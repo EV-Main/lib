@@ -28,6 +28,6 @@ for (const name of NAMES) {
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(800);
 
-    await page.screenshot({ path: `${OUT}/${name}.png`, animations: "disabled" });
+    await page.screenshot({ path: `${OUT}/${name}.png`, fullPage: true, animations: "disabled" });
   });
 }
