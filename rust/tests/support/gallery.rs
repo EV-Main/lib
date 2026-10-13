@@ -1,6 +1,6 @@
 // Shared source-of-truth gallery: one demo fn per primitive, every variant in
 // that fn. `include!`d verbatim by both the integration test (tests/gallery.rs)
-// and the generator example (examples/all_primitives.rs) — no `pub` surface is
+// and the serving example (examples/all_primitives.rs) — no `pub` surface is
 // added to the crate. Adding a primitive to the board = one line in `GALLERY`.
 //
 // Rendered to static HTML via dioxus-ssr, wrapped in a page that pulls the
@@ -135,8 +135,8 @@ fn write_dist() {
 		names.push(format!("{:?}", slug(name)));
 	}
 	std::fs::write(format!("{DIST}/colorscheme.html"), colorscheme()).expect("write colorscheme page");
-	names.push("\"colorscheme\"".into());
 	std::fs::write(format!("{DIST}/index.html"), board(&cells)).expect("write board");
+	names.extend(["\"colorscheme\"".into(), "\"index\"".into()]);
 	std::fs::write(format!("{DIST}/manifest.json"), format!("[{}]", names.join(","))).expect("write manifest");
 }
 

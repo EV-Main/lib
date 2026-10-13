@@ -19,6 +19,7 @@ name: uikit rust
       - Cargo.toml
       - Cargo.lock
       - rust-toolchain.toml
+      - .cargo/**
       - flake.nix
       - flake.lock
       - .github/workflows/uikit-rust.yml
@@ -36,6 +37,7 @@ name: uikit rust
       - Cargo.toml
       - Cargo.lock
       - rust-toolchain.toml
+      - .cargo/**
       - flake.nix
       - flake.lock
       - .github/workflows/uikit-rust.yml

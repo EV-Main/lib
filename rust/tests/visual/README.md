@@ -1,10 +1,12 @@
 # Visual regression
 
-One PNG per uikit primitive, in `__screenshots__/`, compared **byte for byte**.
+One PNG per uikit primitive, plus the combined board and the colorscheme page,
+in `__screenshots__/`, compared **byte for byte** by the gallery test.
 
 ```sh
-nix run .#visual              # capture and compare — exit 0 means identical
-nix run .#visual -- --update  # accept the current render as the baseline
+cargo test --features uikit --test gallery                   # capture and compare
+UPDATE_EXPECT=1 cargo test --features uikit --test gallery   # accept the current render
+nix run .#visual                                             # look at the pages
 ```
 
 Adding a primitive is still one line in `../support/gallery.rs`; the page list
@@ -22,8 +24,9 @@ flows from there through `dist/manifest.json` into the spec.
   linux vs darwin ................ > 1 %         cannot be fixed in-process
 ```
 
-The OS matters and the CPU does not, so the capture is always a `*-linux`
-derivation (`packages.visual-snapshots`) no matter who runs it. A mac routes it
+The OS matters and the CPU does not, so the capture is always linux's: run
+directly from the devShell on linux (byte-identical to the derivation), and the
+`*-linux` derivation (`packages.visual-snapshots`) everywhere else. A mac routes it
 to a **native** `aarch64-linux` builder VM and still matches these x86_64
 baselines — no Docker, no Rosetta, no emulation.
 
@@ -60,9 +63,8 @@ git add rust/tests/visual/__screenshots__ && git commit -m "test(uikit): refresh
 ```
 
 Put the run id in the commit message: it is the provenance of the bytes. The
-gate job (`nix run .#visual` in `errors.yml`) then confirms them on the next
-push. This workflow is hand-written, not produced by the `github` block in
-`flake.nix` — the generator only overwrites its own fixed file names
+gallery test in `uikit-rust.yml` then confirms them on the next push. This
+workflow is hand-written, not produced by the `github` block in `flake.nix` — the generator only overwrites its own fixed file names
 (`errors.yml`, `warnings.yml`, `claude*.yml`, `release-*.yml`, …), so it stays.
 
 **With a linux builder.** In nix-darwin:
@@ -73,7 +75,7 @@ nix.settings.trusted-users = [ "@admin" ];
 ```
 
 Without nix-darwin, run `nix run nixpkgs#darwin.linux-builder` and register it in
-`nix.buildMachines`. Then `nix run .#visual -- --update` works as on linux.
+`nix.buildMachines`. Then the gallery test works as on linux.
 
 The guest has its **own** store (`nix-builder-vm.nix` sets
 `useNixStoreImage = true`), so it fetches the browser closure once from
@@ -82,6 +84,6 @@ substituters rather than reusing the host's.
 ## Not covered
 
 Nothing here stops a stale baseline being committed — it only makes a stale one
-detectable. Catching it at merge is the `nix run .#visual` job in
-`.github/workflows/errors.yml` (the `flake-app` entry in the `github` block of
-`flake.nix`): an ubuntu runner is byte-compatible with these baselines for free.
+detectable. Catching it at merge is the gallery test in
+`.github/workflows/uikit-rust.yml`: an ubuntu runner is byte-compatible with
+these baselines for free.

@@ -1,7 +1,7 @@
 import { test } from "@playwright/test";
 import { readFileSync } from "node:fs";
 
-// Capture only — the comparison is a byte-exact `diff` in `nix run .#visual`,
+// Capture only — the comparison is a byte-exact one in `cargo test --test gallery`,
 // not `toHaveScreenshot`. Renders are deterministic once the env is pinned
 // (0 px on re-run, 0 px across CPU architectures), so a diff-ratio threshold
 // buys nothing and hides the drift it is meant to absorb: the host font set
@@ -11,7 +11,7 @@ import { readFileSync } from "node:fs";
 // to the gallery (one line in tests/support/gallery.rs) adds a baseline here
 // with no TypeScript change.
 const OUT = process.env.EV_SNAPSHOT_OUT;
-if (!OUT) throw new Error("EV_SNAPSHOT_OUT unset — this runs through `nix run .#visual`");
+if (!OUT) throw new Error("EV_SNAPSHOT_OUT unset — this runs through `cargo test --test gallery`");
 
 const NAMES: string[] = JSON.parse(readFileSync(new URL("./dist/manifest.json", import.meta.url), "utf8"));
 

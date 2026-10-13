@@ -65,10 +65,6 @@
           github = v_flakes.github {
             inherit pkgs pname rs;
             enable = true;
-            # The default job set stays off — the only thing CI enforces here is the
-            # visual suite, because a stale baseline is otherwise invisible: `nix run
-            # .#visual` is a command someone has to remember, and nobody does.
-            jobs.errors.augment = [{ name = "flake-app"; args.app = "visual"; }];
             lastSupportedVersion = "nightly-2026-05-12";
             gitignore.extra = ''
               ## Node / TypeScript
@@ -279,51 +275,26 @@
             '';
           };
 
-          gallery-app = pkgs.writeShellApplication {
-            name = "gallery";
-            runtimeInputs = [ rust pkgs.git ]
+          # Serves what the visual test renders: the live board on /, the static
+          # pages it screenshots on /dist/. Comparing them is `cargo test --test gallery`.
+          visual-app = pkgs.writeShellApplication {
+            name = "visual";
+            # `mold` because .cargo/config.toml links through it on linux
+            runtimeInputs = [ rust pkgs.git pkgs.curl ]
             ++ pkgs.lib.optionals pkgs.stdenv.isLinux [ pkgs.mold pkgs.xdg-utils ];
             text = ''
               cd "$(git rev-parse --show-toplevel)"
+              # sccache needs a server this one-shot run has no reason to depend on
               export TAILWIND_BROWSER_JS="${visual.tailwind}" RUSTC_WRAPPER=""
-              cargo test -q --test gallery --features uikit
-              board=rust/tests/visual/dist/index.html
-              ${if pkgs.stdenv.isDarwin then "open" else "xdg-open"} "$board"
-            '';
-          };
-
-          visual-app = pkgs.writeShellApplication {
-            name = "visual";
-            # `mold` because .cargo/config.toml links through it on linux; without
-            # it every cargo invocation here dies at link time.
-            runtimeInputs = [
-              rust
-              pkgs.git
-              pkgs.diffutils
-            ]
-            ++ pkgs.lib.optionals pkgs.stdenv.isLinux [ pkgs.mold ];
-            text = ''
-              cd "$(git rev-parse --show-toplevel)"
-              shots=rust/tests/visual/__screenshots__
-
-              export TAILWIND_BROWSER_JS="${visual.tailwind}"
-              # .cargo/config.toml routes cc through sccache, which needs a server
-              # this one-shot generator has no reason to depend on — and which
-              # fails outright on some hosts. Same opt-out as `publish`.
-              export RUSTC_WRAPPER=""
-              cargo test -q --test gallery --features uikit
-
-              dist=$(nix store add-path rust/tests/visual/dist --name ev-visual-dist)
-              out=$(EV_VISUAL_DIST="$dist" nix build --impure --no-link --print-out-paths \
-                ".#packages.${linuxSystem}.visual-snapshots")
-
-              if [ "''${1-}" = "--update" ]; then
-                rm -f "$shots"/*.png
-                install -m644 "$out"/*.png "$shots"/
-                echo "baselines updated from $out"
-              else
-                diff -rq "$out" "$shots"
-              fi
+              cargo run -q --example all_primitives --features uikit &
+              server=$!
+              trap 'kill $server' EXIT
+              url=http://127.0.0.1:52414
+              until curl -sf "$url/dist/" >/dev/null; do sleep 0.2; done
+              for page in "$url/dist/colorscheme.html" "$url/"; do
+                ${if pkgs.stdenv.isDarwin then "open" else "xdg-open"} "$page"
+              done
+              wait $server
             '';
           };
         in
@@ -338,9 +309,8 @@
                 nix develop                              dev shell (rust nightly, node, playwright, pre-commit)
                 nix run .#gen                            regenerate every derived file (class tables, token sheets)
                 nix run .#publish -- <major|minor|patch> cargo-release + npm publish of impacted ts packages
-                nix run .#gallery                        open every uikit component on one page (static board)
-                cargo run --example all_primitives --features uikit   same board, live/interactive on :52414
-                nix run .#visual [-- --update]           visual regression of the kit gallery
+                nix run .#visual                         serve the kit gallery: live board, colorscheme, every page the visual test captures
+                cargo test --test gallery --features uikit   visual regression of the kit gallery (UPDATE_EXPECT=1 accepts)
                 nix run .#kitstart-visual [-- --update]  visual regression of the kitstart widget gallery
                 nix run .#mk-landing-smoke               smoke the mk-landing fixture container (linux + docker)
                 nix build .#checks.<system>.mk-landing-budget   mk-landing bundle size gate
@@ -348,11 +318,6 @@
               Docs: README.md, docs/
               EOF
             ''}/bin/help";
-          };
-
-          apps.gallery = {
-            type = "app";
-            program = "${gallery-app}/bin/gallery";
           };
 
           apps.publish = {
@@ -365,8 +330,6 @@
             program = "${gen}/bin/gen";
           };
 
-          # `nix run .#visual [-- --update]`: regenerate dist/, capture all
-          # baselines on linux, and compare byte for byte.
           apps.visual = {
             type = "app";
             program = "${visual-app}/bin/visual";
@@ -409,7 +372,7 @@
           packages.visual-snapshots =
             if distPath == "" then
               pkgs.runCommand "ev-visual-snapshots-no-dist" { } ''
-                echo "EV_VISUAL_DIST is unset — this is built through \`nix run .#visual\`, which generates dist/ first." >&2
+                echo "EV_VISUAL_DIST is unset — this is built by \`cargo test --test gallery\` off linux, which generates dist/ first." >&2
                 exit 1
               ''
             else
