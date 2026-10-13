@@ -292,6 +292,7 @@
               url=http://127.0.0.1:52414
               until curl -sf "$url/dist/" >/dev/null; do sleep 0.2; done
               for page in "$url/dist/colorscheme.html" "$url/"; do
+                echo "opening $page"
                 ${if pkgs.stdenv.isDarwin then "open" else "xdg-open"} "$page"
               done
               wait $server
