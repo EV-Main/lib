@@ -57,9 +57,10 @@
   # lock (`"node_modules/@evinvest/kitstart" = ./vendor/kitstart.tgz;`). They
   # win over the platform pruning.
   packageSourceOverrides ? { }
-, # V8's old-space ceiling, in MiB. Unset, node sizes the heap from the host,
-  # not the pod's memory limit, and lets garbage pile up past a 128Mi limit
-  # until the cgroup OOM-kills it (devops#74); below the limit, it collects.
+, # V8's old-space ceiling, in MiB. Node's default does not fit a 128Mi pod,
+  # so garbage piled up until the cgroup OOM-killed it (devops#74); 72 leaves
+  # room for the young generation and native memory, and holds kitstart's
+  # 16 MB ISR cache (retained heap ~55 MB). Raise it with that cache.
   maxOldSpaceMiB ? 72
 ,
 }:

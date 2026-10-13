@@ -33,7 +33,9 @@ export interface LandingOptions {
  * - `cacheMaxMemorySize` — that in-memory LRU defaults to 50 MB, and a brand's
  *   paths (locales × points × A/B buckets) fill it: aquafix's ~550 pushed the
  *   retained heap from 27 to 90 MB and the pod into its 128Mi OOM kill
- *   (devops#74). At 16 MB it plateaus at 55 MB; a miss only re-renders.
+ *   (devops#74). At 16 MB it plateaus at 55 MB. A miss re-renders and refetches
+ *   the live place, so a brand raising it must raise mkLanding's
+ *   `maxOldSpaceMiB` (72) too, or V8 dies with a heap OOM instead.
  */
 export function withLanding(config: NextConfig, options: LandingOptions): NextConfig {
   return {
