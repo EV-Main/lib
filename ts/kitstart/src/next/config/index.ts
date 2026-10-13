@@ -29,13 +29,18 @@ export interface LandingOptions {
  * - `images.unoptimized` + the sharp exclusion — the optimiser would add a
  *   native dependency the Nix image cannot load, for sources already sized;
  * - `isrFlushToDisk: false` — the server runs from the read-only Nix store, so
- *   the cache stays in memory, per pod.
+ *   the cache stays in memory, per pod;
+ * - `cacheMaxMemorySize` — that in-memory LRU defaults to 50 MB, and a brand's
+ *   paths (locales × points × A/B buckets) fill it: aquafix's ~550 pushed the
+ *   retained heap from 27 to 90 MB and the pod into its 128Mi OOM kill
+ *   (devops#74). At 16 MB it plateaus at 55 MB; a miss only re-renders.
  */
 export function withLanding(config: NextConfig, options: LandingOptions): NextConfig {
   return {
     poweredByHeader: false,
     output: "standalone",
     expireTime: 86_400,
+    cacheMaxMemorySize: 16 * 1024 * 1024,
     ...config,
     env: { ...buildEnv(options.root), ...config.env },
     images: { unoptimized: true, ...config.images },
