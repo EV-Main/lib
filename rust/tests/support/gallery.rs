@@ -192,7 +192,7 @@ fn d_hero() -> Element {
 				}
 				nav { class: "flex gap-5 text-sm text-ink-soft",
 					for word in nav.split(' ') {
-						a { "{word}" }
+						a { {word} }
 					}
 				}
 				Button { size: Size::Sm, {lorem(1)} }
@@ -225,7 +225,7 @@ fn d_hero() -> Element {
 						Card { class: "gap-1 py-4",
 							CardContent {
 								p { class: "text-sm text-ink-soft", {lorem(2)} }
-								p { class: "text-2xl font-semibold {ink}", "{value}" }
+								p { class: "text-2xl font-semibold {ink}", {value} }
 							}
 						}
 					}
