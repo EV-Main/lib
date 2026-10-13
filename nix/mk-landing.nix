@@ -57,6 +57,10 @@
   # lock (`"node_modules/@evinvest/kitstart" = ./vendor/kitstart.tgz;`). They
   # win over the platform pruning.
   packageSourceOverrides ? { }
+, # V8's old-space ceiling, in MiB. Unset, node sizes the heap from the host,
+  # not the pod's memory limit, and lets garbage pile up past a 128Mi limit
+  # until the cgroup OOM-kills it (devops#74); below the limit, it collects.
+  maxOldSpaceMiB ? 72
 ,
 }:
 let
@@ -169,6 +173,7 @@ let
           healthPath = "/health";
           entrypoint = [
             "${nodeRuntime}/bin/node"
+            "--max-old-space-size=${toString maxOldSpaceMiB}"
             "${site}/server.js"
           ];
           workingDir = dataDir;

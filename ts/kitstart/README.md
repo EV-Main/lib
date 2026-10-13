@@ -61,6 +61,7 @@ landing = ev.lib.mkLanding {
   checkKitstartVersion ? true,
   e2eConfig ? "tests/e2e",
   packageSourceOverrides ? { },                   # lock key → `file:`/vendored tarball
+  maxOldSpaceMiB ? 72,                            # V8 old-space cap, under the pod's 128Mi
 };
 # → { site, bundleBudget, packages.{default,site,container}, containers,
 #     checks.{site,bundle-budget}, apps.{default,help,dev,test,accept-test,size,container-smoke},
