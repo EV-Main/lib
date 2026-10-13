@@ -442,6 +442,7 @@ describe("withLanding", () => {
       output: "standalone",
       poweredByHeader: false,
       expireTime: 86_400,
+      cacheMaxMemorySize: 16 * 1024 * 1024,
       images: { unoptimized: true },
       outputFileTracingIncludes: { "/og": ["./assets/fonts/*.ttf"] },
       experimental: { isrFlushToDisk: false, globalNotFound: true, typedEnv: true },
