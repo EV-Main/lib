@@ -13,7 +13,7 @@ const VISUAL: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/visual");
 #[test]
 fn matches_baselines() {
 	write_dist();
-	let shots = PathBuf::from(format!("{VISUAL}/__screenshots__"));
+	let shots = format!("{VISUAL}/__screenshots__");
 	let captured = pngs(&capture());
 	assert!(!captured.is_empty(), "playwright captured nothing");
 
@@ -23,7 +23,7 @@ fn matches_baselines() {
 			std::fs::remove_file(path).expect("remove stale baseline");
 		}
 		for (name, path) in &captured {
-			std::fs::copy(path, shots.join(name)).expect("write baseline");
+			std::fs::copy(path, format!("{shots}/{name}")).expect("write baseline");
 		}
 		return;
 	}
@@ -42,9 +42,9 @@ fn matches_baselines() {
 	);
 }
 
-fn pngs(dir: &Path) -> BTreeMap<String, PathBuf> {
+fn pngs(dir: &str) -> BTreeMap<String, PathBuf> {
 	std::fs::read_dir(dir)
-		.unwrap_or_else(|e| panic!("read {}: {e}", dir.display()))
+		.unwrap_or_else(|e| panic!("read {dir}: {e}"))
 		.map(|entry| entry.expect("read_dir entry").path())
 		.filter(|p| p.extension().is_some_and(|e| e == "png"))
 		.map(|p| (p.file_name().expect("read_dir yields named entries").to_string_lossy().into_owned(), p))
@@ -53,8 +53,8 @@ fn pngs(dir: &Path) -> BTreeMap<String, PathBuf> {
 
 /// The render is OS-sensitive but arch-insensitive, and the baselines are linux's.
 #[cfg(target_os = "linux")]
-fn capture() -> PathBuf {
-	let out = PathBuf::from(format!("{DIST}/captured"));
+fn capture() -> String {
+	let out = format!("{DIST}/captured");
 	std::fs::create_dir_all(&out).expect("create capture dir");
 	let status = Command::new("playwright")
 		.arg("test")
@@ -68,7 +68,7 @@ fn capture() -> PathBuf {
 
 /// Off linux, the capture is the `*-linux` derivation — a linux builder runs it natively.
 #[cfg(not(target_os = "linux"))]
-fn capture() -> PathBuf {
+fn capture() -> String {
 	let nix = |args: &[&str], env: &[(&str, &str)]| {
 		let out = Command::new("nix").args(args).envs(env.iter().copied()).output().expect("nix is on PATH");
 		assert!(out.status.success(), "nix {args:?}: {}", String::from_utf8_lossy(&out.stderr));
@@ -76,5 +76,5 @@ fn capture() -> PathBuf {
 	};
 	let dist = nix(&["store", "add-path", DIST, "--name", "ev-visual-dist"], &[]);
 	let flake = format!("{}/..#packages.{}-linux.visual-snapshots", env!("CARGO_MANIFEST_DIR"), std::env::consts::ARCH);
-	PathBuf::from(nix(&["build", "--impure", "--no-link", "--print-out-paths", &flake], &[("EV_VISUAL_DIST", &dist)]))
+	nix(&["build", "--impure", "--no-link", "--print-out-paths", &flake], &[("EV_VISUAL_DIST", &dist)])
 }
