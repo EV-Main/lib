@@ -42,7 +42,7 @@ fn matches_baselines() {
 	);
 }
 
-fn pngs(dir: &std::path::Path) -> BTreeMap<String, PathBuf> {
+fn pngs(dir: &Path) -> BTreeMap<String, PathBuf> {
 	std::fs::read_dir(dir)
 		.unwrap_or_else(|e| panic!("read {}: {e}", dir.display()))
 		.map(|entry| entry.expect("read_dir entry").path())
