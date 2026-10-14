@@ -6,6 +6,8 @@
 //
 // Importing is server-safe; `openWalletAction` touches `window` when called.
 
+import { isSecureTransport } from '@evinvest/mfe';
+
 import { WALLET_ORIGIN } from './elements';
 
 /**
@@ -40,6 +42,9 @@ export const STATE_PARAM = 'state';
 
 const MAX_URL = 2048;
 const MAX_REFERENCE = 128;
+// An id with a separator or an encoded character in it can make the action
+// page look up something other than what the element named; refused, not cleaned.
+const ACTION_PARAM_VALUE = /^[A-Za-z0-9_-]{1,128}$/;
 const DEFAULT_TIMEOUT_MS = 15 * 60_000;
 const DEFAULT_POLL_MS = 500;
 const POPUP_FEATURES = 'popup=yes,width=480,height=720';
@@ -53,16 +58,20 @@ function isActionPath(path: string): path is WalletActionPath {
 /**
  * `raw` as a wallet action URL on `origin`, rebuilt from scratch, or null.
  * Only an exact {@link WALLET_ACTION_PATHS} path survives, with the first
- * `invoice` and `scope` values (non-empty, at most 128 characters); every
- * other parameter and the hash are dropped. Refused outright: another origin,
- * another path, credentials, control characters and backslashes — browsers
- * strip tabs and newlines and read `\` as `/` before the check would see them.
+ * `invoice` and `scope` values; every other parameter and the hash are
+ * dropped. Refused outright: another origin, another path, credentials,
+ * control characters and backslashes — browsers strip tabs and newlines and
+ * read `\` as `/` before the check would see them — and an `invoice` or
+ * `scope` that is present but not 1–128 of `A–Z a–z 0–9 _ -`.
  *
  * Contract of the action page on evinvest.ltd, which this URL opens:
  * - amount, address and recipient are never read from the URL — a payment's
  *   come from the invoice banking issued, server-side; the URL only names it;
- * - `opener` and `return_to` are accepted only when their origin exactly
- *   matches one of the scope's registered origins, else ignored;
+ * - `opener` is accepted only when its origin exactly matches one of the
+ *   scope's registered origins, else ignored;
+ * - `return_to` is accepted only when it is one of those origins plus a path
+ *   byte for byte in the scope's `return_paths` — no query, no hash — else
+ *   ignored;
  * - the result goes out as `opener.postMessage(msg, <opener origin>)`, never
  *   with `'*'`, and echoes `state` unchanged;
  * - the page is served with `frame-ancestors 'none'`, so no host can frame it
@@ -82,7 +91,9 @@ export function walletActionUrl(raw: unknown, origin: string = WALLET_ORIGIN): U
   const url = new URL(parsed.pathname, origin);
   for (const name of WALLET_ACTION_PARAMS) {
     const value = parsed.searchParams.get(name);
-    if (value !== null && value !== '' && value.length <= MAX_REFERENCE) url.searchParams.set(name, value);
+    if (value === null) continue;
+    if (!ACTION_PARAM_VALUE.test(value)) return null;
+    url.searchParams.set(name, value);
   }
   return url;
 }
@@ -150,7 +161,9 @@ export type WalletActionOutcome =
   /** `signal` aborted, before the popup opened or while it was open; the popup was closed. */
   | { status: 'aborted' }
   /** `url` is not a wallet action on `origin` ({@link walletActionUrl}); nothing was opened. */
-  | { status: 'invalid_url' };
+  | { status: 'invalid_url' }
+  /** No `crypto.randomUUID` (an http page that is not loopback, an old browser); nothing was opened. */
+  | { status: 'unsupported' };
 
 export interface WalletActionOptions {
   /** The origin the result must come from. Default {@link WALLET_ORIGIN}; other values are for a staging stand. */
@@ -165,11 +178,18 @@ export interface WalletActionOptions {
 
 /**
  * `url` with this page's origin as {@link OPENER_PARAM} and a fresh
- * {@link STATE_PARAM}. The state ties the result to this one action: a page
- * reloaded from history, or a second evinvest.ltd tab, cannot answer for it.
+ * {@link STATE_PARAM}, or null without `crypto.randomUUID`. The state ties the
+ * result to this one action: a page reloaded from history, or a second
+ * evinvest.ltd tab, cannot answer for it.
  */
-function withOpener(url: URL): { href: string; state: string } {
-  const state = crypto.randomUUID();
+function withOpener(url: URL): { href: string; state: string } | null {
+  let state: string;
+  try {
+    state = crypto.randomUUID();
+  } catch {
+    // Missing outside a secure context; `openWalletAction` promises never to reject.
+    return null;
+  }
   const next = new URL(url);
   next.searchParams.set(OPENER_PARAM, window.location.origin);
   next.searchParams.set(STATE_PARAM, state);
@@ -178,14 +198,34 @@ function withOpener(url: URL): { href: string; state: string } {
 
 /**
  * The same action as a full navigation, for when the popup is blocked: the page
- * sends the user back to `returnTo` instead of posting. Default: this page
- * without query or hash — they can hold tokens or ids that have no business in
- * a URL on evinvest.ltd.
+ * sends the user back to `returnTo` instead of posting. `returnTo` resolves
+ * against this page and is cut to origin and path — the action page takes only
+ * an exact path from the scope's `return_paths`, and query or hash can hold
+ * tokens or ids that have no business in a URL on evinvest.ltd. One on another
+ * origin, or over plain http to a real host, is replaced by the default: this
+ * page's origin and path. Null when `url` is not a wallet action on `origin`
+ * ({@link walletActionUrl}). Browser only.
  */
-export function walletNavigationHref(url: URL, returnTo: string = window.location.origin + window.location.pathname): string {
-  const next = new URL(url);
-  next.searchParams.set(RETURN_TO_PARAM, returnTo);
-  return next.href;
+export function walletNavigationHref(url: URL, returnTo?: string, origin: string = WALLET_ORIGIN): string | null {
+  const target = walletActionUrl(url.href, origin);
+  if (!target) return null;
+  target.searchParams.set(RETURN_TO_PARAM, sameOriginReturnTo(returnTo));
+  return target.href;
+}
+
+function sameOriginReturnTo(returnTo: string | undefined): string {
+  const fallback = window.location.origin + window.location.pathname;
+  if (returnTo === undefined) return fallback;
+  let back: URL;
+  try {
+    back = new URL(returnTo, window.location.href);
+  } catch {
+    return fallback;
+  }
+  // The navigation leaves this page for good: a foreign return address would
+  // hand the user, fresh from a money action, to whoever named it.
+  if (back.origin !== window.location.origin || !isSecureTransport(back)) return fallback;
+  return back.origin + back.pathname;
 }
 
 // The popup of the action in flight on this page. Page-wide, like the window
@@ -211,7 +251,9 @@ export function openWalletAction(url: string | URL, options: WalletActionOptions
     inFlight.focus();
     return Promise.resolve({ status: 'busy' });
   }
-  const { href, state } = withOpener(target);
+  const opened = withOpener(target);
+  if (!opened) return Promise.resolve({ status: 'unsupported' });
+  const { href, state } = opened;
   // Not `noopener`: the page needs `window.opener` to post back. It is ours.
   const popup = window.open(href, POPUP_NAME, POPUP_FEATURES);
   if (!popup) return Promise.resolve({ status: 'blocked' });

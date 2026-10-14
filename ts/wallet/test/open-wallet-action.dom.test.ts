@@ -78,6 +78,7 @@ beforeEach(async () => {
 afterEach(() => {
   vi.useRealTimers();
   vi.restoreAllMocks();
+  vi.unstubAllGlobals();
 });
 
 describe('openWalletAction: refused before opening', () => {
@@ -101,6 +102,25 @@ describe('openWalletAction: refused before opening', () => {
     controller.abort();
 
     await expect(openWalletAction(ACTION, { signal: controller.signal })).resolves.toEqual({ status: 'aborted' });
+    expect(open).not.toHaveBeenCalled();
+  });
+
+  it('should_return_unsupported_and_not_open_when_randomUUID_throws', async () => {
+    const open = stubOpen(fakePopup());
+    vi.spyOn(crypto, 'randomUUID').mockImplementation(() => {
+      throw new TypeError('crypto.randomUUID is not available');
+    });
+
+    await expect(openWalletAction(ACTION)).resolves.toEqual({ status: 'unsupported' });
+    expect(open).not.toHaveBeenCalled();
+  });
+
+  it('should_return_unsupported_and_not_open_without_randomUUID', async () => {
+    // What an http page off loopback or an old browser exposes.
+    const open = stubOpen(fakePopup());
+    vi.stubGlobal('crypto', {});
+
+    await expect(openWalletAction(ACTION)).resolves.toEqual({ status: 'unsupported' });
     expect(open).not.toHaveBeenCalled();
   });
 
@@ -433,6 +453,7 @@ describe('openWalletAction: other ways out', () => {
 });
 
 describe('walletNavigationHref', () => {
+  // jsdom serves this page from http://localhost:3000, a loopback dev stand.
   afterEach(() => {
     window.history.replaceState(null, '', '/');
   });
@@ -443,5 +464,54 @@ describe('walletNavigationHref', () => {
     const href = walletNavigationHref(new URL(ACTION));
 
     expect(href).toBe('https://evinvest.ltd/wallet/pay?invoice=inv-1&return_to=http%3A%2F%2Flocalhost%3A3000%2Fbilling');
+  });
+
+  it('should_cut_a_same_origin_return_to_to_origin_and_path', () => {
+    const href = walletNavigationHref(new URL(ACTION), 'http://localhost:3000/billing?x=1#row-7');
+
+    expect(href).toBe('https://evinvest.ltd/wallet/pay?invoice=inv-1&return_to=http%3A%2F%2Flocalhost%3A3000%2Fbilling');
+  });
+
+  it('should_resolve_a_relative_return_to_against_this_page', () => {
+    const href = walletNavigationHref(new URL(ACTION), '/billing');
+
+    expect(href).toBe('https://evinvest.ltd/wallet/pay?invoice=inv-1&return_to=http%3A%2F%2Flocalhost%3A3000%2Fbilling');
+  });
+
+  it('should_replace_a_return_to_on_another_origin_with_this_page', () => {
+    window.history.replaceState(null, '', '/account');
+
+    const href = walletNavigationHref(new URL(ACTION), 'https://sa.evinvest.ltd/billing?x=1');
+
+    expect(href).toBe('https://evinvest.ltd/wallet/pay?invoice=inv-1&return_to=http%3A%2F%2Flocalhost%3A3000%2Faccount');
+  });
+
+  it('should_replace_a_plain_http_return_to_off_loopback_with_this_page', () => {
+    // Same origin, so only the transport check can refuse it.
+    vi.stubGlobal('location', { href: 'http://sa.example/account', origin: 'http://sa.example', pathname: '/account' });
+
+    const href = walletNavigationHref(new URL(ACTION), 'http://sa.example/billing');
+
+    expect(href).toBe('https://evinvest.ltd/wallet/pay?invoice=inv-1&return_to=http%3A%2F%2Fsa.example%2Faccount');
+  });
+
+  it('should_rebuild_the_action_without_parameters_outside_the_allow_list', () => {
+    const href = walletNavigationHref(new URL(`${ACTION}&amount=999&return_to=https://evil.example/`), '/billing');
+
+    expect(href).toBe('https://evinvest.ltd/wallet/pay?invoice=inv-1&return_to=http%3A%2F%2Flocalhost%3A3000%2Fbilling');
+  });
+
+  it('should_return_null_for_a_wallet_path_that_is_not_an_action', () => {
+    expect(walletNavigationHref(new URL('https://evinvest.ltd/wallet/transfer'), '/billing')).toBeNull();
+  });
+
+  it('should_take_a_staging_action_when_given_the_staging_origin', () => {
+    const href = walletNavigationHref(new URL('https://stage.evinvest.ltd/wallet/pay?invoice=inv-1'), '/billing', 'https://stage.evinvest.ltd');
+
+    expect(href).toBe('https://stage.evinvest.ltd/wallet/pay?invoice=inv-1&return_to=http%3A%2F%2Flocalhost%3A3000%2Fbilling');
+  });
+
+  it('should_return_null_for_a_staging_action_without_the_staging_origin', () => {
+    expect(walletNavigationHref(new URL('https://stage.evinvest.ltd/wallet/pay?invoice=inv-1'), '/billing')).toBeNull();
   });
 });

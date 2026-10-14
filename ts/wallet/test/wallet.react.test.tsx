@@ -199,6 +199,19 @@ describe('Wallet: ev:wallet-action', () => {
     expect(onResult).not.toHaveBeenCalled();
   });
 
+  it('should_navigate_to_the_staging_action_when_the_popup_is_blocked_and_a_staging_origin_is_set', async () => {
+    vi.spyOn(window, 'open').mockReturnValue(null);
+    await render(<Wallet scriptUrl="/wallet/mfe/wallet.js" scope="sa" origin="https://stage.evinvest.ltd" />);
+    const assign = vi.fn<(to: string) => void>();
+    vi.stubGlobal('location', { href: 'https://sa.evinvest.ltd/billing', origin: 'https://sa.evinvest.ltd', pathname: '/billing', assign });
+
+    walletAction(container.querySelector(WALLET), 'https://stage.evinvest.ltd/wallet/pay?invoice=inv-1');
+
+    await vi.waitFor(() => {
+      expect(assign).toHaveBeenCalledWith('https://stage.evinvest.ltd/wallet/pay?invoice=inv-1&return_to=https%3A%2F%2Fsa.evinvest.ltd%2Fbilling');
+    });
+  });
+
   it('should_leave_every_action_to_the_element_without_scope', async () => {
     const { open } = stubOpen();
     const onResult = vi.fn<(outcome: WalletActionOutcome) => void>();

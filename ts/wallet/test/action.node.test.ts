@@ -13,7 +13,6 @@ import {
   WALLET_ACTION_PATHS,
   walletActionFromEvent,
   walletActionUrl,
-  walletNavigationHref,
 } from '../src/index';
 
 const STATE = 'state-1';
@@ -63,18 +62,12 @@ describe('walletActionUrl: what passes', () => {
     );
   });
 
-  it('should_drop_an_empty_invoice', () => {
-    expect(walletActionUrl('https://evinvest.ltd/wallet/pay?invoice=&scope=sa')?.href).toBe('https://evinvest.ltd/wallet/pay?scope=sa');
-  });
+  it('should_keep_an_invoice_of_exactly_128_id_characters', () => {
+    const invoice = `${'Ab9_-'.repeat(25)}xyz`;
+    expect(invoice).toHaveLength(128);
 
-  it('should_keep_an_invoice_of_exactly_128_characters', () => {
-    const invoice = 'i'.repeat(128);
 
     expect(walletActionUrl(`https://evinvest.ltd/wallet/pay?invoice=${invoice}`)?.href).toBe(`https://evinvest.ltd/wallet/pay?invoice=${invoice}`);
-  });
-
-  it('should_drop_an_invoice_longer_than_128_characters_rather_than_cut_it', () => {
-    expect(walletActionUrl(`https://evinvest.ltd/wallet/pay?invoice=${'i'.repeat(129)}`)?.href).toBe('https://evinvest.ltd/wallet/pay');
   });
 
   it('should_accept_a_staging_origin_when_given_one', () => {
@@ -93,6 +86,29 @@ describe('walletActionUrl: what passes', () => {
 });
 
 describe('walletActionUrl: what is refused', () => {
+  // An id the page would look up differently from how the element named it is
+  // refused whole, never cleaned: dropping it would open a different action.
+  it.each([
+    ['empty', ''],
+    ['129 characters long', 'i'.repeat(129)],
+    ['holding a slash', 'a/b'],
+    ['holding an encoded slash', 'a%2F'],
+    ['holding a dot', 'a.b'],
+    ['holding a space', 'a b'],
+  ])('should_refuse_the_whole_url_for_an_invoice_%s', (_label, invoice) => {
+    expect(walletActionUrl(`https://evinvest.ltd/wallet/pay?invoice=${invoice}&scope=sa`)).toBeNull();
+  });
+
+  it.each([
+    ['empty', ''],
+    ['129 characters long', 's'.repeat(129)],
+    ['holding a slash', 'a/b'],
+    ['holding an encoded slash', 'a%2F'],
+    ['holding a dot', 'a.b'],
+  ])('should_refuse_the_whole_url_for_a_scope_%s', (_label, scope) => {
+    expect(walletActionUrl(`https://evinvest.ltd/wallet/move?scope=${scope}`)).toBeNull();
+  });
+
   it.each([
     ['another host', 'https://evil.example/wallet/withdraw'],
     ['a lookalike host', 'https://evinvest.ltd.evil.example/wallet/withdraw'],
@@ -205,14 +221,6 @@ describe('walletActionFromEvent', () => {
   it('should_return_null_for_a_missing_detail_or_a_plain_event', () => {
     expect(walletActionFromEvent(new CustomEvent('ev:wallet-action'))).toBeNull();
     expect(walletActionFromEvent(new Event('ev:wallet-action'))).toBeNull();
-  });
-});
-
-describe('walletNavigationHref', () => {
-  it('should_add_the_return_address_as_return_to', () => {
-    const href = walletNavigationHref(new URL('https://evinvest.ltd/wallet/pay?invoice=i-1'), 'https://sa.evinvest.ltd/billing?x=1');
-
-    expect(href).toBe('https://evinvest.ltd/wallet/pay?invoice=i-1&return_to=https%3A%2F%2Fsa.evinvest.ltd%2Fbilling%3Fx%3D1');
   });
 });
 
