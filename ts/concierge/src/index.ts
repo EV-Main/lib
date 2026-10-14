@@ -23,4 +23,5 @@ export type { ConciergeElement } from './elements';
 export { fetchSession, parseSession, SESSION_URL } from './session';
 export type { Session, SessionUser } from './session';
 
-export { CLOSE_EVENT, rootRelative, RP_LOGIN_PATH, rpLoginHref } from './sign-in';
+export { CLOSE_EVENT, hostReturnTo, RP_LOGIN_PATH, rpLoginHref } from './sign-in';
+export type { SignInIntent } from './sign-in';

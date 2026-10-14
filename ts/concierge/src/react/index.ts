@@ -2,7 +2,7 @@ export { AccountChip } from './account-chip';
 export type { AccountChipProps } from './account-chip';
 export { AccountPage } from './account-page';
 export type { AccountPageProps } from './account-page';
-export type { NavigateHandler } from './events';
+export type { NavigateHandler } from '@evinvest/mfe/react';
 export { SignInDialog } from './sign-in-dialog';
 export type { SignInDialogProps } from './sign-in-dialog';
 export { useSignInRequired } from './use-sign-in-required';

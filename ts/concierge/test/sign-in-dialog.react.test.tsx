@@ -106,6 +106,18 @@ describe('SignInDialog mounting', () => {
 
     expect(element()?.hasAttribute('data-return-to')).toBe(false);
   });
+
+  it('should_drop_a_root_relative_return_to_instead_of_falling_back_to_the_page', async () => {
+    await render(<SignInDialog scriptUrl={SCRIPT} open returnTo="/funds" onOpenChange={() => {}} onSignedIn={() => {}} />);
+
+    expect(element()?.hasAttribute('data-return-to')).toBe(false);
+  });
+
+  it('should_return_to_the_current_page_when_no_return_to_is_given', async () => {
+    await render(dialog(true));
+
+    expect(element()?.getAttribute('data-return-to')).toBe('http://localhost:3000/');
+  });
 });
 
 describe('SignInDialog events', () => {

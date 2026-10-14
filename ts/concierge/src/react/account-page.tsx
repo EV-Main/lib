@@ -1,9 +1,8 @@
 import { API_VERSION, NAVIGATE_EVENT, SIGNOUT_EVENT } from '@evinvest/mfe';
-import { RemoteElement } from '@evinvest/mfe/react';
+import { navigateListener, RemoteElement, type NavigateHandler } from '@evinvest/mfe/react';
 import type { ReactNode } from 'react';
 
 import { ACCOUNT_TAG } from '../index';
-import { navigateListener, type NavigateHandler } from './events';
 
 export interface AccountPageProps {
   /** Bundle URL from the concierge registry (`conciergeEntry(entries, 'account')`). */

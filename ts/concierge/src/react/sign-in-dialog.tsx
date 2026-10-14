@@ -1,8 +1,8 @@
-import { API_VERSION, HOST_ATTRS, safeHref, SIGNED_IN_EVENT } from '@evinvest/mfe';
+import { API_VERSION, HOST_ATTRS, SIGNED_IN_EVENT } from '@evinvest/mfe';
 import { RemoteElement } from '@evinvest/mfe/react';
 import { useState, type ReactNode } from 'react';
 
-import { CLOSE_EVENT, SIGN_IN_TAG } from '../index';
+import { CLOSE_EVENT, hostReturnTo, SIGN_IN_TAG, type SignInIntent } from '../index';
 
 export interface SignInDialogProps {
   /** Bundle URL from the concierge registry (`conciergeEntry(entries, 'signIn')`). */
@@ -13,10 +13,11 @@ export interface SignInDialogProps {
   /** The evinvest.ltd session exists now; start the host's RP login (`rpLoginHref`). */
   onSignedIn: () => void;
   /** Which screen opens first. */
-  intent?: 'login' | 'signup';
+  intent?: SignInIntent;
   /**
    * Where an OAuth round trip (Google, GitHub) lands back: an absolute URL on
-   * this host, whose origin concierge holds in the scope's allowlist.
+   * this host, whose origin concierge holds in the scope's registry. Default:
+   * the current page. A relative or non-http(s) value is left out.
    */
   returnTo?: string;
   minApiVersion?: number;
@@ -45,6 +46,8 @@ export function SignInDialog({
   if (open && !armed) setArmed(true);
   if (!armed) return null;
 
+  // Read only once armed, which takes an open — i.e. in the browser.
+  const back = returnTo ?? window.location.href;
   return (
     <RemoteElement
       tag={SIGN_IN_TAG}
@@ -53,7 +56,7 @@ export function SignInDialog({
       attributes={{
         open,
         [HOST_ATTRS.intent]: intent,
-        [HOST_ATTRS.returnTo]: returnTo === undefined ? undefined : safeHref(returnTo),
+        [HOST_ATTRS.returnTo]: hostReturnTo(back),
       }}
       events={{
         [SIGNED_IN_EVENT]: () => {
