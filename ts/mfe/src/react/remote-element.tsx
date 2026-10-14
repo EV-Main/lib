@@ -32,6 +32,16 @@ export interface RemoteElementProps extends ElementBundleOptions {
    */
   awaitPaint?: boolean;
   className?: string;
+  /**
+   * Mark the wrapper `ph-no-capture` (default true): the host's PostHog then
+   * neither autocaptures clicks inside it (the class counts on any ancestor)
+   * nor records its subtree in session replay. On the wrapper, not the remote's
+   * node, so the remote's own attributes stay exactly what the host set.
+   * A remote renders platform data the host does not own — an email, a
+   * balance, a payout address — and the host's analytics must not copy it
+   * out. Set false only for an element that shows nothing personal.
+   */
+  noCapture?: boolean;
   /** Shown while loading, and for good if the bundle fails. */
   fallback?: ReactNode;
 }
@@ -39,6 +49,7 @@ export interface RemoteElementProps extends ElementBundleOptions {
 const NO_ATTRS: Readonly<Record<string, AttributeValue>> = {};
 const NO_EVENTS: Readonly<Record<string, RemoteEventHandler>> = {};
 const READY_ATTR = 'data-ready';
+const NO_CAPTURE_CLASS = 'ph-no-capture';
 
 function encode(value: AttributeValue): string | null {
   if (value === false || value === null || value === undefined) return null;
@@ -73,6 +84,7 @@ export function RemoteElement({
   events = NO_EVENTS,
   awaitPaint = false,
   className,
+  noCapture = true,
   fallback = null,
   ...bundle
 }: RemoteElementProps) {
@@ -126,8 +138,9 @@ export function RemoteElement({
   }, [attributesKey]);
 
   const showFallback = !ready || (awaitPaint && !painted);
+  const wrapperClass = noCapture ? (className ? `${className} ${NO_CAPTURE_CLASS}` : NO_CAPTURE_CLASS) : className;
   return (
-    <div ref={hostRef} className={className} data-mfe-state={state}>
+    <div ref={hostRef} className={wrapperClass} data-mfe-state={state}>
       {showFallback ? fallback : null}
     </div>
   );

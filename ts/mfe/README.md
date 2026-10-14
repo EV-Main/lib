@@ -14,19 +14,37 @@ talk to it. The producer side is the `mfe` module of the `ev_lib` Rust crate
 
 ## Trust
 
-No hash pins (D20). A host allows the producer's origin in its CSP
-(`script-src https://evinvest.ltd`) and loads whatever the manifest names; a
-script from there has exactly the trust of the service that serves it. The
-registry parser still refuses `javascript:`, `data:` and protocol-relative
-URLs, and ignores a leftover `integrity` field.
+No hash pins (D20). A host allows the producer's **bundle directories** in its
+CSP — paths, not the bare origin, so nothing else served by evinvest.ltd can
+run as a script on the host:
+
+```
+script-src 'self' https://evinvest.ltd/api/auth/mfe/ https://evinvest.ltd/wallet/mfe/
+```
+
+and loads whatever the manifest names; a script from there has exactly the
+trust of the service that serves it. The registry backs the CSP up:
+
+- `fetchRegistry(url, { allowedPrefix })` refuses the whole registry when a
+  resolved `scriptUrl` is outside `allowedPrefix` (the same directory the CSP
+  names), and refuses redirects (`redirect: 'error'`, and a `response.url` on
+  another origin);
+- `isBundleUrl`, `safeHref` and concierge's `hostReturnTo` accept absolute
+  URLs only over `https:` — `http:` only to `localhost`, `127.x.x.x` or `[::1]`
+  for a dev stand (`isSecureTransport`);
+- the parser refuses `javascript:`, `data:` and protocol-relative URLs, and
+  ignores a leftover `integrity` field.
 
 ## Registry
 
 ```ts
 import { fetchRegistry, findEntry, parseRegistry } from '@evinvest/mfe';
 
-// A producer's published registry; relative scriptUrls resolve against it.
-const result = await fetchRegistry('https://evinvest.ltd/api/auth/mfe/registry.json');
+// A producer's published registry; relative scriptUrls resolve against it,
+// and every one must land under allowedPrefix.
+const result = await fetchRegistry('https://evinvest.ltd/api/auth/mfe/registry.json', {
+  allowedPrefix: 'https://evinvest.ltd/api/auth/mfe/',
+});
 if (!result.ok) return fallback; // expected failure, not a throw
 const chip = findEntry(result.value, 'concierge.account-chip');
 
@@ -77,6 +95,12 @@ cross a shadow root. Attributes are set **before** the element connects, because
 a producer reads its configuration in `connectedCallback`. A Rust `mfe!` element reads
 its locale from the nearest `[lang]` once, at mount; to remount on a language
 change, change the component's `key`.
+
+The wrapper carries `ph-no-capture`, so the host's PostHog
+neither autocaptures inside it nor records it in session replay: a remote shows
+platform data — email, balances, addresses — the host's analytics must not copy
+out. `noCapture={false}` turns it off for an element that shows nothing
+personal.
 
 Remote stylesheets are moved into the `reamfe` cascade layer
 (`containRemoteStyles`). Declare it first in the host's CSS, below every layer of

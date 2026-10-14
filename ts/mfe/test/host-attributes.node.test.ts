@@ -88,6 +88,10 @@ describe('safeHref: refused', () => {
     expect(safeHref(42)).toBeNull();
     expect(safeHref(null)).toBeNull();
   });
+
+  it('should_refuse_plain_http_to_a_real_host', () => {
+    expect(safeHref('http://sa.evinvest.ltd/places')).toBeNull();
+  });
 });
 
 describe('parseGroups', () => {

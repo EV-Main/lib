@@ -123,6 +123,38 @@ describe('RemoteElement', () => {
     expect(container.querySelector('[data-mfe-state]')?.getAttribute('data-mfe-state')).toBe('ready');
   });
 
+  it('should_mark_the_wrapper_ph_no_capture_by_default', async () => {
+    defineProbe('ev-probe-capture-default');
+
+    await render(<RemoteElement tag="ev-probe-capture-default" scriptUrl="/mfe/capture-default.js" />);
+
+    expect(container.querySelector('[data-mfe-state]')?.className).toBe('ph-no-capture');
+  });
+
+  it('should_keep_the_host_class_next_to_ph_no_capture', async () => {
+    defineProbe('ev-probe-capture-class');
+
+    await render(<RemoteElement tag="ev-probe-capture-class" scriptUrl="/mfe/capture-class.js" className="chip-slot" />);
+
+    expect(container.querySelector('[data-mfe-state]')?.className).toBe('chip-slot ph-no-capture');
+  });
+
+  it('should_leave_only_the_host_class_when_noCapture_is_false', async () => {
+    defineProbe('ev-probe-capture-off');
+
+    await render(<RemoteElement tag="ev-probe-capture-off" scriptUrl="/mfe/capture-off.js" className="chip-slot" noCapture={false} />);
+
+    expect(container.querySelector('[data-mfe-state]')?.className).toBe('chip-slot');
+  });
+
+  it('should_not_put_ph_no_capture_on_the_remote_element_itself', async () => {
+    defineProbe('ev-probe-capture-node');
+
+    await render(<RemoteElement tag="ev-probe-capture-node" scriptUrl="/mfe/capture-node.js" />);
+
+    expect(container.querySelector('ev-probe-capture-node')?.hasAttribute('class')).toBe(false);
+  });
+
   it('should_update_and_remove_attributes_on_the_same_element', async () => {
     const probe = defineProbe('ev-probe-remove');
     await render(

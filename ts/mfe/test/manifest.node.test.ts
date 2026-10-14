@@ -1,6 +1,7 @@
 // The registry is read from a producer the host does not build, so every entry
 // is parsed: all or nothing, and no bundle URL that leaves the producer's
-// control (`javascript:`, `data:`, protocol-relative) ever reaches a loader.
+// control (`javascript:`, `data:`, protocol-relative, plain http off loopback)
+// ever reaches a loader; a fetched registry is also held to one directory.
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { entryFor, fetchRegistry, parseRegistry, resolveEntries, type MfeEntry } from '../src/index';
@@ -24,6 +25,11 @@ describe('parseRegistry: what passes', () => {
     expect(parseRegistry([entry])).toEqual({ ok: true, value: [entry] });
   });
 
+  it('should_accept_a_plain_http_bundle_url_on_loopback_for_a_dev_stand', () => {
+    const entry = { ...CHIP, scriptUrl: 'http://127.0.0.1:5173/mfe/chip.js' };
+    expect(parseRegistry([entry])).toEqual({ ok: true, value: [entry] });
+  });
+
   it('should_accept_an_empty_registry', () => {
     expect(parseRegistry([])).toEqual({ ok: true, value: [] });
   });
@@ -35,6 +41,13 @@ describe('parseRegistry: what passes', () => {
 });
 
 describe('parseRegistry: what fails the whole registry', () => {
+  it('should_reject_a_plain_http_bundle_url_on_a_real_host', () => {
+    expect(parseRegistry([{ ...CHIP, scriptUrl: 'http://cdn.evinvest.ltd/mfe/chip.js' }])).toEqual({
+      ok: false,
+      error: 'entry 0: concierge.account-chip: `scriptUrl` is not a root-relative or https URL',
+    });
+  });
+
   it('should_reject_an_entry_with_an_empty_name', () => {
     const result = parseRegistry([{ ...CHIP, name: '' }]);
     expect(result).toEqual({ ok: false, error: 'entry 0: manifest `name` is missing or empty' });
@@ -154,6 +167,10 @@ describe('resolveEntries', () => {
 });
 
 describe('fetchRegistry', () => {
+  // The directory the host's CSP names; every resolved bundle must sit under it.
+  const PREFIX = 'https://evinvest.ltd/auth/mfe/';
+  const OPTIONS = { allowedPrefix: PREFIX };
+
   afterEach(() => {
     vi.unstubAllGlobals();
   });
@@ -161,7 +178,7 @@ describe('fetchRegistry', () => {
   it('should_return_entries_with_urls_resolved_against_the_registry_url', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => Response.json([CHIP])));
 
-    const result = await fetchRegistry(REGISTRY_URL);
+    const result = await fetchRegistry(REGISTRY_URL, OPTIONS);
 
     expect(result).toEqual({
       ok: true,
@@ -172,7 +189,7 @@ describe('fetchRegistry', () => {
   it('should_return_a_failure_on_http_500_without_throwing', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => new Response('oops', { status: 500 })));
 
-    const result = await fetchRegistry(REGISTRY_URL);
+    const result = await fetchRegistry(REGISTRY_URL, OPTIONS);
 
     expect(result).toEqual({ ok: false, error: `registry ${REGISTRY_URL}: HTTP 500` });
   });
@@ -185,7 +202,7 @@ describe('fetchRegistry', () => {
       }),
     );
 
-    const result = await fetchRegistry(REGISTRY_URL);
+    const result = await fetchRegistry(REGISTRY_URL, OPTIONS);
 
     expect(result).toEqual({ ok: false, error: `registry ${REGISTRY_URL}: fetch failed` });
   });
@@ -193,7 +210,7 @@ describe('fetchRegistry', () => {
   it('should_return_a_failure_on_invalid_json_without_throwing', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => new Response('<!doctype html><title>404</title>', { status: 200 })));
 
-    const result = await fetchRegistry(REGISTRY_URL);
+    const result = await fetchRegistry(REGISTRY_URL, OPTIONS);
 
     expect(result.ok).toBe(false);
   });
@@ -201,38 +218,171 @@ describe('fetchRegistry', () => {
   it('should_return_the_parse_failure_for_a_well_formed_but_invalid_registry', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => Response.json({ entries: [] })));
 
-    const result = await fetchRegistry(REGISTRY_URL);
+    const result = await fetchRegistry(REGISTRY_URL, OPTIONS);
 
     expect(result).toEqual({ ok: false, error: 'registry is not an array' });
-  });
-
-  it('should_resolve_urls_against_the_final_url_after_a_redirect', async () => {
-    const redirected = Response.json([CHIP]);
-    Object.defineProperty(redirected, 'url', { value: 'https://auth.evinvest.ltd/v2/mfe/registry.json' });
-    vi.stubGlobal('fetch', vi.fn(async () => redirected));
-
-    const result = await fetchRegistry(REGISTRY_URL);
-
-    expect(result).toEqual({
-      ok: true,
-      value: [{ ...CHIP, scriptUrl: 'https://auth.evinvest.ltd/auth/mfe/account-chip.js' }],
-    });
   });
 
   it('should_return_a_failure_for_a_relative_registry_url_without_rejecting', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => Response.json([CHIP])));
 
-    const result = await fetchRegistry('/auth/mfe/registry.json');
+    const result = await fetchRegistry('/auth/mfe/registry.json', OPTIONS);
 
     expect(result.ok).toBe(false);
   });
 
-  it('should_pass_the_request_init_through_to_fetch', async () => {
+  it('should_pass_the_request_init_through_to_fetch_with_redirects_refused', async () => {
     const fetchMock = vi.fn(async (_url: string | URL | Request, _init?: RequestInit) => Response.json([]));
     vi.stubGlobal('fetch', fetchMock);
 
-    await fetchRegistry(REGISTRY_URL, { cache: 'no-store' });
+    await fetchRegistry(REGISTRY_URL, { ...OPTIONS, init: { cache: 'no-store', redirect: 'follow' } });
 
-    expect(fetchMock).toHaveBeenCalledWith(REGISTRY_URL, { cache: 'no-store' });
+    expect(fetchMock).toHaveBeenCalledWith(new URL(REGISTRY_URL), { cache: 'no-store', redirect: 'error' });
+  });
+
+  it('should_refuse_redirects_even_without_a_request_init', async () => {
+    const fetchMock = vi.fn(async (_url: string | URL | Request, _init?: RequestInit) => Response.json([]));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await fetchRegistry(REGISTRY_URL, OPTIONS);
+
+    expect(fetchMock).toHaveBeenCalledWith(new URL(REGISTRY_URL), { redirect: 'error' });
+  });
+
+  it('should_return_a_failure_when_fetch_rejects_a_redirect', async () => {
+    // What `redirect: 'error'` does in a real fetch when the server answers 3xx.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        throw new TypeError('unexpected redirect');
+      }),
+    );
+
+    const result = await fetchRegistry(REGISTRY_URL, OPTIONS);
+
+    expect(result).toEqual({ ok: false, error: `registry ${REGISTRY_URL}: unexpected redirect` });
+  });
+
+  it('should_return_a_failure_when_the_response_was_served_from_another_origin', async () => {
+    const moved = Response.json([CHIP]);
+    Object.defineProperty(moved, 'url', { value: 'https://evil.example/auth/mfe/registry.json' });
+    vi.stubGlobal('fetch', vi.fn(async () => moved));
+
+    const result = await fetchRegistry(REGISTRY_URL, OPTIONS);
+
+    expect(result).toEqual({
+      ok: false,
+      error: `registry ${REGISTRY_URL}: served from another origin, https://evil.example/auth/mfe/registry.json`,
+    });
+  });
+
+  it('should_accept_a_response_url_on_the_requested_origin', async () => {
+    const served = Response.json([CHIP]);
+    Object.defineProperty(served, 'url', { value: REGISTRY_URL });
+    vi.stubGlobal('fetch', vi.fn(async () => served));
+
+    const result = await fetchRegistry(REGISTRY_URL, OPTIONS);
+
+    expect(result).toEqual({
+      ok: true,
+      value: [{ ...CHIP, scriptUrl: 'https://evinvest.ltd/auth/mfe/account-chip.js' }],
+    });
+  });
+
+  it('should_fail_the_whole_registry_when_one_bundle_is_outside_the_allowed_prefix', async () => {
+    const upload = { ...CHIP, name: 'concierge.upload', tag: 'ev-upload', scriptUrl: '/uploads/x.js' };
+    vi.stubGlobal('fetch', vi.fn(async () => Response.json([CHIP, upload])));
+
+    const result = await fetchRegistry(REGISTRY_URL, OPTIONS);
+
+    expect(result).toEqual({
+      ok: false,
+      error: `registry ${REGISTRY_URL}: entry 1: concierge.upload: scriptUrl https://evinvest.ltd/uploads/x.js is outside ${PREFIX}`,
+    });
+  });
+
+  it('should_refuse_a_sibling_directory_that_only_shares_the_prefix_text', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => Response.json([{ ...CHIP, scriptUrl: '/auth/mfe-uploads/x.js' }])));
+
+    const result = await fetchRegistry(REGISTRY_URL, OPTIONS);
+
+    expect(result.ok).toBe(false);
+  });
+
+  it('should_refuse_a_dot_dot_path_that_resolves_outside_the_prefix', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => Response.json([{ ...CHIP, scriptUrl: '/auth/mfe/../uploads/x.js' }])));
+
+    const result = await fetchRegistry(REGISTRY_URL, OPTIONS);
+
+    expect(result.ok).toBe(false);
+  });
+
+  it('should_refuse_an_encoded_slash_that_a_server_could_decode_into_a_traversal', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => Response.json([{ ...CHIP, scriptUrl: '/auth/mfe/..%2F..%2Fuploads/x.js' }])));
+
+    const result = await fetchRegistry(REGISTRY_URL, OPTIONS);
+
+    expect(result.ok).toBe(false);
+  });
+
+  it('should_refuse_an_absolute_bundle_on_another_origin', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => Response.json([{ ...CHIP, scriptUrl: 'https://cdn.example/auth/mfe/x.js' }])));
+
+    const result = await fetchRegistry(REGISTRY_URL, OPTIONS);
+
+    expect(result.ok).toBe(false);
+  });
+
+  it('should_refuse_an_allowed_prefix_without_a_trailing_slash_before_fetching', async () => {
+    const fetchMock = vi.fn(async () => Response.json([CHIP]));
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await fetchRegistry(REGISTRY_URL, { allowedPrefix: 'https://evinvest.ltd/auth/mfe' });
+
+    expect(result).toEqual({
+      ok: false,
+      error: `registry ${REGISTRY_URL}: allowedPrefix https://evinvest.ltd/auth/mfe is not a canonical directory URL ending in /`,
+    });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('should_refuse_a_relative_allowed_prefix', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => Response.json([CHIP])));
+
+    const result = await fetchRegistry(REGISTRY_URL, { allowedPrefix: '/auth/mfe/' });
+
+    expect(result).toEqual({ ok: false, error: `registry ${REGISTRY_URL}: allowedPrefix /auth/mfe/ is not an absolute URL` });
+  });
+
+  it('should_refuse_a_non_canonical_allowed_prefix', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => Response.json([CHIP])));
+
+    const result = await fetchRegistry(REGISTRY_URL, { allowedPrefix: 'https://EVINVEST.ltd/auth/mfe/' });
+
+    expect(result.ok).toBe(false);
+  });
+
+  it('should_refuse_a_plain_http_allowed_prefix_on_a_real_host', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => Response.json([CHIP])));
+
+    const result = await fetchRegistry('http://evinvest.ltd/auth/mfe/registry.json', { allowedPrefix: 'http://evinvest.ltd/auth/mfe/' });
+
+    expect(result).toEqual({
+      ok: false,
+      error: 'registry http://evinvest.ltd/auth/mfe/registry.json: allowedPrefix http://evinvest.ltd/auth/mfe/ is not https',
+    });
+  });
+
+  it('should_accept_a_plain_http_allowed_prefix_on_loopback_for_a_dev_stand', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => Response.json([CHIP])));
+
+    const result = await fetchRegistry('http://localhost:8080/auth/mfe/registry.json', {
+      allowedPrefix: 'http://localhost:8080/auth/mfe/',
+    });
+
+    expect(result).toEqual({
+      ok: true,
+      value: [{ ...CHIP, scriptUrl: 'http://localhost:8080/auth/mfe/account-chip.js' }],
+    });
   });
 });
