@@ -1,15 +1,16 @@
 # @evinvest/mfe
 
 The **host contract** for EV microfrontends: what a page needs to mount a
-platform element (`<ev-sign-in>`, `<ev-account-chip>`, `<ev-wallet>`, …) and
+platform element (`<mfe-concierge-sign-in>`, `<mfe-concierge-account-chip>`,
+`<mfe-banking-wallet>`, …) and
 talk to it. The producer side is the `mfe` module of the `ev_lib` Rust crate
 (`mfe!`), or a React bundle built to the same contract.
 
 - `.` — server-safe core, no peers: registry manifest, `fetchRegistry`, events,
   `apiVersion`, host-mode attributes, the bundle loader (touches the DOM only
   when called).
-- `./react` — `RemoteElement` and `useElementBundle` (a `"use client"` bundle;
-  `react` is an optional peer).
+- `./react` — `RemoteElement`, `useElementBundle` and `navigateListener` (a
+  `"use client"` bundle; `react` is an optional peer).
 
 ## Trust
 
@@ -25,7 +26,7 @@ URLs, and ignores a leftover `integrity` field.
 import { fetchRegistry, findEntry, parseRegistry } from '@evinvest/mfe';
 
 // A producer's published registry; relative scriptUrls resolve against it.
-const result = await fetchRegistry('https://evinvest.ltd/auth/mfe/registry.json');
+const result = await fetchRegistry('https://evinvest.ltd/api/auth/mfe/registry.json');
 if (!result.ok) return fallback; // expected failure, not a throw
 const chip = findEntry(result.value, 'concierge.account-chip');
 
@@ -39,9 +40,10 @@ tag differs.
 
 An entry is `{ name, tag, scriptUrl, kind: "component" | "page" }`. The Rust
 `mfe!` emits the same object without `scriptUrl` (`mfe.json`):
-`entryFromManifest(manifest, url)` joins them. Names are `{service}.{name}` for
-Rust producers; tags must be valid custom-element names and unique in a
-registry.
+`entryFromManifest(manifest, url)` joins them. Rust producers name an entry
+`{service}.{name}` with the tag `mfe-{service}-{name}`, and the platform's React
+bundles follow the same scheme; any tag must be a valid custom-element name, and
+names and tags are unique in a registry.
 
 ## Mount (React)
 
@@ -72,9 +74,9 @@ import { RemoteElement } from '@evinvest/mfe/react';
 
 Light DOM only: host tokens, fonts and Tailwind `@property` registrations do not
 cross a shadow root. Attributes are set **before** the element connects, because
-a producer reads its configuration in `connectedCallback`. The element reads its
-locale from the nearest `[lang]`; to remount on a language change, change the
-component's `key`.
+a producer reads its configuration in `connectedCallback`. A Rust `mfe!` element reads
+its locale from the nearest `[lang]` once, at mount; to remount on a language
+change, change the component's `key`.
 
 Remote stylesheets are moved into the `reamfe` cascade layer
 (`containRemoteStyles`). Declare it first in the host's CSS, below every layer of
@@ -112,3 +114,9 @@ version 3.
 signed in. `hostAttributes(props)` writes the set; `readHostProps(read)` is the
 element's side. Both live here so a value the reader would refuse is never
 written. Names: `HOST_ATTRS`.
+
+`HOST_ATTRS` also names two default-mode attributes that neither function
+touches: `data-intent` (`signin` | `signup`, the first auth screen) and
+`data-return-to` (an absolute URL on the host to come back to after sign-in).
+`data-layout="menu"` is written by `hostAttributes` but read only by the
+element's CSS.

@@ -10,6 +10,7 @@ export const CONCIERGE_ORIGIN = 'https://evinvest.ltd';
 /** The published registry of concierge bundles; relative `scriptUrl`s resolve against it. */
 export const CONCIERGE_REGISTRY_URL = `${CONCIERGE_ORIGIN}/api/auth/mfe/registry.json`;
 
+/** Registry name and tag of each concierge element; {@link conciergeEntry} refuses an entry with another tag. */
 export const CONCIERGE_ELEMENTS = {
   signIn: { name: 'concierge.sign-in', tag: 'mfe-concierge-sign-in' },
   account: { name: 'concierge.account', tag: 'mfe-concierge-account' },

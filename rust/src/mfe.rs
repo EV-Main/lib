@@ -82,12 +82,11 @@ pub fn launch_into(el: web_sys::Element, root: fn() -> Element) {
 /// into. The Rust mirror of `localeOfElement` in `@evinvest/i18n`.
 ///
 /// Read from the DOM rather than taken as an attribute or a prop, because a host
-/// mounts the element *before* it applies attributes — React's `RemoteElement`
-/// appends the node in one effect and sets its attributes in a later one — so
-/// anything pushed in reads as absent at `connectedCallback` time. `lang` is the
-/// platform's own answer to "what language is this subtree", every host that
-/// serves more than one already sets it, and it is readable the instant the node
-/// is attached.
+/// is not bound to set attributes before the element connects (the platform's
+/// `RemoteElement` does, a hand-written host may not), and anything pushed in late
+/// reads as absent at `connectedCallback` time. `lang` is the platform's own
+/// answer to "what language is this subtree", every host that serves more than one
+/// already sets it, and it is readable the instant the node is attached.
 ///
 /// A regional tag resolves to its base language (`ru-RU` → `ru`); an absent or
 /// unpublished `lang` reads as [`DEFAULT_LOCALE`].

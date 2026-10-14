@@ -129,6 +129,7 @@ export function entryFromManifest(manifest: MfeManifest, scriptUrl: string): Par
   return parseEntry({ ...manifest, scriptUrl });
 }
 
+/** The entry named `name`, or undefined. The tag is not checked; {@link entryFor} checks it. */
 export function findEntry(entries: readonly MfeEntry[], name: string): MfeEntry | undefined {
   return entries.find(entry => entry.name === name);
 }

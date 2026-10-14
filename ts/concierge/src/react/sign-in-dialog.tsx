@@ -21,7 +21,10 @@ export interface SignInDialogProps {
    */
   returnTo?: string;
   minApiVersion?: number;
-  /** Shown while the bundle loads, and for good if it fails — a plain link to the RP login is a fair one. */
+  /**
+   * Shown while the dialog is open and the bundle loads, and for good if it
+   * fails — a plain link to the RP login is a fair one. Hidden while closed.
+   */
   fallback?: ReactNode;
 }
 

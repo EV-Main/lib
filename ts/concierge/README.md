@@ -28,7 +28,9 @@ import { conciergeEntry, fetchConciergeRegistry } from '@evinvest/concierge';
 
 const registry = await fetchConciergeRegistry(); // CONCIERGE_REGISTRY_URL by default
 if (!registry.ok) return fallback;
-const signIn = conciergeEntry(registry.value, 'signIn'); // refused if missing or another tag
+const entry = conciergeEntry(registry.value, 'signIn'); // refused if missing or another tag
+if (!entry.ok) return fallback;
+const signIn = entry.value;
 ```
 
 The host's CSP allows `script-src https://evinvest.ltd` (no hash pins, D20).
@@ -66,6 +68,8 @@ Element contract, host side:
 | event | `ev:close` | dismissed by the user (`CLOSE_EVENT`) |
 
 ## Account page and chip
+
+`account` and `chip` are entries taken the same way (`'account'`, `'accountChip'`).
 
 ```tsx
 <AccountPage scriptUrl={account.scriptUrl} onNavigate={href => (router.push(href), true)} onSignOut={signOut} />

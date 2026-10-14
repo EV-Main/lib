@@ -8,7 +8,12 @@
 // a typo, a stale template — so the reader parses each one, and anything that
 // does not parse reads as absent rather than half-rendering.
 
-/** Attribute names. Frozen with apiVersion 2; a rename is apiVersion 3. */
+/**
+ * Attribute names. Frozen with apiVersion 2; a rename is apiVersion 3.
+ * `intent` and `returnTo` belong to default mode: {@link hostAttributes} does
+ * not write them and {@link readHostProps} does not read them. `layout` is
+ * written but read by no function here.
+ */
 export const HOST_ATTRS = {
   mode: 'data-mode',
   name: 'data-name',
@@ -65,6 +70,7 @@ export interface MenuGroupInput {
   items: MenuItemInput[];
 }
 
+/** What {@link readHostProps} returns: a field absent or refused reads as null, `groups` as empty. */
 export interface HostProps {
   name: string | null;
   email: string | null;
@@ -186,6 +192,7 @@ export function parseGroups(raw: string | null): MenuGroup[] {
 
 export type AttributeReader = (name: string) => string | null;
 
+/** Whether `data-mode` is exactly `host`; anything else is default mode. */
 export function isHostMode(read: AttributeReader): boolean {
   return read(HOST_ATTRS.mode) === 'host';
 }
