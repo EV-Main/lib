@@ -31,7 +31,7 @@ trust of the service that serves it. The registry backs the CSP up:
   another origin). `allowedPrefix` is required and must be a directory below
   the origin root: without it, or with `https://host/`, the call returns
   `{ ok: false }` — the check would otherwise shrink to comparing origins;
-- `isBundleUrl`, `safeHref` and concierge's `hostReturnTo` accept absolute
+- `isBundleUrl` and `safeHref` accept absolute
   URLs only over `https:` — `http:` only to `localhost`, `127.x.x.x` or `[::1]`
   for a dev stand (`isSecureTransport`);
 - the parser refuses `javascript:`, `data:` and protocol-relative URLs, and

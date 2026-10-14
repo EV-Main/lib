@@ -67,8 +67,8 @@ fn run_capturing(cmd: &mut Command) -> (bool, String) {
 	(out.status.success(), text)
 }
 
-/// The sibling packages `dir` links through `file:` (`@evinvest/concierge` and
-/// `@evinvest/wallet` build against `../mfe`). `npm install` there runs the
+/// The sibling packages `dir` links through `file:` (kitstart builds against
+/// `../uikit` and `../marketing`). `npm install` there runs the
 /// sibling's own `prepare`, which needs the sibling's dev tools, and a dependent
 /// must publish after what it links — so both the order and the install step read
 /// this.
