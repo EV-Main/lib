@@ -197,6 +197,26 @@ describe('hostAttributes → readHostProps', () => {
     });
   });
 
+  it('should_write_groups_as_the_reader_parses_them', () => {
+    const panel = { id: ' panel ', href: ' /panel ', label: ' Panel ', current: true, tooltip: 'dropped' };
+    const help = { id: 'help', href: '/help', label: 'Help' };
+    const input = [
+      { id: ' services ', label: ' Services ', items: [panel], icon: 'dropped' },
+      { id: 'more', items: [help] },
+    ];
+
+    const attrs = hostAttributes({ groups: input });
+
+    expect(JSON.parse(attrs[HOST_ATTRS.groups] ?? 'null')).toStrictEqual([
+      {
+        id: 'services',
+        label: 'Services',
+        items: [{ id: 'panel', href: '/panel', label: 'Panel', external: false, current: true }],
+      },
+      { id: 'more', items: [{ id: 'help', href: '/help', label: 'Help', external: false, current: false }] },
+    ]);
+  });
+
   it('should_write_only_data_mode_for_empty_props', () => {
     expect(hostAttributes({})).toEqual({ 'data-mode': 'host' });
   });
