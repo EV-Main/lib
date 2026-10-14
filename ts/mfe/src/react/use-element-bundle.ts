@@ -22,17 +22,19 @@ export function useElementBundle(
   scriptUrl: string,
   { minApiVersion = 0, timeoutMs, layer = REMOTE_LAYER }: ElementBundleOptions = {},
 ): BundleState {
-  // Keyed by tag: an instance switching remotes is un-ready for the new one at once.
-  const [state, setState] = useState<{ tag: string; value: BundleState } | null>(null);
+  // Keyed by everything that changes the answer: switching the remote, its URL
+  // or the version floor reads as `loading` at once, not as the old verdict.
+  const key = JSON.stringify([tag, scriptUrl, minApiVersion]);
+  const [state, setState] = useState<{ key: string; value: BundleState } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    // Set up before the bundle runs, and on the already-loaded path too: the
-    // remote's sheet may be injected late or persist from an earlier mount.
+    // Set up before the bundle runs, so the sheet it injects is caught as it lands.
     const stopContainment = layer === false ? () => {} : containRemoteStyles(scriptUrl, layer);
     const options = timeoutMs === undefined ? { minApiVersion } : { minApiVersion, timeoutMs };
+    const settledKey = JSON.stringify([tag, scriptUrl, minApiVersion]);
     void loadElement(tag, scriptUrl, options).then(ok => {
-      if (!cancelled) setState({ tag, value: ok ? 'ready' : 'failed' });
+      if (!cancelled) setState({ key: settledKey, value: ok ? 'ready' : 'failed' });
     });
     return () => {
       cancelled = true;
@@ -40,5 +42,5 @@ export function useElementBundle(
     };
   }, [tag, scriptUrl, minApiVersion, timeoutMs, layer]);
 
-  return state?.tag === tag ? state.value : 'loading';
+  return state?.key === key ? state.value : 'loading';
 }
