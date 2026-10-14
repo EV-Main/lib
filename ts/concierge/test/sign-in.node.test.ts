@@ -75,6 +75,7 @@ describe('hostReturnTo', () => {
     ['a bare word', 'funds'],
     ['empty', ''],
     ['a tab inside', 'https://invest.evinvest.ltd/\tfunds'],
+    ['plain http to a real host', 'http://invest.evinvest.ltd/funds'],
   ])('should_refuse_a_%s_value', (_label, raw) => {
     expect(hostReturnTo(raw)).toBeNull();
   });

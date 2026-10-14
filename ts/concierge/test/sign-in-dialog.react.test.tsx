@@ -118,6 +118,31 @@ describe('SignInDialog mounting', () => {
 
     expect(element()?.getAttribute('data-return-to')).toBe('http://localhost:3000/');
   });
+
+  it('should_leave_the_query_and_hash_of_the_current_page_behind', async () => {
+    window.history.replaceState(null, '', '/funds?token=secret#row-7');
+    try {
+      await render(dialog(true));
+
+      expect(element()?.getAttribute('data-return-to')).toBe('http://localhost:3000/funds');
+    } finally {
+      window.history.replaceState(null, '', '/');
+    }
+  });
+
+  it('should_pass_an_explicit_return_to_as_the_host_wrote_it', async () => {
+    await render(
+      <SignInDialog scriptUrl={SCRIPT} open returnTo="https://invest.evinvest.ltd/funds?x=1" onOpenChange={() => {}} onSignedIn={() => {}} />,
+    );
+
+    expect(element()?.getAttribute('data-return-to')).toBe('https://invest.evinvest.ltd/funds?x=1');
+  });
+
+  it('should_drop_a_plain_http_return_to_on_a_real_host', async () => {
+    await render(<SignInDialog scriptUrl={SCRIPT} open returnTo="http://invest.evinvest.ltd/funds" onOpenChange={() => {}} onSignedIn={() => {}} />);
+
+    expect(element()?.hasAttribute('data-return-to')).toBe(false);
+  });
 });
 
 describe('SignInDialog events', () => {

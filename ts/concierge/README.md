@@ -6,7 +6,7 @@ account page and the account chip — over [`@evinvest/mfe`](../mfe). A host
 built in concierge's `web/` and served from `https://evinvest.ltd/api/auth/mfe/` (the site's `/api/auth/*` rewrite to concierge).
 
 - `.` — server-safe core: registry constants, tags, the session shape, the
-  RP-login href.
+  RP-login and platform sign-out hrefs.
 - `./react` — `SignInDialog`, `AccountPage`, `AccountChip`, `useSignInRequired`
   (a `"use client"` bundle; `react` is an optional peer).
 
@@ -26,14 +26,18 @@ No network calls beyond the registry and the session; the elements do the rest.
 ```ts
 import { conciergeEntry, fetchConciergeRegistry } from '@evinvest/concierge';
 
-const registry = await fetchConciergeRegistry(); // CONCIERGE_REGISTRY_URL by default
+// CONCIERGE_REGISTRY_URL by default; every bundle must sit under CONCIERGE_MFE_PREFIX.
+const registry = await fetchConciergeRegistry();
 if (!registry.ok) return fallback;
 const entry = conciergeEntry(registry.value, 'signIn'); // refused if missing or another tag
 if (!entry.ok) return fallback;
 const signIn = entry.value;
 ```
 
-The host's CSP allows `script-src https://evinvest.ltd` (no hash pins, D20).
+The host's CSP allows the bundle directory, not the whole origin (no hash pins,
+D20): `script-src https://evinvest.ltd/api/auth/mfe/` (plus
+`https://evinvest.ltd/wallet/mfe/` for the wallet). `fetchConciergeRegistry`
+refuses redirects and any `scriptUrl` outside `CONCIERGE_MFE_PREFIX`.
 
 ## Sign in when the host gets a 401
 
@@ -46,7 +50,7 @@ const { guardResponse, dialogProps } = useSignInRequired();
 const response = await fetch('/api/thing');
 if (guardResponse(response)) return; // a 401 opened the dialog
 
-<SignInDialog scriptUrl={signIn.scriptUrl} {...dialogProps} />; // returnTo: this page by default
+<SignInDialog scriptUrl={signIn.scriptUrl} {...dialogProps} />; // returnTo: this page, no query or hash
 ```
 
 The element draws its own backdrop and traps focus; the host only drives
@@ -63,7 +67,7 @@ Element contract, host side:
 | --- | --- | --- |
 | attribute | `open` | present while the dialog is open |
 | attribute | `data-intent` | `signin` or `signup`, the first screen |
-| attribute | `data-return-to` | absolute http(s) URL on the host an OAuth round trip lands on; concierge accepts it only for an origin in a scope's registry. Relative values are left out (`hostReturnTo`) |
+| attribute | `data-return-to` | absolute https URL on the host an OAuth round trip lands on (http only to loopback); concierge accepts it only for an origin in a scope's registry. Relative values are left out (`hostReturnTo`) |
 | event | `ev:signed-in` | sign-in finished |
 | event | `ev:close` | dismissed by the user (`CLOSE_EVENT`) |
 
@@ -83,6 +87,18 @@ Element contract, host side:
 />
 ```
 
+### Sign-out ends both sessions
+
+On `signout` both wrappers call the host's `onSignOut` (awaited when it returns
+a promise), then navigate to concierge's confirm page,
+`platformSignOutHref(origin + pathname)` —
+`https://evinvest.ltd/api/auth/logout/confirm?return_to=…` — which ends the
+evinvest.ltd session and comes back. Without it the platform session outlives
+the host's and the silent RP login signs the next person at that browser
+straight back in. The navigation runs even if `onSignOut` rejects or throws.
+`platformSignOut={false}` turns it off; use it only when the host ends the
+platform session another way, with a comment saying so.
+
 `onNavigate` (`NavigateHandler`, from `@evinvest/mfe/react`) gets an already
 validated root-relative path and returns whether the host took it. In default
 mode the chip takes the same `intent` (`signin` | `signup`) and an absolute
@@ -98,10 +114,14 @@ const session = await fetchSession(); // GET https://evinvest.ltd/api/auth/sessi
 if (session.ok && session.value.authenticated) session.value.user.email;
 ```
 
-`{ authenticated, user, permissions }`, as concierge's `SessionInfo`. Browser
-only in practice: the session cookie is first-party to evinvest.ltd and never
-reaches a host's server. It says who holds the evinvest.ltd session, not what
-the host's backend lets them do — that stays with the host's RP session.
+`{ authenticated, user }`, with `user` cut down to what the chip shows:
+`{ userId, email, emailVerified, username, displayName }`. Concierge's
+`SessionInfo` also carries the platform role, `isAdmin`, the break-glass flag
+and platform `permissions`; the parser drops them, so a host cannot gate its
+own UI on platform privileges. Browser only in practice: the session cookie is
+first-party to evinvest.ltd and never reaches a host's server. It says who
+holds the evinvest.ltd session, not what the host's backend lets them do — that
+stays with the host's RP session.
 
 ## Develop
 

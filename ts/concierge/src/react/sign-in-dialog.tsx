@@ -17,7 +17,8 @@ export interface SignInDialogProps {
   /**
    * Where an OAuth round trip (Google, GitHub) lands back: an absolute URL on
    * this host, whose origin concierge holds in the scope's registry. Default:
-   * the current page. A relative or non-http(s) value is left out.
+   * the current page without query or hash. A relative or non-https value is
+   * left out (http only to loopback).
    */
   returnTo?: string;
   minApiVersion?: number;
@@ -49,8 +50,10 @@ export function SignInDialog({
   if (open && !armed) setArmed(true);
   if (!armed) return null;
 
-  // Read only once armed, which takes an open — i.e. in the browser.
-  const back = returnTo ?? window.location.href;
+  // Read only once armed, which takes an open — i.e. in the browser. Query and
+  // hash stay behind: they can hold tokens or ids, and this URL travels to
+  // evinvest.ltd and the OAuth provider.
+  const back = returnTo ?? window.location.origin + window.location.pathname;
   return (
     <RemoteElement
       tag={SIGN_IN_TAG}
