@@ -1,6 +1,6 @@
 {
   "name": "@evinvest/concierge",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Host wrappers for the concierge microfrontends: the sign-in dialog, the account page and the account chip, the sign-in-required hook, and the session shape. A thin layer over @evinvest/mfe.",
   "license": "BlueOak-1.0.0",
   "publishConfig": {
