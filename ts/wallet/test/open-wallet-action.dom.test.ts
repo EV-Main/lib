@@ -105,18 +105,18 @@ describe('openWalletAction: refused before opening', () => {
     expect(open).not.toHaveBeenCalled();
   });
 
-  it('should_return_unsupported_and_not_open_when_randomUUID_throws', async () => {
+  it('should_still_open_with_a_state_when_randomUUID_is_missing', () => {
+    // An http page off loopback or an old browser has getRandomValues but no randomUUID.
     const open = stubOpen(fakePopup());
-    vi.spyOn(crypto, 'randomUUID').mockImplementation(() => {
-      throw new TypeError('crypto.randomUUID is not available');
-    });
+    vi.stubGlobal('crypto', { getRandomValues: crypto.getRandomValues.bind(crypto) });
 
-    await expect(openWalletAction(ACTION)).resolves.toEqual({ status: 'unsupported' });
-    expect(open).not.toHaveBeenCalled();
+    void openWalletAction(ACTION);
+
+    expect(open).toHaveBeenCalledTimes(1);
+    expect(new URL(String(open.mock.calls[0]?.[0])).searchParams.get('state')).toMatch(/^[0-9a-f]{32}$/);
   });
 
-  it('should_return_unsupported_and_not_open_without_randomUUID', async () => {
-    // What an http page off loopback or an old browser exposes.
+  it('should_return_unsupported_and_not_open_without_crypto', async () => {
     const open = stubOpen(fakePopup());
     vi.stubGlobal('crypto', {});
 
@@ -145,12 +145,15 @@ describe('openWalletAction: the popup', () => {
   it('should_open_the_action_with_this_origin_as_opener_in_the_named_wallet_window', () => {
     const open = stubOpen(fakePopup());
 
-    vi.spyOn(crypto, 'randomUUID').mockReturnValue('00000000-0000-4000-8000-000000000001');
+    vi.spyOn(crypto, 'getRandomValues').mockImplementation(<T extends ArrayBufferView | null>(array: T): T => {
+      if (array instanceof Uint8Array) array.fill(0xab);
+      return array;
+    });
 
     void openWalletAction(new URL(ACTION));
 
     expect(open).toHaveBeenCalledWith(
-      'https://evinvest.ltd/wallet/pay?invoice=inv-1&opener=http%3A%2F%2Flocalhost%3A3000&state=00000000-0000-4000-8000-000000000001',
+      'https://evinvest.ltd/wallet/pay?invoice=inv-1&opener=http%3A%2F%2Flocalhost%3A3000&state=abababababababababababababababab',
       'ev-wallet-action',
       'popup=yes,width=480,height=720',
     );

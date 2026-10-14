@@ -73,7 +73,7 @@ Contract, host side:
 | event | `ev:wallet-action` | cancelable, `detail: { href }`, one of `https://evinvest.ltd/wallet/{pay,withdraw,move,mandate}`; the host rebuilds it with only `invoice` and `scope` — each 1–128 of `A–Z a–z 0–9 _ -`, else the action is refused — and opens it |
 | event | `ev:navigate` | `Wallet` only: an in-element link, as in `@evinvest/mfe` (`onNavigate`) |
 | query | `opener` | the host's origin, added to the popup URL — where the page posts |
-| query | `state` | a fresh `crypto.randomUUID()` per popup; the page echoes it in its message |
+| query | `state` | 128 fresh random bits (`crypto.getRandomValues`, hex) per popup; the page echoes it in its message |
 | query | `return_to` | where the page sends the user back when navigated, not popped up: origin + path only, on this page's origin (default, and in place of anything else: this page, no query or hash) |
 | message | `{ type: 'ev:wallet-result', state, outcome: 'done' \| 'failed' \| 'cancelled', reference? }` | posted to the opener; counted only with this popup's `state`. A reference that is empty, not a string or over 128 characters reads as none — never cut — and the outcome stands |
 
@@ -101,8 +101,8 @@ the page itself) · `busy` (another action's popup is open
 on this page: it is focused, and this call reports nothing) · `timeout`
 (default 15 min; the popup is closed) · `aborted` (`signal`) · `invalid_url`
 (not one of the four action paths on `https://evinvest.ltd`, or a malformed
-`invoice`/`scope`) · `unsupported` (no `crypto.randomUUID` — a non-secure
-page; nothing opened). The React wrappers ignore `busy`,
+`invoice`/`scope`) · `unsupported` (no `crypto` to draw a state from;
+nothing opened). The React wrappers ignore `busy`,
 so a double click gives one popup and one `onResult`.
 A message counts only if `event.origin` is `https://evinvest.ltd`, its source
 is this popup **and** it echoes this popup's `state`. Call it inside the user's click, or the browser blocks the

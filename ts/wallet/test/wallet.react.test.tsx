@@ -127,24 +127,30 @@ describe('Wallet: ev:wallet-action', () => {
     ['a dot-segment escape', 'https://evinvest.ltd/wallet/../admin'],
     ['a relative path', '/wallet/withdraw'],
     ['not a string', 42],
-  ])('should_leave_an_action_to_the_element_when_its_href_is_%s', async (_label, href) => {
+    ['an invoice id outside the allowed characters', 'https://evinvest.ltd/wallet/pay?invoice=a/../b'],
+  ])('should_cancel_the_action_and_report_invalid_url_when_its_href_is_%s', async (_label, href) => {
+    // Left to the element, the action would navigate this tab to the unchecked href.
     const { open } = stubOpen();
-    await render(<Wallet scriptUrl="/wallet/mfe/wallet.js" scope="sa" />);
+    const onResult = vi.fn<(outcome: WalletActionOutcome) => void>();
+    await render(<Wallet scriptUrl="/wallet/mfe/wallet.js" scope="sa" onResult={onResult} />);
 
     const event = walletAction(container.querySelector(WALLET), href);
 
-    expect(event.defaultPrevented).toBe(false);
+    expect(event.defaultPrevented).toBe(true);
     expect(open).not.toHaveBeenCalled();
+    expect(onResult).toHaveBeenCalledWith({ status: 'invalid_url' });
   });
 
   it('should_refuse_a_production_href_when_a_staging_origin_is_set', async () => {
     const { open } = stubOpen();
-    await render(<Wallet scriptUrl="/wallet/mfe/wallet.js" scope="sa" origin="https://stage.evinvest.ltd" />);
+    const onResult = vi.fn<(outcome: WalletActionOutcome) => void>();
+    await render(<Wallet scriptUrl="/wallet/mfe/wallet.js" scope="sa" origin="https://stage.evinvest.ltd" onResult={onResult} />);
 
     const event = walletAction(container.querySelector(WALLET), 'https://evinvest.ltd/wallet/withdraw');
 
-    expect(event.defaultPrevented).toBe(false);
+    expect(event.defaultPrevented).toBe(true);
     expect(open).not.toHaveBeenCalled();
+    expect(onResult).toHaveBeenCalledWith({ status: 'invalid_url' });
   });
 
   it('should_take_a_staging_action_and_its_staging_result_when_a_staging_origin_is_set', async () => {
@@ -321,13 +327,15 @@ describe('PayInvoiceButton', () => {
     expect(secondClick.defaultPrevented).toBe(true);
   });
 
-  it('should_leave_an_action_to_the_element_when_its_href_is_not_a_wallet_action', async () => {
+  it('should_cancel_an_action_and_report_invalid_url_when_its_href_is_not_a_wallet_action', async () => {
     const { open } = stubOpen();
-    await render(<PayInvoiceButton scriptUrl="/wallet/mfe/pay.js" invoice="inv-1" onResult={() => {}} />);
+    const onResult = vi.fn<(outcome: WalletActionOutcome) => void>();
+    await render(<PayInvoiceButton scriptUrl="/wallet/mfe/pay.js" invoice="inv-1" onResult={onResult} />);
 
     const event = walletAction(container.querySelector(PAY), 'https://evil.example/wallet/pay');
 
-    expect(event.defaultPrevented).toBe(false);
+    expect(event.defaultPrevented).toBe(true);
     expect(open).not.toHaveBeenCalled();
+    expect(onResult).toHaveBeenCalledWith({ status: 'invalid_url' });
   });
 });
