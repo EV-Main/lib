@@ -67,7 +67,7 @@ Element contract, host side:
 | --- | --- | --- |
 | attribute | `open` | present while the dialog is open |
 | attribute | `data-intent` | `signin` or `signup`, the first screen |
-| attribute | `data-return-to` | absolute https URL on the host an OAuth round trip lands on (http only to loopback); concierge accepts it only for an origin in a scope's registry. Relative values are left out (`hostReturnTo`) |
+| attribute | `data-return-to` | origin + path of an absolute https URL on the host an OAuth round trip lands on (http only to loopback); query and hash are always cut, since concierge answers a `returnTo` with `?` or `#` with 400. Concierge accepts it only for an origin in a scope's registry. Relative values are left out (`hostReturnTo`) |
 | event | `ev:signed-in` | sign-in finished |
 | event | `ev:close` | dismissed by the user (`CLOSE_EVENT`) |
 
@@ -91,18 +91,35 @@ Element contract, host side:
 
 On `signout` both wrappers call the host's `onSignOut` (awaited when it returns
 a promise), then navigate to concierge's confirm page,
-`platformSignOutHref(origin + pathname)` —
-`https://evinvest.ltd/api/auth/logout/confirm?return_to=…` — which ends the
-evinvest.ltd session and comes back. Without it the platform session outlives
-the host's and the silent RP login signs the next person at that browser
-straight back in. The navigation runs even if `onSignOut` rejects or throws.
-`platformSignOut={false}` turns it off; use it only when the host ends the
-platform session another way, with a comment saying so.
+`platformSignOutHref(origin + '/')` —
+`https://evinvest.ltd/api/auth/logout/confirm?return_to=https%3A%2F%2F<host>%2F` —
+which ends the evinvest.ltd session and sends the user to the host's root.
+Without it the platform session outlives the host's and the silent RP login
+signs the next person at that browser straight back in. The navigation runs
+even if `onSignOut` rejects or throws. `platformSignOut={false}` turns it off;
+use it only when the host ends the platform session another way, with a
+comment saying so.
+
+`onSignOut` ends the host's session with a `fetch` and returns the promise; it
+does not navigate. The wrapper's navigation follows and cancels any the
+handler started, and a handler that leaves the page first never reaches the
+platform sign-out:
+
+```tsx
+<AccountChip scriptUrl={chip.scriptUrl} onSignOut={async () => { await fetch('/auth/logout', { method: 'POST' }) }} />
+```
+
+**Requirement on every scope that mounts the chip or the account page:** its
+`return_paths` in concierge list `/`. Concierge takes `return_to` on
+`/auth/logout/confirm` only when the path is byte for byte one of them, and
+answers anything else — or no `return_to` — with 400, leaving the
+evinvest.ltd session alive.
 
 `onNavigate` (`NavigateHandler`, from `@evinvest/mfe/react`) gets an already
 validated root-relative path and returns whether the host took it. In default
 mode the chip takes the same `intent` (`signin` | `signup`) and an absolute
-`returnTo` as the dialog. The chip keeps `apiVersion` 2, `ev:navigate` and `signout`;
+`returnTo` as the dialog, with the same default: this page's origin and path.
+The chip keeps `apiVersion` 2, `ev:navigate` and `signout`;
 host-mode attributes come from `hostAttributes` in `@evinvest/mfe`.
 
 ## Session

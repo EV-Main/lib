@@ -57,8 +57,20 @@ describe('rpLoginHref', () => {
 });
 
 describe('hostReturnTo', () => {
-  it('should_keep_an_absolute_https_url_on_the_host', () => {
-    expect(hostReturnTo('https://invest.evinvest.ltd/funds?x=1#top')).toBe('https://invest.evinvest.ltd/funds?x=1#top');
+  it('should_keep_the_origin_and_path_of_an_absolute_https_url', () => {
+    expect(hostReturnTo('https://invest.evinvest.ltd/funds')).toBe('https://invest.evinvest.ltd/funds');
+  });
+
+  it('should_drop_the_query_and_hash', () => {
+    expect(hostReturnTo('https://invest.evinvest.ltd/funds?x=1#top')).toBe('https://invest.evinvest.ltd/funds');
+  });
+
+  it('should_drop_credentials', () => {
+    expect(hostReturnTo('https://user:pass@invest.evinvest.ltd/funds')).toBe('https://invest.evinvest.ltd/funds');
+  });
+
+  it('should_keep_the_root_path_of_a_bare_origin', () => {
+    expect(hostReturnTo('https://invest.evinvest.ltd')).toBe('https://invest.evinvest.ltd/');
   });
 
   it('should_keep_an_absolute_http_url_for_a_local_stand', () => {

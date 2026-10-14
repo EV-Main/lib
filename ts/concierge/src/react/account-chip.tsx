@@ -17,7 +17,9 @@ export interface AccountChipProps {
   intent?: SignInIntent;
   /**
    * Default mode: where to come back to after sign-in — an absolute URL on this
-   * host. No default; a relative or non-http(s) value is left out (`hostReturnTo`).
+   * host, cut to origin and path. Default: the current page without query or
+   * hash, as in `SignInDialog`. A relative or non-https value is left out
+   * (`hostReturnTo`; http only to loopback).
    */
   returnTo?: string;
   onNavigate?: NavigateHandler;
@@ -37,6 +39,14 @@ export interface AccountChipProps {
   fallback?: ReactNode;
 }
 
+// Attributes reach the element only from an effect, so the server render can
+// leave this out without a hydration mismatch — and has no `window` to read.
+function defaultModeReturnTo(returnTo: string | undefined): string | null {
+  if (returnTo !== undefined) return hostReturnTo(returnTo);
+  if (typeof window === 'undefined') return null;
+  return hostReturnTo(window.location.origin + window.location.pathname);
+}
+
 /** The concierge account chip, in host mode when `host` is given. */
 export function AccountChip({
   scriptUrl,
@@ -54,7 +64,7 @@ export function AccountChip({
     ? hostAttributes(host)
     : {
         [HOST_ATTRS.intent]: intent,
-        [HOST_ATTRS.returnTo]: returnTo === undefined ? undefined : hostReturnTo(returnTo),
+        [HOST_ATTRS.returnTo]: defaultModeReturnTo(returnTo),
       };
   return (
     <RemoteElement
