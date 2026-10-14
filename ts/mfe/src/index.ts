@@ -22,7 +22,9 @@ export {
   parseRegistry,
   resolveEntries,
 } from './manifest';
-export type { MfeEntry, MfeKind, MfeManifest, ParseResult } from './manifest';
+export type { FetchRegistryOptions, MfeEntry, MfeKind, MfeManifest, ParseResult } from './manifest';
+
+export { isSecureTransport } from './transport';
 
 export {
   API_VERSION,

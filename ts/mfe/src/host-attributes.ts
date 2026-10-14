@@ -8,6 +8,8 @@
 // a typo, a stale template — so the reader parses each one, and anything that
 // does not parse reads as absent rather than half-rendering.
 
+import { isSecureTransport } from './transport';
+
 /**
  * Attribute names. Frozen with apiVersion 2; a rename is apiVersion 3.
  * `intent` and `returnTo` belong to default mode: {@link hostAttributes} does
@@ -109,11 +111,12 @@ function text(raw: unknown): string | null {
 }
 
 /**
- * An href the element may render: root-relative or absolute http(s). Refused:
- * `javascript:`, `data:`, protocol-relative `//evil`, control characters,
- * backslashes, bare words — the value lands in an `<a href>` on a page that
- * holds a session. Browsers strip tabs and newlines and read `\` as `/`, so
- * `/<TAB>/evil` and `/\evil` are refused before any trimming.
+ * An href the element may render: root-relative or absolute `https:` —
+ * `http:` only to a loopback host, for a dev stand. Refused: `javascript:`,
+ * `data:`, http to a real host, protocol-relative `//evil`, control
+ * characters, backslashes, bare words — the value lands in an `<a href>` on a
+ * page that holds a session. Browsers strip tabs and newlines and read `\` as
+ * `/`, so `/<TAB>/evil` and `/\evil` are refused before any trimming.
  */
 export function safeHref(raw: unknown): string | null {
   if (typeof raw !== 'string') return null;
@@ -125,8 +128,7 @@ export function safeHref(raw: unknown): string | null {
       if (value.startsWith('//')) return null;
       return new URL(value, PROBE).origin === PROBE ? value : null;
     }
-    const { protocol } = new URL(value);
-    return protocol === 'https:' || protocol === 'http:' ? value : null;
+    return isSecureTransport(new URL(value)) ? value : null;
   } catch {
     return null;
   }

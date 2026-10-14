@@ -3,11 +3,15 @@
 // macro's `MFE_MANIFEST`, shipped as `mfe.json`); the host — or the producer's
 // published manifest — adds `scriptUrl`.
 //
-// Trust is the host's CSP (`script-src`), not a hash pinned here (D20): a pin
-// had to be re-taken by hand after every producer release. The registry still
-// refuses URLs no CSP should ever have to judge (`javascript:`, `data:`,
-// protocol-relative), because a bad entry is easier to read here than in a
-// console full of CSP reports.
+// Trust is the host's CSP (`script-src`, scoped to the bundle directory), not
+// a hash pinned here (D20): a pin had to be re-taken by hand after every
+// producer release. The registry still refuses URLs no CSP should ever have to
+// judge (`javascript:`, `data:`, protocol-relative, plain http off loopback),
+// and `fetchRegistry` refuses a bundle outside the directory the caller names,
+// because a bad entry is easier to read here than in a console full of CSP
+// reports — and a CSP allowing the whole origin would let it run.
+
+import { isSecureTransport } from './transport';
 
 /** Inline widget inside a host page, or the owner of a whole route. */
 export type MfeKind = 'component' | 'page';
@@ -25,7 +29,7 @@ export interface MfeManifest {
 
 /** One registry entry: a manifest plus where its self-registering ESM bundle is. */
 export interface MfeEntry extends MfeManifest {
-  /** Root-relative (`/cabinet/mfe/x.js`) or absolute http(s) URL of the bundle. */
+  /** Root-relative (`/cabinet/mfe/x.js`) or absolute https URL of the bundle (http only to loopback). */
   scriptUrl: string;
 }
 
@@ -50,17 +54,17 @@ function isKind(value: unknown): value is MfeKind {
 }
 
 /**
- * Whether `url` may be a bundle URL: root-relative, or absolute http(s). Tabs,
- * newlines and backslashes are refused outright — browsers strip the first two
- * and read `\` as `/`, so `/\evil` would load from another host.
+ * Whether `url` may be a bundle URL: root-relative, or absolute `https:` —
+ * `http:` only to a loopback host, for a dev stand. Tabs, newlines and
+ * backslashes are refused outright — browsers strip the first two and read `\`
+ * as `/`, so `/\evil` would load from another host.
  */
 export function isBundleUrl(url: string): boolean {
   if (url.length === 0 || url.length > MAX_URL) return false;
   if (/[\u0000-\u001F\u007F\\\s]/.test(url)) return false;
   if (url.startsWith('/')) return !url.startsWith('//');
   try {
-    const { protocol } = new URL(url);
-    return protocol === 'https:' || protocol === 'http:';
+    return isSecureTransport(new URL(url));
   } catch {
     return false;
   }
@@ -95,7 +99,7 @@ export function parseEntry(raw: unknown): ParseResult<MfeEntry> {
   if (!manifest.ok) return manifest;
   const scriptUrl = typeof raw === 'object' && raw !== null ? field(raw, 'scriptUrl') : undefined;
   if (typeof scriptUrl !== 'string' || !isBundleUrl(scriptUrl)) {
-    return { ok: false, error: `${manifest.value.name}: \`scriptUrl\` is not a root-relative or http(s) URL` };
+    return { ok: false, error: `${manifest.value.name}: \`scriptUrl\` is not a root-relative or https URL` };
   }
   return { ok: true, value: { ...manifest.value, scriptUrl } };
 }
@@ -155,21 +159,78 @@ export function resolveEntries(entries: readonly MfeEntry[], base: string | URL)
   return entries.map(entry => ({ ...entry, scriptUrl: new URL(entry.scriptUrl, base).href }));
 }
 
+export interface FetchRegistryOptions {
+  /**
+   * The directory every bundle must live in, as an absolute URL ending in `/`
+   * (`https://evinvest.ltd/api/auth/mfe/`). Required: the host's CSP names the
+   * same directory, and a registry entry pointing elsewhere on the producer's
+   * origin — an upload, a user page — must not become a script on the host.
+   */
+  allowedPrefix: string;
+  /** Passed to `fetch`; its `redirect` is always overridden with `'error'`. */
+  init?: RequestInit;
+}
+
+// Encoded slashes survive URL normalisation, so a server that decodes them
+// could still serve `/mfe/..%2f..%2fx.js` from outside the directory.
+const ENCODED_SEPARATOR = /%2f|%5c/i;
+
+function prefixError(prefix: string): string | null {
+  let parsed: URL;
+  try {
+    parsed = new URL(prefix);
+  } catch {
+    return `allowedPrefix ${prefix} is not an absolute URL`;
+  }
+  // Without the trailing slash `https://evinvest.ltd/mfe` would also admit
+  // `/mfe-uploads/`; a non-canonical spelling would never match a resolved URL.
+  if (!prefix.endsWith('/') || parsed.href !== prefix || parsed.search !== '' || parsed.hash !== '') {
+    return `allowedPrefix ${prefix} is not a canonical directory URL ending in /`;
+  }
+  return isSecureTransport(parsed) ? null : `allowedPrefix ${prefix} is not https`;
+}
+
+function outsidePrefix(entries: readonly MfeEntry[], prefix: string): string | null {
+  for (const [index, entry] of entries.entries()) {
+    const { pathname } = new URL(entry.scriptUrl);
+    if (!entry.scriptUrl.startsWith(prefix) || ENCODED_SEPARATOR.test(pathname)) {
+      return `entry ${index}: ${entry.name}: scriptUrl ${entry.scriptUrl} is outside ${prefix}`;
+    }
+  }
+  return null;
+}
+
 /**
  * Fetch and validate a producer's published registry, with its relative URLs
- * resolved against the URL the registry was finally served from (after
- * redirects). Network, HTTP and URL failures are results, not throws: a host
- * renders its fallback either way.
+ * resolved against the registry URL. Redirects are refused (`redirect:
+ * 'error'`, and a `response.url` on another origin fails too): a registry that
+ * moved could otherwise hand its entries' base to whoever it moved to. The
+ * whole registry fails when any `scriptUrl`, once resolved, does not start
+ * with `allowedPrefix`. Network, HTTP and URL failures are results, not
+ * throws: a host renders its fallback either way.
  */
-export async function fetchRegistry(url: string | URL, init?: RequestInit): Promise<ParseResult<MfeEntry[]>> {
+export async function fetchRegistry(
+  url: string | URL,
+  { allowedPrefix, init }: FetchRegistryOptions,
+): Promise<ParseResult<MfeEntry[]>> {
+  const badPrefix = prefixError(allowedPrefix);
+  if (badPrefix) return { ok: false, error: `registry ${String(url)}: ${badPrefix}` };
   try {
-    const response = await fetch(url, init);
+    // A relative registry URL means this page's origin; on a server there is
+    // none, and the throw lands in the catch.
+    const requested = new URL(url, typeof location === 'undefined' ? undefined : location.href);
+    const response = await fetch(requested, { ...init, redirect: 'error' });
     if (!response.ok) return { ok: false, error: `registry ${String(url)}: HTTP ${response.status}` };
+    // `response.url` is empty for a hand-built Response; then there is nothing to compare.
+    if (response.url !== '' && new URL(response.url).origin !== requested.origin) {
+      return { ok: false, error: `registry ${String(url)}: served from another origin, ${response.url}` };
+    }
     const parsed = parseRegistry(await response.json());
     if (!parsed.ok) return parsed;
-    // `response.url` is empty for a hand-built Response; the request URL is
-    // then the best base there is, and a relative one throws into the catch.
-    return { ok: true, value: resolveEntries(parsed.value, response.url || url) };
+    const entries = resolveEntries(parsed.value, requested);
+    const outside = outsidePrefix(entries, allowedPrefix);
+    if (outside) return { ok: false, error: `registry ${String(url)}: ${outside}` };
+    return { ok: true, value: entries };
   } catch (cause) {
     const reason = cause instanceof Error ? cause.message : String(cause);
     return { ok: false, error: `registry ${String(url)}: ${reason}` };
