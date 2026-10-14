@@ -67,6 +67,30 @@ fn run_capturing(cmd: &mut Command) -> (bool, String) {
 	(out.status.success(), text)
 }
 
+/// The sibling packages `dir` links through `file:` (`@evinvest/concierge` and
+/// `@evinvest/wallet` build against `../mfe`). `npm install` there runs the
+/// sibling's own `prepare`, which needs the sibling's dev tools, and a dependent
+/// must publish after what it links — so both the order and the install step read
+/// this.
+fn file_deps(dir: &std::path::Path) -> Vec<PathBuf> {
+	let Ok(text) = std::fs::read_to_string(dir.join("package.json")) else { return Vec::new() };
+	let Ok(json) = serde_json::from_str::<serde_json::Value>(&text) else { return Vec::new() };
+	let mut found = Vec::new();
+	for section in ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"] {
+		if let Some(deps) = json.get(section).and_then(|d| d.as_object()) {
+			for spec in deps.values().filter_map(|v| v.as_str()) {
+				if let Some(rel) = spec.strip_prefix("file:") {
+					let path = dir.join(rel);
+					if !found.contains(&path) {
+						found.push(path);
+					}
+				}
+			}
+		}
+	}
+	found
+}
+
 fn version_of(dir: &std::path::Path) -> String {
 	let json: serde_json::Value = serde_json::from_str(&std::fs::read_to_string(dir.join("package.json")).expect("read package.json")).expect("parse package.json");
 	json["version"].as_str().expect("package.json version").to_owned()
@@ -472,7 +496,8 @@ fn main() -> ExitCode {
 
 	// kitstart ships `template/` in its tarball, so it publishes last: by then the
 	// template already names every package this run released before it.
-	impacted.sort_by_key(|(_, name)| name == KITSTART);
+	// A package linking a sibling through `file:` goes after the packages it links.
+	impacted.sort_by_key(|(dir, name)| (name == KITSTART, file_deps(dir).len()));
 
 	// Everything the loop below will do to the template, done first on paper: a
 	// range it cannot move has to stop the run before cargo-release or npm.
@@ -597,6 +622,11 @@ fn main() -> ExitCode {
 		// it would leave a published version with no commit or tag, and the next run
 		// would publish yet another one. Stop the loop instead and let what did
 		// publish be committed and tagged below.
+		if !file_deps(dir).iter().all(|dep| try_run(Command::new("npm").arg("install").current_dir(dep))) {
+			undo();
+			failed.push((name.clone(), "`npm install` of a linked sibling failed; nothing after it was attempted"));
+			break;
+		}
 		if !try_run(Command::new("npm").arg("install").current_dir(dir)) {
 			undo();
 			failed.push((name.clone(), "`npm install` failed; nothing after it was attempted"));
