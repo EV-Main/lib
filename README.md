@@ -51,6 +51,7 @@ it enables.
 | `experiments` | frontend-only A/B testing (mirrors `@evinvest/experiments`): reports exposure through an injected sink, never imports `analytics` |
 | `i18n` | five-locale internationalisation (mirrors `@evinvest/i18n`): locale registry, `/<locale>` URL contract, `Accept-Language` negotiation, an ICU-subset message formatter, and the translation policy that refuses a translation whose English source has moved. Zero deps, wasm-safe; CLDR plural rules for the five locales are hand-written rather than pulling in ICU4X. Reads the same `messages/<locale>/*.json` as the TS half |
 | `settings` | typed env settings (mirrors `@evinvest/settings`): the `settings!` macro reads env vars into a validated struct — aggregate errors, defaults, secret redaction, `#[required_in("production")]` profile guards, `or_exit` (EX_CONFIG); zero deps, env-only (sops/age decrypt at the shell/CI boundary). `settings_drift` adds a generated `watch_drift()` over the mounted Secret (native, tokio + tracing) |
+| `mfe` | microfrontend producer SDK (wasm-only): the `mfe!` macro defines the light-DOM custom element and emits the `{name, tag, kind}` manifest; the host side — registry, loader, events, `apiVersion` — is `@evinvest/mfe` |
 | `otel` | OpenTelemetry logs + traces over OTLP (native-only backends, inert on wasm): `tracing` layers + flush guard, tonic interceptors for W3C trace propagation |
 | `wasm` | opt-in switch layering browser/js backends onto whatever features are enabled |
 
@@ -86,6 +87,7 @@ TS packages live under [`ts/`](ts/), one directory per library, each with its ow
 [`ts/uikit/`](ts/uikit/) (the dep-light React UI kit mirroring the Rust `uikit`),
 [`ts/analytics/`](ts/analytics/) (PostHog), [`ts/error-monitoring/`](ts/error-monitoring/)
 (Sentry), [`ts/experiments/`](ts/experiments/) (A/B testing),
+[`ts/mfe/`](ts/mfe/) (the microfrontend host contract — registry, loader, events),
 [`ts/settings/`](ts/settings/) (typed env settings),
 [`ts/marketing/`](ts/marketing/) (the landing-page layer over the kit — motion,
 form harness, contact-link tracking; no Cargo counterpart),
