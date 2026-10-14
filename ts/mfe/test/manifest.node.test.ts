@@ -3,7 +3,7 @@
 // control (`javascript:`, `data:`, protocol-relative) ever reaches a loader.
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { fetchRegistry, parseRegistry, resolveEntries, type MfeEntry } from '../src/index';
+import { entryFor, fetchRegistry, parseRegistry, resolveEntries, type MfeEntry } from '../src/index';
 
 const CHIP = {
   name: 'concierge.account-chip',
@@ -104,6 +104,32 @@ describe('parseRegistry: what fails the whole registry', () => {
 
   it('should_reject_a_null_entry_without_throwing', () => {
     expect(parseRegistry([null])).toEqual({ ok: false, error: 'entry 0: manifest is not an object' });
+  });
+});
+
+describe('entryFor', () => {
+  const SIGN_IN: MfeEntry = { name: 'concierge.sign-in', tag: 'mfe-concierge-sign-in', kind: 'component', scriptUrl: '/auth/mfe/sign-in.js' };
+
+  it('should_return_the_entry_whose_name_and_tag_match', () => {
+    expect(entryFor([CHIP, SIGN_IN], { name: 'concierge.sign-in', tag: 'mfe-concierge-sign-in' })).toEqual({ ok: true, value: SIGN_IN });
+  });
+
+  it('should_refuse_when_the_registry_has_no_such_entry', () => {
+    expect(entryFor([CHIP], { name: 'concierge.sign-in', tag: 'mfe-concierge-sign-in' })).toEqual({
+      ok: false,
+      error: 'registry has no concierge.sign-in',
+    });
+  });
+
+  it('should_refuse_an_empty_registry', () => {
+    expect(entryFor([], { name: 'concierge.sign-in', tag: 'mfe-concierge-sign-in' }).ok).toBe(false);
+  });
+
+  it('should_refuse_an_entry_whose_tag_differs_from_the_known_tag', () => {
+    expect(entryFor([SIGN_IN], { name: 'concierge.sign-in', tag: 'mfe-concierge-sign-in-v3' })).toEqual({
+      ok: false,
+      error: 'concierge.sign-in: tag mfe-concierge-sign-in, expected mfe-concierge-sign-in-v3',
+    });
   });
 });
 

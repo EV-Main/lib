@@ -76,10 +76,20 @@ export function dispatchSignOut(source: EventTarget): void {
 export function navigateHref(event: Event): string | null {
   const detail: unknown = event instanceof CustomEvent ? event.detail : undefined;
   if (typeof detail !== 'object' || detail === null) return null;
-  const href: unknown = Reflect.get(detail, 'href');
-  if (typeof href !== 'string' || !href.startsWith('/')) return null;
-  if (href.startsWith('//') || /[\u0000-\u001F\u007F\\]/.test(href)) return null;
-  return href;
+  return rootRelative(Reflect.get(detail, 'href'));
+}
+
+/**
+ * `raw` if it is a path on the current origin, else null. Browsers strip tabs
+ * and newlines and read `\` as `/`, so `//evil`, `/\evil` and `/<TAB>/evil`
+ * would all leave the origin; they are refused with every control character.
+ * The one rule for anything a host routes or redirects to: `ev:navigate`
+ * destinations and RP-login `return_to` alike.
+ */
+export function rootRelative(raw: unknown): string | null {
+  if (typeof raw !== 'string' || !raw.startsWith('/') || raw.startsWith('//')) return null;
+  if (/[\u0000-\u001F\u007F\\]/.test(raw)) return null;
+  return raw;
 }
 
 /** The parts of a click {@link delegatedHref} reads (DOM `MouseEvent` or React's wrapper). */

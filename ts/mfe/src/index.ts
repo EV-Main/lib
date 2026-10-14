@@ -11,6 +11,7 @@
  */
 
 export {
+  entryFor,
   entryFromManifest,
   fetchRegistry,
   findEntry,
@@ -31,6 +32,7 @@ export {
   dispatchSignOut,
   NAVIGATE_EVENT,
   navigateHref,
+  rootRelative,
   SIGNED_IN_EVENT,
   SIGNOUT_EVENT,
   speaksApi,
