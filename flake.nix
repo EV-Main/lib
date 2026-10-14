@@ -404,6 +404,9 @@
                 playwright-test
                 python3
                 sccache
+                # `concierge_client` / `concierge_projection` build concierge's
+                # contracts from proto, and prost-build needs `protoc`.
+                protobuf
               ]
               ++ lib.optionals stdenv.isLinux [
                 mold

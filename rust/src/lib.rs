@@ -55,6 +55,9 @@
 //!   routing, schema.org JSON-LD, `<head>` metadata, sitemap and robots, the
 //!   form's spam barriers. No I/O, wasm-safe; pinned with the TypeScript port to
 //!   the fixtures in `tests/fixtures/kitstart/`. See [`kitstart`].
+//! - **`concierge_client`** — a relying party's calls into concierge: code + PKCE
+//!   sign-in, `GetMe`, catalog publishing under the client credential. Native-only. See
+//!   [`concierge_client`].
 
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
@@ -80,6 +83,10 @@ pub mod otel;
 
 #[cfg(all(feature = "alerts", not(target_arch = "wasm32")))]
 pub mod alerts;
+
+// Native-only: tonic transport and sqlx have no browser backend.
+#[cfg(all(feature = "concierge_client", not(target_arch = "wasm32")))]
+pub mod concierge_client;
 
 #[cfg(feature = "experiments")]
 pub mod experiments;
