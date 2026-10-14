@@ -162,7 +162,7 @@ export type WalletActionOutcome =
   | { status: 'aborted' }
   /** `url` is not a wallet action on `origin` ({@link walletActionUrl}); nothing was opened. */
   | { status: 'invalid_url' }
-  /** No `crypto.randomUUID` (an http page that is not loopback, an old browser); nothing was opened. */
+  /** No `crypto` to draw a state from; nothing was opened. */
   | { status: 'unsupported' };
 
 export interface WalletActionOptions {
@@ -178,16 +178,17 @@ export interface WalletActionOptions {
 
 /**
  * `url` with this page's origin as {@link OPENER_PARAM} and a fresh
- * {@link STATE_PARAM}, or null without `crypto.randomUUID`. The state ties the
+ * {@link STATE_PARAM}, or null without `crypto`. The state ties the
  * result to this one action: a page reloaded from history, or a second
  * evinvest.ltd tab, cannot answer for it.
  */
 function withOpener(url: URL): { href: string; state: string } | null {
   let state: string;
   try {
-    state = crypto.randomUUID();
+    // `getRandomValues` works outside a secure context, where `randomUUID` is missing.
+    state = Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2, '0')).join('');
   } catch {
-    // Missing outside a secure context; `openWalletAction` promises never to reject.
+    // `openWalletAction` promises never to reject.
     return null;
   }
   const next = new URL(url);

@@ -7,13 +7,17 @@ import { openWalletAction, walletActionFromEvent, walletNavigationHref, type Wal
  * click, so the popup keeps the user's activation; when the popup is blocked
  * anyway, the action becomes a full navigation that returns here. A second click
  * while a popup is open only focuses it (`busy`): one action, one `onResult`.
- * A detail that is not a wallet action on `origin` is left to the element.
+ * Every `ev:wallet-action` is cancelled here: left to the element, one that
+ * failed the path or id check would navigate this tab to it unfiltered.
  */
 export function walletActionListener(onResult: ((outcome: WalletActionOutcome) => void) | undefined, origin: string | undefined): RemoteEventHandler {
   return event => {
     const action = walletActionFromEvent(event, origin);
-    if (!action) return;
     event.preventDefault();
+    if (!action) {
+      onResult?.({ status: 'invalid_url' });
+      return;
+    }
     void openWalletAction(action, origin === undefined ? {} : { origin }).then(outcome => {
       if (outcome.status === 'blocked') {
         const href = walletNavigationHref(action, undefined, origin);
