@@ -62,8 +62,6 @@ TS packages live under [`ts/`](ts/), one directory per library, each with its ow
 [`ts/analytics/`](ts/analytics/) (PostHog), [`ts/error-monitoring/`](ts/error-monitoring/)
 (Sentry), [`ts/experiments/`](ts/experiments/) (A/B testing),
 [`ts/mfe/`](ts/mfe/) (the microfrontend host contract — registry, loader, events),
-[`ts/concierge/`](ts/concierge/) and [`ts/wallet/`](ts/wallet/) (host wrappers over
-it for the concierge sign-in/account elements and the banking wallet),
 [`ts/settings/`](ts/settings/) (typed env settings),
 [`ts/marketing/`](ts/marketing/) (the landing-page layer over the kit — motion,
 form harness, contact-link tracking; no Cargo counterpart),
