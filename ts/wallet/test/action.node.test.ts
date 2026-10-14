@@ -1,14 +1,80 @@
 // A money action leaves the scope host for evinvest.ltd, so the action URL is
-// checked the way a browser will read it: another origin, a path outside
-// `/wallet/`, credentials, backslashes or control characters never get opened.
-// The result message comes back over a shared channel and is parsed as untrusted.
+// checked the way a browser will read it and then rebuilt: only the four known
+// action paths, only `invoice` and `scope`, on the wallet origin, with no
+// credentials, backslashes or control characters. Whatever else the element
+// put in the href — an amount, a recipient, a return address — never reaches
+// the action page. The result message comes back over a shared channel and
+// counts only when it echoes the state this action was opened with.
 import { describe, expect, it } from 'vitest';
 
-import { parseWalletMessage, walletActionFromEvent, walletActionUrl, walletNavigationHref } from '../src/index';
+import {
+  parseWalletMessage,
+  WALLET_ACTION_PARAMS,
+  WALLET_ACTION_PATHS,
+  walletActionFromEvent,
+  walletActionUrl,
+  walletNavigationHref,
+} from '../src/index';
+
+const STATE = 'state-1';
+
+describe('wallet action allow-lists', () => {
+  it('should_name_exactly_the_four_money_actions', () => {
+    expect(WALLET_ACTION_PATHS).toEqual(['/wallet/pay', '/wallet/withdraw', '/wallet/move', '/wallet/mandate']);
+  });
+
+  it('should_keep_only_invoice_and_scope', () => {
+    expect(WALLET_ACTION_PARAMS).toEqual(['invoice', 'scope']);
+  });
+});
 
 describe('walletActionUrl: what passes', () => {
-  it('should_accept_a_url_under_wallet_on_evinvest_ltd', () => {
-    expect(walletActionUrl('https://evinvest.ltd/wallet/withdraw?amount=5')?.href).toBe('https://evinvest.ltd/wallet/withdraw?amount=5');
+  it.each(['pay', 'withdraw', 'move', 'mandate'])('should_accept_the_%s_action_on_evinvest_ltd', action => {
+    expect(walletActionUrl(`https://evinvest.ltd/wallet/${action}`)?.href).toBe(`https://evinvest.ltd/wallet/${action}`);
+  });
+
+  it('should_keep_the_invoice_and_scope_parameters', () => {
+    expect(walletActionUrl('https://evinvest.ltd/wallet/pay?invoice=inv-1&scope=sa')?.href).toBe(
+      'https://evinvest.ltd/wallet/pay?invoice=inv-1&scope=sa',
+    );
+  });
+
+  it('should_drop_every_parameter_outside_the_allow_list', () => {
+    const url = walletActionUrl('https://evinvest.ltd/wallet/withdraw?amount=5&to=EQabc&opener=https://evil.example&return_to=https://evil.example&state=s');
+
+    expect(url?.href).toBe('https://evinvest.ltd/wallet/withdraw');
+  });
+
+  it('should_drop_an_extra_parameter_and_keep_the_invoice', () => {
+    expect(walletActionUrl('https://evinvest.ltd/wallet/pay?invoice=inv-1&amount=999')?.href).toBe(
+      'https://evinvest.ltd/wallet/pay?invoice=inv-1',
+    );
+  });
+
+  it('should_drop_the_hash', () => {
+    expect(walletActionUrl('https://evinvest.ltd/wallet/pay?invoice=inv-1#amount=999')?.href).toBe(
+      'https://evinvest.ltd/wallet/pay?invoice=inv-1',
+    );
+  });
+
+  it('should_keep_only_the_first_value_of_a_repeated_parameter', () => {
+    expect(walletActionUrl('https://evinvest.ltd/wallet/pay?invoice=inv-1&invoice=inv-2')?.href).toBe(
+      'https://evinvest.ltd/wallet/pay?invoice=inv-1',
+    );
+  });
+
+  it('should_drop_an_empty_invoice', () => {
+    expect(walletActionUrl('https://evinvest.ltd/wallet/pay?invoice=&scope=sa')?.href).toBe('https://evinvest.ltd/wallet/pay?scope=sa');
+  });
+
+  it('should_keep_an_invoice_of_exactly_128_characters', () => {
+    const invoice = 'i'.repeat(128);
+
+    expect(walletActionUrl(`https://evinvest.ltd/wallet/pay?invoice=${invoice}`)?.href).toBe(`https://evinvest.ltd/wallet/pay?invoice=${invoice}`);
+  });
+
+  it('should_drop_an_invoice_longer_than_128_characters_rather_than_cut_it', () => {
+    expect(walletActionUrl(`https://evinvest.ltd/wallet/pay?invoice=${'i'.repeat(129)}`)?.href).toBe('https://evinvest.ltd/wallet/pay');
   });
 
   it('should_accept_a_staging_origin_when_given_one', () => {
@@ -17,11 +83,12 @@ describe('walletActionUrl: what passes', () => {
     expect(url?.href).toBe('https://stage.evinvest.ltd/wallet/pay');
   });
 
-  it('should_accept_a_url_of_exactly_2048_characters', () => {
-    const raw = `https://evinvest.ltd/wallet/${'a'.repeat(2020)}`;
+  it('should_accept_a_url_of_exactly_2048_characters_and_drop_its_padding', () => {
+    const prefix = 'https://evinvest.ltd/wallet/pay?invoice=inv-1&pad=';
+    const raw = `${prefix}${'a'.repeat(2048 - prefix.length)}`;
     expect(raw).toHaveLength(2048);
 
-    expect(walletActionUrl(raw)?.href).toBe(raw);
+    expect(walletActionUrl(raw)?.href).toBe('https://evinvest.ltd/wallet/pay?invoice=inv-1');
   });
 });
 
@@ -44,8 +111,22 @@ describe('walletActionUrl: what is refused', () => {
     ['the root', 'https://evinvest.ltd/'],
     ['another section', 'https://evinvest.ltd/admin/users'],
     ['wallet without the trailing slash', 'https://evinvest.ltd/wallet'],
-    ['a sibling prefix', 'https://evinvest.ltd/wallets/x'],
+    ['the wallet directory itself', 'https://evinvest.ltd/wallet/'],
+    ['a sibling prefix', 'https://evinvest.ltd/wallets/pay'],
   ])('should_refuse_a_path_outside_wallet: %s', (_label, raw) => {
+    expect(walletActionUrl(raw)).toBeNull();
+  });
+
+  it.each([
+    ['an unknown action', 'https://evinvest.ltd/wallet/transfer'],
+    ['another wallet page', 'https://evinvest.ltd/wallet/history'],
+    ['the bundle directory', 'https://evinvest.ltd/wallet/mfe/wallet.js'],
+    ['a trailing slash', 'https://evinvest.ltd/wallet/pay/'],
+    ['a deeper path', 'https://evinvest.ltd/wallet/pay/confirm'],
+    ['another case', 'https://evinvest.ltd/wallet/PAY'],
+    ['a percent-encoded letter', 'https://evinvest.ltd/wallet/%70ay'],
+    ['a doubled slash', 'https://evinvest.ltd/wallet//pay'],
+  ])('should_refuse_a_wallet_path_that_is_not_an_action: %s', (_label, raw) => {
     expect(walletActionUrl(raw)).toBeNull();
   });
 
@@ -76,14 +157,15 @@ describe('walletActionUrl: what is refused', () => {
   it.each([
     ['tab', 'https://evinvest.ltd/wal\tlet/withdraw'],
     ['newline', 'https://evinvest.ltd/wallet/\n../admin'],
-    ['nul', 'https://evinvest.ltd/wallet/x\u0000'],
-    ['delete', 'https://evinvest.ltd/wallet/x\u007F'],
+    ['nul', 'https://evinvest.ltd/wallet/pay\u0000'],
+    ['delete', 'https://evinvest.ltd/wallet/pay\u007F'],
   ])('should_refuse_a_%s_character', (_label, raw) => {
     expect(walletActionUrl(raw)).toBeNull();
   });
 
   it('should_refuse_a_url_longer_than_2048_characters', () => {
-    const raw = `https://evinvest.ltd/wallet/${'a'.repeat(2021)}`;
+    const prefix = 'https://evinvest.ltd/wallet/pay?invoice=inv-1&pad=';
+    const raw = `${prefix}${'a'.repeat(2049 - prefix.length)}`;
     expect(raw).toHaveLength(2049);
 
     expect(walletActionUrl(raw)).toBeNull();
@@ -95,7 +177,7 @@ describe('walletActionUrl: what is refused', () => {
     ['javascript', 'javascript:alert(1)'],
     ['a number', 42],
     ['undefined', undefined],
-    ['an object', { href: 'https://evinvest.ltd/wallet/x' }],
+    ['an object', { href: 'https://evinvest.ltd/wallet/pay' }],
   ])('should_refuse_input_that_is_%s', (_label, raw) => {
     expect(walletActionUrl(raw)).toBeNull();
   });
@@ -103,9 +185,15 @@ describe('walletActionUrl: what is refused', () => {
 
 describe('walletActionFromEvent', () => {
   it('should_read_the_action_url_from_the_event_detail', () => {
+    const event = new CustomEvent('ev:wallet-action', { detail: { href: 'https://evinvest.ltd/wallet/move?scope=sa&amount=5' } });
+
+    expect(walletActionFromEvent(event)?.href).toBe('https://evinvest.ltd/wallet/move?scope=sa');
+  });
+
+  it('should_return_null_for_a_detail_with_a_wallet_path_that_is_not_an_action', () => {
     const event = new CustomEvent('ev:wallet-action', { detail: { href: 'https://evinvest.ltd/wallet/transfer' } });
 
-    expect(walletActionFromEvent(event)?.href).toBe('https://evinvest.ltd/wallet/transfer');
+    expect(walletActionFromEvent(event)).toBeNull();
   });
 
   it('should_return_null_for_a_detail_with_a_foreign_href', () => {
@@ -130,24 +218,27 @@ describe('walletNavigationHref', () => {
 
 describe('parseWalletMessage: what passes', () => {
   it('should_read_a_done_result_with_a_reference', () => {
-    expect(parseWalletMessage({ type: 'ev:wallet-result', outcome: 'done', reference: 'payout-1' })).toEqual({
+    expect(parseWalletMessage({ type: 'ev:wallet-result', state: STATE, outcome: 'done', reference: 'payout-1' }, STATE)).toEqual({
       outcome: 'done',
       reference: 'payout-1',
     });
   });
 
   it.each(['failed', 'cancelled'])('should_read_the_%s_outcome', outcome => {
-    expect(parseWalletMessage({ type: 'ev:wallet-result', outcome })).toEqual({ outcome, reference: null });
+    expect(parseWalletMessage({ type: 'ev:wallet-result', state: STATE, outcome }, STATE)).toEqual({ outcome, reference: null });
   });
 
   it('should_read_a_null_reference_as_null', () => {
-    expect(parseWalletMessage({ type: 'ev:wallet-result', outcome: 'done', reference: null })).toEqual({ outcome: 'done', reference: null });
+    expect(parseWalletMessage({ type: 'ev:wallet-result', state: STATE, outcome: 'done', reference: null }, STATE)).toEqual({
+      outcome: 'done',
+      reference: null,
+    });
   });
 
   it('should_accept_a_reference_of_exactly_128_characters', () => {
     const reference = 'r'.repeat(128);
 
-    expect(parseWalletMessage({ type: 'ev:wallet-result', outcome: 'done', reference })).toEqual({ outcome: 'done', reference });
+    expect(parseWalletMessage({ type: 'ev:wallet-result', state: STATE, outcome: 'done', reference }, STATE)).toEqual({ outcome: 'done', reference });
   });
 
   // The outcome is what matters — money may already have moved — so an unusable
@@ -158,18 +249,21 @@ describe('parseWalletMessage: what passes', () => {
     ['a number', 7],
     ['an object', { id: 'p-1' }],
   ])('should_keep_the_outcome_and_drop_a_reference_that_is_%s', (_label, reference) => {
-    expect(parseWalletMessage({ type: 'ev:wallet-result', outcome: 'done', reference })).toEqual({ outcome: 'done', reference: null });
+    expect(parseWalletMessage({ type: 'ev:wallet-result', state: STATE, outcome: 'done', reference }, STATE)).toEqual({
+      outcome: 'done',
+      reference: null,
+    });
   });
 
   it('should_keep_a_long_reference_out_rather_than_cut_it', () => {
-    expect(parseWalletMessage({ type: 'ev:wallet-result', outcome: 'failed', reference: 'p'.repeat(200) })).toEqual({
+    expect(parseWalletMessage({ type: 'ev:wallet-result', state: STATE, outcome: 'failed', reference: 'p'.repeat(200) }, STATE)).toEqual({
       outcome: 'failed',
       reference: null,
     });
   });
 
   it('should_ignore_unknown_fields', () => {
-    expect(parseWalletMessage({ type: 'ev:wallet-result', outcome: 'done', reference: 'p-1', amount: 5 })).toStrictEqual({
+    expect(parseWalletMessage({ type: 'ev:wallet-result', state: STATE, outcome: 'done', reference: 'p-1', amount: 5 }, STATE)).toStrictEqual({
       outcome: 'done',
       reference: 'p-1',
     });
@@ -178,15 +272,28 @@ describe('parseWalletMessage: what passes', () => {
 
 describe('parseWalletMessage: what is ignored', () => {
   it.each([
-    ['another type', { type: 'ev:wallet-progress', outcome: 'done' }],
-    ['no type', { outcome: 'done' }],
-    ['an unknown outcome', { type: 'ev:wallet-result', outcome: 'success' }],
-    ['no outcome', { type: 'ev:wallet-result' }],
+    ['another type', { type: 'ev:wallet-progress', state: STATE, outcome: 'done' }],
+    ['no type', { state: STATE, outcome: 'done' }],
+    ['an unknown outcome', { type: 'ev:wallet-result', state: STATE, outcome: 'success' }],
+    ['no outcome', { type: 'ev:wallet-result', state: STATE }],
   ])('should_return_null_for_%s', (_label, data) => {
-    expect(parseWalletMessage(data)).toBeNull();
+    expect(parseWalletMessage(data, STATE)).toBeNull();
   });
 
   it.each([null, undefined, 'ev:wallet-result', 1])('should_return_null_for_a_non_object: %j', data => {
-    expect(parseWalletMessage(data)).toBeNull();
+    expect(parseWalletMessage(data, STATE)).toBeNull();
+  });
+
+  it.each([
+    ['no state', { type: 'ev:wallet-result', outcome: 'done' }],
+    ['another action\'s state', { type: 'ev:wallet-result', state: 'state-2', outcome: 'done' }],
+    ['a state of another type', { type: 'ev:wallet-result', state: 1, outcome: 'done' }],
+    ['a state that differs only in case', { type: 'ev:wallet-result', state: 'STATE-1', outcome: 'done' }],
+  ])('should_return_null_for_a_result_with_%s', (_label, data) => {
+    expect(parseWalletMessage(data, STATE)).toBeNull();
+  });
+
+  it('should_return_null_when_the_expected_state_is_empty_even_if_the_message_echoes_it', () => {
+    expect(parseWalletMessage({ type: 'ev:wallet-result', state: '', outcome: 'done' }, '')).toBeNull();
   });
 });

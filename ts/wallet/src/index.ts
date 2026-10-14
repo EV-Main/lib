@@ -12,23 +12,26 @@ export {
   fetchWalletRegistry,
   PAY_INVOICE_TAG,
   WALLET_ELEMENTS,
+  WALLET_MFE_PREFIX,
   WALLET_ORIGIN,
   WALLET_REGISTRY_URL,
   WALLET_TAG,
   walletEntry,
 } from './elements';
-export type { WalletElement } from './elements';
+export type { WalletElement, WalletRegistryOptions } from './elements';
 
 export {
   OPENER_PARAM,
   openWalletAction,
   parseWalletMessage,
   RETURN_TO_PARAM,
+  STATE_PARAM,
   WALLET_ACTION_EVENT,
-  WALLET_ACTION_PATH,
+  WALLET_ACTION_PARAMS,
+  WALLET_ACTION_PATHS,
   WALLET_RESULT_MESSAGE,
   walletActionFromEvent,
   walletActionUrl,
   walletNavigationHref,
 } from './action';
-export type { WalletActionOptions, WalletActionOutcome, WalletResult } from './action';
+export type { WalletActionOptions, WalletActionOutcome, WalletActionPath, WalletResult } from './action';

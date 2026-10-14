@@ -1,5 +1,6 @@
 // openWalletAction opens evinvest.ltd in a popup and waits for its result.
-// Only a message from that popup, from the wallet origin, counts; every other
+// Only a message from that popup, from the wallet origin, echoing the state the
+// popup was opened with, counts; every other
 // way out (closed, timeout, abort) is a value, and each one closes the popup.
 // One action per page: while a popup is in flight, another call focuses it and
 // resolves `busy`. That in-flight popup is module state, so each test imports a
@@ -7,17 +8,19 @@
 // `window.open` returns a fake that only carries what the helper reads.
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { WalletActionOutcome } from '../src/index';
+import { walletNavigationHref, type WalletActionOutcome } from '../src/index';
 
 type WalletModule = typeof import('../src/index');
 
-const ACTION = 'https://evinvest.ltd/wallet/withdraw?amount=5';
+const ACTION = 'https://evinvest.ltd/wallet/pay?invoice=inv-1';
 const RESULT = { type: 'ev:wallet-result', outcome: 'done', reference: 'payout-1' } as const;
 
 interface FakePopup {
   closed: boolean;
   close: () => void;
   focus: () => void;
+  /** What `window.open` was called with: the action page reads its state from it. */
+  href?: string;
 }
 
 function fakePopup(): FakePopup {
@@ -40,12 +43,28 @@ function asWindow(popup: FakePopup): Window {
 
 function stubOpen(...popups: (FakePopup | null)[]) {
   const open = vi.spyOn(window, 'open');
-  for (const popup of popups) open.mockReturnValueOnce(popup === null ? null : asWindow(popup));
+  for (const popup of popups) {
+    open.mockImplementationOnce(href => {
+      if (popup === null) return null;
+      popup.href = String(href);
+      return asWindow(popup);
+    });
+  }
   return open;
 }
 
 function post(data: unknown, from: { origin: string; source: FakePopup }): void {
   window.dispatchEvent(new MessageEvent('message', { data, origin: from.origin, source: asWindow(from.source) }));
+}
+
+/** The state `popup` was opened with, as the action page reads it from its URL. */
+function stateOf(popup: FakePopup): string | null {
+  return new URL(popup.href ?? 'about:blank').searchParams.get('state');
+}
+
+/** `data` as the action page in `popup` posts it: echoing that popup's state. */
+function answer(popup: FakePopup, data: Record<string, unknown> = RESULT, origin = 'https://evinvest.ltd'): void {
+  post({ ...data, state: stateOf(popup) }, { origin, source: popup });
 }
 
 let openWalletAction: WalletModule['openWalletAction'];
@@ -66,6 +85,13 @@ describe('openWalletAction: refused before opening', () => {
     const open = stubOpen(fakePopup());
 
     await expect(openWalletAction('https://evil.example/wallet/withdraw')).resolves.toEqual({ status: 'invalid_url' });
+    expect(open).not.toHaveBeenCalled();
+  });
+
+  it('should_return_invalid_url_and_not_open_a_wallet_path_that_is_not_an_action', async () => {
+    const open = stubOpen(fakePopup());
+
+    await expect(openWalletAction('https://evinvest.ltd/wallet/transfer')).resolves.toEqual({ status: 'invalid_url' });
     expect(open).not.toHaveBeenCalled();
   });
 
@@ -99,13 +125,75 @@ describe('openWalletAction: the popup', () => {
   it('should_open_the_action_with_this_origin_as_opener_in_the_named_wallet_window', () => {
     const open = stubOpen(fakePopup());
 
+    vi.spyOn(crypto, 'randomUUID').mockReturnValue('00000000-0000-4000-8000-000000000001');
+
     void openWalletAction(new URL(ACTION));
 
     expect(open).toHaveBeenCalledWith(
-      'https://evinvest.ltd/wallet/withdraw?amount=5&opener=http%3A%2F%2Flocalhost%3A3000',
+      'https://evinvest.ltd/wallet/pay?invoice=inv-1&opener=http%3A%2F%2Flocalhost%3A3000&state=00000000-0000-4000-8000-000000000001',
       'ev-wallet-action',
       'popup=yes,width=480,height=720',
     );
+  });
+
+  it('should_open_the_rebuilt_action_without_parameters_outside_the_allow_list', () => {
+    const popup = fakePopup();
+    stubOpen(popup);
+
+    void openWalletAction('https://evinvest.ltd/wallet/pay?invoice=inv-1&amount=999&opener=https://evil.example#x');
+
+    const opened = new URL(popup.href ?? 'about:blank');
+    expect([...opened.searchParams.keys()]).toEqual(['invoice', 'opener', 'state']);
+    expect(opened.searchParams.get('opener')).toBe('http://localhost:3000');
+    expect(opened.hash).toBe('');
+  });
+
+  it('should_open_each_action_with_a_fresh_state', async () => {
+    const first = fakePopup();
+    const second = fakePopup();
+    stubOpen(first, second);
+    const done = openWalletAction(ACTION);
+    answer(first);
+    await done;
+
+    void openWalletAction(ACTION);
+
+    expect(stateOf(second)).not.toBe(stateOf(first));
+  });
+
+  it('should_ignore_a_result_from_the_popup_without_the_state', async () => {
+    const popup = fakePopup();
+    stubOpen(popup);
+    const outcome = openWalletAction(ACTION);
+
+    post({ ...RESULT, reference: 'no-state' }, { origin: 'https://evinvest.ltd', source: popup });
+    answer(popup);
+
+    await expect(outcome).resolves.toEqual({ status: 'result', result: { outcome: 'done', reference: 'payout-1' } });
+  });
+
+  it('should_ignore_a_result_from_the_popup_carrying_another_actions_state', async () => {
+    // A page reloaded from history in the same named window still holds the
+    // state of the action that first opened it.
+    const popup = fakePopup();
+    stubOpen(popup);
+    const outcome = openWalletAction(ACTION);
+
+    post({ ...RESULT, state: 'stale-state', reference: 'stale' }, { origin: 'https://evinvest.ltd', source: popup });
+    answer(popup);
+
+    await expect(outcome).resolves.toEqual({ status: 'result', result: { outcome: 'done', reference: 'payout-1' } });
+  });
+
+  it('should_time_out_when_the_popup_only_ever_posts_results_without_the_state', async () => {
+    const popup = fakePopup();
+    stubOpen(popup);
+    const outcome = openWalletAction(ACTION, { timeoutMs: 1_000 });
+
+    post(RESULT, { origin: 'https://evinvest.ltd', source: popup });
+    vi.advanceTimersByTime(1_000);
+
+    await expect(outcome).resolves.toEqual({ status: 'timeout' });
   });
 
   it('should_resolve_with_the_result_and_close_the_popup', async () => {
@@ -113,7 +201,7 @@ describe('openWalletAction: the popup', () => {
     stubOpen(popup);
     const outcome = openWalletAction(ACTION);
 
-    post(RESULT, { origin: 'https://evinvest.ltd', source: popup });
+    answer(popup);
 
     await expect(outcome).resolves.toEqual({ status: 'result', result: { outcome: 'done', reference: 'payout-1' } });
     expect(popup.close).toHaveBeenCalledTimes(1);
@@ -124,8 +212,9 @@ describe('openWalletAction: the popup', () => {
     stubOpen(popup);
     const outcome = openWalletAction(ACTION);
 
-    post({ ...RESULT, reference: 'forged' }, { origin: 'https://evil.example', source: popup });
-    post(RESULT, { origin: 'https://evinvest.ltd', source: popup });
+    // With the right state, so only the origin check stands in the way.
+    post({ ...RESULT, state: stateOf(popup), reference: 'forged' }, { origin: 'https://evil.example', source: popup });
+    answer(popup);
 
     await expect(outcome).resolves.toEqual({ status: 'result', result: { outcome: 'done', reference: 'payout-1' } });
   });
@@ -135,8 +224,9 @@ describe('openWalletAction: the popup', () => {
     stubOpen(popup);
     const outcome = openWalletAction(ACTION);
 
-    post({ ...RESULT, reference: 'other-tab' }, { origin: 'https://evinvest.ltd', source: fakePopup() });
-    post(RESULT, { origin: 'https://evinvest.ltd', source: popup });
+    // With the right state, so only the source check stands in the way.
+    post({ ...RESULT, state: stateOf(popup), reference: 'other-tab' }, { origin: 'https://evinvest.ltd', source: fakePopup() });
+    answer(popup);
 
     await expect(outcome).resolves.toEqual({ status: 'result', result: { outcome: 'done', reference: 'payout-1' } });
   });
@@ -157,7 +247,7 @@ describe('openWalletAction: the popup', () => {
     stubOpen(popup);
     const outcome = openWalletAction('https://stage.evinvest.ltd/wallet/pay', { origin: 'https://stage.evinvest.ltd' });
 
-    post(RESULT, { origin: 'https://stage.evinvest.ltd', source: popup });
+    answer(popup, RESULT, 'https://stage.evinvest.ltd');
 
     await expect(outcome).resolves.toEqual({ status: 'result', result: { outcome: 'done', reference: 'payout-1' } });
   });
@@ -169,7 +259,7 @@ describe('openWalletAction: one action per page', () => {
     const open = stubOpen(popup, fakePopup());
     void openWalletAction(ACTION);
 
-    await expect(openWalletAction('https://evinvest.ltd/wallet/transfer')).resolves.toEqual({ status: 'busy' });
+    await expect(openWalletAction('https://evinvest.ltd/wallet/withdraw')).resolves.toEqual({ status: 'busy' });
     expect(open).toHaveBeenCalledTimes(1);
     expect(popup.focus).toHaveBeenCalledTimes(1);
   });
@@ -180,7 +270,7 @@ describe('openWalletAction: one action per page', () => {
     const first = openWalletAction(ACTION);
     await openWalletAction(ACTION);
 
-    post(RESULT, { origin: 'https://evinvest.ltd', source: popup });
+    answer(popup);
 
     await expect(first).resolves.toEqual({ status: 'result', result: { outcome: 'done', reference: 'payout-1' } });
   });
@@ -190,13 +280,13 @@ describe('openWalletAction: one action per page', () => {
     const second = fakePopup();
     const open = stubOpen(first, second);
     const done = openWalletAction(ACTION);
-    post(RESULT, { origin: 'https://evinvest.ltd', source: first });
+    answer(first);
     await done;
 
-    const next = openWalletAction('https://evinvest.ltd/wallet/transfer');
-    post({ ...RESULT, reference: 'transfer-1' }, { origin: 'https://evinvest.ltd', source: second });
+    const next = openWalletAction('https://evinvest.ltd/wallet/withdraw');
+    answer(second, { ...RESULT, reference: 'withdraw-1' });
 
-    await expect(next).resolves.toEqual({ status: 'result', result: { outcome: 'done', reference: 'transfer-1' } });
+    await expect(next).resolves.toEqual({ status: 'result', result: { outcome: 'done', reference: 'withdraw-1' } });
     expect(open).toHaveBeenCalledTimes(2);
   });
 
@@ -275,7 +365,7 @@ describe('openWalletAction: other ways out', () => {
 
     popup.closed = true;
     vi.advanceTimersToNextTimer();
-    post(RESULT, { origin: 'https://evinvest.ltd', source: popup });
+    answer(popup);
     vi.advanceTimersToNextTimer();
 
     await expect(outcome).resolves.toEqual({ status: 'result', result: { outcome: 'done', reference: 'payout-1' } });
@@ -323,7 +413,7 @@ describe('openWalletAction: other ways out', () => {
     stubOpen(popup);
     const outcome = openWalletAction(ACTION);
 
-    post(RESULT, { origin: 'https://evinvest.ltd', source: popup });
+    answer(popup);
     await outcome;
 
     expect(vi.getTimerCount()).toBe(0);
@@ -334,10 +424,24 @@ describe('openWalletAction: other ways out', () => {
     stubOpen(popup);
     const outcome = openWalletAction(ACTION);
 
-    post(RESULT, { origin: 'https://evinvest.ltd', source: popup });
-    post({ ...RESULT, outcome: 'failed' }, { origin: 'https://evinvest.ltd', source: popup });
+    answer(popup);
+    answer(popup, { ...RESULT, outcome: 'failed' });
 
     await expect(outcome).resolves.toEqual({ status: 'result', result: { outcome: 'done', reference: 'payout-1' } });
     expect(popup.close).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('walletNavigationHref', () => {
+  afterEach(() => {
+    window.history.replaceState(null, '', '/');
+  });
+
+  it('should_return_to_this_page_without_its_query_or_hash_by_default', () => {
+    window.history.replaceState(null, '', '/billing?token=secret#row-7');
+
+    const href = walletNavigationHref(new URL(ACTION));
+
+    expect(href).toBe('https://evinvest.ltd/wallet/pay?invoice=inv-1&return_to=http%3A%2F%2Flocalhost%3A3000%2Fbilling');
   });
 });
