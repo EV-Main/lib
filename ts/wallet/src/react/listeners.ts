@@ -15,8 +15,10 @@ export function walletActionListener(onResult: ((outcome: WalletActionOutcome) =
     if (!action) return;
     event.preventDefault();
     void openWalletAction(action, origin === undefined ? {} : { origin }).then(outcome => {
-      if (outcome.status === 'blocked') window.location.assign(walletNavigationHref(action));
-      else if (outcome.status !== 'busy') onResult?.(outcome);
+      if (outcome.status === 'blocked') {
+        const href = walletNavigationHref(action, undefined, origin);
+        if (href !== null) window.location.assign(href);
+      } else if (outcome.status !== 'busy') onResult?.(outcome);
     });
   };
 }
