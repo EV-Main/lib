@@ -31,6 +31,8 @@ const MAX_REFERENCE = 128;
 const DEFAULT_TIMEOUT_MS = 15 * 60_000;
 const DEFAULT_POLL_MS = 500;
 const POPUP_FEATURES = 'popup=yes,width=480,height=720';
+/** One named window per page: a second action reuses it rather than stacking popups. */
+const POPUP_NAME = 'ev-wallet-action';
 
 /**
  * `raw` as a wallet action URL on `origin`, or null. Refused: another origin,
@@ -65,7 +67,13 @@ export interface WalletResult {
 
 const OUTCOMES: readonly WalletResult['outcome'][] = ['done', 'failed', 'cancelled'];
 
-/** A {@link WALLET_RESULT_MESSAGE} payload, or null for anything else on the channel. */
+/**
+ * A {@link WALLET_RESULT_MESSAGE} payload, or null for anything else on the
+ * channel. The outcome is what matters — money may already have moved — so a
+ * reference that cannot be used (empty, not a string, over 128 characters)
+ * reads as none rather than losing the outcome. A long one is never cut: a
+ * truncated payment reference names a different payment, or none.
+ */
 export function parseWalletMessage(data: unknown): WalletResult | null {
   if (typeof data !== 'object' || data === null) return null;
   if (Reflect.get(data, 'type') !== WALLET_RESULT_MESSAGE) return null;
@@ -73,9 +81,8 @@ export function parseWalletMessage(data: unknown): WalletResult | null {
   const reference: unknown = Reflect.get(data, 'reference');
   const known = OUTCOMES.find(value => value === outcome);
   if (known === undefined) return null;
-  if (reference === undefined || reference === null) return { outcome: known, reference: null };
-  if (typeof reference !== 'string' || reference === '' || reference.length > MAX_REFERENCE) return null;
-  return { outcome: known, reference };
+  const usable = typeof reference === 'string' && reference !== '' && reference.length <= MAX_REFERENCE;
+  return { outcome: known, reference: usable ? reference : null };
 }
 
 /** How a popup action ended. Every way is a value: the host decides what each means. */
@@ -85,6 +92,8 @@ export type WalletActionOutcome =
   | { status: 'closed' }
   /** `window.open` was refused (popup blocker); navigate with {@link walletNavigationHref} instead. */
   | { status: 'blocked' }
+  /** Another action's popup is still open on this page; it was focused instead. Report nothing for this click. */
+  | { status: 'busy' }
   | { status: 'timeout' }
   | { status: 'aborted' }
   | { status: 'invalid_url' };
@@ -116,24 +125,39 @@ export function walletNavigationHref(url: URL, returnTo: string = window.locatio
   return next.href;
 }
 
+// The popup of the action in flight on this page. Page-wide, like the window
+// name: a second click anywhere — another button, the same one again — must
+// not reload the first action's page under it, nor report a second result.
+let inFlight: Window | null = null;
+
 /**
  * Open a money action on evinvest.ltd in a popup and wait for its result. Only
  * a message from the popup itself, from `origin`, in the
  * {@link WALLET_RESULT_MESSAGE} shape counts; everything else on the channel is
- * ignored. Call it inside the user's click — a popup opened later is blocked.
- * Never rejects. Browser only.
+ * ignored. While one action is in flight, another call focuses its popup and
+ * resolves `busy`. Call it inside the user's click — a popup opened later is
+ * blocked. Never rejects. Browser only.
  */
 export function openWalletAction(url: string | URL, options: WalletActionOptions = {}): Promise<WalletActionOutcome> {
   const origin = options.origin ?? WALLET_ORIGIN;
   const target = walletActionUrl(String(url), origin);
   if (!target) return Promise.resolve({ status: 'invalid_url' });
   if (options.signal?.aborted) return Promise.resolve({ status: 'aborted' });
+  if (inFlight && !inFlight.closed) {
+    inFlight.focus();
+    return Promise.resolve({ status: 'busy' });
+  }
   // Not `noopener`: the page needs `window.opener` to post back. It is ours.
-  const popup = window.open(withOpener(target), '_blank', POPUP_FEATURES);
+  const popup = window.open(withOpener(target), POPUP_NAME, POPUP_FEATURES);
   if (!popup) return Promise.resolve({ status: 'blocked' });
+  inFlight = popup;
 
   return new Promise<WalletActionOutcome>(resolve => {
+    let settled = false;
     const settle = (outcome: WalletActionOutcome) => {
+      if (settled) return;
+      settled = true;
+      if (inFlight === popup) inFlight = null;
       window.removeEventListener('message', onMessage);
       clearInterval(poll);
       clearTimeout(timer);
@@ -149,7 +173,11 @@ export function openWalletAction(url: string | URL, options: WalletActionOptions
     };
     const onAbort = () => settle({ status: 'aborted' });
     const poll = setInterval(() => {
-      if (popup.closed) settle({ status: 'closed' });
+      if (!popup.closed) return;
+      clearInterval(poll);
+      // A page that posts and then closes itself can be seen closed before its
+      // message is dispatched here; one more macrotask lets the result win.
+      setTimeout(() => settle({ status: 'closed' }), 0);
     }, options.pollMs ?? DEFAULT_POLL_MS);
     const timer = setTimeout(() => settle({ status: 'timeout' }), options.timeoutMs ?? DEFAULT_TIMEOUT_MS);
     window.addEventListener('message', onMessage);

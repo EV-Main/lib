@@ -29,7 +29,9 @@ const wallet = registry.ok ? walletEntry(registry.value, 'wallet') : registry;
 
 ## Money actions stay on evinvest.ltd
 
-On a scope host the wallet shows balances and history only. A withdrawal,
+With `scope` (a scope host) the wallet shows balances and history only.
+Without it the wallet is mounted on evinvest.ltd itself and the element carries
+out its actions in place; the host does not intercept them. A withdrawal,
 transfer, payment or mandate happens on `https://evinvest.ltd/wallet/…`: in a
 popup, whose page posts the result back to its opener, or — when the popup is
 blocked — as a full navigation that returns to the host. Banking's mutating
@@ -56,19 +58,24 @@ Contract, host side:
 
 | | Name | Meaning |
 | --- | --- | --- |
-| attribute | `scope` | the scope host's id; absent = the full wallet |
+| attribute | `scope` | the scope host's id; absent = the full wallet, actions in place |
 | attribute | `invoice` | the invoice id (pay-invoice only) |
 | event | `ev:wallet-action` | cancelable, `detail: { href }` under `https://evinvest.ltd/wallet/`; the host opens it |
 | query | `opener` | the host's origin, added to the popup URL — where the page posts |
 | query | `return_to` | where the page sends the user back when navigated, not popped up |
-| message | `{ type: 'ev:wallet-result', outcome: 'done' \| 'failed' \| 'cancelled', reference? }` | posted to the opener |
+| message | `{ type: 'ev:wallet-result', outcome: 'done' \| 'failed' \| 'cancelled', reference? }` | posted to the opener; a reference that is empty, not a string or over 128 characters reads as none — never cut — and the outcome stands |
 
 ### `openWalletAction(url, options?)`
 
-Opens the popup and resolves how it ended — never rejects:
-`result` · `closed` (closed before reporting) · `blocked` (use
-`walletNavigationHref`) · `timeout` (default 15 min; the popup is closed) ·
-`aborted` (`signal`) · `invalid_url` (not under `https://evinvest.ltd/wallet/`).
+Opens the popup — one window named `ev-wallet-action` per page — and resolves
+how it ended — never rejects:
+`result` · `closed` (closed before reporting; settled one macrotask after the
+poll sees it closed, so a result posted just before closing still wins) ·
+`blocked` (use `walletNavigationHref`) · `busy` (another action's popup is open
+on this page: it is focused, and this call reports nothing) · `timeout`
+(default 15 min; the popup is closed) · `aborted` (`signal`) · `invalid_url`
+(not under `https://evinvest.ltd/wallet/`). The React wrappers ignore `busy`,
+so a double click gives one popup and one `onResult`.
 A message counts only if `event.origin` is `https://evinvest.ltd` **and** its
 source is this popup. Call it inside the user's click, or the browser blocks the
 popup. `origin` is overridable for a staging stand only.
