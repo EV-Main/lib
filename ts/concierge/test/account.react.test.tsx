@@ -57,12 +57,30 @@ describe('AccountChip attributes', () => {
   });
 
   it('should_not_set_data_mode_without_host', async () => {
-    await render(<AccountChip scriptUrl="/auth/mfe/chip.js" intent="login" returnTo="/funds" />);
+    await render(<AccountChip scriptUrl="/auth/mfe/chip.js" intent="signin" returnTo="https://invest.evinvest.ltd/funds" />);
 
     const chip = container.querySelector(CHIP);
     expect(chip?.hasAttribute('data-mode')).toBe(false);
-    expect(chip?.getAttribute('data-intent')).toBe('login');
-    expect(chip?.getAttribute('data-return-to')).toBe('/funds');
+    expect(chip?.getAttribute('data-intent')).toBe('signin');
+    expect(chip?.getAttribute('data-return-to')).toBe('https://invest.evinvest.ltd/funds');
+  });
+
+  it('should_pass_the_signup_intent', async () => {
+    await render(<AccountChip scriptUrl="/auth/mfe/chip.js" intent="signup" />);
+
+    expect(container.querySelector(CHIP)?.getAttribute('data-intent')).toBe('signup');
+  });
+
+  it('should_drop_a_root_relative_return_to', async () => {
+    await render(<AccountChip scriptUrl="/auth/mfe/chip.js" returnTo="/funds" />);
+
+    expect(container.querySelector(CHIP)?.hasAttribute('data-return-to')).toBe(false);
+  });
+
+  it('should_not_default_return_to_to_the_current_page', async () => {
+    await render(<AccountChip scriptUrl="/auth/mfe/chip.js" />);
+
+    expect(container.querySelector(CHIP)?.hasAttribute('data-return-to')).toBe(false);
   });
 
   it('should_drop_a_return_to_that_leaves_the_origin', async () => {

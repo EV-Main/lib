@@ -4,24 +4,19 @@
 // After `ev:signed-in` the evinvest.ltd session exists, and the host starts its
 // own silent RP login, which `authorize` answers without asking again.
 
+import { rootRelative, safeHref } from '@evinvest/mfe';
+
 /**
  * The user dismissed the sign-in dialog (Escape, the backdrop, the close
  * button). Bubbles, `composed`, no detail — like the events of @evinvest/mfe.
  */
 export const CLOSE_EVENT = 'ev:close';
 
+/** `data-intent`: which screen the sign-in flow opens on. */
+export type SignInIntent = 'signin' | 'signup';
+
 /** Where a host serves its RP login, which redirects to concierge's `authorize`. */
 export const RP_LOGIN_PATH = '/auth/login';
-
-/**
- * A root-relative path on the host, or null. `//evil` and `/\evil` leave the
- * origin in a browser, so they are refused along with control characters.
- */
-export function rootRelative(raw: string): string | null {
-  if (!raw.startsWith('/') || raw.startsWith('//')) return null;
-  if (/[\u0000-\u001F\u007F\\]/.test(raw)) return null;
-  return raw;
-}
 
 /**
  * The host's RP login URL that comes back to `returnTo`
@@ -31,4 +26,14 @@ export function rootRelative(raw: string): string | null {
 export function rpLoginHref(returnTo: string, loginPath: string = RP_LOGIN_PATH): string {
   const back = rootRelative(returnTo) ?? '/';
   return `${loginPath}?return_to=${encodeURIComponent(back)}`;
+}
+
+/**
+ * `data-return-to`: an absolute http(s) URL on the host, or null. Absolute
+ * because the OAuth round trip leaves for evinvest.ltd and must find its way
+ * back; concierge then accepts it only if its origin is in a scope's registry.
+ */
+export function hostReturnTo(raw: string): string | null {
+  const href = safeHref(raw);
+  return href === null || href.startsWith('/') ? null : href;
 }

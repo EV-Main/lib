@@ -2,7 +2,7 @@
 // the Rust `mfe!` scheme, `mfe-{service}-{name}`, with `{service}.{name}` as the
 // registry name; a host reads the bundle URL from the published registry.
 
-import { fetchRegistry, findEntry, type MfeEntry, type ParseResult } from '@evinvest/mfe';
+import { entryFor, fetchRegistry, type MfeEntry, type ParseResult } from '@evinvest/mfe';
 
 /** The origin concierge serves its pages, API and bundles from. */
 export const CONCIERGE_ORIGIN = 'https://evinvest.ltd';
@@ -33,15 +33,7 @@ export function fetchConciergeRegistry(
   return fetchRegistry(url, init);
 }
 
-/**
- * The registry entry for `element`. Refused when the entry is missing or names
- * another tag: the wrappers mount the tag they know, so a registry pointing that
- * name at a different tag would load a bundle that never defines it.
- */
+/** The registry entry for `element`, refused when missing or naming another tag (`entryFor`). */
 export function conciergeEntry(entries: readonly MfeEntry[], element: ConciergeElement): ParseResult<MfeEntry> {
-  const { name, tag } = CONCIERGE_ELEMENTS[element];
-  const entry = findEntry(entries, name);
-  if (!entry) return { ok: false, error: `registry has no ${name}` };
-  if (entry.tag !== tag) return { ok: false, error: `${name}: tag ${entry.tag}, expected ${tag}` };
-  return { ok: true, value: entry };
+  return entryFor(entries, CONCIERGE_ELEMENTS[element]);
 }

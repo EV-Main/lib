@@ -44,7 +44,7 @@ const { guardResponse, dialogProps } = useSignInRequired();
 const response = await fetch('/api/thing');
 if (guardResponse(response)) return; // a 401 opened the dialog
 
-<SignInDialog scriptUrl={signIn.scriptUrl} returnTo={location.href} {...dialogProps} />;
+<SignInDialog scriptUrl={signIn.scriptUrl} {...dialogProps} />; // returnTo: this page by default
 ```
 
 The element draws its own backdrop and traps focus; the host only drives
@@ -60,8 +60,8 @@ Element contract, host side:
 | | Name | Meaning |
 | --- | --- | --- |
 | attribute | `open` | present while the dialog is open |
-| attribute | `data-intent` | `login` or `signup`, the first screen |
-| attribute | `data-return-to` | absolute URL on the host an OAuth round trip lands on |
+| attribute | `data-intent` | `signin` or `signup`, the first screen |
+| attribute | `data-return-to` | absolute http(s) URL on the host an OAuth round trip lands on; concierge accepts it only for an origin in a scope's registry. Relative values are left out (`hostReturnTo`) |
 | event | `ev:signed-in` | sign-in finished |
 | event | `ev:close` | dismissed by the user (`CLOSE_EVENT`) |
 
@@ -79,8 +79,10 @@ Element contract, host side:
 />
 ```
 
-`onNavigate` gets an already validated root-relative path and returns whether
-the host took it. The chip keeps `apiVersion` 2, `ev:navigate` and `signout`;
+`onNavigate` (`NavigateHandler`, from `@evinvest/mfe/react`) gets an already
+validated root-relative path and returns whether the host took it. In default
+mode the chip takes the same `intent` (`signin` | `signup`) and an absolute
+`returnTo` as the dialog. The chip keeps `apiVersion` 2, `ev:navigate` and `signout`;
 host-mode attributes come from `hostAttributes` in `@evinvest/mfe`.
 
 ## Session

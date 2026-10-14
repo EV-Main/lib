@@ -1,8 +1,11 @@
 // `returnTo` ends up as the redirect target of the host's RP login: anything a
-// browser would resolve off the host's origin collapses to `/`.
+// browser would resolve off the host's origin collapses to `/` (the rule itself,
+// `rootRelative`, is tested in @evinvest/mfe). `data-return-to` is the other
+// way round: the OAuth round trip leaves for evinvest.ltd, so only an absolute
+// http(s) URL can bring it back.
 import { describe, expect, it } from 'vitest';
 
-import { rootRelative, rpLoginHref } from '../src/index';
+import { hostReturnTo, rpLoginHref } from '../src/index';
 
 describe('rpLoginHref', () => {
   it('should_carry_a_root_relative_path_back_encoded', () => {
@@ -53,12 +56,26 @@ describe('rpLoginHref', () => {
   });
 });
 
-describe('rootRelative', () => {
-  it('should_return_a_root_relative_path_unchanged', () => {
-    expect(rootRelative('/a/b?c=d#e')).toBe('/a/b?c=d#e');
+describe('hostReturnTo', () => {
+  it('should_keep_an_absolute_https_url_on_the_host', () => {
+    expect(hostReturnTo('https://invest.evinvest.ltd/funds?x=1#top')).toBe('https://invest.evinvest.ltd/funds?x=1#top');
   });
 
-  it('should_return_null_for_a_protocol_relative_url', () => {
-    expect(rootRelative('//evil.example')).toBeNull();
+  it('should_keep_an_absolute_http_url_for_a_local_stand', () => {
+    expect(hostReturnTo('http://localhost:3000/')).toBe('http://localhost:3000/');
+  });
+
+  it.each([
+    ['root-relative', '/funds'],
+    ['the root', '/'],
+    ['protocol-relative', '//evil.example/x'],
+    ['backslash', '/\\evil.example'],
+    ['javascript', 'javascript:alert(1)'],
+    ['data', 'data:text/html,<script>alert(1)</script>'],
+    ['a bare word', 'funds'],
+    ['empty', ''],
+    ['a tab inside', 'https://invest.evinvest.ltd/\tfunds'],
+  ])('should_refuse_a_%s_value', (_label, raw) => {
+    expect(hostReturnTo(raw)).toBeNull();
   });
 });

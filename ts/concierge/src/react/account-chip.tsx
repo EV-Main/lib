@@ -1,9 +1,8 @@
-import { API_VERSION, hostAttributes, HOST_ATTRS, NAVIGATE_EVENT, safeHref, SIGNOUT_EVENT, type HostPropsInput } from '@evinvest/mfe';
-import { RemoteElement } from '@evinvest/mfe/react';
+import { API_VERSION, hostAttributes, HOST_ATTRS, NAVIGATE_EVENT, SIGNOUT_EVENT, type HostPropsInput } from '@evinvest/mfe';
+import { navigateListener, RemoteElement, type NavigateHandler } from '@evinvest/mfe/react';
 import type { ReactNode } from 'react';
 
-import { ACCOUNT_CHIP_TAG } from '../index';
-import { navigateListener, type NavigateHandler } from './events';
+import { ACCOUNT_CHIP_TAG, hostReturnTo, type SignInIntent } from '../index';
 
 export interface AccountChipProps {
   /** Bundle URL from the concierge registry (`conciergeEntry(entries, 'accountChip')`). */
@@ -14,8 +13,8 @@ export interface AccountChipProps {
    */
   host?: HostPropsInput;
   /** Default mode: which auth screen the signed-out CTA opens. */
-  intent?: 'login';
-  /** Default mode: where to come back to after sign-in. */
+  intent?: SignInIntent;
+  /** Default mode: where to come back to after sign-in — an absolute URL on this host. */
   returnTo?: string;
   onNavigate?: NavigateHandler;
   /** Host mode: sign out was picked; end the host's own session. */
@@ -42,7 +41,7 @@ export function AccountChip({
     ? hostAttributes(host)
     : {
         [HOST_ATTRS.intent]: intent,
-        [HOST_ATTRS.returnTo]: returnTo === undefined ? undefined : safeHref(returnTo),
+        [HOST_ATTRS.returnTo]: returnTo === undefined ? undefined : hostReturnTo(returnTo),
       };
   return (
     <RemoteElement
