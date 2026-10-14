@@ -63,8 +63,6 @@ hand-written for one of four reasons:
                      react, next                                            B
  mfe           0.9k  manifest, events, host attributes, loader             A
                      RemoteElement                                          B
-                     SignInDialog, AccountPage, AccountChip, hook           B
-                     Wallet, PayInvoiceButton                               B
  analytics     1.4k  sink / beacon / consent                                A
                      posthog, react, next                                   B
  error-monitoring 0.6k  Sentry / React / Next wiring                        B
