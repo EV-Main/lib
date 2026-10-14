@@ -46,6 +46,11 @@ jobs:
           for pkg in uikit marketing; do
             (cd "ts/$pkg" && npm ci --ignore-scripts && npm run build)
           done
+      # concierge and wallet link @evinvest/mfe by `file:`; their `prepare` build
+      # needs its `dist/` (types for the .d.ts step) before `npm ci` runs it.
+      - name: Build the mfe package concierge and wallet link
+        if: steps.tag.outputs.dir == 'ts/concierge' || steps.tag.outputs.dir == 'ts/wallet'
+        run: (cd ts/mfe && npm ci --ignore-scripts && npm run build)
       - name: Publish
         working-directory: ${{ steps.tag.outputs.dir }}
         env:
