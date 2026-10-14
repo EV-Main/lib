@@ -11,6 +11,7 @@ ts/
 ├── analytics/         port of the `analytics` Cargo feature (PostHog product analytics)
 ├── error-monitoring/  port of the `error_monitoring` Cargo feature (Sentry error monitoring)
 ├── experiments/       port of the `experiments` Cargo feature (frontend-only A/B testing)
+├── mfe/               host side of the `mfe` Cargo feature (registry, loader, events, RemoteElement)
 ├── settings/          port of the `settings` Cargo feature (typed env settings)
 ├── marketing/         landing-page layer over uikit: motion, form harness, contact tracking
 ├── kitstart/          landing-site machinery: routing, places, lead funnel, SEO, Next glue
@@ -60,6 +61,8 @@ hand-written for one of four reasons:
                      hash (FNV-1a)                                          D  hash vectors
                      overrides                                              C
                      react, next                                            B
+ mfe           0.9k  manifest, events, host attributes, loader             A
+                     RemoteElement                                          B
  analytics     1.4k  sink / beacon / consent                                A
                      posthog, react, next                                   B
  error-monitoring 0.6k  Sentry / React / Next wiring                        B
