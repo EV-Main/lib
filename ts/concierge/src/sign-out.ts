@@ -13,16 +13,15 @@ export const PLATFORM_SIGN_OUT_URL = `${CONCIERGE_ORIGIN}/api/auth/logout/confir
 
 /**
  * Where to send the user to end the evinvest.ltd session:
- * `PLATFORM_SIGN_OUT_URL?return_to=<origin + pathname>`. Query and hash are
- * dropped — they can carry tokens or ids that have no business in a URL on
- * another origin. A `returnTo` that is not an absolute https URL
- * (`hostReturnTo`) leaves `return_to` out, and concierge decides where the
- * user lands. Concierge sends the user back only to an origin in a scope's
- * registry.
+ * `PLATFORM_SIGN_OUT_URL?return_to=<origin + pathname>` (`hostReturnTo`).
+ * Concierge takes `return_to` only when its origin is in a scope's registry and
+ * its path is byte for byte one of the scope's `return_paths`; anything else —
+ * including no `return_to` at all — is a 400 and the session stays. A
+ * `returnTo` that is not an absolute https URL therefore yields the bare URL,
+ * which concierge refuses: pass this host's origin plus `/`.
  */
 export function platformSignOutHref(returnTo: string): string {
   const back = hostReturnTo(returnTo);
   if (back === null) return PLATFORM_SIGN_OUT_URL;
-  const url = new URL(back);
-  return `${PLATFORM_SIGN_OUT_URL}?return_to=${encodeURIComponent(url.origin + url.pathname)}`;
+  return `${PLATFORM_SIGN_OUT_URL}?return_to=${encodeURIComponent(back)}`;
 }

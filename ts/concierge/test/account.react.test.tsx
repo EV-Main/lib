@@ -44,7 +44,9 @@ async function render(node: ReactNode): Promise<void> {
 }
 
 const HOST_PAGE = 'https://invest.evinvest.ltd/funds?token=secret#row-7';
-const PLATFORM_SIGN_OUT = 'https://evinvest.ltd/api/auth/logout/confirm?return_to=https%3A%2F%2Finvest.evinvest.ltd%2Ffunds';
+// The host's root, not the page: concierge returns only to a path in the
+// scope's `return_paths`, and `/` is the one every scope with the chip lists.
+const PLATFORM_SIGN_OUT = 'https://evinvest.ltd/api/auth/logout/confirm?return_to=https%3A%2F%2Finvest.evinvest.ltd%2F';
 
 /**
  * jsdom cannot navigate to another origin, so `location` is swapped for a
@@ -119,8 +121,24 @@ describe('AccountChip attributes', () => {
     expect(container.querySelector(CHIP)?.hasAttribute('data-return-to')).toBe(false);
   });
 
-  it('should_not_default_return_to_to_the_current_page', async () => {
+  it('should_default_return_to_to_the_current_page_without_query_or_hash', async () => {
+    stubLocation(HOST_PAGE);
+
     await render(<AccountChip scriptUrl="/auth/mfe/chip.js" />);
+
+    expect(container.querySelector(CHIP)?.getAttribute('data-return-to')).toBe('https://invest.evinvest.ltd/funds');
+  });
+
+  it('should_cut_an_explicit_return_to_to_origin_and_path', async () => {
+    await render(<AccountChip scriptUrl="/auth/mfe/chip.js" returnTo="https://user:pass@invest.evinvest.ltd/funds?token=secret#row-7" />);
+
+    expect(container.querySelector(CHIP)?.getAttribute('data-return-to')).toBe('https://invest.evinvest.ltd/funds');
+  });
+
+  it('should_not_set_return_to_in_host_mode', async () => {
+    stubLocation(HOST_PAGE);
+
+    await render(<AccountChip scriptUrl="/auth/mfe/chip.js" host={{ name: 'V' }} />);
 
     expect(container.querySelector(CHIP)?.hasAttribute('data-return-to')).toBe(false);
   });
@@ -167,7 +185,7 @@ describe('AccountChip events', () => {
     expect(event.defaultPrevented).toBe(false);
   });
 
-  it('should_call_onSignOut_then_send_the_page_to_the_platform_sign_out', async () => {
+  it('should_call_onSignOut_then_send_the_page_to_the_platform_sign_out_back_to_the_host_root', async () => {
     const order: string[] = [];
     await render(<AccountChip scriptUrl="/auth/mfe/chip.js" host={{ name: 'V' }} onSignOut={() => void order.push('host')} />);
     const assign = stubLocation(HOST_PAGE);

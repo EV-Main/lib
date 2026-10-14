@@ -17,6 +17,12 @@ describe('platformSignOutHref', () => {
     );
   });
 
+  it('should_carry_the_host_root_back_as_the_wrappers_send_it', () => {
+    expect(platformSignOutHref('https://invest.evinvest.ltd/')).toBe(
+      'https://evinvest.ltd/api/auth/logout/confirm?return_to=https%3A%2F%2Finvest.evinvest.ltd%2F',
+    );
+  });
+
   it('should_drop_the_query_and_hash_of_the_host_page', () => {
     expect(platformSignOutHref('https://invest.evinvest.ltd/funds?token=secret#row-7')).toBe(
       'https://evinvest.ltd/api/auth/logout/confirm?return_to=https%3A%2F%2Finvest.evinvest.ltd%2Ffunds',

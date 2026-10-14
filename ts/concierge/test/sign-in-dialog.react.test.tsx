@@ -130,12 +130,13 @@ describe('SignInDialog mounting', () => {
     }
   });
 
-  it('should_pass_an_explicit_return_to_as_the_host_wrote_it', async () => {
+  it('should_cut_an_explicit_return_to_to_origin_and_path', async () => {
+    // Concierge answers the OAuth start with 400 for a returnTo carrying `?` or `#`.
     await render(
-      <SignInDialog scriptUrl={SCRIPT} open returnTo="https://invest.evinvest.ltd/funds?x=1" onOpenChange={() => {}} onSignedIn={() => {}} />,
+      <SignInDialog scriptUrl={SCRIPT} open returnTo="https://invest.evinvest.ltd/funds?x=1#top" onOpenChange={() => {}} onSignedIn={() => {}} />,
     );
 
-    expect(element()?.getAttribute('data-return-to')).toBe('https://invest.evinvest.ltd/funds?x=1');
+    expect(element()?.getAttribute('data-return-to')).toBe('https://invest.evinvest.ltd/funds');
   });
 
   it('should_drop_a_plain_http_return_to_on_a_real_host', async () => {
