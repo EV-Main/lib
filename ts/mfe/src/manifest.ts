@@ -134,6 +134,18 @@ export function findEntry(entries: readonly MfeEntry[], name: string): MfeEntry 
 }
 
 /**
+ * The entry for an element a host wrapper knows by `{name, tag}`. Refused when
+ * missing, or when the registry gives that name another tag: the wrapper mounts
+ * the tag it knows, so it would load a bundle that never defines it.
+ */
+export function entryFor(entries: readonly MfeEntry[], known: { name: string; tag: string }): ParseResult<MfeEntry> {
+  const entry = findEntry(entries, known.name);
+  if (!entry) return { ok: false, error: `registry has no ${known.name}` };
+  if (entry.tag !== known.tag) return { ok: false, error: `${known.name}: tag ${entry.tag}, expected ${known.tag}` };
+  return { ok: true, value: entry };
+}
+
+/**
  * Resolve every root-relative `scriptUrl` against `base` — the URL the registry
  * was fetched from. A producer publishes `/auth/mfe/x.js` meaning *its* origin;
  * left relative, a host on another origin would load it from itself.

@@ -12,6 +12,7 @@ import {
   dispatchSignOut,
   NAVIGATE_EVENT,
   navigateHref,
+  rootRelative,
   SIGNED_IN_EVENT,
   SIGNOUT_EVENT,
   speaksApi,
@@ -145,6 +146,50 @@ describe('navigateHref', () => {
 
   it('should_refuse_a_plain_event_without_detail', () => {
     expect(navigateHref(new Event(NAVIGATE_EVENT))).toBeNull();
+  });
+});
+
+describe('rootRelative', () => {
+  it('should_return_a_root_relative_path_with_query_and_hash_unchanged', () => {
+    expect(rootRelative('/a/b?c=d#e')).toBe('/a/b?c=d#e');
+  });
+
+  it('should_return_the_root_itself', () => {
+    expect(rootRelative('/')).toBe('/');
+  });
+
+  it('should_refuse_a_protocol_relative_url', () => {
+    expect(rootRelative('//evil.example/steal')).toBeNull();
+  });
+
+  it('should_refuse_a_backslash_after_the_slash', () => {
+    expect(rootRelative('/\\evil.example')).toBeNull();
+  });
+
+  it('should_refuse_a_backslash_anywhere_in_the_path', () => {
+    expect(rootRelative('/x\\..\\y')).toBeNull();
+  });
+
+  it.each([
+    ['tab', '/\t/evil.example'],
+    ['newline', '/\n/evil.example'],
+    ['carriage return', '/x\r'],
+    ['nul', '/x\u0000'],
+    ['delete', '/x\u007F'],
+  ])('should_refuse_a_%s_in_the_path', (_label, raw) => {
+    expect(rootRelative(raw)).toBeNull();
+  });
+
+  it.each([
+    ['an absolute url', 'https://evil.example/x'],
+    ['a javascript url', 'javascript:alert(1)'],
+    ['a bare word', 'dashboard'],
+    ['an empty string', ''],
+    ['a number', 42],
+    ['null', null],
+    ['undefined', undefined],
+  ])('should_refuse_%s', (_label, raw) => {
+    expect(rootRelative(raw)).toBeNull();
   });
 });
 

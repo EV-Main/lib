@@ -33,6 +33,10 @@ const chip = findEntry(result.value, 'concierge.account-chip');
 const local = parseRegistry(JSON.parse(raw));
 ```
 
+A host wrapper that knows its element by name and tag takes it with
+`entryFor(entries, { name, tag })`, which refuses a missing entry and one whose
+tag differs.
+
 An entry is `{ name, tag, scriptUrl, kind: "component" | "page" }`. The Rust
 `mfe!` emits the same object without `scriptUrl` (`mfe.json`):
 `entryFromManifest(manifest, url)` joins them. Names are `{service}.{name}` for
@@ -85,6 +89,12 @@ All bubble and are `composed`.
 | `ev:navigate` | `{ href }` (path + query + hash) | yes | A plain same-origin link click; `preventDefault()` takes it into the host router |
 | `ev:signed-in` | `null` | no | Sign-in finished inside the element; the host starts its own RP login |
 | `signout` | `null` | no | Sign out picked in host mode; the host ends its session |
+
+`navigateHref(event)` reads an `ev:navigate` destination as untrusted input;
+`navigateListener(onNavigate)` from `./react` wraps it for `RemoteElement`, with
+`onNavigate(href)` returning whether the host took the link. Both sit on
+`rootRelative(raw)` — a path on this origin, never `//evil` or `/\evil` — which
+is also the rule for an RP-login `return_to`.
 
 Producers dispatch with `dispatchNavigate` (with `delegatedHref` to decide which
 clicks to offer), `dispatchSignedIn`, `dispatchSignOut`.

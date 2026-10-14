@@ -17,9 +17,9 @@ export const HOST_ATTRS = {
   profileHref: 'data-profile-href',
   switchHref: 'data-switch-href',
   groups: 'data-groups',
-  /** Default mode: which auth screen the signed-out CTA opens (`login`). */
+  /** Which auth screen the sign-in flow opens on: `signin` or `signup`. */
   intent: 'data-intent',
-  /** Default mode: where to come back to after sign-in. */
+  /** Where to come back to after sign-in: an absolute URL on the host, checked by concierge against the scope registry. */
   returnTo: 'data-return-to',
   /** Either mode; `menu` keeps the name below `sm` (a drawer row). CSS only. */
   layout: 'data-layout',
