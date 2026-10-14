@@ -1,6 +1,9 @@
-// The browser's who-am-I: `GET /api/auth/session` on evinvest.ltd. The shape is
-// concierge's `SessionInfo` (runner/src/web/routes.rs): a camelCase `user` when
-// signed in, the seat's concrete `permissions` either way.
+// The browser's who-am-I: `GET /api/auth/session` on evinvest.ltd. Concierge's
+// `SessionInfo` (runner/src/web/routes.rs) carries more than a host should
+// hold — the platform role, `isAdmin`, the break-glass flag and the seat's
+// platform `permissions`. The parser keeps only what the account chip shows:
+// a host that holds platform privileges in its state is one `if` away from
+// gating its own UI on them, and they say nothing about the host's backend.
 //
 // It tells a host who holds the evinvest.ltd session — not what the host's own
 // backend lets that user do. Authorisation stays with the host's RP session.
@@ -11,25 +14,25 @@ import { CONCIERGE_ORIGIN } from './elements';
 
 export const SESSION_URL = `${CONCIERGE_ORIGIN}/api/auth/session`;
 
+/** Who holds the evinvest.ltd session, as much as a chip shows. Platform role and permissions are left out on purpose. */
 export interface SessionUser {
   userId: string;
   email: string;
   emailVerified: boolean;
   /** Null until the user picks one. */
   username: string | null;
-  status: string;
-  role: string;
-  isAdmin: boolean;
-  /** The role comes from the emergency allowlist, not the directory: temporary by construction. */
-  roleIsBreakGlass: boolean;
+  /** Null when concierge sends none (it does not yet). */
+  displayName: string | null;
 }
 
-export type Session =
-  | { authenticated: true; user: SessionUser; permissions: readonly string[] }
-  | { authenticated: false; user: null; permissions: readonly string[] };
+export type Session = { authenticated: true; user: SessionUser } | { authenticated: false; user: null };
 
-function isStringArray(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every(item => typeof item === 'string');
+// Concierge serialises an unset optional string as `null`; an absent key reads
+// the same. Anything else in the slot is a mistyped body, not an absent value.
+function optionalString(raw: object, key: string): string | null | undefined {
+  const value: unknown = Reflect.get(raw, key);
+  if (value === null || value === undefined) return null;
+  return typeof value === 'string' ? value : undefined;
 }
 
 function parseUser(raw: unknown): SessionUser | null {
@@ -37,39 +40,26 @@ function parseUser(raw: unknown): SessionUser | null {
   const userId: unknown = Reflect.get(raw, 'userId');
   const email: unknown = Reflect.get(raw, 'email');
   const emailVerified: unknown = Reflect.get(raw, 'emailVerified');
-  const username: unknown = Reflect.get(raw, 'username');
-  const status: unknown = Reflect.get(raw, 'status');
-  const role: unknown = Reflect.get(raw, 'role');
-  const isAdmin: unknown = Reflect.get(raw, 'isAdmin');
-  const roleIsBreakGlass: unknown = Reflect.get(raw, 'roleIsBreakGlass');
+  const username = optionalString(raw, 'username');
+  const displayName = optionalString(raw, 'displayName');
   if (typeof userId !== 'string' || userId === '' || typeof email !== 'string') return null;
-  if (typeof emailVerified !== 'boolean' || typeof isAdmin !== 'boolean' || typeof roleIsBreakGlass !== 'boolean') return null;
-  if (typeof status !== 'string' || typeof role !== 'string') return null;
-  // Concierge serialises an unset username as `null`; an absent key reads the same.
-  if (username !== null && username !== undefined && typeof username !== 'string') return null;
-  return {
-    userId,
-    email,
-    emailVerified,
-    username: typeof username === 'string' ? username : null,
-    status,
-    role,
-    isAdmin,
-    roleIsBreakGlass,
-  };
+  if (typeof emailVerified !== 'boolean' || username === undefined || displayName === undefined) return null;
+  return { userId, email, emailVerified, username, displayName: displayName === '' ? null : displayName };
 }
 
-/** Validate a session body. Unknown fields are ignored; a missing or mistyped known one fails. */
+/**
+ * Validate a session body and keep only {@link SessionUser}'s fields. Unknown
+ * fields — `permissions`, `role`, `isAdmin`, `roleIsBreakGlass` among them —
+ * are dropped; a missing or mistyped kept one fails.
+ */
 export function parseSession(raw: unknown): ParseResult<Session> {
   if (typeof raw !== 'object' || raw === null) return { ok: false, error: 'session is not an object' };
   const authenticated: unknown = Reflect.get(raw, 'authenticated');
-  const permissions: unknown = Reflect.get(raw, 'permissions');
   if (typeof authenticated !== 'boolean') return { ok: false, error: 'session `authenticated` is not a boolean' };
-  if (!isStringArray(permissions)) return { ok: false, error: 'session `permissions` is not a string array' };
-  if (!authenticated) return { ok: true, value: { authenticated: false, user: null, permissions } };
+  if (!authenticated) return { ok: true, value: { authenticated: false, user: null } };
   const user = parseUser(Reflect.get(raw, 'user'));
   if (!user) return { ok: false, error: 'session `user` is missing or malformed' };
-  return { ok: true, value: { authenticated: true, user, permissions } };
+  return { ok: true, value: { authenticated: true, user } };
 }
 
 /**

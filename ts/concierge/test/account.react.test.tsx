@@ -1,7 +1,9 @@
 // AccountChip and AccountPage: host mode is set by attributes, and an
 // `ev:navigate` detail from the element is untrusted — only a root-relative
-// path reaches the host's router. Tags are defined up front, so the loader
-// resolves without a network.
+// path reaches the host's router. Sign-out ends the host's session and then the
+// platform's, which a host cannot end itself: left alive, it signs the next
+// visitor of a shared browser straight back in. Tags are defined up front, so
+// the loader resolves without a network.
 import { act, type ReactNode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -32,12 +34,52 @@ beforeEach(() => {
 afterEach(() => {
   act(() => root.unmount());
   container.remove();
+  vi.unstubAllGlobals();
 });
 
 async function render(node: ReactNode): Promise<void> {
   await act(async () => {
     root.render(node);
   });
+}
+
+const HOST_PAGE = 'https://invest.evinvest.ltd/funds?token=secret#row-7';
+const PLATFORM_SIGN_OUT = 'https://evinvest.ltd/api/auth/logout/confirm?return_to=https%3A%2F%2Finvest.evinvest.ltd%2Ffunds';
+
+/**
+ * jsdom cannot navigate to another origin, so `location` is swapped for a
+ * record of where the page was sent. Stubbed after render: the loader resolves
+ * bundle URLs against the real one.
+ */
+function stubLocation(href: string) {
+  const url = new URL(href);
+  const assign = vi.fn<(to: string) => void>();
+  vi.stubGlobal('location', { href: url.href, origin: url.origin, pathname: url.pathname, search: url.search, hash: url.hash, assign });
+  return assign;
+}
+
+type RejectionHandler = (reason: unknown) => void;
+
+/** The slice of Node's `process` the rejection test needs; the package ships no Node types. */
+interface RejectionEvents {
+  listeners(event: 'unhandledRejection'): RejectionHandler[];
+  removeAllListeners(event: 'unhandledRejection'): void;
+  on(event: 'unhandledRejection', handler: RejectionHandler): void;
+  once(event: 'unhandledRejection', handler: RejectionHandler): void;
+}
+
+const nodeProcess: RejectionEvents = Reflect.get(globalThis, 'process');
+
+function signOut(target: Element | null): void {
+  target?.dispatchEvent(new CustomEvent('signout', { bubbles: true, composed: true, detail: null }));
+}
+
+function deferred(): { promise: Promise<void>; resolve: () => void } {
+  let resolve = () => {};
+  const promise = new Promise<void>(done => {
+    resolve = done;
+  });
+  return { promise, resolve };
 }
 
 function navigate(target: Element | null, href: unknown): CustomEvent {
@@ -125,13 +167,100 @@ describe('AccountChip events', () => {
     expect(event.defaultPrevented).toBe(false);
   });
 
-  it('should_call_onSignOut_on_signout', async () => {
-    const onSignOut = vi.fn<() => void>();
-    await render(<AccountChip scriptUrl="/auth/mfe/chip.js" host={{ name: 'V' }} onSignOut={onSignOut} />);
+  it('should_call_onSignOut_then_send_the_page_to_the_platform_sign_out', async () => {
+    const order: string[] = [];
+    await render(<AccountChip scriptUrl="/auth/mfe/chip.js" host={{ name: 'V' }} onSignOut={() => void order.push('host')} />);
+    const assign = stubLocation(HOST_PAGE);
+    assign.mockImplementation(() => void order.push('platform'));
 
-    container.querySelector(CHIP)?.dispatchEvent(new CustomEvent('signout', { bubbles: true, composed: true, detail: null }));
+    signOut(container.querySelector(CHIP));
+
+    await vi.waitFor(() => expect(assign).toHaveBeenCalledWith(PLATFORM_SIGN_OUT));
+    expect(order).toEqual(['host', 'platform']);
+  });
+
+  it('should_wait_for_an_async_onSignOut_before_leaving_the_page', async () => {
+    const hostDone = deferred();
+    await render(<AccountChip scriptUrl="/auth/mfe/chip.js" host={{ name: 'V' }} onSignOut={() => hostDone.promise} />);
+    const assign = stubLocation(HOST_PAGE);
+
+    signOut(container.querySelector(CHIP));
+    await Promise.resolve();
+
+    expect(assign).not.toHaveBeenCalled();
+    hostDone.resolve();
+    await vi.waitFor(() => expect(assign).toHaveBeenCalledWith(PLATFORM_SIGN_OUT));
+  });
+
+  it('should_still_end_the_platform_session_when_onSignOut_rejects', async () => {
+    // The listener lets the rejection reach the page's error handlers on
+    // purpose; vitest's own handler would fail the run, so it steps aside for
+    // this one test and the rejection is checked here instead.
+    const vitestHandlers = nodeProcess.listeners('unhandledRejection');
+    nodeProcess.removeAllListeners('unhandledRejection');
+    const surfaced = new Promise<unknown>(resolve => nodeProcess.once('unhandledRejection', resolve));
+    try {
+      const failure = new Error('host sign-out failed');
+      await render(<AccountChip scriptUrl="/auth/mfe/chip.js" host={{ name: 'V' }} onSignOut={() => Promise.reject(failure)} />);
+      const assign = stubLocation(HOST_PAGE);
+
+      signOut(container.querySelector(CHIP));
+
+      await expect(surfaced).resolves.toBe(failure);
+      expect(assign).toHaveBeenCalledWith(PLATFORM_SIGN_OUT);
+    } finally {
+      for (const handler of vitestHandlers) nodeProcess.on('unhandledRejection', handler);
+    }
+  });
+
+  it('should_still_end_the_platform_session_when_onSignOut_throws_synchronously', async () => {
+    // A synchronous throw surfaces as the same unhandled rejection as above.
+    const vitestHandlers = nodeProcess.listeners('unhandledRejection');
+    nodeProcess.removeAllListeners('unhandledRejection');
+    const surfaced = new Promise<unknown>(resolve => nodeProcess.once('unhandledRejection', resolve));
+    try {
+      const failure = new Error('host sign-out failed');
+      await render(
+        <AccountChip
+          scriptUrl="/auth/mfe/chip.js"
+          host={{ name: 'V' }}
+          onSignOut={() => {
+            throw failure;
+          }}
+        />,
+      );
+      const assign = stubLocation(HOST_PAGE);
+
+      signOut(container.querySelector(CHIP));
+
+      await expect(surfaced).resolves.toBe(failure);
+      expect(assign).toHaveBeenCalledWith(PLATFORM_SIGN_OUT);
+    } finally {
+      for (const handler of vitestHandlers) nodeProcess.on('unhandledRejection', handler);
+    }
+  });
+
+  it('should_end_the_platform_session_without_an_onSignOut', async () => {
+    await render(<AccountChip scriptUrl="/auth/mfe/chip.js" host={{ name: 'V' }} />);
+    const assign = stubLocation(HOST_PAGE);
+
+    signOut(container.querySelector(CHIP));
+
+    await vi.waitFor(() => expect(assign).toHaveBeenCalledWith(PLATFORM_SIGN_OUT));
+  });
+
+  it('should_stay_on_the_page_when_platformSignOut_is_false', async () => {
+    const hostDone = Promise.resolve();
+    const onSignOut = vi.fn(() => hostDone);
+    await render(<AccountChip scriptUrl="/auth/mfe/chip.js" host={{ name: 'V' }} onSignOut={onSignOut} platformSignOut={false} />);
+    const assign = stubLocation(HOST_PAGE);
+
+    signOut(container.querySelector(CHIP));
+    // The listener chains on the host's promise before this await does.
+    await hostDone;
 
     expect(onSignOut).toHaveBeenCalledTimes(1);
+    expect(assign).not.toHaveBeenCalled();
   });
 });
 
@@ -155,12 +284,27 @@ describe('AccountPage events', () => {
     expect(onNavigate).not.toHaveBeenCalled();
   });
 
-  it('should_call_onSignOut_on_signout', async () => {
+  it('should_call_onSignOut_then_send_the_page_to_the_platform_sign_out', async () => {
     const onSignOut = vi.fn<() => void>();
     await render(<AccountPage scriptUrl="/auth/mfe/account.js" onSignOut={onSignOut} />);
+    const assign = stubLocation(HOST_PAGE);
 
-    container.querySelector(PAGE)?.dispatchEvent(new CustomEvent('signout', { bubbles: true, composed: true, detail: null }));
+    signOut(container.querySelector(PAGE));
+
+    await vi.waitFor(() => expect(assign).toHaveBeenCalledWith(PLATFORM_SIGN_OUT));
+    expect(onSignOut).toHaveBeenCalledTimes(1);
+  });
+
+  it('should_stay_on_the_page_when_platformSignOut_is_false', async () => {
+    const hostDone = Promise.resolve();
+    const onSignOut = vi.fn(() => hostDone);
+    await render(<AccountPage scriptUrl="/auth/mfe/account.js" onSignOut={onSignOut} platformSignOut={false} />);
+    const assign = stubLocation(HOST_PAGE);
+
+    signOut(container.querySelector(PAGE));
+    await hostDone;
 
     expect(onSignOut).toHaveBeenCalledTimes(1);
+    expect(assign).not.toHaveBeenCalled();
   });
 });

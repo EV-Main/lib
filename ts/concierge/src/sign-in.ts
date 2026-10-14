@@ -29,11 +29,11 @@ export function rpLoginHref(returnTo: string, loginPath: string = RP_LOGIN_PATH)
 }
 
 /**
- * `data-return-to`: `raw` if it is an absolute http(s) URL (`safeHref`), else
- * null — a root-relative path included. Absolute because the OAuth round trip
- * leaves for evinvest.ltd and must find its way back. That the origin is the
- * host's is not checked here: concierge accepts it only if its origin is in a
- * scope's registry.
+ * `data-return-to`: `raw` if it is an absolute https URL — http only to
+ * loopback, for a dev stand (`safeHref`) — else null, a root-relative path
+ * included. Absolute because the OAuth round trip leaves for evinvest.ltd and
+ * must find its way back. That the origin is the host's is not checked here:
+ * concierge accepts it only if its origin is in a scope's registry.
  */
 export function hostReturnTo(raw: string): string | null {
   const href = safeHref(raw);
