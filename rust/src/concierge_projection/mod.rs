@@ -37,7 +37,7 @@ pub mod pg;
 #[cfg(feature = "concierge_projection_sqlite")]
 pub mod sqlite;
 
-pub use engine::{Cycle, Projection, ProjectionConfig, ProjectionError, UnknownKind};
+pub use engine::{Cycle, MAX_BATCH, Projection, ProjectionConfig, ProjectionError, UnknownKind};
 pub use event::{Member, Scope, ScopeClient, ScopeEvent, ScopeEventBody, ScopeState, Stream, UserEvent, UserEventKind};
 pub use handler::Handler;
 #[cfg(feature = "concierge_projection_pg")]

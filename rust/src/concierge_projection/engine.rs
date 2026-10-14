@@ -16,6 +16,10 @@ use super::{
 
 const TARGET: &str = "ev_lib::concierge_projection";
 
+/// concierge's own ceiling on `limit` (its `MAX_LIMIT`). A larger batch would come back
+/// short every time and stop each drain after one page.
+pub const MAX_BATCH: u32 = 500;
+
 /// What to do with an event this build cannot read (docs/SCOPES-AND-APPROVALS.md §4.3 of
 /// concierge).
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
@@ -32,7 +36,8 @@ pub enum UnknownKind {
 #[derive(Clone, Debug)]
 pub struct ProjectionConfig {
 	pub unknown_kind: UnknownKind,
-	/// Events per pull; concierge caps it at its own ceiling.
+	/// Events per pull, clamped to `1..=`[`MAX_BATCH`]. A page shorter than this is read as
+	/// the stream's head, so it must not exceed what concierge will return.
 	pub batch: u32,
 	/// The wait between cycles that did not stall.
 	pub poll_interval: Duration,
@@ -180,7 +185,8 @@ where
 	H: Handler,
 	Src: EventSource,
 {
-	pub fn new(store: St, handler: H, source: Src, config: ProjectionConfig) -> Self {
+	pub fn new(store: St, handler: H, source: Src, mut config: ProjectionConfig) -> Self {
+		config.batch = config.batch.clamp(1, MAX_BATCH);
 		Self { store, handler, source, config }
 	}
 
@@ -188,8 +194,9 @@ where
 	/// read it), then cycles: the scope stream before the lifecycle stream, so a user's
 	/// MEMBER_JOINED is usually applied before their lifecycle row asks for it.
 	///
-	/// Dropping the future mid-cycle is safe: every step is persisted before the next, and a
-	/// cut-off event is re-pulled and re-applied, never lost. Race it against the app's
+	/// Dropping the future mid-cycle is safe: the cursor moves only after its events are
+	/// done, so a cut-off event is re-pulled — re-applied if the handler's result was not
+	/// recorded, or its MEMBER_JOINED follow-up re-run if only that was cut — never lost. Race it against the app's
 	/// shutdown signal.
 	pub async fn run(&self) {
 		match self.replay_parked().await {
@@ -446,9 +453,14 @@ where
 				Ok(Step::Parked)
 			}
 			Decision::Skip { stale } => {
-				if let (true, Pulled::Known(e)) = (stale, &pulled) {
+				match (stale, &pulled) {
 					// Recorded so a redelivery is caught by the cheaper id check next time.
-					self.store.record_applied(stream, e.event_id(), &e.key(), e.sequence()).await?;
+					(true, Pulled::Known(e)) => self.store.record_applied(stream, e.event_id(), &e.key(), e.sequence()).await?,
+					// A redelivered MEMBER_JOINED may be one whose follow-up never ran (the
+					// cycle was cut between recording it and raising its user's floor);
+					// without this, that user's lifecycle would stay parked for ever.
+					(false, Pulled::Known(Event::Scope(e))) => self.after_member_joined(e, unblocked).await?,
+					(false, Pulled::Known(Event::User(_))) | (_, Pulled::Unknown(_)) => {}
 				}
 				cycle.skipped += 1;
 				Ok(Step::Done)
@@ -480,16 +492,25 @@ where
 		})?;
 		self.store.record_applied(stream, event.event_id(), &event.key(), event.sequence()).await?;
 		cycle.applied += 1;
-		if let Event::Scope(ScopeEvent {
-			body: ScopeEventBody::MemberJoined { auth_subject, member, .. },
-			..
-		}) = event
-		{
-			let key = user_key(auth_subject);
-			self.store.raise_sequence(&key, member.lifecycle_sequence).await?;
-			if self.store.has_parked(&key).await? {
-				unblocked.push(key);
-			}
+		if let Event::Scope(e) = event {
+			self.after_member_joined(e, unblocked).await?;
+		}
+		Ok(())
+	}
+
+	/// For a MEMBER_JOINED: raise its user's lifecycle floor to the snapshot's
+	/// `lifecycle_sequence` (which is also what marks the user as seeded) and queue the
+	/// user's parked lifecycle for replay. Idempotent, so it runs again on a redelivery —
+	/// that is how a follow-up cut short after `record_applied` completes. A no-op for
+	/// every other scope event.
+	async fn after_member_joined(&self, event: &ScopeEvent, unblocked: &mut Vec<String>) -> Result<(), ProjectionError> {
+		let ScopeEventBody::MemberJoined { auth_subject, member, .. } = &event.body else {
+			return Ok(());
+		};
+		let key = user_key(auth_subject);
+		self.store.raise_sequence(&key, member.lifecycle_sequence).await?;
+		if self.store.has_parked(&key).await? {
+			unblocked.push(key);
 		}
 		Ok(())
 	}
