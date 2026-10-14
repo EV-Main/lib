@@ -9,22 +9,34 @@
 import { WALLET_ORIGIN } from './elements';
 
 /**
- * Cancelable, from the wallet elements: the user picked a money action. `detail`
- * is `{ href }`, a URL under `https://evinvest.ltd/wallet/`. A host that takes
- * it calls `preventDefault()` and opens it; left alone, the element navigates.
+ * Cancelable, from the wallet elements: the user picked a money action.
+ * `detail` is `{ href }`, one of {@link WALLET_ACTION_PATHS} on
+ * `https://evinvest.ltd`. A host that takes it calls `preventDefault()` and
+ * opens it; left alone, the element navigates.
  */
 export const WALLET_ACTION_EVENT = 'ev:wallet-action';
 
 /** `type` of the message the evinvest.ltd page posts to its opener. */
 export const WALLET_RESULT_MESSAGE = 'ev:wallet-result';
 
-/** Path every money action lives under. */
-export const WALLET_ACTION_PATH = '/wallet/';
+/**
+ * The money actions a host may open, as exact paths on {@link WALLET_ORIGIN}.
+ * Anything else — a sibling page, a trailing slash, a deeper path — is not an
+ * action, however it is spelled.
+ */
+export const WALLET_ACTION_PATHS = ['/wallet/pay', '/wallet/withdraw', '/wallet/move', '/wallet/mandate'] as const;
+
+export type WalletActionPath = (typeof WALLET_ACTION_PATHS)[number];
+
+/** The only query parameters an action URL keeps: which invoice, which scope. */
+export const WALLET_ACTION_PARAMS = ['invoice', 'scope'] as const;
 
 /** Query parameter telling the action page which origin to post its result to. */
 export const OPENER_PARAM = 'opener';
 /** Query parameter telling the action page where to send the user back to when navigated, not popped up. */
 export const RETURN_TO_PARAM = 'return_to';
+/** Query parameter carrying the nonce the action page echoes in its result message. */
+export const STATE_PARAM = 'state';
 
 const MAX_URL = 2048;
 const MAX_REFERENCE = 128;
@@ -34,23 +46,45 @@ const POPUP_FEATURES = 'popup=yes,width=480,height=720';
 /** One named window per page: a second action reuses it rather than stacking popups. */
 const POPUP_NAME = 'ev-wallet-action';
 
+function isActionPath(path: string): path is WalletActionPath {
+  return WALLET_ACTION_PATHS.some(action => action === path);
+}
+
 /**
- * `raw` as a wallet action URL on `origin`, or null. Refused: another origin,
- * a path outside `/wallet/`, credentials, control characters and backslashes —
- * browsers strip tabs and newlines and read `\` as `/` before the check would
- * see them.
+ * `raw` as a wallet action URL on `origin`, rebuilt from scratch, or null.
+ * Only an exact {@link WALLET_ACTION_PATHS} path survives, with the first
+ * `invoice` and `scope` values (non-empty, at most 128 characters); every
+ * other parameter and the hash are dropped. Refused outright: another origin,
+ * another path, credentials, control characters and backslashes — browsers
+ * strip tabs and newlines and read `\` as `/` before the check would see them.
+ *
+ * Contract of the action page on evinvest.ltd, which this URL opens:
+ * - amount, address and recipient are never read from the URL — a payment's
+ *   come from the invoice banking issued, server-side; the URL only names it;
+ * - `opener` and `return_to` are accepted only when their origin exactly
+ *   matches one of the scope's registered origins, else ignored;
+ * - the result goes out as `opener.postMessage(msg, <opener origin>)`, never
+ *   with `'*'`, and echoes `state` unchanged;
+ * - the page is served with `frame-ancestors 'none'`, so no host can frame it
+ *   and click through it.
  */
 export function walletActionUrl(raw: unknown, origin: string = WALLET_ORIGIN): URL | null {
   if (typeof raw !== 'string' || raw.length === 0 || raw.length > MAX_URL) return null;
   if (/[\u0000-\u001F\u007F\\]/.test(raw)) return null;
-  let url: URL;
+  let parsed: URL;
   try {
-    url = new URL(raw);
+    parsed = new URL(raw);
   } catch {
     return null;
   }
-  if (url.origin !== origin || url.username !== '' || url.password !== '') return null;
-  return url.pathname.startsWith(WALLET_ACTION_PATH) ? url : null;
+  if (parsed.origin !== origin || parsed.username !== '' || parsed.password !== '') return null;
+  if (!isActionPath(parsed.pathname)) return null;
+  const url = new URL(parsed.pathname, origin);
+  for (const name of WALLET_ACTION_PARAMS) {
+    const value = parsed.searchParams.get(name);
+    if (value !== null && value !== '' && value.length <= MAX_REFERENCE) url.searchParams.set(name, value);
+  }
+  return url;
 }
 
 /** The action URL of a {@link WALLET_ACTION_EVENT}, or null when the detail is missing or not one. */
@@ -60,7 +94,15 @@ export function walletActionFromEvent(event: Event, origin: string = WALLET_ORIG
   return walletActionUrl(Reflect.get(detail, 'href'), origin);
 }
 
-/** What the action page reports. `reference` names what was created (payout, payment), when anything was. */
+/**
+ * What the action page reports. `reference` names what was created (payout,
+ * payment), when anything was.
+ *
+ * `done` is a hint for the UI — close a dialog, show "processing" — not proof
+ * that money moved: the message comes from a window the host cannot inspect.
+ * What is paid is decided by the money flow (`InvoicePaid`); a host that
+ * unlocks anything on payment reads its status from its own backend.
+ */
 export interface WalletResult {
   outcome: 'done' | 'failed' | 'cancelled';
   reference: string | null;
@@ -69,15 +111,18 @@ export interface WalletResult {
 const OUTCOMES: readonly WalletResult['outcome'][] = ['done', 'failed', 'cancelled'];
 
 /**
- * A {@link WALLET_RESULT_MESSAGE} payload, or null for anything else on the
- * channel. The outcome is what matters — money may already have moved — so a
- * reference that cannot be used (empty, not a string, over 128 characters)
- * reads as none rather than losing the outcome. A long one is never cut: a
- * truncated payment reference names a different payment, or none.
+ * A {@link WALLET_RESULT_MESSAGE} payload for the action opened with `state`,
+ * or null for anything else on the channel — a message without the echoed
+ * `state` belongs to another action, or to nobody. The outcome is what
+ * matters — money may already have moved — so a reference that cannot be used
+ * (empty, not a string, over 128 characters) reads as none rather than losing
+ * the outcome. A long one is never cut: a truncated payment reference names a
+ * different payment, or none.
  */
-export function parseWalletMessage(data: unknown): WalletResult | null {
+export function parseWalletMessage(data: unknown, state: string): WalletResult | null {
   if (typeof data !== 'object' || data === null) return null;
   if (Reflect.get(data, 'type') !== WALLET_RESULT_MESSAGE) return null;
+  if (state === '' || Reflect.get(data, 'state') !== state) return null;
   const outcome: unknown = Reflect.get(data, 'outcome');
   const reference: unknown = Reflect.get(data, 'reference');
   const known = OUTCOMES.find(value => value === outcome);
@@ -86,16 +131,21 @@ export function parseWalletMessage(data: unknown): WalletResult | null {
   return { outcome: known, reference: usable ? reference : null };
 }
 
-/** How a popup action ended. Every way is a value: the host decides what each means. */
+/**
+ * How a popup action ended. Every way is a value: the host decides what each
+ * means. After `closed` or `timeout` the action may still have gone through —
+ * the user can close the popup after paying — so the host re-reads the status
+ * from its backend; it does not offer to repeat the action.
+ */
 export type WalletActionOutcome =
   | { status: 'result'; result: WalletResult }
-  /** The user closed the popup before the page reported anything. */
+  /** The user closed the popup before the page reported anything; the action's fate is unknown. */
   | { status: 'closed' }
   /** `window.open` was refused (popup blocker); navigate with {@link walletNavigationHref} instead. */
   | { status: 'blocked' }
   /** Another action's popup is still open on this page; it was focused instead. Report nothing for this click. */
   | { status: 'busy' }
-  /** No result within `timeoutMs`; the popup was closed. */
+  /** No result within `timeoutMs`; the popup was closed, the action's fate is unknown. */
   | { status: 'timeout' }
   /** `signal` aborted, before the popup opened or while it was open; the popup was closed. */
   | { status: 'aborted' }
@@ -113,18 +163,26 @@ export interface WalletActionOptions {
   signal?: AbortSignal;
 }
 
-/** `url` with this page's origin as {@link OPENER_PARAM}, so the action page knows where to post. */
-function withOpener(url: URL): string {
+/**
+ * `url` with this page's origin as {@link OPENER_PARAM} and a fresh
+ * {@link STATE_PARAM}. The state ties the result to this one action: a page
+ * reloaded from history, or a second evinvest.ltd tab, cannot answer for it.
+ */
+function withOpener(url: URL): { href: string; state: string } {
+  const state = crypto.randomUUID();
   const next = new URL(url);
   next.searchParams.set(OPENER_PARAM, window.location.origin);
-  return next.href;
+  next.searchParams.set(STATE_PARAM, state);
+  return { href: next.href, state };
 }
 
 /**
  * The same action as a full navigation, for when the popup is blocked: the page
- * sends the user back to `returnTo` (default: here) instead of posting.
+ * sends the user back to `returnTo` instead of posting. Default: this page
+ * without query or hash — they can hold tokens or ids that have no business in
+ * a URL on evinvest.ltd.
  */
-export function walletNavigationHref(url: URL, returnTo: string = window.location.href): string {
+export function walletNavigationHref(url: URL, returnTo: string = window.location.origin + window.location.pathname): string {
   const next = new URL(url);
   next.searchParams.set(RETURN_TO_PARAM, returnTo);
   return next.href;
@@ -138,8 +196,8 @@ let inFlight: Window | null = null;
 /**
  * Open a money action on evinvest.ltd in a popup and wait for its result. Only
  * a message from the popup itself, from `origin`, in the
- * {@link WALLET_RESULT_MESSAGE} shape counts; everything else on the channel is
- * ignored. While one action is in flight, another call focuses its popup and
+ * {@link WALLET_RESULT_MESSAGE} shape and echoing this call's `state` counts;
+ * everything else on the channel is ignored. While one action is in flight, another call focuses its popup and
  * resolves `busy`. A popup this call opened is closed whatever the outcome.
  * Call it inside the user's click — a popup opened later is blocked. Never
  * rejects. Browser only.
@@ -153,8 +211,9 @@ export function openWalletAction(url: string | URL, options: WalletActionOptions
     inFlight.focus();
     return Promise.resolve({ status: 'busy' });
   }
+  const { href, state } = withOpener(target);
   // Not `noopener`: the page needs `window.opener` to post back. It is ours.
-  const popup = window.open(withOpener(target), POPUP_NAME, POPUP_FEATURES);
+  const popup = window.open(href, POPUP_NAME, POPUP_FEATURES);
   if (!popup) return Promise.resolve({ status: 'blocked' });
   inFlight = popup;
 
@@ -174,7 +233,7 @@ export function openWalletAction(url: string | URL, options: WalletActionOptions
     const onMessage = (event: MessageEvent) => {
       // The source check stops another evinvest.ltd window from answering for this popup.
       if (event.origin !== origin || event.source !== popup) return;
-      const result = parseWalletMessage(event.data);
+      const result = parseWalletMessage(event.data, state);
       if (result) settle({ status: 'result', result });
     };
     const onAbort = () => settle({ status: 'aborted' });

@@ -23,7 +23,8 @@ the invest cabinet, the SA panel, admin. The elements are banking's, served from
 ```ts
 import { fetchWalletRegistry, walletEntry } from '@evinvest/wallet';
 
-const registry = await fetchWalletRegistry(); // WALLET_REGISTRY_URL by default
+// WALLET_REGISTRY_URL by default; every bundle must sit under WALLET_MFE_PREFIX.
+const registry = await fetchWalletRegistry();
 if (!registry.ok) return fallback;
 const walletResult = walletEntry(registry.value, 'wallet');
 const payResult = walletEntry(registry.value, 'payInvoice');
@@ -32,12 +33,16 @@ const wallet = walletResult.value;
 const pay = payResult.value;
 ```
 
+The host's CSP allows the bundle directory, not the whole origin:
+`script-src https://evinvest.ltd/wallet/mfe/`.
+
 ## Money actions stay on evinvest.ltd
 
 With `scope` (a scope host) the wallet shows balances and history only.
 Without it the wallet is mounted on evinvest.ltd itself and the element carries
-out its actions in place; the host does not intercept them. A withdrawal,
-transfer, payment or mandate happens on `https://evinvest.ltd/wallet/…`: in a
+out its actions in place; the host does not intercept them. A payment,
+withdrawal, move between compartments or mandate (`/wallet/pay`, `/wallet/withdraw`,
+`/wallet/move`, `/wallet/mandate` — no other path is opened) happens on `https://evinvest.ltd`: in a
 popup, whose page posts the result back to its opener, or — when the popup is
 blocked — as a full navigation that returns to the host. Banking's mutating
 routes accept only `Origin: https://evinvest.ltd`, so nothing on a host can move
@@ -53,9 +58,9 @@ import { PayInvoiceButton, Wallet } from '@evinvest/wallet/react';
   scriptUrl={pay.scriptUrl}
   invoice={invoiceId}
   scope="sa"
-  onResult={outcome => {
-    if (outcome.status === 'result' && outcome.result.outcome === 'done') markPaid(outcome.result.reference);
-  }}
+  // Any outcome: re-read the invoice from the host's backend. `done` is a UI
+  // hint, not proof of payment; after `closed`/`timeout` it may still be paid.
+  onResult={() => refetchInvoice(invoiceId)}
 />;
 ```
 
@@ -65,11 +70,23 @@ Contract, host side:
 | --- | --- | --- |
 | attribute | `scope` | the scope host's id; absent = the full wallet, actions in place |
 | attribute | `invoice` | the invoice id (pay-invoice only) |
-| event | `ev:wallet-action` | cancelable, `detail: { href }` under `https://evinvest.ltd/wallet/`; the host opens it |
+| event | `ev:wallet-action` | cancelable, `detail: { href }`, one of `https://evinvest.ltd/wallet/{pay,withdraw,move,mandate}`; the host rebuilds it with only `invoice` and `scope` and opens it |
 | event | `ev:navigate` | `Wallet` only: an in-element link, as in `@evinvest/mfe` (`onNavigate`) |
 | query | `opener` | the host's origin, added to the popup URL — where the page posts |
-| query | `return_to` | where the page sends the user back when navigated, not popped up |
-| message | `{ type: 'ev:wallet-result', outcome: 'done' \| 'failed' \| 'cancelled', reference? }` | posted to the opener; a reference that is empty, not a string or over 128 characters reads as none — never cut — and the outcome stands |
+| query | `state` | a fresh `crypto.randomUUID()` per popup; the page echoes it in its message |
+| query | `return_to` | where the page sends the user back when navigated, not popped up (default: this page, no query or hash) |
+| message | `{ type: 'ev:wallet-result', state, outcome: 'done' \| 'failed' \| 'cancelled', reference? }` | posted to the opener; counted only with this popup's `state`. A reference that is empty, not a string or over 128 characters reads as none — never cut — and the outcome stands |
+
+The action page's side of the contract (banking): amount, address and recipient
+never come from the URL — a payment's come from the server-side invoice;
+`opener` and `return_to` count only when their origin exactly matches one of
+the scope's origins; the result is posted with `postMessage(msg, opener)`,
+never `'*'`; the page is served with `frame-ancestors 'none'`.
+
+`done` is a hint for the UI, not proof of payment: what is paid is decided by
+the money flow (`InvoicePaid`), and the host reads it from its own backend.
+After `closed` or `timeout` the action may still have gone through — re-read
+the status; do not offer a retry.
 
 ### `openWalletAction(url, options?)`
 
@@ -80,10 +97,10 @@ poll sees it closed, so a result posted just before closing still wins) ·
 `blocked` (use `walletNavigationHref`) · `busy` (another action's popup is open
 on this page: it is focused, and this call reports nothing) · `timeout`
 (default 15 min; the popup is closed) · `aborted` (`signal`) · `invalid_url`
-(not under `https://evinvest.ltd/wallet/`). The React wrappers ignore `busy`,
+(not one of the four action paths on `https://evinvest.ltd`). The React wrappers ignore `busy`,
 so a double click gives one popup and one `onResult`.
-A message counts only if `event.origin` is `https://evinvest.ltd` **and** its
-source is this popup. Call it inside the user's click, or the browser blocks the
+A message counts only if `event.origin` is `https://evinvest.ltd`, its source
+is this popup **and** it echoes this popup's `state`. Call it inside the user's click, or the browser blocks the
 popup. `origin` is overridable for a staging stand only.
 
 ## Develop

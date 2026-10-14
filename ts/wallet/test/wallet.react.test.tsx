@@ -1,6 +1,7 @@
 // On a scope host (Wallet with `scope`, PayInvoiceButton) a money action is
-// taken out of the element's click only when its href is a wallet action on
-// evinvest.ltd; anything else is left to the element, and so is every action
+// taken out of the element's click only when its href is one of the known
+// wallet actions on evinvest.ltd, and its result counts only when it echoes the
+// state the popup was opened with; anything else is left to the element, and so is every action
 // of a Wallet without `scope`, which runs on evinvest.ltd itself. One action per
 // page is module state in the wallet core, so every fake popup is closed after
 // each test. `ev:navigate` details are untrusted: only a root-relative path
@@ -53,6 +54,7 @@ afterEach(() => {
   for (const popup of popups) popup.closed = true;
   popups = [];
   vi.restoreAllMocks();
+  vi.unstubAllGlobals();
 });
 
 async function render(node: ReactNode): Promise<void> {
@@ -72,6 +74,12 @@ function stubOpen() {
   popups.push(popup);
   const open = vi.spyOn(window, 'open').mockReturnValue(asWindow(popup));
   return { popup, open };
+}
+
+/** The state the first popup was opened with, as the action page reads it from its URL. */
+function stateOf(open: ReturnType<typeof stubOpen>['open']): string | null {
+  const [href] = open.mock.calls[0] ?? [];
+  return new URL(String(href)).searchParams.get('state');
 }
 
 function walletAction(target: Element | null, href: unknown): CustomEvent {
@@ -101,7 +109,7 @@ describe('Wallet: ev:wallet-action', () => {
       new MessageEvent('message', {
         origin: 'https://evinvest.ltd',
         source: asWindow(popup),
-        data: { type: 'ev:wallet-result', outcome: 'done', reference: 'payout-1' },
+        data: { type: 'ev:wallet-result', state: stateOf(open), outcome: 'done', reference: 'payout-1' },
       }),
     );
 
@@ -115,6 +123,7 @@ describe('Wallet: ev:wallet-action', () => {
   it.each([
     ['another origin', 'https://evil.example/wallet/withdraw'],
     ['a path outside wallet', 'https://evinvest.ltd/admin/users'],
+    ['a wallet path that is not an action', 'https://evinvest.ltd/wallet/transfer'],
     ['a dot-segment escape', 'https://evinvest.ltd/wallet/../admin'],
     ['a relative path', '/wallet/withdraw'],
     ['not a string', 42],
@@ -148,7 +157,7 @@ describe('Wallet: ev:wallet-action', () => {
       new MessageEvent('message', {
         origin: 'https://stage.evinvest.ltd',
         source: asWindow(popup),
-        data: { type: 'ev:wallet-result', outcome: 'failed' },
+        data: { type: 'ev:wallet-result', state: stateOf(open), outcome: 'failed' },
       }),
     );
 
@@ -156,6 +165,38 @@ describe('Wallet: ev:wallet-action', () => {
     await vi.waitFor(() => {
       expect(onResult).toHaveBeenCalledWith({ status: 'result', result: { outcome: 'failed', reference: null } });
     });
+  });
+
+  it('should_ignore_a_result_that_does_not_echo_the_state', async () => {
+    const { popup, open } = stubOpen();
+    const onResult = vi.fn<(outcome: WalletActionOutcome) => void>();
+    await render(<Wallet scriptUrl="/wallet/mfe/wallet.js" scope="sa" onResult={onResult} />);
+
+    walletAction(container.querySelector(WALLET), 'https://evinvest.ltd/wallet/withdraw');
+    post(popup, 'https://evinvest.ltd', { type: 'ev:wallet-result', outcome: 'done', reference: 'forged' });
+    post(popup, 'https://evinvest.ltd', { type: 'ev:wallet-result', state: stateOf(open), outcome: 'cancelled' });
+
+    await vi.waitFor(() => {
+      expect(onResult).toHaveBeenCalledWith({ status: 'result', result: { outcome: 'cancelled', reference: null } });
+    });
+    expect(onResult).toHaveBeenCalledTimes(1);
+  });
+
+  it('should_navigate_to_the_rebuilt_action_with_this_page_as_return_to_when_the_popup_is_blocked', async () => {
+    vi.spyOn(window, 'open').mockReturnValue(null);
+    const onResult = vi.fn<(outcome: WalletActionOutcome) => void>();
+    await render(<Wallet scriptUrl="/wallet/mfe/wallet.js" scope="sa" onResult={onResult} />);
+    // jsdom cannot navigate to another origin; stubbed after render, since the
+    // loader resolves bundle URLs against the real location.
+    const assign = vi.fn<(to: string) => void>();
+    vi.stubGlobal('location', { href: 'https://sa.evinvest.ltd/billing?token=secret#row-7', origin: 'https://sa.evinvest.ltd', pathname: '/billing', assign });
+
+    walletAction(container.querySelector(WALLET), 'https://evinvest.ltd/wallet/pay?invoice=inv-1&amount=999');
+
+    await vi.waitFor(() => {
+      expect(assign).toHaveBeenCalledWith('https://evinvest.ltd/wallet/pay?invoice=inv-1&return_to=https%3A%2F%2Fsa.evinvest.ltd%2Fbilling');
+    });
+    expect(onResult).not.toHaveBeenCalled();
   });
 
   it('should_leave_every_action_to_the_element_without_scope', async () => {
@@ -236,7 +277,7 @@ describe('PayInvoiceButton', () => {
       new MessageEvent('message', {
         origin: 'https://evinvest.ltd',
         source: asWindow(popup),
-        data: { type: 'ev:wallet-result', outcome: 'cancelled' },
+        data: { type: 'ev:wallet-result', state: stateOf(open), outcome: 'cancelled' },
       }),
     );
 
@@ -255,7 +296,7 @@ describe('PayInvoiceButton', () => {
 
     const firstClick = walletAction(button, 'https://evinvest.ltd/wallet/pay?invoice=inv-1');
     const secondClick = walletAction(button, 'https://evinvest.ltd/wallet/pay?invoice=inv-1');
-    post(popup, 'https://evinvest.ltd', { type: 'ev:wallet-result', outcome: 'done', reference: 'payment-1' });
+    post(popup, 'https://evinvest.ltd', { type: 'ev:wallet-result', state: stateOf(open), outcome: 'done', reference: 'payment-1' });
 
     await vi.waitFor(() => {
       expect(onResult).toHaveBeenCalledWith({ status: 'result', result: { outcome: 'done', reference: 'payment-1' } });
