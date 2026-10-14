@@ -7,15 +7,16 @@ import { defineConfig } from 'tsup';
  * copy. A copy would split the loader's per-tag load cache in two, so a host
  * calling `loadElement` and rendering `RemoteElement` would load twice.
  */
-export const coreAsSibling: Plugin = {
+const coreAsSibling: Plugin = {
   name: 'core-as-sibling',
   setup(build) {
     build.onResolve({ filter: /^\.\.\/index$/ }, () => ({ path: './index.js', external: true }));
   },
 };
 
-// Re-emits only the client subpath, never cleaning, after the main run (see
-// tsup.config.ts) so `dist/react.d.ts` survives. Same options as config #2.
+// The client subpath, built after `tsup.config.ts` and never cleaning, so the
+// core's output survives. `"use client"` so it can be imported from React Server
+// Components without its hooks running on the server.
 export default defineConfig({
   entry: { react: 'src/react/index.ts' },
   format: ['esm'],

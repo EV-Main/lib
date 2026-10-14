@@ -103,7 +103,10 @@ export interface LinkAnchor {
  * Producer side: the path to offer the host for a link click, or null when the
  * click is the browser's — modified or non-primary (new tab, download), a
  * `target`/`download` link, already handled, or another origin, which no host
- * router can reach. Enter on a focused link arrives as a `button` 0 click.
+ * router can reach. Also the browser's: an `<a>` with no href (the DOM reports
+ * `""`), which navigates nowhere, and an in-page `#fragment` link, which only
+ * scrolls — a router push there would re-render the page instead. Enter on a
+ * focused link arrives as a `button` 0 click.
  */
 export function delegatedHref(
   click: LinkClick,
@@ -113,12 +116,16 @@ export function delegatedHref(
   if (click.defaultPrevented || click.button !== 0) return null;
   if (click.ctrlKey || click.metaKey || click.shiftKey || click.altKey) return null;
   if ((anchor.target && anchor.target !== '_self') || anchor.hasAttribute('download')) return null;
+  if (anchor.href === '') return null;
   let url: URL;
+  let here: URL;
   try {
     url = new URL(anchor.href, page.href);
+    here = new URL(page.href);
   } catch {
     return null;
   }
   if (url.origin !== page.origin) return null;
+  if (url.hash !== '' && url.pathname === here.pathname && url.search === here.search) return null;
   return url.pathname + url.search + url.hash;
 }

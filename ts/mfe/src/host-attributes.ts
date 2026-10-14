@@ -210,6 +210,12 @@ function clip(value: string): string {
   return chars.length > MAX_TEXT ? chars.slice(0, MAX_TEXT).join('').trim() : chars.join('');
 }
 
+// A parsed group back in the wire shape: no label is an absent key, because
+// the reader refuses `"label": null`.
+function toInput({ id, label, items }: MenuGroup): MenuGroupInput {
+  return label === null ? { id, items } : { id, label, items };
+}
+
 /**
  * Host side: the host-mode attribute set for `props`. Values the element would
  * refuse are left out here, so the host sees in this record exactly what the
@@ -231,8 +237,10 @@ export function hostAttributes(props: HostPropsInput): HostAttributes {
     if (href) attrs[attr] = href;
   }
   if (props.groups && props.groups.length > 0) {
-    const json = JSON.stringify(props.groups);
-    if (parseGroups(json).length > 0) attrs[HOST_ATTRS.groups] = json;
+    // Written as the reader parses it — trimmed, flags spelled out, unknown
+    // fields gone — so the attribute carries nothing the element would not read.
+    const groups = parseGroups(JSON.stringify(props.groups));
+    if (groups.length > 0) attrs[HOST_ATTRS.groups] = JSON.stringify(groups.map(toInput));
   }
   if (props.layout) attrs[HOST_ATTRS.layout] = props.layout;
   return attrs;

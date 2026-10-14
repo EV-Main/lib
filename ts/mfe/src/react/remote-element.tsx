@@ -2,7 +2,12 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 import { useElementBundle, type ElementBundleOptions } from './use-element-bundle';
 
-export type AttributeValue = string | number | boolean | object;
+/**
+ * `false`, `null` and `undefined` mean "no attribute" and `true` an empty one,
+ * as for a boolean HTML attribute — never the strings "false" or "null", which
+ * an element checking `hasAttribute` would read as set.
+ */
+export type AttributeValue = string | number | boolean | object | null | undefined;
 
 /**
  * Called with the event itself so a host can `preventDefault()` a cancelable
@@ -16,7 +21,7 @@ export interface RemoteElementProps extends ElementBundleOptions {
   tag: string;
   /** URL of the self-registering ESM bundle. */
   scriptUrl: string;
-  /** Set on the element; objects are JSON-encoded. A removed key removes the attribute. */
+  /** Set on the element; objects are JSON-encoded. A removed or `false` key removes the attribute. */
   attributes?: Readonly<Record<string, AttributeValue>>;
   /** Event name → handler. Identities may change freely; the set of names must not. */
   events?: Readonly<Record<string, RemoteEventHandler>>;
@@ -35,17 +40,22 @@ const NO_ATTRS: Readonly<Record<string, AttributeValue>> = {};
 const NO_EVENTS: Readonly<Record<string, RemoteEventHandler>> = {};
 const READY_ATTR = 'data-ready';
 
-function encode(value: AttributeValue): string {
+function encode(value: AttributeValue): string | null {
+  if (value === false || value === null || value === undefined) return null;
+  if (value === true) return '';
   return typeof value === 'object' ? JSON.stringify(value) : String(value);
 }
 
 function sync(element: HTMLElement, attrs: Readonly<Record<string, AttributeValue>>, previous: readonly string[]): string[] {
+  const set: string[] = [];
   for (const [name, value] of Object.entries(attrs)) {
     const encoded = encode(value);
+    if (encoded === null) continue;
     if (element.getAttribute(name) !== encoded) element.setAttribute(name, encoded);
+    set.push(name);
   }
-  for (const name of previous) if (!(name in attrs)) element.removeAttribute(name);
-  return Object.keys(attrs);
+  for (const name of previous) if (!set.includes(name)) element.removeAttribute(name);
+  return set;
 }
 
 /**

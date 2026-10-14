@@ -144,19 +144,21 @@ export function resolveEntries(entries: readonly MfeEntry[], base: string | URL)
 
 /**
  * Fetch and validate a producer's published registry, with its relative URLs
- * resolved against the registry's own URL. Network and HTTP failures are
- * results, not throws: a host renders its fallback either way.
+ * resolved against the URL the registry was finally served from (after
+ * redirects). Network, HTTP and URL failures are results, not throws: a host
+ * renders its fallback either way.
  */
 export async function fetchRegistry(url: string | URL, init?: RequestInit): Promise<ParseResult<MfeEntry[]>> {
-  let body: unknown;
   try {
     const response = await fetch(url, init);
     if (!response.ok) return { ok: false, error: `registry ${String(url)}: HTTP ${response.status}` };
-    body = await response.json();
+    const parsed = parseRegistry(await response.json());
+    if (!parsed.ok) return parsed;
+    // `response.url` is empty for a hand-built Response; the request URL is
+    // then the best base there is, and a relative one throws into the catch.
+    return { ok: true, value: resolveEntries(parsed.value, response.url || url) };
   } catch (cause) {
     const reason = cause instanceof Error ? cause.message : String(cause);
     return { ok: false, error: `registry ${String(url)}: ${reason}` };
   }
-  const parsed = parseRegistry(body);
-  return parsed.ok ? { ok: true, value: resolveEntries(parsed.value, url) } : parsed;
 }
