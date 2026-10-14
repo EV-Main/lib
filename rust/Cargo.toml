@@ -161,6 +161,24 @@ concierge_client = [
     "dep:getrandom",
 ]
 
+# The pull engine a direction builds its user projection with: cursors over
+# `UserEvents.PullUserLifecycle` and `ScopeEvents.PullScopeEvents`, dedupe by
+# `event_id`, per-key ordering by `sequence`, parking (an unknown kind, a lifecycle
+# event ahead of its MEMBER_JOINED) and replay by position. The store is a port; the
+# Postgres and SQLite adapters are the two sub-features below. Native-only, and
+# independent of `concierge_client` (it speaks the same contracts on its own).
+concierge_projection = [
+    "dep:evconcierge_contracts",
+    "dep:tonic_concierge",
+    "dep:thiserror",
+    "dep:async-trait",
+    "dep:tokio",
+    "tokio?/time",
+    "dep:tracing",
+]
+concierge_projection_pg = ["concierge_projection", "dep:sqlx", "sqlx?/postgres"]
+concierge_projection_sqlite = ["concierge_projection", "dep:sqlx", "sqlx?/sqlite-bundled"]
+
 # One opt-in switch that layers wasm/browser backends onto whatever other
 # features are enabled — each feature contributes its own wasm needs here with
 # the `pkg?/feature` syntax (no-op when that feature is off). Enable it
@@ -206,7 +224,7 @@ tracing = { version = "0.1", optional = true }
 tracing-opentelemetry = { version = "0.32", optional = true }
 tracing-subscriber = { version = "0.3", optional = true, default-features = false, features = ["registry", "std"] }
 
-# The concierge plane's wire stubs (`concierge_client`). A git
+# The concierge plane's wire stubs (`concierge_client`, `concierge_projection`). A git
 # dependency: crates.io will not take an `ev_lib` that carries it until concierge
 # publishes the crate. Not `evconcierge_auth`: it depends on `ev_lib` itself (from
 # crates.io), which makes every `cargo … -p ev_lib` here ambiguous.
@@ -214,6 +232,7 @@ evconcierge_contracts = { git = "https://github.com/EV-Main/concierge.git", rev 
 # Renamed because `otel` holds tonic 0.13; the concierge stubs are generated against
 # 0.14, so the `Channel` they take is 0.14's.
 tonic_concierge = { package = "tonic", version = "0.14", optional = true, default-features = false, features = ["transport"] }
+sqlx = { version = "0.9", optional = true, default-features = false, features = ["runtime-tokio"] }
 thiserror = { version = "2", optional = true }
 # PKCE (S256): the verifier's randomness, its SHA-256, and base64url.
 base64 = { version = "0.22", optional = true }

@@ -58,6 +58,10 @@
 //! - **`concierge_client`** — a relying party's calls into concierge: code + PKCE
 //!   sign-in, `GetMe`, catalog publishing under the client credential. Native-only. See
 //!   [`concierge_client`].
+//! - **`concierge_projection`** — the pull engine a direction keeps its users with:
+//!   cursors over concierge's lifecycle and scope streams, dedupe, ordering, parking and
+//!   replay; the store on Postgres (`concierge_projection_pg`) or SQLite
+//!   (`concierge_projection_sqlite`). Native-only. See [`concierge_projection`].
 
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
@@ -87,6 +91,9 @@ pub mod alerts;
 // Native-only: tonic transport and sqlx have no browser backend.
 #[cfg(all(feature = "concierge_client", not(target_arch = "wasm32")))]
 pub mod concierge_client;
+
+#[cfg(all(feature = "concierge_projection", not(target_arch = "wasm32")))]
+pub mod concierge_projection;
 
 #[cfg(feature = "experiments")]
 pub mod experiments;

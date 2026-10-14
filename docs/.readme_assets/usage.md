@@ -28,6 +28,7 @@ it enables.
 | `mfe` | microfrontend producer SDK (wasm-only): the `mfe!` macro defines the light-DOM custom element and emits the `{name, tag, kind}` manifest; the host side — registry, loader, events, `apiVersion` — is `@evinvest/mfe` |
 | `otel` | OpenTelemetry logs + traces over OTLP (native-only backends, inert on wasm): `tracing` layers + flush guard, tonic interceptors for W3C trace propagation |
 | `concierge_client` | a relying party's calls into concierge (native-only): code + PKCE sign-in (authorize URL, `ExchangeCode`, `RefreshClientToken`), `GetMe`, `PublishCatalog` / `PublishScopeCatalog` under the client credential; timeouts, errors as values. Speaks concierge's own `evconcierge_contracts` (git pin) — needs `protoc` to build |
+| `concierge_projection` | the pull engine a direction keeps its users with (native-only): cursors over `PullUserLifecycle` and `PullScopeEvents`, dedupe by `event_id`, per-key ordering by `sequence`, parking (unknown kind, lifecycle ahead of MEMBER_JOINED) and replay by position. Store on Postgres (`concierge_projection_pg`) or SQLite (`concierge_projection_sqlite`); see [`GUIDE.md`](rust/src/concierge_projection/GUIDE.md) |
 | `wasm` | opt-in switch layering browser/js backends onto whatever features are enabled |
 
 ### Consume it
