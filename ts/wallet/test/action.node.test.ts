@@ -150,6 +150,24 @@ describe('parseWalletMessage: what passes', () => {
     expect(parseWalletMessage({ type: 'ev:wallet-result', outcome: 'done', reference })).toEqual({ outcome: 'done', reference });
   });
 
+  // The outcome is what matters — money may already have moved — so an unusable
+  // reference reads as none instead of dropping the whole result.
+  it.each([
+    ['empty', ''],
+    ['129 characters long', 'r'.repeat(129)],
+    ['a number', 7],
+    ['an object', { id: 'p-1' }],
+  ])('should_keep_the_outcome_and_drop_a_reference_that_is_%s', (_label, reference) => {
+    expect(parseWalletMessage({ type: 'ev:wallet-result', outcome: 'done', reference })).toEqual({ outcome: 'done', reference: null });
+  });
+
+  it('should_keep_a_long_reference_out_rather_than_cut_it', () => {
+    expect(parseWalletMessage({ type: 'ev:wallet-result', outcome: 'failed', reference: 'p'.repeat(200) })).toEqual({
+      outcome: 'failed',
+      reference: null,
+    });
+  });
+
   it('should_ignore_unknown_fields', () => {
     expect(parseWalletMessage({ type: 'ev:wallet-result', outcome: 'done', reference: 'p-1', amount: 5 })).toStrictEqual({
       outcome: 'done',
@@ -164,9 +182,6 @@ describe('parseWalletMessage: what is ignored', () => {
     ['no type', { outcome: 'done' }],
     ['an unknown outcome', { type: 'ev:wallet-result', outcome: 'success' }],
     ['no outcome', { type: 'ev:wallet-result' }],
-    ['an empty reference', { type: 'ev:wallet-result', outcome: 'done', reference: '' }],
-    ['a 129-character reference', { type: 'ev:wallet-result', outcome: 'done', reference: 'r'.repeat(129) }],
-    ['a numeric reference', { type: 'ev:wallet-result', outcome: 'done', reference: 7 }],
   ])('should_return_null_for_%s', (_label, data) => {
     expect(parseWalletMessage(data)).toBeNull();
   });

@@ -1,7 +1,7 @@
 // Where the banking wallet microfrontends live and what they are called. Tags
 // follow the Rust `mfe!` scheme, `mfe-{service}-{name}`.
 
-import { fetchRegistry, findEntry, type MfeEntry, type ParseResult } from '@evinvest/mfe';
+import { entryFor, fetchRegistry, type MfeEntry, type ParseResult } from '@evinvest/mfe';
 
 /** The one origin that may carry out a money action and report its result. */
 export const WALLET_ORIGIN = 'https://evinvest.ltd';
@@ -24,14 +24,7 @@ export function fetchWalletRegistry(url: string | URL = WALLET_REGISTRY_URL, ini
   return fetchRegistry(url, init);
 }
 
-/**
- * The registry entry for `element`, refused when missing or naming another tag:
- * the wrappers mount the tag they know.
- */
+/** The registry entry for `element`, refused when missing or naming another tag (`entryFor`). */
 export function walletEntry(entries: readonly MfeEntry[], element: WalletElement): ParseResult<MfeEntry> {
-  const { name, tag } = WALLET_ELEMENTS[element];
-  const entry = findEntry(entries, name);
-  if (!entry) return { ok: false, error: `registry has no ${name}` };
-  if (entry.tag !== tag) return { ok: false, error: `${name}: tag ${entry.tag}, expected ${tag}` };
-  return { ok: true, value: entry };
+  return entryFor(entries, WALLET_ELEMENTS[element]);
 }

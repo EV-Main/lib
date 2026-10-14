@@ -1,19 +1,21 @@
 import { API_VERSION, NAVIGATE_EVENT } from '@evinvest/mfe';
-import { RemoteElement } from '@evinvest/mfe/react';
+import { navigateListener, RemoteElement, type NavigateHandler } from '@evinvest/mfe/react';
 import type { ReactNode } from 'react';
 
 import { WALLET_ACTION_EVENT, WALLET_TAG, type WalletActionOutcome } from '../index';
-import { navigateListener, walletActionListener, type NavigateHandler } from './listeners';
+import { actionInPlace, walletActionListener } from './listeners';
 
 export interface WalletProps {
   /** Bundle URL from the wallet registry (`walletEntry(entries, 'wallet')`). */
   scriptUrl: string;
   /**
    * A scope host's id: the element shows that scope's compartment and main,
-   * balances and history only. Absent, the full wallet — evinvest.ltd itself.
+   * balances and history only, and its money actions go to a popup on
+   * evinvest.ltd. Absent, the full wallet — mounted on evinvest.ltd itself,
+   * where the element carries out actions in place.
    */
   scope?: string;
-  /** A money action finished in its popup; refresh what the host shows. */
+  /** Scope hosts: a money action finished in its popup; refresh what the host shows. */
   onResult?: (outcome: WalletActionOutcome) => void;
   onNavigate?: NavigateHandler;
   /** Where action results must come from; only for a staging stand. */
@@ -23,7 +25,7 @@ export interface WalletProps {
   fallback?: ReactNode;
 }
 
-/** The banking wallet. On a scope host its money actions run on evinvest.ltd, in a popup. */
+/** The banking wallet. With `scope`, its money actions run on evinvest.ltd, in a popup. */
 export function Wallet({ scriptUrl, scope, onResult, onNavigate, origin, minApiVersion = API_VERSION, className, fallback = null }: WalletProps) {
   return (
     <RemoteElement
@@ -34,7 +36,8 @@ export function Wallet({ scriptUrl, scope, onResult, onNavigate, origin, minApiV
       attributes={{ scope }}
       events={{
         [NAVIGATE_EVENT]: navigateListener(onNavigate),
-        [WALLET_ACTION_EVENT]: walletActionListener(onResult, origin),
+        // The name stays registered either way: RemoteElement binds the set of names once.
+        [WALLET_ACTION_EVENT]: scope === undefined ? actionInPlace : walletActionListener(onResult, origin),
       }}
       fallback={fallback}
     />
