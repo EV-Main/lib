@@ -187,6 +187,9 @@ function prefixError(prefix: string): string | null {
   if (!prefix.endsWith('/') || parsed.href !== prefix || parsed.search !== '' || parsed.hash !== '') {
     return `allowedPrefix ${prefix} is not a canonical directory URL ending in /`;
   }
+  // The origin root admits every path on it, so the check would shrink to an
+  // origin comparison and an upload or a user page would pass as a bundle.
+  if (parsed.pathname === '/') return `allowedPrefix ${prefix} is the origin root, not a bundle directory`;
   return isSecureTransport(parsed) ? null : `allowedPrefix ${prefix} is not https`;
 }
 
@@ -207,12 +210,14 @@ function outsidePrefix(entries: readonly MfeEntry[], prefix: string): string | n
  * moved could otherwise hand its entries' base to whoever it moved to. The
  * whole registry fails when any `scriptUrl`, once resolved, does not start
  * with `allowedPrefix`. Network, HTTP and URL failures are results, not
- * throws: a host renders its fallback either way.
+ * throws: a host renders its fallback either way — and so is a call without
+ * `allowedPrefix`, which a plain-JS host or a stale caller can still make.
  */
-export async function fetchRegistry(
-  url: string | URL,
-  { allowedPrefix, init }: FetchRegistryOptions,
-): Promise<ParseResult<MfeEntry[]>> {
+export async function fetchRegistry(url: string | URL, options?: FetchRegistryOptions): Promise<ParseResult<MfeEntry[]>> {
+  // Read as unknown: plain-JS callers reach here past the type, with any value or none.
+  const allowedPrefix: unknown = options?.allowedPrefix;
+  if (typeof allowedPrefix !== 'string') return { ok: false, error: `registry ${String(url)}: allowedPrefix is required` };
+  const init = options?.init;
   const badPrefix = prefixError(allowedPrefix);
   if (badPrefix) return { ok: false, error: `registry ${String(url)}: ${badPrefix}` };
   try {

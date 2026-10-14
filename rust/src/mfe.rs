@@ -42,6 +42,8 @@ export function __ev_register(tag, mount){
     connectedCallback(){
       if (this.__evMounted) return;
       this.__evMounted = true;
+      // Keeps a host's session replay off what the app renders, however the element got here.
+      this.classList.add('ph-no-capture');
       mount(this);
     }
   });

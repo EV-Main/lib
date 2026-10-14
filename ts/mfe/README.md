@@ -28,7 +28,9 @@ trust of the service that serves it. The registry backs the CSP up:
 - `fetchRegistry(url, { allowedPrefix })` refuses the whole registry when a
   resolved `scriptUrl` is outside `allowedPrefix` (the same directory the CSP
   names), and refuses redirects (`redirect: 'error'`, and a `response.url` on
-  another origin);
+  another origin). `allowedPrefix` is required and must be a directory below
+  the origin root: without it, or with `https://host/`, the call returns
+  `{ ok: false }` — the check would otherwise shrink to comparing origins;
 - `isBundleUrl`, `safeHref` and concierge's `hostReturnTo` accept absolute
   URLs only over `https:` — `http:` only to `localhost`, `127.x.x.x` or `[::1]`
   for a dev stand (`isSecureTransport`);
@@ -101,6 +103,11 @@ neither autocaptures inside it nor records it in session replay: a remote shows
 platform data — email, balances, addresses — the host's analytics must not copy
 out. `noCapture={false}` turns it off for an element that shows nothing
 personal.
+
+An element built with the Rust `mfe!` producer adds `ph-no-capture` to itself
+when it connects, so an element appended straight to `<body>` is covered too.
+Text the host renders around it is not: a host without React marks its own
+container.
 
 Remote stylesheets are moved into the `reamfe` cascade layer
 (`containRemoteStyles`). Declare it first in the host's CSS, below every layer of
