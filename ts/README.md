@@ -12,6 +12,8 @@ ts/
 ├── error-monitoring/  port of the `error_monitoring` Cargo feature (Sentry error monitoring)
 ├── experiments/       port of the `experiments` Cargo feature (frontend-only A/B testing)
 ├── mfe/               host side of the `mfe` Cargo feature (registry, loader, events, RemoteElement)
+├── concierge/         host wrappers over mfe for concierge's sign-in, account and chip elements
+├── wallet/            host wrappers over mfe for banking's wallet elements, popup money actions
 ├── settings/          port of the `settings` Cargo feature (typed env settings)
 ├── marketing/         landing-page layer over uikit: motion, form harness, contact tracking
 ├── kitstart/          landing-site machinery: routing, places, lead funnel, SEO, Next glue
@@ -63,6 +65,10 @@ hand-written for one of four reasons:
                      react, next                                            B
  mfe           0.9k  manifest, events, host attributes, loader             A
                      RemoteElement                                          B
+ concierge     0.4k  registry constants, session parse, RP-login href     C  host side only; elements are concierge web/
+                     SignInDialog, AccountPage, AccountChip, hook           B
+ wallet        0.4k  registry constants, popup action + message check     C  host side only; elements are banking's
+                     Wallet, PayInvoiceButton                               B
  analytics     1.4k  sink / beacon / consent                                A
                      posthog, react, next                                   B
  error-monitoring 0.6k  Sentry / React / Next wiring                        B
