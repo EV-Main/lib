@@ -180,6 +180,27 @@ describe('fetchRegistry', () => {
     expect(result).toEqual({ ok: false, error: 'registry is not an array' });
   });
 
+  it('should_resolve_urls_against_the_final_url_after_a_redirect', async () => {
+    const redirected = Response.json([CHIP]);
+    Object.defineProperty(redirected, 'url', { value: 'https://auth.evinvest.ltd/v2/mfe/registry.json' });
+    vi.stubGlobal('fetch', vi.fn(async () => redirected));
+
+    const result = await fetchRegistry(REGISTRY_URL);
+
+    expect(result).toEqual({
+      ok: true,
+      value: [{ ...CHIP, scriptUrl: 'https://auth.evinvest.ltd/auth/mfe/account-chip.js' }],
+    });
+  });
+
+  it('should_return_a_failure_for_a_relative_registry_url_without_rejecting', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => Response.json([CHIP])));
+
+    const result = await fetchRegistry('/auth/mfe/registry.json');
+
+    expect(result.ok).toBe(false);
+  });
+
   it('should_pass_the_request_init_through_to_fetch', async () => {
     const fetchMock = vi.fn(async (_url: string | URL | Request, _init?: RequestInit) => Response.json([]));
     vi.stubGlobal('fetch', fetchMock);

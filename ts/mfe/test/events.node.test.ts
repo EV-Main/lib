@@ -157,6 +157,14 @@ describe('delegatedHref: offered', () => {
     expect(delegatedHref(PLAIN, anchor('profile?x=1'), PAGE)).toBe('/en/profile?x=1');
   });
 
+  it('should_offer_a_hash_link_to_another_path_with_its_hash', () => {
+    expect(delegatedHref(PLAIN, anchor('https://cabinet.example/en/cabinet/settings#x'), PAGE)).toBe('/en/cabinet/settings#x');
+  });
+
+  it('should_offer_a_hash_link_to_the_same_path_with_another_query', () => {
+    expect(delegatedHref(PLAIN, anchor('https://cabinet.example/en/cabinet?tab=1#x'), PAGE)).toBe('/en/cabinet?tab=1#x');
+  });
+
   it('should_offer_a_target_self_link', () => {
     expect(delegatedHref(PLAIN, anchor('https://cabinet.example/en/cabinet', { target: '_self' }), PAGE)).toBe('/en/cabinet');
   });
@@ -193,6 +201,17 @@ describe('delegatedHref: left to the browser', () => {
     expect(delegatedHref(PLAIN, anchor('http://cabinet.example/en/cabinet'), PAGE)).toBeNull();
     expect(delegatedHref(PLAIN, anchor('https://cabinet.example:8443/en/cabinet'), PAGE)).toBeNull();
     expect(delegatedHref(PLAIN, anchor('//evil.example/x'), PAGE)).toBeNull();
+  });
+
+  it('should_leave_an_anchor_without_href', () => {
+    expect(delegatedHref(PLAIN, anchor(''), PAGE)).toBeNull();
+  });
+
+  it('should_leave_an_in_page_fragment_link_on_the_same_path_and_query', () => {
+    expect(delegatedHref(PLAIN, anchor('https://cabinet.example/en/cabinet#x'), PAGE)).toBeNull();
+    expect(
+      delegatedHref(PLAIN, anchor('https://cabinet.example/en/cabinet?tab=1#y'), { ...PAGE, href: 'https://cabinet.example/en/cabinet?tab=1#top' }),
+    ).toBeNull();
   });
 
   it('should_leave_an_unparseable_href_without_throwing', () => {
