@@ -28,21 +28,17 @@ export interface LandingOptions {
  *   the `stale-while-revalidate` tail a CDN may serve to a day, not a year;
  * - `images.unoptimized` + the sharp exclusion — the optimiser would add a
  *   native dependency the Nix image cannot load, for sources already sized;
- * - `isrFlushToDisk: false` — the server runs from the read-only Nix store, so
- *   the cache stays in memory, per pod;
- * - `cacheMaxMemorySize` — that in-memory LRU defaults to 50 MB, and a brand's
- *   paths (locales × points × A/B buckets) fill it: aquafix's ~550 pushed the
- *   retained heap from 27 to 90 MB and the pod into its 128Mi OOM kill
- *   (devops#74). At 16 MB it plateaus at 55 MB. A miss re-renders and refetches
- *   the live place, so a brand raising it must raise mkLanding's
- *   `maxOldSpaceMiB` (72) too, or V8 dies with a heap OOM instead.
+ * - `cacheMaxMemorySize: 0` — the ISR cache lives on disk (mkLanding links it
+ *   to the pod's `/tmp`), off the V8 heap. In memory, a brand's paths (locales ×
+ *   points × A/B buckets) held up to its whole size: 16 MB of a heap capped
+ *   below 128Mi (devops#74);
  */
 export function withLanding(config: NextConfig, options: LandingOptions): NextConfig {
   return {
     poweredByHeader: false,
     output: "standalone",
     expireTime: 86_400,
-    cacheMaxMemorySize: 16 * 1024 * 1024,
+    cacheMaxMemorySize: 0,
     ...config,
     env: { ...buildEnv(options.root), ...config.env },
     images: { unoptimized: true, ...config.images },
@@ -56,6 +52,6 @@ export function withLanding(config: NextConfig, options: LandingOptions): NextCo
     },
     // `app/global-not-found.tsx` answers every path no route matches — the proxy
     // sends dead paths there (`gone`); the root layout lives under `[locale]`.
-    experimental: { isrFlushToDisk: false, globalNotFound: true, ...config.experimental },
+    experimental: { globalNotFound: true, ...config.experimental },
   };
 }

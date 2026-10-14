@@ -5,6 +5,9 @@
 # docker; the text of mkLanding's `container-smoke` app, which sets every
 # SMOKE_* variable.
 #
+# `--tmpfs /tmp` stands in for the emptyDir every pod mounts there (v_flakes
+# toManifests): the server's page cache lives in it.
+#
 # The host port is docker's choice (`-p 127.0.0.1::<port>`): the container
 # ports landings use sit inside Linux's ephemeral range, and a fixed host port
 # there fails now and then with `address already in use`.
@@ -28,7 +31,7 @@ trap cleanup EXIT
 # The host port docker picked for the container's port.
 published() { docker port "$1" "$SMOKE_PORT/tcp" | head -n1 | sed 's/.*://'; }
 
-docker run -d --name smoke -p "127.0.0.1::$SMOKE_PORT" -v "$data:$SMOKE_DATA" "$SMOKE_IMAGE_NAME" >/dev/null
+docker run -d --name smoke --tmpfs /tmp:mode=1777 -p "127.0.0.1::$SMOKE_PORT" -v "$data:$SMOKE_DATA" "$SMOKE_IMAGE_NAME" >/dev/null
 port="$(published smoke)"
 for _ in $(seq 60); do curl -fsS "127.0.0.1:$port/health" >/dev/null 2>&1 && break; sleep 1; done
 
@@ -49,6 +52,10 @@ expect 200 "127.0.0.1:$port/health"
 expect 302 "127.0.0.1:$port/"
 expect 200 "${host_header[@]}" "127.0.0.1:$port$SMOKE_PAGE"
 expect 200 "127.0.0.1:$port$SMOKE_OG"
+if docker logs smoke 2>&1 | grep -E "EACCES|Failed to update prerender cache"; then
+  echo "✘ the server could not write its page cache" >&2
+  exit 1
+fi
 
 if [ -n "${SMOKE_QUOTE:-}" ]; then
   # The brand's fields, one `name=value` per line.
@@ -73,7 +80,7 @@ fi
 # not come up on dev defaults.
 blank=()
 for key in ${SMOKE_PROD_ENV_KEYS:-}; do blank+=(-e "$key="); done
-docker run -d --name smoke-bare -p "127.0.0.1::$SMOKE_PORT" "${blank[@]}" "$SMOKE_IMAGE_NAME" >/dev/null
+docker run -d --name smoke-bare --tmpfs /tmp:mode=1777 -p "127.0.0.1::$SMOKE_PORT" "${blank[@]}" "$SMOKE_IMAGE_NAME" >/dev/null
 bare="$(published smoke-bare)"
 for _ in $(seq 30); do
   if [ "$(status "127.0.0.1:$bare/health")" != 000 ]; then break; fi
@@ -90,7 +97,7 @@ if [ -z "${SMOKE_STORE_KEYS:-}" ]; then
 fi
 nostore=()
 for key in $SMOKE_STORE_KEYS; do nostore+=(-e "$key="); done
-docker run -d --name smoke-nostore -p "127.0.0.1::$SMOKE_PORT" "${nostore[@]}" "$SMOKE_IMAGE_NAME" >/dev/null
+docker run -d --name smoke-nostore --tmpfs /tmp:mode=1777 -p "127.0.0.1::$SMOKE_PORT" "${nostore[@]}" "$SMOKE_IMAGE_NAME" >/dev/null
 nostore_port="$(published smoke-nostore)"
 for _ in $(seq 30); do
   if [ "$(status "127.0.0.1:$nostore_port/health")" != 000 ]; then break; fi

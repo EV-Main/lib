@@ -57,11 +57,10 @@
   # lock (`"node_modules/@evinvest/kitstart" = ./vendor/kitstart.tgz;`). They
   # win over the platform pruning.
   packageSourceOverrides ? { }
-, # V8's old-space ceiling, in MiB. Node's default does not fit a 128Mi pod,
-  # so garbage piled up until the cgroup OOM-killed it (devops#74); 72 leaves
-  # room for the young generation and native memory, and holds kitstart's
-  # 16 MB ISR cache (retained heap ~55 MB). Raise it with that cache.
-  maxOldSpaceMiB ? 72
+, # V8's old-space ceiling, in MiB. V8 collects lazily up to it, so it is what
+  # an idle pod creeps to (devops#74). The page cache lives on disk, off the
+  # heap; the floor is the OG render, which dies at 48.
+  maxOldSpaceMiB ? 56
 ,
 }:
 let
@@ -130,6 +129,10 @@ let
         ${lib.concatMapStrings (f: "test -e ${lib.escapeShellArg ".next/standalone/${f}"}\n") requiredFiles}
         cp -a .next/standalone "$out"
         cp -a .next/diagnostics "$out/.next/diagnostics"
+        # Next's caches live under the read-only store path; `/tmp` is the pod's emptyDir.
+        # Not a subdir: Next's recursive mkdir fails through a dangling link.
+        ln -sT /tmp "$out/.next/cache"
+        ln -sT /tmp "$out/.next/server/route-cache"
         runHook postInstall
       '';
       # The traced node_modules keep their bin shebangs; rewritten, each would
@@ -175,10 +178,12 @@ let
           entrypoint = [
             "${nodeRuntime}/bin/node"
             "--max-old-space-size=${toString maxOldSpaceMiB}"
+            "--max-semi-space-size=2" # the young generation, Node's default sizes it for a server with RAM to spare
             "${site}/server.js"
           ];
           workingDir = dataDir;
-          imageEnv = [ "HOME=${dataDir}" ] ++ lib.mapAttrsToList (n: v: "${n}=${v}") prodEnv;
+          # glibc's per-thread arenas keep freed native memory resident
+          imageEnv = [ "HOME=${dataDir}" "MALLOC_ARENA_MAX=2" ] ++ lib.mapAttrsToList (n: v: "${n}=${v}") prodEnv;
         };
       };
 
