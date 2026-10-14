@@ -14,7 +14,10 @@ export interface AccountChipProps {
   host?: HostPropsInput;
   /** Default mode: which auth screen the signed-out CTA opens. */
   intent?: SignInIntent;
-  /** Default mode: where to come back to after sign-in — an absolute URL on this host. */
+  /**
+   * Default mode: where to come back to after sign-in — an absolute URL on this
+   * host. No default; a relative or non-http(s) value is left out (`hostReturnTo`).
+   */
   returnTo?: string;
   onNavigate?: NavigateHandler;
   /** Host mode: sign out was picked; end the host's own session. */

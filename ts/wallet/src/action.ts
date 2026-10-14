@@ -37,7 +37,8 @@ const POPUP_NAME = 'ev-wallet-action';
 /**
  * `raw` as a wallet action URL on `origin`, or null. Refused: another origin,
  * a path outside `/wallet/`, credentials, control characters and backslashes —
- * browsers strip the former and read `\` as `/` before the check would see it.
+ * browsers strip tabs and newlines and read `\` as `/` before the check would
+ * see them.
  */
 export function walletActionUrl(raw: unknown, origin: string = WALLET_ORIGIN): URL | null {
   if (typeof raw !== 'string' || raw.length === 0 || raw.length > MAX_URL) return null;
@@ -94,8 +95,11 @@ export type WalletActionOutcome =
   | { status: 'blocked' }
   /** Another action's popup is still open on this page; it was focused instead. Report nothing for this click. */
   | { status: 'busy' }
+  /** No result within `timeoutMs`; the popup was closed. */
   | { status: 'timeout' }
+  /** `signal` aborted, before the popup opened or while it was open; the popup was closed. */
   | { status: 'aborted' }
+  /** `url` is not a wallet action on `origin` ({@link walletActionUrl}); nothing was opened. */
   | { status: 'invalid_url' };
 
 export interface WalletActionOptions {
@@ -103,8 +107,9 @@ export interface WalletActionOptions {
   origin?: string;
   /** Give up — and close the popup — after this long. Default 15 minutes. */
   timeoutMs?: number;
-  /** How often to look whether the user closed the popup. */
+  /** How often to look whether the user closed the popup. Default 500 ms. */
   pollMs?: number;
+  /** Aborting closes the popup and resolves `aborted`. */
   signal?: AbortSignal;
 }
 
@@ -135,8 +140,9 @@ let inFlight: Window | null = null;
  * a message from the popup itself, from `origin`, in the
  * {@link WALLET_RESULT_MESSAGE} shape counts; everything else on the channel is
  * ignored. While one action is in flight, another call focuses its popup and
- * resolves `busy`. Call it inside the user's click — a popup opened later is
- * blocked. Never rejects. Browser only.
+ * resolves `busy`. A popup this call opened is closed whatever the outcome.
+ * Call it inside the user's click — a popup opened later is blocked. Never
+ * rejects. Browser only.
  */
 export function openWalletAction(url: string | URL, options: WalletActionOptions = {}): Promise<WalletActionOutcome> {
   const origin = options.origin ?? WALLET_ORIGIN;

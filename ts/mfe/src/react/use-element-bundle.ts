@@ -6,7 +6,9 @@ import { containRemoteStyles, loadElement, REMOTE_LAYER } from '../index';
 export type BundleState = 'loading' | 'ready' | 'failed';
 
 export interface ElementBundleOptions {
+  /** As in `LoadOptions`; default 0 accepts any bundle. */
   minApiVersion?: number;
+  /** As in `LoadOptions`; default 8 s. */
   timeoutMs?: number;
   /** Cascade layer for the remote's stylesheets; `false` leaves them alone. */
   layer?: string | false;

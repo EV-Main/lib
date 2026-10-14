@@ -24,7 +24,12 @@ the invest cabinet, the SA panel, admin. The elements are banking's, served from
 import { fetchWalletRegistry, walletEntry } from '@evinvest/wallet';
 
 const registry = await fetchWalletRegistry(); // WALLET_REGISTRY_URL by default
-const wallet = registry.ok ? walletEntry(registry.value, 'wallet') : registry;
+if (!registry.ok) return fallback;
+const walletResult = walletEntry(registry.value, 'wallet');
+const payResult = walletEntry(registry.value, 'payInvoice');
+if (!walletResult.ok || !payResult.ok) return fallback;
+const wallet = walletResult.value;
+const pay = payResult.value;
 ```
 
 ## Money actions stay on evinvest.ltd
@@ -61,6 +66,7 @@ Contract, host side:
 | attribute | `scope` | the scope host's id; absent = the full wallet, actions in place |
 | attribute | `invoice` | the invoice id (pay-invoice only) |
 | event | `ev:wallet-action` | cancelable, `detail: { href }` under `https://evinvest.ltd/wallet/`; the host opens it |
+| event | `ev:navigate` | `Wallet` only: an in-element link, as in `@evinvest/mfe` (`onNavigate`) |
 | query | `opener` | the host's origin, added to the popup URL — where the page posts |
 | query | `return_to` | where the page sends the user back when navigated, not popped up |
 | message | `{ type: 'ev:wallet-result', outcome: 'done' \| 'failed' \| 'cancelled', reference? }` | posted to the opener; a reference that is empty, not a string or over 128 characters reads as none — never cut — and the outcome stands |

@@ -7,9 +7,10 @@
 
 /**
  * The host-contract version this package speaks. A producer sets it as a static
- * on its element class (`static apiVersion = API_VERSION`); a host refuses an
- * older bundle rather than half-render it. Additive changes keep the number;
- * a renamed attribute or event bumps it.
+ * on its element class (`static apiVersion = API_VERSION`); a host that passes
+ * it as `minApiVersion` refuses an older bundle rather than half-render it (the
+ * loader's default, 0, accepts any). Additive changes keep the number; a renamed
+ * attribute or event bumps it.
  */
 export const API_VERSION = 2;
 
@@ -26,9 +27,9 @@ export function speaksApi(ctor: unknown, min: number): boolean {
  * route itself; left alone, the browser follows the link.
  */
 export const NAVIGATE_EVENT = 'ev:navigate';
-/** The user finished signing in inside the element; the host starts its own RP login. */
+/** The user finished signing in inside the element; the host starts its own RP login. `detail` is null. */
 export const SIGNED_IN_EVENT = 'ev:signed-in';
-/** Sign out was picked in host mode; the host ends its own session. */
+/** Sign out was picked in host mode; the host ends its own session. `detail` is null. */
 export const SIGNOUT_EVENT = 'signout';
 
 /** `detail` of {@link NAVIGATE_EVENT}: the destination as path + query + hash. */
@@ -36,6 +37,7 @@ export interface NavigateDetail {
   href: string;
 }
 
+/** Every event of the host contract, by name, with the event type a listener receives. */
 export interface MfeEventMap {
   [NAVIGATE_EVENT]: CustomEvent<NavigateDetail>;
   [SIGNED_IN_EVENT]: CustomEvent<null>;
@@ -59,10 +61,12 @@ export function dispatchNavigate(source: EventTarget, href: string): boolean {
   return !source.dispatchEvent(event);
 }
 
+/** Producer side: report {@link SIGNED_IN_EVENT} from `source`. */
 export function dispatchSignedIn(source: EventTarget): void {
   source.dispatchEvent(new CustomEvent<null>(SIGNED_IN_EVENT, { ...BASE, detail: null }));
 }
 
+/** Producer side: report {@link SIGNOUT_EVENT} from `source`. */
 export function dispatchSignOut(source: EventTarget): void {
   source.dispatchEvent(new CustomEvent<null>(SIGNOUT_EVENT, { ...BASE, detail: null }));
 }
