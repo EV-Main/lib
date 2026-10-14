@@ -346,6 +346,40 @@ describe('fetchRegistry', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  it('should_refuse_a_call_without_options_before_fetching', async () => {
+    const fetchMock = vi.fn(async () => Response.json([CHIP]));
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await fetchRegistry(REGISTRY_URL);
+
+    expect(result).toEqual({ ok: false, error: `registry ${REGISTRY_URL}: allowedPrefix is required` });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('should_refuse_empty_options_before_fetching', async () => {
+    const fetchMock = vi.fn(async () => Response.json([CHIP]));
+    vi.stubGlobal('fetch', fetchMock);
+
+    // What a plain-JS host or a caller built against the old signature can pass.
+    const result = await fetchRegistry(REGISTRY_URL, JSON.parse('{}'));
+
+    expect(result).toEqual({ ok: false, error: `registry ${REGISTRY_URL}: allowedPrefix is required` });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('should_refuse_the_origin_root_as_allowed_prefix_before_fetching', async () => {
+    const fetchMock = vi.fn(async () => Response.json([CHIP]));
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await fetchRegistry(REGISTRY_URL, { allowedPrefix: 'https://evinvest.ltd/' });
+
+    expect(result).toEqual({
+      ok: false,
+      error: `registry ${REGISTRY_URL}: allowedPrefix https://evinvest.ltd/ is the origin root, not a bundle directory`,
+    });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
   it('should_refuse_a_relative_allowed_prefix', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => Response.json([CHIP])));
 
