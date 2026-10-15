@@ -82,12 +82,15 @@ export function SheetTrigger({ asChild = false, onClick, ...props }: SheetTrigge
 export interface SheetOverlayProps extends React.ComponentProps<"div"> {}
 
 export function SheetOverlay({ className, ...props }: SheetOverlayProps) {
-  const { open, setOpen } = useSheet();
+  const { open } = useSheet();
+  // No onClick: the content's dismissable layer already closes on the
+  // pointer-down that lands here, and a second path called onOpenChange(false)
+  // twice for one press whenever the overlay was still hit by the click
+  // (a host that closes later, CSS without the closed-state pointer-events).
   return (
     <div
       data-slot="sheet-overlay"
       data-state={open ? "open" : "closed"}
-      onClick={() => setOpen(false)}
       className={cn(SHEET_OVERLAY, className)}
       {...(props as Record<string, unknown>)}
     />

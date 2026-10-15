@@ -78,12 +78,15 @@ export function AlertDialogTrigger({ asChild = false, onClick, ...props }: Alert
 export interface AlertDialogOverlayProps extends React.ComponentProps<"div"> {}
 
 export function AlertDialogOverlay({ className, ...props }: AlertDialogOverlayProps) {
-  const { open, setOpen } = useAlertDialog();
+  const { open } = useAlertDialog();
+  // No onClick: the content's dismissable layer already closes on the
+  // pointer-down that lands here, and a second path called onOpenChange(false)
+  // twice for one press whenever the overlay was still hit by the click
+  // (a host that closes later, CSS without the closed-state pointer-events).
   return (
     <div
       data-slot="alert-dialog-overlay"
       data-state={open ? "open" : "closed"}
-      onClick={() => setOpen(false)}
       className={cn(ALERT_DIALOG_OVERLAY, className)}
       {...(props as Record<string, unknown>)}
     />
