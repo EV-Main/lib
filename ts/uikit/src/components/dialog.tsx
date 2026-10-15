@@ -23,6 +23,11 @@ interface DialogContextValue {
   open: boolean;
   setOpen: (next: boolean) => void;
   triggerRef: React.RefObject<HTMLElement | null>;
+  /** Ids of the mounted DialogTitle / DialogDescription; unset while none is. */
+  titleId: string | undefined;
+  descriptionId: string | undefined;
+  setTitleId: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setDescriptionId: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
 const DialogContext = React.createContext<DialogContextValue | null>(null);
@@ -47,8 +52,12 @@ export function Dialog({ open, defaultOpen = false, onOpenChange, children }: Di
     ...(onOpenChange ? { onChange: onOpenChange } : {}),
   });
   const triggerRef = React.useRef<HTMLElement | null>(null);
+  const [titleId, setTitleId] = React.useState<string | undefined>(undefined);
+  const [descriptionId, setDescriptionId] = React.useState<string | undefined>(undefined);
   return (
-    <DialogContext.Provider value={{ open: isOpen, setOpen, triggerRef }}>
+    <DialogContext.Provider
+      value={{ open: isOpen, setOpen, triggerRef, titleId, descriptionId, setTitleId, setDescriptionId }}
+    >
       {children}
     </DialogContext.Provider>
   );
@@ -84,12 +93,15 @@ export function DialogPortal({ children }: DialogPortalProps) {
 export interface DialogOverlayProps extends React.ComponentProps<"div"> {}
 
 export function DialogOverlay({ className, ...props }: DialogOverlayProps) {
-  const { open, setOpen } = useDialog();
+  const { open } = useDialog();
+  // No onClick: the content's dismissable layer already closes on the
+  // pointer-down that lands here, and a second path called onOpenChange(false)
+  // twice for one press whenever the overlay was still hit by the click
+  // (a host that closes later, CSS without the closed-state pointer-events).
   return (
     <div
       data-slot="dialog-overlay"
       data-state={open ? "open" : "closed"}
-      onClick={() => setOpen(false)}
       className={cn(DIALOG_OVERLAY, className)}
       {...(props as Record<string, unknown>)}
     />
@@ -126,7 +138,7 @@ export function DialogContent({
   initialFocus = "first",
   ...props
 }: DialogContentProps) {
-  const { open, setOpen, triggerRef } = useDialog();
+  const { open, setOpen, triggerRef, titleId, descriptionId } = useDialog();
   const { isPresent, ref: presRef } = usePresence(open);
   const focusRef = useFocusScope(open, { initialFocus, returnFocusTo: triggerRef });
   const dismissRef = useDismissableLayer({
@@ -151,6 +163,8 @@ export function DialogContent({
         data-slot="dialog-content"
         role="dialog"
         aria-modal="true"
+        aria-labelledby={titleId}
+        aria-describedby={descriptionId}
         data-state={open ? "open" : "closed"}
         ref={mergeRefs(focusRef, dismissRef, presRef as React.Ref<HTMLDivElement>)}
         className={cn(DIALOG_CONTENT, className)}
@@ -212,9 +226,34 @@ export function DialogFooter({ className, ...props }: React.ComponentProps<"div"
   );
 }
 
-export function DialogTitle({ className, ...props }: React.ComponentProps<"h2">) {
+/**
+ * Announces `id` as the dialog's title or description while the part is
+ * mounted. A layout effect, so the reference is in place before the first
+ * paint of an opening dialog and gone with the part — DialogContent never
+ * points at an id that is not in the document. Outside a Dialog there is
+ * nothing to register with: the part renders as before rather than throwing,
+ * since it never needed the context until now.
+ */
+function useRegisteredId(
+  own: string | undefined,
+  register: React.Dispatch<React.SetStateAction<string | undefined>> | undefined,
+): string {
+  const generated = React.useId();
+  const id = own ?? generated;
+  React.useLayoutEffect(() => {
+    if (!register) return;
+    register(id);
+    // Clear only our own id: a title mounted after this one has already taken the slot.
+    return () => register((current) => (current === id ? undefined : current));
+  }, [id, register]);
+  return id;
+}
+
+export function DialogTitle({ className, id, ...props }: React.ComponentProps<"h2">) {
+  const titleId = useRegisteredId(id, React.useContext(DialogContext)?.setTitleId);
   return (
     <h2
+      id={titleId}
       data-slot="dialog-title"
       className={cn(DIALOG_TITLE, className)}
       {...props}
@@ -222,9 +261,11 @@ export function DialogTitle({ className, ...props }: React.ComponentProps<"h2">)
   );
 }
 
-export function DialogDescription({ className, ...props }: React.ComponentProps<"p">) {
+export function DialogDescription({ className, id, ...props }: React.ComponentProps<"p">) {
+  const descriptionId = useRegisteredId(id, React.useContext(DialogContext)?.setDescriptionId);
   return (
     <p
+      id={descriptionId}
       data-slot="dialog-description"
       className={cn(DIALOG_DESCRIPTION, className)}
       {...props}

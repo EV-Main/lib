@@ -242,6 +242,17 @@ Rust crate and its TypeScript mirror at once.
 
 ### Fixed
 
+- **`Dialog` closes once and is named by its title** (`@evinvest/uikit`, #249,
+  patch). One press on the overlay of a `Dialog`, `Sheet` or `AlertDialog`
+  called `onOpenChange(false)` twice — once from the dismissable layer's
+  pointer-down, once from the overlay's `onClick` — whenever the click still
+  hit the overlay (a host that closes later, a page without the closed-state
+  `pointer-events-none`). The overlay's `onClick` is gone; the layer is the one
+  outside-press path, as in `Drawer` and `CommandDialog`. `DialogContent` now
+  points `aria-labelledby` at `DialogTitle` and `aria-describedby` at
+  `DialogDescription` (their own `id`, or a `useId`); with no title or
+  description mounted the attribute is not set.
+
 - **`FieldLabel` sees controls a Server Component rendered** (`@evinvest/uikit`):
   the Flight client hands such elements a lazy type, which `FieldLabel` did not
   look through, so a label around a server-rendered control (the choice card,
