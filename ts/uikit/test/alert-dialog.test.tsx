@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 import {
   AlertDialog,
@@ -55,5 +55,15 @@ describe("AlertDialog", () => {
     fireEvent.click(getByText("open"));
     fireEvent.click(getByText("Confirm"));
     expect(queryByRole("alertdialog")).toBeNull();
+  });
+
+  it("should_call_onOpenChange_false_once_when_overlay_is_pressed", () => {
+    const onOpenChange = vi.fn();
+    const { baseElement } = render(tree({ open: true, onOpenChange }));
+    const overlay = baseElement.querySelector('[data-slot="alert-dialog-overlay"]')!;
+    fireEvent.pointerDown(overlay);
+    fireEvent.click(overlay);
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 });

@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 import {
   Sheet,
@@ -54,6 +54,22 @@ describe("Sheet", () => {
     expect(getByRole("dialog")).toBeInTheDocument();
     fireEvent.keyDown(document, { key: "Escape" });
     expect(queryByRole("dialog")).toBeNull();
+  });
+
+  it("should_call_onOpenChange_false_once_when_overlay_is_pressed", () => {
+    const onOpenChange = vi.fn();
+    const { baseElement } = render(
+      <Sheet open onOpenChange={onOpenChange}>
+        <SheetContent>
+          <SheetTitle>Title</SheetTitle>
+        </SheetContent>
+      </Sheet>,
+    );
+    const overlay = baseElement.querySelector('[data-slot="sheet-overlay"]')!;
+    fireEvent.pointerDown(overlay);
+    fireEvent.click(overlay);
+    expect(onOpenChange).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
   it("focuses the panel itself on open, not its first control", () => {
