@@ -655,8 +655,11 @@ measuring needs host-only `web-sys`). Known gaps:
   the next Escape — and a press inside a layer above is not "outside" the
   ones below. A modal (`Dialog`, `AlertDialog`, `Sheet`, `Drawer`,
   `CommandDialog`) bars the layers below from pointer-downs while it is open:
-  a click on its backdrop closes it alone. `Drawer` and `CommandDialog` close
-  on a click on their own scrim, not on any outside pointer-down. Toasts are
+  a click on its backdrop closes it alone. `Dialog`, `AlertDialog` and `Sheet`
+  close on the pointer-down outside their panel — their backdrop has no click
+  handler, so one press is one `onOpenChange(false)`. `Drawer` and
+  `CommandDialog` close on a click on their own scrim, not on any outside
+  pointer-down. Toasts are
   outside every layer: they never take Escape, and a click on one closes
   nothing. The stack is shared through `globalThis`, so a micro-frontend
   bundling its own uikit copy sees the host's layers; parent links are a
