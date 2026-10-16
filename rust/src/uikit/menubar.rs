@@ -99,7 +99,7 @@ pub fn MenubarItem(
 		div {
 			class: cls,
 			"data-slot": "menubar-item",
-			"data-inset": inset,
+			"data-inset": inset.then_some(""),
 			"data-variant": variant.as_ref(),
 			role: "menuitem",
 			onclick: move |e| { if let Some(h) = onclick { h.call(e); } },
@@ -190,7 +190,7 @@ pub fn MenubarRadioItem(value: String, #[props(default)] class: String, children
 pub fn MenubarLabel(#[props(default)] inset: bool, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(MENUBAR_LABEL, class);
 	rsx! {
-		div { class: cls, "data-slot": "menubar-label", "data-inset": inset, {children} }
+		div { class: cls, "data-slot": "menubar-label", "data-inset": inset.then_some(""), {children} }
 	}
 }
 
@@ -231,7 +231,7 @@ pub fn MenubarSubTrigger(#[props(default)] inset: bool, #[props(default)] class:
 		div {
 			class: cls,
 			"data-slot": "menubar-sub-trigger",
-			"data-inset": inset,
+			"data-inset": inset.then_some(""),
 			"data-state": if open { "open" } else { "closed" },
 			role: "menuitem",
 			onclick: move |_| ctx.open.set(!ctx.open.get()),

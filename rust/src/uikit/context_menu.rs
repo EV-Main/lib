@@ -100,8 +100,8 @@ pub fn ContextMenuItem(
 			tabindex: "-1",
 			"data-slot": "context-menu-item",
 			"data-variant": variant.as_ref(),
-			"data-inset": inset,
-			"data-disabled": disabled,
+			"data-inset": inset.then_some(""),
+			"data-disabled": disabled.then_some(""),
 			onclick: move |e| {
 				if disabled {
 					return;
@@ -132,7 +132,7 @@ pub fn ContextMenuCheckboxItem(
 			tabindex: "-1",
 			"data-slot": "context-menu-checkbox-item",
 			"data-state": if checked { "checked" } else { "unchecked" },
-			"data-disabled": disabled,
+			"data-disabled": disabled.then_some(""),
 			"aria-checked": if checked { "true" } else { "false" },
 			onclick: move |e| {
 				if disabled {
@@ -189,7 +189,7 @@ pub fn ContextMenuRadioItem(value: String, #[props(default)] disabled: bool, #[p
 			tabindex: "-1",
 			"data-slot": "context-menu-radio-item",
 			"data-state": if checked { "checked" } else { "unchecked" },
-			"data-disabled": disabled,
+			"data-disabled": disabled.then_some(""),
 			"aria-checked": if checked { "true" } else { "false" },
 			onclick: move |_| {
 				if disabled {
@@ -213,7 +213,7 @@ pub fn ContextMenuRadioItem(value: String, #[props(default)] disabled: bool, #[p
 pub fn ContextMenuLabel(#[props(default)] inset: bool, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(CONTEXT_MENU_LABEL, class);
 	rsx! {
-		div { class: cls, "data-slot": "context-menu-label", "data-inset": inset, {children} }
+		div { class: cls, "data-slot": "context-menu-label", "data-inset": inset.then_some(""), {children} }
 	}
 }
 #[component]
@@ -253,7 +253,7 @@ pub fn ContextMenuSubTrigger(#[props(default)] inset: bool, #[props(default)] cl
 			tabindex: "-1",
 			"data-slot": "context-menu-sub-trigger",
 			"data-state": if open { "open" } else { "closed" },
-			"data-inset": inset,
+			"data-inset": inset.then_some(""),
 			"aria-haspopup": "menu",
 			"aria-expanded": if open { "true" } else { "false" },
 			onclick: move |_| ctx.open.set(!ctx.open.get()),
@@ -336,6 +336,7 @@ mod tests {
 		assert!(html.contains("role=\"menu\""), "{html}");
 		assert!(html.contains("Back"), "{html}");
 		assert!(html.contains("data-state=\"open\""), "{html}");
+		assert!(!html.contains("data-disabled") && !html.contains("data-inset"), "the classes match on presence: {html}");
 	}
 
 	#[test]

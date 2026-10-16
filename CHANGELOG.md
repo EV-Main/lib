@@ -59,6 +59,13 @@ Rust crate and its TypeScript mirror at once.
   as CSS `order`, so the best match is on top and the arrows walk that order;
   a group's heading stays first. `shouldFilter={false}` is unchanged.
 
+### Fixed
+
+- **Dropdown, context and menubar items are clickable again** (`ev_lib` `uikit`):
+  they rendered `data-disabled="false"` and `data-inset="false"`, which the
+  classes' `data-[disabled]` / `data-[inset]` match on presence, so every item
+  was `pointer-events-none opacity-50` and indented. Both are now absent unless set.
+
 ### Added
 
 - **`I18nScope`** (`@evinvest/i18n/react`, 0.10.0): a nested scope lays its
