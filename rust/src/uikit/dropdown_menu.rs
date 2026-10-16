@@ -98,8 +98,8 @@ pub fn DropdownMenuItem(
 			tabindex: "-1",
 			"data-slot": "dropdown-menu-item",
 			"data-variant": variant.as_ref(),
-			"data-inset": inset,
-			"data-disabled": disabled,
+			"data-inset": inset.then_some(""),
+			"data-disabled": disabled.then_some(""),
 			onclick: move |e| {
 				if disabled {
 					return;
@@ -130,7 +130,7 @@ pub fn DropdownMenuCheckboxItem(
 			tabindex: "-1",
 			"data-slot": "dropdown-menu-checkbox-item",
 			"data-state": if checked { "checked" } else { "unchecked" },
-			"data-disabled": disabled,
+			"data-disabled": disabled.then_some(""),
 			"aria-checked": if checked { "true" } else { "false" },
 			onclick: move |e| {
 				if disabled {
@@ -187,7 +187,7 @@ pub fn DropdownMenuRadioItem(value: String, #[props(default)] disabled: bool, #[
 			tabindex: "-1",
 			"data-slot": "dropdown-menu-radio-item",
 			"data-state": if checked { "checked" } else { "unchecked" },
-			"data-disabled": disabled,
+			"data-disabled": disabled.then_some(""),
 			"aria-checked": if checked { "true" } else { "false" },
 			onclick: move |_| {
 				if disabled {
@@ -211,7 +211,7 @@ pub fn DropdownMenuRadioItem(value: String, #[props(default)] disabled: bool, #[
 pub fn DropdownMenuLabel(#[props(default)] inset: bool, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(DROPDOWN_MENU_LABEL, class);
 	rsx! {
-		div { class: cls, "data-slot": "dropdown-menu-label", "data-inset": inset, {children} }
+		div { class: cls, "data-slot": "dropdown-menu-label", "data-inset": inset.then_some(""), {children} }
 	}
 }
 #[component]
@@ -252,7 +252,7 @@ pub fn DropdownMenuSubTrigger(#[props(default)] inset: bool, #[props(default)] c
 			tabindex: "-1",
 			"data-slot": "dropdown-menu-sub-trigger",
 			"data-state": if open { "open" } else { "closed" },
-			"data-inset": inset,
+			"data-inset": inset.then_some(""),
 			"aria-haspopup": "menu",
 			"aria-expanded": if open { "true" } else { "false" },
 			onclick: move |_| ctx.open.set(!ctx.open.get()),
@@ -335,6 +335,24 @@ mod tests {
 		assert!(html.contains("role=\"menu\""), "{html}");
 		assert!(html.contains("Profile"), "{html}");
 		assert!(html.contains("data-state=\"open\""), "{html}");
+	}
+
+	#[test]
+	fn only_disabled_items_carry_data_disabled() {
+		fn app() -> Element {
+			rsx! {
+				DropdownMenu { default_open: true,
+					DropdownMenuContent {
+						DropdownMenuItem { "live" }
+						DropdownMenuCheckboxItem { "live check" }
+						DropdownMenuItem { disabled: true, "dead" }
+					}
+				}
+			}
+		}
+		let html = render(app);
+		assert_eq!(html.matches("data-disabled").count(), 1, "the classes match `data-[disabled]` on presence: {html}");
+		assert!(!html.contains("data-inset"), "{html}");
 	}
 
 	#[test]
