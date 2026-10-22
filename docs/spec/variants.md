@@ -13,11 +13,15 @@ is written down instead.
 
 ## Where the line falls
 
-`Outline`, `Ghost` and `Link` stay. They name an **affordance pattern**, not a
-raw visual property: "outlined button" is a term of art that survives a
-repalette, and it carries information an emphasis ladder loses — `Tertiary` does
-not tell you the thing has a border. `Destructive` stays for the same reason
-inverted: it names a consequence.
+A button is `Primary`, `Secondary`, `Ghost`, `Solid`, `Danger` or `Link`, from
+Uikit 2.0 on. `Ghost` and `Link` name an **affordance pattern**, not a raw
+visual property: they survive a repalette, and they carry information an
+emphasis ladder loses. `Danger` names a consequence, and it replaces
+`Destructive` so menu rows and buttons say the same word. `Primary` is the
+outlined action and `Solid` the one filled call to action; whether either paints
+an outline or a fill is the theme's job (the `--button-*` face tokens), so the
+name stays true when Oldschool fills `Primary`. `Outline` is gone: `Secondary`
+is the raised face with a hairline.
 
 `Red` names a hue. Change the palette and the name lies.
 `Default` names nothing at all.
@@ -39,4 +43,7 @@ which fuses magnitude with shape and, in `"icon"`, elides the default as well.
 
 **There is one severity vocabulary.** A toast is `{Neutral, Positive, Info,
 Warn, Error}` — the [accent rungs](./accents.md) plus the valence — not a second
-ladder written in different words.
+ladder written in different words. A badge adds `Primary`: `{Neutral, Primary,
+Positive, Info, Warn, Error}`. Figma's own names (accent, negative, warning) map
+onto these; the chip tokens `--chip-{tone}-{bg,border}` carry the same six
+tones.

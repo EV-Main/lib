@@ -25,7 +25,7 @@ values written a second time.
 but must read as good, so `positive` is its own role off the ladder. Adding it
 as a sixth rung would break the ordering.
 
-**Charts are neither.** `chart-1 … chart-5` are distinguishable hues carrying no
+**Charts are neither.** `chart-1 … chart-6` are distinguishable hues carrying no
 significance. A decorative colour that is not ordered belongs there.
 
 ## A fill is not an ink
@@ -35,10 +35,10 @@ and it is the one role whose fill and ink are two values. A role is one colour
 worn two ways — as a solid fill with `on-{role}` reading on it, and as ink on a
 surface — and for every other role one value does both jobs: `positive` and the
 five accents each hold their dark `on-*` label (≥ 4.5:1) and read as ink on
-`background` and `card` at once. `primary` could too — `#070d18` reads on the
-teal ink `#2a9d8f` at 5.85:1 — so the split is a choice, not a necessity: the
+`background` and `card` at once. `primary` could too — the dark label reads on
+the teal ink `#35a395` at 6.31:1 — so the split is a choice, not a necessity: the
 call to action wanted a white label and a calmer plane than a bright teal
-chip, and a teal dark enough for white (`#128377`, 4.63:1) is too dark to be
+chip, and a teal dark enough for white (`#138377`, 4.62:1) is too dark to be
 the link and eyebrow colour on a card. Hence `primary` / `primary-ink`, the
 same hue and chroma one step apart in lightness; a role whose two values ever
 diverge names its ink the same way, `{role}-ink`.
@@ -49,12 +49,21 @@ surface, but not on its own 10 % tint — a destructive menu row (`DropdownMenu`
 (lib#166). So that row's text and icon wear `accent-error-ink`. Unlike
 `primary-ink` it is derived, not required: the contract mixes 70 % of
 `accent-error` with 30 % of `ink`, which moves it toward whichever polarity
-the text needs — EV's lands at `#ec8379`, 4.83:1 on the tint over `popover`
-and 5.36:1 on `popover` itself — so a brand file written before it still
-renders. A palette whose mix misses the floor pins its own value, as the
-test fixture's dark side does. EV does not pin it: a palette that sits on
-`:root` alone would be overridden by the derived rule inside every `.light`
-/ `.dark` subtree, so EV's value is the formula's.
+the text needs — Oldschool's lands at `#ec8379`, 4.83:1 on the tint over
+`popover` and 5.36:1 on `popover` itself — so a brand file written before it
+still renders. A palette whose mix misses the floor pins its own value, as the
+test fixture's dark side does. EV's Dark and Light pin it (`#f2736a`,
+`#b82826`): Figma's own text values measured 4.49:1 and 4.21:1 on the danger
+button's hover tint.
+
+**The other status inks follow it.** `positive-ink`, `accent-info-ink` and
+`accent-warn-ink` are the same idea for the rest of the status roles, and they
+are the colour for status *text*. On a light plane the fills are shapes only
+(the Light status fills measure 1.89–3.81:1 as text), so a label, a chip or a message
+in a status colour wears the ink. They are derived too — 60 % of the role
+toward `ink` — and EV pins Figma's values. In Light, `positive` itself is
+`#1f7f48`, one step darker than Figma's `#228a4e`, because neither label
+reached 4.5:1 on the Figma value.
 
 **Label polarity is deliberately split.** White on a fill marks the one call to
 action, so it belongs to `primary` alone; `destructive`, `positive` and the five
@@ -68,21 +77,23 @@ that is on and the `Primary` band are the fill. A link, an eyebrow, a checked Fi
 focus `ring`, a radio dot, a Slider range and a Progress indicator are the ink.
 The radio dot, range and indicator are ink although they are painted shapes
 because a shape with no label is identified by contrast alone, and the ink
-holds more of it: 4.72:1 on card against the fill's 3.39:1 for the 8px dot,
-3.54:1 against 2.54:1 for the range on its muted track. A Checkbox and a
+holds more of it: on Dark card 5.92:1 against the fill's 3.94:1 for the 8px dot.
+The range and the indicator ride a 14 % ink track (`bg-ink/14`), which is
+1.42:1 against card on Dark and 1.35:1 on Light; the planes sit only 1.10:1 from
+`muted`, so a muted track would vanish. A Checkbox and a
 Switch stay the fill because their mark — the tick, the thumb — is
 `on-primary`, so they identify themselves even where the fill does not clear
 the surface.
 
 **The floors.** The label on the fill ≥ 4.5:1. The fill against every surface
-it is placed on ≥ 3:1: `background` (4.20:1), `secondary` (3.94:1), `card`
-(3.39:1) and `popover` (3.01:1). `muted` is the one exception (2.54:1), and
-the test holds it as one so that it cannot drift silently. It is the palette's
-well, not a plane a screen is laid out on — the `TABS_LIST` behind the
-triggers, the `DRAWER_HANDLE` bar, a `Muted` band — and a fill that does land
-there (a Switch or a Button in a `Muted` band) is never a bare shape: its
-`on-primary` mark — a label, a tick, a thumb — identifies it, which is what
-WCAG 1.4.11 asks of a control. The ink on `background` and `card` ≥ 4.5:1. `--ring` is the ink, and the test holds that
+it is placed on ≥ 3:1. On Dark that is `background` (4.20:1), `secondary`
+(3.67:1), `card` (3.94:1) and `popover` (3.30:1); Light is 3.88–4.62:1 and
+Oldschool 3.01:1 on `popover`. `muted` is under the floor only in Oldschool
+(2.55:1). It is the palette's well, not a plane a screen is laid out on — the
+`TABS_LIST` behind the triggers, the `DRAWER_HANDLE` bar, a `Muted` band — and
+a fill that does land there (a Switch or a Button in a `Muted` band) is never a
+bare shape: its `on-primary` mark — a label, a tick, a thumb — identifies it,
+which is what WCAG 1.4.11 asks of a control. The ink on `background` and `card` ≥ 4.5:1. `--ring` is the ink, and the test holds that
 too: a focus indicator needs the 3:1 the ink gives on every surface, not the
 2.54:1 the fill gives on muted.
 
@@ -92,11 +103,18 @@ adjoining an ink shape takes the ink — `border-primary-ink` on the Slider
 thumb riding its ink range. An outline on a surface with no fill inside it is
 ink: `border-primary-ink` on a checked Field.
 
+**Planes are separated by a hairline.** The u2 planes sit 1.04–1.14:1 apart on
+purpose: the design is flat, with no tinted fills and no shadow. The ~1.2 floor
+therefore applies to the `--border` hairline between two planes (1.37–1.46:1 on
+Dark, 1.35:1 on Light, 1.37–1.45:1 on Oldschool), not to the planes. A text
+tier is held at 4.5:1 on all four planes, and the disabled ink `ink-faint` is
+exempt because nothing can be done with it. `border-strong` (about 2:1) is for
+state and overlay edges, never for a control: a control edge stays `--input`.
+
 **What lives where.** The measured values live beside the tokens in
-`tokens.css`; the track and indicator pairs beside their classes in
+`ev.css`; the track and indicator pairs beside their classes in
 `rust/classes/src/{slider,progress}.rs`; every floor above is asserted in
 `ts/uikit/test/tokens.test.ts`, so a retune of one value cannot quietly move
-the other. `card` is pinned from both sides — the surface ladder below it and
-the 3.39:1 the fill needs above it — so lifting card one step breaks the test.
+the other. The 3:1 the fill needs against `popover` pins `card` from above.
 The destructive row's ink is held at 4.5:1 on its tint and on `popover`, and
 a Toggle's on-vs-off at the fill's 3:1, for every palette the test measures.
