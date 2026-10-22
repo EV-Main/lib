@@ -752,3 +752,5 @@ export type {
   AccountSettingsDialogProps,
   AccountSettingsSection,
 } from "./components/account-settings-dialog";
+export { ConfirmDialog } from "./components/confirm-dialog";
+export type { ConfirmDialogLabels, ConfirmDialogProps, ConfirmDialogTone } from "./components/confirm-dialog";
