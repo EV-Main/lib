@@ -1,5 +1,16 @@
 import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { extendTailwindMerge } from "tailwind-merge";
+
+// The kit's own type scale (theme.css `--text-*`). tailwind-merge only knows
+// t-shirt sizes as font sizes, so `text-body` would be filed under text colour
+// and dropped by a later `text-ink`. The Rust mirror is `fuse` in ev_lib_classes.
+const twMerge = extendTailwindMerge({
+  extend: {
+    classGroups: {
+      "font-size": [{ text: ["caption", "body-s", "body", "body-l", "h3", "h2", "h1", "figure-m", "figure-l"] }],
+    },
+  },
+});
 
 /**
  * Fuses class fragments into one string with real Tailwind conflict resolution:

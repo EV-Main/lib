@@ -24,7 +24,7 @@ import { TEXTAREA_BASE } from "../src/generated/textarea";
 import { RADIO_GROUP_ITEM } from "../src/generated/radio-group";
 import { SELECT_ITEM } from "../src/generated/select";
 import { TOGGLE_BASE, toggleVariantClasses } from "../src/generated/toggle";
-import { brandFromToml, DERIVED_SCOPE, readContract, readRules, renderPalette, type CssRule } from "../src/palette";
+import { brandFromToml, DERIVED_SCOPE, FACES_SCOPE, readContract, readRules, renderPalette, type CssRule } from "../src/palette";
 
 // The shipped sheet, not the repo-root source: a consumer imports this one.
 // Resolved from cwd rather than import.meta.url: jsdom rewrites the module URL
@@ -63,7 +63,6 @@ const NOT_A_BRAND = ':not([data-brand]:not([data-brand="ev"]), [data-brand]:not(
 const EV_DARK_SELECTOR = `:where(:is(:root, [data-brand="ev"], .dark)${NOT_A_BRAND})`;
 const EV_LIGHT_SELECTOR = `:where(.light${NOT_A_BRAND})`;
 const EV_OLDSCHOOL_SELECTOR = ':where([data-theme="oldschool"], [data-theme="oldschool"] :is(.light, .dark))';
-const FACES_SELECTOR = ":where([data-theme], [data-brand], .light, .dark, :root)";
 
 const EV_DARK = scopeOf(sheetRules, EV_DARK_SELECTOR, "ev dark");
 const EV_LIGHT = scopeOf(sheetRules, EV_LIGHT_SELECTOR, "ev light");
@@ -88,11 +87,12 @@ function token(name: string, scope: Scope): string {
 }
 
 const derivedRule = sheetRules.find((r) => r.selector === DERIVED_SCOPE);
-const facesRule = sheetRules.find((r) => r.selector === FACES_SELECTOR);
+const facesRule = sheetRules.find((r) => r.selector === FACES_SCOPE);
+const geometryRule = sheetRules.find((r) => r.selector === ":where(:root, [data-brand])");
 
 /** The value a scope gives `--name`: its own, else the contract's formula. */
 function declared(name: string, scope: Scope): string {
-  const value = scope.rule.declarations.get(name) ?? derivedRule?.declarations.get(name) ?? facesRule?.declarations.get(name);
+  const value = scope.rule.declarations.get(name) ?? derivedRule?.declarations.get(name) ?? facesRule?.declarations.get(name) ?? geometryRule?.declarations.get(name);
   if (value === undefined) throw new Error(`--${name} is neither pinned in ${scope.label} nor derived by the contract`);
   return value;
 }
@@ -488,7 +488,7 @@ describe("list rows ring their keyboard focus", () => {
 describe("the contract half of the sheet", () => {
   const rules = readRules(sheet);
 
-  it("derives the states, lines, inks and status inks rather than asking a palette for them", () => {
+  it("derives the states, lines, inks, status inks, button faces and chips rather than asking a palette for them", () => {
     expect([...contract.derived].sort()).toEqual([
       "accent-error-ink",
       "accent-info-ink",
@@ -497,6 +497,26 @@ describe("the contract half of the sheet", () => {
       "border",
       "border-strong",
       "border-subtle",
+      "button-danger-bg",
+      "button-danger-border",
+      "button-danger-hover",
+      "button-danger-ink",
+      "button-primary-bg",
+      "button-primary-border",
+      "button-primary-hover",
+      "button-primary-ink",
+      "chip-error-bg",
+      "chip-error-border",
+      "chip-info-bg",
+      "chip-info-border",
+      "chip-neutral-bg",
+      "chip-neutral-border",
+      "chip-positive-bg",
+      "chip-positive-border",
+      "chip-primary-bg",
+      "chip-primary-border",
+      "chip-warn-bg",
+      "chip-warn-border",
       "hover",
       "ink-faint",
       "ink-mid",

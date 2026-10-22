@@ -21,6 +21,9 @@ export function references(value: string): string[] {
 /** The rule the derived tokens live on — see `theme.css`, the contract half of `tokens.css`. */
 export const DERIVED_SCOPE = ":where(:root, .dark, .light, [data-brand], [data-theme])";
 
+/** The same scopes in another order: the button faces and chips, derived the same way. */
+export const FACES_SCOPE = ":where([data-theme], [data-brand], .light, .dark, :root)";
+
 export interface CssRule {
   selector: string;
   /** Custom properties declared directly in the rule, in source order. */
@@ -79,9 +82,11 @@ export function readContract(css: string): Contract {
   }
   const derivedRule = rules.find((r) => r.selector === DERIVED_SCOPE);
   if (!derivedRule) throw new Error(`token sheet has no \`${DERIVED_SCOPE}\` rule — not the kit's contract`);
-  const derived = [...derivedRule.declarations.keys()];
+  const facesRule = rules.find((r) => r.selector === FACES_SCOPE);
+  const formulas = new Map([...derivedRule.declarations, ...(facesRule?.declarations ?? [])]);
+  const derived = [...formulas.keys()];
   const stray = derived.filter((d) => !painted.includes(d));
   if (stray.length > 0) throw new Error(`derived tokens with no @theme mapping: ${stray.join(", ")}`);
-  const derivedFrom = Object.fromEntries([...derivedRule.declarations].map(([name, value]) => [name, references(value)]));
+  const derivedFrom = Object.fromEntries([...formulas].map(([name, value]) => [name, references(value)]));
   return { required: painted.filter((p) => !derived.includes(p)), derived, derivedFrom };
 }

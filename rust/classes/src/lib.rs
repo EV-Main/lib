@@ -224,9 +224,15 @@ pub fn fuse(class: &str) -> String {
 fn ring_width_collision(elements: &[&str], arbitrary: Option<&str>) -> Option<&'static str> {
 	match (elements, arbitrary) {
 		(["ring"], Some(value)) if is_arbitrary_length(value) => Some("ring-width"),
+		(["text", size @ ..], None) if !size.is_empty() && TEXT_SCALE.contains(&size.join("-").as_str()) => Some("font-size"),
 		_ => None,
 	}
 }
+
+/// The kit's `--text-*` scale (theme.css). `tailwind_fuse` knows only t-shirt
+/// sizes as font sizes, so without this `text-body` is filed under text colour
+/// and a later `text-ink` drops it. The TS port extends tailwind-merge the same way.
+const TEXT_SCALE: [&str; 9] = ["caption", "body-s", "body", "body-l", "h3", "h2", "h1", "figure-m", "figure-l"];
 
 /// `length:` is Tailwind's explicit type hint; otherwise a value opening with a
 /// digit is a dimension (`3px`, `0.5rem`) — a colour never does.
@@ -251,6 +257,15 @@ mod tests {
 		);
 		assert_eq!(cn!("ring-[3px]", "ring-[length:4px]"), "ring-[length:4px]");
 		assert_eq!(cn!("ring-[3px]", "ring-[#fff]"), "ring-[3px] ring-[#fff]");
+	}
+
+	/// The kit's type scale is a font size, not a colour: it survives a text colour
+	/// and yields to another size.
+	#[test]
+	fn type_scale_is_a_font_size() {
+		assert_eq!(cn!("text-body", "text-ink"), "text-body text-ink");
+		assert_eq!(cn!("text-body-s text-ink-mid", "text-body-l"), "text-ink-mid text-body-l");
+		assert_eq!(cn!("text-figure-m", "text-sm"), "text-sm");
 	}
 
 	#[test]

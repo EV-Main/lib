@@ -625,6 +625,29 @@
   --color-on-accent-error: var(--on-accent-error);
   --color-accent-error-ink: var(--accent-error-ink);
 
+  /* component faces: derived below, pinned per theme by EV, so `bg-button-primary-bg`
+   * and `border-chip-error-border` are real utilities the class merge understands */
+  --color-button-primary-bg: var(--button-primary-bg);
+  --color-button-primary-hover: var(--button-primary-hover);
+  --color-button-primary-border: var(--button-primary-border);
+  --color-button-primary-ink: var(--button-primary-ink);
+  --color-button-danger-bg: var(--button-danger-bg);
+  --color-button-danger-hover: var(--button-danger-hover);
+  --color-button-danger-border: var(--button-danger-border);
+  --color-button-danger-ink: var(--button-danger-ink);
+  --color-chip-neutral-bg: var(--chip-neutral-bg);
+  --color-chip-neutral-border: var(--chip-neutral-border);
+  --color-chip-primary-bg: var(--chip-primary-bg);
+  --color-chip-primary-border: var(--chip-primary-border);
+  --color-chip-positive-bg: var(--chip-positive-bg);
+  --color-chip-positive-border: var(--chip-positive-border);
+  --color-chip-info-bg: var(--chip-info-bg);
+  --color-chip-info-border: var(--chip-info-border);
+  --color-chip-warn-bg: var(--chip-warn-bg);
+  --color-chip-warn-border: var(--chip-warn-border);
+  --color-chip-error-bg: var(--chip-error-bg);
+  --color-chip-error-border: var(--chip-error-border);
+
   /* charts — distinguishable hues carrying no significance */
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
@@ -679,11 +702,10 @@
   --accent-error-ink: color-mix(in srgb, var(--accent-error) 70%, var(--ink));
 }
 
-/* Component faces built from the palette. Not colour names (no `--color-*`
- * mapping), so they are not part of the contract a brand file owes; a brand
- * gets these formulas and EV pins its own per theme. Same scopes as the rule
- * above, listed in another order so the contract reader finds one rule per
- * selector. */
+/* Component faces built from the palette. Derived like the rule above (a brand
+ * file owes none of them and may pin any), but kept in a rule of their own: the
+ * same scopes, listed in another order so the contract reader finds one rule
+ * per selector. */
 :where([data-theme], [data-brand], .light, .dark, :root) {
   /* primary is an outline button, danger the same in the error role */
   --button-primary-bg: transparent;
@@ -697,11 +719,8 @@
   --button-danger-border: var(--accent-error-ink);
   --button-danger-ink: var(--accent-error-ink);
 
-  /* chips (Badge, status pills): an outline by default, a tinted fill when a
-   * theme raises --chip-fill. The source is the role's ink, so the edge and the
-   * label are one hue. */
-  --chip-fill: 0%;
-  --chip-edge: 50%;
+  /* chips (Badge, status pills). The source is the role's ink, so the edge and
+   * the label are one hue; --chip-fill and --chip-edge are in the geometry. */
   --chip-neutral-bg: transparent;
   --chip-neutral-border: var(--border-strong);
   --chip-primary-bg: color-mix(in srgb, var(--primary-ink) var(--chip-fill), transparent);
@@ -724,6 +743,10 @@
   /* control geometry, so a consumer reshapes every button/input at once */
   --control-radius: 0.25rem;
   --chip-radius: 0.25rem;
+  /* how much of its ink a chip's fill and edge take, for a brand that pins
+   * nothing: an outline by default, a tint where a theme raises the fill */
+  --chip-fill: 0%;
+  --chip-edge: 50%;
   /* u2 is flat: depth is surface steps and hairlines. Never `none` — inside
    * Tailwind's comma-separated box-shadow list it invalidates the whole
    * declaration, and the focus ring goes with it. */
