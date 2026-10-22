@@ -7,8 +7,8 @@ describe("Button", () => {
     const { getByText } = render(<Button>go</Button>);
     const el = getByText("go");
     expect(el.tagName).toBe("BUTTON");
-    expect(el).toHaveClass("bg-primary");
-    expect(el).toHaveClass("h-9");
+    expect(el).toHaveClass("bg-button-primary-bg");
+    expect(el).toHaveClass("h-7");
     expect(el).toHaveAttribute("data-slot", "button");
   });
 
@@ -18,7 +18,7 @@ describe("Button", () => {
         x
       </Button>,
     );
-    expect(getByText("x")).toHaveClass("h-8");
+    expect(getByText("x")).toHaveClass("h-6");
     expect(getByText("x")).toHaveClass("aspect-square");
   });
 
@@ -37,11 +37,15 @@ describe("Button", () => {
   });
 
   it("recolours at an accent rung, per the variant's face", () => {
-    const { getByText } = render(<Button accent="warn">x</Button>);
+    const { getByText } = render(
+      <Button variant="solid" accent="warn">
+        x
+      </Button>,
+    );
     expect(getByText("x")).toHaveClass("bg-accent-warn");
     expect(getByText("x")).not.toHaveClass("bg-primary");
 
-    const outlined = buttonVariants({ variant: "outline", accent: "warn" });
+    const outlined = buttonVariants({ accent: "warn" });
     expect(outlined).toContain("border-accent-warn/40");
     expect(outlined).not.toContain("bg-accent-warn ");
   });
@@ -54,16 +58,16 @@ describe("Button", () => {
     );
     const el = getByRole("link");
     expect(el.tagName).toBe("A");
-    expect(el).toHaveClass("bg-primary");
+    expect(el).toHaveClass("bg-button-primary-bg");
   });
 
   it("buttonVariants helper fuses variant, size and className override", () => {
     const cls = buttonVariants({ variant: "ghost", size: "md", className: "px-10" });
     expect(cls).toContain("hover:bg-hover");
-    expect(cls).toContain("h-9");
+    expect(cls).toContain("h-7");
     expect(cls).toContain("px-10");
-    // the default size's standalone `px-4` is dropped by the override (the
-    // `has-[>svg]:px-3` refinement stays — it's a different utility).
-    expect(cls).not.toMatch(/(^|\s)px-4(\s|$)/);
+    // the default size's standalone `px-3` is dropped by the override (the
+    // `has-[>svg]:px-2.5` refinement stays — it's a different utility).
+    expect(cls).not.toMatch(/(^|\s)px-3(\s|$)/);
   });
 });

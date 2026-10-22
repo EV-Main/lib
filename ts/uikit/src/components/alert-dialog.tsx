@@ -188,7 +188,7 @@ export function AlertDialogCancel({ className, onClick, ...props }: AlertDialogC
   return (
     <button
       data-slot="alert-dialog-cancel"
-      className={cn(buttonVariants({ variant: "outline" }), className)}
+      className={cn(buttonVariants({ variant: "secondary" }), className)}
       onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
         onClick?.(e);
         setOpen(false);

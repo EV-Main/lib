@@ -100,7 +100,6 @@ basis-full
 bg-accent-debug text-on-accent-debug hover:bg-accent-debug/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 bg-accent-error
 bg-accent-error text-on-accent-error hover:bg-accent-error/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
-bg-accent-error text-on-accent-error hover:bg-accent-error/90 focus-visible:ring-accent-error/20 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 bg-accent-error/15
 bg-accent-info text-on-accent-info hover:bg-accent-info/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 bg-accent-trace text-on-accent-trace hover:bg-accent-trace/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
@@ -123,6 +122,7 @@ bg-border pointer-events-none -mx-1 my-1 h-px
 bg-border relative flex-1 rounded-full
 bg-border shrink-0
 bg-brand
+bg-button-primary-bg
 bg-card
 bg-card text-ink
 bg-card text-ink border-border
@@ -161,20 +161,21 @@ bg-popover text-ink flex h-full w-full flex-col overflow-hidden rounded-md
 bg-positive
 bg-primary
 bg-primary text-on-primary
-bg-primary text-on-primary hover:bg-primary/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+bg-primary text-on-primary hover:bg-primary-hover
 bg-primary-ink absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full
 bg-primary-ink h-full w-full flex-1 transition-all
 bg-secondary group-data-[variant=floating]:border-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm
 bg-secondary text-ink flex h-full w-(--sidebar-width) flex-col
-bg-secondary text-on-secondary hover:bg-secondary/80 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 bg-transparent
 body-a
 border border-accent-debug/40 text-accent-debug hover:bg-accent-debug/10
-border border-accent-error/40 text-accent-error hover:bg-accent-error/10
-border border-accent-info/40 text-accent-info hover:bg-accent-info/10
+border border-accent-error/40 text-accent-error-ink hover:bg-accent-error/10
+border border-accent-info/40 text-accent-info-ink hover:bg-accent-info/10
 border border-accent-trace/40 text-accent-trace hover:bg-accent-trace/10
-border border-accent-warn/40 text-accent-warn hover:bg-accent-warn/10
-border border-input bg-transparent shadow-xs hover:bg-hover hover:text-ink
+border border-accent-warn/40 text-accent-warn-ink hover:bg-accent-warn/10
+border border-border bg-secondary text-ink hover:bg-[image:linear-gradient(var(--hover),var(--hover))]
+border border-button-danger-border bg-button-danger-bg text-button-danger-ink hover:bg-button-danger-hover
+border border-button-primary-border bg-button-primary-bg text-button-primary-ink hover:bg-button-primary-hover
 border border-input bg-transparent shadow-xs hover:bg-hover hover:text-ink data-[state=on]:border-primary
 border-accent-warn/40
 border-b border-border last:border-b-0
@@ -473,10 +474,7 @@ group/item-group flex flex-col
 group/menu-item relative
 group/navigation-menu relative flex max-w-max flex-1 items-center justify-center
 group/sidebar-wrapper has-data-[variant=inset]:bg-secondary flex min-h-svh w-full
-h-10 aspect-square
-h-10 aspect-square px-0
 h-10 px-2.5 min-w-10
-h-10 px-6 has-[>svg]:px-4
 h-12
 h-12 pr-11 pl-4 text-base md:text-base
 h-12 px-3 min-w-12
@@ -486,23 +484,27 @@ h-12 text-sm group-data-[collapsible=icon]:p-0!
 h-2.5 flex-col border-t border-t-transparent
 h-4
 h-4 w-24
+h-5 aspect-square px-0
+h-5 gap-1 px-1.5 text-caption has-[>svg]:px-1
 h-6
+h-6 aspect-square
+h-6 aspect-square px-0
 h-6 gap-1 px-2 rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-3.5 has-[>svg]:px-2
+h-6 px-2 text-body-s has-[>svg]:px-1.5
+h-7
 h-7 aspect-square px-0
-h-7 gap-1 px-2 text-xs has-[>svg]:px-1.5
 h-7 px-1 min-w-7
+h-7 px-3 text-body has-[>svg]:px-2.5
 h-7 text-xs
 h-8
 h-8 aspect-square
 h-8 aspect-square px-0
-h-8 gap-1.5 px-3 has-[>svg]:px-2.5
 h-8 px-1.5 min-w-8
 h-8 px-2.5 gap-1.5 rounded-md has-[>svg]:px-2.5
+h-8 px-4 text-body-l has-[>svg]:px-3
 h-8 text-sm
 h-9
-h-9 aspect-square px-0
 h-9 px-2 min-w-9
-h-9 px-4 py-[var(--control-py)] has-[>svg]:px-3
 h-full w-2.5 border-l border-l-transparent
 has-data-[slot=card-action]:grid-cols-[1fr_auto]
 hint-body
@@ -510,7 +512,6 @@ hover-card-content
 hover-card-trigger
 hover:after:bg-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex
 hover:bg-hover
-hover:bg-hover hover:text-ink
 hover:bg-muted/50 data-[state=selected]:bg-muted border-b border-border transition-colors
 hover:text-ink
 hover:text-ink transition-colors
@@ -527,8 +528,8 @@ inline-block
 inline-flex items-center gap-1
 inline-flex items-center gap-1.5
 inline-flex items-center justify-center bg-brand
+inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[var(--control-radius)] text-body font-medium transition-colors cursor-pointer disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none aria-invalid:border-accent-error focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 inline-flex items-center justify-center gap-2 rounded-[var(--control-radius)] text-sm font-medium hover:bg-muted hover:text-ink-soft disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-primary data-[state=on]:text-on-primary [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 focus-visible:border-ring outline-none transition-[color,box-shadow] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error whitespace-nowrap focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
-inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[var(--control-radius)] text-sm font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error
 inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 gap-1 overflow-hidden [&>svg]:size-3 [&>svg]:pointer-events-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error
 inline-flex size-4 shrink-0 cursor-help items-center justify-center rounded-full align-middle text-ink-soft outline-none transition-colors hover:text-ink focus-visible:ring-2 focus-visible:ring-ring data-[state=open]:text-accent-debug
 inline-flex size-7 items-center justify-center rounded-md hover:bg-hover hover:text-ink
@@ -587,7 +588,7 @@ menubar-sub
 menubar-sub-content
 menubar-sub-trigger
 menubar-trigger
-min-h-11 px-6 has-[>svg]:px-4
+min-h-11 px-6 text-body-l has-[>svg]:px-4
 min-h-14
 min-h-16
 min-h-20
@@ -673,6 +674,7 @@ pt-4
 px-2
 px-2 py-1.5
 px-2 py-1.5 text-sm font-medium data-[inset]:pl-8
+px-3
 px-4
 px-5
 px-6
@@ -800,16 +802,22 @@ text-accent-error
 text-accent-error bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid
 text-accent-error text-sm
 text-accent-error text-sm font-normal
+text-accent-error-ink
 text-accent-info
 text-accent-info bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid
+text-accent-info-ink
 text-accent-trace
-text-accent-warn
+text-accent-warn-ink
 text-base
+text-body 
+text-body-s
 text-end tabular-nums
 text-ink
 text-ink font-normal
 text-ink font-semibold
 text-ink px-2 py-1.5 text-sm font-medium data-[inset]:pl-8
+text-ink-mid
+text-ink-mid hover:bg-hover hover:text-ink
 text-ink-soft
 text-ink-soft [&>a:hover]:text-primary-ink text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4
 text-ink-soft col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed

@@ -74,8 +74,8 @@ mod tests {
 			rsx! { Button { "go" } }
 		}
 		let html = render(app);
-		assert!(html.contains("bg-primary"), "{html}");
-		assert!(html.contains("h-9"), "{html}");
+		assert!(html.contains("bg-button-primary-bg"), "{html}");
+		assert!(html.contains("h-7"), "{html}");
 		assert!(html.contains("go"));
 		assert!(html.contains("data-slot=\"button\""));
 	}
@@ -88,7 +88,7 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("h-8 aspect-square"), "{html}");
+		assert!(html.contains("h-6 aspect-square"), "{html}");
 	}
 
 	#[test]
@@ -99,8 +99,8 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("h-10 aspect-square"), "{html}");
-		assert!(!html.contains("px-6"), "icon button must not carry text padding: {html}");
+		assert!(html.contains("h-8 aspect-square"), "{html}");
+		assert!(!html.contains("px-4"), "icon button must not carry text padding: {html}");
 	}
 
 	#[test]
@@ -142,7 +142,7 @@ mod tests {
 	fn accent_recolours_per_variant() {
 		fn filled() -> Element {
 			rsx! {
-				Button { accent: Accent::Warn, "x" }
+				Button { variant: ButtonVariant::Solid, accent: Accent::Warn, "x" }
 			}
 		}
 		let html = render(filled);
@@ -151,7 +151,7 @@ mod tests {
 
 		fn outlined() -> Element {
 			rsx! {
-				Button { variant: ButtonVariant::Outline, accent: Accent::Warn, "x" }
+				Button { accent: Accent::Warn, "x" }
 			}
 		}
 		let html = render(outlined);
@@ -159,21 +159,17 @@ mod tests {
 		assert!(!html.contains("bg-accent-warn "), "an outlined button stays outlined: {html}");
 	}
 
-	/// lib#129: a button that paints a fill trades the halo for the offset ring,
-	/// and the fuse has to actually drop the halo's width, not just append.
+	/// lib#129: every variant wears the offset ring, and the fuse has to actually
+	/// drop the halo's width, not just append.
 	#[test]
-	fn filled_buttons_wear_the_offset_ring() {
+	fn every_button_wears_the_offset_ring() {
 		use strum::IntoEnumIterator;
 
 		for variant in ButtonVariant::iter() {
 			for accent in [None, Some(Accent::Warn)] {
-				let paints_fill = match accent {
-					Some(_) => variant != ButtonVariant::Outline,
-					None => matches!(variant, ButtonVariant::Primary | ButtonVariant::Secondary | ButtonVariant::Destructive),
-				};
 				let classes = button_classes(&variant, Size::Md, false, accent, "");
-				assert_eq!(classes.contains(FILLED_FOCUS_RING), paints_fill, "{variant:?} {accent:?}: {classes}");
-				assert_eq!(classes.contains("focus-visible:ring-[3px]"), !paints_fill, "{variant:?} {accent:?}: {classes}");
+				assert!(classes.contains(FILLED_FOCUS_RING), "{variant:?} {accent:?}: {classes}");
+				assert!(!classes.contains("focus-visible:ring-[3px]"), "{variant:?} {accent:?}: {classes}");
 			}
 		}
 
@@ -185,6 +181,13 @@ mod tests {
 	}
 
 	#[test]
+	fn the_text_scale_survives_the_variant_ink() {
+		let classes = button_classes(&ButtonVariant::Ghost, Size::Sm, false, None, "");
+		assert!(classes.contains("text-body-s") && classes.contains("text-ink-mid"), "{classes}");
+		assert!(!classes.contains("text-body "), "the small size replaces the base size: {classes}");
+	}
+
+	#[test]
 	fn class_override_wins() {
 		fn app() -> Element {
 			rsx! {
@@ -193,6 +196,6 @@ mod tests {
 		}
 		let html = render(app);
 		assert!(html.contains("px-6"));
-		assert!(!html.contains("px-4"), "override should drop base px-4: {html}");
+		assert!(!html.contains("px-3"), "override should drop base px-3: {html}");
 	}
 }

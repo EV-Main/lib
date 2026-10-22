@@ -46,10 +46,11 @@ export function buttonVariants({
   );
 }
 
-// Which face an accent wears is the variant's business — an outlined button tints
-// what it already has, anything else repaints. Mirrors Rust's `button_accent_class`.
+// Which face an accent wears is the variant's business — an outlined button
+// (`primary`, `danger`) tints what it already has, anything else repaints. Mirrors
+// Rust's `button_accent_class`.
 function accentClass(accent: Accent, variant: ButtonVariant): string {
-  return variant === "outline" ? accentOutlineClasses[accent] : accentFillClasses[accent];
+  return variant === "primary" || variant === "danger" ? accentOutlineClasses[accent] : accentFillClasses[accent];
 }
 
 export interface ButtonProps extends React.ComponentProps<"button"> {

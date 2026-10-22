@@ -208,7 +208,8 @@ describe.each(scopes)("palette $label", (scope) => {
     it("stands off the fill, so the ring is never measured against it", () => {
       for (const classes of [
         buttonVariants({ variant: "primary" }),
-        buttonVariants({ variant: "destructive" }),
+        buttonVariants({ variant: "solid" }),
+        buttonVariants({ variant: "danger" }),
         buttonVariants({ variant: "ghost", accent: "warn" }),
       ]) {
         expect(classes).toMatch(/\bfocus-visible:outline-offset-2\b/);
@@ -413,7 +414,6 @@ describe.each(scopes)("palette $label", (scope) => {
 // the token it measures, not with the divider.
 describe("outlined controls frame with --input", () => {
   it.each([
-    ["button outline", buttonVariants({ variant: "outline" })],
     ["toggle outline", toggleVariantClasses.outline],
     ["input", INPUT_BASE],
     ["textarea", TEXTAREA_BASE],

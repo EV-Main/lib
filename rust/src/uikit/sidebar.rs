@@ -325,7 +325,7 @@ mod tests {
 			rsx! {
 				SidebarProvider {
 					SidebarMenuButton {
-						variant: ButtonVariant::Outline,
+						variant: ButtonVariant::Secondary,
 						size: Size::Lg,
 						is_active: true,
 						"go"

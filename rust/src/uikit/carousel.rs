@@ -101,7 +101,7 @@ pub fn CarouselPrevious(#[props(default)] class: String) -> Element {
 	let cls = cn!(CAROUSEL_NAV, pos, class);
 	rsx! {
 		Button {
-			variant: ButtonVariant::Outline,
+			variant: ButtonVariant::Secondary,
 			size: Size::Md,
 			icon: true,
 			class: cls,
@@ -132,7 +132,7 @@ pub fn CarouselNext(#[props(default)] class: String) -> Element {
 	let cls = cn!(CAROUSEL_NAV, pos, class);
 	rsx! {
 		Button {
-			variant: ButtonVariant::Outline,
+			variant: ButtonVariant::Secondary,
 			size: Size::Md,
 			icon: true,
 			class: cls,

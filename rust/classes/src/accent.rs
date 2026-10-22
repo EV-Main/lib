@@ -20,14 +20,15 @@ pub enum Accent {
 }
 
 /// Accent text colour — on a status page it threads through the mark, the
-/// eyebrow, the code and the headline.
+/// eyebrow, the code and the headline. The loud rungs wear their `-ink`: a fill
+/// as text reads under AA on a light plane (docs/spec/accents.md).
 pub fn accent_text_class(accent: Accent) -> &'static str {
 	match accent {
 		Accent::Trace => "text-accent-trace",
 		Accent::Debug => "text-accent-debug",
-		Accent::Info => "text-accent-info",
-		Accent::Warn => "text-accent-warn",
-		Accent::Error => "text-accent-error",
+		Accent::Info => "text-accent-info-ink",
+		Accent::Warn => "text-accent-warn-ink",
+		Accent::Error => "text-accent-error-ink",
 	}
 }
 
@@ -49,19 +50,20 @@ pub fn accent_outline_class(accent: Accent) -> &'static str {
 	match accent {
 		Accent::Trace => "border border-accent-trace/40 text-accent-trace hover:bg-accent-trace/10",
 		Accent::Debug => "border border-accent-debug/40 text-accent-debug hover:bg-accent-debug/10",
-		Accent::Info => "border border-accent-info/40 text-accent-info hover:bg-accent-info/10",
-		Accent::Warn => "border border-accent-warn/40 text-accent-warn hover:bg-accent-warn/10",
-		Accent::Error => "border border-accent-error/40 text-accent-error hover:bg-accent-error/10",
+		Accent::Info => "border border-accent-info/40 text-accent-info-ink hover:bg-accent-info/10",
+		Accent::Warn => "border border-accent-warn/40 text-accent-warn-ink hover:bg-accent-warn/10",
+		Accent::Error => "border border-accent-error/40 text-accent-error-ink hover:bg-accent-error/10",
 	}
 }
 
 /// Which face a button's accent wears. The choice is the *variant's* — an
-/// outlined button tints what it already has, anything else repaints — so a
+/// outlined button (`Primary`, `Danger`) tints what it already has, anything
+/// else repaints — so a
 /// caller never names a face; it names a rung and a variant, and both ports
 /// resolve the pair here.
 pub fn button_accent_class(accent: Accent, variant: &ButtonVariant) -> &'static str {
 	match variant {
-		ButtonVariant::Outline => accent_outline_class(accent),
+		ButtonVariant::Primary | ButtonVariant::Danger => accent_outline_class(accent),
 		_ => accent_fill_class(accent),
 	}
 }

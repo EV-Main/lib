@@ -313,7 +313,7 @@ export function DateTimePicker({
           data-placeholder={value ? undefined : "true"}
           aria-haspopup="dialog"
           className={cn(
-            buttonVariants({ variant: "outline", size: "md" }),
+            buttonVariants({ variant: "secondary", size: "md" }),
             DATE_TIME_PICKER_TRIGGER,
             className,
           )}

@@ -117,7 +117,7 @@ export function StatusScreen({
         <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row">
           {children}
           {links?.map((link) => (
-            <L key={link.label} href={link.href} className={statusCtaClass(accent, link.variant ?? "primary")}>
+            <L key={link.label} href={link.href} className={statusCtaClass(accent, link.variant ?? "solid")}>
               {link.leadingArrow ? <ArrowLeftIcon className="mr-2 h-4 w-4" /> : null}
               {link.label}
             </L>
@@ -150,7 +150,7 @@ export function NotFound({ linkComponent = "a", homeHref = "/", contactHref = "/
       linkComponent={linkComponent}
       links={[
         { label: "Back to home", href: homeHref, leadingArrow: true },
-        { label: "Contact the team", href: contactHref, variant: "outline" },
+        { label: "Contact the team", href: contactHref, variant: "secondary" },
       ]}
     />
   );
@@ -169,7 +169,7 @@ export function Forbidden({ linkComponent = "a", homeHref = "/", contactHref = "
       linkComponent={linkComponent}
       links={[
         { label: "Back to home", href: homeHref, leadingArrow: true },
-        { label: "Request access", href: contactHref, variant: "outline" },
+        { label: "Request access", href: contactHref, variant: "secondary" },
       ]}
     />
   );
@@ -195,11 +195,11 @@ export function ServerError({ linkComponent = "a", homeHref = "/", reset }: Serv
       headlineAccent="recalibrating"
       subtext="Something broke on our end — not yours. We've been alerted and are restoring service. Please try again in a moment."
       linkComponent={linkComponent}
-      links={[{ label: "Back to home", href: homeHref, variant: "outline", leadingArrow: true }]}
+      links={[{ label: "Back to home", href: homeHref, variant: "secondary", leadingArrow: true }]}
     >
       <button
         type="button"
-        className={statusCtaClass("error", "primary")}
+        className={statusCtaClass("error", "solid")}
         onClick={() => (reset ? reset() : window.location.reload())}
       >
         Try again

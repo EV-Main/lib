@@ -81,7 +81,7 @@ export function ResourceError(props: ResourceErrorProps) {
     >
       {line}
       {onRetry && (
-        <Button type="button" variant="outline" size="sm" disabled={retrying} onClick={onRetry}>
+        <Button type="button" variant="secondary" size="sm" disabled={retrying} onClick={onRetry}>
           <RefreshIcon className={cn("size-4", retrying && "motion-safe:animate-spin")} />
           {labels.retry ?? "Try again"}
         </Button>

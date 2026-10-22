@@ -47,7 +47,7 @@ pub fn PaginationLink(
 	aria_label: Option<String>,
 	children: Element,
 ) -> Element {
-	let variant = if is_active { ButtonVariant::Outline } else { ButtonVariant::Ghost };
+	let variant = if is_active { ButtonVariant::Secondary } else { ButtonVariant::Ghost };
 	let cls = button_classes(&variant, size, icon, None, &class);
 	rsx! {
 		a {

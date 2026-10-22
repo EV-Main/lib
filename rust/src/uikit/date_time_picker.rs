@@ -178,7 +178,7 @@ pub fn DateTimePicker(
 		(None, _) => placeholder,
 	};
 	let is_empty = value.is_none();
-	let trigger_class = button_classes(&ButtonVariant::Outline, Size::Md, false, None, &cn!(DATE_TIME_PICKER_TRIGGER, class));
+	let trigger_class = button_classes(&ButtonVariant::Secondary, Size::Md, false, None, &cn!(DATE_TIME_PICKER_TRIGGER, class));
 	let content_class = cn!(POPOVER_CONTENT, cn!("absolute top-full left-0 mt-1", DATE_TIME_PICKER_CONTENT));
 	let time_input_class = cn!(INPUT_BASE, DATE_TIME_PICKER_TIME_INPUT);
 	let clear_class = button_classes(&ButtonVariant::Ghost, Size::Sm, false, None, DATE_TIME_PICKER_CLEAR);

@@ -203,9 +203,9 @@ fn d_hero() -> Element {
 					h1 { class: "font-display text-3xl text-ink", {lorem(6)} }
 					p { class: "text-ink-mid", {lorem(24)} }
 					div { class: "flex gap-3",
-						Button { {lorem(2)} }
+						Button { variant: ButtonVariant::Solid, {lorem(2)} }
 						Button { variant: ButtonVariant::Secondary, {lorem(2)} }
-						Button { variant: ButtonVariant::Outline, {lorem(1)} }
+						Button { {lorem(1)} }
 					}
 				}
 				div { class: "flex flex-col gap-2 rounded-lg bg-popover p-2 shadow-(--shadow-overlay)",
@@ -269,11 +269,11 @@ fn colorscheme() -> String {
 
 fn d_button() -> Element {
 	rsx! {
-		Button { "Default" }
+		Button { "Primary" }
 		Button { variant: ButtonVariant::Secondary, "Secondary" }
-		Button { variant: ButtonVariant::Outline, "Outline" }
 		Button { variant: ButtonVariant::Ghost, "Ghost" }
-		Button { variant: ButtonVariant::Destructive, "Destructive" }
+		Button { variant: ButtonVariant::Solid, "Solid" }
+		Button { variant: ButtonVariant::Danger, "Danger" }
 		Button { variant: ButtonVariant::Link, "Link" }
 		Button { size: Size::Sm, "Small" }
 		Button { size: Size::Lg, "Large" }
@@ -288,10 +288,10 @@ fn d_button() -> Element {
 fn d_button_accent() -> Element {
 	rsx! {
 		for accent in [Accent::Trace, Accent::Debug, Accent::Info, Accent::Warn, Accent::Error] {
-			Button { accent, "{accent.as_ref()}" }
+			Button { variant: ButtonVariant::Solid, accent, "{accent.as_ref()}" }
 		}
 		for accent in [Accent::Trace, Accent::Debug, Accent::Info, Accent::Warn, Accent::Error] {
-			Button { variant: ButtonVariant::Outline, accent, "{accent.as_ref()}" }
+			Button { accent, "{accent.as_ref()}" }
 		}
 	}
 }
@@ -560,9 +560,9 @@ fn d_field() -> Element {
 fn d_button_group() -> Element {
 	rsx! {
 		ButtonGroup {
-			Button { variant: ButtonVariant::Outline, "Day" }
-			Button { variant: ButtonVariant::Outline, "Week" }
-			Button { variant: ButtonVariant::Outline, "Month" }
+			Button { variant: ButtonVariant::Secondary, "Day" }
+			Button { variant: ButtonVariant::Secondary, "Week" }
+			Button { variant: ButtonVariant::Secondary, "Month" }
 		}
 	}
 }
@@ -784,7 +784,7 @@ fn d_tooltip() -> Element {
 		TooltipProvider {
 			Tooltip { default_open: true,
 				TooltipTrigger {
-					Button { variant: ButtonVariant::Outline, "Hover me" }
+					Button { variant: ButtonVariant::Secondary, "Hover me" }
 				}
 				TooltipContent { "Tooltip content" }
 			}
@@ -796,7 +796,7 @@ fn d_popover() -> Element {
 	rsx! {
 		Popover { default_open: true,
 			PopoverTrigger {
-				Button { variant: ButtonVariant::Outline, "Open popover" }
+				Button { variant: ButtonVariant::Secondary, "Open popover" }
 			}
 			PopoverContent {
 				div { class: "flex flex-col gap-2",
@@ -823,7 +823,7 @@ fn d_dropdown_menu() -> Element {
 	rsx! {
 		DropdownMenu { default_open: true,
 			DropdownMenuTrigger {
-				Button { variant: ButtonVariant::Outline, "Menu" }
+				Button { variant: ButtonVariant::Secondary, "Menu" }
 			}
 			DropdownMenuContent {
 				DropdownMenuLabel { "Account" }
@@ -892,7 +892,7 @@ fn d_dialog() -> Element {
 					DialogDescription { "Update your account details." }
 				}
 				DialogFooter {
-					Button { variant: ButtonVariant::Outline, "Cancel" }
+					Button { variant: ButtonVariant::Secondary, "Cancel" }
 					Button { "Save" }
 				}
 			}
