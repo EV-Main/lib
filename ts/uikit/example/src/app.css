@@ -5,6 +5,26 @@
 /* the kit's theme contract (dark palette + @theme tokens + toast keyframes) */
 @import "../../styles/tokens.css";
 
+/* The kit reads these two names for its fonts; the fontsource packages register
+   the variable families under their own names. */
+:root {
+  --font-inter: "Inter Variable";
+  --font-source-serif: "Source Serif 4 Variable";
+}
+
+html {
+  background: var(--background);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  /* a scrollbar appearing on a short page would shift every swatch */
+  scrollbar-gutter: stable;
+}
+
+/* section-sized stagger for a page's blocks (cards, not rows) */
+.page-root {
+  --enter-step: var(--ev-stagger-section);
+}
+
 /* EV's palette is the sheet's default and carries no mark (the kit ships no
    artwork), so the EV scope declares one here, the way a consumer would */
 [data-brand="ev"] {
