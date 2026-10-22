@@ -831,7 +831,7 @@ fn d_dropdown_menu() -> Element {
 				DropdownMenuSeparator {}
 				DropdownMenuItem { "Profile" }
 				DropdownMenuItem { "Settings" }
-				DropdownMenuItem { variant: DropdownMenuItemVariant::Destructive, "Delete" }
+				DropdownMenuItem { variant: DropdownMenuItemVariant::Danger, "Delete" }
 			}
 		}
 	}
@@ -847,7 +847,7 @@ fn d_context_menu() -> Element {
 				ContextMenuItem { "Back" }
 				ContextMenuItem { "Forward" }
 				ContextMenuSeparator {}
-				ContextMenuItem { variant: ContextMenuItemVariant::Destructive, "Delete" }
+				ContextMenuItem { variant: ContextMenuItemVariant::Danger, "Delete" }
 			}
 		}
 	}
@@ -862,7 +862,7 @@ fn d_menubar() -> Element {
 					MenubarItem { "New" }
 					MenubarItem { "Open" }
 					MenubarSeparator {}
-					MenubarItem { variant: MenubarItemVariant::Destructive, "Quit" }
+					MenubarItem { variant: MenubarItemVariant::Danger, "Quit" }
 				}
 			}
 		}

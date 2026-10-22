@@ -12,7 +12,7 @@
 @container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6
 [&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none
 [&>svg]:size-3.5
-[&_[data-slot=command-input-wrapper]]:h-12 [&_[data-slot=command-input]]:h-12
+[&_[data-slot=command-input-wrapper]]:h-9 [&_[data-slot=command-input]]:h-8
 [&_tr:last-child]:border-0
 [&_tr]:border-b
 [--table-dense-py:calc(var(--spacing)*1.5)]
@@ -110,17 +110,16 @@ bg-background border-border data-[state=open]:animate-in data-[state=closed]:ani
 bg-background border-t border-ink/10 py-16
 bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border border-border p-6 shadow-lg duration-200 data-[state=closed]:fill-mode-forwards outline-hidden sm:max-w-lg
 bg-background fixed z-50 flex h-auto border border-border
-bg-background flex h-9 items-center gap-1 rounded-md border border-border p-1 shadow-xs
+bg-background flex h-8 items-center gap-0.5 rounded-lg border border-border p-0.5
 bg-background relative flex w-full flex-1 flex-col md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2
 bg-background text-ink
 bg-background text-ink-soft relative mx-auto block w-fit px-2
 bg-border
-bg-border -mx-1 h-px
-bg-border -mx-1 my-1 h-px
 bg-border mx-2 h-px w-auto shrink-0
 bg-border pointer-events-none -mx-1 my-1 h-px
 bg-border relative flex-1 rounded-full
 bg-border shrink-0
+bg-border-subtle my-1 h-px
 bg-brand
 bg-button-primary-bg
 bg-card
@@ -151,15 +150,15 @@ bg-muted/50 border-t border-border font-medium [&>tr]:last:border-b-0
 bg-popover text-ink border-accent-error/50
 bg-popover text-ink border-border
 bg-popover text-ink border-positive/40
-bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 absolute z-50 min-w-[8rem] overflow-hidden rounded-md border border-border p-1 shadow-lg
-bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-(--radix-context-menu-content-transform-origin) overflow-hidden rounded-md border border-border p-1 shadow-lg
-bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-(--radix-context-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border border-border p-1 shadow-md
-bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-(--radix-dropdown-menu-content-transform-origin) overflow-hidden rounded-md border border-border p-1 shadow-lg
-bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-(--radix-dropdown-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border border-border p-1 shadow-md
+bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 absolute z-50 min-w-[8rem] overflow-hidden flex flex-col gap-0.5 rounded-lg border border-border p-1.5 shadow-elevated
+bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 absolute z-50 min-w-[8rem] overflow-x-hidden overflow-y-auto flex flex-col gap-0.5 rounded-lg border border-border p-1.5 shadow-elevated
+bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-(--radix-context-menu-content-transform-origin) overflow-hidden flex flex-col gap-0.5 rounded-lg border border-border p-1.5 shadow-elevated
+bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-(--radix-context-menu-content-transform-origin) overflow-x-hidden overflow-y-auto flex flex-col gap-0.5 rounded-lg border border-border p-1.5 shadow-elevated
+bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-(--radix-dropdown-menu-content-transform-origin) overflow-hidden flex flex-col gap-0.5 rounded-lg border border-border p-1.5 shadow-elevated
+bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-(--radix-dropdown-menu-content-transform-origin) overflow-x-hidden overflow-y-auto flex flex-col gap-0.5 rounded-lg border border-border p-1.5 shadow-elevated
 bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-64 rounded-md border border-border p-4 shadow-md outline-hidden
 bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-72 rounded-md border border-border p-4 shadow-md outline-hidden
-bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 absolute z-50 min-w-[12rem] overflow-hidden rounded-md border border-border p-1 shadow-md
-bg-popover text-ink flex h-full w-full flex-col overflow-hidden rounded-md
+bg-popover text-ink flex h-full w-full flex-col overflow-hidden rounded-lg
 bg-positive
 bg-primary
 bg-primary text-on-primary
@@ -258,7 +257,7 @@ data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=fro
 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full
 data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px
 data-[orientation=vertical]:w-px
-data-[selected=true]:bg-hover data-[selected=true]:text-ink [&_svg:not([class*='text-'])]:text-ink-soft relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
+data-[selected=true]:bg-active data-[selected=true]:text-ink [&_svg:not([class*='text-'])]:text-ink-mid relative flex h-7 cursor-default items-center gap-2 rounded-[var(--control-radius)] px-2 text-body text-ink-mid outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
 data-[state=active]:bg-background focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-ink inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
 data-[state=checked]:bg-on-primary data-[state=unchecked]:bg-ink pointer-events-none block size-4 rounded-full ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0
 data-[state=checked]:translate-x-[calc(100%-2px)]
@@ -381,9 +380,9 @@ field-sizing-content
 file:text-ink placeholder:text-ink-soft selection:bg-primary selection:text-on-primary border-input h-9 w-full min-w-0 rounded-[var(--control-radius)] border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error
 fill-primary-ink
 first:rounded-l-md
-fixed inset-0 z-50 bg-black/50
 fixed inset-0 z-50 bg-black/50 data-[state=closed]:pointer-events-none
-fixed top-1/2 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-lg border border-border p-0 shadow-lg
+fixed inset-0 z-50 bg-scrim
+fixed top-1/2 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-lg border border-border-strong p-0 shadow-overlay
 flex
 flex basis-full items-center justify-between gap-2
 flex flex-1 flex-col gap-1 [&+[data-slot=item-content]]:flex-none
@@ -395,7 +394,8 @@ flex flex-col gap-2 p-2
 flex flex-col gap-2 text-center sm:text-left
 flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3
 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end
-flex h-9 items-center gap-2 border-b border-border px-3
+flex h-6 items-center px-2 text-body-s text-ink-soft data-[inset]:pl-8
+flex h-8 items-center gap-2 border-b border-border-subtle px-3
 flex items-center
 flex items-center gap-2
 flex items-center gap-2 border-t border-border px-3 py-2
@@ -436,13 +436,11 @@ focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-v
 focus-visible:ring-[3px]
 focus-visible:ring-ring/50 size-full rounded-[inherit] overflow-auto transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1
 focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring [&_svg:not([class*='text-'])]:text-ink-soft relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm whitespace-normal [overflow-wrap:anywhere] outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2
-focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[state=open]:bg-hover data-[state=open]:text-ink [&_svg:not([class*='text-'])]:text-ink-soft flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
-focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[state=open]:bg-hover data-[state=open]:text-ink [&_svg:not([class*='text-'])]:text-ink-soft flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
-focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[state=open]:bg-hover data-[state=open]:text-ink flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-none select-none data-[inset]:pl-8
-focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[state=open]:bg-hover data-[state=open]:text-ink flex items-center rounded-sm px-2 py-1 text-sm font-medium outline-hidden select-none
-focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[variant=destructive]:text-accent-error-ink data-[variant=destructive]:focus:bg-accent-error/10 data-[variant=destructive]:focus:text-accent-error-ink data-[variant=destructive]:*:[svg]:!text-accent-error-ink [&_svg:not([class*='text-'])]:text-ink-soft relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
-focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
-focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring relative flex cursor-default items-center gap-2 rounded-xs py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
+focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[state=open]:bg-hover data-[state=open]:text-ink flex h-7 cursor-default items-center gap-2 rounded-[var(--control-radius)] px-2 text-body text-ink-mid outline-hidden select-none data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-ink-mid
+focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[state=open]:bg-hover data-[state=open]:text-ink flex h-7 items-center rounded-[var(--control-radius)] px-2 text-body font-medium text-ink-mid outline-hidden select-none
+focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[variant=danger]:text-accent-error-ink data-[variant=danger]:focus:bg-accent-error/10 data-[variant=danger]:focus:text-accent-error-ink data-[variant=danger]:*:[svg]:!text-accent-error-ink data-[inset]:pl-8 relative flex h-7 cursor-default items-center gap-2 rounded-[var(--control-radius)] px-2 text-body text-ink-mid outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-ink-mid
+focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring relative flex h-7 cursor-default items-center gap-2 rounded-[var(--control-radius)] pr-2 pl-8 text-body text-ink-mid outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
+focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring relative flex h-7 cursor-default items-center gap-2 rounded-[var(--control-radius)] pr-2 pl-8 text-body text-ink-mid outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-[state=checked]:bg-active data-[state=checked]:text-ink
 font-display [font-weight:700] max-w-[54rem] tracking-[-0.005em] leading-[1.16] md:leading-[1.14] text-[calc(1.5625rem*var(--display-scale))] md:text-[calc(2.625rem*var(--display-scale))]
 font-medium
 font-medium text-[10px] md:text-[11.5px] tracking-[0.15em] md:tracking-[0.16em] text-primary-ink [.bg-primary_&]:text-on-primary
@@ -459,10 +457,10 @@ form-message\
 gap-1 px-2.5 sm:pl-2.5
 gap-1 px-2.5 sm:pr-2.5
 gap-2.5
+grid gap-0.5 text-ink [&_[data-slot=command-group-heading]]:text-ink-soft overflow-hidden p-1.5 [&>[data-slot=command-group-heading]]:order-first [&_[data-slot=command-group-heading]]:flex [&_[data-slot=command-group-heading]]:h-6 [&_[data-slot=command-group-heading]]:items-center [&_[data-slot=command-group-heading]]:px-2 [&_[data-slot=command-group-heading]]:text-body-s
 grid gap-2
 grid gap-3
 grid max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto
-grid text-ink [&_[data-slot=command-group-heading]]:text-ink-soft overflow-hidden p-1 [&>[data-slot=command-group-heading]]:order-first [&_[data-slot=command-group-heading]]:px-2 [&_[data-slot=command-group-heading]]:py-1.5 [&_[data-slot=command-group-heading]]:text-xs [&_[data-slot=command-group-heading]]:font-medium
 group flex flex-1 list-none items-center justify-center gap-1
 group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-hover hover:text-ink focus:bg-hover focus:text-ink disabled:pointer-events-none disabled:opacity-50 data-[state=open]:hover:bg-hover data-[state=open]:text-ink data-[state=open]:focus:bg-hover data-[state=open]:bg-hover/50 focus-visible:ring-ring/50 outline-none transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1
 group-content
@@ -661,12 +659,12 @@ picked:
 picked:{picked}
 pl-4
 placeholder:text-ink-soft
-placeholder:text-ink-soft flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50
+placeholder:text-ink-soft flex h-7 w-full rounded-[var(--control-radius)] bg-transparent text-body outline-hidden disabled:cursor-not-allowed disabled:opacity-40
 pointer-events-auto flex w-full items-start gap-3 rounded-md border p-4 text-sm shadow-lg
 pointer-events-none absolute inset-0 flex items-center justify-center
 pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-background/45 via-background/20 to-transparent
 pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-background/45 via-background/20 to-transparent
-pointer-events-none absolute left-2 flex size-3.5 items-center justify-center
+pointer-events-none absolute left-2 flex size-4 items-center justify-center
 pointer-events-none fixed z-100 w-[calc(100%-2rem)] max-w-sm
 popover-anchor
 popover-content
@@ -677,7 +675,6 @@ pt-0 pb-4
 pt-4
 px-1.5
 px-2 py-1.5
-px-2 py-1.5 text-sm font-medium data-[inset]:pl-8
 px-3
 px-4
 px-5
@@ -689,7 +686,7 @@ px-[var(--table-px,calc(var(--spacing)*2))]
 px-[var(--table-px,calc(var(--spacing)*2))] py-[var(--table-dense-py,var(--table-py,calc(var(--spacing)*2)))] align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]
 py-3 px-4 gap-2.5
 py-6
-py-6 text-center text-sm
+py-6 text-center text-body text-ink-soft
 py-[var(--band-py)]
 py-[var(--band-py-tight)]
 py-[var(--table-dense-py,var(--table-py,calc(var(--spacing)*2)))]
@@ -820,7 +817,6 @@ text-end tabular-nums
 text-ink
 text-ink font-normal
 text-ink font-semibold
-text-ink px-2 py-1.5 text-sm font-medium data-[inset]:pl-8
 text-ink-mid
 text-ink-mid hover:bg-hover hover:text-ink
 text-ink-soft
@@ -830,7 +826,7 @@ text-ink-soft flex flex-wrap items-center gap-1.5 text-sm break-words sm:gap-2.5
 text-ink-soft flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&>svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50
 text-ink-soft flex items-center gap-2 text-sm [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4
 text-ink-soft line-clamp-2 text-sm leading-normal font-normal text-balance [&>a:hover]:text-primary-ink [&>a]:underline [&>a]:underline-offset-4
-text-ink-soft ml-auto text-xs tracking-widest
+text-ink-soft ml-auto text-caption tabular-nums
 text-ink-soft mt-4 text-sm
 text-ink-soft pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200
 text-ink-soft px-2 py-1.5 text-xs

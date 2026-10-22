@@ -79,7 +79,7 @@ describe("DropdownMenu", () => {
             <DropdownMenuItem>Duplicate</DropdownMenuItem>
             {withDisabled ? <DropdownMenuItem disabled>Archive</DropdownMenuItem> : null}
             <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+            <DropdownMenuItem variant="danger">Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>,
       );

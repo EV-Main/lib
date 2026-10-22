@@ -257,7 +257,7 @@ describe.each(scopes)("palette $label", (scope) => {
     // ring's inner edge sits on that instead.
     it("the ring reads against a destructive row's tint (non-text 3:1)", () => {
       for (const classes of [DROPDOWN_MENU_ITEM, CONTEXT_MENU_ITEM, MENUBAR_ITEM]) {
-        expect(classes).toMatch(/(^|\s)data-\[variant=destructive\]:focus:bg-accent-error\/10(\s|$)/);
+        expect(classes).toMatch(/(^|\s)data-\[variant=danger\]:focus:bg-accent-error\/10(\s|$)/);
       }
       const destructive = composite(t("accent-error"), 0.1, t("popover"));
       expect(contrast(ring(scope), destructive)).toBeGreaterThanOrEqual(3);
@@ -435,9 +435,9 @@ describe("destructive menu rows read in the error ink", () => {
     ["context menu item", CONTEXT_MENU_ITEM],
     ["menubar item", MENUBAR_ITEM],
   ])("%s", (_, classes) => {
-    expect(classes).toMatch(/(^|\s)data-\[variant=destructive\]:text-accent-error-ink(\s|$)/);
-    expect(classes).toMatch(/(^|\s)data-\[variant=destructive\]:focus:text-accent-error-ink(\s|$)/);
-    expect(classes).toMatch(/(^|\s)data-\[variant=destructive\]:\*:\[svg\]:!text-accent-error-ink(\s|$)/);
+    expect(classes).toMatch(/(^|\s)data-\[variant=danger\]:text-accent-error-ink(\s|$)/);
+    expect(classes).toMatch(/(^|\s)data-\[variant=danger\]:focus:text-accent-error-ink(\s|$)/);
+    expect(classes).toMatch(/(^|\s)data-\[variant=danger\]:\*:\[svg\]:!text-accent-error-ink(\s|$)/);
     expect(classes).not.toMatch(/text-accent-error(\s|$)/);
   });
 });

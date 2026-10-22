@@ -15,7 +15,7 @@ use crate::{
 pub enum MenubarItemVariant {
 	#[default]
 	Neutral,
-	Destructive,
+	Danger,
 }
 
 #[component]

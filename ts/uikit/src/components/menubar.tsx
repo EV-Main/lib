@@ -165,7 +165,7 @@ export function MenubarItem({
   ...props
 }: React.ComponentProps<"div"> & {
   inset?: boolean;
-  variant?: "neutral" | "destructive";
+  variant?: "neutral" | "danger";
 }) {
   return (
     <div
