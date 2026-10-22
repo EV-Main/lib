@@ -99,7 +99,6 @@ background-color:currentColor
 basis-full
 bg-accent-debug text-on-accent-debug hover:bg-accent-debug/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 bg-accent-error
-bg-accent-error text-on-accent-error hover:bg-accent-error/90
 bg-accent-error text-on-accent-error hover:bg-accent-error/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 bg-accent-error text-on-accent-error hover:bg-accent-error/90 focus-visible:ring-accent-error/20 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 bg-accent-error/15
@@ -158,8 +157,6 @@ bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out
 bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 absolute z-50 min-w-[12rem] overflow-hidden rounded-md border border-border p-1 shadow-md
 bg-popover text-ink flex h-full w-full flex-col overflow-hidden rounded-md
 bg-positive
-bg-positive text-on-positive hover:bg-positive/90
-bg-positive/15
 bg-primary
 bg-primary text-on-primary
 bg-primary text-on-primary hover:bg-primary/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
@@ -385,37 +382,27 @@ fixed top-1/2 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 ov
 flex
 flex basis-full items-center justify-between gap-2
 flex flex-1 flex-col gap-1 [&+[data-slot=item-content]]:flex-none
-flex flex-1 items-center justify-center p-6 text-sm text-ink-soft
 flex flex-col gap-0.5 p-4 text-center sm:gap-1.5 sm:text-left
 flex flex-col gap-1.5 p-4
 flex flex-col gap-2
 flex flex-col gap-2 md:gap-3.5
 flex flex-col gap-2 p-2
 flex flex-col gap-2 text-center sm:text-left
-flex flex-col gap-3 p-3 text-sm
 flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3
 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end
 flex h-9 items-center gap-2 border-b border-border px-3
-flex h-9 shrink-0 items-center gap-2 border-b border-border px-3 text-xs font-medium text-ink-mid
 flex items-center
 flex items-center gap-2
 flex items-center gap-2 border-t border-border px-3 py-2
 flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50
 flex items-center gap-[7px] whitespace-nowrap
 flex items-center justify-between gap-1 w-full px-1
-flex items-center justify-between gap-2 text-xs
 flex items-center justify-center text-current transition-none
 flex items-center px-6 [.border-t]:pt-6
 flex max-w-sm flex-col items-center gap-2 text-center
-flex min-h-0 flex-1 flex-col font-mono text-xs tabular-nums
 flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden
-flex min-h-0 flex-1 flex-col overflow-auto
 flex min-h-0 flex-1 flex-col overflow-y-auto
-flex min-h-0 min-w-0 flex-col overflow-hidden bg-card
 flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border-dashed p-6 text-center text-balance md:p-12
-flex min-w-0 items-center gap-6 overflow-x-auto bg-card px-4 py-2 whitespace-nowrap
-flex shrink-0 flex-col gap-0.5
-flex shrink-0 items-center justify-between gap-2 border-y border-border bg-muted/50 px-3 py-1 text-ink-mid
 flex shrink-0 items-center justify-center gap-2 group-has-[[data-slot=item-description]]/item:self-start [&_svg]:pointer-events-none group-has-[[data-slot=item-description]]/item:translate-y-0.5
 flex shrink-0 items-center justify-center mb-2 [&_svg]:pointer-events-none [&_svg]:shrink-0
 flex size-9 items-center justify-center
@@ -454,8 +441,6 @@ focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-rin
 font-display [font-weight:700] max-w-[54rem] tracking-[-0.005em] leading-[1.16] md:leading-[1.14] text-[calc(1.5625rem*var(--display-scale))] md:text-[calc(2.625rem*var(--display-scale))]
 font-medium
 font-medium text-[10px] md:text-[11.5px] tracking-[0.15em] md:tracking-[0.16em] text-primary-ink [.bg-primary_&]:text-on-primary
-font-mono tabular-nums text-ink
-font-mono text-sm tabular-nums text-ink
 font-semibold
 font-semibold text-positive
 font-serif font-bold text-base tracking-wider text-ink
@@ -471,11 +456,8 @@ gap-1 px-2.5 sm:pr-2.5
 gap-2.5
 grid gap-2
 grid gap-3
-grid grid-cols-3 gap-2 px-3 py-0.5 text-right font-mono text-xs leading-5 tabular-nums hover:bg-hover
 grid max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto
-grid shrink-0 grid-cols-3 gap-2 px-3 py-1.5 text-right text-[11px] text-ink-soft [&>*:first-child]:text-left
 grid text-ink [&_[data-slot=command-group-heading]]:text-ink-soft overflow-hidden p-1 [&>[data-slot=command-group-heading]]:order-first [&_[data-slot=command-group-heading]]:px-2 [&_[data-slot=command-group-heading]]:py-1.5 [&_[data-slot=command-group-heading]]:text-xs [&_[data-slot=command-group-heading]]:font-medium
-grid w-full grid-cols-1 gap-px bg-border text-ink text-sm lg:h-[calc(100dvh-var(--ev-shell-offset,0px))] lg:grid-cols-[minmax(0,1fr)_18rem_20rem] lg:grid-rows-[auto_minmax(0,1fr)_14rem]
 group flex flex-1 list-none items-center justify-center gap-1
 group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-hover hover:text-ink focus:bg-hover focus:text-ink disabled:pointer-events-none disabled:opacity-50 data-[state=open]:hover:bg-hover data-[state=open]:text-ink data-[state=open]:focus:bg-hover data-[state=open]:bg-hover/50 focus-visible:ring-ring/50 outline-none transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1
 group-content
@@ -542,7 +524,6 @@ info-tip-content\
 info-tip-trigger
 info-tip-trigger\
 inline-block
-inline-flex h-10 w-full shrink-0 cursor-pointer items-center justify-center rounded-[var(--control-radius)] text-sm font-semibold transition-colors outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50
 inline-flex items-center gap-1
 inline-flex items-center gap-1.5
 inline-flex items-center justify-center bg-brand
@@ -577,12 +558,7 @@ last:rounded-r-md
 leading-none font-semibold
 lg:col-span-2
 lg:col-span-3
-lg:col-span-3 lg:row-start-1
-lg:col-span-3 lg:row-start-3
-lg:col-start-1 lg:row-start-2
-lg:col-start-2 lg:row-start-2
 lg:col-start-3
-lg:col-start-3 lg:row-start-2
 light
 logo-background
 mask-image:var(--brand-mark)
@@ -684,7 +660,6 @@ placeholder:text-ink-soft flex h-10 w-full rounded-md bg-transparent py-3 text-s
 pointer-events-auto flex w-full items-start gap-3 rounded-md border p-4 text-sm shadow-lg
 pointer-events-none absolute inset-0 flex items-center justify-center
 pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-background/45 via-background/20 to-transparent
-pointer-events-none absolute inset-y-0 right-0 -z-10
 pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-background/45 via-background/20 to-transparent
 pointer-events-none absolute left-2 flex size-3.5 items-center justify-center
 pointer-events-none fixed z-100 w-[calc(100%-2rem)] max-w-sm
@@ -721,8 +696,6 @@ relative flex items-center gap-2 has-disabled:opacity-50
 relative flex size-8 shrink-0 overflow-hidden rounded-full
 relative flex w-full min-w-0 flex-col p-2
 relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col
-relative isolate grid cursor-pointer grid-cols-3 gap-2 px-3 py-0.5 text-right leading-5 hover:bg-hover
-relative min-h-[18rem] flex-1 overflow-hidden
 relative size-9 shrink-0 p-0 select-none
 relative size-9 shrink-0 p-0 text-center select-none
 relative w-full overflow-x-auto
@@ -820,7 +793,6 @@ terminal-pane
 terminal-pane-body
 terminal-pane-header
 terminal-ticker
-text-[11px] uppercase tracking-wide text-ink-soft
 text-[14px] md:text-[15px] leading-[1.62] text-ink-soft
 text-[color:var(--table-head-ink,var(--ink))] h-[var(--table-head-h,calc(var(--spacing)*10))] px-[var(--table-px,calc(var(--spacing)*2))] text-start align-middle font-medium whitespace-nowrap text-[length:var(--table-head-text)] tracking-[var(--table-head-tracking)] [text-transform:var(--table-head-case)] [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]
 text-accent-debug
@@ -858,7 +830,6 @@ text-ink/30
 text-ink/40 text-xs font-light max-w-sm leading-relaxed mb-6
 text-ink/50 hover:text-ink shrink-0 transition-colors
 text-ink/70 ring-ring flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0 group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0
-text-left
 text-left text-accent-error
 text-lg font-medium tracking-tight
 text-lg font-semibold

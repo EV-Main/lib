@@ -47,7 +47,6 @@ import {
   type ToastPosition,
   type ToastVariant,
 } from "@evinvest/uikit";
-import { TerminalDemo } from "./TerminalDemo";
 import { DrawerDemo } from "./DrawerDemo";
 import { LayersDemo } from "./LayersDemo";
 import { BrandsDemo } from "./BrandsDemo";
@@ -367,12 +366,6 @@ export default function App() {
 
           <Section title="Nested overlays" hint="each Escape closes one layer, the top one; a click in the panel closes only the list; a modal's backdrop closes only that modal">
             <LayersDemo />
-          </Section>
-
-          <Section title="Terminal" hint="fake data; the chart host is empty on purpose">
-            <div className="w-full">
-              <TerminalDemo />
-            </div>
           </Section>
 
           <Section title="App shell" hint="rail from lg, tab bar below; clicks mark at once, the fake router lands 250ms later">

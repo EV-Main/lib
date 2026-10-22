@@ -618,13 +618,6 @@ element across the two ports.
   nav-badge (`NavBadge` / `NavDot`), top-bar, account-menu, mobile-app-bar, page-frame (`PageFrame` /
   `PageHeading` / `SectionLabel`), section-nav, resource-error, system-banner,
   settled — see [App shell](#app-shell).
-- **Features — composed screens (1):** terminal — a trading terminal over an
-  investment product's shares (`Terminal` grid placing each `TerminalPane` by
-  `TerminalArea`; `TerminalTicker` / `TickerStat`; `OrderBook` with
-  `OrderBookHead` / `OrderBookRow` / `OrderBookSpread`; `TradesTapeRow`;
-  `OrderForm` / `OrderFormRow` / `OrderFormSubmit`; `OpenOrdersEmpty`). Column
-  captions and every figure are the consumer's strings — the kit knows no
-  locale and no number format.
 
 The canonical variant set is the **superset** of the original cabinet (Rust) and
 landing (TS) sources — e.g. `Badge` keeps cabinet's `success` variant, and
@@ -675,11 +668,6 @@ measuring needs host-only `web-sys`). Known gaps:
   `onkeydown` — and `AlertDialog`, `Sheet`, `Drawer`, `ContextMenu`, `Menubar`,
   `NavigationMenu`, `HoverCard`, `Tooltip`, `InfoTip`, `DateTimePicker`,
   `CommandDialog` and `DropdownMenuSub` are not on the stack yet.
-- **terminal:** no plotting engine and no state. `TerminalChart` is a sized
-  `relative` host that hands its element out (`ref` in TS, `id` in Rust) for a
-  consumer-chosen charting library to mount into; `OrderForm` only prevents the
-  submit's default — inputs, validation and the order itself are the
-  consumer's. The open-orders pane reuses `Table` and `Tabs`.
 - **calendar:** single month, single-date selection (no range/multi-month, no
   dropdown captions). The grid is always six fixed weeks of 36px cells, so its
   size never changes with the month or the locale's weekday labels, and it

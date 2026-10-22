@@ -675,38 +675,6 @@ export {
   FormMessage,
 } from "./components/form";
 
-// Features — screens composed from the bricks above.
-export {
-  OpenOrdersEmpty,
-  OrderBook,
-  OrderBookHead,
-  OrderBookRow,
-  OrderBookSpread,
-  OrderForm,
-  OrderFormRow,
-  OrderFormSubmit,
-  Terminal,
-  TerminalChart,
-  TerminalPane,
-  TerminalPaneBody,
-  TerminalPaneHeader,
-  TerminalTicker,
-  TickerStat,
-  TradesTapeRow,
-} from "./components/terminal";
-export type {
-  BookSide,
-  OrderBookHeadProps,
-  OrderBookRowProps,
-  OrderFormRowProps,
-  OrderFormSubmitProps,
-  OrderSide,
-  TerminalArea,
-  TerminalPaneProps,
-  TickerStatProps,
-  TradesTapeRowProps,
-} from "./components/terminal";
-
 // App shell — TS-only: the frame a signed-in app's screens sit in. Router-agnostic
 // (`linkComponent` + `pathname`); motion is CSS in `motion.css`.
 export { AppShell } from "./components/app-shell";

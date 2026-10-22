@@ -61,7 +61,6 @@ pub fn manifest() -> Vec<(&'static str, Vec<Ts>)> {
 		("input-group", input_group()),
 		("item", item()),
 		("sidebar", sidebar()),
-		("terminal", terminal()),
 	]
 }
 
@@ -1435,109 +1434,6 @@ fn accent_table(name: &'static str, ty: &'static str, class: fn(Accent) -> &'sta
 		ty,
 		entries: Accent::iter().map(|a| (a.as_ref().to_string(), class(a).to_string())).collect(),
 	}
-}
-
-fn terminal() -> Vec<Ts> {
-	vec![
-		Ts::Const {
-			name: "TERMINAL_ROOT",
-			value: TERMINAL_ROOT,
-		},
-		table::<TerminalArea>("terminalAreaClasses", "TerminalArea"),
-		Ts::Const {
-			name: "TERMINAL_PANE",
-			value: TERMINAL_PANE,
-		},
-		Ts::Const {
-			name: "TERMINAL_PANE_HEADER",
-			value: TERMINAL_PANE_HEADER,
-		},
-		Ts::Const {
-			name: "TERMINAL_PANE_BODY",
-			value: TERMINAL_PANE_BODY,
-		},
-		Ts::Const {
-			name: "TERMINAL_CHART",
-			value: TERMINAL_CHART,
-		},
-		Ts::Const {
-			name: "TERMINAL_TICKER",
-			value: TERMINAL_TICKER,
-		},
-		Ts::Const {
-			name: "TERMINAL_TICKER_STAT",
-			value: TERMINAL_TICKER_STAT,
-		},
-		Ts::Const {
-			name: "TERMINAL_TICKER_LABEL",
-			value: TERMINAL_TICKER_LABEL,
-		},
-		Ts::Const {
-			name: "TERMINAL_TICKER_VALUE",
-			value: TERMINAL_TICKER_VALUE,
-		},
-		table::<BookSide>("bookSideClasses", "BookSide"),
-		// The depth tint is a second class per side, which one `TwVariant` cannot
-		// carry — hence a function on the Rust side and a hand-built table here.
-		Ts::Table {
-			name: "bookDepthClasses",
-			ty: "BookDepthSide",
-			entries: BookSide::iter().map(|s| (s.as_ref().to_string(), book_depth_class(s).to_string())).collect(),
-		},
-		Ts::Const {
-			name: "ORDER_BOOK",
-			value: ORDER_BOOK,
-		},
-		Ts::Const {
-			name: "ORDER_BOOK_HEAD",
-			value: ORDER_BOOK_HEAD,
-		},
-		Ts::Const {
-			name: "ORDER_BOOK_ROW",
-			value: ORDER_BOOK_ROW,
-		},
-		Ts::Const {
-			name: "ORDER_BOOK_PRICE",
-			value: ORDER_BOOK_PRICE,
-		},
-		Ts::Const {
-			name: "ORDER_BOOK_DEPTH",
-			value: ORDER_BOOK_DEPTH,
-		},
-		Ts::Const {
-			name: "ORDER_BOOK_SPREAD",
-			value: ORDER_BOOK_SPREAD,
-		},
-		Ts::Const {
-			name: "TRADES_TAPE_ROW",
-			value: TRADES_TAPE_ROW,
-		},
-		Ts::Const {
-			name: "ORDER_FORM",
-			value: ORDER_FORM,
-		},
-		Ts::Const {
-			name: "ORDER_FORM_ROW",
-			value: ORDER_FORM_ROW,
-		},
-		Ts::Const {
-			name: "ORDER_FORM_LABEL",
-			value: ORDER_FORM_LABEL,
-		},
-		Ts::Const {
-			name: "ORDER_FORM_VALUE",
-			value: ORDER_FORM_VALUE,
-		},
-		Ts::Const {
-			name: "ORDER_FORM_SUBMIT_BASE",
-			value: ORDER_FORM_SUBMIT_BASE,
-		},
-		table::<OrderSide>("orderSideClasses", "OrderSide"),
-		Ts::Const {
-			name: "OPEN_ORDERS_EMPTY",
-			value: OPEN_ORDERS_EMPTY,
-		},
-	]
 }
 
 fn locales() -> Vec<Ts> {

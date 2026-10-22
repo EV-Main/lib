@@ -22,6 +22,18 @@ Rust crate and its TypeScript mirror at once.
 
 ## [Unreleased]
 
+### Breaking
+
+- **The TS trading terminal is removed** (`@evinvest/uikit`): `Terminal`,
+  `TerminalPane`, `TerminalPaneHeader`, `TerminalPaneBody`, `TerminalChart`,
+  `TerminalTicker`, `TickerStat`, `OrderBook`, `OrderBookHead`, `OrderBookRow`,
+  `OrderBookSpread`, `TradesTapeRow`, `OrderForm`, `OrderFormRow`,
+  `OrderFormSubmit`, `OpenOrdersEmpty` and the types `TerminalArea`,
+  `TerminalPaneProps`, `TickerStatProps`, `OrderBookHeadProps`,
+  `OrderBookRowProps`, `OrderFormRowProps`, `OrderFormSubmitProps`,
+  `BookSide`, `OrderSide`, `TradesTapeRowProps`. The Rust terminal in
+  `ev_lib::uikit` stays.
+
 ### Added
 
 - **`PlaceLive.reviewUrl` and `panelLocale`** (`@evinvest/kitstart`, minor).
