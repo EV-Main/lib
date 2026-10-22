@@ -39,7 +39,7 @@ export interface SectionNavProps extends Omit<React.ComponentProps<"nav">, "chil
 }
 
 const ITEM =
-  "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50";
+  "flex h-8 w-full items-center gap-2.5 rounded-(--control-radius) px-2.5 text-left text-body outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-40";
 
 /**
  * A screen's own section rail — settings panes, a document's chapters: grouped
@@ -60,16 +60,16 @@ export function SectionNav({
     <nav
       data-slot="section-nav"
       aria-label={labels.nav ?? "Sections"}
-      className={cn("flex w-60 shrink-0 flex-col gap-5", className)}
+      className={cn("flex w-64 shrink-0 flex-col gap-0.5", className)}
       {...props}
     >
       {groups.map((group) => (
-        <div key={group.id} className="flex flex-col gap-1">
+        <div key={group.id} className="flex flex-col gap-0.5 pt-3.5 first:pt-0">
           {(group.label !== undefined || group.description !== undefined) && (
-            <div className="mb-1 flex flex-col gap-0.5 px-3">
+            <div className="flex flex-col">
               {group.label !== undefined && <SectionLabel>{group.label}</SectionLabel>}
               {group.description !== undefined && (
-                <p className="text-xs leading-snug text-ink-soft">{group.description}</p>
+                <p className="px-2 text-caption text-ink-soft">{group.description}</p>
               )}
             </div>
           )}
@@ -102,11 +102,11 @@ function SectionNavRow({
   const Icon = item.icon;
   const className = cn(
     ITEM,
-    active ? "bg-primary-ink/15 font-semibold text-primary-ink" : "text-ink hover:bg-hover",
+    active ? "bg-active text-ink" : "text-ink-mid hover:bg-hover",
   );
   const content = (
     <>
-      {Icon && <Icon className="size-4.5 shrink-0" />}
+      {Icon && <Icon className="size-4 shrink-0 text-ink-soft" />}
       <span className="min-w-0 flex-1 truncate">{item.label}</span>
       {item.trailing}
     </>

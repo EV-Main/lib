@@ -744,3 +744,5 @@ export { KeyValue } from "./components/key-value";
 export type { KeyValueLabels, KeyValueProps } from "./components/key-value";
 export { FormRow } from "./components/form-row";
 export type { FormRowProps } from "./components/form-row";
+export { SettingsLayout, SettingsSection, SettingsRow } from "./components/settings";
+export type { SettingsLayoutProps, SettingsRowProps, SettingsSectionProps } from "./components/settings";
