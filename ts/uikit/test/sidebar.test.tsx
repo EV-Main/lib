@@ -69,7 +69,7 @@ describe("Sidebar", () => {
   it("menu button carries variant, size and active state", () => {
     const { getByText } = render(
       <SidebarProvider>
-        <SidebarMenuButton variant="outline" size="lg" isActive>
+        <SidebarMenuButton variant="secondary" size="lg" isActive>
           go
         </SidebarMenuButton>
       </SidebarProvider>,

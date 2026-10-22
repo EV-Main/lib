@@ -721,8 +721,8 @@
 
   /* chips (Badge, status pills). The source is the role's ink, so the edge and
    * the label are one hue; --chip-fill and --chip-edge are in the geometry. */
-  --chip-neutral-bg: transparent;
-  --chip-neutral-border: var(--border-strong);
+  --chip-neutral-bg: var(--hover);
+  --chip-neutral-border: var(--border);
   --chip-primary-bg: color-mix(in srgb, var(--primary-ink) var(--chip-fill), transparent);
   --chip-primary-border: color-mix(in srgb, var(--primary-ink) var(--chip-edge), transparent);
   --chip-positive-bg: color-mix(in srgb, var(--positive-ink) var(--chip-fill), transparent);
@@ -940,8 +940,8 @@
   --button-danger-ink: var(--accent-error-ink);
 
   /* chips are outlines: a transparent fill and the ink's hue at 50 % */
-  --chip-neutral-bg: #e6e1d300;
-  --chip-neutral-border: var(--border-strong);
+  --chip-neutral-bg: var(--hover);
+  --chip-neutral-border: var(--border);
   --chip-primary-bg: #35a39500;
   --chip-primary-border: #35a3958c;
   --chip-positive-bg: #2e9e5c00;
@@ -1023,8 +1023,8 @@
   --button-danger-ink: var(--accent-error-ink);
 
   /* the solid hue at 50 % (warning 60 %), where Dark uses the ink's */
-  --chip-neutral-bg: #0d0d0f00;
-  --chip-neutral-border: var(--border-strong);
+  --chip-neutral-bg: var(--hover);
+  --chip-neutral-border: var(--border);
   --chip-primary-bg: #13837700;
   --chip-primary-border: #116f658c;
   --chip-positive-bg: #228a4e00;
@@ -1113,7 +1113,7 @@
   --button-danger-ink: #070d18;
 
   /* chips are tinted pills with no edge */
-  --chip-neutral-bg: #e6e1d312;
+  --chip-neutral-bg: var(--hover);
   --chip-neutral-border: #e6e1d300;
   /* Figma tints the accent chip 16 %, which leaves its teal label at 4.03:1 on
    * the card; 8 % holds 4.56:1 */

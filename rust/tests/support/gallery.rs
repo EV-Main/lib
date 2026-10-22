@@ -234,7 +234,7 @@ fn d_hero() -> Element {
 					for accent in [Accent::Trace, Accent::Debug, Accent::Info, Accent::Warn, Accent::Error] {
 						Button { size: Size::Sm, accent, "{accent.as_ref()}" }
 					}
-					Badge { variant: BadgeVariant::Success, {lorem(1)} }
+					Badge { variant: BadgeVariant::Positive, {lorem(1)} }
 					Input { class: "ml-auto w-56", placeholder: lorem(3) }
 					Input { class: "w-40 ring-3 ring-ring/50 border-ring", value: lorem(1) }
 				}
@@ -298,11 +298,12 @@ fn d_button_accent() -> Element {
 
 fn d_badge() -> Element {
 	rsx! {
-		Badge { "Default" }
-		Badge { variant: BadgeVariant::Secondary, "Secondary" }
-		Badge { variant: BadgeVariant::Destructive, "Destructive" }
-		Badge { variant: BadgeVariant::Outline, "Outline" }
-		Badge { variant: BadgeVariant::Success, "Success" }
+		Badge { "Neutral" }
+		Badge { variant: BadgeVariant::Primary, "Primary" }
+		Badge { variant: BadgeVariant::Positive, "Positive" }
+		Badge { variant: BadgeVariant::Info, "Info" }
+		Badge { variant: BadgeVariant::Warn, "Warn" }
+		Badge { variant: BadgeVariant::Error, "Error" }
 	}
 }
 

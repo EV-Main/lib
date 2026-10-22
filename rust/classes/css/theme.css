@@ -664,8 +664,8 @@
 
   /* chips (Badge, status pills). The source is the role's ink, so the edge and
    * the label are one hue; --chip-fill and --chip-edge are in the geometry. */
-  --chip-neutral-bg: transparent;
-  --chip-neutral-border: var(--border-strong);
+  --chip-neutral-bg: var(--hover);
+  --chip-neutral-border: var(--border);
   --chip-primary-bg: color-mix(in srgb, var(--primary-ink) var(--chip-fill), transparent);
   --chip-primary-border: color-mix(in srgb, var(--primary-ink) var(--chip-edge), transparent);
   --chip-positive-bg: color-mix(in srgb, var(--positive-ink) var(--chip-fill), transparent);

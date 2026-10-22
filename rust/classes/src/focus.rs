@@ -53,9 +53,9 @@ mod tests {
 
 	use super::{FILLED_FOCUS_RING, OPTION_FOCUS_RING};
 	use crate::{
-		Accent, BUTTON_BASE, BadgeVariant, ButtonVariant, CHECKBOX_BASE, CONTEXT_MENU_CHECK_ITEM, CONTEXT_MENU_ITEM, CONTEXT_MENU_SUB_TRIGGER, DROPDOWN_MENU_CHECK_ITEM, DROPDOWN_MENU_ITEM,
-		DROPDOWN_MENU_SUB_TRIGGER, MENUBAR_CHECKBOX_ITEM, MENUBAR_ITEM, MENUBAR_RADIO_ITEM, MENUBAR_SUB_TRIGGER, MENUBAR_TRIGGER, SELECT_ITEM, SWITCH_BASE, TOGGLE_BASE, accent_fill_class,
-		accent_outline_class,
+		Accent, BADGE_BASE, BUTTON_BASE, BadgeVariant, ButtonVariant, CHECKBOX_BASE, CONTEXT_MENU_CHECK_ITEM, CONTEXT_MENU_ITEM, CONTEXT_MENU_SUB_TRIGGER, DROPDOWN_MENU_CHECK_ITEM,
+		DROPDOWN_MENU_ITEM, DROPDOWN_MENU_SUB_TRIGGER, MENUBAR_CHECKBOX_ITEM, MENUBAR_ITEM, MENUBAR_RADIO_ITEM, MENUBAR_SUB_TRIGGER, MENUBAR_TRIGGER, SELECT_ITEM, SWITCH_BASE, TOGGLE_BASE,
+		accent_fill_class, accent_outline_class,
 	};
 
 	/// The offset ring rides on the base, so no variant repeats it or brings a halo.
@@ -69,10 +69,10 @@ mod tests {
 	}
 
 	#[test]
-	fn filled_badge_variants_carry_the_ring() {
+	fn badge_carries_the_ring_through_its_base() {
+		assert!(BADGE_BASE.ends_with(FILLED_FOCUS_RING), "{BADGE_BASE}");
 		for variant in BadgeVariant::iter() {
-			let filled = matches!(variant, BadgeVariant::Primary | BadgeVariant::Secondary | BadgeVariant::Destructive);
-			assert_eq!(variant.as_class().contains(FILLED_FOCUS_RING), filled, "{}", variant.as_ref());
+			assert!(!variant.as_class().contains("ring-"), "{}", variant.as_ref());
 		}
 	}
 

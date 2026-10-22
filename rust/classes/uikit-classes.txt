@@ -128,6 +128,8 @@ bg-card text-ink
 bg-card text-ink border-border
 bg-card text-ink flex flex-col gap-6 rounded-xl border border-border py-6 shadow-sm
 bg-card text-ink overflow-hidden rounded-xl border border-border shadow-sm
+bg-chip-neutral-bg
+bg-chip-{tone}-bg
 bg-hover
 bg-hover animate-pulse rounded-md
 bg-hover text-ink rounded-md
@@ -180,7 +182,13 @@ border border-input bg-transparent shadow-xs hover:bg-hover hover:text-ink data-
 border-accent-warn/40
 border-b border-border last:border-b-0
 border-border
-border-border text-ink [a&]:hover:bg-hover [a&]:hover:text-ink
+border-chip-error-border bg-chip-error-bg text-accent-error-ink [a&]:hover:bg-hover
+border-chip-info-border bg-chip-info-bg text-accent-info-ink [a&]:hover:bg-hover
+border-chip-neutral-border bg-chip-neutral-bg text-ink-mid [a&]:hover:bg-active
+border-chip-positive-border bg-chip-positive-bg text-positive-ink [a&]:hover:bg-hover
+border-chip-primary-border bg-chip-primary-bg text-primary-ink [a&]:hover:bg-hover
+border-chip-warn-border bg-chip-warn-bg text-accent-warn-ink [a&]:hover:bg-hover
+border-chip-{tone}-border
 border-dashed
 border-input
 border-input placeholder:text-ink-soft focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error flex field-sizing-content min-h-16 w-full rounded-[var(--control-radius)] border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm
@@ -188,10 +196,6 @@ border-input text-primary-ink focus-visible:border-ring focus-visible:ring-ring/
 border-primary-ink ring-ring/50 block size-4 shrink-0 rounded-full border bg-ink shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50
 border-t
 border-t border-ink/10 pt-8 text-[10px] font-mono text-ink/40
-border-transparent bg-accent-error text-on-accent-error [a&]:hover:bg-accent-error/90 focus-visible:ring-accent-error/20 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
-border-transparent bg-positive/20 text-positive
-border-transparent bg-primary text-on-primary [a&]:hover:bg-primary/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
-border-transparent bg-secondary text-on-secondary [a&]:hover:bg-secondary/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 bottom-4 left-1/2 -translate-x-1/2
 bottom-4 left-4
 bottom-4 right-4
@@ -525,12 +529,12 @@ info-tip-content\
 info-tip-trigger
 info-tip-trigger\
 inline-block
+inline-flex h-5 items-center justify-center rounded-[var(--chip-radius)] border px-1.5 text-caption font-medium w-fit whitespace-nowrap shrink-0 gap-1 overflow-hidden [&>svg]:size-3 [&>svg]:pointer-events-none transition-colors outline-none aria-invalid:border-accent-error focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 inline-flex items-center gap-1
 inline-flex items-center gap-1.5
 inline-flex items-center justify-center bg-brand
 inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[var(--control-radius)] text-body font-medium transition-colors cursor-pointer disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none aria-invalid:border-accent-error focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 inline-flex items-center justify-center gap-2 rounded-[var(--control-radius)] text-sm font-medium hover:bg-muted hover:text-ink-soft disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-primary data-[state=on]:text-on-primary [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 focus-visible:border-ring outline-none transition-[color,box-shadow] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error whitespace-nowrap focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
-inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 gap-1 overflow-hidden [&>svg]:size-3 [&>svg]:pointer-events-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error
 inline-flex size-4 shrink-0 cursor-help items-center justify-center rounded-full align-middle text-ink-soft outline-none transition-colors hover:text-ink focus-visible:ring-2 focus-visible:ring-ring data-[state=open]:text-accent-debug
 inline-flex size-7 items-center justify-center rounded-md hover:bg-hover hover:text-ink
 inline-start
@@ -671,7 +675,7 @@ profile-body
 progress-indicator
 pt-0 pb-4
 pt-4
-px-2
+px-1.5
 px-2 py-1.5
 px-2 py-1.5 text-sm font-medium data-[inset]:pl-8
 px-3
@@ -811,6 +815,7 @@ text-accent-warn-ink
 text-base
 text-body 
 text-body-s
+text-caption
 text-end tabular-nums
 text-ink
 text-ink font-normal
@@ -845,6 +850,8 @@ text-lg leading-none font-semibold
 text-on-positive
 text-positive
 text-positive bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid
+text-positive-ink
+text-primary-ink
 text-primary-ink underline-offset-4 hover:underline
 text-sm
 text-sm font-medium select-none
