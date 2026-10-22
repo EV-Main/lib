@@ -732,3 +732,7 @@ export type { SystemBannerLabels, SystemBannerProps, SystemBannerTone } from "./
 
 export { Settled } from "./components/settled";
 export type { SettledProps } from "./components/settled";
+
+// Uikit 2.0 elements and composed parts
+export { IconButton } from "./components/icon-button";
+export type { IconButtonProps, IconButtonSize, IconButtonVariant } from "./components/icon-button";
