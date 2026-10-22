@@ -742,3 +742,5 @@ export { WorkspaceTabs, WorkspaceTab } from "./components/workspace-tab";
 export type { WorkspaceTabProps, WorkspaceTabsProps } from "./components/workspace-tab";
 export { KeyValue } from "./components/key-value";
 export type { KeyValueLabels, KeyValueProps } from "./components/key-value";
+export { FormRow } from "./components/form-row";
+export type { FormRowProps } from "./components/form-row";
