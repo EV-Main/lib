@@ -758,3 +758,10 @@ export { AccountList, AccountListItem } from "./components/account-list";
 export type { AccountListItemProps, AccountListProps } from "./components/account-list";
 export { PopoverForm } from "./components/popover-form";
 export type { PopoverFormLabels, PopoverFormProps } from "./components/popover-form";
+export { CommandPalette, useCommandPaletteShortcut } from "./components/command-palette";
+export type {
+  CommandPaletteGroup,
+  CommandPaletteItem,
+  CommandPaletteLabels,
+  CommandPaletteProps,
+} from "./components/command-palette";
