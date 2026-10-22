@@ -736,3 +736,5 @@ export type { SettledProps } from "./components/settled";
 // Uikit 2.0 elements and composed parts
 export { IconButton } from "./components/icon-button";
 export type { IconButtonProps, IconButtonSize, IconButtonVariant } from "./components/icon-button";
+export { StatusItem, StatusDot } from "./components/status-item";
+export type { StatusDotProps, StatusItemProps, StatusTone } from "./components/status-item";
