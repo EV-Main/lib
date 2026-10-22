@@ -740,3 +740,5 @@ export { StatusItem, StatusDot } from "./components/status-item";
 export type { StatusDotProps, StatusItemProps, StatusTone } from "./components/status-item";
 export { WorkspaceTabs, WorkspaceTab } from "./components/workspace-tab";
 export type { WorkspaceTabProps, WorkspaceTabsProps } from "./components/workspace-tab";
+export { KeyValue } from "./components/key-value";
+export type { KeyValueLabels, KeyValueProps } from "./components/key-value";
