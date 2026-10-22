@@ -756,3 +756,5 @@ export { ConfirmDialog } from "./components/confirm-dialog";
 export type { ConfirmDialogLabels, ConfirmDialogProps, ConfirmDialogTone } from "./components/confirm-dialog";
 export { AccountList, AccountListItem } from "./components/account-list";
 export type { AccountListItemProps, AccountListProps } from "./components/account-list";
+export { PopoverForm } from "./components/popover-form";
+export type { PopoverFormLabels, PopoverFormProps } from "./components/popover-form";
