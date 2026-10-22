@@ -746,3 +746,9 @@ export { FormRow } from "./components/form-row";
 export type { FormRowProps } from "./components/form-row";
 export { SettingsLayout, SettingsSection, SettingsRow } from "./components/settings";
 export type { SettingsLayoutProps, SettingsRowProps, SettingsSectionProps } from "./components/settings";
+export { AccountSettingsDialog } from "./components/account-settings-dialog";
+export type {
+  AccountSettingsDialogLabels,
+  AccountSettingsDialogProps,
+  AccountSettingsSection,
+} from "./components/account-settings-dialog";
