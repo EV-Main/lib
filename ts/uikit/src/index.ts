@@ -738,3 +738,5 @@ export { IconButton } from "./components/icon-button";
 export type { IconButtonProps, IconButtonSize, IconButtonVariant } from "./components/icon-button";
 export { StatusItem, StatusDot } from "./components/status-item";
 export type { StatusDotProps, StatusItemProps, StatusTone } from "./components/status-item";
+export { WorkspaceTabs, WorkspaceTab } from "./components/workspace-tab";
+export type { WorkspaceTabProps, WorkspaceTabsProps } from "./components/workspace-tab";
