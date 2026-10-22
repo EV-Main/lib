@@ -12,28 +12,41 @@
  *              writes (or generates — `evinvest-palette`, see the uikit README)
  *              its own palette against the same names under `[data-brand="…"]`.
  *
- *   SCOPE      :root · [data-brand] — a theme root; .light · .dark — a polarity
- *   SURFACES   background · card · popover · muted · hover
- *   INK        ink · ink-mid · ink-soft
- *   LINES      border · input · ring
+ *   SCOPE      :root · [data-brand] — a theme root; .light · .dark — a polarity;
+ *              [data-theme="oldschool"] — EV's pre-1.0 navy look, opt-in
+ *   SURFACES   background · card · popover · muted · secondary
+ *   STATES     hover · active · selected — surface tints; scrim — behind a modal
+ *   INK        ink · ink-mid · ink-soft · ink-faint (disabled only)
+ *   LINES      border-subtle · border · border-strong · input · ring
  *   ROLES      {role} and on-{role} for the ones that get filled:
  *              brand · primary · secondary · positive ·
  *              accent-trace · accent-debug · accent-info · accent-warn · accent-error
  *              primary-ink — the primary role as ink on a surface, where the
- *              fill and the readable value are different colours
- *              accent-error-ink — the error role as text on its own tint;
- *              derived from accent-error and ink, a palette may pin it
- *   SCALARS    radius · control-* · display-scale · page-* · shell-* · shadows · fonts
+ *              fill and the readable value are different colours;
+ *              primary-hover · primary-border — the solid button's states
+ *              positive-ink · accent-info-ink · accent-warn-ink · accent-error-ink —
+ *              a status role as text on a surface or on its own tint; derived
+ *              from the role and the ink, a palette may pin them
+ *   FACES      button-primary-* · button-danger-* ({bg,hover,border,ink}) and
+ *              chip-{neutral,primary,positive,info,warn,error}-{bg,border}:
+ *              what a Button or Badge paints, pinned per theme by EV and
+ *              derived for a brand. Not part of what a brand file owes.
+ *   TYPE       text-caption · body-s · body · body-l · h3 · h2 · h1 ·
+ *              figure-m · figure-l (size and line height); fonts
+ *   SCALARS    radius · control-radius · chip-radius · control-* · display-scale ·
+ *              page-* · shell-* · depth-* (behind shadow-card/elevated/overlay)
  *   MOTION     ev-ease-* · ev-dur-* · ev-rise · ev-stagger(-section)
- *   CHARTS     chart-1 … chart-5
+ *   CHARTS     chart-1 … chart-6
  *   MARK       brand-mark · brand-aspect       — supplied, never defined here
  *
  * Custom properties inherit, so a scope on a `<section>` re-themes its subtree:
  * `bg-card text-ink` is correct under any brand and either polarity with no
- * prop. A brand's palette declares `.light` and `.dark` beneath its own
- * `[data-brand]`, so a `<Section polarity="dark">` inside it takes that
- * brand's dark values — never EV's. EV is single-polarity: its palette sits on
- * the theme root alone and both polarity classes inherit it unchanged.
+ * prop. EV has two polarities of its own (Dark is the default, `.light` is
+ * Light) and a third theme; each pins every EV token, so a wrapper of one theme
+ * inside another replaces all of it. A brand's palette declares `.light` and
+ * `.dark` beneath its own `[data-brand]`, so a `<Section polarity="dark">`
+ * inside it takes that brand's dark values — never EV's: EV's rules do not
+ * match inside a brand scope.
  * Brand scopes do not nest: CSS has no "nearest ancestor", so a polarity class
  * inside a brand inside another brand may match either.
  *
@@ -518,14 +531,31 @@
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
 
-  /* Depth has to be a ladder, not a single drop shadow: on a dark theme the
-   * value steps alone are too close to separate a resting card from a menu
-   * from a modal, so each tier gets its own spread + opacity. */
-  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.30);
-  --shadow-elevated:
-    0 4px 12px -2px rgb(0 0 0 / 0.40),
-    0 2px 4px -2px rgb(0 0 0 / 0.30);
-  --shadow-overlay: 0 16px 48px -12px rgb(0 0 0 / 0.60);
+  /* The names stay, the values are per theme: u2 is flat (`--depth-*` is a
+   * zero shadow), Oldschool brings the ladder back in ev.css. */
+  --shadow-card: var(--depth-card);
+  --shadow-elevated: var(--depth-elevated);
+  --shadow-overlay: var(--depth-overlay);
+
+  /* Type scale: size / line-height in pairs, the Figma text styles. */
+  --text-caption: 0.6875rem;
+  --text-caption--line-height: 0.875rem;
+  --text-body-s: 0.75rem;
+  --text-body-s--line-height: 1rem;
+  --text-body: 0.8125rem;
+  --text-body--line-height: 1.125rem;
+  --text-body-l: 0.875rem;
+  --text-body-l--line-height: 1.25rem;
+  --text-h3: 0.875rem;
+  --text-h3--line-height: 1.25rem;
+  --text-h2: 1.5rem;
+  --text-h2--line-height: 1.875rem;
+  --text-h1: 2rem;
+  --text-h1--line-height: 2.375rem;
+  --text-figure-m: 1.25rem;
+  --text-figure-m--line-height: 1.5rem;
+  --text-figure-l: 1.75rem;
+  --text-figure-l--line-height: 2rem;
 
   /* The families are parameters: a brand scope sets `--brand-font-sans`,
    * `--brand-font-display` and `--brand-font-mono` (evinvest-palette writes
@@ -538,9 +568,9 @@
    * `inline` puts the var() chain in the utility itself, so it resolves on
    * the element and a brand scope re-fonts its subtree. */
   --font-sans: var(--brand-font-sans, var(--font-inter, "Inter")), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--brand-font-display, var(--font-playfair, "Playfair Display")), ui-serif, Georgia, serif;
+  --font-serif: var(--brand-font-display, var(--font-source-serif, "Source Serif 4")), Georgia, serif;
   --font-mono: var(--brand-font-mono, var(--font-inter, "Inter")), ui-monospace, monospace;
-  --font-display: var(--brand-font-display, var(--font-playfair, "Playfair Display")), ui-serif, Georgia, serif;
+  --font-display: var(--brand-font-display, var(--font-source-serif, "Source Serif 4")), Georgia, serif;
 
   /* The colour contract: every `--color-X: var(--X)` below is a name a palette
    * owes, except the derived ones in the next rule. `evinvest-palette` reads
@@ -552,14 +582,20 @@
   --color-popover: var(--popover);
   --color-muted: var(--muted);
   --color-hover: var(--hover);
+  --color-active: var(--active);
+  --color-selected: var(--selected);
+  --color-scrim: var(--scrim);
 
   /* ink — hierarchy, loudest first */
   --color-ink: var(--ink);
   --color-ink-mid: var(--ink-mid);
   --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
 
   /* lines */
+  --color-border-subtle: var(--border-subtle);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-input: var(--input);
   --color-ring: var(--ring);
 
@@ -568,18 +604,23 @@
   --color-primary: var(--primary);
   --color-on-primary: var(--on-primary);
   --color-primary-ink: var(--primary-ink);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-border: var(--primary-border);
   --color-secondary: var(--secondary);
   --color-on-secondary: var(--on-secondary);
   --color-positive: var(--positive);
   --color-on-positive: var(--on-positive);
+  --color-positive-ink: var(--positive-ink);
   --color-accent-trace: var(--accent-trace);
   --color-on-accent-trace: var(--on-accent-trace);
   --color-accent-debug: var(--accent-debug);
   --color-on-accent-debug: var(--on-accent-debug);
   --color-accent-info: var(--accent-info);
   --color-on-accent-info: var(--on-accent-info);
+  --color-accent-info-ink: var(--accent-info-ink);
   --color-accent-warn: var(--accent-warn);
   --color-on-accent-warn: var(--on-accent-warn);
+  --color-accent-warn-ink: var(--accent-warn-ink);
   --color-accent-error: var(--accent-error);
   --color-on-accent-error: var(--on-accent-error);
   --color-accent-error-ink: var(--accent-error-ink);
@@ -590,26 +631,46 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
 }
 
 /* Derived from the palette, and redeclared on every scope a palette can be
  * declared on. A var() inside a custom property is resolved where it is
  * declared and the result is what inherits — declared on `:root` alone, a brand
  * scope would change the text and keep EV's borders, hover and focus ring.
- * Zero specificity, so a palette that sets one of these outright wins. */
-:where(:root, .dark, .light, [data-brand]) {
-  /* the menu-item tint: a surface state, so it is named for the state */
-  --hover: color-mix(in srgb, var(--ink) 8%, transparent);
+ * Zero specificity, so a palette that sets one of these outright wins. These
+ * are the formulas a brand file gets; EV pins its own per theme in ev.css. */
+:where(:root, .dark, .light, [data-brand], [data-theme]) {
+  /* surface states: the menu-item tint, the pressed tint, the chosen row */
+  --hover: color-mix(in srgb, var(--ink) 6%, transparent);
+  --active: color-mix(in srgb, var(--ink) 10%, transparent);
+  --selected: color-mix(in srgb, var(--ink) 10%, transparent);
+  /* behind a modal layer; black on either polarity keeps the page readable
+   * through it without tinting the brand */
+  --scrim: color-mix(in srgb, black 50%, transparent);
   --ink-mid: color-mix(in srgb, var(--ink) 82%, transparent);
   /* the most-used secondary text token, so it has to clear AA on its own */
-  --ink-soft: color-mix(in srgb, var(--ink) 65%, transparent);
-  /* a divider: decoration, so it stays quiet */
+  --ink-soft: color-mix(in srgb, var(--ink) 60%, transparent);
+  /* disabled only: exempt from the text floor because nothing can be done with it */
+  --ink-faint: color-mix(in srgb, var(--ink) 38%, transparent);
+  /* three steps of line: a row rule, a divider, and a panel edge. Decoration,
+   * so they stay quiet; none of them is a control edge (see --input) */
+  --border-subtle: color-mix(in srgb, var(--ink) 8%, transparent);
   --border: color-mix(in srgb, var(--ink) 14%, transparent);
+  --border-strong: color-mix(in srgb, var(--ink) 26%, transparent);
   /* the only edge an unfilled control has, so it owes the non-text 3:1 on every
    * surface (lib#154). One mix serves both polarities; light is the binding
    * side — ink over white needs ~47% to clear it, dark lands near 4:1. */
   --input: color-mix(in srgb, var(--ink) 48%, transparent);
   --ring: var(--primary-ink);
+  --primary-hover: color-mix(in srgb, var(--primary) 95%, black);
+  --primary-border: color-mix(in srgb, var(--primary-ink) 55%, transparent);
+  /* the status roles as text on a surface: a fill is a shape, and as text it
+   * reads far below AA on a light plane (docs/spec/accents.md). 60 % of the
+   * role toward the ink is the fallback for a brand that pins nothing. */
+  --positive-ink: color-mix(in srgb, var(--positive) 60%, var(--ink));
+  --accent-info-ink: color-mix(in srgb, var(--accent-info) 60%, var(--ink));
+  --accent-warn-ink: color-mix(in srgb, var(--accent-warn) 60%, var(--ink));
   /* the error role as text on its own 10 % tint — a destructive menu row
    * (lib#166). The fill alone read 3.76:1 there on EV and 2.48:1 on a dark
    * brand; 30 % of the ink pulls it toward whichever polarity the text needs.
@@ -618,14 +679,57 @@
   --accent-error-ink: color-mix(in srgb, var(--accent-error) 70%, var(--ink));
 }
 
+/* Component faces built from the palette. Not colour names (no `--color-*`
+ * mapping), so they are not part of the contract a brand file owes; a brand
+ * gets these formulas and EV pins its own per theme. Same scopes as the rule
+ * above, listed in another order so the contract reader finds one rule per
+ * selector. */
+:where([data-theme], [data-brand], .light, .dark, :root) {
+  /* primary is an outline button, danger the same in the error role */
+  --button-primary-bg: transparent;
+  --button-primary-hover: var(--hover);
+  --button-primary-border: color-mix(in srgb, var(--ink) 60%, transparent);
+  --button-primary-ink: var(--ink);
+  --button-danger-bg: transparent;
+  --button-danger-hover: color-mix(in srgb, var(--accent-error) 10%, transparent);
+  /* the ink, not the fill: a brand's error fill may sit under 3:1 on its dark
+   * planes, and an outline owes the non-text floor */
+  --button-danger-border: var(--accent-error-ink);
+  --button-danger-ink: var(--accent-error-ink);
+
+  /* chips (Badge, status pills): an outline by default, a tinted fill when a
+   * theme raises --chip-fill. The source is the role's ink, so the edge and the
+   * label are one hue. */
+  --chip-fill: 0%;
+  --chip-edge: 50%;
+  --chip-neutral-bg: transparent;
+  --chip-neutral-border: var(--border-strong);
+  --chip-primary-bg: color-mix(in srgb, var(--primary-ink) var(--chip-fill), transparent);
+  --chip-primary-border: color-mix(in srgb, var(--primary-ink) var(--chip-edge), transparent);
+  --chip-positive-bg: color-mix(in srgb, var(--positive-ink) var(--chip-fill), transparent);
+  --chip-positive-border: color-mix(in srgb, var(--positive-ink) var(--chip-edge), transparent);
+  --chip-info-bg: color-mix(in srgb, var(--accent-info-ink) var(--chip-fill), transparent);
+  --chip-info-border: color-mix(in srgb, var(--accent-info-ink) var(--chip-edge), transparent);
+  --chip-warn-bg: color-mix(in srgb, var(--accent-warn-ink) var(--chip-fill), transparent);
+  --chip-warn-border: color-mix(in srgb, var(--accent-warn-ink) var(--chip-edge), transparent);
+  --chip-error-bg: color-mix(in srgb, var(--accent-error-ink) var(--chip-fill), transparent);
+  --chip-error-border: color-mix(in srgb, var(--accent-error-ink) var(--chip-edge), transparent);
+}
+
 /* Geometry. A `[data-brand]` scope is a theme root of its own, so it restarts
  * from these defaults (and from the scale-ups below) rather than inheriting
- * whatever an ancestor computed — `--control-radius` in particular is derived
- * from `--radius` and has to be recomputed wherever `--radius` may change. */
+ * whatever an ancestor computed. */
 :where(:root, [data-brand]) {
-  --radius: 0.375rem; /* 6px on mobile; bumped to 8px ≥ sm (see @media below) */
+  --radius: 0.375rem; /* panels and menus */
   /* control geometry, so a consumer reshapes every button/input at once */
-  --control-radius: calc(var(--radius) - 2px);
+  --control-radius: 0.25rem;
+  --chip-radius: 0.25rem;
+  /* u2 is flat: depth is surface steps and hairlines. Never `none` — inside
+   * Tailwind's comma-separated box-shadow list it invalidates the whole
+   * declaration, and the focus ring goes with it. */
+  --depth-card: 0 0 #0000;
+  --depth-elevated: 0 0 #0000;
+  --depth-overlay: 0 0 #0000;
   --control-py: 0.5rem;
   /* the Xl (call-to-action) button reads all three */
   --control-px: 2rem;
@@ -681,11 +785,10 @@
   --ev-shell-offset: 0px;
 }
 
-/* Mobile-first scale-ups: roomier gutters + slightly larger radii on bigger
-   viewports. Lives here (not per-component) so every consumer scales alike. */
+/* Mobile-first scale-ups: roomier gutters on bigger viewports. Lives here (not
+   per-component) so every consumer scales alike. */
 @media (min-width: 640px) {
   :where(:root, [data-brand]) {
-    --radius: 0.5rem;
     --page-px: 1.5rem;
   }
 }
@@ -705,75 +808,312 @@
 
 /* ═══ PALETTE: EV ════════════════════════════════════════════════
  *
- * Zero specificity: EV is the default a brand scope overrides, whatever order
- * the two sheets are imported in.
+ * Three themes, each a zero-specificity rule: a brand scope overrides them
+ * whatever order the sheets are imported in, and later rules here win over
+ * earlier ones on the same element (so the order below is load-bearing).
  *
- * Surface ladder — dark UI reads as unfinished when every plane is the same
- * value, so the steps below are deliberate and measured; keep them apart if you
- * retune. background #070d18 → secondary #0d1526 (1.07:1) → card #16233c (1.24:1
- * vs background) → popover #1d2c49 (1.13:1 vs card) → muted #26375c. Elevation
- * rides the same ladder via --shadow-card / -elevated / -overlay. Card is also
- * pinned from above by a second floor: --primary has to clear 3:1 against it
- * (3.39:1 today), so lifting card one step breaks the tokens test.
+ *   u2 Dark     the default: `:root`, `[data-brand="ev"]`, or a `.dark` wrapper
+ *   u2 Light    a `.light` wrapper (on <html> or on any section)
+ *   Oldschool   `[data-theme="oldschool"]`: the navy look the kit shipped before
+ *               1.0, single-polarity, rounder, with shadows
+ *
+ * Each rule pins every EV-specific token, so a wrapper of one theme nested in
+ * another replaces all of it and leaks nothing. A brand scope is not EV: the
+ * `:not(…)` guard keeps these pins out of a `[data-brand]` subtree (and off the
+ * brand's own element), where the brand's palette and the derived formulas in
+ * theme.css apply instead. Without it a brand's `.light` would inherit EV
+ * Light's hover and borders.
+ *
+ * Surface ladder — the u2 planes sit 1.04–1.14:1 apart, which is the design
+ * (flat, no tinted fills) and under the ~1.2 floor in AGENTS.md. Planes are
+ * separated by a `--border` hairline instead: 1.37–1.46:1 on Dark and 1.35:1 on
+ * Light, measured with the alpha composited onto the plane. Do not lift a plane
+ * to chase the ratio; retune the hairline, and tokens.test.ts will measure it.
+ * Oldschool keeps its own, wider ladder: #070d18 → card #16233c (1.24:1) →
+ * popover #1d2c49 (1.13:1), with --primary held at 3:1 against the popover.
+ *
+ * Where a Figma value failed a floor the nearest passing one is pinned
+ * instead; the comment beside each says which.
  */
-:where(:root, [data-brand="ev"]) {
+
+/* ── u2 Dark ─────────────────────────────────────────────────── */
+:where(:is(:root, [data-brand="ev"], .dark):not([data-brand]:not([data-brand="ev"]), [data-brand]:not([data-brand="ev"]) *)) {
   /* the polarity, for what the platform draws itself (a native <select>'s
    * popup); a custom property so nothing but the kit's opt-ins reads it */
   --scheme: dark;
 
-  /* ── surfaces ────────────────────────────────────────────────── */
+  /* surfaces */
+  --background: #0d0d0f;
+  --card: #151518;
+  --secondary: #1c1c20;
+  --on-secondary: var(--ink);
+  --popover: #252529;
+  --muted: #070709;
+  --hover: #e6e1d30f;
+  --active: #e6e1d31a;
+  --selected: #e6e1d31a;
+  --scrim: #000000a8;
+
+  /* ink: the Figma steps, opaque, so the text floor is measured on the value
+   * that paints (tertiary is 4.53:1 on the popover, the tightest plane) */
+  --ink: #e6e1d3;
+  --ink-mid: #bebab1;
+  --ink-soft: #8d8c87;
+  --ink-faint: #5e5e5b;
+
+  /* lines. --input stays the derived 48 % ink: the control edge owes 3:1 and
+   * Figma has no variable for it. */
+  --border-subtle: #e6e1d314;
+  --border: #e6e1d324;
+  --border-strong: #e6e1d342;
+  --ring: #35a395;
+
+  /* brand and primary. A fill and an ink are different jobs (docs/spec/accents.md):
+   * --primary carries white at 4.62:1 and reads as a shape on every plane (3.30:1
+   * on the popover); --primary-ink is the teal that reads as text (4.96:1 there).
+   * Figma's hover #18998b is 3.52:1 under white, so #127c71 (5.06:1) is pinned. */
+  --brand: #0d1627;
+  --primary: #138377;
+  --on-primary: #ffffff;
+  --primary-ink: #35a395;
+  --primary-hover: #127c71;
+  --primary-border: #35a3958c;
+
+  /* status. Fills carry the dark label (white fails 3:1–3.4:1 on these); the
+   * *-ink values are the ones to use as text. */
+  --positive: #2e9e5c;
+  --on-positive: #0d0d0f;
+  --positive-ink: #4abf76;
+  --accent-trace: #6b7fa0;
+  --on-accent-trace: #0d0d0f;
+  --accent-debug: #35a395;
+  --on-accent-debug: #0d0d0f;
+  --accent-info: #4990d8;
+  --on-accent-info: #0d0d0f;
+  --accent-info-ink: #6ca6e4;
+  --accent-warn: #f5c84e;
+  --on-accent-warn: #0d0d0f;
+  --accent-warn-ink: #f5c84e;
+  --accent-error: #f05b52;
+  --on-accent-error: #0d0d0f;
+  /* Figma's #f06c61 is 4.49:1 on the danger button's hover over the popover;
+   * one step lighter clears AA there */
+  --accent-error-ink: #f2736a;
+
+  --chart-1: #35a395;
+  --chart-2: #4990d8;
+  --chart-3: #f5c84e;
+  --chart-4: #e68aaf;
+  --chart-5: #2e9e5c;
+  --chart-6: #988eef;
+
+  --button-primary-bg: #e6e1d300;
+  --button-primary-hover: #e6e1d314;
+  --button-primary-border: #e6e1d399;
+  --button-primary-ink: #e6e1d3;
+  --button-danger-bg: #f05b5200;
+  --button-danger-hover: #f05b521a;
+  --button-danger-border: #f05b52;
+  --button-danger-ink: var(--accent-error-ink);
+
+  /* chips are outlines: a transparent fill and the ink's hue at 50 % */
+  --chip-neutral-bg: #e6e1d300;
+  --chip-neutral-border: var(--border-strong);
+  --chip-primary-bg: #35a39500;
+  --chip-primary-border: #35a3958c;
+  --chip-positive-bg: #2e9e5c00;
+  --chip-positive-border: #4abf7680;
+  --chip-info-bg: #4990d800;
+  --chip-info-border: #6ca6e480;
+  --chip-warn-bg: #f5c84e00;
+  --chip-warn-border: #f5c84e80;
+  --chip-error-bg: #f05b5200;
+  --chip-error-border: #f06c6180;
+}
+
+/* ── u2 Light ────────────────────────────────────────────────── */
+:where(.light:not([data-brand]:not([data-brand="ev"]), [data-brand]:not([data-brand="ev"]) *)) {
+  --scheme: light;
+
+  --background: #efebdf;
+  --card: #f6f3eb;
+  --secondary: #fbfaf6;
+  --on-secondary: var(--ink);
+  --popover: #ffffff;
+  --muted: #e6e1d3;
+  --hover: #0d0d0f0d;
+  --active: #0d0d0f17;
+  --selected: #0d0d0f14;
+  --scrim: #00000066;
+
+  --ink: #0d0d0f;
+  --ink-mid: #3d3d41;
+  --ink-soft: #67696c;
+  --ink-faint: #9a9b9e;
+
+  --border-subtle: #0d0d0f14;
+  --border: #0d0d0f24;
+  --border-strong: #0d0d0f47;
+  --ring: #138377;
+
+  --brand: #080e1a;
+  --primary: #138377;
+  --on-primary: #ffffff;
+  --primary-ink: #116f65;
+  --primary-hover: #116f65;
+  --primary-border: #116f658c;
+
+  /* Figma's positive #228a4e carries neither label at 4.5:1 (white 4.36, dark
+   * 4.45), so the fill is one step darker: white reads at 5.01:1. */
+  --positive: #1f7f48;
+  --on-positive: #ffffff;
+  --positive-ink: #1b7943;
+  --accent-trace: #5a6b7c;
+  --on-accent-trace: #ffffff;
+  --accent-debug: #116f65;
+  --on-accent-debug: #ffffff;
+  --accent-info: #2d79c2;
+  --on-accent-info: #ffffff;
+  --accent-info-ink: #25639f;
+  --accent-warn: #d8a523;
+  --on-accent-warn: #0d0d0f;
+  --accent-warn-ink: #846305;
+  --accent-error: #db3834;
+  --on-accent-error: #ffffff;
+  /* Figma's #c52c2a is 4.21:1 on the danger button's hover over the page plane */
+  --accent-error-ink: #b82826;
+
+  --chart-1: #116f65;
+  --chart-2: #2d79c2;
+  --chart-3: #d8a523;
+  --chart-4: #b74679;
+  --chart-5: #228a4e;
+  --chart-6: #6d5acc;
+
+  --button-primary-bg: #0d0d0f00;
+  --button-primary-hover: #0d0d0f0f;
+  --button-primary-border: #0d0d0fa6;
+  --button-primary-ink: #080e1a;
+  --button-danger-bg: #db383400;
+  --button-danger-hover: #db383414;
+  --button-danger-border: #db3834;
+  --button-danger-ink: var(--accent-error-ink);
+
+  /* the solid hue at 50 % (warning 60 %), where Dark uses the ink's */
+  --chip-neutral-bg: #0d0d0f00;
+  --chip-neutral-border: var(--border-strong);
+  --chip-primary-bg: #13837700;
+  --chip-primary-border: #116f658c;
+  --chip-positive-bg: #228a4e00;
+  --chip-positive-border: #228a4e80;
+  --chip-info-bg: #2d79c200;
+  --chip-info-border: #2d79c280;
+  --chip-warn-bg: #d8a52300;
+  --chip-warn-border: #d8a52399;
+  --chip-error-bg: #db383400;
+  --chip-error-border: #db383480;
+}
+
+/* ── Oldschool ───────────────────────────────────────────────── *
+ * Opt-in. Dark-only, so a `.light` or `.dark` inside it takes these values
+ * too. The surfaces are the ones the kit shipped (they pass every floor in
+ * tokens.test.ts); Figma's raised/overlay #1f2d4b measured 2.96:1 for the fill
+ * and 4.06:1 for tertiary text, so the popover stays #1d2c49. Its ink steps and
+ * --border are the derived formulas for the same reason: Figma's opaque
+ * border #1b2843 is 1.1:1 on the card and would leave the planes unseparated.
+ */
+:where([data-theme="oldschool"], [data-theme="oldschool"] :is(.light, .dark)) {
+  --scheme: dark;
+
   --background: #070d18;
   --card: #16233c;
-  --popover: #1d2c49;
-  --muted: #26375c;
-
-  /* ── ink ─────────────────────────────────────────────────────── */
-  --ink: #e6e1d3;
-
-  /* ── roles ───────────────────────────────────────────────────── */
-  --brand: #001e4e;
-  /* teal, not the brand navy: navy filled a Button/Switch at ~1.1:1 against
-   * these surfaces, i.e. an invisible control, and consumers hardcoded teal to
-   * get around it. The brand navy still lives in --brand.
-   *
-   * A fill and an ink are different jobs, so the primary role carries two
-   * values (docs/spec/accents.md). --primary-ink is the teal that reads on the
-   * surfaces: 5.85:1 on background, 4.72:1 on card. --primary is the same hue
-   * and chroma one step down in lightness — OKLCH L 0.550 C 0.094 H 183°
-   * against the ink's L 0.630 C 0.101 H 183° — so the CTA carries white:
-   * --on-primary reads on it at 4.63:1, and the fill clears the 3:1 non-text
-   * floor against background (4.20:1), secondary (3.94:1), card (3.39:1) and
-   * popover (3.01:1), so a checked Switch on a Card still reads as one. Muted
-   * is the one surface under the floor (2.54:1); the controls that fill there
-   * carry an on-primary mark, see the spec. Darkening the single value instead
-   * would have dropped every teal label below AA. */
-  --primary: #128377;
-  --on-primary: #ffffff;
-  --primary-ink: #2a9d8f;
   --secondary: #0d1526;
   --on-secondary: var(--ink);
-  /* valence, not significance: a success reads as good while staying quiet */
-  --positive: #2e9e5b;
+  --popover: #1d2c49;
+  --muted: #26375c;
+  --hover: #e6e1d312;
+  --active: #e6e1d31f;
+  --selected: #35a3952e;
+  --scrim: #02050ea3;
+
+  --ink: #e6e1d3;
+  --ink-mid: color-mix(in srgb, var(--ink) 82%, transparent);
+  --ink-soft: color-mix(in srgb, var(--ink) 60%, transparent);
+  --ink-faint: color-mix(in srgb, var(--ink) 38%, transparent);
+
+  --border-subtle: #e6e1d312;
+  --border: color-mix(in srgb, var(--ink) 14%, transparent);
+  --border-strong: #2e3e64;
+  --ring: #35a395;
+
+  --brand: #080e1a;
+  --primary: #138377;
+  --on-primary: #ffffff;
+  --primary-ink: #35a395;
+  --primary-hover: #127c71;
+  --primary-border: #35a39500;
+
+  --positive: #2e9e5c;
   --on-positive: #070d18;
+  --positive-ink: #4abf76;
   --accent-trace: #6b7fa0;
   --on-accent-trace: #070d18;
-  --accent-debug: #2a9d8f;
+  --accent-debug: #35a395;
   --on-accent-debug: #070d18;
-  --accent-info: #4a90d9;
+  --accent-info: #4990d8;
   --on-accent-info: #070d18;
-  --accent-warn: #f2c94c;
+  --accent-info-ink: #6ca6e4;
+  --accent-warn: #f5c84e;
   --on-accent-warn: #070d18;
-  /* lifted off the brand red #da251d, which failed AA on a card. This one value
-   * is the fill and the text on a bare surface; on its own 10 % tint (a
-   * destructive menu row) the text is the derived --accent-error-ink, which
-   * EV leaves to the contract: #ec8379, 4.83:1 on that tint over popover. The
-   * vivid brand red is a gitops constant, not a UI token. */
-  --accent-error: #ef5b52;
+  --accent-warn-ink: #f5c84e;
+  --accent-error: #f05b52;
   --on-accent-error: #070d18;
+  /* Figma's #f06c61 is 4.24:1 on the error chip's tint; the derived mix is
+   * ≈#ec8379 (4.83:1) */
+  --accent-error-ink: color-mix(in srgb, var(--accent-error) 70%, var(--ink));
 
-  --chart-1: #2a9d8f;
-  --chart-2: #2e9e5b;
-  --chart-3: #f2c94c;
-  --chart-4: #e58aae;
-  --chart-5: #4a90d9;
+  --chart-1: #35a395;
+  --chart-2: #4990d8;
+  --chart-3: #f5c84e;
+  --chart-4: #e68aaf;
+  --chart-5: #2e9e5c;
+  --chart-6: #988eef;
+
+  /* filled buttons. The danger label stays dark: white on #f05b52 is 3.32:1. */
+  --button-primary-bg: #138377;
+  --button-primary-hover: #127c71;
+  --button-primary-border: #138377;
+  --button-primary-ink: #ffffff;
+  --button-danger-bg: #f05b52;
+  --button-danger-hover: #f06c61;
+  --button-danger-border: #f05b52;
+  --button-danger-ink: #070d18;
+
+  /* chips are tinted pills with no edge */
+  --chip-neutral-bg: #e6e1d312;
+  --chip-neutral-border: #e6e1d300;
+  /* Figma tints the accent chip 16 %, which leaves its teal label at 4.03:1 on
+   * the card; 8 % holds 4.56:1 */
+  --chip-primary-bg: #35a39514;
+  --chip-primary-border: #35a39500;
+  --chip-positive-bg: #2e9e5c2e;
+  --chip-positive-border: #4abf7600;
+  --chip-info-bg: #4990d82e;
+  --chip-info-border: #6ca6e400;
+  --chip-warn-bg: #f5c84e29;
+  --chip-warn-border: #f5c84e00;
+  --chip-error-bg: #f05b522e;
+  --chip-error-border: #f06c6100;
+
+  --radius: 0.5rem;
+  --control-radius: 0.375rem;
+  --chip-radius: 9999px;
+  /* the ladder is three tiers, not one drop shadow: on a dark theme the value
+   * steps alone are too close to separate a resting card from a menu from a
+   * modal, so each tier gets its own spread and opacity */
+  --depth-card: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --depth-elevated:
+    0 4px 12px -2px rgb(0 0 0 / 0.4),
+    0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --depth-overlay: 0 16px 48px -12px rgb(0 0 0 / 0.6);
 }

@@ -474,14 +474,31 @@
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
 
-  /* Depth has to be a ladder, not a single drop shadow: on a dark theme the
-   * value steps alone are too close to separate a resting card from a menu
-   * from a modal, so each tier gets its own spread + opacity. */
-  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.30);
-  --shadow-elevated:
-    0 4px 12px -2px rgb(0 0 0 / 0.40),
-    0 2px 4px -2px rgb(0 0 0 / 0.30);
-  --shadow-overlay: 0 16px 48px -12px rgb(0 0 0 / 0.60);
+  /* The names stay, the values are per theme: u2 is flat (`--depth-*` is a
+   * zero shadow), Oldschool brings the ladder back in ev.css. */
+  --shadow-card: var(--depth-card);
+  --shadow-elevated: var(--depth-elevated);
+  --shadow-overlay: var(--depth-overlay);
+
+  /* Type scale: size / line-height in pairs, the Figma text styles. */
+  --text-caption: 0.6875rem;
+  --text-caption--line-height: 0.875rem;
+  --text-body-s: 0.75rem;
+  --text-body-s--line-height: 1rem;
+  --text-body: 0.8125rem;
+  --text-body--line-height: 1.125rem;
+  --text-body-l: 0.875rem;
+  --text-body-l--line-height: 1.25rem;
+  --text-h3: 0.875rem;
+  --text-h3--line-height: 1.25rem;
+  --text-h2: 1.5rem;
+  --text-h2--line-height: 1.875rem;
+  --text-h1: 2rem;
+  --text-h1--line-height: 2.375rem;
+  --text-figure-m: 1.25rem;
+  --text-figure-m--line-height: 1.5rem;
+  --text-figure-l: 1.75rem;
+  --text-figure-l--line-height: 2rem;
 
   /* The families are parameters: a brand scope sets `--brand-font-sans`,
    * `--brand-font-display` and `--brand-font-mono` (evinvest-palette writes
@@ -494,9 +511,9 @@
    * `inline` puts the var() chain in the utility itself, so it resolves on
    * the element and a brand scope re-fonts its subtree. */
   --font-sans: var(--brand-font-sans, var(--font-inter, "Inter")), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--brand-font-display, var(--font-playfair, "Playfair Display")), ui-serif, Georgia, serif;
+  --font-serif: var(--brand-font-display, var(--font-source-serif, "Source Serif 4")), Georgia, serif;
   --font-mono: var(--brand-font-mono, var(--font-inter, "Inter")), ui-monospace, monospace;
-  --font-display: var(--brand-font-display, var(--font-playfair, "Playfair Display")), ui-serif, Georgia, serif;
+  --font-display: var(--brand-font-display, var(--font-source-serif, "Source Serif 4")), Georgia, serif;
 
   /* The colour contract: every `--color-X: var(--X)` below is a name a palette
    * owes, except the derived ones in the next rule. `evinvest-palette` reads
@@ -508,14 +525,20 @@
   --color-popover: var(--popover);
   --color-muted: var(--muted);
   --color-hover: var(--hover);
+  --color-active: var(--active);
+  --color-selected: var(--selected);
+  --color-scrim: var(--scrim);
 
   /* ink — hierarchy, loudest first */
   --color-ink: var(--ink);
   --color-ink-mid: var(--ink-mid);
   --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
 
   /* lines */
+  --color-border-subtle: var(--border-subtle);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-input: var(--input);
   --color-ring: var(--ring);
 
@@ -524,18 +547,23 @@
   --color-primary: var(--primary);
   --color-on-primary: var(--on-primary);
   --color-primary-ink: var(--primary-ink);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-border: var(--primary-border);
   --color-secondary: var(--secondary);
   --color-on-secondary: var(--on-secondary);
   --color-positive: var(--positive);
   --color-on-positive: var(--on-positive);
+  --color-positive-ink: var(--positive-ink);
   --color-accent-trace: var(--accent-trace);
   --color-on-accent-trace: var(--on-accent-trace);
   --color-accent-debug: var(--accent-debug);
   --color-on-accent-debug: var(--on-accent-debug);
   --color-accent-info: var(--accent-info);
   --color-on-accent-info: var(--on-accent-info);
+  --color-accent-info-ink: var(--accent-info-ink);
   --color-accent-warn: var(--accent-warn);
   --color-on-accent-warn: var(--on-accent-warn);
+  --color-accent-warn-ink: var(--accent-warn-ink);
   --color-accent-error: var(--accent-error);
   --color-on-accent-error: var(--on-accent-error);
   --color-accent-error-ink: var(--accent-error-ink);
@@ -546,26 +574,46 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
 }
 
 /* Derived from the palette, and redeclared on every scope a palette can be
  * declared on. A var() inside a custom property is resolved where it is
  * declared and the result is what inherits — declared on `:root` alone, a brand
  * scope would change the text and keep EV's borders, hover and focus ring.
- * Zero specificity, so a palette that sets one of these outright wins. */
-:where(:root, .dark, .light, [data-brand]) {
-  /* the menu-item tint: a surface state, so it is named for the state */
-  --hover: color-mix(in srgb, var(--ink) 8%, transparent);
+ * Zero specificity, so a palette that sets one of these outright wins. These
+ * are the formulas a brand file gets; EV pins its own per theme in ev.css. */
+:where(:root, .dark, .light, [data-brand], [data-theme]) {
+  /* surface states: the menu-item tint, the pressed tint, the chosen row */
+  --hover: color-mix(in srgb, var(--ink) 6%, transparent);
+  --active: color-mix(in srgb, var(--ink) 10%, transparent);
+  --selected: color-mix(in srgb, var(--ink) 10%, transparent);
+  /* behind a modal layer; black on either polarity keeps the page readable
+   * through it without tinting the brand */
+  --scrim: color-mix(in srgb, black 50%, transparent);
   --ink-mid: color-mix(in srgb, var(--ink) 82%, transparent);
   /* the most-used secondary text token, so it has to clear AA on its own */
-  --ink-soft: color-mix(in srgb, var(--ink) 65%, transparent);
-  /* a divider: decoration, so it stays quiet */
+  --ink-soft: color-mix(in srgb, var(--ink) 60%, transparent);
+  /* disabled only: exempt from the text floor because nothing can be done with it */
+  --ink-faint: color-mix(in srgb, var(--ink) 38%, transparent);
+  /* three steps of line: a row rule, a divider, and a panel edge. Decoration,
+   * so they stay quiet; none of them is a control edge (see --input) */
+  --border-subtle: color-mix(in srgb, var(--ink) 8%, transparent);
   --border: color-mix(in srgb, var(--ink) 14%, transparent);
+  --border-strong: color-mix(in srgb, var(--ink) 26%, transparent);
   /* the only edge an unfilled control has, so it owes the non-text 3:1 on every
    * surface (lib#154). One mix serves both polarities; light is the binding
    * side — ink over white needs ~47% to clear it, dark lands near 4:1. */
   --input: color-mix(in srgb, var(--ink) 48%, transparent);
   --ring: var(--primary-ink);
+  --primary-hover: color-mix(in srgb, var(--primary) 95%, black);
+  --primary-border: color-mix(in srgb, var(--primary-ink) 55%, transparent);
+  /* the status roles as text on a surface: a fill is a shape, and as text it
+   * reads far below AA on a light plane (docs/spec/accents.md). 60 % of the
+   * role toward the ink is the fallback for a brand that pins nothing. */
+  --positive-ink: color-mix(in srgb, var(--positive) 60%, var(--ink));
+  --accent-info-ink: color-mix(in srgb, var(--accent-info) 60%, var(--ink));
+  --accent-warn-ink: color-mix(in srgb, var(--accent-warn) 60%, var(--ink));
   /* the error role as text on its own 10 % tint — a destructive menu row
    * (lib#166). The fill alone read 3.76:1 there on EV and 2.48:1 on a dark
    * brand; 30 % of the ink pulls it toward whichever polarity the text needs.
@@ -574,14 +622,57 @@
   --accent-error-ink: color-mix(in srgb, var(--accent-error) 70%, var(--ink));
 }
 
+/* Component faces built from the palette. Not colour names (no `--color-*`
+ * mapping), so they are not part of the contract a brand file owes; a brand
+ * gets these formulas and EV pins its own per theme. Same scopes as the rule
+ * above, listed in another order so the contract reader finds one rule per
+ * selector. */
+:where([data-theme], [data-brand], .light, .dark, :root) {
+  /* primary is an outline button, danger the same in the error role */
+  --button-primary-bg: transparent;
+  --button-primary-hover: var(--hover);
+  --button-primary-border: color-mix(in srgb, var(--ink) 60%, transparent);
+  --button-primary-ink: var(--ink);
+  --button-danger-bg: transparent;
+  --button-danger-hover: color-mix(in srgb, var(--accent-error) 10%, transparent);
+  /* the ink, not the fill: a brand's error fill may sit under 3:1 on its dark
+   * planes, and an outline owes the non-text floor */
+  --button-danger-border: var(--accent-error-ink);
+  --button-danger-ink: var(--accent-error-ink);
+
+  /* chips (Badge, status pills): an outline by default, a tinted fill when a
+   * theme raises --chip-fill. The source is the role's ink, so the edge and the
+   * label are one hue. */
+  --chip-fill: 0%;
+  --chip-edge: 50%;
+  --chip-neutral-bg: transparent;
+  --chip-neutral-border: var(--border-strong);
+  --chip-primary-bg: color-mix(in srgb, var(--primary-ink) var(--chip-fill), transparent);
+  --chip-primary-border: color-mix(in srgb, var(--primary-ink) var(--chip-edge), transparent);
+  --chip-positive-bg: color-mix(in srgb, var(--positive-ink) var(--chip-fill), transparent);
+  --chip-positive-border: color-mix(in srgb, var(--positive-ink) var(--chip-edge), transparent);
+  --chip-info-bg: color-mix(in srgb, var(--accent-info-ink) var(--chip-fill), transparent);
+  --chip-info-border: color-mix(in srgb, var(--accent-info-ink) var(--chip-edge), transparent);
+  --chip-warn-bg: color-mix(in srgb, var(--accent-warn-ink) var(--chip-fill), transparent);
+  --chip-warn-border: color-mix(in srgb, var(--accent-warn-ink) var(--chip-edge), transparent);
+  --chip-error-bg: color-mix(in srgb, var(--accent-error-ink) var(--chip-fill), transparent);
+  --chip-error-border: color-mix(in srgb, var(--accent-error-ink) var(--chip-edge), transparent);
+}
+
 /* Geometry. A `[data-brand]` scope is a theme root of its own, so it restarts
  * from these defaults (and from the scale-ups below) rather than inheriting
- * whatever an ancestor computed — `--control-radius` in particular is derived
- * from `--radius` and has to be recomputed wherever `--radius` may change. */
+ * whatever an ancestor computed. */
 :where(:root, [data-brand]) {
-  --radius: 0.375rem; /* 6px on mobile; bumped to 8px ≥ sm (see @media below) */
+  --radius: 0.375rem; /* panels and menus */
   /* control geometry, so a consumer reshapes every button/input at once */
-  --control-radius: calc(var(--radius) - 2px);
+  --control-radius: 0.25rem;
+  --chip-radius: 0.25rem;
+  /* u2 is flat: depth is surface steps and hairlines. Never `none` — inside
+   * Tailwind's comma-separated box-shadow list it invalidates the whole
+   * declaration, and the focus ring goes with it. */
+  --depth-card: 0 0 #0000;
+  --depth-elevated: 0 0 #0000;
+  --depth-overlay: 0 0 #0000;
   --control-py: 0.5rem;
   /* the Xl (call-to-action) button reads all three */
   --control-px: 2rem;
@@ -637,11 +728,10 @@
   --ev-shell-offset: 0px;
 }
 
-/* Mobile-first scale-ups: roomier gutters + slightly larger radii on bigger
-   viewports. Lives here (not per-component) so every consumer scales alike. */
+/* Mobile-first scale-ups: roomier gutters on bigger viewports. Lives here (not
+   per-component) so every consumer scales alike. */
 @media (min-width: 640px) {
   :where(:root, [data-brand]) {
-    --radius: 0.5rem;
     --page-px: 1.5rem;
   }
 }

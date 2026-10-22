@@ -19,7 +19,7 @@ export function references(value: string): string[] {
 }
 
 /** The rule the derived tokens live on — see `theme.css`, the contract half of `tokens.css`. */
-export const DERIVED_SCOPE = ":where(:root, .dark, .light, [data-brand])";
+export const DERIVED_SCOPE = ":where(:root, .dark, .light, [data-brand], [data-theme])";
 
 export interface CssRule {
   selector: string;
