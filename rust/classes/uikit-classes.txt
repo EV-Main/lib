@@ -132,12 +132,14 @@ bg-hover
 bg-hover animate-pulse rounded-md
 bg-hover text-ink rounded-md
 bg-ink text-background animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-fit rounded-md px-3 py-1.5 text-xs text-balance
+bg-ink/14
+bg-ink/14 relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5
+bg-ink/14 relative h-2 w-full overflow-hidden rounded-full
 bg-input relative !m-0 self-stretch shrink-0 data-[orientation=vertical]:h-auto
 bg-muted
 bg-muted flex items-center gap-2 rounded-md border border-border px-4 text-sm font-medium shadow-xs [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4
 bg-muted flex size-full items-center justify-center rounded-full
 bg-muted mx-auto mt-4 h-2 w-[100px] shrink-0 rounded-full
-bg-muted relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5
 bg-muted text-ink
 bg-muted text-ink flex size-10 shrink-0 items-center justify-center rounded-lg [&_svg:not([class*='size-'])]:size-6
 bg-muted text-ink-soft inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]
@@ -162,8 +164,6 @@ bg-primary text-on-primary
 bg-primary text-on-primary hover:bg-primary/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 bg-primary-ink absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full
 bg-primary-ink h-full w-full flex-1 transition-all
-bg-primary-ink/20
-bg-primary-ink/20 relative h-2 w-full overflow-hidden rounded-full
 bg-secondary group-data-[variant=floating]:border-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm
 bg-secondary text-ink flex h-full w-(--sidebar-width) flex-col
 bg-secondary text-on-secondary hover:bg-secondary/80 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring

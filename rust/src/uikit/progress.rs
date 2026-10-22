@@ -39,7 +39,7 @@ mod tests {
 		let html = render(app);
 		assert!(html.contains("data-slot=\"progress\""), "{html}");
 		assert!(html.contains("role=\"progressbar\""), "{html}");
-		assert!(html.contains("bg-primary-ink/20"), "{html}");
+		assert!(html.contains("bg-ink/14"), "{html}");
 	}
 
 	#[test]

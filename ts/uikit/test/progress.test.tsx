@@ -6,7 +6,7 @@ describe("Progress", () => {
   it("renders the base, slot and role", () => {
     const { getByRole } = render(<Progress />);
     const el = getByRole("progressbar");
-    expect(el).toHaveClass("bg-primary-ink/20");
+    expect(el).toHaveClass("bg-ink/14");
     expect(el).toHaveAttribute("data-slot", "progress");
   });
 
