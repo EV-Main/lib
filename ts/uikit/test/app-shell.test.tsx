@@ -91,7 +91,8 @@ describe("PageHeading / SectionLabel", () => {
 
   it("labels in two tones, on any element", () => {
     const { container } = render(<SectionLabel as="h2" tone="accent">Portfolio</SectionLabel>);
-    expect(container.querySelector("h2")).toHaveClass("text-primary-ink", "uppercase");
+    expect(container.querySelector("h2")).toHaveClass("text-primary-ink");
+    expect(container.querySelector("h2")).not.toHaveClass("uppercase");
   });
 });
 

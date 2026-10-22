@@ -10,14 +10,14 @@ export interface SectionLabelProps extends React.HTMLAttributes<HTMLElement> {
   tone?: SectionLabelTone;
 }
 
-/** The tracked-uppercase label above a figure, a group or a section. */
+/** The quiet label above a figure, a group or a section; no case change, no tracking. */
 export function SectionLabel({ as: Comp = "p", tone = "muted", className, ...props }: SectionLabelProps) {
   return (
     <Comp
       data-slot="section-label"
       className={cn(
-        "text-xs font-semibold uppercase tracking-widest",
-        tone === "accent" ? "text-primary-ink" : "text-ink-soft",
+        "text-body-s",
+        tone === "accent" ? "font-medium text-primary-ink" : "px-2 py-1 text-ink-soft",
         className,
       )}
       {...props}

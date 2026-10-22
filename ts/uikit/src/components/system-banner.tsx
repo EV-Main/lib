@@ -4,7 +4,7 @@ import * as React from "react";
 import { cn } from "../lib/cn";
 import { CloseIcon, InfoIcon, TriangleAlertIcon } from "./shell-icons";
 
-export type SystemBannerTone = "warn" | "info";
+export type SystemBannerTone = "neutral" | "primary" | "info" | "warn";
 
 export interface SystemBannerLabels {
   /** The close button. Default `"Dismiss"`. */
@@ -12,7 +12,7 @@ export interface SystemBannerLabels {
 }
 
 export interface SystemBannerProps extends Omit<React.ComponentProps<"div">, "title"> {
-  /** `warn` — a platform state (maintenance, read-only); `info` — an announcement. */
+  /** `warn` — a platform state (maintenance, read-only); `info` — an announcement. Only the icon carries the tone. */
   tone?: SystemBannerTone;
   /** Bold lead before the message. */
   title?: React.ReactNode;
@@ -20,12 +20,16 @@ export interface SystemBannerProps extends Omit<React.ComponentProps<"div">, "ti
   icon?: React.ReactNode;
   /** Shows a close button; remembering the dismissal is the caller's. */
   onDismiss?: () => void;
+  /** A link or button after the message. */
+  action?: React.ReactNode;
   labels?: SystemBannerLabels;
 }
 
-const TONE: Record<SystemBannerTone, string> = {
-  warn: "border-accent-warn/40 bg-accent-warn/10 text-accent-warn",
-  info: "border-border bg-card text-ink",
+const ICON_TONE: Record<SystemBannerTone, string> = {
+  neutral: "text-ink-soft",
+  primary: "text-primary-ink",
+  info: "text-accent-info-ink",
+  warn: "text-accent-warn-ink",
 };
 
 /**
@@ -38,6 +42,7 @@ export function SystemBanner({
   title,
   icon,
   onDismiss,
+  action,
   labels = {},
   className,
   children,
@@ -50,23 +55,25 @@ export function SystemBanner({
       data-slot="system-banner"
       data-tone={tone}
       role="status"
-      className={cn("flex items-start gap-2.5 rounded-lg border px-4 py-2.5 text-sm", TONE[tone], className)}
+      className={cn(
+        "relative flex min-h-8 items-center justify-center gap-2 border-b border-border bg-card py-1.5 pl-4 pr-10 text-center text-body text-ink",
+        className,
+      )}
       {...props}
     >
-      {glyph !== null && <span className="mt-0.5 flex shrink-0">{glyph}</span>}
-      <div className="min-w-0 flex-1">
-        {title !== undefined && <span className="font-semibold">{title}</span>}
+      {glyph !== null && <span className={cn("flex shrink-0", ICON_TONE[tone])}>{glyph}</span>}
+      <div className="min-w-0">
+        {title !== undefined && <span className="font-medium">{title}</span>}
         {title !== undefined && children !== undefined && " — "}
-        {children !== undefined && (
-          <span className={cn(title !== undefined && tone === "info" && "text-ink-soft")}>{children}</span>
-        )}
+        {children !== undefined && <span className={cn(title !== undefined && "text-ink-mid")}>{children}</span>}
       </div>
+      {action !== undefined && <span className="shrink-0">{action}</span>}
       {onDismiss && (
         <button
           type="button"
           aria-label={labels.dismiss ?? "Dismiss"}
           onClick={onDismiss}
-          className="-mr-1 shrink-0 rounded-md p-0.5 opacity-70 outline-none transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring"
+          className="absolute right-3 top-1/2 flex size-5 -translate-y-1/2 items-center justify-center rounded-(--control-radius) text-ink-mid outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring"
         >
           <CloseIcon className="size-4" />
         </button>
