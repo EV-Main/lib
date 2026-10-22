@@ -57,11 +57,23 @@ const demoRules = readRules(
 );
 const at = `[data-brand="${demoBrand}"]`;
 
-const EV = scopeOf(readRules(sheet), ':where(:root, [data-brand="ev"])', "ev");
-// Every palette the kit measures, in every polarity it declares. EV is
+const sheetRules = readRules(sheet);
+// EV's rules do not match inside another brand's scope or on its element.
+const NOT_A_BRAND = ':not([data-brand]:not([data-brand="ev"]), [data-brand]:not([data-brand="ev"]) *)';
+const EV_DARK_SELECTOR = `:where(:is(:root, [data-brand="ev"], .dark)${NOT_A_BRAND})`;
+const EV_LIGHT_SELECTOR = `:where(.light${NOT_A_BRAND})`;
+const EV_OLDSCHOOL_SELECTOR = ':where([data-theme="oldschool"], [data-theme="oldschool"] :is(.light, .dark))';
+const FACES_SELECTOR = ":where([data-theme], [data-brand], .light, .dark, :root)";
+
+const EV_DARK = scopeOf(sheetRules, EV_DARK_SELECTOR, "ev dark");
+const EV_LIGHT = scopeOf(sheetRules, EV_LIGHT_SELECTOR, "ev light");
+const EV_OLDSCHOOL = scopeOf(sheetRules, EV_OLDSCHOOL_SELECTOR, "ev oldschool");
+// Every palette the kit measures, in every polarity it declares. Oldschool is
 // single-polarity: one scope serves both classes.
 const scopes: Scope[] = [
-  EV,
+  EV_DARK,
+  EV_LIGHT,
+  EV_OLDSCHOOL,
   scopeOf(demoRules, `${at}, ${at}.light, ${at} .light`, `${demoBrand} light`),
   scopeOf(demoRules, `${at}.dark, ${at} .dark`, `${demoBrand} dark`),
 ];
@@ -75,7 +87,41 @@ function token(name: string, scope: Scope): string {
   return value.toLowerCase();
 }
 
-const derivedRule = readRules(sheet).find((r) => r.selector === DERIVED_SCOPE);
+const derivedRule = sheetRules.find((r) => r.selector === DERIVED_SCOPE);
+const facesRule = sheetRules.find((r) => r.selector === FACES_SELECTOR);
+
+/** The value a scope gives `--name`: its own, else the contract's formula. */
+function declared(name: string, scope: Scope): string {
+  const value = scope.rule.declarations.get(name) ?? derivedRule?.declarations.get(name) ?? facesRule?.declarations.get(name);
+  if (value === undefined) throw new Error(`--${name} is neither pinned in ${scope.label} nor derived by the contract`);
+  return value;
+}
+
+/**
+ * `--name` as it is seen over `surface` in `scope`: a flat hex, an 8-digit hex
+ * or an sRGB `color-mix` of tokens, resolved the way the browser does and
+ * composited onto the plane under it. A translucent line is only ever seen over
+ * whatever is below, so measuring it without the plane would lie.
+ */
+function paint(name: string, scope: Scope, surface: string): string {
+  return paintValue(declared(name, scope), scope, surface);
+}
+
+function paintValue(value: string, scope: Scope, surface: string): string {
+  const ref = /^var\(--([a-z0-9-]+)\)$/.exec(value);
+  if (ref?.[1]) return paint(ref[1], scope, surface);
+  if (value === "black") return "#000000";
+  if (value === "transparent") return surface;
+  if (/^#[0-9a-f]{6}$/i.test(value)) return value.toLowerCase();
+  const rgba = /^(#[0-9a-f]{6})([0-9a-f]{2})$/i.exec(value);
+  if (rgba?.[1] && rgba[2]) return composite(rgba[1].toLowerCase(), parseInt(rgba[2], 16) / 255, surface);
+  const mix = /^color-mix\(in srgb, (.+?) (\d+(?:\.\d+)?%|var\(--[a-z0-9-]+\)), (.+)\)$/.exec(value);
+  if (!mix?.[1] || !mix[2] || !mix[3]) throw new Error(`cannot paint ${value} in ${scope.label}`);
+  const amount = mix[2].startsWith("var(") ? declared(/--([a-z0-9-]+)/.exec(mix[2])?.[1] ?? "", scope) : mix[2];
+  const share = Number.parseFloat(amount) / 100;
+  const under = mix[3] === "transparent" ? surface : paintValue(mix[3], scope, surface);
+  return composite(paintValue(mix[1], scope, surface), share, under);
+}
 
 /**
  * `--ring` as painted in `scope`: the palette's own value when it pins one,
@@ -83,40 +129,17 @@ const derivedRule = readRules(sheet).find((r) => r.selector === DERIVED_SCOPE);
  * today) — so a retune of either side is what gets measured.
  */
 function ring(scope: Scope): string {
-  if (scope.rule.declarations.has("ring")) return token("ring", scope);
-  const formula = derivedRule?.declarations.get("ring");
-  const ref = formula && /^var\(--([a-z0-9-]+)\)$/.exec(formula);
-  if (!ref?.[1]) throw new Error(`the contract's --ring is not a plain reference: ${formula}`);
-  return token(ref[1], scope);
+  return paint("ring", scope, token("background", scope));
 }
 
-/**
- * A derived line token (`--input`, `--border`) as painted over `surface` in
- * `scope`: the palette's own hex when it pins one, else the contract's
- * `color-mix(in srgb, var(--ink) N%, transparent)` composited onto the surface
- * — the translucent line is only ever seen over whatever is under it.
- */
+/** A line or a tint (`--input`, `--border`, `--hover`) over `surface`. */
 function line(name: string, scope: Scope, surface: string): string {
-  if (scope.rule.declarations.has(name)) return token(name, scope);
-  const formula = derivedRule?.declarations.get(name);
-  const mix = formula && /^color-mix\(in srgb, var\(--([a-z0-9-]+)\) (\d+(?:\.\d+)?)%, transparent\)$/.exec(formula);
-  if (!mix?.[1] || !mix[2]) throw new Error(`the contract's --${name} is not an ink mix: ${formula}`);
-  return composite(token(mix[1], scope), Number(mix[2]) / 100, surface);
+  return paint(name, scope, surface);
 }
 
-/**
- * A derived ink (`--accent-error-ink`) as painted in `scope`: the palette's own
- * hex when it pins one, else the contract's
- * `color-mix(in srgb, var(--a) N%, var(--b))` resolved against the palette —
- * two opaque colours, so the mix is the same sRGB blend as `composite`.
- */
+/** A derived ink (`--accent-error-ink`): two opaque colours, so no plane shows through. */
 function derivedInk(name: string, scope: Scope): string {
-  if (scope.rule.declarations.has(name)) return token(name, scope);
-  const formula = derivedRule?.declarations.get(name);
-  const mix =
-    formula && /^color-mix\(in srgb, var\(--([a-z0-9-]+)\) (\d+(?:\.\d+)?)%, var\(--([a-z0-9-]+)\)\)$/.exec(formula);
-  if (!mix?.[1] || !mix[2] || !mix[3]) throw new Error(`the contract's --${name} is not a mix of two tokens: ${formula}`);
-  return composite(token(mix[1], scope), Number(mix[2]) / 100, token(mix[3], scope));
+  return paint(name, scope, token("background", scope));
 }
 
 function luminance(hex: string): number {
@@ -274,32 +297,115 @@ describe.each(scopes)("palette $label", (scope) => {
 
   // A track is a shape under a shape, so it owes two floors at once: the moving
   // part reads on it (3:1) and it reads against the plane it sits on (~1.3:1, or
-  // the UI goes flat). Both pairs are painted by the class tables, so the classes
-  // are asserted alongside the numbers they were chosen for.
+  // the UI goes flat). Both are painted by the class tables, so the classes are
+  // asserted alongside the numbers they were chosen for. The u2 planes sit only
+  // 1.10:1 apart, so a `bg-muted` track would vanish: it is 14 % of the ink.
   describe("slider and progress tracks", () => {
-    it("the slider range is the ink on a muted track", () => {
+    const track = (surface: string) => composite(t("ink"), 0.14, t(surface));
+
+    it("the slider range is the ink on a 14% ink track", () => {
       expect(SLIDER_RANGE).toMatch(/\bbg-primary-ink\b/);
-      expect(SLIDER_TRACK).toMatch(/\bbg-muted\b/);
-      expect(contrast(t("primary-ink"), t("muted"))).toBeGreaterThanOrEqual(3);
-      expect(contrast(t("muted"), t("card"))).toBeGreaterThanOrEqual(1.3);
+      expect(SLIDER_TRACK).toMatch(/\bbg-ink\/14\b/);
+      for (const surface of ["background", "card"]) {
+        expect(contrast(t("primary-ink"), track(surface))).toBeGreaterThanOrEqual(3);
+        expect(contrast(track(surface), t(surface))).toBeGreaterThanOrEqual(1.3);
+      }
     });
 
-    it("the progress indicator is the ink on a 20% tint of itself, composited on card", () => {
+    it("the progress indicator is the ink on the same track", () => {
       expect(PROGRESS_INDICATOR).toMatch(/\bbg-primary-ink\b/);
-      expect(PROGRESS_TRACK).toMatch(/\bbg-primary-ink\/20\b/);
-      const track = composite(t("primary-ink"), 0.2, t("card"));
-      expect(contrast(t("primary-ink"), track)).toBeGreaterThanOrEqual(3);
-      expect(contrast(track, t("card"))).toBeGreaterThanOrEqual(1.3);
+      expect(PROGRESS_TRACK).toMatch(/\bbg-ink\/14\b/);
+      for (const surface of ["background", "card"]) {
+        expect(contrast(t("primary-ink"), track(surface))).toBeGreaterThanOrEqual(3);
+        expect(contrast(track(surface), t(surface))).toBeGreaterThanOrEqual(1.3);
+      }
     });
   });
-});
 
-describe("EV", () => {
-  // The documented exception, pinned so it stays one: a fill on muted is
-  // identified by its on-primary mark, never as a bare shape. Should a retune
-  // ever clear 3:1 here, the spec's list of surfaces is what should change.
-  it("the fill is under the floor on muted (the spec's stated exception)", () => {
-    expect(contrast(token("primary", EV), token("muted", EV))).toBeLessThan(3);
+  // 1.0: the planes are flat steps (1.04-1.14:1), so what separates them is the
+  // hairline. AGENTS.md states the floor as the hairline's, not the planes'.
+  describe("planes are separated by a hairline", () => {
+    it.each(["background", "secondary", "card", "popover"])("--border reads against %s (>= 1.3:1)", (surface) => {
+      expect(contrast(line("border", scope, t(surface)), t(surface))).toBeGreaterThanOrEqual(1.3);
+    });
+  });
+
+  describe("text tiers", () => {
+    it.each(["background", "secondary", "card", "popover"])("ink-mid and ink-soft read on %s (AA text)", (surface) => {
+      expect(contrast(line("ink-mid", scope, t(surface)), t(surface))).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(line("ink-soft", scope, t(surface)), t(surface))).toBeGreaterThanOrEqual(4.5);
+    });
+
+    it.each(["card", "popover"])("the label reads on a hovered, pressed or selected row of %s (AA text)", (surface) => {
+      for (const state of ["hover", "active", "selected"]) {
+        expect(contrast(t("ink"), line(state, scope, t(surface)))).toBeGreaterThanOrEqual(4.5);
+      }
+    });
+
+    it.each(["positive-ink", "accent-info-ink", "accent-warn-ink", "accent-error-ink"])("%s reads as text on the planes (AA text)", (name) => {
+      for (const surface of ["background", "card", "popover"]) {
+        expect(contrast(paint(name, scope, t(surface)), t(surface))).toBeGreaterThanOrEqual(4.5);
+      }
+    });
+
+    it("the solid primary hover still carries the label (AA text)", () => {
+      expect(contrast(t("on-primary"), paint("primary-hover", scope, t("card")))).toBeGreaterThanOrEqual(4.5);
+    });
+  });
+
+  // 1.0 Button faces. Each is a background that may be translucent, a hover
+  // painted over it, an edge and a label; all four are resolved over the plane
+  // the button sits on.
+  describe("button faces", () => {
+    const faces = ["primary", "danger"] as const;
+
+    it.each(faces)("the %s label reads on the face and on its hover (AA text)", (face) => {
+      for (const surface of ["background", "secondary", "card", "popover"]) {
+        const plane = t(surface);
+        const bg = paint(`button-${face}-bg`, scope, plane);
+        const hover = paint(`button-${face}-hover`, scope, bg);
+        const ink = paint(`button-${face}-ink`, scope, bg);
+        expect(contrast(ink, bg)).toBeGreaterThanOrEqual(4.5);
+        expect(contrast(paint(`button-${face}-ink`, scope, hover), hover)).toBeGreaterThanOrEqual(4.5);
+      }
+    });
+
+    it.each(faces)("the %s edge reads against the plane (non-text 3:1)", (face) => {
+      for (const surface of ["background", "secondary", "card", "popover"]) {
+        const plane = t(surface);
+        expect(contrast(paint(`button-${face}-border`, scope, plane), plane)).toBeGreaterThanOrEqual(3);
+      }
+    });
+  });
+
+  // 1.0 Chips. A tinted fill (or none) and an edge in the role's hue, with the
+  // role's ink as the label. Only the label owes AA; the edge is decoration.
+  describe("chip tints", () => {
+    const tones = [
+      ["neutral", "ink-mid"],
+      ["primary", "primary-ink"],
+      ["positive", "positive-ink"],
+      ["info", "accent-info-ink"],
+      ["warn", "accent-warn-ink"],
+      ["error", "accent-error-ink"],
+    ] as const;
+
+    // background and card, as for the other text inks: Oldschool's teal ink is
+    // 4.52:1 on its popover bare, so no tint can sit under it.
+    it.each(tones)("the %s label reads on its fill over the planes (AA text)", (tone, ink) => {
+      for (const surface of ["background", "card"]) {
+        const plane = t(surface);
+        const fill = paint(`chip-${tone}-bg`, scope, plane);
+        expect(contrast(paint(ink, scope, fill), fill)).toBeGreaterThanOrEqual(4.5);
+      }
+    });
+  });
+
+  describe("scrim", () => {
+    it("darkens the page behind a modal", () => {
+      const page = t("background");
+      expect(luminance(paint("scrim", scope, page))).toBeLessThan(luminance(page));
+    });
   });
 });
 
@@ -382,17 +488,96 @@ describe("list rows ring their keyboard focus", () => {
 describe("the contract half of the sheet", () => {
   const rules = readRules(sheet);
 
-  it("derives the lines, hover and secondary ink rather than asking a palette for them", () => {
-    expect([...contract.derived].sort()).toEqual(["accent-error-ink", "border", "hover", "ink-mid", "ink-soft", "input", "ring"]);
+  it("derives the states, lines, inks and status inks rather than asking a palette for them", () => {
+    expect([...contract.derived].sort()).toEqual([
+      "accent-error-ink",
+      "accent-info-ink",
+      "accent-warn-ink",
+      "active",
+      "border",
+      "border-strong",
+      "border-subtle",
+      "hover",
+      "ink-faint",
+      "ink-mid",
+      "ink-soft",
+      "input",
+      "positive-ink",
+      "primary-border",
+      "primary-hover",
+      "ring",
+      "scrim",
+      "selected",
+    ]);
+  });
+
+  it("derives the button faces and chips for a brand that pins none", () => {
+    const names = [...(facesRule?.declarations.keys() ?? [])];
+    expect(names).toEqual(
+      expect.arrayContaining([
+        "button-primary-bg",
+        "button-primary-hover",
+        "button-primary-border",
+        "button-primary-ink",
+        "button-danger-bg",
+        "button-danger-hover",
+        "button-danger-border",
+        "button-danger-ink",
+        "chip-neutral-bg",
+        "chip-primary-border",
+        "chip-error-bg",
+      ]),
+    );
   });
 
   it("the focus ring is the ink", () => {
     expect(sheet).toMatch(/^\s*--ring:\s*var\(--primary-ink\);/m);
   });
 
-  it("leaves both polarity classes to the palettes (EV binds neither)", () => {
+  // EV binds both polarity classes now, so its pins would reach a brand's own
+  // `.light` / `.dark` subtree (and a brand element that carries the class
+  // itself) unless the rules stay out of every brand but EV.
+  it("keeps EV's polarity rules out of a brand's subtree and off its element", () => {
     const palettes = rules.filter((r) => r.declarations.has("background"));
-    expect(palettes.map((r) => r.selector)).toEqual([':where(:root, [data-brand="ev"])']);
+    expect(palettes.map((r) => r.selector)).toEqual([EV_DARK_SELECTOR, EV_LIGHT_SELECTOR, EV_OLDSCHOOL_SELECTOR]);
+    for (const selector of [EV_DARK_SELECTOR, EV_LIGHT_SELECTOR]) {
+      expect(selector).toContain('[data-brand]:not([data-brand="ev"]) *');
+      expect(selector).toContain('[data-brand]:not([data-brand="ev"])');
+      expect(selector.startsWith(":where(")).toBe(true);
+    }
+  });
+
+  // A nested wrapper replaces its parent's theme only if it sets everything the
+  // parent set; a token it leaves out would show through from the wrapper above.
+  it("pins the same tokens in Dark and Light, and all of them in Oldschool", () => {
+    const dark = [...EV_DARK.rule.declarations.keys()].sort();
+    expect([...EV_LIGHT.rule.declarations.keys()].sort()).toEqual(dark);
+    expect(dark.filter((n) => !EV_OLDSCHOOL.rule.declarations.has(n))).toEqual([]);
+  });
+
+  it("gives Oldschool its shapes and depth, and leaves Dark and Light flat and square", () => {
+    for (const shape of ["radius", "control-radius", "chip-radius", "depth-card", "depth-elevated", "depth-overlay"]) {
+      expect(EV_OLDSCHOOL.rule.declarations.has(shape)).toBe(true);
+      expect(EV_DARK.rule.declarations.has(shape)).toBe(false);
+    }
+    expect(EV_OLDSCHOOL.rule.declarations.get("chip-radius")).toBe("9999px");
+  });
+
+  // `none` inside Tailwind's comma-separated box-shadow list invalidates the
+  // whole declaration, and the focus ring is in that list.
+  it("makes the flat depth a zero shadow, never `none`", () => {
+    const geometry = rules.find((r) => r.selector === ":where(:root, [data-brand])");
+    for (const tier of ["card", "elevated", "overlay"]) {
+      expect(geometry?.declarations.get(`depth-${tier}`)).toBe("0 0 #0000");
+    }
+    expect(sheet).toMatch(/--shadow-overlay:\s*var\(--depth-overlay\);/);
+  });
+
+  it("styles the text scale with a line height each", () => {
+    for (const step of ["caption", "body-s", "body", "body-l", "h3", "h2", "h1", "figure-m", "figure-l"]) {
+      expect(sheet).toMatch(new RegExp(`--text-${step}:\\s*[\\d.]+rem;`));
+      expect(sheet).toMatch(new RegExp(`--text-${step}--line-height:\\s*[\\d.]+rem;`));
+    }
   });
 
   it("scales the geometry up on a brand scope as it does on the root", () => {

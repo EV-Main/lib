@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, it, expect } from "vitest";
 
-import { brandFromToml, PaletteError, parseToml, readContract, readRules, renderPalette, type BrandConfig } from "../src/palette";
+import { brandFromToml, DERIVED_SCOPE, PaletteError, parseToml, readContract, readRules, renderPalette, type BrandConfig } from "../src/palette";
 
 const sheet = readFileSync(join(process.cwd(), "styles/tokens.css"), "utf8");
 const contract = readContract(sheet);
@@ -26,9 +26,21 @@ describe("readContract", () => {
   it("reads the colour names off the sheet's @theme mapping", () => {
     expect(contract.required).toContain("background");
     expect(contract.required).toContain("primary-ink");
-    expect(contract.required).toContain("chart-5");
+    expect(contract.required).toContain("chart-6");
     expect(contract.required).not.toContain("border");
-    expect(contract.required).toHaveLength(28);
+    expect(contract.required).toHaveLength(29);
+  });
+
+  it("owes no state, line or status-ink token: the contract derives them", () => {
+    for (const name of ["active", "selected", "scrim", "ink-faint", "border-subtle", "border-strong", "primary-hover", "primary-border", "positive-ink", "accent-info-ink", "accent-warn-ink"]) {
+      expect(contract.derived).toContain(name);
+      expect(contract.required).not.toContain(name);
+    }
+  });
+
+  it("reads the derived rule on every scope a theme or a palette can be declared on", () => {
+    expect(DERIVED_SCOPE).toBe(":where(:root, .dark, .light, [data-brand], [data-theme])");
+    expect(readRules(sheet).some((r) => r.selector === DERIVED_SCOPE)).toBe(true);
   });
 
   it("refuses a sheet that is not the kit's contract", () => {
@@ -95,8 +107,8 @@ describe("brandFromToml + renderPalette", () => {
       .join("\n");
     const found = problems(() => renderPalette("aquafix", brandFromToml(aquafix), contract));
     expect(found).toEqual([
-      "light is missing primary-ink, chart-1, chart-2, chart-3, chart-4, chart-5",
-      "dark is missing primary-ink, chart-1, chart-2, chart-3, chart-4, chart-5",
+      "light is missing primary-ink, chart-1, chart-2, chart-3, chart-4, chart-5, chart-6",
+      "dark is missing primary-ink, chart-1, chart-2, chart-3, chart-4, chart-5, chart-6",
     ]);
   });
 
