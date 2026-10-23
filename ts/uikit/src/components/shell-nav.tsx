@@ -185,7 +185,7 @@ function ShellNavRow({ item, state, row }: { item: NavItem; state: NavItemState;
         ROW,
         NAV_FOCUS,
         state.active ? "font-semibold text-on-primary" : "font-medium text-ink hover:bg-hover",
-        item.disabled && "cursor-not-allowed opacity-50 hover:bg-transparent",
+        item.disabled && "cursor-not-allowed opacity-40 hover:bg-transparent",
       )}
     >
       {row.renderItem ? (
