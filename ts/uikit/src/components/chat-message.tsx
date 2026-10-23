@@ -8,9 +8,9 @@ import { UiIcon } from "./ui-icons";
 export type ChatBubbleVariant = "user" | "assistant" | "muted";
 
 const BUBBLE: Record<ChatBubbleVariant, string> = {
-  user: "max-w-[420px] rounded-lg border border-border bg-secondary px-3.5 py-2.5",
+  user: "max-w-105 rounded-lg border border-border bg-secondary px-3.5 py-2.5",
   assistant: "py-0.5",
-  muted: "max-w-[420px] rounded-lg border border-border-subtle bg-muted px-3.5 py-2.5",
+  muted: "max-w-105 rounded-lg border border-border-subtle bg-muted px-3.5 py-2.5",
 };
 
 export interface ChatBubbleProps extends React.ComponentProps<"div"> {
@@ -64,7 +64,7 @@ export function ChatMessage({ role, name, time, avatar, compact = false, classNa
           )}
         </div>
       )}
-      <div className={cn("flex min-w-0 flex-col gap-1.5", user ? "max-w-[420px] items-end" : "flex-1")}>
+      <div className={cn("flex min-w-0 flex-col gap-1.5", user ? "max-w-105 items-end" : "flex-1")}>
         {!compact && (name != null || time != null) && (
           <div className="flex items-baseline gap-2">
             {name != null && <span className="text-body-s font-medium text-ink">{name}</span>}
@@ -97,7 +97,7 @@ export function ChatMarker(allProps: ChatMarkerProps) {
   if (allProps.type === "separator") {
     const { type: _type, className, children, ...rest } = allProps;
     return (
-      <div data-slot="chat-marker" data-type="separator" role="separator" className={cn("flex items-center gap-3", className)} {...rest}>
+      <div data-slot="chat-marker" data-type="separator" className={cn("flex items-center gap-3", className)} {...rest}>
         <span className="h-px flex-1 bg-border" />
         <span className="text-caption text-ink-soft">{children}</span>
         <span className="h-px flex-1 bg-border" />
@@ -131,7 +131,7 @@ export function ChatMarker(allProps: ChatMarkerProps) {
       data-state={state}
       className={cn(
         "flex items-center gap-2.5 rounded-(--control-radius) border bg-card px-2.5 py-2",
-        state === "error" ? "border-(--chip-error-border)" : "border-border",
+        state === "error" ? "border-chip-error-border" : "border-border",
         className,
       )}
       {...rest}

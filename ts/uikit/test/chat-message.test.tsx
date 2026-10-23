@@ -82,7 +82,9 @@ describe("ChatMarker", () => {
 
   it("draws a labelled separator", () => {
     render(<ChatMarker type="separator">Today</ChatMarker>);
-    expect(screen.getByRole("separator")).toHaveTextContent("Today");
+    // No separator role: it would hide the label from assistive tech.
+    expect(screen.getByText("Today")).toBeVisible();
+    expect(screen.queryByRole("separator")).toBeNull();
   });
 });
 
