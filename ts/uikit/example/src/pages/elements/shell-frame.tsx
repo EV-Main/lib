@@ -117,7 +117,7 @@ function DemoPage({ pathname }: { pathname: string }) {
       title={pathname === "/" ? "Home" : pathname}
       description="Sections arrive in sequence by CSS alone."
       appBar={<MobileAppBar title={pathname} hideFrom="lg" />}
-      actions={<Button variant="outline" size="sm">Export</Button>}
+      actions={<Button variant="secondary" size="sm">Export</Button>}
     >
       <Card>
         <CardHeader>
@@ -125,7 +125,7 @@ function DemoPage({ pathname }: { pathname: string }) {
         </CardHeader>
         <CardContent>
           <Settled loading={loading} skeleton={<Skeleton className="h-8 w-40" />}>
-            <p className="text-ink text-2xl font-semibold tabular-nums">12 480.00</p>
+            <p className="font-display text-figure-l text-ink font-light tabular-nums">12 480.00</p>
           </Settled>
         </CardContent>
       </Card>
@@ -141,14 +141,14 @@ function DemoPage({ pathname }: { pathname: string }) {
           ]}
         />
         <Card className="flex-1">
-          <CardContent className="text-ink-soft pt-6 text-sm">Pane: {section}</CardContent>
+          <CardContent className="text-ink-soft pt-6 text-body">Pane: {section}</CardContent>
         </Card>
       </div>
     </PageFrame>
   );
 }
 
-export function ShellDemo() {
+export function ShellFrame() {
   const { pathname, Link } = useFakeRouter();
   const [announce, setAnnounce] = useState(true);
   return (
@@ -165,7 +165,7 @@ export function ShellDemo() {
             start={<span className="text-ink font-semibold">ACME</span>}
             end={
               <>
-                <span className="text-ink-soft text-sm">123 tokens</span>
+                <span className="text-ink-soft text-body">123 tokens</span>
                 <AccountMenu
                   account={{ name: "Ada Lovelace", email: "ada@example.com" }}
                   manageHref="#account-center"

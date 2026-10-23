@@ -58,7 +58,7 @@ function useInvestorSearch(query: string) {
  * "ch", wait for the rows, ArrowDown / Enter picks one; the highlight lands on
  * the first row when results arrive.
  */
-export function CommandDemo() {
+export function CommandSearch() {
   const [query, setQuery] = useState("");
   const [picked, setPicked] = useState<string | null>(null);
   const { rows, loading } = useInvestorSearch(query);
