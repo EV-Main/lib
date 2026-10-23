@@ -5,10 +5,6 @@ import {
   AccountMenu,
   Badge,
   IconButton,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
   type NavGroup,
 } from "@evinvest/uikit";
 import { GlobeIcon, MoonIcon, MoreIcon, SlidersIcon } from "../../gallery/icons";
@@ -73,18 +69,13 @@ function Menu() {
         darkTheme: { label: "Dark theme", checked: theme === "dark", onCheckedChange: (on) => setTheme(on ? "dark" : "light") },
         colorTheme: {
           label: "Color theme",
-          control: (
-            <Select value={theme} onValueChange={(v) => (v === "dark" || v === "light" || v === "oldschool") && setTheme(v)}>
-              <SelectTrigger className="w-full" aria-label="Color theme">
-                <span className="capitalize">{theme}</span>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="dark">Dark</SelectItem>
-                <SelectItem value="light">Light</SelectItem>
-                <SelectItem value="oldschool">Oldschool</SelectItem>
-              </SelectContent>
-            </Select>
-          ),
+          value: theme,
+          options: [
+            { id: "dark", label: "Dark" },
+            { id: "light", label: "Light" },
+            { id: "oldschool", label: "Oldschool" },
+          ],
+          onValueChange: (v) => (v === "dark" || v === "light" || v === "oldschool") && setTheme(v),
         },
         icons: { language: <GlobeIcon />, darkTheme: <MoonIcon /> },
       }}
