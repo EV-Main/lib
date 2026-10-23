@@ -12,7 +12,7 @@ import {
 import { Block, PageRoot } from "../../gallery/ui";
 
 const BANNER_TONES: readonly SystemBannerTone[] = ["info", "primary", "warn", "neutral"];
-const ALERTS: readonly AlertVariant[] = ["neutral", "info", "success", "destructive"];
+const ALERTS: readonly AlertVariant[] = ["neutral", "info", "positive", "warn", "error"];
 
 function Banners() {
   const [shown, setShown] = useState(true);

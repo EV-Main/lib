@@ -26,14 +26,12 @@ import {
 import { CopyIcon, SearchIcon } from "../../gallery/icons";
 import { Block, LIVE_STATES, Matrix, PageRoot, Specimen } from "../../gallery/ui";
 
-// fields name their 44 px size `lg`; Button and IconButton name it `touch`
-const SIZES = ["sm", "md", "lg"] as const;
-const COLUMNS = ["sm", "md", "touch (lg)"] as const;
+const SIZES = ["sm", "md", "touch"] as const;
 
 function InputMatrix() {
   return (
     <Matrix
-      columns={COLUMNS}
+      columns={SIZES}
       rows={[
         { label: "Placeholder", cells: SIZES.map((s) => <Input key={s} size={s} aria-label={`Placeholder ${s}`} placeholder="Search" className="w-36" />) },
         { label: "Filled", cells: SIZES.map((s) => <Input key={s} size={s} aria-label={`Filled ${s}`} defaultValue="2,398.73" className="w-36" />) },
@@ -59,7 +57,7 @@ function SelectMatrix() {
   );
   return (
     <Matrix
-      columns={COLUMNS}
+      columns={SIZES}
       rows={[
         { label: "Placeholder", cells: SIZES.map((s) => <span key={s}>{trigger(s, {})}</span>) },
         { label: "Filled", cells: SIZES.map((s) => <span key={s}>{trigger(s, { value: "usd" })}</span>) },
@@ -142,7 +140,7 @@ export default function InputsPage() {
       </Block>
       <Block title="Textarea">
         <Matrix
-          columns={COLUMNS}
+          columns={SIZES}
           rows={[
             { label: "Placeholder", cells: SIZES.map((s) => <Textarea key={s} size={s} aria-label={`Placeholder ${s}`} placeholder="Notes" className="w-36" />) },
             { label: "Disabled", cells: SIZES.map((s) => <Textarea key={s} size={s} aria-label={`Disabled ${s}`} defaultValue="Locked" disabled className="w-36" />) },

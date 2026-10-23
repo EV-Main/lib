@@ -1,4 +1,4 @@
-import type { ComponentType, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Card, CardContent, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@evinvest/uikit";
 
 /**
@@ -45,8 +45,8 @@ export function Block({
 /** A bordered plane that specimens sit on; `bg-card` is the first surface step. */
 export function Specimen({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <Card className={`gap-0 py-4 shadow-card ${className ?? ""}`}>
-      <CardContent className="flex flex-wrap items-center gap-3 px-4">{children}</CardContent>
+    <Card className={`gap-0 ${className ?? ""}`}>
+      <CardContent className="flex flex-wrap items-center gap-3">{children}</CardContent>
     </Card>
   );
 }
@@ -95,19 +95,4 @@ export const LIVE_STATES = "Hover, focus (Tab) and press are live on every speci
 
 export function Caption({ children }: { children: ReactNode }) {
   return <span className="text-caption text-ink-soft">{children}</span>;
-}
-
-/** Stands in for an element family that executor B has not exported yet. */
-export function waitingFor(name: string): ComponentType {
-  return function Waiting() {
-    return (
-      <PageRoot title={name} lede={`${name} is built by the component track and is not exported from the kit yet. This page fills in when it lands.`}>
-        <Block title="Status">
-          <Specimen>
-            <span className="text-body text-ink-mid">Waiting for the export.</span>
-          </Specimen>
-        </Block>
-      </PageRoot>
-    );
-  };
 }

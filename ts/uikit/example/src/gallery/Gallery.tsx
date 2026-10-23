@@ -6,7 +6,6 @@ import {
   AlertTitle,
   BottomTabBar,
   Label,
-  MobileAppBar,
   Select,
   SelectContent,
   SelectGroup,
@@ -17,11 +16,11 @@ import {
   ShellNav,
   Toaster,
   TooltipProvider,
-  TopBar,
   type NavGroup,
   type NavItem,
 } from "@evinvest/uikit";
 import { CompareView, SingleView } from "./ThemeScope";
+import { GalleryHeader } from "./GalleryHeader";
 import { ThemeSwitch } from "./ThemeSwitch";
 import { DEFAULT_ROUTE, navigate, useRoute } from "./router";
 import { ENTRIES, TIERS, entriesOf, entryPath, findEntry } from "./registry";
@@ -117,19 +116,18 @@ export function Gallery() {
         }
         tabBar={<BottomTabBar items={TAB_ITEMS} pathname={route} linkComponent={HashLink} />}
         topBar={
-          <TopBar
-            start={<span className="text-body text-ink-mid">{entry ? `${TIERS.find((t) => t.id === entry.tier)?.label} / ${entry.title}` : "Gallery"}</span>}
-            end={
-              <>
-                <CompareToggle compare={compare} />
-                <ThemeSwitch theme={theme} />
-              </>
-            }
+          <GalleryHeader
+            theme={theme}
+            compare={compare}
+            title={entry ? `${TIERS.find((t) => t.id === entry.tier)?.label} / ${entry.title}` : "Gallery"}
           />
         }
       >
-        <MobileAppBar title={<PageSelect route={route} />} right={<ThemeSwitch theme={theme} compact />} />
-        <div className="px-4 pt-3 lg:hidden">
+        <div className="border-border bg-background sticky top-0 z-30 flex flex-col gap-2 border-b px-4 py-2 lg:hidden">
+          <div className="flex items-center justify-between gap-2">
+            <PageSelect route={route} />
+            <ThemeSwitch theme={theme} compact />
+          </div>
           <CompareToggle compare={compare} />
         </div>
         {entry ? (
