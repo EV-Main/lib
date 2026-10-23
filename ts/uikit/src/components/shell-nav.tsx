@@ -40,6 +40,8 @@ export interface ShellNavProps
   /** Replaces a row's content (icon, label, badge); the link, `aria-current` and the marker stay the kit's. */
   renderItem?: (item: NavItem, state: NavItemState) => React.ReactNode;
   labels?: ShellNavLabels;
+  /** Makes every labelled group collapsible; a group's own `collapsible` wins. Default `false`. */
+  collapsible?: boolean;
 }
 
 // The ring is the solid token, never a tint — at 50% it composites under the 3:1
@@ -69,6 +71,7 @@ export function ShellNav({
   onItemIntent,
   onNavigate,
   labels = {},
+  collapsible = false,
   className,
   ...props
 }: ShellNavProps) {
@@ -85,6 +88,7 @@ export function ShellNav({
       pendingId={pendingId}
       pathname={pathname}
       labels={labels}
+      collapsible={collapsible}
       row={{ linkComponent, markPending, onItemIntent, onNavigate, renderItem, badgeLabel: labels.badge }}
     />
   );
@@ -133,6 +137,7 @@ function ShellNavSection({
   pathname,
   row,
   labels,
+  collapsible,
 }: {
   group: NavGroup;
   currentId: string | undefined;
@@ -140,6 +145,7 @@ function ShellNavSection({
   pathname: string;
   row: RowContext;
   labels: ShellNavLabels;
+  collapsible: boolean;
 }) {
   const body = React.useRef<HTMLDivElement>(null);
   const labelId = React.useId();
@@ -147,7 +153,7 @@ function ShellNavSection({
   const at = group.items.some((i) => i.id === currentId) ? (currentId ?? null) : null;
   const [open, setOpen] = useNavGroupOpen(group, at !== null);
   useSlideMarker(body, at);
-  const folds = group.collapsible === true && group.label !== undefined;
+  const folds = (group.collapsible ?? collapsible) && group.label !== undefined;
   const landing =
     group.href !== undefined &&
     navItemMatch({ id: group.id, href: group.href, label: "", match: "exact" }, pathname) !== null;

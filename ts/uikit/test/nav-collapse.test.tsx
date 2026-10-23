@@ -107,6 +107,28 @@ describe("ShellNav collapsible groups", () => {
     expect(getByRole("list", { name: "Plain" })).toBeInTheDocument();
   });
 
+  it("renders a group without the opt-in exactly as a static list", () => {
+    const groups: NavGroup[] = GROUPS.map(({ collapsible: _off, ...rest }) => rest);
+    const { queryAllByRole, container, getByRole } = render(
+      <ShellNav groups={groups} pathname="/docs/install" />,
+    );
+    expect(queryAllByRole("button")).toHaveLength(0);
+    expect(container.querySelector("[aria-expanded]")).toBeNull();
+    expect(container.querySelector('[data-slot="nav-collapse"]')).toBeNull();
+    expect(getByRole("link", { name: "Authentication" })).toBeInTheDocument();
+  });
+
+  it("collapses every labelled group from the nav prop, and a group can opt out", () => {
+    const groups: NavGroup[] = GROUPS.map(({ collapsible: _off, ...rest }) => rest);
+    const [first, ...others] = groups;
+    if (!first) throw new Error("fixture");
+    const { getByRole, queryByRole } = render(
+      <ShellNav groups={[{ ...first, collapsible: false }, ...others]} pathname="/guides/auth" collapsible />,
+    );
+    expect(queryByRole("button", { name: "Getting Started" })).toBeNull();
+    expect(getByRole("button", { name: "Guides" })).toHaveAttribute("aria-expanded", "true");
+  });
+
   it("removes every transition under reduced motion", () => {
     const { getByRole, container } = render(<ShellNav groups={GROUPS} pathname="/docs/install" />);
     const id = getByRole("button", { name: "Guides" }).getAttribute("aria-controls") ?? "";
@@ -129,5 +151,12 @@ describe("SectionNav collapsible groups", () => {
     );
     expect(getByRole("button", { name: "One" })).toHaveAttribute("aria-expanded", "false");
     expect(getByRole("button", { name: "Two" })).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("stays static without the opt-in", () => {
+    const { queryAllByRole } = render(
+      <SectionNav value="a" groups={[{ id: "g1", label: "One", items: [{ id: "a", label: "Alpha" }] }]} />,
+    );
+    expect(queryAllByRole("button").map((b) => b.getAttribute("aria-expanded"))).toEqual([null]);
   });
 });

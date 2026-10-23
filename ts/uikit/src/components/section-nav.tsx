@@ -43,6 +43,8 @@ export interface SectionNavProps extends Omit<React.ComponentProps<"nav">, "chil
   onValueChange?: (id: string) => void;
   linkComponent?: React.ElementType;
   labels?: SectionNavLabels;
+  /** Makes every labelled group collapsible; a group's own `collapsible` wins. Default `false`. */
+  collapsible?: boolean;
 }
 
 const ITEM =
@@ -60,6 +62,7 @@ export function SectionNav({
   onValueChange,
   linkComponent,
   labels = {},
+  collapsible = false,
   className,
   ...props
 }: SectionNavProps) {
@@ -78,6 +81,7 @@ export function SectionNav({
           onSelect={onValueChange}
           linkComponent={linkComponent}
           labels={labels}
+          collapsible={collapsible}
         />
       ))}
     </nav>
@@ -90,17 +94,19 @@ function SectionNavGroupView({
   onSelect,
   linkComponent,
   labels,
+  collapsible,
 }: {
   group: SectionNavGroup;
   value: string;
   onSelect: ((id: string) => void) | undefined;
   linkComponent: React.ElementType | undefined;
   labels: SectionNavLabels;
+  collapsible: boolean;
 }) {
   const labelId = React.useId();
   const regionId = React.useId();
   const [open, setOpen] = useNavGroupOpen(group, group.items.some((i) => i.id === value));
-  const folds = group.collapsible === true && group.label !== undefined;
+  const folds = (group.collapsible ?? collapsible) && group.label !== undefined;
   const rows = group.items.map((item) => (
     <SectionNavRow
       key={item.id}

@@ -81,7 +81,8 @@ export function NavCollapse({
       data-slot="nav-collapse"
       data-state={open ? "open" : "closed"}
       className={cn(
-        "grid transition-[grid-template-rows]",
+        // minmax(0, …): a plain `1fr` column grows to the widest label and the rail overflows.
+        "grid grid-cols-[minmax(0,1fr)] transition-[grid-template-rows]",
         MOTION,
         open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
       )}
