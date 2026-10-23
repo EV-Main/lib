@@ -33,6 +33,26 @@ Rust crate and its TypeScript mirror at once.
   `OrderBookRowProps`, `OrderFormRowProps`, `OrderFormSubmitProps`,
   `BookSide`, `OrderSide`, `TradesTapeRowProps`. The Rust terminal in
   `ev_lib::uikit` stays.
+- **Uikit 2.0 look** (`ev_lib` `uikit` and `@evinvest/uikit`): the kit follows
+  the new Figma page. Dark is EV's default, `.light` is Light, and the
+  pre-1.0 navy look is opt-in as `data-theme="oldschool"`. The planes are flat
+  steps separated by a hairline; panels are 6 px, controls and chips 4 px, and
+  the shadow tiers are a zero shadow outside Oldschool. A brand file must add
+  `chart-6` (29 names). `--font-playfair` is no longer read: the display face
+  is Source Serif 4 (`--font-source-serif`). Brands without their own
+  radius or depth take the u2 shapes. See the README's *Migrating 0.x → 1.0*.
+- **Variant names** (`ev_lib` `uikit` and `@evinvest/uikit`): `ButtonVariant`
+  is `Primary` (outline face, the default), `Secondary`, `Ghost`, `Solid`
+  (the filled call to action), `Danger` and `Link`; `Outline` and `Destructive`
+  are gone and the old filled `Primary` is `Solid`. `BadgeVariant` is
+  `Neutral`, `Primary`, `Positive`, `Info`, `Warn`, `Error`. `AlertVariant`
+  is `Neutral`, `Info`, `Positive`, `Warn`, `Error`. The menu item variant
+  `Destructive` is `Danger` (dropdown, context, menubar).
+- **Field sizes** (`@evinvest/uikit`): `Input`, `Textarea`, `SelectTrigger` and
+  `NativeSelect` take `sm | md | touch`; `lg` is gone. The shared `Size` scale
+  is 20, 24, 28, 32 px (`xs`, `sm`, `md`, `lg`), plus `touch` at 44 px.
+- **`@evinvest/kitstart`** moves to the new names: `outline` to `secondary`,
+  the filled CTAs to `solid`, large fields to `touch`.
 
 ### Added
 
@@ -48,13 +68,58 @@ Rust crate and its TypeScript mirror at once.
   caller it is not for — an `Empty` with a lock, a title, a description and an
   action slot (a guest's sign-in button; nothing, or "request access", for a
   signed-in caller without the permission).
+- **Uikit 2.0 tokens** (`ev_lib` `uikit` and `@evinvest/uikit`): `active`,
+  `selected`, `scrim`, `border-subtle`, `border-strong`, `ink-faint`,
+  `primary-hover`, `primary-border`, the status inks `positive-ink`,
+  `accent-info-ink` and `accent-warn-ink`, `chart-6`, the button faces
+  `button-primary-*` and `button-danger-*`, the chips `chip-{tone}-{bg,border}`,
+  the type scale `text-caption` … `text-figure-l`, `--chip-radius` and the
+  `--depth-*` tiers behind `shadow-card`, `shadow-elevated` and `shadow-overlay`.
+  All are derived for a brand that pins none. `readContract` counts the faces
+  and chips as derived.
+- **`IconButton`, `StatusItem`, `StatusDot`, `WorkspaceTabs`, `WorkspaceTab`,
+  `KeyValue`, `FormRow`** (`@evinvest/uikit`): the new elements. `Avatar`
+  takes `shape` (`circle`, `square`) and `size` (`sm`, `md`, `lg`).
+- **Settings and account parts** (`@evinvest/uikit`): `SettingsLayout`,
+  `SettingsSection`, `SettingsRow`, `AccountSettingsDialog`, `ConfirmDialog`
+  with an async confirm, `AccountList`, `AccountListItem`, `PopoverForm`, and a
+  profile form on `AccountMenu`.
+- **`CommandPalette`, `useCommandPaletteShortcut`** (`@evinvest/uikit`): a
+  `Dialog` over `Command`, opened by Ctrl or Cmd K.
+- **`SmartHeader`, `HeaderBalance`, `HeaderSearch`, `NotificationBell`**
+  (`@evinvest/uikit`): the header in its `default`, `collapsed`, `banner` and
+  `search` states.
+- **`AsideHeader`, `AsideRail`, `AsidePanel`** (`@evinvest/uikit`): docked or
+  overlay asides, and an `aside` slot on `AppShell`. A docked aside slides in
+  from its edge (fade under reduced motion).
+- **AI chat** (`@evinvest/uikit`): `ChatMessage`, `ChatBubble` (a `streaming`
+  prop shows a blinking caret), `ChatMarker`, `ChatAttachment`, `ChatComposer`,
+  `ModelChip`, `ChatPanel` and `ChatDock`.
+- **`cn` knows the type scale** (`@evinvest/uikit` and `ev_lib`): `text-body`
+  is a font size, so `text-body text-ink` keeps both classes.
 
 ### Removed
 
 - **`Chart*` and `Resizable*`** (`ev_lib` + `@evinvest/uikit`, and their class
   constants): no consumer used them. The `chart-1 … chart-5` palette tokens stay.
+- **Badge `Secondary`, `Destructive`, `Outline`, `Success`; Alert `Destructive`,
+  `Success`; Button `Outline`, `Destructive`** (`ev_lib` `uikit` and
+  `@evinvest/uikit`): see *Breaking* for what replaces them.
 
 ### Changed
+
+- **Menus, overlays and controls are restyled** (`ev_lib` `uikit` and
+  `@evinvest/uikit`): 28 px menu rows and fields, a hairline instead of shadows
+  on cards and popovers, the scrim token behind every modal, an underlined
+  `Tabs`, a 28 by 16 px `Switch`, a flat `Card` (6 px radius, 16 px padding),
+  the tooltip as a popover, tracks drawn as 14 % ink (`bg-ink/14`), disabled at
+  40 % opacity, and the offset focus ring on every `Button` variant. The
+  `Select` trigger, list and `NativeSelect` classes now live in the class
+  tables instead of the components.
+- **Status text uses the `-ink` tokens** (`ev_lib` `uikit` and
+  `@evinvest/uikit`): the outline accent faces, status pages, field and form
+  errors read in `accent-error-ink` and its siblings, which clear AA on a light
+  plane where the fill does not.
 
 - **`Field` no longer imports the controls it labels** (`@evinvest/uikit`):
   `Input`, `Textarea`, `NativeSelect`, `Checkbox`, `Switch`, `SelectTrigger`

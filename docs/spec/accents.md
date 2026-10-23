@@ -104,9 +104,11 @@ thumb riding its ink range. An outline on a surface with no fill inside it is
 ink: `border-primary-ink` on a checked Field.
 
 **Planes are separated by a hairline.** The u2 planes sit 1.04–1.14:1 apart on
-purpose: the design is flat, with no tinted fills and no shadow. The ~1.2 floor
-therefore applies to the `--border` hairline between two planes (1.37–1.46:1 on
-Dark, 1.35:1 on Light, 1.37–1.45:1 on Oldschool), not to the planes. A text
+purpose: the design is flat, with no tinted fills and no shadow. The floor is
+therefore stated for the `--border` hairline, not the planes: planes are separated by a
+hairline of at least 1.3:1 against each plane it sits on, and adjacent planes may
+sit below 1.2:1 (measured 1.37–1.46:1 on
+Dark, 1.35:1 on Light, 1.37–1.45:1 on Oldschool). A text
 tier is held at 4.5:1 on all four planes, and the disabled ink `ink-faint` is
 exempt because nothing can be done with it. `border-strong` (about 2:1) is for
 state and overlay edges, never for a control: a control edge stays `--input`.
