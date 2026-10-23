@@ -27,6 +27,23 @@ describe("Command", () => {
     expect(screen.getByText("Banana")).toBeInTheDocument();
   });
 
+  // A grid list squeezed each overflow-hidden group to fit max-h instead of
+  // scrolling; a flex column ranks rows by `order` and keeps every child its height.
+  it("scrolls the list instead of squeezing its groups", () => {
+    render(
+      <Command>
+        <CommandList>
+          <CommandGroup heading="One">
+            <CommandItem value="a">a</CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </Command>,
+    );
+    const list = document.querySelector('[data-slot="command-list"]')!;
+    expect(list).toHaveClass("flex", "flex-col", "overflow-y-auto", "[&>*]:shrink-0");
+    expect(list).not.toHaveClass("grid");
+  });
+
   describe("fuzzy matching, ranked as fzf ranks", () => {
     /// The rows a query leaves, in the order the arrows walk them.
     function check(values: string[], query: string, expected: string[]) {

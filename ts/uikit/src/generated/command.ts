@@ -12,7 +12,7 @@ export const COMMAND_INPUT_WRAPPER = "flex h-8 items-center gap-2 border-b borde
 
 export const COMMAND_INPUT = "placeholder:text-ink-soft flex h-7 w-full rounded-[var(--control-radius)] bg-transparent text-body outline-hidden disabled:cursor-not-allowed disabled:opacity-40";
 
-export const COMMAND_LIST = "grid max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto";
+export const COMMAND_LIST = "flex max-h-[300px] scroll-py-1 flex-col overflow-x-hidden overflow-y-auto [&>*]:shrink-0";
 
 export const COMMAND_EMPTY = "py-6 text-center text-body text-ink-soft";
 

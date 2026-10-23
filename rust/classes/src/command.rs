@@ -12,7 +12,11 @@ pub const COMMAND_INPUT_WRAPPER: &str = "flex h-8 items-center gap-2 border-b bo
 pub const COMMAND_INPUT: &str =
 	"placeholder:text-ink-soft flex h-7 w-full rounded-[var(--control-radius)] bg-transparent text-body outline-hidden disabled:cursor-not-allowed disabled:opacity-40";
 
-pub const COMMAND_LIST: &str = "grid max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto";
+/// A column, not a grid: rows carry their rank as CSS `order`, which needs a flex or
+/// grid container, but a grid item with `overflow-hidden` (a group) has a minimum
+/// height of 0 and the grid squeezed every group to fit `max-h` instead of letting
+/// the list scroll. `shrink-0` keeps each child its own height.
+pub const COMMAND_LIST: &str = "flex max-h-[300px] scroll-py-1 flex-col overflow-x-hidden overflow-y-auto [&>*]:shrink-0";
 
 pub const COMMAND_EMPTY: &str = "py-6 text-center text-body text-ink-soft";
 
