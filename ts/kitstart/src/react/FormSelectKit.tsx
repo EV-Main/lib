@@ -22,7 +22,7 @@ const BOX = "relative inline-flex w-full";
 // The chevron at full strength, as the native select draws it: the kit's
 // trigger dims its own arrow.
 const TRIGGER = "w-full min-w-0 text-ink [&>svg]:opacity-100";
-const TRIGGER_TEXT: Record<SelectTriggerSize, string> = { sm: "text-base md:text-sm", md: "text-base md:text-sm", lg: "" };
+const TRIGGER_TEXT: Record<SelectTriggerSize, string> = { sm: "text-base md:text-sm", md: "text-base md:text-sm", touch: "" };
 
 /**
  * `FormSelect` once scripted: the kit's `Select`, the list drawn in the
@@ -42,7 +42,7 @@ export function FormSelectKit({ field, box, value, choose, open, setOpen, onInva
         </SelectTrigger>
         <SelectContent className={classNames?.content}>
           {options.map(o => (
-            <SelectItem key={o.value} value={o.value} className={cn(size === "lg" && "py-2.5 text-base", classNames?.item)}>
+            <SelectItem key={o.value} value={o.value} className={cn(size === "touch" && "py-2.5 text-base", classNames?.item)}>
               {o.label}
             </SelectItem>
           ))}

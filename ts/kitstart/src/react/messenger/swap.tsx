@@ -32,10 +32,10 @@ export default function Swap({ kit }: { kit: MessengerKit }) {
             {kit.facts.telegram && (
               <div className="min-w-0 flex-1">
                 {/* VF-3: «Telegram» beside the WhatsApp button; «Ouvrir Telegram» beside the QR code. */}
-                <MessengerCta kit={kit} action={action} channel="telegram" label={desktop ? words.messengerTelegramCta : words.messengerOptionTelegram} variant="outline" />
+                <MessengerCta kit={kit} action={action} channel="telegram" label={desktop ? words.messengerTelegramCta : words.messengerOptionTelegram} variant="secondary" />
               </div>
             )}
-            <Button type="button" variant="outline" size="touch" className={cn("min-w-0 flex-1", kit.classNames?.messengerSecondary)} onClick={() => toCall(kit)}>
+            <Button type="button" variant="secondary" size="touch" className={cn("min-w-0 flex-1", kit.classNames?.messengerSecondary)} onClick={() => toCall(kit)}>
               <Glyph kit={kit} channel="call" />
               {words.messengerCallback}
             </Button>

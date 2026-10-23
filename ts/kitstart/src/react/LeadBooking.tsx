@@ -44,7 +44,7 @@ function OpenBooking(props: { adapter: BookingAdapter; ctx: Omit<BookingContext,
     void adapter.open?.({ ...ctx, onBooked });
   };
   const href = adapter.href?.(ctx) ?? null;
-  const look = buttonVariants({ variant: "primary", size: "touch", className: cn("w-full", c?.bookingCta) });
+  const look = buttonVariants({ variant: "solid", size: "touch", className: cn("w-full", c?.bookingCta) });
   if (booked) return <p className={cn("font-medium text-ink", c?.bookingNote)}>{text.booked}</p>;
   return (
     <div className={cn("flex flex-col gap-3", c?.booking)}>

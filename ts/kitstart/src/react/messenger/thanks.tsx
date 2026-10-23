@@ -21,7 +21,7 @@ export default function Thanks({ kit }: { kit: MessengerKit }) {
       {whatsapp && !desktop && <p className="font-medium text-ink">{words.messengerThanksTitle}</p>}
       {whatsapp && (desktop ? <QrPanel href={whatsapp} words={words} onCallback={null} kit={kit} /> : <MessengerCta kit={kit} action={action} channel="whatsapp" label={words.messengerThanksCta} />)}
       {whatsapp && !desktop && <InappHint kit={kit} message={message.message} />}
-      {kit.facts.telegram && <MessengerCta kit={kit} action={action} channel="telegram" label={desktop ? words.messengerTelegramCta : words.messengerOptionTelegram} variant="outline" />}
+      {kit.facts.telegram && <MessengerCta kit={kit} action={action} channel="telegram" label={desktop ? words.messengerTelegramCta : words.messengerOptionTelegram} variant="secondary" />}
     </div>
   );
 }

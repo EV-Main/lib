@@ -76,7 +76,7 @@ export function LeadSteps(props: {
         <ul data-lead-chrome="" className={cn("flex flex-wrap gap-2", c?.answers)}>
           {answered.map(s => (
             <li key={s.id}>
-              <Button type="button" variant="outline" size="touch" className={cn("h-auto gap-2 px-3 text-sm", c?.answer)} onClick={() => props.onEdit(s.id)}>
+              <Button type="button" variant="secondary" size="touch" className={cn("h-auto gap-2 px-3 text-sm", c?.answer)} onClick={() => props.onEdit(s.id)}>
                 <span className="sr-only">{`${s.label}, `}</span>
                 <span className="font-medium text-ink">{s.value}</span>
                 <span className="text-ink-soft underline underline-offset-4">{text.change}</span>

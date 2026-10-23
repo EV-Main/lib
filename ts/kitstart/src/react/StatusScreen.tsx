@@ -101,12 +101,12 @@ export function StatusScreen<L extends string, F>(props: StatusScreenProps<L, F>
         <p className={partWithLeading("max-w-2xl text-base text-ink-soft md:text-lg", "leading-relaxed", c?.body)}>{status.body(f)}</p>
         <div className={cn("flex flex-col gap-3.5 sm:flex-row", c?.actions)}>
           {primary && (
-            <Button href={primary.href} size="xl" className={cn(buttonClassName, c?.primaryButton)}>
+            <Button href={primary.href} variant="solid" size="xl" className={cn(buttonClassName, c?.primaryButton)}>
               {primary.label}
             </Button>
           )}
           {secondary && secondary.href !== primary?.href && (
-            <Button href={secondary.href} size="xl" variant="outline" className={cn(buttonClassName, c?.secondaryButton)}>
+            <Button href={secondary.href} size="xl" variant="secondary" className={cn(buttonClassName, c?.secondaryButton)}>
               {secondary.label}
             </Button>
           )}

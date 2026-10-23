@@ -84,7 +84,7 @@ export function LeadBookingManual(props: { leadRef: string; locale: string; now:
             {text.preferFailed}
           </p>
         )}
-        <Button type="submit" variant="outline" size="touch" disabled={state === "busy" || (day === null && part === null)} className={cn("w-full", c?.preferSubmit)}>
+        <Button type="submit" variant="secondary" size="touch" disabled={state === "busy" || (day === null && part === null)} className={cn("w-full", c?.preferSubmit)}>
           {text.preferSubmit}
         </Button>
       </form>

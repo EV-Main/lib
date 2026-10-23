@@ -60,26 +60,26 @@ export function CallBar<L extends string, F>(props: CallBarProps<L, F>) {
     switch (channel) {
       case "phone":
         return phone ? (
-          <Button key={channel} href={telHref(phone)} size="xl" variant="outline" aria-label={t.callLabel(f)} className={cn("shrink-0 px-4", buttonClassName, c?.call)}>
+          <Button key={channel} href={telHref(phone)} size="xl" variant="secondary" aria-label={t.callLabel(f)} className={cn("shrink-0 px-4", buttonClassName, c?.call)}>
             {/* The kit has no phone glyph; the button's name is its label. */}
             <span aria-hidden="true">☎</span>
           </Button>
         ) : null;
       case "whatsapp":
         return whatsapp ? (
-          <Button key={channel} href={whatsappHref(whatsapp, t.whatsappMessage(f))} size="xl" variant="outline" className={cn("flex-1 px-3", buttonClassName, c?.whatsapp)}>
+          <Button key={channel} href={whatsappHref(whatsapp, t.whatsappMessage(f))} size="xl" variant="secondary" className={cn("flex-1 px-3", buttonClassName, c?.whatsapp)}>
             {t.whatsappShort}
           </Button>
         ) : null;
       case "callback":
         return callback ? (
-          <Button key={channel} href={callback.href} size="xl" variant={filled === "callback" ? "primary" : "outline"} data-intent="callback" className={cn("flex-1 px-3", buttonClassName, c?.callback)}>
+          <Button key={channel} href={callback.href} size="xl" variant={filled === "callback" ? "solid" : "secondary"} data-intent="callback" className={cn("flex-1 px-3", buttonClassName, c?.callback)}>
             {callback.label}
           </Button>
         ) : null;
       case "form":
         return (
-          <Button key={channel} href={quoteHref} size="xl" variant={filled === "form" ? "primary" : "outline"} data-intent="form_open" className={cn("flex-1 px-3", buttonClassName, c?.quote)}>
+          <Button key={channel} href={quoteHref} size="xl" variant={filled === "form" ? "solid" : "secondary"} data-intent="form_open" className={cn("flex-1 px-3", buttonClassName, c?.quote)}>
             {t.ctaShort}
           </Button>
         );

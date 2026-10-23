@@ -648,7 +648,7 @@ export function LeadCapture(props: LeadCaptureProps) {
           node: (
             <>
               {localityField}
-              <Button type="button" size="touch" data-lead-chrome="" className={cn("w-full", c?.stepNext)} onClick={continueLocality}>
+              <Button type="button" variant="solid" size="touch" data-lead-chrome="" className={cn("w-full", c?.stepNext)} onClick={continueLocality}>
                 {flowText.stepNext}
               </Button>
             </>
@@ -697,7 +697,7 @@ export function LeadCapture(props: LeadCaptureProps) {
                 <EstimateQuestionField key={input.id} model={model} need={shownNeed} input={input} question={props.questions?.[input.id]} {...estimateProps} />
               ))}
               {inputs.length > 1 && (
-                <Button type="button" size="touch" data-lead-chrome="" className={cn("w-full", c?.stepNext)} onClick={() => continueScreen(inputs.map(i => i.id))}>
+                <Button type="button" variant="solid" size="touch" data-lead-chrome="" className={cn("w-full", c?.stepNext)} onClick={() => continueScreen(inputs.map(i => i.id))}>
                   {props.questions?.[first.id]?.next ?? flowText.stepNext}
                 </Button>
               )}

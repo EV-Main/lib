@@ -122,13 +122,13 @@ const SCENARIOS: readonly { name: string; widths: Widths; node: ReactElement }[]
       <QuoteFormShell placeSlug="royat" locale="fr" renderedAt={0} honeypotLabel="Site web" className="max-w-md rounded-xl bg-card p-6">
         <Field className="flex flex-col gap-2">
           <FieldLabel>Intervention</FieldLabel>
-          <NativeSelect name="job" size="lg" defaultValue="other">
+          <NativeSelect name="job" size="touch" defaultValue="other">
             <NativeSelectOption value="other">Autre</NativeSelectOption>
           </NativeSelect>
         </Field>
         <Field className="flex flex-col gap-2">
           <FieldLabel>Commune ou code postal</FieldLabel>
-          <Input name="zip" size="lg" placeholder="63130" />
+          <Input name="zip" size="touch" placeholder="63130" />
         </Field>
         <Button type="submit" size="xl">
           Recevoir le prix
@@ -146,11 +146,11 @@ const SCENARIOS: readonly { name: string; widths: Widths; node: ReactElement }[]
         {([false, true] as const).flatMap(scripted => [
           <Field key={`${scripted}-value`} className="flex flex-col gap-2">
             <FieldLabel>{scripted ? "Intervention (après hydratation)" : "Intervention (sans JavaScript)"}</FieldLabel>
-            <FormSelectView scripted={scripted} id={`job-${scripted ? "scripted" : "native"}`} name="job" size="lg" defaultValue="boiler" options={JOBS} />
+            <FormSelectView scripted={scripted} id={`job-${scripted ? "scripted" : "native"}`} name="job" size="touch" defaultValue="boiler" options={JOBS} />
           </Field>,
           <Field key={`${scripted}-empty`} className="flex flex-col gap-2">
             <FieldLabel>Type de bien</FieldLabel>
-            <FormSelectView scripted={scripted} id={`home-${scripted ? "scripted" : "native"}`} name="home" size="lg" placeholder="Choisir" required options={JOBS} />
+            <FormSelectView scripted={scripted} id={`home-${scripted ? "scripted" : "native"}`} name="home" size="touch" placeholder="Choisir" required options={JOBS} />
           </Field>,
         ])}
       </div>

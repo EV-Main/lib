@@ -80,7 +80,7 @@ export function ChannelLink(props: {
   return (
     <Button
       href={href}
-      variant={primary ? "primary" : "outline"}
+      variant={primary ? "solid" : "secondary"}
       size="touch"
       className={partWithLeading(primary ? "w-full" : "flex-1", CHANNEL_LEADING, cn(c?.channel, primary && c?.primary) || undefined)}
       data-intent={channel === "sms" ? "sms" : undefined}
@@ -142,7 +142,7 @@ export function CallbackForm(props: {
       <summary
         data-intent="callback"
         className={partWithLeading(
-          buttonVariants({ variant: primary ? "primary" : "outline", size: "touch", className: "flex w-full list-none [&::-webkit-details-marker]:hidden" }),
+          buttonVariants({ variant: primary ? "solid" : "secondary", size: "touch", className: "flex w-full list-none [&::-webkit-details-marker]:hidden" }),
           CHANNEL_LEADING,
           cn(c?.channel, primary && c?.primary, c?.callbackSummary) || undefined,
         )}
@@ -195,7 +195,7 @@ export function PhotosAsk(props: {
     <div className={cn("flex flex-col gap-2 rounded-[var(--control-radius)] border border-border p-4", props.className)}>
       <p className="font-medium text-ink">{text.photosTitle}</p>
       <p className="text-sm text-ink-soft">{text.photosLede}</p>
-      <Button href={href} variant="outline" size="touch" className="w-full" data-experiment={experiment?.name} data-variant={experiment?.variant}>
+      <Button href={href} variant="secondary" size="touch" className="w-full" data-experiment={experiment?.name} data-variant={experiment?.variant}>
         {text.photosCta}
       </Button>
     </div>

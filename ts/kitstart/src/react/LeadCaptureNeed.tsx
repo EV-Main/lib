@@ -81,7 +81,7 @@ export function NeedField(props: NeedFieldProps) {
     return (
       <Field className={cn("flex flex-col gap-2", c?.field)}>
         <FieldLabel className={c?.label}>{label}</FieldLabel>
-        <FormSelect name={name} size="lg" defaultValue={need ?? needs[0]?.value} options={needs} onValueChange={v => onPick(v, null)} classNames={c?.control ? { trigger: c.control } : undefined} />
+        <FormSelect name={name} size="touch" defaultValue={need ?? needs[0]?.value} options={needs} onValueChange={v => onPick(v, null)} classNames={c?.control ? { trigger: c.control } : undefined} />
       </Field>
     );
   }

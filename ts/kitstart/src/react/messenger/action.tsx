@@ -247,7 +247,7 @@ export function SquareButton(props: { kit: MessengerKit; channel: MessengerMode;
   const { kit, channel } = props;
   const icon = hasIcon(kit, channel);
   return (
-    <Button type="button" variant="outline" size="touch" icon={icon} aria-label={props.label} className={cn("shrink-0", kit.classNames?.messengerSquare)} onClick={props.onClick}>
+    <Button type="button" variant="secondary" size="touch" icon={icon} aria-label={props.label} className={cn("shrink-0", kit.classNames?.messengerSquare)} onClick={props.onClick}>
       {icon ? <Glyph kit={kit} channel={channel} /> : labelOf(wordsOf(kit), channel)}
     </Button>
   );
@@ -272,7 +272,7 @@ const CTA_LEADING = "leading-6";
 const partOf = (kit: MessengerKit, kind: "cta" | "secondary" | "square"): string | undefined =>
   kind === "cta" ? kit.classNames?.messengerCta : kind === "secondary" ? kit.classNames?.messengerSecondary : kit.classNames?.messengerSquare;
 
-export function MessengerCta(props: { kit: MessengerKit; action: MessengerAction; channel: Messenger; label: string; variant?: "primary" | "outline"; className?: string | undefined; square?: boolean }) {
+export function MessengerCta(props: { kit: MessengerKit; action: MessengerAction; channel: Messenger; label: string; variant?: "solid" | "secondary"; className?: string | undefined; square?: boolean }) {
   const { kit, action, channel } = props;
   const link = action.link(channel);
   if (!link) return null;
@@ -281,13 +281,13 @@ export function MessengerCta(props: { kit: MessengerKit; action: MessengerAction
   return (
     <Button
       asChild
-      variant={props.variant ?? "primary"}
+      variant={props.variant ?? "solid"}
       size="touch"
       icon={square}
       className={partWithLeading(
         cn(props.square ? "shrink-0" : "w-full", props.className),
         CTA_LEADING,
-        partOf(kit, props.square ? "square" : props.variant === "outline" ? "secondary" : "cta"),
+        partOf(kit, props.square ? "square" : props.variant === "secondary" ? "secondary" : "cta"),
       )}
     >
       <a
@@ -524,12 +524,12 @@ function ReturnScreen(props: { left: Left; words: LeadCaptureMessengerText; onAn
         {words.messengerReturnTitle}
       </p>
       <p className="text-ink-soft">{fillText(words.messengerReturnBody, { channel: name, ref: left.ref ?? "" })}</p>
-      <Button asChild variant="outline" size="touch" className={partWithLeading("w-full", CTA_LEADING, c?.messengerSecondary)}>
+      <Button asChild variant="secondary" size="touch" className={partWithLeading("w-full", CTA_LEADING, c?.messengerSecondary)}>
         <a href={left.href} {...(left.channel === "telegram" ? { target: "_blank", rel: "noopener" } : {})}>
           {fillText(words.messengerReopen, { channel: name })}
         </a>
       </Button>
-      <Button type="button" size="touch" className={partWithLeading("w-full", CTA_LEADING, c?.messengerCta)} onClick={() => props.onAnswer("failed")}>
+      <Button type="button" variant="solid" size="touch" className={partWithLeading("w-full", CTA_LEADING, c?.messengerCta)} onClick={() => props.onAnswer("failed")}>
         {words.messengerReturnFailed}
       </Button>
       <Button type="button" variant="link" size="touch" className="self-center" onClick={() => props.onAnswer("sent")}>

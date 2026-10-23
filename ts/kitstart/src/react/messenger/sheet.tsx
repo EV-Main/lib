@@ -61,7 +61,7 @@ export default function Sheet({ kit }: { kit: MessengerKit }) {
         }}
       >
         <DrawerTrigger asChild>
-          <Button type="button" size="touch" className={cn("w-full", kit.classNames?.messengerCta)}>
+          <Button type="button" variant="solid" size="touch" className={cn("w-full", kit.classNames?.messengerCta)}>
             {words.messengerSheetCta}
           </Button>
         </DrawerTrigger>

@@ -15,7 +15,7 @@ function form(props: Partial<FormSelectProps> = {}): ReactElement {
     <form>
       <Field className="flex flex-col gap-2">
         <FieldLabel>Intervention</FieldLabel>
-        <FormSelect name="job" options={OPTIONS} size="lg" {...props} />
+        <FormSelect name="job" options={OPTIONS} size="touch" {...props} />
       </Field>
     </form>
   );
@@ -51,7 +51,7 @@ describe("FormSelect on the server and without JavaScript", () => {
     root.innerHTML = renderToString(form({ defaultValue: "boiler" }));
     const select = root.querySelector("select");
     expect(select).toHaveAttribute("name", "job");
-    expect(select).toHaveAttribute("data-size", "lg");
+    expect(select).toHaveAttribute("data-size", "touch");
     expect(root.querySelector("label")?.getAttribute("for")).toBe(select?.id);
     expect(root.querySelector("[role=combobox]")).toBeNull();
     expect(new FormData(root.querySelector("form") ?? undefined).get("job")).toBe("boiler");
