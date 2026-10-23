@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "../lib/cn";
+import { AnimatedNumber } from "./animated-number";
 import { IconButton } from "./icon-button";
 import { Kbd } from "./kbd";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
@@ -13,8 +14,13 @@ export interface HeaderBalanceProps extends Omit<React.HTMLAttributes<HTMLElemen
   /** Only meaningful with `onClick`. */
   disabled?: boolean;
   label?: React.ReactNode;
-  /** The figure, already formatted: "$0.00". */
-  value: React.ReactNode;
+  /** The figure, already formatted: "$0.00". Ignored when `amount` is given. */
+  value?: React.ReactNode;
+  /** The figure as a number: it rolls to each new amount, formatted by `format` and `locales`. */
+  amount?: number;
+  /** Formatting for `amount`. Default: USD currency. */
+  format?: Intl.NumberFormatOptions;
+  locales?: Intl.LocalesArgument;
   /** True until the balance is known; the figure then reveals in place of the skeleton. */
   loading?: boolean;
   /** A glyph before the label. */
@@ -23,10 +29,15 @@ export interface HeaderBalanceProps extends Omit<React.HTMLAttributes<HTMLElemen
   tone?: "default" | "warn";
 }
 
+const USD: Intl.NumberFormatOptions = { style: "currency", currency: "USD" };
+
 /** "Balance: $0.00" in the header; a button only when given `onClick`. */
 export function HeaderBalance({
   label = "Balance:",
   value,
+  amount,
+  format = USD,
+  locales,
   loading = false,
   icon,
   tone = "default",
@@ -50,7 +61,7 @@ export function HeaderBalance({
         className="inline-flex"
       >
         <span className={cn("font-medium tabular-nums", tone === "warn" ? "text-accent-warn-ink" : "text-ink")}>
-          {value}
+          {amount === undefined ? value : <AnimatedNumber value={amount} format={format} locales={locales} />}
         </span>
       </Settled>
       {onClick && <UiIcon name="chevron-down" className="size-4 text-ink-soft" />}

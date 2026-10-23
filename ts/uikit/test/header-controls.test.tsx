@@ -25,6 +25,18 @@ describe("HeaderBalance", () => {
     render(<HeaderBalance value="$0.00" tone="warn" />);
     expect(screen.getByText("$0.00")).toHaveClass("text-accent-warn-ink");
   });
+
+  it("formats a numeric amount as USD by default and speaks it once", () => {
+    const { container } = render(<HeaderBalance amount={1234.5} locales="en" />);
+    expect(container.querySelector('[data-slot="animated-number-text"]')).toHaveTextContent("$1,234.50");
+  });
+
+  it("keeps the figure's colour class on the animated amount", () => {
+    const { container } = render(<HeaderBalance amount={3} tone="warn" />);
+    expect(container.querySelector(".text-accent-warn-ink")).toContainElement(
+      container.querySelector('[data-slot="animated-number"]'),
+    );
+  });
 });
 
 describe("NotificationBell", () => {
