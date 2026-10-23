@@ -9,7 +9,7 @@ use dioxus::prelude::*;
 use crate::{
 	cn,
 	uikit::{
-		SELECT_CONTENT_BOUNDS, SELECT_ITEM, Size,
+		SELECT_CONTENT_BOUNDS, SELECT_CONTENT_SURFACE, SELECT_ITEM, SELECT_LABEL, SELECT_LIST, SELECT_SEPARATOR, SELECT_TRIGGER_BASE, Size,
 		primitives::{Controllable, DismissReason, sort_into_document_order, text_of, use_controllable, use_dismissable_layer, use_stable_id},
 		select_trigger_size_class,
 	},
@@ -58,17 +58,7 @@ pub fn SelectTrigger(#[props(default)] size: Size, #[props(default)] class: Stri
 	let open = ctx.open.get();
 	let data_state = if open { "open" } else { "closed" };
 	// The placeholder mark is on `SelectValue`'s span, not on this button.
-	let cls = cn!(
-		"border-input [&_[data-placeholder]]:text-ink-soft [&_svg:not([class*='text-'])]:text-ink-soft \
-		 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error \
-		 flex w-fit items-center justify-between gap-2 rounded-[var(--control-radius)] border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs \
-		 transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 \
-		 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex \
-		 *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 \
-		 [&_svg:not([class*='size-'])]:size-4",
-		select_trigger_size_class(size),
-		class
-	);
+	let cls = cn!(SELECT_TRIGGER_BASE, select_trigger_size_class(size), class);
 	rsx! {
 		button {
 			r#type: "button",
@@ -141,11 +131,7 @@ pub fn SelectContent(#[props(default)] class: String, children: Element) -> Elem
 		}
 		return rsx! {};
 	}
-	let cls = cn!(
-		"bg-popover text-ink absolute top-full left-0 z-50 mt-1 overflow-x-hidden overflow-y-auto rounded-md border border-border shadow-md",
-		SELECT_CONTENT_BOUNDS,
-		class
-	);
+	let cls = cn!("absolute top-full left-0 z-50 mt-1", SELECT_CONTENT_SURFACE, SELECT_CONTENT_BOUNDS, class);
 	let backdrop_layer = layer.clone();
 	rsx! {
 		div {
@@ -164,7 +150,7 @@ pub fn SelectContent(#[props(default)] class: String, children: Element) -> Elem
 					ctx.on_list_key(&e);
 				}
 			},
-			div { class: "p-1", {children} }
+			div { class: SELECT_LIST, {children} }
 		}
 	}
 }
@@ -251,14 +237,14 @@ pub fn SelectGroup(#[props(default)] class: String, children: Element) -> Elemen
 }
 #[component]
 pub fn SelectLabel(#[props(default)] class: String, children: Element) -> Element {
-	let cls = cn!("text-ink-soft px-2 py-1.5 text-xs", class);
+	let cls = cn!(SELECT_LABEL, class);
 	rsx! {
 		div { class: cls, "data-slot": "select-label", {children} }
 	}
 }
 #[component]
 pub fn SelectSeparator(#[props(default)] class: String) -> Element {
-	let cls = cn!("bg-border pointer-events-none -mx-1 my-1 h-px", class);
+	let cls = cn!(SELECT_SEPARATOR, class);
 	rsx! {
 		div { class: cls, "data-slot": "select-separator" }
 	}
@@ -668,7 +654,7 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("h-8"), "{html}");
+		assert!(html.contains("h-6"), "{html}");
 	}
 
 	#[test]
@@ -681,9 +667,9 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("h-12"), "{html}");
+		assert!(html.contains("h-11"), "{html}");
 		assert!(html.contains("text-base"), "{html}");
-		assert!(!html.contains("text-sm"), "lg replaces the md type: {html}");
+		assert!(!html.contains("text-body"), "lg replaces the md type: {html}");
 		assert!(html.contains("rounded-[var(--control-radius)]"), "{html}");
 	}
 

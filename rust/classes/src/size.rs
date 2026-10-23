@@ -4,10 +4,14 @@
 #[derive(Clone, Copy, Default, PartialEq, strum::AsRefStr, strum::EnumIter)]
 #[strum(serialize_all = "kebab-case")]
 pub enum Size {
+	/// 20 px
 	Xs,
+	/// 24 px
 	Sm,
+	/// 28 px
 	#[default]
 	Md,
+	/// 32 px
 	Lg,
 	Xl,
 	/// The 44 px pointer-target floor (WCAG 2.5.5) for touch-first controls. Named
@@ -20,10 +24,10 @@ impl Size {
 	/// Tailwind magnitude; the component picks the axis (h-/size-/min-w-).
 	pub fn scale(&self) -> u8 {
 		match self {
-			Size::Xs => 7,
-			Size::Sm => 8,
-			Size::Md => 9,
-			Size::Lg => 10,
+			Size::Xs => 5,
+			Size::Sm => 6,
+			Size::Md => 7,
+			Size::Lg => 8,
 			Size::Xl => 12,
 			Size::Touch => 11,
 		}

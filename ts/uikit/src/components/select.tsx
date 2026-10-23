@@ -2,7 +2,17 @@
 
 import * as React from "react";
 import { cn } from "../lib/cn";
-import { SELECT_CONTENT_BOUNDS, SELECT_ITEM, selectTriggerSizeClasses, type SelectTriggerSize } from "../generated/select";
+import {
+  SELECT_CONTENT_BOUNDS,
+  SELECT_CONTENT_SURFACE,
+  SELECT_ITEM,
+  SELECT_LABEL,
+  SELECT_LIST,
+  SELECT_SEPARATOR,
+  SELECT_TRIGGER_BASE,
+  selectTriggerSizeClasses,
+  type SelectTriggerSize,
+} from "../generated/select";
 import { useControllableState } from "../primitives/use-controllable-state";
 import { useFloating } from "../primitives/use-floating";
 import { DismissableLayerScope, useDismissableLayer } from "../primitives/dismissable-layer";
@@ -190,7 +200,7 @@ export function SelectTrigger({
       }}
       className={cn(
         // The placeholder mark is on `SelectValue`'s span, not on this button.
-        "border-input [&_[data-placeholder]]:text-ink-soft [&_svg:not([class*='text-'])]:text-ink-soft focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error flex w-fit items-center justify-between gap-2 rounded-[var(--control-radius)] border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        SELECT_TRIGGER_BASE,
         selectTriggerSizeClasses[size],
         className,
       )}
@@ -304,13 +314,14 @@ export function SelectContent({
           }
         }}
         className={cn(
-          "bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border border-border shadow-md",
+          "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 origin-(--radix-select-content-transform-origin)",
+          SELECT_CONTENT_SURFACE,
           SELECT_CONTENT_BOUNDS,
           className,
         )}
         {...(props as Record<string, unknown>)}
       >
-        <div className="p-1"><DismissableLayerScope layer={dismissRef}>{children}</DismissableLayerScope></div>
+        <div className={SELECT_LIST}><DismissableLayerScope layer={dismissRef}>{children}</DismissableLayerScope></div>
       </div>
     </Portal>
   );
@@ -389,7 +400,7 @@ export function SelectLabel({ className, ...props }: React.ComponentProps<"div">
   return (
     <div
       data-slot="select-label"
-      className={cn("text-ink-soft px-2 py-1.5 text-xs", className)}
+      className={cn(SELECT_LABEL, className)}
       {...props}
     />
   );
@@ -399,7 +410,7 @@ export function SelectSeparator({ className, ...props }: React.ComponentProps<"d
   return (
     <div
       data-slot="select-separator"
-      className={cn("bg-border pointer-events-none -mx-1 my-1 h-px", className)}
+      className={cn(SELECT_SEPARATOR, className)}
       {...props}
     />
   );

@@ -257,7 +257,7 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("first:rounded-l-md"), "{html}");
-		assert!(html.contains("last:rounded-r-md"), "{html}");
+		assert!(html.contains("first:rounded-l-[var(--control-radius)]"), "{html}");
+		assert!(html.contains("last:rounded-r-[var(--control-radius)]"), "{html}");
 	}
 }

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "../lib/cn";
-import { nativeSelectSizeClasses, type NativeSelectSize } from "../generated/select";
+import { NATIVE_SELECT_BASE, nativeSelectSizeClasses, type NativeSelectSize } from "../generated/select";
 import { markLabelable } from "../primitives/labelable";
 import { useFieldControlId } from "./field-context";
 import { SelectChevron } from "./select-chevron";
@@ -36,8 +36,6 @@ export interface NativeSelectProps
 // (a palette's polarity, `light` or `dark`) picks the platform's own dark
 // menu where it does not. The placeholder is the empty option being the
 // checked one — CSS can see that without script.
-const NATIVE_SELECT =
-  "border-input text-ink h-9 w-full min-w-0 appearance-none rounded-[var(--control-radius)] border bg-transparent py-1 pr-9 pl-3 text-base shadow-xs transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error has-[option[value='']:checked]:text-ink-soft [&_option]:bg-popover [&_option]:text-ink [&_optgroup]:bg-popover [&_optgroup]:text-ink-soft [color-scheme:var(--scheme,normal)]";
 
 export const NativeSelect = React.forwardRef<HTMLSelectElement, NativeSelectProps>(
   function NativeSelect(
@@ -58,7 +56,7 @@ export const NativeSelect = React.forwardRef<HTMLSelectElement, NativeSelectProp
           id={controlId}
           data-slot="native-select"
           data-size={size}
-          className={cn(NATIVE_SELECT, nativeSelectSizeClasses[size], className)}
+          className={cn(NATIVE_SELECT_BASE, nativeSelectSizeClasses[size], className)}
           {...(value !== undefined ? { value } : {})}
           {...(initial !== undefined ? { defaultValue: initial } : {})}
           {...props}

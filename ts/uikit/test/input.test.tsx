@@ -23,21 +23,21 @@ describe("Input", () => {
     const { container } = render(<Input className="h-12" />);
     const el = container.querySelector("input")!;
     expect(el).toHaveClass("h-12");
-    expect(el).not.toHaveClass("h-9");
+    expect(el).not.toHaveClass("h-7");
   });
 
-  it("defaults to md and grows to a 48px, 16px-text field at lg", () => {
+  it("defaults to md and grows to a 44px, 16px-text field at lg", () => {
     const { container, rerender } = render(<Input />);
     const el = container.querySelector("input")!;
     expect(el).toHaveAttribute("data-size", "md");
-    expect(el).toHaveClass("h-9", "md:text-sm");
+    expect(el).toHaveClass("h-7", "bg-muted", "text-base", "pointer-fine:text-body");
 
     rerender(<Input size="lg" />);
     expect(el).toHaveAttribute("data-size", "lg");
-    expect(el).toHaveClass("h-12", "px-4", "text-base", "md:text-base", "rounded-[var(--control-radius)]");
+    expect(el).toHaveClass("h-11", "px-3", "text-base", "pointer-fine:text-base", "rounded-[var(--control-radius)]");
     // below 16px iOS Safari zooms into the focused field
-    expect(el).not.toHaveClass("h-9");
-    expect(el).not.toHaveClass("md:text-sm");
+    expect(el).not.toHaveClass("h-7");
+    expect(el).not.toHaveClass("pointer-fine:text-body");
   });
 
   it("hands the ref the DOM node (forwardRef, so React 18 keeps it too)", () => {

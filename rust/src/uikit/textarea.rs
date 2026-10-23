@@ -87,8 +87,8 @@ mod tests {
 		}
 		let html = render(app);
 		assert!(html.contains("min-h-20"), "{html}");
-		assert!(html.contains("md:text-base"), "{html}");
+		assert!(html.contains("pointer-fine:text-base"), "{html}");
 		assert!(!html.contains("min-h-16"), "{html}");
-		assert!(!html.contains("md:text-sm"), "{html}");
+		assert!(!html.contains("pointer-fine:text-body"), "{html}");
 	}
 }

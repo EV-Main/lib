@@ -1182,6 +1182,30 @@ fn select() -> Vec<Ts> {
 			name: "SELECT_ITEM",
 			value: SELECT_ITEM,
 		},
+		Ts::Const {
+			name: "SELECT_TRIGGER_BASE",
+			value: SELECT_TRIGGER_BASE,
+		},
+		Ts::Const {
+			name: "SELECT_CONTENT_SURFACE",
+			value: SELECT_CONTENT_SURFACE,
+		},
+		Ts::Const {
+			name: "SELECT_LIST",
+			value: SELECT_LIST,
+		},
+		Ts::Const {
+			name: "SELECT_LABEL",
+			value: SELECT_LABEL,
+		},
+		Ts::Const {
+			name: "SELECT_SEPARATOR",
+			value: SELECT_SEPARATOR,
+		},
+		Ts::Const {
+			name: "NATIVE_SELECT_BASE",
+			value: NATIVE_SELECT_BASE,
+		},
 		form_size_table("selectTriggerSizeClasses", "SelectTriggerSize", select_trigger_size_class),
 		form_size_table("nativeSelectSizeClasses", "NativeSelectSize", native_select_size_class),
 	]

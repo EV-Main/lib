@@ -95,19 +95,19 @@ mod tests {
 	}
 
 	#[test]
-	fn large_size_is_48px_with_16px_text_at_every_width() {
+	fn large_size_is_44px_with_16px_text_at_every_width() {
 		fn app() -> Element {
 			rsx! {
 				Input { size: Size::Lg }
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("h-12"), "{html}");
-		assert!(html.contains("md:text-base"), "{html}");
-		// `file:h-9` sizes the file button and legitimately stays; only the bare
+		assert!(html.contains("h-11"), "{html}");
+		assert!(html.contains("pointer-fine:text-base"), "{html}");
+		// `file:h-8` sizes the file button and legitimately stays; only the bare
 		// height class must be gone.
-		assert!(!html.split(['"', ' ']).any(|class| class == "h-9"), "lg drops the md height: {html}");
-		assert!(!html.contains("md:text-sm"), "lg must not shrink below 16px: {html}");
+		assert!(!html.split(['"', ' ']).any(|class| class == "h-7"), "lg drops the md height: {html}");
+		assert!(!html.contains("pointer-fine:text-body"), "lg must not shrink below 16px: {html}");
 		assert!(html.contains("rounded-[var(--control-radius)]"), "{html}");
 		assert!(html.contains("data-size=\"lg\""), "{html}");
 	}
@@ -118,7 +118,7 @@ mod tests {
 			rsx! { Input {} }
 		}
 		let html = render(app);
-		assert!(html.contains("h-9"), "{html}");
+		assert!(html.contains("h-7"), "{html}");
 		assert!(html.contains("data-size=\"md\""), "{html}");
 	}
 }

@@ -42,7 +42,7 @@ describe("InputGroup", () => {
   it("renders the button with ghost variant and xs size", () => {
     const { getByRole } = render(<InputGroupButton>b</InputGroupButton>);
     const el = getByRole("button");
-    expect(el).toHaveClass("h-6");
+    expect(el).toHaveClass("h-5");
     expect(el).toHaveClass("hover:bg-hover");
     expect(el).toHaveAttribute("data-size", "xs");
   });

@@ -116,10 +116,10 @@ bg-background text-ink
 bg-background text-ink-soft relative mx-auto block w-fit px-2
 bg-border
 bg-border mx-2 h-px w-auto shrink-0
-bg-border pointer-events-none -mx-1 my-1 h-px
 bg-border relative flex-1 rounded-full
 bg-border shrink-0
 bg-border-subtle my-1 h-px
+bg-border-subtle pointer-events-none my-1 h-px
 bg-brand
 bg-button-primary-bg
 bg-card
@@ -159,6 +159,7 @@ bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out
 bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-64 rounded-md border border-border p-4 shadow-md outline-hidden
 bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-72 rounded-md border border-border p-4 shadow-md outline-hidden
 bg-popover text-ink flex h-full w-full flex-col overflow-hidden rounded-lg
+bg-popover text-ink overflow-x-hidden overflow-y-auto rounded-lg border border-border shadow-elevated
 bg-positive
 bg-primary
 bg-primary text-on-primary
@@ -190,7 +191,9 @@ border-chip-warn-border bg-chip-warn-bg text-accent-warn-ink [a&]:hover:bg-hover
 border-chip-{tone}-border
 border-dashed
 border-input
-border-input placeholder:text-ink-soft focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error flex field-sizing-content min-h-16 w-full rounded-[var(--control-radius)] border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm
+border-input [&_[data-placeholder]]:text-ink-soft [&_svg:not([class*='text-'])]:text-ink-soft focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error data-[state=open]:border-ring flex w-fit items-center justify-between gap-2 rounded-[var(--control-radius)] border bg-secondary pr-1.5 pl-2 text-body whitespace-nowrap hover:bg-[image:linear-gradient(var(--hover),var(--hover))] transition-colors outline-none disabled:cursor-not-allowed disabled:opacity-50 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
+border-input placeholder:text-ink-soft focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error flex field-sizing-content min-h-16 w-full rounded-[var(--control-radius)] border bg-muted px-2 py-1.5 text-base pointer-fine:text-body transition-colors outline-none disabled:cursor-not-allowed disabled:opacity-50
+border-input text-ink h-7 w-full min-w-0 appearance-none rounded-[var(--control-radius)] border bg-secondary py-0 pr-9 pl-2 text-base pointer-fine:text-body transition-colors outline-none disabled:pointer-events-none disabled:cursor-not-allowed focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error has-[option[value='']:checked]:text-ink-soft [&_option]:bg-popover [&_option]:text-ink [&_optgroup]:bg-popover [&_optgroup]:text-ink-soft [color-scheme:var(--scheme,normal)]
 border-input text-primary-ink focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error aspect-square size-4 shrink-0 rounded-full border shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50
 border-primary-ink ring-ring/50 block size-4 shrink-0 rounded-full border bg-ink shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50
 border-t
@@ -251,7 +254,7 @@ context-menu-trigger
 cursor-pointer list-none [&::-webkit-details-marker]:hidden
 dark
 dark:
-data-[active=true]:border-ring data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error data-[active=true]:aria-invalid:border-accent-error border-input relative flex h-9 w-9 items-center justify-center border-y border-r text-sm shadow-xs transition-all outline-none first:rounded-l-md first:border-l last:rounded-r-md data-[active=true]:z-10 data-[active=true]:ring-[3px]
+data-[active=true]:border-ring data-[active=true]:ring-ring data-[active=true]:aria-invalid:ring-accent-error aria-invalid:border-accent-error data-[active=true]:aria-invalid:border-accent-error border-input relative flex h-7 w-7 items-center justify-center border-y border-r bg-muted text-body transition-colors outline-none first:rounded-l-[var(--control-radius)] first:border-l last:rounded-r-[var(--control-radius)] data-[active=true]:z-10 data-[active=true]:ring-1
 data-[active=true]:focus:bg-hover data-[active=true]:hover:bg-hover data-[active=true]:bg-hover/50 data-[active=true]:text-ink hover:bg-hover hover:text-ink focus:bg-hover focus:text-ink focus-visible:ring-ring/50 [&_svg:not([class*='text-'])]:text-ink-soft flex flex-col gap-1 rounded-sm p-2 text-sm transition-all outline-none focus-visible:ring-[3px] focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4
 data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 top-0 left-0 w-full p-2 pr-2.5 md:absolute md:w-auto group-data-[viewport=false]/navigation-menu:bg-popover group-data-[viewport=false]/navigation-menu:text-ink group-data-[viewport=false]/navigation-menu:data-[state=open]:animate-in group-data-[viewport=false]/navigation-menu:data-[state=closed]:animate-out group-data-[viewport=false]/navigation-menu:data-[state=closed]:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-[state=open]:fade-in-0 group-data-[viewport=false]/navigation-menu:data-[state=closed]:fade-out-0 group-data-[viewport=false]/navigation-menu:top-full group-data-[viewport=false]/navigation-menu:mt-1.5 group-data-[viewport=false]/navigation-menu:overflow-hidden group-data-[viewport=false]/navigation-menu:rounded-md group-data-[viewport=false]/navigation-menu:border group-data-[viewport=false]/navigation-menu:border-border group-data-[viewport=false]/navigation-menu:shadow group-data-[viewport=false]/navigation-menu:duration-200 **:data-[slot=navigation-menu-link]:focus:ring-0 **:data-[slot=navigation-menu-link]:focus:outline-none
 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full
@@ -377,7 +380,7 @@ field-separator
 field-separator-content
 field-set
 field-sizing-content
-file:text-ink placeholder:text-ink-soft selection:bg-primary selection:text-on-primary border-input h-9 w-full min-w-0 rounded-[var(--control-radius)] border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error
+file:text-ink placeholder:text-ink-soft selection:bg-primary selection:text-on-primary border-input h-7 w-full min-w-0 rounded-[var(--control-radius)] border bg-muted px-2 text-base pointer-fine:text-body transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-body file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error
 fill-primary-ink
 first:rounded-l-md
 fixed inset-0 z-50 bg-black/50 data-[state=closed]:pointer-events-none
@@ -386,6 +389,7 @@ fixed top-1/2 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 ov
 flex
 flex basis-full items-center justify-between gap-2
 flex flex-1 flex-col gap-1 [&+[data-slot=item-content]]:flex-none
+flex flex-col gap-0.5 p-1.5
 flex flex-col gap-0.5 p-4 text-center sm:gap-1.5 sm:text-left
 flex flex-col gap-1.5 p-4
 flex flex-col gap-2
@@ -420,8 +424,8 @@ flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance
 flex w-full min-w-0 flex-col gap-1
 flex w-full mt-2
 flex-1 outline-none
-flex-1 resize-none rounded-none border-0 bg-transparent py-3 shadow-none focus-visible:ring-0
-flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0
+flex-1 resize-none rounded-none border-0 bg-transparent py-3 focus-visible:ring-0
+flex-1 rounded-none border-0 bg-transparent focus-visible:ring-0
 flex-1 space-y-1
 flex-col
 flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>*:not(:last-child)]:rounded-b-none
@@ -435,7 +439,7 @@ focus-visible:ring-0
 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 focus-visible:ring-[3px]
 focus-visible:ring-ring/50 size-full rounded-[inherit] overflow-auto transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1
-focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring [&_svg:not([class*='text-'])]:text-ink-soft relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm whitespace-normal [overflow-wrap:anywhere] outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2
+focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring [&_svg:not([class*='text-'])]:text-ink-mid relative flex min-h-7 w-full cursor-default items-center gap-2 rounded-[var(--control-radius)] py-1 pr-8 pl-2 text-body text-ink-mid whitespace-normal [overflow-wrap:anywhere] outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2
 focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[state=open]:bg-hover data-[state=open]:text-ink flex h-7 cursor-default items-center gap-2 rounded-[var(--control-radius)] px-2 text-body text-ink-mid outline-hidden select-none data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-ink-mid
 focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[state=open]:bg-hover data-[state=open]:text-ink flex h-7 items-center rounded-[var(--control-radius)] px-2 text-body font-medium text-ink-mid outline-hidden select-none
 focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[variant=danger]:text-accent-error-ink data-[variant=danger]:focus:bg-accent-error/10 data-[variant=danger]:focus:text-accent-error-ink data-[variant=danger]:*:[svg]:!text-accent-error-ink data-[inset]:pl-8 relative flex h-7 cursor-default items-center gap-2 rounded-[var(--control-radius)] px-2 text-body text-ink-mid outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-ink-mid
@@ -470,28 +474,29 @@ group/field-content flex flex-1 flex-col gap-1.5 leading-snug
 group/field-group @container/field-group flex w-full flex-col gap-7 data-[slot=checkbox-group]:gap-3 [&>[data-slot=field-group]]:gap-4
 group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border [&>*]:data-[slot=field]:p-4 has-data-[state=checked]:bg-primary-ink/5 has-data-[state=checked]:border-primary-ink
 group/input-group
-group/input-group border-input relative flex w-full items-center rounded-md border shadow-xs transition-[color,box-shadow] outline-none h-9 min-w-0 has-[>textarea]:h-auto has-[>[data-align=inline-start]]:[&>input]:pl-2 has-[>[data-align=inline-end]]:[&>input]:pr-2 has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-accent-error/20 has-[[data-slot][aria-invalid=true]]:border-accent-error
+group/input-group border-input relative flex w-full items-center rounded-[var(--control-radius)] border bg-muted transition-colors outline-none h-7 min-w-0 has-[>textarea]:h-auto has-[>[data-align=inline-start]]:[&>input]:pl-2 has-[>[data-align=inline-end]]:[&>input]:pr-2 has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-1 has-[[data-slot=input-group-control]:focus-visible]:ring-ring has-[[data-slot][aria-invalid=true]]:border-accent-error
 group/item flex items-center border border-transparent text-sm rounded-md transition-colors [a]:hover:bg-hover/50 [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]
 group/item-group flex flex-col
 group/menu-item relative
 group/navigation-menu relative flex max-w-max flex-1 items-center justify-center
 group/sidebar-wrapper has-data-[variant=inset]:bg-secondary flex min-h-svh w-full
 h-10 px-2.5 min-w-10
+h-11 pl-3 pr-2.5 text-base
+h-11 pr-11 pl-3 text-base pointer-fine:text-base
+h-11 px-3 text-base pointer-fine:text-base file:h-8
 h-12
-h-12 pr-11 pl-4 text-base md:text-base
 h-12 px-3 min-w-12
-h-12 px-4 text-base
-h-12 px-4 text-base md:text-base file:h-9
 h-12 text-sm group-data-[collapsible=icon]:p-0!
 h-2.5 flex-col border-t border-t-transparent
 h-4
 h-4 w-24
 h-5 aspect-square px-0
+h-5 gap-1 px-1.5 rounded-[var(--control-radius)] [&>svg:not([class*='size-'])]:size-3.5 has-[>svg]:px-1.5
 h-5 gap-1 px-1.5 text-caption has-[>svg]:px-1
 h-6
 h-6 aspect-square
 h-6 aspect-square px-0
-h-6 gap-1 px-2 rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-3.5 has-[>svg]:px-2
+h-6 px-2 gap-1.5 rounded-[var(--control-radius)] has-[>svg]:px-2
 h-6 px-2 text-body-s has-[>svg]:px-1.5
 h-7
 h-7 aspect-square px-0
@@ -502,7 +507,6 @@ h-8
 h-8 aspect-square
 h-8 aspect-square px-0
 h-8 px-1.5 min-w-8
-h-8 px-2.5 gap-1.5 rounded-md has-[>svg]:px-2.5
 h-8 px-4 text-body-l has-[>svg]:px-3
 h-8 text-sm
 h-9
@@ -594,7 +598,7 @@ min-h-11 px-6 text-body-l has-[>svg]:px-4
 min-h-14
 min-h-16
 min-h-20
-min-h-20 px-4 py-3 text-base md:text-base
+min-h-20 px-3 py-2 text-base pointer-fine:text-base
 min-h-40
 min-w-0 flex-auto shrink-0 rounded-none shadow-none first:rounded-l-md last:rounded-r-md focus:z-10 focus-visible:z-10 data-[variant=outline]:-ml-px data-[variant=outline]:first:ml-0 data-[state=on]:z-10
 min-w-0 shrink-0 grow-0 basis-full
@@ -627,20 +631,19 @@ order-book-head
 order-book-row
 order-book-spread
 order-first
-order-first pl-3 has-[>button]:ml-[-0.45rem] has-[>kbd]:ml-[-0.35rem]
-order-first w-full justify-start px-3 pt-3 [.border-b]:pb-3 group-has-[>input]/input-group:pt-2.5
+order-first pl-2 has-[>button]:ml-[-0.45rem] has-[>kbd]:ml-[-0.35rem]
+order-first w-full justify-start px-2 pt-2 [.border-b]:pb-2 group-has-[>input]/input-group:pt-1.5
 order-form
 order-form-row
 order-form-submit
 order-last
-order-last pr-3 has-[>button]:mr-[-0.45rem] has-[>kbd]:mr-[-0.35rem]
-order-last w-full justify-start px-3 pb-3 [.border-t]:pt-3 group-has-[>input]/input-group:pb-2.5
+order-last pr-2 has-[>button]:mr-[-0.45rem] has-[>kbd]:mr-[-0.35rem]
+order-last w-full justify-start px-2 pb-2 [.border-t]:pt-2 group-has-[>input]/input-group:pb-1.5
 origin-top-center bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border border-border shadow md:w-[var(--radix-navigation-menu-viewport-width)]
 overflow-auto
 overflow-hidden
 overflow-x-auto
 p-0
-p-1
 p-3 w-fit
 p-4 gap-4
 pagination-content
@@ -759,11 +762,11 @@ size-4 animate-spin
 size-4 opacity-50
 size-4 shrink-0 opacity-50
 size-4 shrink-0 text-accent-debug
+size-5 rounded-[var(--control-radius)] p-0 has-[>svg]:p-0
 size-6
-size-6 rounded-[calc(var(--radius)-5px)] p-0 has-[>svg]:p-0
+size-6 p-0 has-[>svg]:p-0
 size-8
 size-8 border border-border rounded-sm bg-muted [&_svg:not([class*='size-'])]:size-4
-size-8 p-0 has-[>svg]:p-0
 size-8 p-0 select-none
 size-auto w-full aspect-square font-normal leading-none tabular-nums
 size-full
@@ -811,6 +814,7 @@ text-accent-trace
 text-accent-warn-ink
 text-base
 text-body 
+text-body flex gap-2 items-center
 text-body-s
 text-caption
 text-end tabular-nums
@@ -823,13 +827,13 @@ text-ink-soft
 text-ink-soft [&>a:hover]:text-primary-ink text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4
 text-ink-soft col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed
 text-ink-soft flex flex-wrap items-center gap-1.5 text-sm break-words sm:gap-2.5
-text-ink-soft flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&>svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50
-text-ink-soft flex items-center gap-2 text-sm [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4
+text-ink-soft flex h-6 items-center px-2 text-body-s
+text-ink-soft flex h-auto cursor-text items-center justify-center gap-2 py-1 text-body font-medium select-none [&>svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-[var(--control-radius)] group-data-[disabled=true]/input-group:opacity-50
+text-ink-soft flex items-center gap-2 text-body [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4
 text-ink-soft line-clamp-2 text-sm leading-normal font-normal text-balance [&>a:hover]:text-primary-ink [&>a]:underline [&>a]:underline-offset-4
 text-ink-soft ml-auto text-caption tabular-nums
 text-ink-soft mt-4 text-sm
 text-ink-soft pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200
-text-ink-soft px-2 py-1.5 text-xs
 text-ink-soft rounded-md w-9 shrink-0 font-normal text-[0.8rem] select-none whitespace-nowrap
 text-ink-soft select-none
 text-ink-soft text-sm
@@ -851,7 +855,6 @@ text-primary-ink
 text-primary-ink underline-offset-4 hover:underline
 text-sm
 text-sm font-medium select-none
-text-sm shadow-none flex gap-2 items-center
 text-sm sm:text-xs font-light leading-relaxed text-ink/70 mb-4
 text-start
 text-xs font-light text-ink/70 hover:text-accent-debug transition-colors

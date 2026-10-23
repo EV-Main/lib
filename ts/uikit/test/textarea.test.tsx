@@ -15,9 +15,9 @@ describe("Textarea", () => {
     const { container } = render(<Textarea size="lg" />);
     const el = container.querySelector("textarea")!;
     expect(el).toHaveAttribute("data-size", "lg");
-    expect(el).toHaveClass("min-h-20", "px-4", "md:text-base");
+    expect(el).toHaveClass("min-h-20", "px-3", "pointer-fine:text-base");
     expect(el).not.toHaveClass("min-h-16");
-    expect(el).not.toHaveClass("md:text-sm");
+    expect(el).not.toHaveClass("pointer-fine:text-body");
   });
 
   it("forwards placeholder", () => {

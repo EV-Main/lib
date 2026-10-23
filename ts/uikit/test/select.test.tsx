@@ -101,7 +101,7 @@ describe("Select", () => {
 
   it("sizes the trigger from the shared form scale", () => {
     const { unmount } = render(tree());
-    expect(screen.getByRole("combobox")).toHaveClass("h-9", "rounded-[var(--control-radius)]");
+    expect(screen.getByRole("combobox")).toHaveClass("h-7", "rounded-[var(--control-radius)]");
     unmount();
     render(
       <Select>
@@ -112,8 +112,8 @@ describe("Select", () => {
     );
     const trigger = screen.getByRole("combobox");
     expect(trigger).toHaveAttribute("data-size", "lg");
-    expect(trigger).toHaveClass("h-12", "px-4", "text-base");
-    expect(trigger).not.toHaveClass("text-sm");
+    expect(trigger).toHaveClass("h-11", "pl-3", "text-base");
+    expect(trigger).not.toHaveClass("text-body");
   });
 
   it("shows the chosen item's label, not its value, before the popover ever opened", () => {
