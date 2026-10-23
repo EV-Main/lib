@@ -804,3 +804,5 @@ export type {
   ModelChipProps,
   ModelOption,
 } from "./components/chat-composer";
+export { ChatDock, ChatPanel } from "./components/chat-panel";
+export type { ChatDockLabels, ChatDockProps, ChatPanelLabels, ChatPanelProps } from "./components/chat-panel";
