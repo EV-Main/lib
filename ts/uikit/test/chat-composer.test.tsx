@@ -71,6 +71,14 @@ describe("ChatComposer", () => {
     expect(onSend).toHaveBeenCalledWith("next");
   });
 
+  it("moves focus to the field after Stop", () => {
+    render(<ChatComposer onSend={() => {}} onStop={() => {}} streaming />);
+    const stop = screen.getByRole("button", { name: "Stop" });
+    stop.focus();
+    fireEvent.click(stop);
+    expect(field()).toHaveFocus();
+  });
+
   it("shows the attach button, the attachments and the tools it was given", () => {
     const onAttach = vi.fn();
     render(<ChatComposer onSend={() => {}} onAttach={onAttach} attachments={<span>file.pdf</span>} tools={<span>Fast</span>} />);

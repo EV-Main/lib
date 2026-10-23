@@ -110,6 +110,7 @@ export function ChatComposer({
     ...(onValueChange ? { onChange: onValueChange } : {}),
   });
   const trimmed = text.trim();
+  const root = React.useRef<HTMLDivElement>(null);
 
   const send = () => {
     if (trimmed === "" || disabled) return;
@@ -119,6 +120,7 @@ export function ChatComposer({
 
   return (
     <div
+      ref={root}
       data-slot="chat-composer"
       data-state={streaming ? "streaming" : "default"}
       className={cn(
@@ -156,7 +158,15 @@ export function ChatComposer({
         <span className="flex-1" />
         {hint != null && <span className="hidden text-caption text-ink-soft sm:inline">{hint}</span>}
         {streaming ? (
-          <IconButton variant="secondary" aria-label={labels.stop ?? "Stop"} onClick={onStop}>
+          <IconButton
+            variant="secondary"
+            aria-label={labels.stop ?? "Stop"}
+            onClick={() => {
+              onStop?.();
+              // The Stop button turns into Send, so focus would otherwise stay on a swapped-out element.
+              root.current?.querySelector("textarea")?.focus();
+            }}
+          >
             <UiIcon name="stop" />
           </IconButton>
         ) : (
