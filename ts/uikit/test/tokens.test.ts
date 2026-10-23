@@ -228,11 +228,15 @@ describe.each(scopes)("palette $label", (scope) => {
       expect(contrast(line("input", scope, t(surface)), t(surface))).toBeGreaterThanOrEqual(3);
     });
 
-    it("the unchecked switch thumb still reads on its --input track", () => {
-      expect(SWITCH_BASE).toMatch(/\bdata-\[state=unchecked\]:bg-input\b/);
-      expect(SWITCH_THUMB).toMatch(/\bdata-\[state=unchecked\]:bg-ink\b/);
+    // Off, the track is a muted well edged by --input and the knob is the mid
+    // ink: the edge carries the 3:1 shape floor, the knob reads against the well.
+    it("the unchecked switch is a muted well edged by --input, and its thumb reads on it", () => {
+      expect(SWITCH_BASE).toMatch(/\bdata-\[state=unchecked\]:bg-muted\b/);
+      expect(SWITCH_BASE).toMatch(/\bdata-\[state=unchecked\]:border-input\b/);
+      expect(SWITCH_THUMB).toMatch(/\bdata-\[state=unchecked\]:bg-ink-mid\b/);
       for (const surface of ["background", "card"]) {
-        expect(contrast(t("ink"), line("input", scope, t(surface)))).toBeGreaterThanOrEqual(3);
+        expect(contrast(line("ink-mid", scope, t("muted")), t("muted"))).toBeGreaterThanOrEqual(3);
+        expect(contrast(line("input", scope, t(surface)), t(surface))).toBeGreaterThanOrEqual(3);
       }
     });
   });

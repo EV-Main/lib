@@ -8,15 +8,15 @@ pub const TABLE_CONTAINER: &str = "relative w-full overflow-x-auto";
 /// variant down — and keeps every cell utility a plain single-class rule, so a
 /// cell's own `px-4` or `text-ink` fuses over the kit's and wins. A descendant
 /// selector on the table (`[&_td]:px-5`) would outrank it instead.
-pub const TABLE: &str = "w-full caption-bottom text-sm";
+pub const TABLE: &str = "w-full caption-bottom text-body";
 
 /// The card a `variant="card"` table sits in: the [`CARD`](crate::CARD)
 /// surface without its padding and gap, clipping the rows to the radius.
-pub const TABLE_CARD: &str = "bg-card text-ink overflow-hidden rounded-xl border border-border shadow-sm";
-pub const TABLE_HEADER: &str = "[&_tr]:border-b";
+pub const TABLE_CARD: &str = "bg-card text-ink overflow-hidden rounded-lg border border-border shadow-card";
+pub const TABLE_HEADER: &str = "[&_tr]:border-b [&_tr]:border-border-subtle";
 pub const TABLE_BODY: &str = "[&_tr:last-child]:border-0";
-pub const TABLE_FOOTER: &str = "bg-muted/50 border-t border-border font-medium [&>tr]:last:border-b-0";
-pub const TABLE_ROW: &str = "hover:bg-muted/50 data-[state=selected]:bg-muted border-b border-border transition-colors";
+pub const TABLE_FOOTER: &str = "bg-hover border-t border-border-subtle font-medium [&>tr]:last:border-b-0";
+pub const TABLE_ROW: &str = "hover:bg-hover data-[state=selected]:bg-selected border-b border-border-subtle transition-colors";
 // The typography properties have no fallback on purpose: an undefined custom
 // property makes the declaration compute to `unset`, and font-size,
 // letter-spacing and text-transform all inherit — so outside a `card` table the
@@ -29,7 +29,7 @@ pub const TABLE_HEAD: &str = "text-[color:var(--table-head-ink,var(--ink))] h-[v
                              [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]";
 pub const TABLE_CELL: &str = "px-[var(--table-px,calc(var(--spacing)*2))] py-[var(--table-dense-py,var(--table-py,calc(var(--spacing)*2)))] \
                              align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]";
-pub const TABLE_CAPTION: &str = "text-ink-soft mt-4 text-sm";
+pub const TABLE_CAPTION: &str = "text-ink-soft mt-4 text-body-s";
 /// The look of the table: `default` is the shadcn canon, `card` the tracked
 /// uppercase list that sits edge to edge in a [`TABLE_CARD`].
 #[derive(Debug, PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
@@ -49,7 +49,7 @@ pub enum TableVariant {
 	// card edge. The head row loses its hover: it is not a row you act on —
 	// its own head only (`>`), not a nested table's.
 	#[tw(class = "[--table-px:calc(var(--spacing)*5)] [--table-py:calc(var(--spacing)*3)] [--table-head-ink:var(--ink-soft)] \
-		         [--table-head-text:var(--text-xs)] [--table-head-tracking:var(--tracking-wide)] [--table-head-case:uppercase] \
+		         [--table-head-text:var(--text-caption)] [--table-head-tracking:var(--tracking-normal)] [--table-head-case:none] \
 		         [&>thead>tr:hover]:bg-transparent")]
 	Card,
 }
@@ -112,7 +112,7 @@ mod tests {
 	#[test]
 	fn card_and_compact_compose() {
 		let both = table(TableVariant::Card, TableDensity::Compact);
-		for prop in ["--table-px:", "--table-py:", "--table-head-case:uppercase", "--table-dense-py:", "--table-head-h:"] {
+		for prop in ["--table-px:", "--table-py:", "--table-head-case:none", "--table-dense-py:", "--table-head-h:"] {
 			assert!(both.contains(prop), "{prop} missing from {both}");
 		}
 		assert!(both.contains("[&>thead>tr:hover]:bg-transparent"), "{both}");

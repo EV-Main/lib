@@ -2,8 +2,8 @@
 
 export const TABS_ROOT = "flex flex-col gap-2";
 
-export const TABS_LIST = "bg-muted text-ink-soft inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]";
+export const TABS_LIST = "text-ink-mid border-border-subtle inline-flex h-8 w-fit items-stretch justify-center border-b";
 
-export const TABS_TRIGGER = "data-[state=active]:bg-background focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-ink inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
+export const TABS_TRIGGER = "text-ink-mid hover:text-ink data-[state=active]:text-ink data-[state=active]:border-primary focus-visible:outline-ring inline-flex h-8 flex-1 items-center justify-center gap-1.5 -mb-px border-b border-transparent px-3 text-body font-medium whitespace-nowrap transition-colors outline-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:-outline-offset-2 disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
 
 export const TABS_CONTENT = "flex-1 outline-none";

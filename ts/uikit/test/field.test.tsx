@@ -52,7 +52,7 @@ describe("Field", () => {
   it("FieldError renders children with an alert role", () => {
     const { getByRole } = render(<FieldError>bad</FieldError>);
     const el = getByRole("alert");
-    expect(el).toHaveClass("text-accent-error");
+    expect(el).toHaveClass("text-accent-error-ink");
     expect(el).toHaveTextContent("bad");
   });
 

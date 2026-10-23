@@ -34,7 +34,7 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("bg-muted"), "{html}");
+		assert!(html.contains("bg-secondary"), "{html}");
 		assert!(html.contains("data-slot=\"kbd\""), "{html}");
 		assert!(html.contains("K"));
 	}

@@ -80,6 +80,6 @@ mod tests {
 			rsx! { Switch {} }
 		}
 		let html = render(app);
-		assert!(html.contains("data-[state=checked]:translate-x-[calc(100%-2px)]"), "{html}");
+		assert!(html.contains("data-[state=checked]:translate-x-[13px]"), "{html}");
 	}
 }

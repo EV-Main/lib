@@ -106,7 +106,7 @@ mod tests {
 		assert!(html.contains("data-slot=\"item\""), "{html}");
 		assert!(html.contains("data-variant=\"bare\""), "{html}");
 		assert!(html.contains("data-size=\"md\""), "{html}");
-		assert!(html.contains("rounded-md"), "{html}");
+		assert!(html.contains("rounded-[var(--control-radius)]"), "{html}");
 	}
 
 	#[test]

@@ -1,5 +1,10 @@
+use crate::focus::filled_focus_ring;
+
 pub const RADIO_GROUP_ROOT: &str = "grid gap-3";
-pub const RADIO_GROUP_ITEM: &str = "border-input text-primary-ink focus-visible:border-ring focus-visible:ring-ring/50 \
-                         aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error aspect-square size-4 \
-                         shrink-0 rounded-full border shadow-xs transition-[color,box-shadow] outline-none \
-                         focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50";
+/// Unfilled, but the offset ring is the kit's indicator for a control with no
+/// edge of its own to recolour that reads on every plane.
+pub const RADIO_GROUP_ITEM: &str = concat!(
+	"border-input text-primary-ink bg-muted aria-invalid:border-accent-error aspect-square size-4 \
+	 shrink-0 rounded-full border transition-colors outline-none disabled:cursor-not-allowed disabled:opacity-40 ",
+	filled_focus_ring!()
+);

@@ -1067,6 +1067,8 @@ fn avatar() -> Vec<Ts> {
 			name: "AVATAR_FALLBACK",
 			value: AVATAR_FALLBACK,
 		},
+		table::<AvatarShape>("avatarShapeClasses", "AvatarShape"),
+		table::<AvatarSize>("avatarSizeClasses", "AvatarSize"),
 	]
 }
 

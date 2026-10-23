@@ -75,6 +75,6 @@ mod tests {
 		}
 		let html = render(app);
 		assert!(html.contains("border-input"), "{html}");
-		assert!(html.contains("h-8"), "{html}");
+		assert!(html.contains("h-6"), "{html}");
 	}
 }

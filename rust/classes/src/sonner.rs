@@ -3,7 +3,7 @@ use tailwind_fuse::{AsTailwindClass, TwVariant};
 /// Base shared by every toast. The TS mirror appends its swipe-only utilities
 /// (`touch-pan-y select-none`) on top — that styling is behaviour-specific and
 /// stays in the React component (the Rust kit has no swipe-to-dismiss).
-pub const TOAST_BASE: &str = "pointer-events-auto flex w-full items-start gap-3 rounded-md border p-4 text-sm shadow-lg";
+pub const TOAST_BASE: &str = "pointer-events-auto flex w-full items-start gap-3 rounded-lg border p-3 text-body shadow-elevated";
 
 pub const TOAST_CLOSE: &str = "text-ink/50 hover:text-ink shrink-0 transition-colors";
 
@@ -19,13 +19,13 @@ pub const TOASTER_BASE: &str = "pointer-events-none fixed z-100 w-[calc(100%-2re
 pub enum ToastVariant {
 	#[tw(default, class = "bg-popover text-ink border-border")]
 	Neutral,
-	#[tw(class = "bg-popover text-ink border-positive/40")]
+	#[tw(class = "bg-popover text-ink border-chip-positive-border")]
 	Positive,
-	#[tw(class = "bg-popover text-ink border-border")]
+	#[tw(class = "bg-popover text-ink border-chip-info-border")]
 	Info,
-	#[tw(class = "bg-popover text-ink border-border")]
+	#[tw(class = "bg-popover text-ink border-chip-warn-border")]
 	Warn,
-	#[tw(class = "bg-popover text-ink border-accent-error/50")]
+	#[tw(class = "bg-popover text-ink border-chip-error-border")]
 	Error,
 }
 

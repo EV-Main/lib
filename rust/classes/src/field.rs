@@ -1,10 +1,10 @@
 use tailwind_fuse::{AsTailwindClass, TwVariant};
 
-pub const FIELD_BASE: &str = "group/field flex w-full gap-3 data-[invalid=true]:text-accent-error";
+pub const FIELD_BASE: &str = "group/field flex w-full gap-3 data-[invalid=true]:text-accent-error-ink";
 
 pub const FIELD_SET: &str = "flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3";
 
-pub const FIELD_LEGEND: &str = "mb-3 font-medium data-[variant=legend]:text-base data-[variant=label]:text-sm";
+pub const FIELD_LEGEND: &str = "mb-3 font-medium data-[variant=legend]:text-base data-[variant=label]:text-body";
 
 pub const FIELD_GROUP: &str = "group/field-group @container/field-group flex w-full flex-col gap-7 \
          data-[slot=checkbox-group]:gap-3 [&>[data-slot=field-group]]:gap-4";
@@ -16,20 +16,20 @@ pub const FIELD_LABEL: &str = "group/field-label peer/field-label flex w-fit gap
          has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border \
          [&>*]:data-[slot=field]:p-4 has-data-[state=checked]:bg-primary-ink/5 has-data-[state=checked]:border-primary-ink";
 
-pub const FIELD_TITLE: &str = "flex w-fit items-center gap-2 text-sm leading-snug font-medium \
+pub const FIELD_TITLE: &str = "flex w-fit items-center gap-2 text-body leading-snug font-medium \
          group-data-[disabled=true]/field:opacity-50";
 
-pub const FIELD_DESCRIPTION: &str = "text-ink-soft text-sm leading-normal font-normal \
+pub const FIELD_DESCRIPTION: &str = "text-ink-soft text-body leading-normal font-normal \
          group-has-[[data-orientation=horizontal]]/field:text-balance last:mt-0 nth-last-2:-mt-1 \
          [[data-variant=legend]+&]:-mt-1.5 [&>a:hover]:text-primary-ink [&>a]:underline [&>a]:underline-offset-4";
 
-pub const FIELD_SEPARATOR: &str = "relative -my-2 h-5 text-sm group-data-[variant=outline]/field-group:-mb-2";
+pub const FIELD_SEPARATOR: &str = "relative -my-2 h-5 text-body group-data-[variant=outline]/field-group:-mb-2";
 
 pub const FIELD_SEPARATOR_LINE: &str = "absolute inset-0 top-1/2 shrink-0 bg-border h-px w-full";
 
 pub const FIELD_SEPARATOR_CONTENT: &str = "bg-background text-ink-soft relative mx-auto block w-fit px-2";
 
-pub const FIELD_ERROR: &str = "text-accent-error text-sm font-normal";
+pub const FIELD_ERROR: &str = "text-accent-error-ink text-body-s font-normal";
 
 #[derive(PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
 #[strum(serialize_all = "kebab-case")]

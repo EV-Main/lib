@@ -45,7 +45,7 @@ pub fn ToggleGroup(
 		shared.set(look);
 	}
 	use_context_provider(|| ToggleGroupCtx { selected, look: shared });
-	let cls = cn!("group/toggle-group flex w-fit items-center rounded-md data-[variant=outline]:shadow-xs", class);
+	let cls = cn!("group/toggle-group flex w-fit items-center rounded-[var(--control-radius)]", class);
 	rsx! {
 		div {
 			class: cls,
@@ -93,7 +93,7 @@ pub fn ToggleGroupItem(
 	let on = driver.is_on();
 	let cls = cn!(
 		toggle_classes(&variant, size, ""),
-		"min-w-0 flex-auto shrink-0 rounded-none shadow-none first:rounded-l-md last:rounded-r-md focus:z-10 focus-visible:z-10 data-[variant=outline]:-ml-px data-[variant=outline]:first:ml-0 data-[state=on]:z-10",
+		"min-w-0 flex-auto shrink-0 rounded-none shadow-none first:rounded-l-[var(--control-radius)] last:rounded-r-[var(--control-radius)] focus:z-10 focus-visible:z-10 data-[variant=outline]:-ml-px data-[variant=outline]:first:ml-0 data-[state=on]:z-10",
 		class
 	);
 	rsx! {
@@ -206,8 +206,8 @@ mod tests {
 		}
 		let html = render(app);
 		assert!(html.contains("data-slot=\"toggle-group-item\""), "{html}");
-		assert!(html.contains("first:rounded-l-md"), "{html}");
-		assert!(html.contains("h-8"), "{html}");
+		assert!(html.contains("first:rounded-l-[var(--control-radius)]"), "{html}");
+		assert!(html.contains("h-6"), "{html}");
 	}
 
 	#[test]

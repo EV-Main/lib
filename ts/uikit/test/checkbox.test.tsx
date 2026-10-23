@@ -9,7 +9,7 @@ describe("Checkbox", () => {
     expect(el).toHaveAttribute("data-slot", "checkbox");
     expect(el).toHaveAttribute("data-state", "unchecked");
     expect(el).toHaveAttribute("aria-checked", "false");
-    expect(el).toHaveClass("rounded-[4px]");
+    expect(el).toHaveClass("rounded-[var(--control-radius)]", "bg-muted");
   });
 
   it("shows the check indicator only when checked", () => {

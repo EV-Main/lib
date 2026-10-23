@@ -4,9 +4,9 @@ pub const NAVIGATION_MENU_LIST: &str = "group flex flex-1 list-none items-center
 
 pub const NAVIGATION_MENU_ITEM: &str = "relative";
 
-pub const NAVIGATION_MENU_TRIGGER_STYLE: &str = "group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 \
-                             text-sm font-medium hover:bg-hover hover:text-ink focus:bg-hover \
-                             focus:text-ink disabled:pointer-events-none disabled:opacity-50 \
+pub const NAVIGATION_MENU_TRIGGER_STYLE: &str = "group inline-flex h-9 w-max items-center justify-center rounded-[var(--control-radius)] bg-background px-4 py-2 \
+                             text-body font-medium hover:bg-hover hover:text-ink focus:bg-hover \
+                             focus:text-ink disabled:pointer-events-none disabled:opacity-40 \
                              data-[state=open]:hover:bg-hover data-[state=open]:text-ink \
                              data-[state=open]:focus:bg-hover data-[state=open]:bg-hover/50 focus-visible:ring-ring/50 \
                              outline-none transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1";
@@ -29,7 +29,7 @@ pub const NAVIGATION_MENU_CONTENT: &str = "data-[motion^=from-]:animate-in data-
                        group-data-[viewport=false]/navigation-menu:rounded-md \
                        group-data-[viewport=false]/navigation-menu:border \
                        group-data-[viewport=false]/navigation-menu:border-border \
-                       group-data-[viewport=false]/navigation-menu:shadow \
+                       group-data-[viewport=false]/navigation-menu:shadow-elevated \
                        group-data-[viewport=false]/navigation-menu:duration-200 \
                        **:data-[slot=navigation-menu-link]:focus:ring-0 \
                        **:data-[slot=navigation-menu-link]:focus:outline-none";
@@ -37,7 +37,7 @@ pub const NAVIGATION_MENU_CONTENT: &str = "data-[motion^=from-]:animate-in data-
 pub const NAVIGATION_MENU_LINK: &str = "data-[active=true]:focus:bg-hover data-[active=true]:hover:bg-hover data-[active=true]:bg-hover/50 \
                     data-[active=true]:text-ink hover:bg-hover hover:text-ink \
                     focus:bg-hover focus:text-ink focus-visible:ring-ring/50 \
-                    [&_svg:not([class*='text-'])]:text-ink-soft flex flex-col gap-1 rounded-sm p-2 text-sm \
+                    [&_svg:not([class*='text-'])]:text-ink-soft flex flex-col gap-1 rounded-[var(--control-radius)] p-2 text-body \
                     transition-all outline-none focus-visible:ring-[3px] focus-visible:outline-1 \
                     [&_svg:not([class*='size-'])]:size-4";
 
@@ -47,4 +47,4 @@ pub const NAVIGATION_MENU_INDICATOR: &str = "data-[state=visible]:animate-in dat
 pub const NAVIGATION_MENU_VIEWPORT: &str = "origin-top-center bg-popover text-ink data-[state=open]:animate-in \
                               data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 \
                               relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden \
-                              rounded-md border border-border shadow md:w-[var(--radix-navigation-menu-viewport-width)]";
+                              rounded-[var(--control-radius)] border border-border shadow-elevated md:w-[var(--radix-navigation-menu-viewport-width)]";

@@ -6,7 +6,7 @@ pub const CALENDAR_NAV_BUTTON: &str = "size-8 p-0 select-none";
 
 pub const CALENDAR_NAV: &str = "flex items-center justify-between gap-1 w-full px-1";
 
-pub const CALENDAR_CAPTION: &str = "text-sm font-medium select-none";
+pub const CALENDAR_CAPTION: &str = "text-body font-medium select-none";
 
 pub const CALENDAR_GRID: &str = "w-full border-collapse mt-4";
 
@@ -16,7 +16,7 @@ pub const CALENDAR_WEEKDAY_ROW: &str = "flex";
 // locale's weekday labels; the height is fixed by the six-week grid both
 // components always render. `whitespace-nowrap` keeps the header row one line
 // tall even if a locale's label ever carries a space (lib#122).
-pub const CALENDAR_WEEKDAY: &str = "text-ink-soft rounded-md w-9 shrink-0 font-normal text-[0.8rem] select-none whitespace-nowrap";
+pub const CALENDAR_WEEKDAY: &str = "text-ink-soft rounded-[var(--control-radius)] w-9 shrink-0 font-normal text-body-s select-none whitespace-nowrap";
 
 pub const CALENDAR_WEEK: &str = "flex w-full mt-2";
 
@@ -28,4 +28,4 @@ pub const CALENDAR_DAY: &str = "size-auto w-full aspect-square font-normal leadi
 
 pub const CALENDAR_DAY_SELECTED: &str = "bg-primary text-on-primary";
 
-pub const CALENDAR_DAY_TODAY: &str = "bg-hover text-ink rounded-md";
+pub const CALENDAR_DAY_TODAY: &str = "bg-hover text-ink rounded-[var(--control-radius)]";

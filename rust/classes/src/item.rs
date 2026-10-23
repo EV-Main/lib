@@ -6,7 +6,7 @@ pub const ITEM_SEPARATOR: &str = "my-0";
 
 /// Shared base for the two-axis (variant × size) item. Fused with the variant
 /// and size class last-wins, mirroring the TS `cn(ITEM_BASE, itemVariants[v], itemSizes[s])`.
-pub const ITEM_BASE: &str = "group/item flex items-center border border-transparent text-sm rounded-md transition-colors \
+pub const ITEM_BASE: &str = "group/item flex items-center border border-transparent text-body rounded-[var(--control-radius)] transition-colors \
                              [a]:hover:bg-hover/50 [a]:transition-colors duration-100 flex-wrap outline-none \
                              focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]";
 
@@ -16,9 +16,9 @@ pub const ITEM_MEDIA_BASE: &str = "flex shrink-0 items-center justify-center gap
 
 pub const ITEM_CONTENT: &str = "flex flex-1 flex-col gap-1 [&+[data-slot=item-content]]:flex-none";
 
-pub const ITEM_TITLE: &str = "flex w-fit items-center gap-2 text-sm leading-snug font-medium";
+pub const ITEM_TITLE: &str = "flex w-fit items-center gap-2 text-body leading-snug font-medium";
 
-pub const ITEM_DESCRIPTION: &str = "text-ink-soft line-clamp-2 text-sm leading-normal font-normal text-balance \
+pub const ITEM_DESCRIPTION: &str = "text-ink-soft line-clamp-2 text-body leading-normal font-normal text-balance \
                                     [&>a:hover]:text-primary-ink [&>a]:underline [&>a]:underline-offset-4";
 
 pub const ITEM_ACTIONS: &str = "flex items-center gap-2";
@@ -52,8 +52,8 @@ pub enum ItemSize {
 pub enum ItemMediaVariant {
 	#[tw(default, class = "bg-transparent")]
 	Bare,
-	#[tw(class = "size-8 border border-border rounded-sm bg-muted [&_svg:not([class*='size-'])]:size-4")]
+	#[tw(class = "size-8 border border-border rounded-[var(--control-radius)] bg-muted [&_svg:not([class*='size-'])]:size-4")]
 	Icon,
-	#[tw(class = "size-10 rounded-sm overflow-hidden [&_img]:size-full [&_img]:object-cover")]
+	#[tw(class = "size-10 rounded-[var(--control-radius)] overflow-hidden [&_img]:size-full [&_img]:object-cover")]
 	Image,
 }

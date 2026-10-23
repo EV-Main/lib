@@ -114,7 +114,7 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("bg-muted/50"), "{html}");
+		assert!(html.contains("bg-hover"), "{html}");
 		assert!(html.contains("border-t"), "{html}");
 		assert!(html.contains("data-slot=\"table-footer\""), "{html}");
 	}
@@ -165,7 +165,7 @@ mod tests {
 		let html = render(app);
 		assert!(html.contains("data-variant=\"card\""), "{html}");
 		assert!(html.contains("data-density=\"compact\""), "{html}");
-		assert!(html.contains("[--table-head-case:uppercase]"), "{html}");
+		assert!(html.contains("[--table-head-case:none]"), "{html}");
 		assert!(html.contains("[--table-dense-py:calc(var(--spacing)*1.5)]"), "{html}");
 		// dioxus-ssr escapes `&` and `>` as numeric references
 		assert!(html.contains("thead") && html.contains("tr:hover]:bg-transparent"), "{html}");
@@ -216,7 +216,7 @@ mod tests {
 		let html = render(app);
 		assert!(html.contains("data-slot=\"table-card\""), "{html}");
 		assert!(html.contains("overflow-hidden"), "{html}");
-		assert!(html.contains("rounded-xl"), "{html}");
+		assert!(html.contains("rounded-lg"), "{html}");
 		assert!(!html.contains("py-6"), "{html}");
 	}
 }

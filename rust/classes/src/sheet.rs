@@ -6,11 +6,11 @@
 /// pointer events the moment it closes — the click right after a close lands on the page.
 pub const SHEET_OVERLAY: &str = "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 \
                                  data-[state=open]:fade-in-0 data-[state=closed]:duration-300 data-[state=open]:duration-500 \
-                                 data-[state=closed]:fill-mode-forwards data-[state=closed]:pointer-events-none fixed inset-0 z-50 bg-black/50";
+                                 data-[state=closed]:fill-mode-forwards data-[state=closed]:pointer-events-none fixed inset-0 z-50 bg-scrim";
 
 /// `outline-hidden`: the TS port focuses the panel itself on open (`tabindex=-1`), and a ring round a whole panel says nothing.
-pub const SHEET_CONTENT: &str = "bg-background border-border data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 \
-                                 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 \
+pub const SHEET_CONTENT: &str = "bg-background border-border-strong data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 \
+                                 shadow-overlay transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 \
                                  data-[state=closed]:fill-mode-forwards outline-hidden";
 
 /// `focus-visible`, not `focus`: the panel can hand focus here on a mouse open, where a ring is noise.

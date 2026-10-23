@@ -38,7 +38,7 @@ describe("Toggle", () => {
   it("toggleVariants fuses variant, size and override", () => {
     const cls = toggleVariants({ variant: "outline", size: "sm", className: "px-10" });
     expect(cls).toContain("border-input");
-    expect(cls).toContain("h-8");
+    expect(cls).toContain("h-6");
     expect(cls).toContain("px-10");
   });
 });

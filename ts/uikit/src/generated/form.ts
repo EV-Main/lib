@@ -2,8 +2,8 @@
 
 export const FORM_ITEM = "grid gap-2";
 
-export const FORM_LABEL = "text-accent-error";
+export const FORM_LABEL = "text-accent-error-ink";
 
 export const FORM_DESCRIPTION = "text-ink-soft text-sm";
 
-export const FORM_MESSAGE = "text-accent-error text-sm";
+export const FORM_MESSAGE = "text-accent-error-ink text-body-s";

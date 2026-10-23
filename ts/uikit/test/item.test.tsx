@@ -18,7 +18,7 @@ describe("Item", () => {
     const { getByText } = render(<Item>x</Item>);
     const el = getByText("x");
     expect(el.tagName).toBe("DIV");
-    expect(el).toHaveClass("rounded-md");
+    expect(el).toHaveClass("rounded-[var(--control-radius)]");
     expect(el).toHaveAttribute("data-slot", "item");
     expect(el).toHaveAttribute("data-variant", "bare");
     expect(el).toHaveAttribute("data-size", "md");
@@ -45,7 +45,7 @@ describe("Item", () => {
     );
     const el = getByRole("link");
     expect(el.tagName).toBe("A");
-    expect(el).toHaveClass("rounded-md");
+    expect(el).toHaveClass("rounded-[var(--control-radius)]");
   });
 
   it("renders the image media variant", () => {

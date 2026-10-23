@@ -131,7 +131,7 @@ pub fn NavigationMenuIndicator(#[props(default)] class: String) -> Element {
 	let cls = cn!(NAVIGATION_MENU_INDICATOR, class);
 	rsx! {
 		div { class: cls, "data-slot": "navigation-menu-indicator",
-			div { class: "bg-border relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm shadow-md" }
+			div { class: "bg-border relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm shadow-elevated" }
 		}
 	}
 }

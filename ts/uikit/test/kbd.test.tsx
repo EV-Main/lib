@@ -7,7 +7,7 @@ describe("Kbd", () => {
     const { getByText } = render(<Kbd>K</Kbd>);
     const el = getByText("K");
     expect(el.tagName).toBe("KBD");
-    expect(el).toHaveClass("bg-muted");
+    expect(el).toHaveClass("bg-secondary", "border");
     expect(el).toHaveAttribute("data-slot", "kbd");
   });
 

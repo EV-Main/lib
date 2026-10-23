@@ -6,13 +6,13 @@ export const CALENDAR_NAV_BUTTON = "size-8 p-0 select-none";
 
 export const CALENDAR_NAV = "flex items-center justify-between gap-1 w-full px-1";
 
-export const CALENDAR_CAPTION = "text-sm font-medium select-none";
+export const CALENDAR_CAPTION = "text-body font-medium select-none";
 
 export const CALENDAR_GRID = "w-full border-collapse mt-4";
 
 export const CALENDAR_WEEKDAY_ROW = "flex";
 
-export const CALENDAR_WEEKDAY = "text-ink-soft rounded-md w-9 shrink-0 font-normal text-[0.8rem] select-none whitespace-nowrap";
+export const CALENDAR_WEEKDAY = "text-ink-soft rounded-[var(--control-radius)] w-9 shrink-0 font-normal text-body-s select-none whitespace-nowrap";
 
 export const CALENDAR_WEEK = "flex w-full mt-2";
 
@@ -24,4 +24,4 @@ export const CALENDAR_DAY = "size-auto w-full aspect-square font-normal leading-
 
 export const CALENDAR_DAY_SELECTED = "bg-primary text-on-primary";
 
-export const CALENDAR_DAY_TODAY = "bg-hover text-ink rounded-md";
+export const CALENDAR_DAY_TODAY = "bg-hover text-ink rounded-[var(--control-radius)]";

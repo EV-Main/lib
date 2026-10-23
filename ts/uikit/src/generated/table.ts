@@ -2,11 +2,11 @@
 
 export const TABLE_CONTAINER = "relative w-full overflow-x-auto";
 
-export const TABLE = "w-full caption-bottom text-sm";
+export const TABLE = "w-full caption-bottom text-body";
 
 export const tableVariants = {
   "default": "[--table-px:initial] [--table-py:initial] [--table-head-ink:initial] [--table-head-text:initial] [--table-head-tracking:initial] [--table-head-case:initial]",
-  "card": "[--table-px:calc(var(--spacing)*5)] [--table-py:calc(var(--spacing)*3)] [--table-head-ink:var(--ink-soft)] [--table-head-text:var(--text-xs)] [--table-head-tracking:var(--tracking-wide)] [--table-head-case:uppercase] [&>thead>tr:hover]:bg-transparent",
+  "card": "[--table-px:calc(var(--spacing)*5)] [--table-py:calc(var(--spacing)*3)] [--table-head-ink:var(--ink-soft)] [--table-head-text:var(--text-caption)] [--table-head-tracking:var(--tracking-normal)] [--table-head-case:none] [&>thead>tr:hover]:bg-transparent",
 } as const;
 export type TableVariant = keyof typeof tableVariants;
 
@@ -16,15 +16,15 @@ export const tableDensities = {
 } as const;
 export type TableDensity = keyof typeof tableDensities;
 
-export const TABLE_CARD = "bg-card text-ink overflow-hidden rounded-xl border border-border shadow-sm";
+export const TABLE_CARD = "bg-card text-ink overflow-hidden rounded-lg border border-border shadow-card";
 
-export const TABLE_HEADER = "[&_tr]:border-b";
+export const TABLE_HEADER = "[&_tr]:border-b [&_tr]:border-border-subtle";
 
 export const TABLE_BODY = "[&_tr:last-child]:border-0";
 
-export const TABLE_FOOTER = "bg-muted/50 border-t border-border font-medium [&>tr]:last:border-b-0";
+export const TABLE_FOOTER = "bg-hover border-t border-border-subtle font-medium [&>tr]:last:border-b-0";
 
-export const TABLE_ROW = "hover:bg-muted/50 data-[state=selected]:bg-muted border-b border-border transition-colors";
+export const TABLE_ROW = "hover:bg-hover data-[state=selected]:bg-selected border-b border-border-subtle transition-colors";
 
 export const TABLE_HEAD = "text-[color:var(--table-head-ink,var(--ink))] h-[var(--table-head-h,calc(var(--spacing)*10))] px-[var(--table-px,calc(var(--spacing)*2))] text-start align-middle font-medium whitespace-nowrap text-[length:var(--table-head-text)] tracking-[var(--table-head-tracking)] [text-transform:var(--table-head-case)] [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]";
 
@@ -36,4 +36,4 @@ export const tableAligns = {
 } as const;
 export type TableAlign = keyof typeof tableAligns;
 
-export const TABLE_CAPTION = "text-ink-soft mt-4 text-sm";
+export const TABLE_CAPTION = "text-ink-soft mt-4 text-body-s";

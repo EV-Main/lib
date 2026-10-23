@@ -78,7 +78,7 @@ describe("Sidebar", () => {
     expect(el).toHaveAttribute("data-slot", "sidebar-menu-button");
     expect(el).toHaveAttribute("data-size", "lg");
     expect(el).toHaveAttribute("data-active", "true");
-    expect(el).toHaveClass("h-12");
+    expect(el).toHaveClass("h-11");
   });
 
   it("menu button renders as child when asChild", () => {
