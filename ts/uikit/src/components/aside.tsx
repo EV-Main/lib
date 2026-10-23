@@ -89,8 +89,7 @@ export function AsideRail({
   );
   return (
     <div
-      role="toolbar"
-      aria-orientation="vertical"
+      role="group"
       aria-label={ariaLabel}
       data-slot="aside-rail"
       className={cn("flex w-11 shrink-0 flex-col items-center gap-1 border-l border-border bg-card px-1.5 py-2", className)}
@@ -138,7 +137,7 @@ export interface AsidePanelProps extends Omit<React.ComponentProps<"aside">, "ti
 
 /**
  * A side panel. `docked` sits in the layout and takes room from the content;
- * `overlay` floats over a scrim on a Sheet, or on a bottom Drawer below `md`.
+ * `overlay` floats over a scrim on a Sheet. Below `md` both use a bottom Drawer.
  * The edge facing the content is the only border.
  */
 export function AsidePanel({
@@ -167,7 +166,7 @@ export function AsidePanel({
     </>
   );
 
-  if (mode === "docked") {
+  if (mode === "docked" && wide) {
     if (!open) return null;
     return (
       <aside
@@ -175,7 +174,7 @@ export function AsidePanel({
         data-mode="docked"
         data-side={side}
         className={cn(
-          "flex h-full w-[380px] shrink-0 flex-col bg-card",
+          "flex h-full w-95 shrink-0 flex-col bg-card",
           side === "right" ? "border-l border-border" : "border-r border-border",
           className,
         )}
@@ -186,6 +185,7 @@ export function AsidePanel({
     );
   }
 
+  // Below md there is no room beside the content, so a docked panel floats like an overlay.
   const label = props["aria-label"];
   if (!wide) {
     return (
@@ -202,7 +202,7 @@ export function AsidePanel({
         side={side}
         aria-label={label}
         className={cn(
-          "w-full gap-0 border-border-strong bg-card p-0 sm:max-w-[420px] [&>[data-slot=sheet-close]]:hidden",
+          "w-full gap-0 border-border-strong bg-card p-0 sm:max-w-105 [&>[data-slot=sheet-close]]:hidden",
           className,
         )}
       >

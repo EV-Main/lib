@@ -43,7 +43,7 @@ describe("AsideRail", () => {
 
   it("marks the open aside's button as pressed", () => {
     render(<AsideRail items={items} value="chat" onValueChange={() => {}} />);
-    expect(screen.getByRole("toolbar", { name: "Panels" })).toBeInTheDocument();
+    expect(screen.getByRole("group", { name: "Panels" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Assistant" })).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByRole("button", { name: "Watchlist" })).toHaveAttribute("aria-pressed", "false");
   });
@@ -77,6 +77,17 @@ describe("AsidePanel", () => {
     expect(panel).toHaveClass("border-l");
     expect(panel).toHaveTextContent("Body");
     expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
+  });
+
+  it("docked below md falls back to a drawer so the content keeps its room", () => {
+    stubWidth(false);
+    render(
+      <AsidePanel aria-label="Watchlist">
+        <p>Body</p>
+      </AsidePanel>,
+    );
+    expect(screen.queryByRole("complementary")).toBeNull();
+    expect(document.querySelector('[data-slot="drawer-content"]')).not.toBeNull();
   });
 
   it("docked on the left borders the right edge, and renders nothing when closed", () => {
