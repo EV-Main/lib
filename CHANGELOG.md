@@ -110,6 +110,10 @@ Rust crate and its TypeScript mirror at once.
   `ModelChip`, `ChatPanel` and `ChatDock`.
 - **`cn` knows the type scale** (`@evinvest/uikit` and `ev_lib`): `text-body`
   is a font size, so `text-body text-ink` keeps both classes.
+- **`AnimatedNumber`, `useCountTween`** (`@evinvest/uikit`): a figure that
+  rolls its digit columns (or counts up) to each new value, formatted with
+  `Intl.NumberFormat`. `HeaderBalance` takes a numeric `amount`; the existing
+  `value` still works. No animation library; reduced motion swaps at once.
 
 ### Removed
 

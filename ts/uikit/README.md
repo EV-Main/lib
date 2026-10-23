@@ -511,6 +511,57 @@ The timing is tokens on every theme root, for your own transitions too
 `--ev-rise` (8px), `--ev-stagger` (35ms), `--ev-stagger-section` (50ms). The
 shell's geometry is `--shell-rail-w` (248px) and `--shell-tab-bar-h` (64px).
 
+
+### Animated numbers
+
+`AnimatedNumber` shows a number that moves to its new value. It needs no
+animation library: the digits are CSS transforms and transitions, and the
+count-up is `requestAnimationFrame`.
+
+```tsx
+<AnimatedNumber value={balance} format={{ style: "currency", currency: "USD" }} />
+<AnimatedNumber value={change} format={{ style: "percent", signDisplay: "exceptZero" }} />
+<AnimatedNumber value={volume} format={{ notation: "compact" }} mode="count" animateOnMount />
+```
+
+| prop | |
+|---|---|
+| `value` | the number |
+| `format`, `locales` | passed to `Intl.NumberFormat` |
+| `mode` | `roll` (default): digit columns spin. `count`: the number is tweened and re-formatted each frame |
+| `trend` | roll only. `1` every column spins up, `-1` down, `0` each column takes its shorter way. Default: the way the value moved |
+| `duration` | ms per change: spin 750 (roll), whole tween 800 (count) |
+| `prefix`, `suffix` | React nodes beside the figure, not animated |
+| `live` | announce each new value politely; off by default |
+| `animateOnMount`, `from` | animate the first render from `from` (default 0) |
+
+It inherits font, size and colour, so it fits `text-figure-l font-display
+font-light` as well as a `text-body` table cell. `tabular-nums` is on.
+`useCountTween(value, { duration, easing, from, animateOnMount })` returns the
+in-flight number for a chart or a label of your own. `HeaderBalance` takes
+`amount` (USD unless `format` says otherwise); any `figure`, `value` or other
+`ReactNode` slot takes an `<AnimatedNumber />` as is.
+
+**How roll works.** `formatToParts` splits the value. Integer digits are keyed
+by place value from the right, fraction digits by position, so `9 -> 10` keeps
+the existing column and only a new one enters. Symbols (currency, sign, group,
+decimal, percent, compact suffix) are keyed by type. A digit is a clipped
+one-line window over a strip moved with `translateY` on a spring-shaped
+`linear()` easing (~4 % overshoot), with soft top and bottom edges. The strip
+is unbounded, so a forced direction wraps (9 to 0 going up). Entering and leaving
+parts animate width (`0fr` to `1fr`) and opacity in 350 ms, so their neighbours
+slide.
+
+**Accessibility.** The final formatted value is in the DOM once, as
+visually hidden text; the moving glyphs are `aria-hidden` and not selectable,
+so a copy gives the formatted text.
+
+**Reduced motion.** Under `prefers-reduced-motion: reduce` a new value swaps in
+at once: no spin, no width animation, no tween frames.
+
+**SSR.** The server prints the final formatted value, also with `animateOnMount`,
+so hydration does not jump; the count-up starts after hydration.
+
 ## Usage
 
 ```tsx
