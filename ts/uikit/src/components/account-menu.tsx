@@ -96,7 +96,7 @@ export function AccountMenu({
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className={profile ? "w-75" : "w-64"}>
-        {tabs.length > 0 && <ProfileTabs tabs={tabs} value={tab} onChange={setTab} />}
+        {tabs.length > 0 && <ProfileTabs tabs={tabs} value={tab} onChange={setTab} label={profile?.tabsLabel} />}
         {otherTab ? (
           otherTab.content
         ) : (

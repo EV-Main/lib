@@ -25,11 +25,14 @@ describe("AccountMenu profile form", () => {
     expect(menu.querySelector('[data-slot="account-menu-card"]')).not.toBeNull();
   });
 
-  it("makes the card a button when it can open the settings", () => {
+  it("makes the card a menu item that opens the settings and closes the menu", () => {
     const onOpenProfile = vi.fn();
     const menu = open({ onOpenProfile });
-    fireEvent.click(menu.querySelector('[data-slot="account-menu-card"]') as HTMLElement);
+    const card = menu.querySelector('[data-slot="account-menu-card"]') as HTMLElement;
+    expect(card).toHaveAttribute("role", "menuitem");
+    fireEvent.click(card);
     expect(onOpenProfile).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole("menu")).toBeNull();
   });
 
   it("swaps the body for another tab's content and back", () => {
@@ -39,23 +42,43 @@ describe("AccountMenu profile form", () => {
         { id: "notes", label: "Notifications", content: <p>No news</p> },
       ],
     });
-    expect(within(menu).getByRole("tab", { name: "Profile" })).toHaveAttribute("aria-selected", "true");
-    fireEvent.click(within(menu).getByRole("tab", { name: "Notifications" }));
+    expect(within(menu).getByRole("menuitemradio", { name: "Profile" })).toHaveAttribute("aria-checked", "true");
+    fireEvent.click(within(menu).getByRole("menuitemradio", { name: "Notifications" }));
+    expect(screen.getByRole("menu")).toBeInTheDocument();
     expect(within(menu).getByText("No news")).toBeInTheDocument();
     expect(within(menu).queryByText("Billing")).toBeNull();
-    fireEvent.click(within(menu).getByRole("tab", { name: "Profile" }));
+    fireEvent.click(within(menu).getByRole("menuitemradio", { name: "Profile" }));
     expect(within(menu).getByText("Billing")).toBeInTheDocument();
   });
 
-  it("moves between tabs with the arrow keys", () => {
+  it("keeps the tabs inside the menu's own item order", () => {
+    const menu = open({
+      tabsLabel: "Menu sections",
+      tabs: [
+        { id: "profile", label: "Profile" },
+        { id: "notes", label: "Notifications", content: <p>No news</p> },
+      ],
+    });
+    expect(within(menu).getByRole("group", { name: "Menu sections" })).toBeInTheDocument();
+    expect(within(menu).queryByRole("tablist")).toBeNull();
+    // The same selector the menu's roving focus uses: the first stop is the first tab.
+    const first = menu.querySelector<HTMLElement>("[role^='menuitem']");
+    expect(first).toHaveAccessibleName("Profile");
+  });
+
+  it("moves selection and focus together with the left and right arrows", () => {
     const menu = open({
       tabs: [
         { id: "profile", label: "Profile" },
         { id: "notes", label: "Notifications", content: <p>No news</p> },
       ],
     });
-    fireEvent.keyDown(within(menu).getByRole("tab", { name: "Profile" }), { key: "ArrowRight" });
-    expect(within(menu).getByRole("tab", { name: "Notifications" })).toHaveAttribute("aria-selected", "true");
+    const profile = within(menu).getByRole("menuitemradio", { name: "Profile" });
+    profile.focus();
+    fireEvent.keyDown(profile, { key: "ArrowRight" });
+    const notes = within(menu).getByRole("menuitemradio", { name: "Notifications" });
+    expect(notes).toHaveAttribute("aria-checked", "true");
+    expect(notes).toHaveFocus();
   });
 
   it("toggles the dark theme through its row and closes", () => {
@@ -68,17 +91,32 @@ describe("AccountMenu profile form", () => {
     expect(screen.queryByRole("menu")).toBeNull();
   });
 
-  it("shows the language value as a badge and renders the colour-theme slot", () => {
+  it("shows the language value as a badge and runs its action", () => {
     const onSelect = vi.fn();
-    const menu = open({
-      language: { label: "Language", value: "EN", onSelect },
-      colorTheme: { label: "Color theme", control: <span>System</span> },
-    });
+    const menu = open({ language: { label: "Language", value: "EN", onSelect } });
     expect(within(menu).getByText("EN")).toBeInTheDocument();
-    expect(within(menu).getByText("Color theme")).toBeInTheDocument();
-    expect(within(menu).getByText("System")).toBeInTheDocument();
     fireEvent.click(within(menu).getByRole("menuitem", { name: /Language/ }));
     expect(onSelect).toHaveBeenCalledTimes(1);
+  });
+
+  it("puts the colour theme behind a submenu of radio options", () => {
+    const onValueChange = vi.fn();
+    const menu = open({
+      colorTheme: {
+        label: "Color theme",
+        value: "system",
+        options: [
+          { id: "system", label: "System" },
+          { id: "teal", label: "Teal" },
+        ],
+        onValueChange,
+      },
+    });
+    expect(within(menu).queryByRole("menuitemradio", { name: "Teal" })).toBeNull();
+    fireEvent.click(within(menu).getByRole("menuitem", { name: /Color theme/ }));
+    expect(within(menu).getByRole("menuitemradio", { name: "System" })).toHaveAttribute("aria-checked", "true");
+    fireEvent.click(within(menu).getByRole("menuitemradio", { name: "Teal" }));
+    expect(onValueChange).toHaveBeenCalledWith("teal");
   });
 
   it("marks sign out as the danger row", () => {
