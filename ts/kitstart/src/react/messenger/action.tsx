@@ -441,7 +441,7 @@ export function OptionCard(props: {
       <span className="flex min-w-0 flex-1 flex-col">
         <span className="flex items-center gap-2 font-medium text-ink">
           {labelOf(words, mode)}
-          {props.recommended && <Badge>{words.messengerRecommended}</Badge>}
+          {props.recommended && <Badge variant="primary">{words.messengerRecommended}</Badge>}
         </span>
         <span className="text-sm text-ink-soft">{noteOf(words, mode)}</span>
       </span>

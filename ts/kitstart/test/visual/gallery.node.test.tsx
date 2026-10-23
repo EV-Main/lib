@@ -130,7 +130,7 @@ const SCENARIOS: readonly { name: string; widths: Widths; node: ReactElement }[]
           <FieldLabel>Commune ou code postal</FieldLabel>
           <Input name="zip" size="touch" placeholder="63130" />
         </Field>
-        <Button type="submit" size="xl">
+        <Button type="submit" variant="solid" size="xl">
           Recevoir le prix
         </Button>
       </QuoteFormShell>
