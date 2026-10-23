@@ -1,7 +1,7 @@
 /*
  * Toast (sonner) and Drawer enter/exit motion, the reduced-motion fade for Sheet and
  * the dialogs, the entrances (rise / stagger / settled / skeleton) and the app-shell
- * markers, shared by both ports. Imported by the token
+ * markers, the chat caret and the docked aside, shared by both ports. Imported by the token
  * sheets so the lifecycle ships with the theme contract.
  */
 
@@ -448,7 +448,48 @@
     opacity: 0;
   }
 }
+/* ── Chat: the streaming caret, and the docked aside's entrance ──────────────
+   The caret trails the last character of a bubble that is still receiving text
+   (`data-streaming`), so a reader sees the answer is not finished. A docked
+   aside is mounted and unmounted by its owner, so it only has an enter: it
+   slides in from the edge it docks to. Both fall back under reduced motion. */
+[data-slot="chat-bubble"][data-streaming]::after {
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--ink-mid);
+  animation: ev-caret-blink 1s steps(1) infinite;
+}
+@keyframes ev-caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+[data-slot="aside-panel"][data-mode="docked"] {
+  --ev-aside-from: 24px;
+  animation: ev-aside-enter var(--ev-dur-base, 280ms) var(--ev-ease-out, ease-out) backwards;
+}
+[data-slot="aside-panel"][data-mode="docked"][data-side="left"] {
+  --ev-aside-from: -24px;
+}
+@keyframes ev-aside-enter {
+  from {
+    opacity: 0;
+    transform: translateX(var(--ev-aside-from));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  [data-slot="chat-bubble"][data-streaming]::after {
+    animation: none;
+  }
+  [data-slot="aside-panel"][data-mode="docked"] {
+    animation-name: ev-enter-fade;
+  }
   [data-enter="rise"],
   [data-enter="stagger"] > *,
   [data-slot="settled"][data-state="revealed"] {

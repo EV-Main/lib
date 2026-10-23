@@ -15,6 +15,17 @@ describe("ChatBubble", () => {
     expect(screen.getByText("m")).toHaveClass("bg-muted");
     expect(screen.getByText("a")).not.toHaveClass("border");
   });
+
+  it("marks a bubble that is still receiving text, for the caret in motion.css", () => {
+    render(
+      <>
+        <ChatBubble streaming>s</ChatBubble>
+        <ChatBubble>d</ChatBubble>
+      </>,
+    );
+    expect(screen.getByText("s")).toHaveAttribute("data-streaming");
+    expect(screen.getByText("d")).not.toHaveAttribute("data-streaming");
+  });
 });
 
 describe("ChatMessage", () => {

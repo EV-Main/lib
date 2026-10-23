@@ -15,14 +15,17 @@ const BUBBLE: Record<ChatBubbleVariant, string> = {
 
 export interface ChatBubbleProps extends React.ComponentProps<"div"> {
   variant?: ChatBubbleVariant;
+  /** Still receiving text: a blinking caret trails it (motion.css). */
+  streaming?: boolean;
 }
 
 /** One block of message text; `assistant` has no box so long answers read as a page. */
-export function ChatBubble({ variant = "assistant", className, ...props }: ChatBubbleProps) {
+export function ChatBubble({ variant = "assistant", streaming = false, className, ...props }: ChatBubbleProps) {
   return (
     <div
       data-slot="chat-bubble"
       data-variant={variant}
+      data-streaming={streaming ? "" : undefined}
       className={cn("min-w-0 break-words whitespace-pre-wrap text-body text-ink", BUBBLE[variant], className)}
       {...props}
     />
