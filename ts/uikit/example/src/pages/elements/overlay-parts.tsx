@@ -289,7 +289,8 @@ function OpenedTogether() {
             </DialogHeader>
             <Popover defaultOpen>
               <PopoverTrigger asChild>
-                <Button variant="secondary" className="self-start">
+                {/* DialogContent is a grid: `self-*` aligns the block axis, `justify-self-*` the width. */}
+                <Button variant="secondary" className="justify-self-start">
                   Details
                 </Button>
               </PopoverTrigger>

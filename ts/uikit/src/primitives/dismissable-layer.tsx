@@ -117,7 +117,47 @@ function pop(layer: LayerRef) {
   }
 }
 
-const ParentLayerContext = React.createContext<LayerRef | null>(null);
+interface ParentLayer {
+  layer: LayerRef;
+}
+
+const ParentLayerContext = React.createContext<ParentLayer | null>(null);
+
+// Whether each layer asked for `modal`, known from its first render. The stack
+// learns it only in an effect, too late for the scope below a layer opened in
+// the same commit to tell its children that a modal is under them.
+const renderedModal = new WeakMap<LayerRef, boolean>();
+
+// Layers waiting for their parent's node: a child's layout effect runs before
+// the parent's ref is attached when both open in one commit.
+const waitingForParent = new WeakMap<LayerRef, Set<LayerRef>>();
+
+/**
+ * Children's portals mount before their parent's when both open in one
+ * commit, so with equal `z-index` the parent paints over the child and its
+ * scrim. Lifts `child` (and the scrim rendered just before it) over `parent`
+ * only in that case, so overlays that do not share a tree keep the stacking
+ * their classes give them. Returns false while a node is still missing.
+ */
+function liftAbove(child: LayerRef, parent: LayerRef): boolean {
+  const node = child.current;
+  const parentNode = parent.current;
+  if (!node || !parentNode) return false;
+  if (!(parentNode.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_PRECEDING)) return true;
+  const view = node.ownerDocument.defaultView;
+  if (!view) return true;
+  const parentZ = Number.parseInt(view.getComputedStyle(parentNode).zIndex, 10);
+  const ownZ = Number.parseInt(view.getComputedStyle(node).zIndex, 10);
+  if (Number.isNaN(parentZ) || Number.isNaN(ownZ) || ownZ > parentZ) return true;
+  node.style.zIndex = String(parentZ + 2);
+  const scrim = node.previousElementSibling;
+  // Only a modal renders its own scrim just before its panel; for anything
+  // else that sibling belongs to someone else.
+  if (renderedModal.get(child) && scrim instanceof HTMLElement && scrim.dataset["slot"]?.endsWith("overlay")) {
+    scrim.style.zIndex = String(parentZ + 1);
+  }
+  return true;
+}
 
 /**
  * Marks `children` as rendered inside `layer` (the ref `useDismissableLayer`
@@ -125,7 +165,8 @@ const ParentLayerContext = React.createContext<LayerRef | null>(null);
  * open in the same commit. Wrap the overlay's content in it.
  */
 export function DismissableLayerScope({ layer, children }: { layer: LayerRef; children?: React.ReactNode }) {
-  return <ParentLayerContext.Provider value={layer}>{children}</ParentLayerContext.Provider>;
+  const value = React.useMemo<ParentLayer>(() => ({ layer }), [layer]);
+  return <ParentLayerContext.Provider value={value}>{children}</ParentLayerContext.Provider>;
 }
 
 /** Why a layer is being dismissed: the event itself, for a caller that treats keys and pointers apart. */
@@ -168,8 +209,10 @@ export function useDismissableLayer(opts: {
   modal?: boolean;
 }): React.RefObject<HTMLDivElement | null> {
   const { enabled, onDismiss, exclude, pointerOutside = true, modal = false } = opts;
-  const parent = React.useContext(ParentLayerContext);
+  const parent = React.useContext(ParentLayerContext)?.layer ?? null;
   const ref = React.useRef<HTMLDivElement | null>(null);
+  // Idempotent per ref, so safe in render; see `renderedModal`.
+  renderedModal.set(ref, modal);
   const onDismissRef = React.useRef(onDismiss);
   // Callers pass `exclude` inline, a new array each render: read through a ref,
   // or the effect would re-run and move this layer to the top of the stack.
@@ -178,6 +221,25 @@ export function useDismissableLayer(opts: {
     onDismissRef.current = onDismiss;
     excludeRef.current = exclude;
   });
+
+  React.useLayoutEffect(() => {
+    if (!enabled) return;
+    // Late children first (they ran before this layer's ref existed), then this
+    // layer against its own parent.
+    const waiting = waitingForParent.get(ref);
+    if (waiting) {
+      waitingForParent.delete(ref);
+      for (const child of waiting) liftAbove(child, ref);
+    }
+    if (parent && !liftAbove(ref, parent)) {
+      const siblings = waitingForParent.get(parent) ?? new Set<LayerRef>();
+      siblings.add(ref);
+      waitingForParent.set(parent, siblings);
+    }
+    return () => {
+      if (parent) waitingForParent.get(parent)?.delete(ref);
+    };
+  }, [enabled, parent]);
 
   React.useEffect(() => {
     if (!enabled) return;

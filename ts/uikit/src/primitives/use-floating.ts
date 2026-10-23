@@ -66,6 +66,14 @@ function layoutSize(el: HTMLElement): Size2D {
   return { width: el.offsetWidth, height: el.offsetHeight };
 }
 
+// jsdom has no `getAnimations`; there nothing animates.
+function hasRunningAnimationAbove(el: Element): boolean {
+  for (let node = el.parentElement; node; node = node.parentElement) {
+    if (node.getAnimations?.().some((a) => a.playState === "running")) return true;
+  }
+  return false;
+}
+
 function viewport(): { vw: number; vh: number } {
   // `clientWidth` excludes the scrollbar, which the floating element cannot
   // sit under anyway; jsdom reports 0 there, hence the fallback.
@@ -207,7 +215,19 @@ export function useFloating(opts: {
       write(floating, f, top + shiftY, left + shiftX, true);
     }
 
-    place();
+    // An anchor inside an entering dialog is measured scaled and shifted by the
+    // dialog's animation (`zoom-in-95`), which places the floating element off
+    // its anchor for good: no resize or scroll follows the animation's end. So
+    // keep re-placing, a frame at a time, until no ancestor animates.
+    let frame = 0;
+    function follow() {
+      frame = 0;
+      place();
+      if (anchorRef.current && hasRunningAnimationAbove(anchorRef.current)) {
+        frame = requestAnimationFrame(follow);
+      }
+    }
+    follow();
     // No rAF: `scroll` already fires at most once per frame, and a synchronous
     // DOM write from the handler lands in that same frame — rAF would cost one.
     window.addEventListener("scroll", sync, true);
@@ -221,6 +241,7 @@ export function useFloating(opts: {
     }
 
     return () => {
+      if (frame) cancelAnimationFrame(frame);
       window.removeEventListener("scroll", sync, true);
       window.removeEventListener("resize", place);
       observer?.disconnect();

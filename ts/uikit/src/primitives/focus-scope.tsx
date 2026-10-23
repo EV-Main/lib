@@ -52,6 +52,21 @@ export interface FocusScopeOptions {
   returnFocusTo?: React.RefObject<HTMLElement | null>;
 }
 
+interface Claim {
+  root: HTMLElement;
+  // Boxed so an outer scope opened in the same commit can mark it `behind`.
+  saved: { el: HTMLElement | null; behind: boolean };
+}
+
+// Scopes that took focus in the current task. Cleared in a microtask, so only
+// scopes opened in the same commit count, never one that has been open a while.
+let claimed: Claim[] = [];
+
+function claim(root: HTMLElement, saved: Claim["saved"]) {
+  if (claimed.length === 0) queueMicrotask(() => (claimed = []));
+  claimed.push({ root, saved });
+}
+
 function usable(el: HTMLElement | null | undefined): el is HTMLElement {
   return !!el && el !== document.body && el.isConnected;
 }
@@ -89,10 +104,23 @@ export function useFocusScope(
     const root = ref.current;
     if (!root) return;
 
-    const previouslyFocused = document.activeElement as HTMLElement | null;
-    const first = initialFocus === "first" ? focusable(root)[0] : undefined;
-    if (first) first.focus();
-    else focusRoot(root);
+    // A scope opened in the same commit (a popover inside this dialog) has
+    // already run, since children's effects come first, and taken focus. This
+    // one must not pull focus out of it. Both saved the element focused before
+    // either opened; the inner scope sits inside this one, so on close it goes
+    // back to its own trigger first and to that element only as a fallback.
+    const inner = claimed.find((c) => c.root !== root && c.root.contains(document.activeElement));
+    const saved: Claim["saved"] = {
+      el: inner ? inner.saved.el : (document.activeElement as HTMLElement | null),
+      behind: false,
+    };
+    if (inner) inner.saved.behind = true;
+    else {
+      const first = initialFocus === "first" ? focusable(root)[0] : undefined;
+      if (first) first.focus();
+      else focusRoot(root);
+    }
+    claim(root, saved);
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key !== "Tab" || !root) return;
@@ -121,11 +149,13 @@ export function useFocusScope(
     root.addEventListener("keydown", onKeyDown);
     return () => {
       root.removeEventListener("keydown", onKeyDown);
+      claimed = claimed.filter((c) => c.root !== root);
       // Focus that already left the scope (a click outside landed on a field)
       // is the user's; only focus still inside, or dropped to <body>, returns.
       const active = document.activeElement;
       if (active && active !== document.body && !root.contains(active)) return;
-      const target = usable(previouslyFocused) ? previouslyFocused : fallbackRef.current?.current;
+      const anchor = fallbackRef.current?.current;
+      const target = saved.behind && usable(anchor) ? anchor : usable(saved.el) ? saved.el : anchor;
       if (usable(target)) target.focus({ preventScroll: true });
     };
   }, [enabled, initialFocus]);
