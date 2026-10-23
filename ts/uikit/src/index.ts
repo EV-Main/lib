@@ -739,6 +739,10 @@ export type { SystemBannerLabels, SystemBannerProps, SystemBannerTone } from "./
 
 export { Settled } from "./components/settled";
 export type { SettledProps } from "./components/settled";
+export { AnimatedNumber } from "./components/animated-number";
+export type { AnimatedNumberProps } from "./components/animated-number";
+export { useCountTween } from "./components/use-count-tween";
+export type { CountTweenOptions } from "./components/use-count-tween";
 
 // Uikit 2.0 elements and composed parts
 export { IconButton } from "./components/icon-button";
