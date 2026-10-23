@@ -789,3 +789,11 @@ export type {
   AsideRailItem,
   AsideRailProps,
 } from "./components/aside";
+export { ChatAttachment, ChatBubble, ChatMarker, ChatMessage } from "./components/chat-message";
+export type {
+  ChatAttachmentProps,
+  ChatBubbleProps,
+  ChatBubbleVariant,
+  ChatMarkerProps,
+  ChatMessageProps,
+} from "./components/chat-message";
