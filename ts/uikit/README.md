@@ -59,14 +59,23 @@ your Tailwind v4 entrypoint — this is the load-bearing part of the kit:
 
 | group | names |
 |---|---|
-| scope | `:root` · `[data-brand="…"]` — a theme root; `.light` · `.dark` — a polarity beneath it |
-| surfaces | `background` `card` `popover` `muted` `hover` |
-| ink | `ink` `ink-mid` `ink-soft` — hierarchy, loudest first |
-| lines | `border` `input` `ring` |
-| roles | `brand` `primary` `secondary` `positive` `accent-trace` `accent-debug` `accent-info` `accent-warn` `accent-error`, each with `on-*` where it gets filled; `primary-ink` — the primary role as ink on a surface (`#128377` fill under a white `on-primary`, `#2a9d8f` ink); `accent-error-ink` — the error role as text on its own tint (derived, a palette may pin it) |
-| scalars | `radius` `control-radius` `control-py` `display-scale` `band-py` `page-max` `page-px` `shell-rail-w` `shell-tab-bar-h` `shadow-*` `font-*` |
+| scope | `:root` · `[data-brand="…"]` — a theme root; `.light` · `.dark` — a polarity beneath it; `[data-theme="oldschool"]` — EV's pre-1.0 look |
+| surfaces | `background` (page) · `card` (surface) · `secondary` (raised) · `popover` (overlay) · `muted` (inset, input fill) |
+| states | `hover` · `active` · `selected` — translucent tints; `scrim` — behind a modal |
+| ink | `ink` · `ink-mid` · `ink-soft` — hierarchy, loudest first; `ink-faint` — disabled only |
+| lines | `border-subtle` (row rule) · `border` (hairline, 14 %) · `border-strong` (state and overlay edges) · `input` (control edge, ≥ 3:1) · `ring` |
+| roles | `brand` `primary` `secondary` `positive` `accent-trace` `accent-debug` `accent-info` `accent-warn` `accent-error`, each with `on-*` where it gets filled; `primary-ink` — the primary role as ink on a surface; `primary-hover` · `primary-border` — the solid button's states |
+| status inks | `positive-ink` · `accent-info-ink` · `accent-warn-ink` · `accent-error-ink` — a status role as text on a surface or on its own tint (derived, a palette may pin them) |
+| faces | `button-primary-*` · `button-danger-*` (`bg` `hover` `border` `ink`) and `chip-{neutral,primary,positive,info,warn,error}-{bg,border}` — what a Button or Badge paints; derived for a brand, pinned per theme by EV |
+| type | `text-caption` 11/14 · `body-s` 12/16 · `body` 13/18 · `body-l` 14/20 · `h3` 14/20 · `h2` 24/30 · `h1` 32/38 · `figure-m` 20/24 · `figure-l` 28/32 (size and line height each) |
+| scalars | `radius` (panel, 6 px) · `control-radius` (4 px) · `chip-radius` (4 px) · `depth-card` `depth-elevated` `depth-overlay` · `control-py` `display-scale` `band-py` `page-max` `page-px` `shell-rail-w` `shell-tab-bar-h` · `font-*` |
 | motion | `ev-ease-out` `ev-ease-in-out` `ev-dur-fast` `ev-dur-base` `ev-dur-slow` `ev-rise` `ev-stagger` `ev-stagger-section` |
-| charts | `chart-1` … `chart-5` |
+| charts | `chart-1` … `chart-6` |
+
+A palette owes **29 names**: the colours that are not derived, which is every
+role and surface above plus `chart-1` … `chart-6`. The states, lines, inks,
+status inks, faces and chips are derived from them with formulas, so a brand
+file that pins none of them still renders.
 
 Custom properties inherit, so a scope class on a `<section>` re-themes its
 subtree — `bg-card text-ink` is correct on both polarities with no prop. That is
@@ -80,14 +89,39 @@ polarity — so `on-{role}` exists exactly there.
 
 A fill and an ink are different jobs, and `primary` is the one role that
 names them separately: `primary` is the fill (`bg-primary text-on-primary` on
-a button, a checked switch or checkbox — `#128377`, white reads on it at
-4.63:1 and it clears 3:1 against `background`, `secondary`, `card` and
-`popover`) and `primary-ink` is the same hue as ink (`text-primary-ink` on a
-link or eyebrow, a radio dot, a slider range, `border-primary-ink` on a checked
-outline, the focus `ring` — `#2a9d8f`, 5.85:1 on `background`, 4.72:1 on
-`card`). Every other role holds its own label and reads as ink with one value.
-A consumer sheet must define `--primary-ink`; see
-[`docs/spec/accents.md`](../../docs/spec/accents.md).
+a solid button, a checked switch or checkbox — `#138377`, white reads on it at
+4.62:1 and it clears 3:1 against every plane) and `primary-ink` is the same hue
+as ink (`text-primary-ink` on a link or eyebrow, a radio dot, a slider range,
+the focus `ring` — `#35a395` in Dark, `#116f65` in Light). The status roles
+follow the same rule with their `-ink` values. A consumer sheet must define
+`--primary-ink`; see [`docs/spec/accents.md`](../../docs/spec/accents.md).
+
+### Themes
+
+EV ships three, each a zero-specificity rule that pins every EV token:
+
+| theme | how to switch | look |
+|---|---|---|
+| **Dark** (default) | nothing: no class, no attribute | near-black neutrals, warm ink, one teal accent, flat |
+| **Light** | `class="light"` on `<html>` or on any wrapper | warm paper planes, same shapes |
+| **Oldschool** | `data-theme="oldschool"` on `<html>` or on any wrapper | the pre-1.0 navy look: radius 8 / control 6 / pill chips, tinted chips, real shadows |
+
+The u2 themes are flat: depth is surface steps and hairlines, and the
+`--depth-*` tiers behind `shadow-card`, `shadow-elevated` and `shadow-overlay`
+are a zero shadow. Oldschool gives them back. Use those three names, never raw
+`shadow-sm/md/lg`.
+
+Scoping works the way the polarity classes always did. A `.light` or
+`[data-theme="oldschool"]` wrapper inside a Dark page takes its own full token
+set; a `.light` or `.dark` inside an Oldschool region also takes Oldschool.
+EV's rules do not match inside a `[data-brand]` scope or on its element, so a
+brand's own `.light` and `.dark` never pick EV's values up. Keep `data-theme`
+and `data-brand` on separate elements. For a side-by-side view give each scoped
+wrapper its own `PortalProvider` container so overlays stay inside the scope.
+
+The planes sit only 1.04–1.14:1 apart on purpose, so what separates them is the
+`--border` hairline (measured 1.37–1.46:1 on Dark, 1.35:1 on Light). Do not lift
+a plane to chase the ratio; see [`docs/spec/accents.md`](../../docs/spec/accents.md).
 
 Accents are decorative and **ordered by significance**, quiet to loud. Pick a
 rung by how loud the thing should be, never by what it means; see
@@ -105,22 +139,22 @@ It has two halves, each also shipped as a flat sheet of its own —
 `styles/theme.css` (the contract) and `styles/ev.css` (EV's palette):
 
 - **the contract** — the `@theme inline` mapping, the geometry, and the tokens
-  *derived* from a palette (`hover`, `ink-mid`, `ink-soft`, `border`, `input`
-  from `ink`; `ring` from `primary-ink`; `accent-error-ink` from `accent-error`
-  and `ink`). The derived ones are redeclared on
-  `:root`, `[data-brand]`, `.light` and `.dark` at zero specificity, so a brand
-  scope gets its own borders, hover and focus ring rather than inheriting the
-  root's, and a palette may still pin any of them outright. The geometry
-  (`radius`, `page-px`, `band-py`, …) and its responsive scale-ups restart on
-  every `[data-brand]` the same way.
-- **EV's palette** — a single dark palette on `:where(:root, [data-brand="ev"])`.
-  It binds neither polarity class, so a `.dark` section inside another brand
-  never picks EV's values up, and `<Section polarity="light">` under EV is a
-  no-op (EV is single-polarity).
+  *derived* from a palette (`hover` `active` `selected` `border-*` `ink-mid`
+  `ink-soft` `ink-faint` `input` from `ink`; `scrim`; `ring` from `primary-ink`;
+  `primary-hover` `primary-border`; the status inks; the button faces and
+  chips). The derived ones are redeclared on `:root`, `[data-brand]`, `.light`,
+  `.dark` and `[data-theme]` at zero specificity, so a brand scope gets its own
+  borders, hover and focus ring rather than inheriting the root's, and a
+  palette may still pin any of them outright. The geometry (`radius`,
+  `page-px`, `band-py`, …) and its responsive scale-ups restart on every
+  `[data-brand]` the same way.
+- **EV's palette** — Dark on `:root`, `[data-brand="ev"]` and `.dark`; Light on
+  `.light`; Oldschool on `[data-theme="oldschool"]`. None of them matches inside
+  another brand's scope.
 
 ### Brand palettes
 
-A second brand is a palette against the same names, scoped to
+A second brand is a palette against the same names (29 of them, `chart-6` among them), scoped to
 `[data-brand="<slug>"]`; light is its default and `.light` / `.dark` beneath it
 pick a polarity, so a `<Section polarity="dark">` inside the brand takes the
 brand's dark values. The package ships a generator for it, reading the
@@ -197,7 +231,7 @@ The families are parameters, one per role; unset, each is EV's:
 | parameter | utilities | default (EV) |
 |---|---|---|
 | `--brand-font-sans` | `font-sans`, the page's base family | `--font-inter`, else `"Inter"` |
-| `--brand-font-display` | `font-display`, `font-serif` | `--font-playfair`, else `"Playfair Display"` |
+| `--brand-font-display` | `font-display`, `font-serif` | `--font-source-serif`, else `"Source Serif 4"` |
 | `--brand-font-mono` | `font-mono` | `--font-inter`, else `"Inter"` |
 
 Declare them on the brand scope (the palette generator writes them from
@@ -209,6 +243,12 @@ the kit ships no font files:
   --brand-font-display: "Archivo";
 }
 ```
+
+From 1.0 the display face is **Source Serif 4** (headings, figures, the avatar
+initial). The kit ships no font files, so a consumer loads it — `next/font`
+with `variable: "--font-source-serif"`, or an `@font-face` for the family
+"Source Serif 4" at weight 300 (Light) — and keeps loading Inter for the rest.
+`--font-playfair` is no longer read.
 
 The utilities resolve the chain on the element, so a scope re-fonts everything
 under it that carries one. The page's base family resolves once, on `<html>`: a
@@ -304,13 +344,12 @@ through hydration. Three parts of the kit make that hold:
 </form>
 ```
 
-**Focus.** A control that paints a fill — `Button` `primary` / `secondary` /
-`destructive` or any accent fill, a filled `Badge`, `Switch`, `Checkbox` —
-shows focus as the solid `ring` standing 2px off it, so both edges of the
-indicator are against the surface: the ring reads on every surface at ≥ 3:1
-and so does the fill, on every palette and polarity `test/tokens.test.ts`
-measures. Controls that sit on the surface (`outline`, `ghost`, inputs) keep
-the `ring` border plus its halo.
+**Focus.** Every `Button` variant, a `Badge` link, `Switch`, `Checkbox`,
+`RadioGroupItem` and `Toggle` show focus as the solid `ring` standing 2px off
+the control, so both edges of the indicator are against the surface: the ring
+reads on every surface at ≥ 3:1 and so does a fill, on every palette and
+polarity `test/tokens.test.ts` measures. Fields (`Input`, `Select`, …) turn
+their edge to `ring` and add a 1 px ring; tabs and list rows draw it inside.
 
 ## App shell
 
@@ -596,7 +635,7 @@ element across the two ports.
 | overlay placement | inline `position:fixed` + `data-side` | `Portal` + `useFloating` |
 | dismiss / focus trap | full-screen backdrop / native order | `useDismissableLayer` / `useFocusScope` |
 
-### Component inventory (all 75 bricks)
+### Component inventory (all bricks)
 
 - **Tier A — static (23):** badge, button, button-group, card, input, textarea,
   label, field, separator, skeleton, spinner, kbd, table, container, alert,
@@ -618,15 +657,88 @@ element across the two ports.
   nav-badge (`NavBadge` / `NavDot`), top-bar, account-menu, mobile-app-bar, page-frame (`PageFrame` /
   `PageHeading` / `SectionLabel`), section-nav, resource-error, system-banner,
   settled — see [App shell](#app-shell).
+- **Uikit 2.0 — TS-only (new in 1.0):**
+  - *elements:* `IconButton` (required `aria-label`), `StatusItem` / `StatusDot`,
+    `WorkspaceTabs` / `WorkspaceTab`, `KeyValue` (copy button), `FormRow`;
+  - *settings:* `SettingsLayout` / `SettingsSection` / `SettingsRow`,
+    `AccountSettingsDialog`, `ConfirmDialog` (async confirm), `AccountList` /
+    `AccountListItem`, `PopoverForm`, `CommandPalette` and
+    `useCommandPaletteShortcut`, and a profile form on `AccountMenu`;
+  - *header and asides:* `SmartHeader` (`default`, `collapsed`, `banner`,
+    `search`), `HeaderBalance`, `HeaderSearch`, `NotificationBell`,
+    `AsideHeader`, `AsideRail`, `AsidePanel` (`docked` or `overlay`) and the
+    `AppShell` `aside` slot;
+  - *AI chat:* `ChatMessage`, `ChatBubble` (`streaming` shows a caret),
+    `ChatMarker`, `ChatAttachment`, `ChatComposer`, `ModelChip`, `ChatPanel`,
+    `ChatDock`.
 
-The canonical variant set is the **superset** of the original cabinet (Rust) and
-landing (TS) sources — e.g. `Badge` keeps cabinet's `success` variant, and
+  `Avatar` takes `shape` and `size`; `SectionLabel` and `SystemBanner` follow the
+  new look.
+
+### Variant vocabulary
+
+A variant names the state ([`docs/spec/variants.md`](../../docs/spec/variants.md)).
+From 1.0 the tones are one list wherever a component has them:
+
+| component | values |
+|---|---|
+| `Button` | `primary` (outline face, default) · `secondary` · `ghost` · `solid` (the one filled call to action) · `danger` · `link` |
+| `Badge` | `neutral` (default) · `primary` · `positive` · `info` · `warn` · `error` |
+| `Alert` | `neutral` (default) · `info` · `positive` · `warn` · `error` |
+| menu item (`DropdownMenuItem`, `ContextMenuItem`, `MenubarItem`) | `neutral` · `danger` |
+| `Avatar` | `shape`: `circle` (default, always round) · `square` (chip radius); `size`: `sm` 20 · `md` 28 · `lg` 56 px |
+
+Control sizes are `xs` 20 · `sm` 24 · `md` 28 · `lg` 32 px, plus `xl` for a
+call to action. `size="touch"` is the 44 px pointer-target floor (WCAG 2.5.5)
+for touch-first screens: `min-h-11`, and a 44 × 44 square with `icon`. Form
+fields (`Input`, `Textarea`, `SelectTrigger`, `NativeSelect`) have three steps,
+`sm` · `md` · `touch`; they hold 16 px text on a coarse pointer so iOS does not
+zoom, and `touch` holds it at every width. Disabled is 40 % opacity (fields 50 %).
+
 `Button` keeps landing's square icon shape at every size, as the separate `icon`
-boolean it always was in Rust (see [docs/spec/variants.md](../../docs/spec/variants.md)).
+boolean it always was in Rust. A `Primary` and a `Danger` button are outlines whose
+faces come from the `button-*` tokens, so Oldschool fills them without a class change.
 
-`size="touch"` is the 44 px pointer-target floor (WCAG 2.5.5) for touch-first
-screens: `min-h-11` with `lg`'s padding, and a 44 × 44 square with `icon`. It is
-a button step only — `Input` and `SelectTrigger` already clear it at `lg`.
+## Migrating 0.x → 1.0
+
+Breaking, all at once. The package version is bumped by the release script, not
+by hand; a consumer pinned at `^0.x` must bump by hand and read the list.
+
+**Renames and removals**
+
+| 0.x | 1.0 |
+|---|---|
+| `Button variant="primary"` (filled) | `solid` — and `primary` is now the outline face; a `Button` with no `variant` was filled and is now an outline, so add `variant="solid"` where it is the call to action |
+| `variant="outline"` | `secondary` |
+| `variant="destructive"` | `danger` |
+| `Badge variant="outline"` · `"secondary"` | `neutral` |
+| `Badge variant="destructive"` · `"success"` | `error` · `positive` (new: `info`, `warn`; the default is now `neutral`, was filled `primary`) |
+| `Alert variant="destructive"` · `"success"` | `error` · `positive` (new: `warn`) |
+| menu item `variant="destructive"` | `danger` |
+| `Input` / `Textarea` / `SelectTrigger` / `NativeSelect` `size="lg"` | `size="touch"` (`lg` is gone from the field scale) |
+| `Avatar` (32 px) | `md` is 28 px; `shape`, `size` are new |
+| `Terminal`, `TerminalPane*`, `TerminalChart`, `TerminalTicker`, `TickerStat`, `OrderBook*`, `TradesTapeRow`, `OrderForm*`, `OpenOrdersEmpty` and their types | removed from the TS kit (the Rust terminal stays) |
+
+**Tokens and look**
+
+- `--font-playfair` is no longer read; load Source Serif 4 and set
+  `--font-source-serif` (see [Fonts](#fonts)).
+- A brand file must add `chart-6` (29 names now); `evinvest-palette` names it.
+- Panel radius is 6 px at every width (the `sm` bump to 8 px is gone), controls
+  4 px, and the depth tiers are flat. **Aquafix, vifnet and any other brand take
+  the u2 shapes and lose their shadows** unless their scope overrides
+  `--radius`, `--control-radius`, `--chip-radius` and `--depth-card`,
+  `--depth-elevated`, `--depth-overlay`. Check each brand before releasing.
+- EV's pre-1.0 navy palette is now opt-in: `data-theme="oldschool"`. Dark is the
+  default and is a different colour set.
+- A track is `bg-ink/14` (slider, progress); muted is no longer a track.
+- Raw `shadow-xs/sm/md/lg` classes in your own code should move to
+  `shadow-card`, `shadow-elevated` and `shadow-overlay`.
+- Text sizes `text-sm`/`text-xs` still work; the kit itself uses the new scale
+  (`text-body`, `text-body-s`, `text-caption`, …). The kit's class merge knows the
+  scale is a font size, so `text-body text-ink` keeps both.
+- `kitstart` migrated in the same release: its buttons, badges and field sizes
+  follow the table above.
 
 ## Limitations
 
@@ -679,7 +791,7 @@ measuring needs host-only `web-sys`). Known gaps:
   locale whose short form contains whitespace (vi's "Thứ 2" → "T2", he's
   "יום ב׳" → "ב׳") as long as narrow still yields seven distinct labels. Rust has no `Intl`, so its captions
   stay English. Rust does manual date math; TS uses the built-in `Date`.
-- **date-time-picker:** the kit's own bricks only — an outline trigger, a
+- **date-time-picker:** the kit's own bricks only — a raised trigger, a
   `Popover` with the `Calendar` and two numeric 24-hour hours/minutes fields (no
   native `datetime-local` / `time` input, so the browser's locale popup never
   appears). Its ARIA and button strings are `labels` overrides with English
