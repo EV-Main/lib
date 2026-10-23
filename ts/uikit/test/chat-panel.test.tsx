@@ -82,6 +82,28 @@ describe("ChatPanel", () => {
     expect(screen.queryByRole("button", { name: "Jump to latest" })).toBeNull();
   });
 
+  it("shows the empty state when the children are conditional falsy values", () => {
+    const items: string[] = [];
+    render(<ChatPanel empty={<p>How can I help?</p>}>{items.length > 0 && <p>turn</p>}</ChatPanel>);
+    expect(screen.getByText("How can I help?")).toBeInTheDocument();
+  });
+
+  it("marks the log busy while streaming", () => {
+    const { rerender } = render(<ChatPanel streaming>x</ChatPanel>);
+    expect(log()).toHaveAttribute("aria-busy", "true");
+    rerender(<ChatPanel>x</ChatPanel>);
+    expect(log()).toHaveAttribute("aria-busy", "false");
+  });
+
+  it("keeps focus in the log after the jump button goes away", () => {
+    render(<ChatPanel>x</ChatPanel>);
+    geometry(log(), { scrollHeight: 1000, clientHeight: 200, scrollTop: 100 });
+    fireEvent.scroll(log());
+    screen.getByRole("button", { name: "Jump to latest" }).focus();
+    fireEvent.click(screen.getByRole("button", { name: "Jump to latest" }));
+    expect(log()).toHaveFocus();
+  });
+
   it("renders the composer under the log", () => {
     render(<ChatPanel composer={<textarea aria-label="Message" />}>x</ChatPanel>);
     expect(screen.getByRole("textbox", { name: "Message" })).toBeInTheDocument();
@@ -102,6 +124,18 @@ describe("ChatDock", () => {
     expect(onExpandedChange).toHaveBeenCalledWith(false);
     expect(screen.getByRole("button", { name: "Open assistant" })).toBeInTheDocument();
     expect(screen.queryByText("turn")).toBeNull();
+  });
+
+  it("moves focus to the launcher on collapse and to the composer on expand", () => {
+    render(
+      <ChatDock title="Assistant" composer={<textarea aria-label="Message" />}>
+        <p>turn</p>
+      </ChatDock>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Collapse" }));
+    expect(screen.getByRole("button", { name: "Open assistant" })).toHaveFocus();
+    fireEvent.click(screen.getByRole("button", { name: "Open assistant" }));
+    expect(screen.getByRole("textbox", { name: "Message" })).toHaveFocus();
   });
 
   it("collapsed: a launcher bar that expands it", () => {

@@ -24,6 +24,11 @@ export interface ChatPanelProps extends Omit<React.ComponentProps<"div">, "child
   empty?: React.ReactNode;
   /** The composer, under the log. */
   composer?: React.ReactNode;
+  /**
+   * The last turn is still arriving. The log is marked busy, so a screen reader
+   * waits for the finished text instead of announcing every chunk.
+   */
+  streaming?: boolean;
   labels?: ChatPanelLabels;
 }
 
@@ -33,11 +38,12 @@ export interface ChatPanelProps extends Omit<React.ComponentProps<"div">, "child
  * them back. The log is a polite live region, so new turns are announced
  * without taking focus.
  */
-export function ChatPanel({ children, empty, composer, labels = {}, className, ...props }: ChatPanelProps) {
+export function ChatPanel({ children, empty, composer, streaming = false, labels = {}, className, ...props }: ChatPanelProps) {
   const scroller = React.useRef<HTMLDivElement>(null);
   const pinned = React.useRef(true);
   const [away, setAway] = React.useState(false);
-  const isEmpty = React.Children.count(children) === 0 && empty != null;
+  // `count` would call `false` a child, and `{list.length > 0 && …}` is common.
+  const isEmpty = React.Children.toArray(children).length === 0 && empty != null;
 
   const toEnd = () => {
     const el = scroller.current;
@@ -72,6 +78,7 @@ export function ChatPanel({ children, empty, composer, labels = {}, className, .
             ref={scroller}
             role="log"
             aria-live="polite"
+            aria-busy={streaming}
             aria-label={labels.log ?? "Conversation"}
             tabIndex={0}
             data-slot="chat-log"
@@ -95,6 +102,8 @@ export function ChatPanel({ children, empty, composer, labels = {}, className, .
               pinned.current = true;
               setAway(false);
               toEnd();
+              // The button unmounts with `away`; keep focus in the conversation.
+              scroller.current?.focus();
             }}
           >
             <UiIcon name="chevron-down" />
@@ -125,6 +134,7 @@ export interface ChatDockProps extends Omit<React.ComponentProps<"section">, "ti
   children?: React.ReactNode;
   empty?: React.ReactNode;
   composer?: React.ReactNode;
+  streaming?: boolean;
   labels?: ChatDockLabels;
 }
 
@@ -139,19 +149,32 @@ export function ChatDock({
   children,
   empty,
   composer,
+  streaming = false,
   labels = {},
   className,
   ...props
 }: ChatDockProps) {
   const [inner, setInner] = React.useState(defaultExpanded);
   const open = expanded ?? inner;
+  const root = React.useRef<HTMLElement>(null);
+  const moved = React.useRef(false);
   const set = (next: boolean) => {
+    moved.current = true;
     setInner(next);
     onExpandedChange?.(next);
   };
+  // The button that was pressed unmounts with its state; hand focus to the same job in the other one.
+  React.useEffect(() => {
+    if (!moved.current) return;
+    moved.current = false;
+    const target = open
+      ? (root.current?.querySelector<HTMLElement>("textarea") ?? root.current?.querySelector<HTMLElement>("[role=log]"))
+      : root.current?.querySelector<HTMLElement>("button");
+    target?.focus();
+  }, [open]);
   if (!open) {
     return (
-      <section data-slot="chat-dock" data-state="collapsed" className={cn("bg-card", className)} {...props}>
+      <section ref={root} data-slot="chat-dock" data-state="collapsed" className={cn("bg-card", className)} {...props}>
         <button
           type="button"
           aria-label={labels.open ?? "Open assistant"}
@@ -165,9 +188,9 @@ export function ChatDock({
     );
   }
   return (
-    <section data-slot="chat-dock" data-state="expanded" className={cn("flex h-full min-h-0 flex-col bg-card", className)} {...props}>
+    <section ref={root} data-slot="chat-dock" data-state="expanded" className={cn("flex h-full min-h-0 flex-col bg-card", className)} {...props}>
       <AsideHeader title={title} actions={actions} onClose={() => set(false)} labels={{ close: labels.collapse ?? "Collapse" }} />
-      <ChatPanel empty={empty} composer={composer} labels={labels}>
+      <ChatPanel empty={empty} composer={composer} streaming={streaming} labels={labels}>
         {children}
       </ChatPanel>
     </section>
