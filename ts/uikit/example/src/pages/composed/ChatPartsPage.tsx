@@ -1,9 +1,12 @@
+import { useEffect, useState } from "react";
 import {
   Button,
   ChatAttachment,
   ChatBubble,
   ChatMarker,
   ChatMessage,
+  ChatStreamText,
+  ChatTyping,
 } from "@evinvest/uikit";
 import { Block, Caption, PageRoot, Specimen } from "../../gallery/ui";
 import { AssistantComposer, DockPanel, useAssistant } from "../parts/chat-parts";
@@ -24,9 +27,35 @@ function Stream() {
       </div>
       <ChatMessage role="assistant" name="Assistant" time="13:08">
         {a.streaming ? <ChatMarker type="status" state="running" /> : null}
-        {a.shown ? <ChatBubble variant="assistant" streaming={a.streaming}>{a.shown}</ChatBubble> : <Caption>Nothing yet.</Caption>}
+        {a.shown ? (
+          <ChatBubble variant="assistant" streaming={a.streaming}>{a.shown}</ChatBubble>
+        ) : a.streaming ? (
+          <ChatTyping />
+        ) : (
+          <Caption>Nothing yet.</Caption>
+        )}
       </ChatMessage>
       <Caption>Words arrive one at a time; with reduced motion on they arrive in chunks of eight.</Caption>
+    </div>
+  );
+}
+
+const GROW = "Each new word fades in from a soft blur and settles, while the words already shown stay exactly where they are.";
+
+function GrowingText() {
+  const [n, setN] = useState(0);
+  const words = GROW.split(" ");
+  useEffect(() => {
+    if (n >= words.length) return;
+    const id = setTimeout(() => setN(n + 1), 140);
+    return () => clearTimeout(id);
+  }, [n, words.length]);
+  return (
+    <div className="flex max-w-xl flex-col gap-3">
+      <p className="text-body text-ink min-h-12">
+        <ChatStreamText text={words.slice(0, n).join(" ")} streaming={n < words.length} />
+      </p>
+      <Button size="sm" variant="secondary" onClick={() => setN(0)}>Replay</Button>
     </div>
   );
 }
@@ -93,6 +122,16 @@ export default function ChatPartsPage() {
       <Block title="Composer" note="Default, and streaming: the send button becomes Stop, and Enter still queues a follow-up.">
         <Specimen>
           <ComposerStates />
+        </Specimen>
+      </Block>
+      <Block title="Typing" note="The wait before the first token. Reduced motion shows a still ellipsis.">
+        <Specimen className="items-start">
+          <ChatTyping />
+        </Specimen>
+      </Block>
+      <Block title="Stream text" note="ChatStreamText on its own: pass the growing string and only the new words animate. A ChatBubble with `streaming` does this for string children.">
+        <Specimen className="items-start">
+          <GrowingText />
         </Specimen>
       </Block>
       <Block title="Token stream">

@@ -11,6 +11,7 @@ import {
   ChatMarker,
   ChatMessage,
   ChatPanel,
+  ChatTyping,
   IconButton,
   Input,
   ModelChip,
@@ -135,7 +136,7 @@ export function FullThread({ asked, shown, streaming }: { asked: string | null; 
       <ChatMessage role="assistant" name="Assistant" time="13:06">
         <ChatMarker type="tool" state={streaming ? "running" : "done"} title="create_alert" detail="instrument=ABCUSD,DEFUSD · threshold=24%" meta={streaming ? "Running…" : "0.9s"} />
         {streaming ? <ChatMarker type="status" state="running" /> : null}
-        {shown ? <ChatBubble variant="assistant" streaming={streaming}>{shown}</ChatBubble> : null}
+        {shown ? <ChatBubble variant="assistant" streaming={streaming}>{shown}</ChatBubble> : streaming ? <ChatTyping /> : null}
       </ChatMessage>
       {asked ? (
         <div className="flex justify-end">
@@ -268,7 +269,7 @@ export function DockThread({ streaming, shown }: { streaming: boolean; shown: st
         <ChatBubble variant="assistant">
           Price fell with a volume spike at 12:41 and funding turned positive. Most of the move happened in two candles.
         </ChatBubble>
-        {shown ? <ChatBubble variant="assistant" streaming={streaming}>{shown}</ChatBubble> : null}
+        {shown ? <ChatBubble variant="assistant" streaming={streaming}>{shown}</ChatBubble> : streaming ? <ChatTyping /> : null}
         {streaming ? <ChatMarker type="status" state="running" /> : null}
       </ChatMessage>
     </>
