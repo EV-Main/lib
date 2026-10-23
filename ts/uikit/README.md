@@ -721,6 +721,26 @@ by hand; a consumer pinned at `^0.x` must bump by hand and read the list.
 | `Avatar` (32 px) | `md` is 28 px; `shape`, `size` are new |
 | `Terminal`, `TerminalPane*`, `TerminalChart`, `TerminalTicker`, `TickerStat`, `OrderBook*`, `TradesTapeRow`, `OrderForm*`, `OpenOrdersEmpty` and their types | removed from the TS kit (the Rust terminal stays) |
 
+**Silent changes: the compiler does not flag these.** Removed names
+(`outline`, `destructive`, `success`) fail the type check, but two defaults
+change their look and still compile:
+
+- A `Button` with no `variant`, or with `variant="primary"`, was the filled call
+  to action and is now an outline button.
+- A `Badge` with no `variant` was filled `primary` and is now `neutral`.
+
+When you bump an app, search for both and decide each one by hand:
+
+```sh
+rg -n '<Button(\s|>)' --glob '*.tsx' | rg -v 'variant='
+rg -n 'variant="primary"' --glob '*.tsx'
+rg -n '<Badge(\s|>)' --glob '*.tsx' | rg -v 'variant='
+```
+
+A `<Button` whose props span several lines shows up in the first search even
+when it sets a `variant`; check those by eye. The call to action on a screen
+becomes `variant="solid"`.
+
 **Tokens and look**
 
 - `--font-playfair` is no longer read; load Source Serif 4 and set
