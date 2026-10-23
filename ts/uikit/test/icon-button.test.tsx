@@ -1,3 +1,4 @@
+import * as React from "react";
 import { describe, it, expect } from "vitest";
 import { render, fireEvent, screen } from "@testing-library/react";
 import { IconButton } from "../src/components/icon-button";
@@ -32,6 +33,23 @@ describe("IconButton", () => {
       </IconButton>,
     );
     expect(screen.getByRole("button", { name: "Pin" })).not.toHaveAttribute("aria-pressed");
+  });
+
+  it("forwards its ref to the button, also through a tooltip", () => {
+    const plain = React.createRef<HTMLButtonElement>();
+    const tipped = React.createRef<HTMLButtonElement>();
+    render(
+      <>
+        <IconButton ref={plain} aria-label="A">
+          <svg />
+        </IconButton>
+        <IconButton ref={tipped} aria-label="B" tooltip="tip">
+          <svg />
+        </IconButton>
+      </>,
+    );
+    expect(plain.current).toBe(screen.getByRole("button", { name: "A" }));
+    expect(tipped.current).toBe(screen.getByRole("button", { name: "B" }));
   });
 
   it("shows its tooltip on focus", () => {

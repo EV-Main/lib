@@ -53,7 +53,7 @@ function accentClass(accent: Accent, variant: ButtonVariant): string {
   return variant === "primary" || variant === "danger" ? accentOutlineClasses[accent] : accentFillClasses[accent];
 }
 
-export interface ButtonProps extends React.ComponentProps<"button"> {
+export interface ButtonProps extends React.ComponentPropsWithoutRef<"button"> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   icon?: boolean;
@@ -64,23 +64,19 @@ export interface ButtonProps extends React.ComponentProps<"button"> {
   href?: string;
 }
 
-export function Button({
-  className,
-  variant = "primary",
-  size = "md",
-  icon = false,
-  accent,
-  asChild = false,
-  href,
-  ...props
-}: ButtonProps) {
+// `forwardRef` so `asChild` triggers (Popover, Tooltip, Dialog) get their anchor under React 18 too.
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  { className, variant = "primary", size = "md", icon = false, accent, asChild = false, href, ...props },
+  ref,
+) {
   const Comp = asChild ? Slot : href !== undefined ? "a" : "button";
   return (
     <Comp
       data-slot="button"
       href={href}
+      ref={ref as React.Ref<never>}
       className={cn(buttonVariants({ variant, size, icon, accent }), className)}
       {...(props as Record<string, unknown>)}
     />
   );
-}
+});

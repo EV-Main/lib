@@ -6,7 +6,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 export type IconButtonVariant = "secondary" | "ghost";
 export type IconButtonSize = "sm" | "md" | "touch";
 
-export interface IconButtonProps extends Omit<React.ComponentProps<"button">, "aria-label" | "children"> {
+export interface IconButtonProps extends Omit<React.ComponentPropsWithoutRef<"button">, "aria-label" | "children"> {
   /** Required: a glyph alone names nothing. */
   "aria-label": string;
   /** The glyph, 16 px. */
@@ -20,20 +20,17 @@ export interface IconButtonProps extends Omit<React.ComponentProps<"button">, "a
 }
 
 /**
- * A square button holding one glyph. The host `<button>` is rendered here (not
- * `Button`) so the tooltip anchor gets its ref on React 18 as well.
+ * A square button holding one glyph. It forwards its ref (also on React 18,
+ * where function components drop `ref`) so it can be the child of any
+ * `asChild` trigger; with a `tooltip` the same element anchors the tooltip.
  */
-export function IconButton({
-  variant = "ghost",
-  size = "md",
-  pressed,
-  tooltip,
-  className,
-  type = "button",
-  ...props
-}: IconButtonProps) {
+export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(
+  { variant = "ghost", size = "md", pressed, tooltip, className, type = "button", ...props },
+  ref,
+) {
   const button = (
     <button
+      ref={ref}
       type={type}
       data-slot="icon-button"
       data-variant={variant}
@@ -54,4 +51,4 @@ export function IconButton({
       <TooltipContent>{tooltip}</TooltipContent>
     </Tooltip>
   );
-}
+});
