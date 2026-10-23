@@ -63,6 +63,12 @@ Rust crate and its TypeScript mirror at once.
 
 ### Added
 
+- **Collapsible nav sections** (`@evinvest/uikit`, minor). `ShellNav` and
+  `SectionNav` groups take `collapsible`, `defaultOpen`, `open` /
+  `onOpenChange` and a landing `href`; both navs take a `collapsible` prop for
+  all labelled groups. Off by default: a group without it renders as before.
+  The rows fold on a grid-rows transition with a fade and a turning chevron,
+  closed rows are `inert`, and the group holding the current route opens itself.
 - **`PlaceLive.reviewUrl` and `panelLocale`** (`@evinvest/kitstart`, minor).
   `reviewUrl`: where the place asks for a Google review, read from the live
   source and merged onto `Place.reviewUrl`; only `https:` on `g.page` or

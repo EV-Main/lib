@@ -432,6 +432,15 @@ export function Nav() {
   middle click does not. One marker per group slides between rows on a CSS
   `transform` transition — it is placed by measurement, so until hydration the
   marked row carries the fill itself.
+  *Collapsible sections* are opt-in: set `collapsible` on a group (or on
+  `ShellNav` for every labelled group; a group's own value wins) and its label
+  becomes a header with a chevron. `defaultOpen`, controlled `open` /
+  `onOpenChange`, and `href` (the label links to a landing page, only the
+  chevron toggles) go on the group; the group holding the current route opens
+  when the route moves into it. Height runs on a `0fr → 1fr` grid track with a
+  180 ms fade and chevron turn (`--ev-dur-fast`, `--ev-ease-in-out`), none under
+  reduced motion; closed rows are `inert`. `labels` also takes `expand` /
+  `collapse` (the chevron reads "Expand Guides"). `SectionNav` takes the same.
 - **`BottomTabBar`** — `items` (five fit a phone), the same router props,
   callbacks and optimistic mark, `labels` `{ nav, badge(n) }`. One rule slides by
   whole tab widths and fades on a route no tab claims; a numeric `badge` sits
