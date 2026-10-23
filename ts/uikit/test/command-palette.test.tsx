@@ -52,19 +52,26 @@ describe("useCommandPaletteShortcut", () => {
   it("fires on Ctrl+K and Cmd+K and prevents the browser default", () => {
     const onTrigger = vi.fn();
     render(<Probe onTrigger={onTrigger} />);
-    const ctrl = new KeyboardEvent("keydown", { key: "k", ctrlKey: true, cancelable: true });
+    const ctrl = new KeyboardEvent("keydown", { key: "k", code: "KeyK", ctrlKey: true, cancelable: true });
     document.dispatchEvent(ctrl);
-    document.dispatchEvent(new KeyboardEvent("keydown", { key: "K", metaKey: true }));
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "л", code: "KeyK", metaKey: true }));
     expect(onTrigger).toHaveBeenCalledTimes(2);
     expect(ctrl.defaultPrevented).toBe(true);
+  });
+
+  it("ignores a held key", () => {
+    const onTrigger = vi.fn();
+    render(<Probe onTrigger={onTrigger} />);
+    document.dispatchEvent(new KeyboardEvent("keydown", { code: "KeyK", ctrlKey: true, repeat: true }));
+    expect(onTrigger).not.toHaveBeenCalled();
   });
 
   it("ignores a bare K and is silent when disabled", () => {
     const onTrigger = vi.fn();
     const { rerender } = render(<Probe onTrigger={onTrigger} />);
-    document.dispatchEvent(new KeyboardEvent("keydown", { key: "k" }));
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", code: "KeyK" }));
     rerender(<Probe onTrigger={onTrigger} enabled={false} />);
-    document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", ctrlKey: true }));
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", code: "KeyK", ctrlKey: true }));
     expect(onTrigger).not.toHaveBeenCalled();
   });
 });

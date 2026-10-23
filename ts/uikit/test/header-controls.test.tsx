@@ -66,8 +66,27 @@ describe("HeaderSearch", () => {
     const onClick = vi.fn();
     render(<HeaderSearch onClick={onClick} />);
     const btn = screen.getByRole("button", { name: /Search or jump to…/ });
-    expect(btn).toHaveTextContent("⌘K");
+    expect(btn).toHaveTextContent("Ctrl K");
     fireEvent.click(btn);
     expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("shows the Command key on Apple platforms", () => {
+    vi.stubGlobal("navigator", { platform: "MacIntel" });
+    render(<HeaderSearch />);
+    expect(screen.getByRole("button")).toHaveTextContent("⌘K");
+    vi.unstubAllGlobals();
+  });
+
+  it("lets the caller set the hint", () => {
+    render(<HeaderSearch shortcut="/" />);
+    expect(screen.getByRole("button")).toHaveTextContent("/");
+  });
+});
+
+describe("HeaderBalance attributes", () => {
+  it("keeps aria and data attributes when it is not a button", () => {
+    render(<HeaderBalance value="$1" aria-label="Account balance" data-testid="bal" />);
+    expect(screen.getByTestId("bal")).toHaveAttribute("aria-label", "Account balance");
   });
 });

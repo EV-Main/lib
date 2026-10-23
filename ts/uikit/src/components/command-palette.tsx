@@ -53,6 +53,8 @@ export interface CommandPaletteProps {
   className?: string;
 }
 
+// Built on Dialog + Command rather than the kit's CommandDialog: that one has no accessible
+// name and no footer, and both need Dialog's title and focus wiring.
 /**
  * Search-and-run over a list of actions. Choosing a row runs it and closes the
  * palette. Pair it with `useCommandPaletteShortcut` for ⌘K / Ctrl+K.
@@ -74,7 +76,7 @@ export function CommandPalette({
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogContent
         showCloseButton={false}
-        className={cn("top-[15%] max-w-[calc(100%-2rem)] translate-y-0 gap-0 overflow-hidden bg-popover p-0 sm:max-w-[420px]", className)}
+        className={cn("top-1/6 max-w-[calc(100%-2rem)] translate-y-0 gap-0 overflow-hidden bg-popover p-0 sm:max-w-105", className)}
       >
         <DialogTitle className="sr-only">{labels.title ?? "Command palette"}</DialogTitle>
         <Command className="bg-transparent">
@@ -129,7 +131,8 @@ export function CommandPalette({
 
 /**
  * Calls `onTrigger` on ⌘K (Mac) or Ctrl+K, and keeps the browser from taking
- * the key (Chrome focuses the address bar on Ctrl+K in some layouts).
+ * the key (Chrome focuses the address bar on Ctrl+K in some layouts). Matches the
+ * physical key (`code`), so it also works on a Russian or other non-Latin layout.
  */
 export function useCommandPaletteShortcut(onTrigger: () => void, enabled = true): void {
   // Latest callback without re-binding the listener on every render.
@@ -140,9 +143,10 @@ export function useCommandPaletteShortcut(onTrigger: () => void, enabled = true)
   React.useEffect(() => {
     if (!enabled) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && !e.altKey && !e.shiftKey && e.key.toLowerCase() === "k") {
+      if ((e.metaKey || e.ctrlKey) && !e.altKey && !e.shiftKey && e.code === "KeyK") {
         e.preventDefault();
-        ref.current();
+        // A held key would toggle the palette open and shut.
+        if (!e.repeat) ref.current();
       }
     };
     document.addEventListener("keydown", onKeyDown);

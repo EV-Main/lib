@@ -9,7 +9,9 @@ import { Settled } from "./settled";
 import { Skeleton } from "./skeleton";
 import { UiIcon } from "./ui-icons";
 
-export interface HeaderBalanceProps extends Omit<React.ComponentProps<"button">, "value"> {
+export interface HeaderBalanceProps extends Omit<React.HTMLAttributes<HTMLElement>, "children"> {
+  /** Only meaningful with `onClick`. */
+  disabled?: boolean;
   label?: React.ReactNode;
   /** The figure, already formatted: "$0.00". */
   value: React.ReactNode;
@@ -29,6 +31,7 @@ export function HeaderBalance({
   icon,
   tone = "default",
   onClick,
+  disabled,
   className,
   ...props
 }: HeaderBalanceProps) {
@@ -55,13 +58,13 @@ export function HeaderBalance({
   );
   if (!onClick) {
     return (
-      <div data-slot="header-balance" className={face}>
+      <div data-slot="header-balance" className={face} {...props}>
         {body}
       </div>
     );
   }
   return (
-    <button type="button" data-slot="header-balance" className={face} onClick={onClick} {...props}>
+    <button type="button" data-slot="header-balance" className={face} onClick={onClick} disabled={disabled} {...props}>
       {body}
     </button>
   );
@@ -147,17 +150,30 @@ export function NotificationBell({ notifications, onSelect, labels = {}, footer,
 
 export interface HeaderSearchProps extends React.ComponentProps<"button"> {
   placeholder?: string;
-  /** The shortcut hint at the end. Default `"⌘K"`. */
+  /** The shortcut hint at the end. Default: `⌘K` on Apple platforms, `Ctrl K` elsewhere. */
   shortcut?: string;
+}
+
+const APPLE = /Mac|iPhone|iPad|iPod/;
+
+// Read after mount, so the server render and the first client render agree.
+function usePlatformShortcut(): string {
+  const [shortcut, setShortcut] = React.useState("Ctrl K");
+  React.useEffect(() => {
+    const nav = navigator as Navigator & { userAgentData?: { platform?: string } };
+    if (APPLE.test(nav.userAgentData?.platform ?? nav.platform ?? "")) setShortcut("⌘K");
+  }, []);
+  return shortcut;
 }
 
 /** A button dressed as the search field; it opens the palette rather than taking input. */
 export function HeaderSearch({
   placeholder = "Search or jump to…",
-  shortcut = "⌘K",
+  shortcut,
   className,
   ...props
 }: HeaderSearchProps) {
+  const platformShortcut = usePlatformShortcut();
   return (
     <button
       type="button"
@@ -170,7 +186,7 @@ export function HeaderSearch({
     >
       <UiIcon name="search" />
       <span className="min-w-0 flex-1 truncate">{placeholder}</span>
-      <Kbd>{shortcut}</Kbd>
+      <Kbd>{shortcut ?? platformShortcut}</Kbd>
     </button>
   );
 }
