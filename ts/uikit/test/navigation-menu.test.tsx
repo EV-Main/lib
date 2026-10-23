@@ -26,6 +26,26 @@ describe("NavigationMenu", () => {
     expect(nav).toHaveAttribute("data-viewport", "true");
   });
 
+  it("styles the open content as a panel below the trigger and mounts no empty viewport", () => {
+    const { getByText, container } = render(
+      <NavigationMenu>
+        <NavigationMenuList>
+          <NavigationMenuItem defaultOpen>
+            <NavigationMenuTrigger>Docs</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <NavigationMenuLink href="/intro">Intro</NavigationMenuLink>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>,
+    );
+    const panel = getByText("Intro").closest('[data-slot="navigation-menu-content"]')!;
+    for (const cls of ["absolute", "top-full", "mt-1.5", "bg-popover", "border-border", "rounded-lg", "shadow-elevated"]) {
+      expect(panel).toHaveClass(cls);
+    }
+    expect(container.querySelector('[data-slot="navigation-menu-viewport"]')).toBeNull();
+  });
+
   it("renders the trigger with a chevron-down", () => {
     const { getByText } = render(
       <NavigationMenu>

@@ -92,9 +92,8 @@ pub fn NavigationMenuContent(#[props(default)] class: String, children: Element)
 		return rsx! {};
 	}
 	// dep-light: inline positioning + backdrop; no portal/floating — see README Limitations.
-	// `relative z-50` keeps the panel above the z-40 backdrop (the shared class is z-auto
-	// because the TS mirror dismisses via events and has no backdrop to outstack).
-	let cls = cn!(NAVIGATION_MENU_CONTENT, "relative z-50", class);
+	// The shared class is z-50, above the z-40 backdrop.
+	let cls = cn!(NAVIGATION_MENU_CONTENT, class);
 	rsx! {
 		div {
 			class: "fixed inset-0 z-40",
@@ -219,7 +218,7 @@ mod tests {
 		assert!(html.contains("data-slot=\"navigation-menu-link\""), "{html}");
 		assert!(html.contains("href=\"/intro\""), "{html}");
 		assert!(html.contains("fixed inset-0 z-40"), "backdrop: {html}");
-		assert!(html.contains("relative z-50"), "panel above backdrop: {html}");
+		assert!(html.contains("absolute top-full left-0 z-50"), "panel below the trigger, above backdrop: {html}");
 	}
 
 	#[test]

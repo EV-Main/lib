@@ -42,6 +42,8 @@ function useItem(): ItemCtx {
 export function NavigationMenu({
   className,
   children,
+  // Content renders inline under its trigger, so no shared viewport is mounted; the flag
+  // stays on the DOM for consumers' selectors.
   viewport = true,
   ...props
 }: React.ComponentProps<"nav"> & { viewport?: boolean }) {
@@ -57,7 +59,6 @@ export function NavigationMenu({
       {...props}
     >
       {children}
-      {viewport && <NavigationMenuViewport />}
     </nav>
   );
 }
