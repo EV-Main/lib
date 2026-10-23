@@ -8,7 +8,7 @@ const DOT: Record<StatusTone, string> = {
   neutral: "bg-ink-soft",
   warn: "bg-accent-warn",
   error: "bg-accent-error",
-  muted: "bg-ink-faint",
+  muted: "bg-ink-soft/50",
 };
 
 export interface StatusDotProps extends React.ComponentProps<"span"> {

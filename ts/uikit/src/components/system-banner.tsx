@@ -73,7 +73,7 @@ export function SystemBanner({
           type="button"
           aria-label={labels.dismiss ?? "Dismiss"}
           onClick={onDismiss}
-          className="absolute right-3 top-1/2 flex size-5 -translate-y-1/2 items-center justify-center rounded-(--control-radius) text-ink-mid outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring"
+          className="absolute right-3 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-(--control-radius) text-ink-mid outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring"
         >
           <CloseIcon className="size-4" />
         </button>

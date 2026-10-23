@@ -5,7 +5,7 @@ import { cn } from "../lib/cn";
 import { UiIcon } from "./ui-icons";
 
 export interface KeyValueLabels {
-  /** The copy button. Default `"Copy"`. */
+  /** The copy button. Default `"Copy {label}"` (just `"Copy"` when the label is not text). */
   copy?: string;
   /** The polite announcement after a copy. Default `"Copied"`. */
   copied?: string;
@@ -32,12 +32,15 @@ async function writeClipboard(text: string): Promise<boolean> {
   } catch {
     // Denied permission: try the selection route below.
   }
+  // Inside a modal the focus scope pulls focus back to the dialog, which would drop a selection
+  // made in <body>; the helper has to live inside the dialog the user is in.
+  const host = document.activeElement?.closest('[role="dialog"]') ?? document.body;
   const area = document.createElement("textarea");
   area.value = text;
   area.setAttribute("readonly", "");
   area.style.position = "fixed";
   area.style.opacity = "0";
-  document.body.append(area);
+  host.append(area);
   area.select();
   try {
     return document.execCommand("copy");
@@ -67,9 +70,9 @@ export function KeyValue({ label, value, copyText, labels = {}, className, ...pr
         {copyText !== undefined && (
           <button
             type="button"
-            aria-label={labels.copy ?? "Copy"}
+            aria-label={labels.copy ?? (typeof label === "string" ? `Copy ${label}` : "Copy")}
             onClick={copy}
-            className="inline-flex size-5 shrink-0 items-center justify-center rounded-(--control-radius) text-ink-soft outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring"
+            className="inline-flex size-6 shrink-0 items-center justify-center rounded-(--control-radius) text-ink-soft outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring"
           >
             <UiIcon name={copied ? "check" : "copy"} />
           </button>
