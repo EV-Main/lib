@@ -160,6 +160,18 @@ Rust crate and its TypeScript mirror at once.
 
 ### Fixed
 
+- **A popover opened together with its dialog sits above it** (`@evinvest/uikit`):
+  when both mount in one commit, the child layer is lifted over its parent,
+  keeps focus (Escape closes the popover first), and is placed from the
+  dialog's settled position rather than mid zoom-in.
+- **Nested modals share one scrim** (`@evinvest/uikit`): only the lowest open
+  modal draws an opaque scrim; Dialog, AlertDialog, Sheet, Drawer and
+  CommandDialog over another modal keep their own backdrop click and Escape
+  but add no darkness, and closing the top one does not flash the scrim.
+- **Command list scrolls** (`@evinvest/uikit`, `ev_lib` `uikit`): groups no
+  longer shrink to fit the list height and clip their items.
+- **NavigationMenu content opens below its trigger on a panel**
+  (`@evinvest/uikit`, `ev_lib` `uikit`), not over the trigger without a surface.
 - **Dropdown, context and menubar items are clickable again** (`ev_lib` `uikit`):
   they rendered `data-disabled="false"` and `data-inset="false"`, which the
   classes' `data-[disabled]` / `data-[inset]` match on presence, so every item

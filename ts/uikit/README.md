@@ -823,6 +823,14 @@ becomes `variant="solid"`.
 - `kitstart` migrated in the same release: its buttons, badges and field sizes
   follow the table above.
 
+**Layers across bundles**
+
+- The shared layer stack (Escape order, outside clicks, the one shared scrim)
+  lives on a global key that is now `@2`. A micro-frontend that bundles uikit
+  0.x keeps its own `@1` stack, so its overlays and the host's 1.0 overlays no
+  longer close in one order or share a scrim. Move hosts and the MFEs they
+  mount (for example the concierge account chip) to 1.0 together.
+
 ## Limitations
 
 Reproducing everything dep-light means some behaviour is intentionally reduced,
