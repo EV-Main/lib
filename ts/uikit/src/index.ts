@@ -770,3 +770,11 @@ export type {
   CommandPaletteLabels,
   CommandPaletteProps,
 } from "./components/command-palette";
+export { HeaderBalance, HeaderSearch, NotificationBell } from "./components/header-controls";
+export type {
+  HeaderBalanceProps,
+  HeaderNotification,
+  HeaderSearchProps,
+  NotificationBellLabels,
+  NotificationBellProps,
+} from "./components/header-controls";
