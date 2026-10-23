@@ -106,8 +106,13 @@ Rust crate and its TypeScript mirror at once.
   overlay asides, and an `aside` slot on `AppShell`. A docked aside slides in
   from its edge (fade under reduced motion).
 - **AI chat** (`@evinvest/uikit`): `ChatMessage`, `ChatBubble` (a `streaming`
-  prop shows a blinking caret), `ChatMarker`, `ChatAttachment`, `ChatComposer`,
-  `ModelChip`, `ChatPanel` and `ChatDock`.
+  prop shows a soft pulsing caret), `ChatMarker`, `ChatAttachment`,
+  `ChatComposer`, `ModelChip`, `ChatPanel` and `ChatDock`. `ChatStreamText`
+  fades in only the newly appended words of a growing string (opacity, a 2 px
+  blur and a 3 px rise), and a bubble that has streamed uses it for its text.
+  `ChatTyping` is the "thinking" indicator shown before the first token.
+  Messages, markers and attachments fade in; the log fades out at the top when
+  scrolled. Under reduced motion all of this is an opacity change only.
 - **`cn` knows the type scale** (`@evinvest/uikit` and `ev_lib`): `text-body`
   is a font size, so `text-body text-ink` keeps both classes.
 - **`AnimatedNumber`, `useCountTween`** (`@evinvest/uikit`): a figure that

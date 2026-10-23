@@ -730,7 +730,8 @@ element across the two ports.
     `AppShell` `aside` slot;
   - *AI chat:* `ChatMessage`, `ChatBubble` (`streaming` shows a caret),
     `ChatMarker`, `ChatAttachment`, `ChatComposer`, `ModelChip`, `ChatPanel`,
-    `ChatDock`.
+    `ChatDock`, `ChatStreamText` (pass the whole growing string; only the new
+    words fade in) and `ChatTyping` (the "thinking" indicator).
 
   `Avatar` takes `shape` and `size`; `SectionLabel` and `SystemBanner` follow the
   new look.
