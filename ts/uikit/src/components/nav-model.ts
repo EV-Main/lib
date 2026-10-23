@@ -1,4 +1,5 @@
 import type * as React from "react";
+import type { NavGroupCollapse } from "./nav-collapse";
 
 /**
  * How a {@link NavItem} decides it is the current one.
@@ -47,7 +48,7 @@ export interface NavItem {
 }
 
 /** A titled run of items; the rail draws one marker per group. */
-export interface NavGroup {
+export interface NavGroup extends NavGroupCollapse {
   id: string;
   /** The eyebrow above the rows; also the list's accessible name. */
   label?: React.ReactNode;

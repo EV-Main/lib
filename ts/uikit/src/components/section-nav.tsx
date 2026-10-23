@@ -2,6 +2,13 @@
 
 import * as React from "react";
 import { cn } from "../lib/cn";
+import {
+  NavCollapse,
+  NavGroupHeader,
+  useNavGroupOpen,
+  type NavCollapseLabels,
+  type NavGroupCollapse,
+} from "./nav-collapse";
 import { SectionLabel } from "./page-frame";
 
 export interface SectionNavItem {
@@ -15,7 +22,7 @@ export interface SectionNavItem {
   disabled?: boolean;
 }
 
-export interface SectionNavGroup {
+export interface SectionNavGroup extends NavGroupCollapse {
   id: string;
   label?: React.ReactNode;
   /** One line under the label saying what kind of thing lives here. */
@@ -23,7 +30,7 @@ export interface SectionNavGroup {
   items: readonly SectionNavItem[];
 }
 
-export interface SectionNavLabels {
+export interface SectionNavLabels extends NavCollapseLabels {
   /** Accessible name of the nav. Default `"Sections"`. */
   nav?: string;
 }
@@ -64,38 +71,90 @@ export function SectionNav({
       {...props}
     >
       {groups.map((group) => (
-        <div key={group.id} className="flex flex-col gap-0.5 pt-3.5 first:pt-0">
-          {(group.label !== undefined || group.description !== undefined) && (
-            <div className="flex flex-col">
-              {group.label !== undefined && <SectionLabel>{group.label}</SectionLabel>}
-              {group.description !== undefined && (
-                <p className="px-2 text-caption text-ink-soft">{group.description}</p>
-              )}
-            </div>
-          )}
-          {group.items.map((item) => (
-            <SectionNavRow
-              key={item.id}
-              item={item}
-              active={item.id === value}
-              onSelect={onValueChange}
-              linkComponent={linkComponent}
-            />
-          ))}
-        </div>
+        <SectionNavGroupView
+          key={group.id}
+          group={group}
+          value={value}
+          onSelect={onValueChange}
+          linkComponent={linkComponent}
+          labels={labels}
+        />
       ))}
     </nav>
+  );
+}
+
+function SectionNavGroupView({
+  group,
+  value,
+  onSelect,
+  linkComponent,
+  labels,
+}: {
+  group: SectionNavGroup;
+  value: string;
+  onSelect: ((id: string) => void) | undefined;
+  linkComponent: React.ElementType | undefined;
+  labels: SectionNavLabels;
+}) {
+  const labelId = React.useId();
+  const regionId = React.useId();
+  const [open, setOpen] = useNavGroupOpen(group, group.items.some((i) => i.id === value));
+  const folds = group.collapsible === true && group.label !== undefined;
+  const rows = group.items.map((item) => (
+    <SectionNavRow
+      key={item.id}
+      item={item}
+      active={item.id === value}
+      nested={folds}
+      onSelect={onSelect}
+      linkComponent={linkComponent}
+    />
+  ));
+  if (folds) {
+    return (
+      <div className="flex flex-col pt-1.5 first:pt-0">
+        <NavGroupHeader
+          label={group.label}
+          labelId={labelId}
+          regionId={regionId}
+          open={open}
+          onToggle={() => setOpen(!open)}
+          href={group.href}
+          linkComponent={linkComponent}
+          labels={labels}
+        />
+        <NavCollapse open={open} id={regionId}>
+          <div className="flex flex-col gap-0.5 pt-0.5 pl-3">{rows}</div>
+        </NavCollapse>
+      </div>
+    );
+  }
+  return (
+    <div className="flex flex-col gap-0.5 pt-3.5 first:pt-0">
+      {(group.label !== undefined || group.description !== undefined) && (
+        <div className="flex flex-col">
+          {group.label !== undefined && <SectionLabel>{group.label}</SectionLabel>}
+          {group.description !== undefined && (
+            <p className="px-2 text-caption text-ink-soft">{group.description}</p>
+          )}
+        </div>
+      )}
+      {rows}
+    </div>
   );
 }
 
 function SectionNavRow({
   item,
   active,
+  nested,
   onSelect,
   linkComponent,
 }: {
   item: SectionNavItem;
   active: boolean;
+  nested: boolean;
   onSelect: ((id: string) => void) | undefined;
   linkComponent: React.ElementType | undefined;
 }) {
@@ -103,6 +162,7 @@ function SectionNavRow({
   const className = cn(
     ITEM,
     active ? "bg-active text-ink" : "text-ink-mid hover:bg-hover",
+    nested && "h-9",
   );
   const content = (
     <>

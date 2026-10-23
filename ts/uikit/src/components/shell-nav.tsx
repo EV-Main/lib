@@ -4,10 +4,17 @@ import * as React from "react";
 import { cn } from "../lib/cn";
 import { NavBadge } from "./nav-badge";
 import { labelTitle, NavLink, type NavLinkCallbacks } from "./nav-link";
-import { resolveActiveNavItem, type NavGroup, type NavItem, type NavItemState } from "./nav-model";
+import { NavCollapse, NavGroupHeader, useNavGroupOpen, type NavCollapseLabels } from "./nav-collapse";
+import {
+  navItemMatch,
+  resolveActiveNavItem,
+  type NavGroup,
+  type NavItem,
+  type NavItemState,
+} from "./nav-model";
 import { usePendingNavigation, useSlideMarker } from "./use-shell-nav";
 
-export interface ShellNavLabels {
+export interface ShellNavLabels extends NavCollapseLabels {
   /** Accessible name of the nav holding `groups`. Default `"Main"`. */
   primary?: string;
   /** Accessible name of the nav holding `footerGroups`. Default `"Account"`. */
@@ -76,6 +83,8 @@ export function ShellNav({
       group={group}
       currentId={currentId}
       pendingId={pendingId}
+      pathname={pathname}
+      labels={labels}
       row={{ linkComponent, markPending, onItemIntent, onNavigate, renderItem, badgeLabel: labels.badge }}
     />
   );
@@ -115,27 +124,35 @@ interface RowContext extends NavLinkCallbacks {
 // with either row. Crossing groups unmounts one marker and mounts another (a
 // fade). `isolate` is load-bearing: the marker sits on a negative z-index and
 // without its own stacking context would land behind the rail's background.
+// The marker lives in the BODY, below the header, so a folding section clips it
+// together with its rows instead of leaving it painted over the next group.
 function ShellNavSection({
   group,
   currentId,
   pendingId,
+  pathname,
   row,
+  labels,
 }: {
   group: NavGroup;
   currentId: string | undefined;
   pendingId: string | null;
+  pathname: string;
   row: RowContext;
+  labels: ShellNavLabels;
 }) {
-  const root = React.useRef<HTMLDivElement>(null);
+  const body = React.useRef<HTMLDivElement>(null);
   const labelId = React.useId();
+  const regionId = React.useId();
   const at = group.items.some((i) => i.id === currentId) ? (currentId ?? null) : null;
-  useSlideMarker(root, at);
-  return (
-    <div
-      ref={root}
-      data-slot="shell-nav-section"
-      className={cn("relative isolate flex flex-col gap-1", group.label !== undefined && "pl-1")}
-    >
+  const [open, setOpen] = useNavGroupOpen(group, at !== null);
+  useSlideMarker(body, at);
+  const folds = group.collapsible === true && group.label !== undefined;
+  const landing =
+    group.href !== undefined &&
+    navItemMatch({ id: group.id, href: group.href, label: "", match: "exact" }, pathname) !== null;
+  const content = (
+    <div ref={body} className={cn("relative isolate", folds && "pt-1")}>
       {/* First in DOM order: the pre-hydration fill in motion.css reaches the marked
           row through a sibling combinator, which only looks forward. */}
       {at !== null && (
@@ -145,19 +162,15 @@ function ShellNavSection({
           className="pointer-events-none absolute left-0 top-0 -z-10 rounded-lg bg-primary"
         />
       )}
-      {group.label !== undefined && (
-        <p id={labelId} className="mb-0.5 text-xs font-semibold uppercase tracking-widest text-ink-soft">
-          {group.label}
-        </p>
-      )}
       <ul
         aria-labelledby={group.label !== undefined ? labelId : undefined}
-        className="flex flex-col gap-1"
+        className={cn("flex flex-col gap-1", folds && "pl-3")}
       >
         {group.items.map((item) => (
           <li key={item.id} className="flex flex-col">
             <ShellNavRow
               item={item}
+              nested={folds}
               state={{ active: item.id === currentId, pending: item.id === pendingId }}
               row={row}
             />
@@ -166,9 +179,52 @@ function ShellNavSection({
       </ul>
     </div>
   );
+  if (!folds) {
+    return (
+      <div
+        data-slot="shell-nav-section"
+        className={cn("flex flex-col gap-1", group.label !== undefined && "pl-1")}
+      >
+        {group.label !== undefined && (
+          <p id={labelId} className="mb-0.5 text-xs font-semibold uppercase tracking-widest text-ink-soft">
+            {group.label}
+          </p>
+        )}
+        {content}
+      </div>
+    );
+  }
+  return (
+    <div data-slot="shell-nav-section" data-state={open ? "open" : "closed"} className="flex flex-col">
+      <NavGroupHeader
+        label={group.label}
+        labelId={labelId}
+        regionId={regionId}
+        open={open}
+        onToggle={() => setOpen(!open)}
+        href={group.href}
+        linkComponent={row.linkComponent}
+        current={landing}
+        labels={labels}
+      />
+      <NavCollapse open={open} id={regionId}>
+        {content}
+      </NavCollapse>
+    </div>
+  );
 }
 
-function ShellNavRow({ item, state, row }: { item: NavItem; state: NavItemState; row: RowContext }) {
+function ShellNavRow({
+  item,
+  state,
+  row,
+  nested,
+}: {
+  item: NavItem;
+  state: NavItemState;
+  row: RowContext;
+  nested: boolean;
+}) {
   const Icon = item.icon;
   const trailing = typeof item.trailing === "function" ? item.trailing(state) : item.trailing;
   return (
@@ -184,7 +240,9 @@ function ShellNavRow({ item, state, row }: { item: NavItem; state: NavItemState;
       className={cn(
         ROW,
         NAV_FOCUS,
-        state.active ? "font-semibold text-on-primary" : "font-medium text-ink hover:bg-hover",
+        state.active
+          ? "font-semibold text-on-primary"
+          : cn("font-medium hover:bg-hover", nested ? "text-ink-mid" : "text-ink"),
         item.disabled && "cursor-not-allowed opacity-40 hover:bg-transparent",
       )}
     >

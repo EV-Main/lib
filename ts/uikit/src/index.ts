@@ -688,6 +688,7 @@ export {
   resolveActiveNavItem,
 } from "./components/nav-model";
 export type { NavGroup, NavItem, NavItemState, NavMatch } from "./components/nav-model";
+export type { NavCollapseLabels, NavGroupCollapse } from "./components/nav-collapse";
 export { usePendingNavigation } from "./components/use-shell-nav";
 
 export { ShellNav } from "./components/shell-nav";
