@@ -26,6 +26,7 @@ import { ThemeSwitch } from "./ThemeSwitch";
 import { DEFAULT_ROUTE, navigate, useRoute } from "./router";
 import { ENTRIES, TIERS, entriesOf, entryPath, findEntry } from "./registry";
 import { setCompare, useGallery } from "./theme";
+import { useToastPosition } from "./toast-position";
 
 function HashLink({ href, ...props }: ComponentProps<"a">) {
   return <a href={href === undefined ? undefined : `#${href}`} {...props} />;
@@ -95,6 +96,7 @@ export function Gallery() {
   const route = useRoute();
   const { theme, compare } = useGallery();
   const entry = findEntry(route);
+  const toastPosition = useToastPosition();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -140,7 +142,7 @@ export function Gallery() {
           <NotFound route={ENTRIES.length === 0 ? `${route} (registry is empty)` : route} />
         )}
       </AppShell>
-      <Toaster />
+      <Toaster position={toastPosition} />
     </TooltipProvider>
   );
 }

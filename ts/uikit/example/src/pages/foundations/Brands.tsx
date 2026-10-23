@@ -30,6 +30,7 @@ import {
   Switch,
   type Polarity,
 } from "@evinvest/uikit";
+import { Block, PageRoot } from "../../gallery/ui";
 
 /**
  * One brand scope: `data-brand` picks the palette and the mark, and the
@@ -50,7 +51,7 @@ function BrandScope({ brand, polarity }: { brand: string; polarity: Polarity }) 
           <div className="flex items-center gap-3">
             <Logo className="h-8 w-auto text-primary-ink" />
             <span className="font-semibold">{brand}</span>
-            <Badge variant="outline">{polarity}</Badge>
+            <Badge variant="neutral">{polarity}</Badge>
           </div>
           <BrandCard id={`${brand}-${polarity}`} brand={brand} />
           <LeadForm />
@@ -71,7 +72,7 @@ function BrandCard({ id, brand }: { id: string; brand: string }) {
       </CardHeader>
       <CardContent className="flex flex-wrap items-center gap-3">
         <Button>Primary</Button>
-        <Button variant="outline">Outline</Button>
+        <Button variant="secondary">Secondary</Button>
         <Switch checked={on} onCheckedChange={setOn} aria-label="toggle" />
         <Select defaultValue="one">
           <SelectTrigger className="w-40" data-testid={`select-${id}`}>
@@ -127,12 +128,19 @@ function LeadForm() {
   );
 }
 
-export function BrandsDemo() {
+export default function Brands() {
   return (
-    <div className="space-y-4">
-      <BrandScope brand="ev" polarity="dark" />
-      <BrandScope brand="aquafix-demo" polarity="light" />
-      <BrandScope brand="aquafix-demo" polarity="dark" />
-    </div>
+    <PageRoot
+      title="Brands"
+      lede="A brand scope swaps the palette and the mark on one element. The same components follow, and overlays stay inside the scope that opened them."
+    >
+      <Block title="EV and the aquafix demo brand" note="data-brand scopes sit on their own element, apart from the theme. The aquafix palette is generated from its brand.toml when the page builds.">
+        <div className="flex flex-col gap-4">
+          <BrandScope brand="ev" polarity="dark" />
+          <BrandScope brand="aquafix-demo" polarity="light" />
+          <BrandScope brand="aquafix-demo" polarity="dark" />
+        </div>
+      </Block>
+    </PageRoot>
   );
 }

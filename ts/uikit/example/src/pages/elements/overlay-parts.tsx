@@ -18,12 +18,15 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerDescription,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -31,6 +34,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  Input,
+  ListRow,
+  ListRows,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -39,8 +45,116 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
   toast,
+  type DrawerDirection,
 } from "@evinvest/uikit";
+
+const DIRECTIONS: DrawerDirection[] = ["bottom", "top", "left", "right"];
+
+// Long enough to overflow the capped sheet on a phone, so the drag-vs-scroll
+// hand-off (drag only from the body's top) is exercised, not just the swipe.
+const LINES = Array.from({ length: 40 }, (_, i) => `Line ${i + 1} of the drawer body`);
+
+export function DrawerLauncher() {
+  const [direction, setDirection] = useState<DrawerDirection>("bottom");
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      {DIRECTIONS.map((d) => (
+        <Button key={d} variant={d === direction ? "solid" : "secondary"} size="sm" onClick={() => setDirection(d)}>
+          {d}
+        </Button>
+      ))}
+      <Drawer direction={direction}>
+        <DrawerTrigger asChild>
+          <Button data-testid="drawer-open">Open drawer</Button>
+        </DrawerTrigger>
+        <DrawerContent className="max-h-[85vh]">
+          <DrawerHeader>
+            <DrawerTitle>Drag me</DrawerTitle>
+            <DrawerDescription>Swipe towards the edge, or tap the scrim.</DrawerDescription>
+          </DrawerHeader>
+          <ul className="flex flex-col gap-2 px-4">
+            {LINES.map((l) => (
+              <li key={l} className="text-body text-ink-soft">
+                {l}
+              </li>
+            ))}
+          </ul>
+          <DrawerFooter>
+            <DrawerClose asChild>
+              <Button variant="secondary">Close</Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    </div>
+  );
+}
+
+/**
+ * Open and close each with the mouse: the scrim should fade with the panel and
+ * never flash back to full dark, and the × should show no ring (Tab to it does).
+ */
+export function ModalTriggers() {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant="secondary">Sheet</Button>
+        </SheetTrigger>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Lead</SheetTitle>
+            <SheetDescription>The panel takes focus; the first Tab reaches “Call”.</SheetDescription>
+          </SheetHeader>
+          <div className="flex flex-col gap-4 px-4">
+            <Button>Call</Button>
+            <ListRows>
+              <ListRow label="Stage" value="new" />
+              <ListRow label="Price" value="1,250" />
+            </ListRows>
+          </div>
+        </SheetContent>
+      </Sheet>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="secondary">Dialog</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Rename</DialogTitle>
+            <DialogDescription>Focus lands on the field.</DialogDescription>
+          </DialogHeader>
+          <Input aria-label="Name" defaultValue="Aquafix" />
+          <DialogFooter>
+            <Button>Save</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button variant="secondary">Alert dialog</Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Revoke the key?</AlertDialogTitle>
+            <AlertDialogDescription>Requests signed with it start failing at once.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction>Revoke</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
+}
 
 const USERS = ["Alice Moreau", "Chen Wei", "Grace Okafor"];
 
@@ -48,28 +162,27 @@ function DialogWithMenu() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Dialog with a menu</Button>
+        <Button variant="secondary">Dialog with a menu</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Position</DialogTitle>
           <DialogDescription>
-            Open the menu, then Escape: the menu goes, the dialog stays. Raise a toast and click it: the dialog
-            stays.
+            Open the menu, then Escape: the menu goes, the dialog stays. Raise a toast and click it: the dialog stays.
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-wrap gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">Actions</Button>
+              <Button variant="secondary">Actions</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem>Rename</DropdownMenuItem>
               <DropdownMenuItem>Duplicate</DropdownMenuItem>
-              <DropdownMenuItem variant="destructive">Archive</DropdownMenuItem>
+              <DropdownMenuItem variant="danger">Archive</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant="outline" onClick={() => toast("Saved", { duration: Infinity })}>
+          <Button variant="secondary" onClick={() => toast("Saved", { duration: Infinity })}>
             Raise a toast
           </Button>
         </div>
@@ -82,14 +195,12 @@ function DrawerWithSelect() {
   return (
     <Drawer direction="right">
       <DrawerTrigger asChild>
-        <Button variant="outline">Drawer with a Select</Button>
+        <Button variant="secondary">Drawer with a Select</Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Allocation</DrawerTitle>
-          <DrawerDescription>
-            Open the Select or the picker, then Escape or click the panel: only the list closes.
-          </DrawerDescription>
+          <DrawerDescription>Open the Select or the picker, then Escape or click the panel: only the list closes.</DrawerDescription>
         </DrawerHeader>
         <div className="flex flex-col gap-3 px-4">
           <Select>
@@ -103,7 +214,7 @@ function DrawerWithSelect() {
           </Select>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" className="w-48">
+              <Button variant="secondary" className="w-48">
                 Pick a user
               </Button>
             </PopoverTrigger>
@@ -131,18 +242,16 @@ function AlertOverDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">AlertDialog over Dialog</Button>
+        <Button variant="secondary">AlertDialog over Dialog</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Position</DialogTitle>
-          <DialogDescription>
-            Delete, then click the dimmed area around the confirmation: it closes, this dialog stays.
-          </DialogDescription>
+          <DialogDescription>Delete, then click the dimmed area around the confirmation: it closes, this dialog stays.</DialogDescription>
         </DialogHeader>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="destructive" className="self-start">
+            <Button variant="danger" className="self-start">
               Delete
             </Button>
           </AlertDialogTrigger>
@@ -168,7 +277,7 @@ function OpenedTogether() {
   const [round, setRound] = useState(0);
   return (
     <>
-      <Button variant="outline" onClick={() => setRound((r) => r + 1)}>
+      <Button variant="secondary" onClick={() => setRound((r) => r + 1)}>
         defaultOpen parent+child
       </Button>
       {round > 0 && (
@@ -180,7 +289,7 @@ function OpenedTogether() {
             </DialogHeader>
             <Popover defaultOpen>
               <PopoverTrigger asChild>
-                <Button variant="outline" className="self-start">
+                <Button variant="secondary" className="self-start">
                   Details
                 </Button>
               </PopoverTrigger>
@@ -194,7 +303,7 @@ function OpenedTogether() {
 }
 
 /** Nested overlays: each Escape and each click away should close one layer, the top one. */
-export function LayersDemo() {
+export function NestedLayers() {
   return (
     <div className="flex flex-wrap items-center gap-2">
       <DialogWithMenu />

@@ -63,7 +63,9 @@ export function Matrix({ columns, rows }: { columns: readonly string[]; rows: re
       <Table density="compact">
         <TableHeader>
           <TableRow>
-            <TableHead className="text-ink-soft w-28">&nbsp;</TableHead>
+            <TableHead className="text-ink-soft w-28">
+              <span className="sr-only">Row</span>
+            </TableHead>
             {columns.map((c) => (
               <TableHead key={c} className="text-ink-soft">
                 {c}
@@ -87,6 +89,9 @@ export function Matrix({ columns, rows }: { columns: readonly string[]; rows: re
     </div>
   );
 }
+
+/** Hover, focus and press cannot be pinned from CSS, so the matrices say they are live. */
+export const LIVE_STATES = "Hover, focus (Tab) and press are live on every specimen. Disabled and error are pinned.";
 
 export function Caption({ children }: { children: ReactNode }) {
   return <span className="text-caption text-ink-soft">{children}</span>;
