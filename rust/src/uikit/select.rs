@@ -93,7 +93,7 @@ pub fn SelectTrigger(#[props(default)] size: Size, #[props(default)] class: Stri
 				stroke_width: "2",
 				stroke_linecap: "round",
 				stroke_linejoin: "round",
-				class: "size-4 opacity-50",
+				class: "size-4 opacity-40",
 				path { d: "m6 9 6 6 6-6" }
 			}
 		}

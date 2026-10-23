@@ -12,7 +12,7 @@ pub const INPUT_GROUP_BASE: &str = "group/input-group border-input relative flex
 
 pub const INPUT_GROUP_ADDON_BASE: &str = "text-ink-soft flex h-auto cursor-text items-center justify-center gap-2 \
                                           py-1 text-body font-medium select-none [&>svg:not([class*='size-'])]:size-4 \
-                                          [&>kbd]:rounded-[var(--control-radius)] group-data-[disabled=true]/input-group:opacity-50";
+                                          [&>kbd]:rounded-[var(--control-radius)] group-data-[disabled=true]/input-group:opacity-40";
 
 pub const INPUT_GROUP_BUTTON_BASE: &str = "text-body flex gap-2 items-center";
 

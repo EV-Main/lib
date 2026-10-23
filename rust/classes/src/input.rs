@@ -10,7 +10,7 @@ pub const INPUT_BASE: &str = "file:text-ink placeholder:text-ink-soft selection:
                               selection:text-on-primary border-input h-7 w-full min-w-0 rounded-[var(--control-radius)] border \
                               bg-muted px-2 text-base pointer-fine:text-body transition-colors outline-none \
                               file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-body file:font-medium \
-                              disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 \
+                              disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40 \
                               focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error";
 
 /// Height, and for `Touch` the inset and type, fused over [`INPUT_BASE`]. A form

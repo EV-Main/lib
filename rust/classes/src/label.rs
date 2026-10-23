@@ -1,3 +1,3 @@
 pub const LABEL_BASE: &str = "flex items-center gap-2 text-body leading-none font-medium select-none \
-                          group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 \
+                          group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-40 \
                           peer-disabled:cursor-not-allowed peer-disabled:opacity-40";

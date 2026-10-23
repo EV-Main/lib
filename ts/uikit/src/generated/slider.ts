@@ -6,4 +6,4 @@ export const SLIDER_TRACK = "bg-ink/14 relative grow overflow-hidden rounded-ful
 
 export const SLIDER_RANGE = "bg-primary-ink absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full";
 
-export const SLIDER_THUMB = "border-primary-ink ring-ring/50 block size-4 shrink-0 rounded-full border bg-ink transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-40";
+export const SLIDER_THUMB = "border-primary-ink block size-4 shrink-0 rounded-full border-2 bg-ink transition-colors outline-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-40";

@@ -8,7 +8,7 @@ pub const ITEM_SEPARATOR: &str = "my-0";
 /// and size class last-wins, mirroring the TS `cn(ITEM_BASE, itemVariants[v], itemSizes[s])`.
 pub const ITEM_BASE: &str = "group/item flex items-center border border-transparent text-body rounded-[var(--control-radius)] transition-colors \
                              [a]:hover:bg-hover/50 [a]:transition-colors duration-100 flex-wrap outline-none \
-                             focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]";
+                             focus-visible:outline-solid focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring";
 
 pub const ITEM_MEDIA_BASE: &str = "flex shrink-0 items-center justify-center gap-2 \
                                    group-has-[[data-slot=item-description]]/item:self-start [&_svg]:pointer-events-none \

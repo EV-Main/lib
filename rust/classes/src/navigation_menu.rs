@@ -8,8 +8,8 @@ pub const NAVIGATION_MENU_TRIGGER_STYLE: &str = "group inline-flex h-9 w-max ite
                              text-body font-medium hover:bg-hover hover:text-ink focus:bg-hover \
                              focus:text-ink disabled:pointer-events-none disabled:opacity-40 \
                              data-[state=open]:hover:bg-hover data-[state=open]:text-ink \
-                             data-[state=open]:focus:bg-hover data-[state=open]:bg-hover/50 focus-visible:ring-ring/50 \
-                             outline-none transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1";
+                             data-[state=open]:focus:bg-hover data-[state=open]:bg-hover/50 \
+                             outline-none transition-colors focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 pub const NAVIGATION_MENU_CONTENT: &str = "data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in \
                        data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 \
@@ -36,9 +36,9 @@ pub const NAVIGATION_MENU_CONTENT: &str = "data-[motion^=from-]:animate-in data-
 
 pub const NAVIGATION_MENU_LINK: &str = "data-[active=true]:focus:bg-hover data-[active=true]:hover:bg-hover data-[active=true]:bg-hover/50 \
                     data-[active=true]:text-ink hover:bg-hover hover:text-ink \
-                    focus:bg-hover focus:text-ink focus-visible:ring-ring/50 \
+                    focus:bg-hover focus:text-ink \
                     [&_svg:not([class*='text-'])]:text-ink-soft flex flex-col gap-1 rounded-[var(--control-radius)] p-2 text-body \
-                    transition-all outline-none focus-visible:ring-[3px] focus-visible:outline-1 \
+                    transition-all outline-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring \
                     [&_svg:not([class*='size-'])]:size-4";
 
 pub const NAVIGATION_MENU_INDICATOR: &str = "data-[state=visible]:animate-in data-[state=hidden]:animate-out data-[state=hidden]:fade-out \

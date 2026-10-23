@@ -1,7 +1,7 @@
 use tailwind_fuse::{AsTailwindClass, TwVariant};
 
 pub const SCROLL_AREA_VIEWPORT: &str =
-	"focus-visible:ring-ring/50 size-full rounded-[inherit] overflow-auto transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1";
+	"size-full rounded-[inherit] overflow-auto transition-colors outline-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring";
 
 pub const SCROLL_AREA_THUMB: &str = "bg-border relative flex-1 rounded-full";
 

@@ -17,9 +17,9 @@ export const FIELD_GROUP = "group/field-group @container/field-group flex w-full
 
 export const FIELD_CONTENT = "group/field-content flex flex-1 flex-col gap-1.5 leading-snug";
 
-export const FIELD_LABEL = "group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border [&>*]:data-[slot=field]:p-4 has-data-[state=checked]:bg-primary-ink/5 has-data-[state=checked]:border-primary-ink";
+export const FIELD_LABEL = "group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-40 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border [&>*]:data-[slot=field]:p-4 has-data-[state=checked]:bg-primary-ink/5 has-data-[state=checked]:border-primary-ink";
 
-export const FIELD_TITLE = "flex w-fit items-center gap-2 text-body leading-snug font-medium group-data-[disabled=true]/field:opacity-50";
+export const FIELD_TITLE = "flex w-fit items-center gap-2 text-body leading-snug font-medium group-data-[disabled=true]/field:opacity-40";
 
 export const FIELD_DESCRIPTION = "text-ink-soft text-body leading-normal font-normal group-has-[[data-orientation=horizontal]]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&]:-mt-1.5 [&>a:hover]:text-primary-ink [&>a]:underline [&>a]:underline-offset-4";
 

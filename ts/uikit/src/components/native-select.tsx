@@ -49,7 +49,7 @@ export const NativeSelect = React.forwardRef<HTMLSelectElement, NativeSelectProp
     return (
       <span
         data-slot="native-select-wrapper"
-        className={cn("relative inline-flex w-full has-[select:disabled]:opacity-50", wrapperClassName)}
+        className={cn("relative inline-flex w-full has-[select:disabled]:opacity-40", wrapperClassName)}
       >
         <select
           ref={ref}

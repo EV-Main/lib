@@ -13,6 +13,6 @@ pub const SLIDER_TRACK: &str = "bg-ink/14 relative grow overflow-hidden rounded-
 pub const SLIDER_RANGE: &str = "bg-primary-ink absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full";
 /// An outline adjoining its own fill follows that fill — here the ink range the
 /// thumb rides on.
-pub const SLIDER_THUMB: &str = "border-primary-ink ring-ring/50 block size-4 shrink-0 rounded-full border bg-ink \
-                                transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden \
+pub const SLIDER_THUMB: &str = "border-primary-ink block size-4 shrink-0 rounded-full border-2 bg-ink \
+                                transition-colors outline-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring \
                                 disabled:pointer-events-none disabled:opacity-40";

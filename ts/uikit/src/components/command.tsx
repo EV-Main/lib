@@ -360,7 +360,7 @@ export function CommandInput({
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="size-4 shrink-0 opacity-50"
+        className="size-4 shrink-0 opacity-40"
         aria-hidden="true"
       >
         <circle cx="11" cy="11" r="8" />

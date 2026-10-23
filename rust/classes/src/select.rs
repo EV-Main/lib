@@ -30,7 +30,7 @@ pub const SELECT_ITEM: &str = concat!(
 pub const SELECT_TRIGGER_BASE: &str = "border-input [&_[data-placeholder]]:text-ink-soft [&_svg:not([class*='text-'])]:text-ink-soft \
 	 focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error data-[state=open]:border-ring \
 	 flex w-fit items-center justify-between gap-2 rounded-[var(--control-radius)] border bg-secondary pr-1.5 pl-2 text-body whitespace-nowrap \
-	 hover:bg-[image:linear-gradient(var(--hover),var(--hover))] transition-colors outline-none disabled:cursor-not-allowed disabled:opacity-50 \
+	 hover:bg-[image:linear-gradient(var(--hover),var(--hover))] transition-colors outline-none disabled:cursor-not-allowed disabled:opacity-40 \
 	 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex \
 	 *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 \
 	 [&_svg:not([class*='size-'])]:size-4";

@@ -1,4 +1,4 @@
-pub const INPUT_OTP_CONTAINER: &str = "relative flex items-center gap-2 has-disabled:opacity-50";
+pub const INPUT_OTP_CONTAINER: &str = "relative flex items-center gap-2 has-disabled:opacity-40";
 
 pub const INPUT_OTP_INPUT: &str = "absolute inset-0 h-full w-full opacity-0 disabled:cursor-not-allowed";
 

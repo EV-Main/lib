@@ -4,7 +4,7 @@ export const ITEM_GROUP = "group/item-group flex flex-col";
 
 export const ITEM_SEPARATOR = "my-0";
 
-export const ITEM_BASE = "group/item flex items-center border border-transparent text-body rounded-[var(--control-radius)] transition-colors [a]:hover:bg-hover/50 [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]";
+export const ITEM_BASE = "group/item flex items-center border border-transparent text-body rounded-[var(--control-radius)] transition-colors [a]:hover:bg-hover/50 [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring";
 
 export const itemVariants = {
   "bare": "bg-transparent",
