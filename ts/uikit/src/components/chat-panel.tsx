@@ -42,6 +42,7 @@ export function ChatPanel({ children, empty, composer, streaming = false, labels
   const scroller = React.useRef<HTMLDivElement>(null);
   const pinned = React.useRef(true);
   const [away, setAway] = React.useState(false);
+  const [scrolled, setScrolled] = React.useState(false);
   // `count` would call `false` a child, and `{list.length > 0 && …}` is common.
   const isEmpty = React.Children.toArray(children).length === 0 && empty != null;
 
@@ -82,21 +83,28 @@ export function ChatPanel({ children, empty, composer, streaming = false, labels
             aria-label={labels.log ?? "Conversation"}
             tabIndex={0}
             data-slot="chat-log"
+            data-scrolled={scrolled ? "" : undefined}
             className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
             onScroll={(e) => {
               const el = e.currentTarget;
               const atEnd = el.scrollHeight - el.scrollTop - el.clientHeight <= PIN_SLACK;
               pinned.current = atEnd;
               setAway(!atEnd);
+              setScrolled(el.scrollTop > 0);
             }}
           >
             {children}
           </div>
         )}
-        {away && !isEmpty && (
+        {!isEmpty && (
+          // Stays mounted so it can fade; hidden from the tree and the tab order until it matters.
           <IconButton
             variant="secondary"
             aria-label={labels.jump ?? "Jump to latest"}
+            data-chat-jump={away ? "visible" : "hidden"}
+            aria-hidden={!away}
+            tabIndex={away ? 0 : -1}
+            disabled={!away}
             className="absolute bottom-3 left-1/2 -translate-x-1/2"
             onClick={() => {
               pinned.current = true;

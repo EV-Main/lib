@@ -506,12 +506,38 @@
     opacity: 0;
   }
 }
-/* ── Chat: the streaming caret, and the docked aside's entrance ──────────────
-   The caret trails the last character of a bubble that is still receiving text
-   (`data-streaming`), so a reader sees the answer is not finished. A docked
-   aside is mounted and unmounted by its owner, so it only has an enter: it
-   slides in from the edge it docks to. Both fall back under reduced motion. */
-[data-slot="chat-bubble"][data-streaming]::after {
+/* ── Chat: streaming text, caret, thinking dots, entrances ───────────────────
+   Streamed words (`chat-word`, from ChatStreamText) fade in from a 2px blur with
+   a small rise; each is an inline-block so `translate` applies, and the space
+   between words stays outside it so lines still wrap normally. The caret trails a
+   bubble that is still receiving text (`data-streaming`) and pulses instead of
+   blinking; once streaming ends the bubble keeps `data-caret`, so the caret fades
+   out by transition. The assistant's text sits a little dimmer while it arrives
+   and settles to full ink when it is done. Turns, markers and attachments fade in
+   as they mount; the log fades its top edge once scrolled, and the jump button
+   fades with its state. A docked aside is mounted and unmounted by its owner, so
+   it only has an enter: it slides in from the edge it docks to. Everything falls
+   back under reduced motion. */
+@keyframes ev-word-in {
+  from {
+    opacity: 0;
+    filter: blur(2px);
+    translate: 0 3px;
+  }
+}
+[data-slot="chat-word"] {
+  display: inline-block;
+  animation: ev-word-in var(--ev-dur-base, 280ms) var(--ev-ease-out, ease-out) backwards;
+}
+
+[data-slot="chat-bubble"][data-variant="assistant"] {
+  transition: opacity var(--ev-dur-slow, 400ms) var(--ev-ease-out, ease-out);
+}
+[data-slot="chat-bubble"][data-variant="assistant"][data-streaming] {
+  opacity: 0.86;
+}
+
+[data-slot="chat-bubble"][data-caret]::after {
   content: "";
   display: inline-block;
   width: 0.5em;
@@ -519,12 +545,102 @@
   margin-left: 2px;
   vertical-align: text-bottom;
   background: var(--ink-mid);
-  animation: ev-caret-blink 1s steps(1) infinite;
+  opacity: 0;
+  transition: opacity var(--ev-dur-base, 280ms) var(--ev-ease-out, ease-out);
 }
-@keyframes ev-caret-blink {
-  50% {
-    opacity: 0;
+[data-slot="chat-bubble"][data-streaming]::after {
+  animation: ev-caret-pulse 1.4s var(--ev-ease-in-out, ease-in-out) infinite;
+}
+@keyframes ev-caret-pulse {
+  0%,
+  100% {
+    opacity: 0.15;
   }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+[data-slot="chat-typing"] {
+  animation: ev-enter-fade var(--ev-dur-base, 280ms) var(--ev-ease-out, ease-out) backwards;
+}
+[data-slot="chat-typing"] [data-still] {
+  display: none;
+}
+[data-slot="chat-typing"] [data-dot] {
+  animation: ev-typing-wave 1.2s var(--ev-ease-in-out, ease-in-out) infinite;
+}
+[data-slot="chat-typing"] [data-dot]:nth-child(2) {
+  animation-delay: 160ms;
+}
+[data-slot="chat-typing"] [data-dot]:nth-child(3) {
+  animation-delay: 320ms;
+}
+@keyframes ev-typing-wave {
+  0%,
+  60%,
+  100% {
+    opacity: 0.25;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+@keyframes ev-chat-in {
+  from {
+    opacity: 0;
+    filter: blur(3px);
+    translate: 0 10px;
+  }
+}
+@keyframes ev-chat-in-user {
+  from {
+    opacity: 0;
+    filter: blur(3px);
+    translate: 0 10px;
+    scale: 0.98;
+  }
+}
+@keyframes ev-chat-part-in {
+  from {
+    opacity: 0;
+    translate: 0 4px;
+  }
+}
+[data-slot="chat-message"][data-enter="rise"] {
+  animation: ev-chat-in var(--ev-dur-slow, 400ms) var(--ev-ease-out, ease-out) var(--enter-delay, 0ms) backwards;
+}
+[data-slot="chat-message"][data-role="user"][data-enter="rise"] {
+  transform-origin: right bottom;
+  animation-name: ev-chat-in-user;
+}
+[data-slot="chat-marker"],
+[data-slot="chat-attachment"] {
+  animation: ev-chat-part-in var(--ev-dur-base, 280ms) var(--ev-ease-out, ease-out) backwards;
+}
+
+@property --ev-chat-fade {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+[data-slot="chat-log"] {
+  mask-image: linear-gradient(to bottom, transparent, black var(--ev-chat-fade));
+  transition: --ev-chat-fade var(--ev-dur-base, 280ms) var(--ev-ease-out, ease-out);
+}
+[data-slot="chat-log"][data-scrolled] {
+  --ev-chat-fade: 28px;
+}
+[data-chat-jump] {
+  transition:
+    opacity var(--ev-dur-base, 280ms) var(--ev-ease-out, ease-out),
+    translate var(--ev-dur-base, 280ms) var(--ev-ease-out, ease-out);
+}
+[data-chat-jump="hidden"] {
+  opacity: 0;
+  translate: 0 6px;
+  pointer-events: none;
 }
 
 [data-slot="aside-panel"][data-mode="docked"] {
@@ -542,8 +658,42 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  [data-slot="chat-word"] {
+    animation: ev-enter-fade 1ms backwards;
+    /* beats the per-word stagger delay set inline */
+    animation-delay: 0ms !important;
+  }
+  [data-slot="chat-bubble"][data-variant="assistant"],
+  [data-slot="chat-bubble"][data-caret]::after,
+  [data-slot="chat-log"] {
+    transition: none;
+  }
+  [data-slot="chat-bubble"][data-variant="assistant"][data-streaming] {
+    opacity: 1;
+  }
   [data-slot="chat-bubble"][data-streaming]::after {
     animation: none;
+    opacity: 0.6;
+  }
+  [data-slot="chat-typing"],
+  [data-slot="chat-typing"] [data-dot] {
+    animation: none;
+  }
+  [data-slot="chat-typing"] [data-dot] {
+    display: none;
+  }
+  [data-slot="chat-typing"] [data-still] {
+    display: inline;
+  }
+  [data-slot="chat-message"][data-enter="rise"],
+  [data-slot="chat-message"][data-role="user"][data-enter="rise"],
+  [data-slot="chat-marker"],
+  [data-slot="chat-attachment"] {
+    animation: ev-enter-fade var(--ev-dur-fast, 180ms) linear backwards;
+  }
+  [data-chat-jump] {
+    transition: opacity var(--ev-dur-fast, 180ms) linear;
+    translate: none;
   }
   [data-slot="aside-panel"][data-mode="docked"] {
     animation-name: ev-enter-fade;

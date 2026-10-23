@@ -798,6 +798,10 @@ export type {
   ChatMarkerProps,
   ChatMessageProps,
 } from "./components/chat-message";
+export { ChatStreamText } from "./components/chat-stream-text";
+export type { ChatStreamTextProps } from "./components/chat-stream-text";
+export { ChatTyping } from "./components/chat-typing";
+export type { ChatTypingProps } from "./components/chat-typing";
 export { ChatComposer, ModelChip } from "./components/chat-composer";
 export type {
   ChatComposerLabels,

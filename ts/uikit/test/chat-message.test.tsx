@@ -23,7 +23,8 @@ describe("ChatBubble", () => {
         <ChatBubble>d</ChatBubble>
       </>,
     );
-    expect(screen.getByText("s")).toHaveAttribute("data-streaming");
+    // A streaming string is wrapped in word spans, so climb to the bubble.
+    expect(screen.getByText("s").closest("[data-slot=chat-bubble]")).toHaveAttribute("data-streaming");
     expect(screen.getByText("d")).not.toHaveAttribute("data-streaming");
   });
 });

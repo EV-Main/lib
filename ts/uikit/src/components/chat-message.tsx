@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "../lib/cn";
+import { ChatStreamText } from "./chat-stream-text";
 import { IconButton } from "./icon-button";
 import { UiIcon } from "./ui-icons";
 
@@ -15,20 +16,30 @@ const BUBBLE: Record<ChatBubbleVariant, string> = {
 
 export interface ChatBubbleProps extends React.ComponentProps<"div"> {
   variant?: ChatBubbleVariant;
-  /** Still receiving text: a blinking caret trails it (motion.css). */
+  /**
+   * Still receiving text: a soft caret pulses after it, and string children
+   * fade in word by word (`ChatStreamText`). Stays set until the text is complete.
+   */
   streaming?: boolean;
 }
 
 /** One block of message text; `assistant` has no box so long answers read as a page. */
-export function ChatBubble({ variant = "assistant", streaming = false, className, ...props }: ChatBubbleProps) {
+export function ChatBubble({ variant = "assistant", streaming = false, className, children, ...props }: ChatBubbleProps) {
+  // Once a bubble has streamed it keeps its word wrappers and its caret slot, so
+  // the last words finish landing and the caret fades out instead of vanishing.
+  const [live, setLive] = React.useState(streaming);
+  if (streaming && !live) setLive(true);
   return (
     <div
       data-slot="chat-bubble"
       data-variant={variant}
       data-streaming={streaming ? "" : undefined}
+      data-caret={live ? "" : undefined}
       className={cn("min-w-0 break-words whitespace-pre-wrap text-body text-ink", BUBBLE[variant], className)}
       {...props}
-    />
+    >
+      {live && typeof children === "string" ? <ChatStreamText text={children} streaming={streaming} /> : children}
+    </div>
   );
 }
 
