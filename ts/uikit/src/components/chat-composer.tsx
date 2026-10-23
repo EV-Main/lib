@@ -58,6 +58,8 @@ export function ModelChip({ models, value, onValueChange, "aria-label": ariaLabe
 }
 
 export interface ChatComposerLabels {
+  /** Names the message field. Default `"Message"`. */
+  field?: string;
   send?: string;
   stop?: string;
   attach?: string;
@@ -120,7 +122,7 @@ export function ChatComposer({
       data-slot="chat-composer"
       data-state={streaming ? "streaming" : "default"}
       className={cn(
-        "flex flex-col gap-2 rounded-lg border bg-card px-3 pb-2.5 pt-3 focus-within:ring-1 focus-within:ring-ring",
+        "flex flex-col gap-2 rounded-lg border bg-card px-3 pb-2.5 pt-3 focus-within:ring-2 focus-within:ring-ring",
         streaming ? "border-border" : "border-border-strong",
         className,
       )}
@@ -132,10 +134,12 @@ export function ChatComposer({
         value={text}
         disabled={disabled}
         placeholder={placeholder}
+        aria-label={labels.field ?? "Message"}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={(e) => {
-          // Enter during IME composition confirms the candidate; it must not send.
-          if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+          // Enter during IME composition confirms the candidate; it must not send. Safari reports the
+          // confirming Enter after compositionend, with isComposing already false and keyCode 229.
+          if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing && e.keyCode !== 229) {
             e.preventDefault();
             send();
           }

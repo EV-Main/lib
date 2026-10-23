@@ -31,6 +31,19 @@ describe("ChatComposer", () => {
     expect(onSend).not.toHaveBeenCalled();
   });
 
+  it("does not send on the Enter that confirms an IME candidate in Safari", () => {
+    const onSend = vi.fn();
+    render(<ChatComposer onSend={onSend} />);
+    fireEvent.change(field(), { target: { value: "привет" } });
+    fireEvent.keyDown(field(), { key: "Enter", keyCode: 229 });
+    expect(onSend).not.toHaveBeenCalled();
+  });
+
+  it("names the field", () => {
+    render(<ChatComposer onSend={() => {}} labels={{ field: "Сообщение" }} />);
+    expect(screen.getByRole("textbox", { name: "Сообщение" })).toBeInTheDocument();
+  });
+
   it("ignores an empty message and disables the send button", () => {
     const onSend = vi.fn();
     render(<ChatComposer onSend={onSend} />);
