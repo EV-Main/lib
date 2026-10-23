@@ -118,7 +118,7 @@ Rust crate and its TypeScript mirror at once.
 - **Menus, overlays and controls are restyled** (`ev_lib` `uikit` and
   `@evinvest/uikit`): 28 px menu rows and fields, a hairline instead of shadows
   on cards and popovers, the scrim token behind every modal, an underlined
-  `Tabs`, a 28 by 16 px `Switch`, a flat `Card` (6 px radius, 16 px padding),
+  `Tabs`, a fully round 28 by 16 px `Switch`, a flat `Card` (6 px radius, 16 px padding),
   the tooltip as a popover, tracks drawn as 14 % ink (`bg-ink/14`), disabled at
   40 % opacity, and the offset focus ring on every `Button` variant. The
   `Select` trigger, list and `NativeSelect` classes now live in the class

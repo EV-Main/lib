@@ -7,7 +7,7 @@ use crate::focus::filled_focus_ring;
 pub const SWITCH_BASE: &str = concat!(
 	"peer data-[state=checked]:bg-primary data-[state=checked]:border-transparent data-[state=unchecked]:bg-muted \
 	 data-[state=unchecked]:border-input focus-visible:border-ring \
-	 inline-flex h-4 w-7 shrink-0 items-center rounded-[var(--chip-radius)] border \
+	 inline-flex h-4 w-7 shrink-0 items-center rounded-full border \
 	 transition-colors outline-none disabled:cursor-not-allowed disabled:opacity-40 ",
 	filled_focus_ring!()
 );
@@ -15,5 +15,5 @@ pub const SWITCH_BASE: &str = concat!(
 /// 12 px knob. The thumb's travel is the track's inner width less the knob and
 /// the 2 px inset on each side, in px so it does not depend on the knob's size.
 pub const SWITCH_THUMB: &str = "data-[state=checked]:bg-on-primary data-[state=unchecked]:bg-ink-mid pointer-events-none \
-                                block size-3 rounded-[var(--chip-radius)] ring-0 transition-transform \
+                                block size-3 rounded-full ring-0 transition-transform \
                                 data-[state=checked]:translate-x-[13px] data-[state=unchecked]:translate-x-0.5";

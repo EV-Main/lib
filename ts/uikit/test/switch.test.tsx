@@ -9,7 +9,7 @@ describe("Switch", () => {
     expect(el).toHaveAttribute("data-slot", "switch");
     expect(el).toHaveAttribute("data-state", "unchecked");
     expect(el).toHaveAttribute("aria-checked", "false");
-    expect(el).toHaveClass("rounded-[var(--chip-radius)]", "h-4", "w-7");
+    expect(el).toHaveClass("rounded-full", "h-4", "w-7");
   });
 
   it("renders the thumb with translate classes", () => {

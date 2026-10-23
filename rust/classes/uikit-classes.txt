@@ -266,7 +266,7 @@ data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full
 data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px
 data-[orientation=vertical]:w-px
 data-[selected=true]:bg-active data-[selected=true]:text-ink [&_svg:not([class*='text-'])]:text-ink-mid relative flex h-7 cursor-default items-center gap-2 rounded-[var(--control-radius)] px-2 text-body text-ink-mid outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
-data-[state=checked]:bg-on-primary data-[state=unchecked]:bg-ink-mid pointer-events-none block size-3 rounded-[var(--chip-radius)] ring-0 transition-transform data-[state=checked]:translate-x-[13px] data-[state=unchecked]:translate-x-0.5
+data-[state=checked]:bg-on-primary data-[state=unchecked]:bg-ink-mid pointer-events-none block size-3 rounded-full ring-0 transition-transform data-[state=checked]:translate-x-[13px] data-[state=unchecked]:translate-x-0.5
 data-[state=checked]:translate-x-[13px]
 data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm
 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto border-t
@@ -656,7 +656,7 @@ pagination-link
 panel-one
 panel-two
 peer border-input bg-muted data-[state=checked]:bg-primary data-[state=checked]:text-on-primary data-[state=checked]:border-primary focus-visible:border-ring aria-invalid:border-accent-error size-4 shrink-0 rounded-[var(--control-radius)] border transition-colors outline-none disabled:cursor-not-allowed disabled:opacity-40 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
-peer data-[state=checked]:bg-primary data-[state=checked]:border-transparent data-[state=unchecked]:bg-muted data-[state=unchecked]:border-input focus-visible:border-ring inline-flex h-4 w-7 shrink-0 items-center rounded-[var(--chip-radius)] border transition-colors outline-none disabled:cursor-not-allowed disabled:opacity-40 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+peer data-[state=checked]:bg-primary data-[state=checked]:border-transparent data-[state=unchecked]:bg-muted data-[state=unchecked]:border-input focus-visible:border-ring inline-flex h-4 w-7 shrink-0 items-center rounded-full border transition-colors outline-none disabled:cursor-not-allowed disabled:opacity-40 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 peer/field-label
 peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-[var(--control-radius)] p-2 text-left text-body outline-hidden ring-ring transition-[width,height,padding] hover:bg-hover hover:text-ink focus-visible:ring-2 active:bg-active active:text-ink disabled:pointer-events-none disabled:opacity-40 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-40 data-[active=true]:bg-active data-[active=true]:font-medium data-[active=true]:text-ink data-[state=open]:hover:bg-hover data-[state=open]:hover:text-ink group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0
 pending:false
