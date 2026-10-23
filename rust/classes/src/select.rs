@@ -52,24 +52,24 @@ pub const NATIVE_SELECT_BASE: &str = "border-input text-ink h-7 w-full min-w-0 a
 	 focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error has-[option[value='']:checked]:text-ink-soft \
 	 [&_option]:bg-popover [&_option]:text-ink [&_optgroup]:bg-popover [&_optgroup]:text-ink-soft [color-scheme:var(--scheme,normal)]";
 
-/// The `SelectTrigger`'s height, and for `Lg` its inset and type, on the same
+/// The `SelectTrigger`'s height, and for `Touch` its inset and type, on the same
 /// three steps as [`input_size_class`](crate::input_size_class), so a trigger
 /// lines up with the input beside it in a form row.
 pub fn select_trigger_size_class(size: Size) -> &'static str {
 	match size {
 		Size::Xs | Size::Sm => "h-6",
-		Size::Md => "h-7",
-		Size::Lg | Size::Touch | Size::Xl => "h-11 pl-3 pr-2.5 text-base",
+		Size::Md | Size::Lg => "h-7",
+		Size::Touch | Size::Xl => "h-11 pl-3 pr-2.5 text-base",
 	}
 }
 
-/// The `NativeSelect`'s height, and for `Lg` its inset and type. The inset is
+/// The `NativeSelect`'s height, and for `Touch` its inset and type. The inset is
 /// written per side because the right one clears the arrow: a `px-*` here would
 /// fuse that clearance away.
 pub fn native_select_size_class(size: Size) -> &'static str {
 	match size {
 		Size::Xs | Size::Sm => "h-6",
-		Size::Md => "h-7",
-		Size::Lg | Size::Touch | Size::Xl => "h-11 pr-11 pl-3 text-base pointer-fine:text-base",
+		Size::Md | Size::Lg => "h-7",
+		Size::Touch | Size::Xl => "h-11 pr-11 pl-3 text-base pointer-fine:text-base",
 	}
 }

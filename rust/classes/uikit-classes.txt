@@ -9,7 +9,7 @@
 -top-12 left-1/2 -translate-x-1/2 rotate-90
 12:00:01
 2026-06-10 09:05
-@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6
+@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-4 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-4
 [&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none
 [&>svg]:size-3.5
 [&_[data-slot=command-input-wrapper]]:h-9 [&_[data-slot=command-input]]:h-8
@@ -19,11 +19,11 @@
 [--table-dense-py:calc(var(--spacing)*1.5)] [--table-head-h:calc(var(--spacing)*8)]
 [--table-dense-py:initial]
 [--table-dense-py:initial] [--table-head-h:initial]
-[--table-head-case:uppercase]
+[--table-head-case:none]
 [--table-px:calc(var(--spacing)*5)] [--table-py:calc(var(--spacing)*3)] [--table-head-ink:var(--ink-soft)] [--table-head-text:var(--text-caption)] [--table-head-tracking:var(--tracking-normal)] [--table-head-case:none] [&>thead>tr:hover]:bg-transparent
 [--table-px:initial]
 [--table-px:initial] [--table-py:initial] [--table-head-ink:initial] [--table-head-text:initial] [--table-head-tracking:initial] [--table-head-case:initial]
-[.border-t]:pt-6
+[.border-t]:pt-4
 [overflow-wrap:anywhere]
 absolute inset-0 h-full w-full opacity-0 disabled:cursor-not-allowed
 absolute inset-0 top-1/2 shrink-0 bg-border h-px w-full
@@ -125,7 +125,7 @@ bg-button-primary-bg
 bg-card
 bg-card text-ink
 bg-card text-ink border-border
-bg-card text-ink flex flex-col gap-6 rounded-lg border border-border py-6 shadow-card
+bg-card text-ink flex flex-col gap-4 rounded-lg border border-border py-4 shadow-card
 bg-card text-ink overflow-hidden rounded-lg border border-border shadow-card
 bg-chip-neutral-bg
 bg-chip-{tone}-bg
@@ -165,6 +165,7 @@ bg-primary text-on-primary
 bg-primary text-on-primary hover:bg-primary-hover
 bg-primary-ink absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full
 bg-primary-ink h-full w-full flex-1 transition-all
+bg-secondary
 bg-secondary group-data-[variant=floating]:border-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-card
 bg-secondary text-ink flex h-full w-(--sidebar-width) flex-col
 bg-secondary text-ink-soft border-border pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-[var(--control-radius)] border px-1 font-sans text-caption font-medium tabular-nums select-none [&_svg:not([class*='size-'])]:size-3
@@ -182,11 +183,15 @@ border border-input bg-transparent hover:bg-hover hover:text-ink data-[state=on]
 border-accent-warn/40
 border-b border-border last:border-b-0
 border-border
+border-chip-error-border
 border-chip-error-border bg-chip-error-bg text-accent-error-ink [a&]:hover:bg-hover
+border-chip-info-border
 border-chip-info-border bg-chip-info-bg text-accent-info-ink [a&]:hover:bg-hover
 border-chip-neutral-border bg-chip-neutral-bg text-ink-mid [a&]:hover:bg-active
+border-chip-positive-border
 border-chip-positive-border bg-chip-positive-bg text-positive-ink [a&]:hover:bg-hover
 border-chip-primary-border bg-chip-primary-bg text-primary-ink [a&]:hover:bg-hover
+border-chip-warn-border
 border-chip-warn-border bg-chip-warn-bg text-accent-warn-ink [a&]:hover:bg-hover
 border-chip-{tone}-border
 border-dashed
@@ -262,7 +267,7 @@ data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px
 data-[orientation=vertical]:w-px
 data-[selected=true]:bg-active data-[selected=true]:text-ink [&_svg:not([class*='text-'])]:text-ink-mid relative flex h-7 cursor-default items-center gap-2 rounded-[var(--control-radius)] px-2 text-body text-ink-mid outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
 data-[state=checked]:bg-on-primary data-[state=unchecked]:bg-ink-mid pointer-events-none block size-3 rounded-[var(--chip-radius)] ring-0 transition-transform data-[state=checked]:translate-x-[13px] data-[state=unchecked]:translate-x-0.5
-data-[state=checked]:translate-x-[calc(100%-2px)]
+data-[state=checked]:translate-x-[13px]
 data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm
 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto border-t
 data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 h-full w-3/4 border-r sm:max-w-sm
@@ -382,7 +387,6 @@ field-sizing-content
 file:text-ink placeholder:text-ink-soft selection:bg-primary selection:text-on-primary border-input h-7 w-full min-w-0 rounded-[var(--control-radius)] border bg-muted px-2 text-base pointer-fine:text-body transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-body file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error
 fill-primary-ink
 first:rounded-l-[var(--control-radius)]
-first:rounded-l-md
 fixed inset-0 z-50 bg-scrim
 fixed inset-0 z-50 bg-scrim data-[state=closed]:pointer-events-none
 fixed top-1/2 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-lg border border-border-strong p-0 shadow-overlay
@@ -407,7 +411,7 @@ flex items-center gap-2 text-body leading-none font-medium select-none group-dat
 flex items-center gap-[7px] whitespace-nowrap
 flex items-center justify-between gap-1 w-full px-1
 flex items-center justify-center text-current transition-none
-flex items-center px-6 [.border-t]:pt-6
+flex items-center px-4 [.border-t]:pt-4
 flex max-w-sm flex-col items-center gap-2 text-center
 flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden
 flex min-h-0 flex-1 flex-col overflow-y-auto
@@ -508,7 +512,6 @@ h-7
 h-7 aspect-square px-0
 h-7 px-2 min-w-7
 h-7 px-3 text-body has-[>svg]:px-2.5
-h-8
 h-8 aspect-square
 h-8 aspect-square px-0
 h-8 px-2.5 min-w-8
@@ -566,7 +569,6 @@ item-title
 kbd-group
 kebab-case
 last:rounded-r-[var(--control-radius)]
-leading-none font-semibold
 lg:col-span-2
 lg:col-span-3
 lg:col-start-3
@@ -711,12 +713,11 @@ relative w-full overflow-x-auto
 relative w-full rounded-lg border px-4 py-3 text-body grid has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current
 ring-offset-background focus-visible:ring-ring absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:pointer-events-none
 ring-offset-background focus-visible:ring-ring absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
-rounded-[4px]
+rounded-[inherit]
 rounded-[var(--chip-radius)]
 rounded-[var(--control-radius)]
 rounded-full
-rounded-md
-rounded-xl
+rounded-lg
 scroll-area
 scroll-area-scrollbar
 scroll-area-thumb
@@ -810,15 +811,15 @@ text-[14px] md:text-[15px] leading-[1.62] text-ink-soft
 text-[color:var(--table-head-ink,var(--ink))] h-[var(--table-head-h,calc(var(--spacing)*10))] px-[var(--table-px,calc(var(--spacing)*2))] text-start align-middle font-medium whitespace-nowrap text-[length:var(--table-head-text)] tracking-[var(--table-head-tracking)] [text-transform:var(--table-head-case)] [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]
 text-accent-debug
 text-accent-error
-text-accent-error bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid
 text-accent-error-ink
+text-accent-error-ink border-chip-error-border bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid
 text-accent-error-ink text-body-s
 text-accent-error-ink text-body-s font-normal
-text-accent-info
-text-accent-info bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid
 text-accent-info-ink
+text-accent-info-ink border-chip-info-border bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid
 text-accent-trace
 text-accent-warn-ink
+text-accent-warn-ink border-chip-warn-border bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid
 text-base
 text-body
 text-body 
@@ -827,6 +828,7 @@ text-body font-medium select-none
 text-body-s
 text-caption
 text-end tabular-nums
+text-h3 text-ink font-medium
 text-ink
 text-ink font-normal
 text-ink font-semibold
@@ -834,6 +836,7 @@ text-ink-mid
 text-ink-mid border-border-subtle inline-flex h-8 w-fit items-stretch justify-center border-b
 text-ink-mid hover:bg-hover hover:text-ink
 text-ink-mid hover:text-ink data-[state=active]:text-ink data-[state=active]:border-primary focus-visible:outline-ring inline-flex h-8 flex-1 items-center justify-center gap-1.5 -mb-px border-b border-transparent px-3 text-body font-medium whitespace-nowrap transition-colors outline-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:-outline-offset-2 disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
+text-ink-mid text-body
 text-ink-soft
 text-ink-soft [&>a:hover]:text-primary-ink text-body/relaxed [&>a]:underline [&>a]:underline-offset-4
 text-ink-soft col-start-2 grid justify-items-start gap-1 text-body [&_p]:leading-relaxed
@@ -860,8 +863,8 @@ text-lg font-semibold
 text-lg leading-none font-semibold
 text-on-positive
 text-positive
-text-positive bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid
 text-positive-ink
+text-positive-ink border-chip-positive-border bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid
 text-primary-ink
 text-primary-ink underline-offset-4 hover:underline
 text-sm

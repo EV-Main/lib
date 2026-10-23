@@ -5,13 +5,13 @@ pub const TEXTAREA_BASE: &str = "border-input placeholder:text-ink-soft focus-vi
                              border bg-muted px-2 py-1.5 text-base pointer-fine:text-body transition-colors \
                              outline-none disabled:cursor-not-allowed disabled:opacity-50";
 
-/// Minimum height, and for `Lg` the inset and type, fused over
-/// [`TEXTAREA_BASE`]. The same three steps and the same 16px floor at `Lg` as
+/// Minimum height, and for `Touch` the inset and type, fused over
+/// [`TEXTAREA_BASE`]. The same three steps and the same 16px floor at `Touch` as
 /// [`input_size_class`](crate::input_size_class).
 pub fn textarea_size_class(size: Size) -> &'static str {
 	match size {
 		Size::Xs | Size::Sm => "min-h-14",
-		Size::Md => "min-h-16",
-		Size::Lg | Size::Touch | Size::Xl => "min-h-20 px-3 py-2 text-base pointer-fine:text-base",
+		Size::Md | Size::Lg => "min-h-16",
+		Size::Touch | Size::Xl => "min-h-20 px-3 py-2 text-base pointer-fine:text-base",
 	}
 }

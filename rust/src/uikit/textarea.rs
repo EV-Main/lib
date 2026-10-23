@@ -82,7 +82,7 @@ mod tests {
 	fn large_size_grows_and_keeps_16px_text() {
 		fn app() -> Element {
 			rsx! {
-				Textarea { size: Size::Lg }
+				Textarea { size: Size::Touch }
 			}
 		}
 		let html = render(app);

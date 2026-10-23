@@ -98,7 +98,7 @@ mod tests {
 	fn large_size_is_44px_with_16px_text_at_every_width() {
 		fn app() -> Element {
 			rsx! {
-				Input { size: Size::Lg }
+				Input { size: Size::Touch }
 			}
 		}
 		let html = render(app);
@@ -109,7 +109,7 @@ mod tests {
 		assert!(!html.split(['"', ' ']).any(|class| class == "h-7"), "lg drops the md height: {html}");
 		assert!(!html.contains("pointer-fine:text-body"), "lg must not shrink below 16px: {html}");
 		assert!(html.contains("rounded-[var(--control-radius)]"), "{html}");
-		assert!(html.contains("data-size=\"lg\""), "{html}");
+		assert!(html.contains("data-size=\"touch\""), "{html}");
 	}
 
 	#[test]

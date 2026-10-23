@@ -11,10 +11,10 @@ describe("Textarea", () => {
     expect(el).toHaveAttribute("data-slot", "textarea");
   });
 
-  it("grows at lg and keeps 16px text at every width", () => {
-    const { container } = render(<Textarea size="lg" />);
+  it("grows at touch and keeps 16px text at every width", () => {
+    const { container } = render(<Textarea size="touch" />);
     const el = container.querySelector("textarea")!;
-    expect(el).toHaveAttribute("data-size", "lg");
+    expect(el).toHaveAttribute("data-size", "touch");
     expect(el).toHaveClass("min-h-20", "px-3", "pointer-fine:text-base");
     expect(el).not.toHaveClass("min-h-16");
     expect(el).not.toHaveClass("pointer-fine:text-body");

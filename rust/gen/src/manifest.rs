@@ -1219,7 +1219,7 @@ fn form_size_table(name: &'static str, ty: &'static str, class: fn(Size) -> &'st
 	Ts::Table {
 		name,
 		ty,
-		entries: [Size::Sm, Size::Md, Size::Lg].into_iter().map(|s| (s.as_ref().to_string(), class(s).to_string())).collect(),
+		entries: [Size::Sm, Size::Md, Size::Touch].into_iter().map(|s| (s.as_ref().to_string(), class(s).to_string())).collect(),
 	}
 }
 

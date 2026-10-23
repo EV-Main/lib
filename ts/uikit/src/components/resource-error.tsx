@@ -51,7 +51,7 @@ export function ResourceError(props: ResourceErrorProps) {
     const { message, title, labels: _labels, variant: _variant, className, ...rest } = props;
     return (
       <div data-slot="resource-error" data-variant="alert" className={className} {...rest}>
-        <Alert variant="destructive">
+        <Alert variant="error">
           <TriangleAlertIcon className="size-4" />
           {title !== undefined && <AlertTitle>{title}</AlertTitle>}
           <AlertDescription>{message}</AlertDescription>

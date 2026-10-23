@@ -83,10 +83,10 @@ describe("NativeSelect", () => {
     expect(wrapper).not.toHaveClass("w-full");
   });
 
-  it("grows to 44px at lg, keeping the arrow clear of the text", () => {
-    const { container } = render(<NativeSelect size="lg" />);
+  it("grows to 44px at touch, keeping the arrow clear of the text", () => {
+    const { container } = render(<NativeSelect size="touch" />);
     const el = select(container);
-    expect(el).toHaveAttribute("data-size", "lg");
+    expect(el).toHaveAttribute("data-size", "touch");
     expect(el).toHaveClass("h-11", "pl-3", "pr-11", "pointer-fine:text-base");
     expect(el).not.toHaveClass("h-7");
     expect(el).not.toHaveClass("pointer-fine:text-body");

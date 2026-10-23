@@ -26,14 +26,14 @@ describe("Input", () => {
     expect(el).not.toHaveClass("h-7");
   });
 
-  it("defaults to md and grows to a 44px, 16px-text field at lg", () => {
+  it("defaults to md and grows to a 44px, 16px-text field at touch", () => {
     const { container, rerender } = render(<Input />);
     const el = container.querySelector("input")!;
     expect(el).toHaveAttribute("data-size", "md");
     expect(el).toHaveClass("h-7", "bg-muted", "text-base", "pointer-fine:text-body");
 
-    rerender(<Input size="lg" />);
-    expect(el).toHaveAttribute("data-size", "lg");
+    rerender(<Input size="touch" />);
+    expect(el).toHaveAttribute("data-size", "touch");
     expect(el).toHaveClass("h-11", "px-3", "text-base", "pointer-fine:text-base", "rounded-[var(--control-radius)]");
     // below 16px iOS Safari zooms into the focused field
     expect(el).not.toHaveClass("h-7");

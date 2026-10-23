@@ -22,15 +22,15 @@ describe("Card", () => {
     expect(el).toHaveClass("has-data-[slot=card-action]:grid-cols-[1fr_auto]");
   });
 
-  it("title stays minimal (no landing text-ink)", () => {
+  it("title is the h3 style", () => {
     const { getByText } = render(<CardTitle>t</CardTitle>);
     const el = getByText("t");
-    expect(el).toHaveClass("font-semibold");
+    expect(el).toHaveClass("text-h3", "font-medium");
     expect(el).toHaveAttribute("data-slot", "card-title");
   });
 
   it("footer keeps the border-t rule", () => {
     const { getByText } = render(<CardFooter>f</CardFooter>);
-    expect(getByText("f")).toHaveClass("[.border-t]:pt-6");
+    expect(getByText("f")).toHaveClass("[.border-t]:pt-4");
   });
 });

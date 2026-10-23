@@ -105,13 +105,13 @@ describe("Select", () => {
     unmount();
     render(
       <Select>
-        <SelectTrigger size="lg">
+        <SelectTrigger size="touch">
           <SelectValue placeholder="Pick" />
         </SelectTrigger>
       </Select>,
     );
     const trigger = screen.getByRole("combobox");
-    expect(trigger).toHaveAttribute("data-size", "lg");
+    expect(trigger).toHaveAttribute("data-size", "touch");
     expect(trigger).toHaveClass("h-11", "pl-3", "text-base");
     expect(trigger).not.toHaveClass("text-body");
   });

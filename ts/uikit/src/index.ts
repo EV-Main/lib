@@ -32,6 +32,7 @@ export { Alert, AlertTitle, AlertDescription } from "./components/alert";
 export type { AlertProps, AlertVariant } from "./components/alert";
 
 export { Avatar, AvatarImage, AvatarFallback } from "./components/avatar";
+export type { AvatarProps, AvatarShape, AvatarSize } from "./components/avatar";
 
 export { Badge } from "./components/badge";
 export type { BadgeProps, BadgeVariant } from "./components/badge";

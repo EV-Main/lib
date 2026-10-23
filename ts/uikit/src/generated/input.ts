@@ -5,6 +5,6 @@ export const INPUT_BASE = "file:text-ink placeholder:text-ink-soft selection:bg-
 export const inputSizeClasses = {
   "sm": "h-6",
   "md": "h-7",
-  "lg": "h-11 px-3 text-base pointer-fine:text-base file:h-8",
+  "touch": "h-11 px-3 text-base pointer-fine:text-base file:h-8",
 } as const;
 export type InputSize = keyof typeof inputSizeClasses;

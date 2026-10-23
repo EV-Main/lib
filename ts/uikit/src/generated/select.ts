@@ -19,13 +19,13 @@ export const NATIVE_SELECT_BASE = "border-input text-ink h-7 w-full min-w-0 appe
 export const selectTriggerSizeClasses = {
   "sm": "h-6",
   "md": "h-7",
-  "lg": "h-11 pl-3 pr-2.5 text-base",
+  "touch": "h-11 pl-3 pr-2.5 text-base",
 } as const;
 export type SelectTriggerSize = keyof typeof selectTriggerSizeClasses;
 
 export const nativeSelectSizeClasses = {
   "sm": "h-6",
   "md": "h-7",
-  "lg": "h-11 pr-11 pl-3 text-base pointer-fine:text-base",
+  "touch": "h-11 pr-11 pl-3 text-base pointer-fine:text-base",
 } as const;
 export type NativeSelectSize = keyof typeof nativeSelectSizeClasses;

@@ -4,9 +4,10 @@ export const ALERT_BASE = "relative w-full rounded-lg border px-4 py-3 text-body
 
 export const alertVariants = {
   "neutral": "bg-card text-ink border-border",
-  "destructive": "text-accent-error bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid",
-  "success": "text-positive bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid",
-  "info": "text-accent-info bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid",
+  "info": "text-accent-info-ink border-chip-info-border bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid",
+  "positive": "text-positive-ink border-chip-positive-border bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid",
+  "warn": "text-accent-warn-ink border-chip-warn-border bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid",
+  "error": "text-accent-error-ink border-chip-error-border bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid",
 } as const;
 export type AlertVariant = keyof typeof alertVariants;
 

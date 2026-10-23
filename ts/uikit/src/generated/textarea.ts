@@ -5,6 +5,6 @@ export const TEXTAREA_BASE = "border-input placeholder:text-ink-soft focus-visib
 export const textareaSizeClasses = {
   "sm": "min-h-14",
   "md": "min-h-16",
-  "lg": "min-h-20 px-3 py-2 text-base pointer-fine:text-base",
+  "touch": "min-h-20 px-3 py-2 text-base pointer-fine:text-base",
 } as const;
 export type TextareaSize = keyof typeof textareaSizeClasses;

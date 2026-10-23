@@ -662,7 +662,7 @@ mod tests {
 		fn app() -> Element {
 			rsx! {
 				Select {
-					SelectTrigger { size: Size::Lg, "x" }
+					SelectTrigger { size: Size::Touch, "x" }
 				}
 			}
 		}

@@ -13,16 +13,17 @@ pub const INPUT_BASE: &str = "file:text-ink placeholder:text-ink-soft selection:
                               disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 \
                               focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error";
 
-/// Height, and for `Lg` the inset and type, fused over [`INPUT_BASE`]. A form
-/// field has three steps: `Xs` reads as `Sm` and `Xl` as `Lg`.
+/// Height, and for `Touch` the inset and type, fused over [`INPUT_BASE`]. A form
+/// field has three steps, keyed `sm`, `md` and `touch`: `Xs` reads as `Sm`, `Lg` as
+/// `Md` and `Xl` as `Touch`.
 ///
-/// `Lg` is the 44 px touch-first field and holds 16px text at every width, not
+/// `Touch` is the 44 px touch-first field and holds 16px text at every width, not
 /// only on a coarse pointer: a landing page's lead form is filled in on a tablet
 /// that reports a fine one.
 pub fn input_size_class(size: Size) -> &'static str {
 	match size {
 		Size::Xs | Size::Sm => "h-6",
-		Size::Md => "h-7",
-		Size::Lg | Size::Touch | Size::Xl => "h-11 px-3 text-base pointer-fine:text-base file:h-8",
+		Size::Md | Size::Lg => "h-7",
+		Size::Touch | Size::Xl => "h-11 px-3 text-base pointer-fine:text-base file:h-8",
 	}
 }

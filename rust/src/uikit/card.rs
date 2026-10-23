@@ -97,7 +97,7 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("[.border-t]:pt-6"), "{html}");
+		assert!(html.contains("[.border-t]:pt-4"), "{html}");
 		assert!(html.contains("data-slot=\"card-footer\""), "{html}");
 	}
 }

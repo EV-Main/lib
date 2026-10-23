@@ -72,7 +72,7 @@ export const NativeSelect = React.forwardRef<HTMLSelectElement, NativeSelectProp
           className={cn(
             "text-ink-soft pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2",
             // keeps the arrow as far in from the edge as the large inset keeps the text
-            size === "lg" && "right-4",
+            size === "touch" && "right-4",
           )}
         />
       </span>

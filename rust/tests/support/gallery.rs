@@ -371,11 +371,11 @@ fn d_alert() -> Element {
 				AlertTitle { "Heads up" }
 				AlertDescription { "This is a neutral informational alert." }
 			}
-			Alert { variant: AlertVariant::Destructive,
+			Alert { variant: AlertVariant::Error,
 				AlertTitle { "Something failed" }
 				AlertDescription { "Your changes could not be saved." }
 			}
-			Alert { variant: AlertVariant::Success,
+			Alert { variant: AlertVariant::Positive,
 				AlertTitle { "Order filled" }
 				AlertDescription { "120 units bought at 1.024." }
 			}
