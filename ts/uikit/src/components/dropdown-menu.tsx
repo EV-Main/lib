@@ -7,6 +7,7 @@ import { useFloating } from "../primitives/use-floating";
 import { DismissableLayerScope, useDismissableLayer } from "../primitives/dismissable-layer";
 import { usePresence } from "../primitives/presence";
 import { useRovingFocus } from "../primitives/use-roving-focus";
+import { useHoverIntent } from "../primitives/use-hover-intent";
 import { mergeRefs } from "../primitives/merge-refs";
 import { Portal } from "../primitives/portal";
 import { Slot } from "../primitives/slot";
@@ -132,6 +133,19 @@ export function DropdownMenuContent({
     if (!open) return;
     items()[activeIndex]?.focus();
   }, [open, activeIndex]);
+  // Give focus back to the trigger on close, as Popover and Dialog do. Skipped when focus already
+  // went somewhere real (an item opened a dialog, an outside click landed on an input).
+  const wasOpen = React.useRef(false);
+  React.useEffect(() => {
+    if (open) {
+      wasOpen.current = true;
+      return;
+    }
+    if (!wasOpen.current) return;
+    wasOpen.current = false;
+    const active = document.activeElement;
+    if (!active || active === document.body || contentRef.current?.contains(active)) anchorRef.current?.focus();
+  }, [open, anchorRef]);
   // Selecting an item closes the menu: items call this through context.
   const close = React.useCallback(() => setOpen(false), [setOpen]);
   if (!isPresent) return null;
@@ -228,9 +242,10 @@ export function DropdownMenuCheckboxItem({
   checked,
   disabled,
   onClick,
+  onKeyDown,
   ...props
 }: DropdownMenuCheckboxItemProps) {
-  const close = React.useContext(DropdownMenuCloseContext);
+  // No close: several boxes can be toggled in one visit. Escape or an outside click ends it.
   return (
     <div
       data-slot="dropdown-menu-checkbox-item"
@@ -246,7 +261,13 @@ export function DropdownMenuCheckboxItem({
       onClick={(e) => {
         if (disabled) return;
         onClick?.(e);
-        close();
+      }}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          (e.currentTarget as HTMLElement).click();
+        }
       }}
       {...props}
     >
@@ -385,6 +406,9 @@ export function DropdownMenuShortcut({ className, ...props }: React.ComponentPro
 interface DropdownMenuSubContextValue {
   open: boolean;
   setOpen: (next: boolean) => void;
+  triggerRef: React.RefObject<HTMLDivElement | null>;
+  /** Set by a keyboard open, so the first item takes focus; a pointer open leaves focus alone. */
+  focusFirst: React.RefObject<boolean>;
 }
 
 const DropdownMenuSubContext = React.createContext<DropdownMenuSubContextValue | null>(null);
@@ -402,9 +426,20 @@ export function DropdownMenuSub({ open, defaultOpen = false, onOpenChange, child
     defaultValue: defaultOpen,
     ...(onOpenChange ? { onChange: onOpenChange } : {}),
   });
+  const triggerRef = React.useRef<HTMLDivElement | null>(null);
+  const focusFirst = React.useRef(false);
+  // On the wrapper, which holds the trigger and the flyout, so crossing from one to the other is not "leaving".
+  const hover = useHoverIntent({
+    onOpen: () => setOpen(true),
+    onClose: () => setOpen(false),
+    openDelay: 100,
+    closeDelay: 150,
+  });
   return (
-    <DropdownMenuSubContext.Provider value={{ open: isOpen, setOpen }}>
-      <div data-slot="dropdown-menu-sub">{children}</div>
+    <DropdownMenuSubContext.Provider value={{ open: isOpen, setOpen, triggerRef, focusFirst }}>
+      <div data-slot="dropdown-menu-sub" {...hover}>
+        {children}
+      </div>
     </DropdownMenuSubContext.Provider>
   );
 }
@@ -413,10 +448,18 @@ export interface DropdownMenuSubTriggerProps extends React.ComponentProps<"div">
   inset?: boolean;
 }
 
-export function DropdownMenuSubTrigger({ className, inset, children, onClick, ...props }: DropdownMenuSubTriggerProps) {
+export function DropdownMenuSubTrigger({
+  className,
+  inset,
+  children,
+  onClick,
+  onKeyDown,
+  ...props
+}: DropdownMenuSubTriggerProps) {
   const ctx = React.useContext(DropdownMenuSubContext);
   return (
     <div
+      ref={ctx?.triggerRef}
       data-slot="dropdown-menu-sub-trigger"
       data-inset={inset ? "" : undefined}
       data-state={ctx?.open ? "open" : "closed"}
@@ -432,6 +475,15 @@ export function DropdownMenuSubTrigger({ className, inset, children, onClick, ..
         onClick?.(e);
         ctx?.setOpen(!ctx.open);
       }}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (!ctx || (e.key !== "ArrowRight" && e.key !== "Enter" && e.key !== " ")) return;
+        e.preventDefault();
+        // Stops the menu's own handler, which would read Enter as "select this item".
+        e.stopPropagation();
+        ctx.focusFirst.current = true;
+        ctx.setOpen(true);
+      }}
       {...props}
     >
       {children}
@@ -442,11 +494,29 @@ export function DropdownMenuSubTrigger({ className, inset, children, onClick, ..
   );
 }
 
-export function DropdownMenuSubContent({ className, children, ...props }: React.ComponentProps<"div">) {
+export function DropdownMenuSubContent({ className, children, onKeyDown, ...props }: React.ComponentProps<"div">) {
   const ctx = React.useContext(DropdownMenuSubContext);
+  const ref = React.useRef<HTMLDivElement | null>(null);
+  const open = ctx?.open ?? false;
+  React.useEffect(() => {
+    if (!open || !ctx?.focusFirst.current) return;
+    ctx.focusFirst.current = false;
+    ref.current?.querySelector<HTMLElement>("[role^='menuitem']")?.focus();
+  }, [open, ctx]);
   if (!ctx?.open) return null;
   return (
     <div
+      ref={ref}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (e.key === "ArrowLeft" || e.key === "Escape") {
+          // Closes this flyout only; Escape would otherwise reach the whole menu's dismissal.
+          e.preventDefault();
+          e.stopPropagation();
+          ctx.setOpen(false);
+          ctx.triggerRef.current?.focus();
+        }
+      }}
       data-slot="dropdown-menu-sub-content"
       data-state="open"
       role="menu"
