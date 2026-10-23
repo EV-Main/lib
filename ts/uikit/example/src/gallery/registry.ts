@@ -15,6 +15,20 @@ import TablesPage from "../pages/elements/TablesPage";
 import TabsPage from "../pages/elements/TabsPage";
 import TipsPage from "../pages/elements/TipsPage";
 import ToastsPage from "../pages/elements/ToastsPage";
+import AccountListPage from "../pages/composed/AccountListPage";
+import AsidesPage from "../pages/composed/AsidesPage";
+import ChatPartsPage from "../pages/composed/ChatPartsPage";
+import CommandPalettePage from "../pages/composed/CommandPalettePage";
+import DialogsPage from "../pages/composed/DialogsPage";
+import MenuRecipesPage from "../pages/composed/MenuRecipesPage";
+import PopoverFormPage from "../pages/composed/PopoverFormPage";
+import SettingsPartsPage from "../pages/composed/SettingsPartsPage";
+import SmartHeaderPage from "../pages/composed/SmartHeaderPage";
+import AccountModalScreen from "../pages/screens/AccountModalScreen";
+import AiChatScreen from "../pages/screens/AiChatScreen";
+import AsidesScreen from "../pages/screens/AsidesScreen";
+import SettingsScreen from "../pages/screens/SettingsScreen";
+import SmartHeaderScreen from "../pages/screens/SmartHeaderScreen";
 import Brands from "../pages/foundations/Brands";
 import Colors from "../pages/foundations/Colors";
 import Elevation from "../pages/foundations/Elevation";
@@ -69,6 +83,20 @@ export const ENTRIES: readonly Entry[] = [
   { tier: "elements", id: "feedback", title: "Progress and loading", Page: FeedbackPage },
   { tier: "elements", id: "dates", title: "Dates", Page: DatePage },
   { tier: "elements", id: "toasts", title: "Toasts", Page: ToastsPage },
+  { tier: "composed", id: "settings-parts", title: "Settings parts", Page: SettingsPartsPage },
+  { tier: "composed", id: "dialogs", title: "Account dialogs", Page: DialogsPage },
+  { tier: "composed", id: "accounts", title: "Accounts", Page: AccountListPage },
+  { tier: "composed", id: "popover-form", title: "Popover form", Page: PopoverFormPage },
+  { tier: "composed", id: "command-palette", title: "Command palette", Page: CommandPalettePage },
+  { tier: "composed", id: "menu-recipes", title: "Menu recipes", Page: MenuRecipesPage },
+  { tier: "composed", id: "smart-header", title: "Smart header", Page: SmartHeaderPage },
+  { tier: "composed", id: "asides", title: "Asides", Page: AsidesPage },
+  { tier: "composed", id: "chat-parts", title: "Chat parts", Page: ChatPartsPage },
+  { tier: "screens", id: "settings", title: "Settings", Page: SettingsScreen },
+  { tier: "screens", id: "account-modal", title: "Account modal", Page: AccountModalScreen },
+  { tier: "screens", id: "smart-header", title: "Smart header", Page: SmartHeaderScreen },
+  { tier: "screens", id: "asides", title: "Asides", Page: AsidesScreen },
+  { tier: "screens", id: "ai-chat", title: "AI chat", Page: AiChatScreen },
 ];
 
 export const entryPath = (e: Entry): string => `/${e.tier}/${e.id}`;
