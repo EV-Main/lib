@@ -68,6 +68,10 @@ export function ConfirmDialog({
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const danger = tone === "danger";
+  // A controlled parent can reopen the dialog without going through `change`.
+  React.useEffect(() => {
+    if (isOpen) setError(null);
+  }, [isOpen]);
 
   const change = (next: boolean) => {
     if (pending) return;
@@ -91,12 +95,12 @@ export function ConfirmDialog({
   return (
     <AlertDialog open={isOpen} onOpenChange={change}>
       {trigger != null && <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>}
-      <AlertDialogContent className={cn("max-w-[420px] gap-4 bg-popover p-5", className)}>
+      <AlertDialogContent className={cn("max-w-105 gap-4 bg-popover p-5", className)}>
         <AlertDialogHeader className="flex-row gap-3 text-left">
           <span
             className={cn(
               "flex size-8 shrink-0 items-center justify-center rounded-(--control-radius)",
-              danger ? "bg-(--chip-error-bg) text-accent-error-ink" : "bg-muted text-ink-mid",
+              danger ? "bg-chip-error-bg text-accent-error-ink" : "bg-muted text-ink-mid",
             )}
           >
             {icon ?? <UiIcon name="alert" />}

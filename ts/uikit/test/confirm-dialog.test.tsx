@@ -61,6 +61,16 @@ describe("ConfirmDialog", () => {
     expect(screen.getByRole("button", { name: "Yes" })).toBeEnabled();
   });
 
+  it("drops a stale error when a controlled parent reopens the dialog", async () => {
+    const props = { title: "Sure?", confirmLabel: "Yes", onConfirm: () => Promise.reject(new Error("Nope")) };
+    const { rerender } = render(<ConfirmDialog open {...props} />);
+    fireEvent.click(screen.getByRole("button", { name: "Yes" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Nope");
+    rerender(<ConfirmDialog open={false} {...props} />);
+    rerender(<ConfirmDialog open {...props} />);
+    expect(screen.queryByRole("alert")).toBeNull();
+  });
+
   it("uses the danger face for the confirm button", () => {
     render(<ConfirmDialog open tone="danger" title="Delete?" confirmLabel="Delete" onConfirm={() => {}} />);
     expect(screen.getByRole("button", { name: "Delete" }).className).toContain("danger");
