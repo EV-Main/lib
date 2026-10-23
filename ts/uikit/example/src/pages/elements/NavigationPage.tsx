@@ -14,6 +14,7 @@ import {
   NavigationMenuTrigger,
 } from "@evinvest/uikit";
 import { Block, PageRoot, Specimen } from "../../gallery/ui";
+import { CollapsibleNavSpecimen } from "./collapsible-nav-specimen";
 import { ShellFrame } from "./shell-frame";
 
 export default function NavigationPage() {
@@ -67,6 +68,14 @@ export default function NavigationPage() {
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
+        </Specimen>
+      </Block>
+      <Block
+        title="Collapsible sections"
+        note="Set collapsible on a ShellNav group. The group holding the current page opens itself; the chevron turns and the rows fold. Architecture has a landing page, so its label is a link and only the chevron toggles."
+      >
+        <Specimen className="items-start">
+          <CollapsibleNavSpecimen />
         </Specimen>
       </Block>
       <Block title="App shell" note="Rail from lg, tab bar below. Clicks mark at once; the fake router lands 250 ms later.">

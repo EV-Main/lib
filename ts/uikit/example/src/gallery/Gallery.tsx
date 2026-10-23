@@ -33,7 +33,7 @@ function HashLink({ href, ...props }: ComponentProps<"a">) {
 
 const NAV_GROUPS: NavGroup[] = TIERS.flatMap((tier) => {
   const items: NavItem[] = entriesOf(tier.id).map((e) => ({ id: entryPath(e), href: entryPath(e), label: e.title }));
-  return items.length > 0 ? [{ id: tier.id, label: tier.label, items }] : [];
+  return items.length > 0 ? [{ id: tier.id, label: tier.label, collapsible: true, items }] : [];
 });
 
 const TAB_ITEMS: NavItem[] = TIERS.flatMap((tier) => {
