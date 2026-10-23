@@ -454,8 +454,8 @@ export function Nav() {
   onValueChange?, linkComponent?, labels: { nav } }` — a page's own section
   rail (settings panes); items are buttons, or links when they have an `href`.
 - **`ResourceError`** `{ message, variant: "inline" (onRetry?, retrying?) |
-  "alert" (title?), labels: { retry } }` and **`SystemBanner`** `{ tone: "warn" |
-  "info", title?, icon?, onDismiss?, labels: { dismiss } }` — presentation
+  "alert" (title?), labels: { retry } }` and **`SystemBanner`** `{ tone: "neutral" |
+  "primary" | "info" | "warn", title?, icon?, onDismiss?, labels: { dismiss } }` — presentation
   only; what failed and whether a dismissal sticks are yours.
 - **`Settled`** `{ loading, skeleton, children }` — the skeleton → content
   handover: the content fades and rises in after a skeleton was shown, and cuts
@@ -693,7 +693,7 @@ call to action. `size="touch"` is the 44 px pointer-target floor (WCAG 2.5.5)
 for touch-first screens: `min-h-11`, and a 44 × 44 square with `icon`. Form
 fields (`Input`, `Textarea`, `SelectTrigger`, `NativeSelect`) have three steps,
 `sm` · `md` · `touch`; they hold 16 px text on a coarse pointer so iOS does not
-zoom, and `touch` holds it at every width. Disabled is 40 % opacity (fields 50 %).
+zoom, and `touch` holds it at every width. Disabled is 40 % opacity on every control.
 
 `Button` keeps landing's square icon shape at every size, as the separate `icon`
 boolean it always was in Rust. A `Primary` and a `Danger` button are outlines whose
@@ -716,6 +716,8 @@ by hand; a consumer pinned at `^0.x` must bump by hand and read the list.
 | `Alert variant="destructive"` · `"success"` | `error` · `positive` (new: `warn`) |
 | menu item `variant="destructive"` | `danger` |
 | `Input` / `Textarea` / `SelectTrigger` / `NativeSelect` `size="lg"` | `size="touch"` (`lg` is gone from the field scale) |
+| `NativeSelect size="lg"` | `size="touch"` (the field scale is `sm`, `md`, `touch`) |
+| `SystemBanner` tones `warn`, `info` | `neutral`, `primary`, `info`, `warn`: the fill is always `card` with a bottom hairline and the tone colours only the icon (`info` is the default) |
 | `Avatar` (32 px) | `md` is 28 px; `shape`, `size` are new |
 | `Terminal`, `TerminalPane*`, `TerminalChart`, `TerminalTicker`, `TickerStat`, `OrderBook*`, `TradesTapeRow`, `OrderForm*`, `OpenOrdersEmpty` and their types | removed from the TS kit (the Rust terminal stays) |
 

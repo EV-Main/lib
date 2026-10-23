@@ -51,6 +51,13 @@ Rust crate and its TypeScript mirror at once.
 - **Field sizes** (`@evinvest/uikit`): `Input`, `Textarea`, `SelectTrigger` and
   `NativeSelect` take `sm | md | touch`; `lg` is gone. The shared `Size` scale
   is 20, 24, 28, 32 px (`xs`, `sm`, `md`, `lg`), plus `touch` at 44 px.
+- **Other renames to carry** (`@evinvest/uikit`): `Button` `outline` is gone
+  (use `secondary`) and `primary` is now an outline face, so a `Button` with no
+  `variant` is an outline; the filled call to action is `solid`. `Badge` defaults
+  to `neutral`, not a filled `primary`. `Alert variant="destructive"` is
+  `error`. `NativeSelect size="lg"` is `touch`. `SystemBanner` tones are
+  `neutral`, `primary`, `info`, `warn` (were `warn`, `info`), and the banner is a
+  `card` bar with a hairline where only the icon carries the tone.
 - **`@evinvest/kitstart`** moves to the new names: `outline` to `secondary`,
   the filled CTAs to `solid`, large fields to `touch`.
 
