@@ -90,6 +90,35 @@ describe("AsidePanel", () => {
     expect(document.querySelector('[data-slot="drawer-content"]')).not.toBeNull();
   });
 
+  it("collapseBelow={false} keeps a docked panel docked on a narrow screen", () => {
+    stubWidth(false);
+    render(
+      <AsidePanel aria-label="Watchlist" collapseBelow={false}>
+        <p>Body</p>
+      </AsidePanel>,
+    );
+    expect(screen.getByRole("complementary", { name: "Watchlist" })).toBeInTheDocument();
+    expect(document.querySelector('[data-slot="drawer-content"]')).toBeNull();
+  });
+
+  it("the drawer path reports Escape and a scrim press as a close", () => {
+    stubWidth(false);
+    const onOpenChange = vi.fn();
+    render(
+      <AsidePanel aria-label="Watchlist" onOpenChange={onOpenChange}>
+        <p>Body</p>
+      </AsidePanel>,
+    );
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+    onOpenChange.mockClear();
+    const scrim = document.querySelector('[data-slot="drawer-overlay"]');
+    expect(scrim).not.toBeNull();
+    fireEvent.pointerDown(scrim as Element);
+    fireEvent.click(scrim as Element);
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
   it("docked on the left borders the right edge, and renders nothing when closed", () => {
     const { rerender } = render(
       <AsidePanel aria-label="Nav" side="left">

@@ -125,12 +125,21 @@ export interface AsidePanelProps extends Omit<React.ComponentProps<"aside">, "ti
   /** Which edge of the screen it hugs. Default `right`. */
   side?: "left" | "right";
   open?: boolean;
-  /** Overlay only: Escape, the scrim and the drawer drag call it with `false`. */
+  /**
+   * Escape, the scrim and the drawer drag call it with `false`. A docked panel
+   * is only dismissable this way where it falls back to the drawer (below `md`).
+   */
   onOpenChange?: (open: boolean) => void;
   /** An `AsideHeader`. */
   header?: React.ReactNode;
   /** Sticky under the body: actions. */
   footer?: React.ReactNode;
+  /**
+   * Below this width the panel floats on a drawer so the content keeps its room.
+   * `false` keeps it docked (or on a sheet) at every width, for a framed preview
+   * or an embedded layout where the viewport says nothing about the room.
+   */
+  collapseBelow?: "md" | false;
   /** Docked 380 (260 for a left navigation), overlay 420: a width class overrides it. */
   className?: string;
 }
@@ -147,11 +156,13 @@ export function AsidePanel({
   onOpenChange,
   header,
   footer,
+  collapseBelow = "md",
   className,
   children,
   ...props
 }: AsidePanelProps) {
-  const wide = useAtLeast("(min-width: 768px)");
+  const viewportWide = useAtLeast("(min-width: 768px)");
+  const wide = collapseBelow === false || viewportWide;
   const body = (
     <>
       {header}
