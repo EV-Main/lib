@@ -14,7 +14,7 @@ import { Block, PageRoot, Specimen } from "../../gallery/ui";
 function Accounts() {
   const [value, setValue] = useState("personal");
   return (
-    <AccountList aria-label="Accounts" value={value} onValueChange={setValue} className="max-w-xl">
+    <AccountList aria-label="Accounts" value={value} onValueChange={setValue} className="w-full min-w-0 max-w-xl">
       <AccountListItem
         value="personal"
         name="JD"

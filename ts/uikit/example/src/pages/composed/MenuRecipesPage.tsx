@@ -227,7 +227,7 @@ export default function MenuRecipesPage() {
       <Block title="Context" note="Opens at the pointer, from the right button or the menu key.">
         <Specimen><Context /></Specimen>
       </Block>
-      <Block title="Submenu" note="A flyout of checks: several indicators can be on at once.">
+      <Block title="Submenu" note="Opens on hover or ArrowRight. The checks keep the menu open, so several indicators can be on at once; Escape closes one level.">
         <Specimen><Submenu /></Specimen>
       </Block>
     </PageRoot>

@@ -94,6 +94,7 @@ export function WatchlistAside({ onClose }: { onClose?: () => void }) {
   return (
     <AsidePanel
       aria-label="Watchlist"
+      collapseBelow={false}
       header={
         <AsideHeader
           title="Watchlist"
@@ -136,6 +137,7 @@ export function EditAlertAside({ onClose }: { onClose?: () => void }) {
   return (
     <AsidePanel
       aria-label="Edit alert"
+      collapseBelow={false}
       header={<AsideHeader title="Edit alert" onBack={() => {}} {...(onClose ? { onClose } : {})} />}
       footer={
         <>
@@ -184,6 +186,7 @@ export function ChatAside({ onClose }: { onClose?: () => void }) {
   return (
     <AsidePanel
       aria-label="Assistant"
+      collapseBelow={false}
       header={
         <AsideHeader
           title="Assistant"
@@ -210,6 +213,7 @@ export function NavigationAside({ onClose }: { onClose?: () => void }) {
   return (
     <AsidePanel
       aria-label="Workspace"
+      collapseBelow={false}
       side="left"
       className="w-[260px]"
       header={<AsideHeader title="Workspace" {...(onClose ? { onClose } : {})} />}

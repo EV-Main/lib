@@ -6,9 +6,9 @@ import { AccountsSection, DeleteSection, NotificationRows, ProfileSection, Setti
 function Layout() {
   const [section, setSection] = useState("account");
   return (
-    <div className="border-border overflow-hidden rounded-lg border">
-      <div className="flex flex-col gap-6 p-4 lg:flex-row lg:gap-8 lg:p-6">
-        <div className="shrink-0 lg:w-64">
+    <div className="border-border @container overflow-hidden rounded-lg border">
+      <div className="flex flex-col gap-6 p-4 @3xl:flex-row @3xl:gap-8 @3xl:p-6">
+        <div className="shrink-0 @3xl:w-64">
           <SettingsNav value={section} onValueChange={setSection} />
         </div>
         <div className="flex min-w-0 flex-1 flex-col gap-6">
@@ -31,7 +31,7 @@ export default function SettingsPartsPage() {
         <Layout />
       </Block>
       <Block title="SettingsSection" note="Default, with an action, flush rows, and the danger tone.">
-        <div className="grid max-w-5xl gap-4 md:grid-cols-2">
+        <div className="@container"><div className="grid max-w-5xl gap-4 @2xl:grid-cols-2">
           <SettingsSection title="Default" description="The body is padded.">
             <p className="text-body text-ink-mid">Cards are one surface step above the page, with a hairline.</p>
           </SettingsSection>
@@ -42,7 +42,7 @@ export default function SettingsPartsPage() {
           <SettingsSection title="Danger" tone="danger">
             <p className="text-body text-ink-mid">The edge uses the error colour.</p>
           </SettingsSection>
-        </div>
+        </div></div>
       </Block>
       <Block title="Rows" note="FormRow puts the label left and the control right; SettingsRow adds an inline mode that keeps a switch or a button on the line.">
         <div className="border-border bg-card max-w-2xl overflow-hidden rounded-lg border">

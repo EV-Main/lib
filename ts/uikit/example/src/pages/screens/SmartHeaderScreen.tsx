@@ -8,10 +8,12 @@ export default function SmartHeaderScreen() {
   return (
     <PageRoot title="Smart header" lede="The four variants, stacked, as the design shows them. The sample content is a trading terminal; the structure is what the kit ships.">
       {ORDER.map((state) => (
-        <section key={state} className="flex min-w-0 flex-col gap-2 overflow-x-auto">
+        <section key={state} className="flex min-w-0 flex-col gap-2">
           <Caption>{HEADER_CAPTIONS[state]}</Caption>
-          <div className="min-w-[1040px]">
-            <SmartHeaderDemo state={state} />
+          <div className="overflow-x-auto">
+            <div className="min-w-[760px]">
+              <SmartHeaderDemo state={state} />
+            </div>
           </div>
         </section>
       ))}

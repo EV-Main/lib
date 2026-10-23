@@ -32,18 +32,22 @@ export default function SmartHeaderPage() {
             ))}
           </ToggleGroup>
           <div className="overflow-x-auto">
-            <div className="min-w-[1040px]">
+            <div className="min-w-[760px]">
               <SmartHeaderDemo state={state} />
             </div>
           </div>
         </div>
       </Block>
       <Block title="All four states">
-        <div className="flex flex-col gap-6 overflow-x-auto">
+        <div className="flex flex-col gap-6">
           {STATES.map((s) => (
-            <div key={s} className="flex min-w-[1040px] flex-col gap-2">
+            <div key={s} className="flex min-w-0 flex-col gap-2">
               <Caption>{HEADER_CAPTIONS[s]}</Caption>
-              <SmartHeaderDemo state={s} />
+              <div className="overflow-x-auto">
+                <div className="min-w-[760px]">
+                  <SmartHeaderDemo state={s} />
+                </div>
+              </div>
             </div>
           ))}
         </div>
