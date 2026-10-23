@@ -13,6 +13,8 @@ export interface AppShellProps extends React.ComponentProps<"div"> {
   topBar?: React.ReactNode;
   /** Strips above the page (`SystemBanner`s). An empty slot takes no room. */
   banner?: React.ReactNode;
+  /** Right of the content column: an `AsidePanel` and its `AsideRail`, side by side. Sticks like the rail. */
+  aside?: React.ReactNode;
   /** Default `lg`. */
   breakpoint?: ShellBreakpoint;
   /** Props for the `<main>` the page renders into (an `id` for a skip link, say). */
@@ -54,6 +56,7 @@ export function AppShell({
   tabBar,
   topBar,
   banner,
+  aside,
   breakpoint = "lg",
   mainProps,
   className,
@@ -106,6 +109,14 @@ export function AppShell({
           {children}
         </main>
       </div>
+      {present(aside) && (
+        <div
+          data-slot="app-shell-aside"
+          className="sticky top-[var(--ev-shell-offset,0px)] flex h-[calc(100dvh-var(--ev-shell-offset,0px))] shrink-0 self-start"
+        >
+          {aside}
+        </div>
+      )}
       {present(tabBar) && (
         <div
           data-slot="app-shell-tab-bar"

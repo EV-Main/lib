@@ -780,3 +780,12 @@ export type {
 } from "./components/header-controls";
 export { SmartHeader } from "./components/smart-header";
 export type { SmartHeaderProps, SmartHeaderState } from "./components/smart-header";
+export { AsideHeader, AsidePanel, AsideRail } from "./components/aside";
+export type {
+  AsideHeaderLabels,
+  AsideHeaderProps,
+  AsidePanelMode,
+  AsidePanelProps,
+  AsideRailItem,
+  AsideRailProps,
+} from "./components/aside";
