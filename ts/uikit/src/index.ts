@@ -778,3 +778,5 @@ export type {
   NotificationBellLabels,
   NotificationBellProps,
 } from "./components/header-controls";
+export { SmartHeader } from "./components/smart-header";
+export type { SmartHeaderProps, SmartHeaderState } from "./components/smart-header";
