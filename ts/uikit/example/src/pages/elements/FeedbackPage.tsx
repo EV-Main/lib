@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Progress, Settled, Skeleton, Spinner } from "@evinvest/uikit";
 import { Block, Matrix, PageRoot, Specimen } from "../../gallery/ui";
+import { CountOnReveal, TickerDemo } from "../foundations/number-parts";
 
 function ProgressDemo() {
   const [value, setValue] = useState(66);
@@ -64,6 +65,12 @@ export default function FeedbackPage() {
       </Block>
       <Block title="Settled" note="Skeleton to content in one handover: the content rises into place.">
         <SettledDemo />
+      </Block>
+      <Block title="Animated number" note="A figure that moves to its new value instead of swapping. Currency, signed percent and compact all format through Intl.">
+        <TickerDemo />
+      </Block>
+      <Block title="Count up on reveal">
+        <CountOnReveal />
       </Block>
     </PageRoot>
   );

@@ -23,16 +23,24 @@ const NOTES: HeaderNotification[] = [
   { id: "n3", title: "Statement ready", description: "September statement is available", time: "1d ago" },
 ];
 
-/** A balance that "loads" for 900 ms on mount and again each time it is pressed. */
+/** A balance that "loads" for 900 ms on mount; each press sets a new amount, so the roll is visible here. */
 function LiveBalance() {
-  const [round, setRound] = useState(0);
+  const [amount, setAmount] = useState(1284.5);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    setLoading(true);
     const t = setTimeout(() => setLoading(false), 900);
     return () => clearTimeout(t);
-  }, [round]);
-  return <HeaderBalance icon={<WalletIcon />} value="$0.00" tone="warn" loading={loading} onClick={() => setRound((r) => r + 1)} aria-label="Balance, press to reload" />;
+  }, []);
+  return (
+    <HeaderBalance
+      icon={<WalletIcon />}
+      amount={amount}
+      locales="en"
+      loading={loading}
+      onClick={() => setAmount((a) => Math.max(0, Math.round((a + (Math.random() - 0.45) * 4000) * 100) / 100))}
+      aria-label="Balance, press for a new amount"
+    />
+  );
 }
 
 function Bell() {

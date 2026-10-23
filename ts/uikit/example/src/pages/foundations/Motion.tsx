@@ -11,6 +11,7 @@ import {
   StaggerDemo,
   ToastBurst,
 } from "./motion-parts";
+import { CountOnReveal, DigitsDemo, NumberReducedNote, TickerDemo, TrendDemo } from "./number-parts";
 
 export default function Motion() {
   return (
@@ -35,6 +36,21 @@ export default function Motion() {
       </Block>
       <Block title="Easing">
         <EaseDemo />
+      </Block>
+      <Block title="Numbers" note="AnimatedNumber rolls each digit column to the new value, or counts up with mode=&quot;count&quot;. This ticker steps every 1.5 s, up and down.">
+        <TickerDemo />
+      </Block>
+      <Block title="Count up on reveal" note="animateOnMount starts from 0 (or from). The server markup is the final value.">
+        <CountOnReveal />
+      </Block>
+      <Block title="Trend" note="By default columns spin the way the value moved. trend forces up (1) or down (-1); 0 sends each column the short way.">
+        <TrendDemo />
+      </Block>
+      <Block title="Digits entering and leaving" note="Columns are keyed by place value, so the digits that stay keep their node and only the new places slide in.">
+        <DigitsDemo />
+      </Block>
+      <Block title="Numbers and reduced motion">
+        <NumberReducedNote />
       </Block>
       <Block title="Toasts" note="Toasts pile up collapsed and spread on hover. Drag one sideways to flick it away.">
         <ToastBurst />
