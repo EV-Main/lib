@@ -9,13 +9,16 @@ export interface SettingsLayoutProps extends Omit<React.ComponentProps<"div">, "
   nav: React.ReactNode;
 }
 
-/** Rail on the left, cards in the main column; centres a 1408 px measure. */
+/**
+ * Rail on the left, cards in the main column; centres a 1408 px measure. The column is a
+ * div: `AppShell` already renders the page's `<main>`.
+ */
 export function SettingsLayout({ nav, className, children, ...props }: SettingsLayoutProps) {
   return (
     <div
       data-slot="settings-layout"
       className={cn(
-        "mx-auto flex w-full max-w-[1408px] flex-col gap-6 px-4 py-8 lg:flex-row lg:gap-8",
+        "mx-auto flex w-full max-w-352 flex-col gap-6 px-4 py-8 lg:flex-row lg:gap-8",
         className,
       )}
       {...props}
@@ -23,9 +26,9 @@ export function SettingsLayout({ nav, className, children, ...props }: SettingsL
       <div data-slot="settings-nav" className="shrink-0 lg:w-64">
         {nav}
       </div>
-      <main data-slot="settings-main" className="flex min-w-0 flex-1 flex-col gap-6">
+      <div data-slot="settings-main" className="flex min-w-0 flex-1 flex-col gap-6">
         {children}
-      </main>
+      </div>
     </div>
   );
 }

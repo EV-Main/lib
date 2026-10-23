@@ -11,7 +11,8 @@ describe("Settings", () => {
       </SettingsLayout>,
     );
     expect(screen.getByRole("navigation", { name: "Sections" })).toBeInTheDocument();
-    expect(screen.getByRole("main")).toHaveTextContent("Body");
+    expect(document.querySelector('[data-slot="settings-main"]')).toHaveTextContent("Body");
+    expect(screen.queryByRole("main")).toBeNull();
     expect(screen.getByRole("button", { name: "Account" })).toHaveAttribute("aria-current", "true");
     expect(screen.getByRole("button", { name: "Account" })).toHaveClass("bg-active");
   });

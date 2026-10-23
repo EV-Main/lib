@@ -67,7 +67,7 @@ export function AccountSettingsDialog({
       <DialogContent
         showCloseButton={false}
         className={cn(
-          "flex max-h-[90dvh] max-w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden bg-popover p-0 sm:max-w-[1040px] md:h-[680px] md:flex-row",
+          "flex max-h-[90dvh] max-w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden bg-popover p-0 sm:max-w-260 md:h-170 md:flex-row",
           className,
         )}
       >
@@ -92,7 +92,7 @@ export function AccountSettingsDialog({
           </div>
           <div className="relative flex min-h-0 min-w-0 flex-1 flex-col gap-5 overflow-y-auto p-6 md:p-8">
             <div className="flex flex-col gap-1 pr-10">
-              <DialogTitle className="font-display text-h1 font-light leading-[38px] text-ink">{title}</DialogTitle>
+              <DialogTitle className="font-display text-h1 font-light text-ink">{title}</DialogTitle>
               {description != null && (
                 <DialogDescription className="text-body text-ink-mid">{description}</DialogDescription>
               )}
