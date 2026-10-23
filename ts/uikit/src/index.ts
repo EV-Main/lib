@@ -797,3 +797,10 @@ export type {
   ChatMarkerProps,
   ChatMessageProps,
 } from "./components/chat-message";
+export { ChatComposer, ModelChip } from "./components/chat-composer";
+export type {
+  ChatComposerLabels,
+  ChatComposerProps,
+  ModelChipProps,
+  ModelOption,
+} from "./components/chat-composer";
