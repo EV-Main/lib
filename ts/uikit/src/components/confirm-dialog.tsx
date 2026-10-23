@@ -46,6 +46,8 @@ export interface ConfirmDialogProps {
   className?: string;
 }
 
+const PENDING = "aria-disabled:cursor-not-allowed aria-disabled:opacity-40";
+
 export function ConfirmDialog({
   open,
   defaultOpen = false,
@@ -80,6 +82,7 @@ export function ConfirmDialog({
   };
 
   const confirm = async () => {
+    if (pending) return;
     setError(null);
     setPending(true);
     try {
@@ -118,20 +121,21 @@ export function ConfirmDialog({
           </div>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex-row justify-end gap-2">
+          {/* aria-disabled, not disabled: a disabled button that holds focus drops it to <body> and Tab leaves the dialog. */}
           <button
             type="button"
-            disabled={pending}
+            aria-disabled={pending}
             onClick={() => change(false)}
-            className={buttonVariants({ variant: "ghost" })}
+            className={cn(buttonVariants({ variant: "ghost" }), PENDING)}
           >
             {labels.cancel ?? "Cancel"}
           </button>
           <button
             type="button"
-            disabled={pending}
+            aria-disabled={pending}
             aria-busy={pending}
             onClick={confirm}
-            className={buttonVariants({ variant: danger ? "danger" : "solid" })}
+            className={cn(buttonVariants({ variant: danger ? "danger" : "solid" }), PENDING)}
           >
             {pending && <Spinner className="size-3.5" />}
             {confirmLabel}
