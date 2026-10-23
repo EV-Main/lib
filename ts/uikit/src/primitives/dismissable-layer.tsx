@@ -26,12 +26,15 @@ interface LayerStore {
   // capture phase, which runs before any DOM listener, React's root included.
   seen: WeakMap<Event, LayerRef[]>;
   snapshot: (event: Event) => void;
+  // Who to tell when the stack changes (a modal asks whether another modal is
+  // below it, to decide whether it draws the scrim).
+  listeners: Set<() => void>;
 }
 
 // One stack per page, not per module copy: a micro-frontend that bundles its
 // own uikit must see the host's layers, and the host its. Versioned, so a copy
 // with a different store shape keeps to itself instead of misreading this one.
-const STORE_KEY = Symbol.for("@evinvest/uikit/dismissable-layers@1");
+const STORE_KEY = Symbol.for("@evinvest/uikit/dismissable-layers@2");
 
 function isStore(value: unknown): value is LayerStore {
   return typeof value === "object" && value !== null && "stack" in value && Array.isArray(value.stack);
@@ -44,6 +47,7 @@ function sharedStore(): LayerStore {
     stack: [],
     info: new WeakMap(),
     seen: new WeakMap(),
+    listeners: new Set(),
     snapshot: (event) => {
       if (!store.seen.has(event)) store.seen.set(event, store.stack.slice());
     },
@@ -105,6 +109,11 @@ function push(layer: LayerRef) {
   const firstChild = stack.findIndex((other) => isDescendant(other, layer));
   if (firstChild < 0) stack.push(layer);
   else stack.splice(firstChild, 0, layer);
+  notify();
+}
+
+function notify() {
+  for (const listener of store.listeners) listener();
 }
 
 function pop(layer: LayerRef) {
@@ -115,10 +124,13 @@ function pop(layer: LayerRef) {
     window.removeEventListener("keydown", store.snapshot, true);
     window.removeEventListener("pointerdown", store.snapshot, true);
   }
+  notify();
 }
 
 interface ParentLayer {
   layer: LayerRef;
+  /** This layer or one above it in the React tree is a modal. */
+  modalAbove: boolean;
 }
 
 const ParentLayerContext = React.createContext<ParentLayer | null>(null);
@@ -159,13 +171,51 @@ function liftAbove(child: LayerRef, parent: LayerRef): boolean {
   return true;
 }
 
+function modalBelow(layer: LayerRef): boolean {
+  const { stack } = store;
+  const index = stack.indexOf(layer);
+  // Not on the stack yet (first render) or no longer (exiting): whatever modals
+  // are open are, or were, under it.
+  const below = index < 0 ? stack : stack.slice(0, index);
+  return below.some((other) => other !== layer && store.info.get(other)?.modal === true);
+}
+
+function subscribe(listener: () => void): () => void {
+  store.listeners.add(listener);
+  return () => store.listeners.delete(listener);
+}
+
+const CLEAR_SCRIM: React.CSSProperties = Object.freeze({ backgroundColor: "transparent" });
+
+/**
+ * The inline style for a modal's scrim. One scrim darkens the page however
+ * many modals are stacked: the lowest draws it, the ones above get a clear
+ * one (it still sits under their panel and catches presses for their layer),
+ * so the panel below stays readable between the scrim and the top modal.
+ * Pass the layer `useDismissableLayer` returned.
+ */
+export function useModalScrimStyle(layer: LayerRef): React.CSSProperties | undefined {
+  const parent = React.useContext(ParentLayerContext);
+  const below = React.useSyncExternalStore(
+    subscribe,
+    () => modalBelow(layer),
+    () => false,
+  );
+  return below || parent?.modalAbove === true ? CLEAR_SCRIM : undefined;
+}
+
 /**
  * Marks `children` as rendered inside `layer` (the ref `useDismissableLayer`
  * returned), so a layer among them always stacks above it — even when both
  * open in the same commit. Wrap the overlay's content in it.
  */
 export function DismissableLayerScope({ layer, children }: { layer: LayerRef; children?: React.ReactNode }) {
-  const value = React.useMemo<ParentLayer>(() => ({ layer }), [layer]);
+  const outer = React.useContext(ParentLayerContext);
+  const outerModal = outer?.modalAbove ?? false;
+  const value = React.useMemo<ParentLayer>(
+    () => ({ layer, modalAbove: outerModal || renderedModal.get(layer) === true }),
+    [layer, outerModal],
+  );
   return <ParentLayerContext.Provider value={value}>{children}</ParentLayerContext.Provider>;
 }
 

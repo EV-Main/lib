@@ -3,7 +3,7 @@
 import * as React from "react";
 import { cn } from "../lib/cn";
 import { useControllableState } from "../primitives/use-controllable-state";
-import { DismissableLayerScope, useDismissableLayer } from "../primitives/dismissable-layer";
+import { DismissableLayerScope, useDismissableLayer, useModalScrimStyle } from "../primitives/dismissable-layer";
 import { useFocusScope } from "../primitives/focus-scope";
 import { mergeRefs } from "../primitives/merge-refs";
 import { Portal } from "../primitives/portal";
@@ -320,12 +320,14 @@ export function CommandDialog({
     pointerOutside: false,
     modal: true,
   });
+  const scrimStyle = useModalScrimStyle(dismissRef);
   if (!isOpen) return null;
   return (
     <Portal>
       <div
         data-slot="command-overlay"
         className={COMMAND_DIALOG_OVERLAY}
+        style={scrimStyle}
         onClick={() => setOpen(false)}
       />
       <div

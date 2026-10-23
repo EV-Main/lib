@@ -2,6 +2,8 @@ import * as React from "react";
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { render, fireEvent, screen, act } from "@testing-library/react";
 import { Dialog, DialogContent, DialogTitle } from "../src/components/dialog";
+import { AlertDialog, AlertDialogContent, AlertDialogTitle } from "../src/components/alert-dialog";
+import { CommandDialog } from "../src/components/command";
 import { Popover, PopoverContent, PopoverTrigger } from "../src/components/popover";
 
 // jsdom paints nothing, but it resolves `z-index` from a stylesheet, which is
@@ -87,5 +89,83 @@ describe("a Popover opened later inside a Dialog", () => {
     const popover = document.querySelector<HTMLElement>('[data-slot="popover-content"]')!;
     expect(popover.style.zIndex).toBe("");
     expect(paintsAbove(popover, document.querySelector('[data-slot="dialog-content"]')!)).toBe(true);
+  });
+});
+
+describe("modals stacked on one page share one scrim", () => {
+  function DialogOverDialog() {
+    return (
+      <Dialog defaultOpen>
+        <DialogContent>
+          <DialogTitle>Parent</DialogTitle>
+          <AlertDialog defaultOpen>
+            <AlertDialogContent>
+              <AlertDialogTitle>Child</AlertDialogTitle>
+            </AlertDialogContent>
+          </AlertDialog>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  it("draws one opaque scrim for a Dialog and an AlertDialog opened in the same commit", () => {
+    render(<DialogOverDialog />);
+    expect(overlays()).toHaveLength(2);
+    expect(opaqueScrims()).toHaveLength(1);
+  });
+
+  it("keeps the one scrim under both panels, the child panel on top", () => {
+    render(<DialogOverDialog />);
+    const [scrim] = opaqueScrims();
+    const parent = document.querySelector('[data-slot="dialog-content"]')!;
+    const child = document.querySelector('[data-slot="alert-dialog-content"]')!;
+    expect(paintsAbove(parent, scrim!)).toBe(true);
+    expect(paintsAbove(child, parent)).toBe(true);
+  });
+
+  it("draws one opaque scrim when a modal opens over one that has been open for a while", () => {
+    const { rerender } = render(
+      <Dialog open>
+        <DialogContent>
+          <DialogTitle>Base</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    );
+    expect(opaqueScrims()).toHaveLength(1);
+
+    rerender(
+      <>
+        <Dialog open>
+          <DialogContent>
+            <DialogTitle>Base</DialogTitle>
+          </DialogContent>
+        </Dialog>
+        <CommandDialog open onOpenChange={() => {}} />
+      </>,
+    );
+
+    expect(overlays()).toHaveLength(2);
+    expect(opaqueScrims()).toHaveLength(1);
+  });
+
+  it("keeps the scrim for the modal below when the top modal closes", () => {
+    render(<DialogOverDialog />);
+    escape();
+    // The AlertDialog is gone (no animation in jsdom); the Dialog still has its scrim.
+    expect(document.querySelector('[data-slot="alert-dialog-content"]')).toBeNull();
+    expect(screen.getByRole("dialog")).toBeTruthy();
+    expect(opaqueScrims()).toHaveLength(1);
+  });
+
+  it("changes nothing for a single modal", () => {
+    render(
+      <Dialog defaultOpen>
+        <DialogContent>
+          <DialogTitle>Alone</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    );
+    expect(overlays()).toHaveLength(1);
+    expect(overlays()[0]!.getAttribute("style")).toBeNull();
   });
 });

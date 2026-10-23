@@ -3,7 +3,7 @@
 import * as React from "react";
 import { cn } from "../lib/cn";
 import { useControllableState } from "../primitives/use-controllable-state";
-import { DismissableLayerScope, useDismissableLayer } from "../primitives/dismissable-layer";
+import { DismissableLayerScope, useDismissableLayer, useModalScrimStyle } from "../primitives/dismissable-layer";
 import { type InitialFocus, useFocusScope } from "../primitives/focus-scope";
 import { usePresence } from "../primitives/presence";
 import { mergeRefs } from "../primitives/merge-refs";
@@ -147,10 +147,11 @@ export function SheetContent({
     exclude: [triggerRef],
     modal: true,
   });
+  const scrimStyle = useModalScrimStyle(dismissRef);
   if (!isPresent) return null;
   return (
     <Portal>
-      <SheetOverlay />
+      <SheetOverlay style={scrimStyle} />
       <div
         data-slot="sheet-content"
         role="dialog"

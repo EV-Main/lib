@@ -3,7 +3,7 @@
 import * as React from "react";
 import { cn } from "../lib/cn";
 import { useControllableState } from "../primitives/use-controllable-state";
-import { DismissableLayerScope, useDismissableLayer } from "../primitives/dismissable-layer";
+import { DismissableLayerScope, useDismissableLayer, useModalScrimStyle } from "../primitives/dismissable-layer";
 import { type InitialFocus, useFocusScope } from "../primitives/focus-scope";
 import { usePresence } from "../primitives/presence";
 import { mergeRefs } from "../primitives/merge-refs";
@@ -147,6 +147,7 @@ export function DialogContent({
     exclude: [triggerRef],
     modal: true,
   });
+  const scrimStyle = useModalScrimStyle(dismissRef);
   React.useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -158,7 +159,7 @@ export function DialogContent({
   if (!isPresent) return null;
   return (
     <Portal>
-      <DialogOverlay />
+      <DialogOverlay style={scrimStyle} />
       <div
         data-slot="dialog-content"
         role="dialog"

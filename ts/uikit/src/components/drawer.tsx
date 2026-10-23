@@ -3,7 +3,7 @@
 import * as React from "react";
 import { cn } from "../lib/cn";
 import { useControllableState } from "../primitives/use-controllable-state";
-import { DismissableLayerScope, useDismissableLayer } from "../primitives/dismissable-layer";
+import { DismissableLayerScope, useDismissableLayer, useModalScrimStyle } from "../primitives/dismissable-layer";
 import { useFocusScope } from "../primitives/focus-scope";
 import { mergeRefs } from "../primitives/merge-refs";
 import { Portal } from "../primitives/portal";
@@ -395,6 +395,7 @@ export function DrawerContent({ className, children, ...props }: React.Component
     pointerOutside: false,
     modal: true,
   });
+  const scrimStyle = useModalScrimStyle(dismissRef);
 
   if (!present) return null;
   const state = closing ? "closed" : "open";
@@ -405,6 +406,7 @@ export function DrawerContent({ className, children, ...props }: React.Component
         data-slot="drawer-overlay"
         data-state={state}
         className={DRAWER_OVERLAY}
+        style={scrimStyle}
         onClick={() => setOpen(false)}
       />
       <div

@@ -4,7 +4,7 @@ import * as React from "react";
 import { cn } from "../lib/cn";
 import { buttonVariants } from "./button";
 import { useControllableState } from "../primitives/use-controllable-state";
-import { DismissableLayerScope, useDismissableLayer } from "../primitives/dismissable-layer";
+import { DismissableLayerScope, useDismissableLayer, useModalScrimStyle } from "../primitives/dismissable-layer";
 import { useFocusScope } from "../primitives/focus-scope";
 import { usePresence } from "../primitives/presence";
 import { mergeRefs } from "../primitives/merge-refs";
@@ -105,10 +105,11 @@ export function AlertDialogContent({ className, children, ...props }: AlertDialo
     exclude: [triggerRef],
     modal: true,
   });
+  const scrimStyle = useModalScrimStyle(dismissRef);
   if (!isPresent) return null;
   return (
     <Portal>
-      <AlertDialogOverlay />
+      <AlertDialogOverlay style={scrimStyle} />
       <div
         data-slot="alert-dialog-content"
         role="alertdialog"
