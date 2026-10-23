@@ -6,6 +6,7 @@ import { useControllableState } from "../primitives/use-controllable-state";
 import { DismissableLayerScope, useDismissableLayer } from "../primitives/dismissable-layer";
 import { usePresence } from "../primitives/presence";
 import { useRovingFocus } from "../primitives/use-roving-focus";
+import { useHoverIntent } from "../primitives/use-hover-intent";
 import { mergeRefs } from "../primitives/merge-refs";
 import { Portal } from "../primitives/portal";
 import { Slot } from "../primitives/slot";
@@ -197,9 +198,10 @@ export function ContextMenuCheckboxItem({
   checked,
   disabled,
   onClick,
+  onKeyDown,
   ...props
 }: ContextMenuCheckboxItemProps) {
-  const close = React.useContext(ContextMenuCloseContext);
+  // No close: several boxes can be toggled in one visit.
   return (
     <div
       data-slot="context-menu-checkbox-item"
@@ -215,7 +217,13 @@ export function ContextMenuCheckboxItem({
       onClick={(e) => {
         if (disabled) return;
         onClick?.(e);
-        close();
+      }}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          (e.currentTarget as HTMLElement).click();
+        }
       }}
       {...props}
     >
@@ -353,6 +361,9 @@ export function ContextMenuShortcut({ className, ...props }: React.ComponentProp
 interface ContextMenuSubContextValue {
   open: boolean;
   setOpen: (next: boolean) => void;
+  triggerRef: React.RefObject<HTMLDivElement | null>;
+  /** Set by a keyboard open, so the first item takes focus; a pointer open leaves focus alone. */
+  focusFirst: React.RefObject<boolean>;
 }
 
 const ContextMenuSubContext = React.createContext<ContextMenuSubContextValue | null>(null);
@@ -370,9 +381,19 @@ export function ContextMenuSub({ open, defaultOpen = false, onOpenChange, childr
     defaultValue: defaultOpen,
     ...(onOpenChange ? { onChange: onOpenChange } : {}),
   });
+  const triggerRef = React.useRef<HTMLDivElement | null>(null);
+  const focusFirst = React.useRef(false);
+  const hover = useHoverIntent({
+    onOpen: () => setOpen(true),
+    onClose: () => setOpen(false),
+    openDelay: 100,
+    closeDelay: 150,
+  });
   return (
-    <ContextMenuSubContext.Provider value={{ open: isOpen, setOpen }}>
-      <div data-slot="context-menu-sub">{children}</div>
+    <ContextMenuSubContext.Provider value={{ open: isOpen, setOpen, triggerRef, focusFirst }}>
+      <div data-slot="context-menu-sub" {...hover}>
+        {children}
+      </div>
     </ContextMenuSubContext.Provider>
   );
 }
@@ -381,10 +402,18 @@ export interface ContextMenuSubTriggerProps extends React.ComponentProps<"div"> 
   inset?: boolean;
 }
 
-export function ContextMenuSubTrigger({ className, inset, children, onClick, ...props }: ContextMenuSubTriggerProps) {
+export function ContextMenuSubTrigger({
+  className,
+  inset,
+  children,
+  onClick,
+  onKeyDown,
+  ...props
+}: ContextMenuSubTriggerProps) {
   const ctx = React.useContext(ContextMenuSubContext);
   return (
     <div
+      ref={ctx?.triggerRef}
       data-slot="context-menu-sub-trigger"
       data-inset={inset ? "" : undefined}
       data-state={ctx?.open ? "open" : "closed"}
@@ -400,6 +429,14 @@ export function ContextMenuSubTrigger({ className, inset, children, onClick, ...
         onClick?.(e);
         ctx?.setOpen(!ctx.open);
       }}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (!ctx || (e.key !== "ArrowRight" && e.key !== "Enter" && e.key !== " ")) return;
+        e.preventDefault();
+        e.stopPropagation();
+        ctx.focusFirst.current = true;
+        ctx.setOpen(true);
+      }}
       {...props}
     >
       {children}
@@ -410,11 +447,29 @@ export function ContextMenuSubTrigger({ className, inset, children, onClick, ...
   );
 }
 
-export function ContextMenuSubContent({ className, children, ...props }: React.ComponentProps<"div">) {
+export function ContextMenuSubContent({ className, children, onKeyDown, ...props }: React.ComponentProps<"div">) {
   const ctx = React.useContext(ContextMenuSubContext);
+  const ref = React.useRef<HTMLDivElement | null>(null);
+  const open = ctx?.open ?? false;
+  React.useEffect(() => {
+    if (!open || !ctx?.focusFirst.current) return;
+    ctx.focusFirst.current = false;
+    ref.current?.querySelector<HTMLElement>("[role^='menuitem']")?.focus();
+  }, [open, ctx]);
   if (!ctx?.open) return null;
   return (
     <div
+      ref={ref}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (e.key === "ArrowLeft" || e.key === "Escape") {
+          // Closes this flyout only; Escape would otherwise reach the whole menu's dismissal.
+          e.preventDefault();
+          e.stopPropagation();
+          ctx.setOpen(false);
+          ctx.triggerRef.current?.focus();
+        }
+      }}
       data-slot="context-menu-sub-content"
       data-state="open"
       role="menu"

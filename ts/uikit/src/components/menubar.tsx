@@ -8,6 +8,7 @@ import { useFloating } from "../primitives/use-floating";
 import { DismissableLayerScope, useDismissableLayer } from "../primitives/dismissable-layer";
 import { usePresence } from "../primitives/presence";
 import { useRovingFocus } from "../primitives/use-roving-focus";
+import { useHoverIntent } from "../primitives/use-hover-intent";
 import { mergeRefs } from "../primitives/merge-refs";
 import {
   MENUBAR_CHECKBOX_ITEM,
@@ -313,6 +314,9 @@ export function MenubarShortcut({ className, ...props }: React.ComponentProps<"s
 interface SubCtx {
   open: boolean;
   setOpen: (open: boolean) => void;
+  triggerRef: React.RefObject<HTMLDivElement | null>;
+  /** Set by a keyboard open, so the first item takes focus; a pointer open leaves focus alone. */
+  focusFirst: React.RefObject<boolean>;
 }
 const MenubarSubContext = React.createContext<SubCtx | null>(null);
 function useSub(): SubCtx {
@@ -334,9 +338,17 @@ export function MenubarSub({ open, defaultOpen = false, onOpenChange, children }
     defaultValue: defaultOpen,
     onChange: onOpenChange,
   });
+  const triggerRef = React.useRef<HTMLDivElement | null>(null);
+  const focusFirst = React.useRef(false);
+  const hover = useHoverIntent({
+    onOpen: () => setOpen(true),
+    onClose: () => setOpen(false),
+    openDelay: 100,
+    closeDelay: 150,
+  });
   return (
-    <MenubarSubContext.Provider value={{ open: isOpen, setOpen }}>
-      <div data-slot="menubar-sub" className="relative">
+    <MenubarSubContext.Provider value={{ open: isOpen, setOpen, triggerRef, focusFirst }}>
+      <div data-slot="menubar-sub" className="relative" {...hover}>
         {children}
       </div>
     </MenubarSubContext.Provider>
@@ -348,11 +360,13 @@ export function MenubarSubTrigger({
   inset,
   children,
   onClick,
+  onKeyDown,
   ...props
 }: React.ComponentProps<"div"> & { inset?: boolean }) {
-  const { open, setOpen } = useSub();
+  const { open, setOpen, triggerRef, focusFirst } = useSub();
   return (
     <div
+      ref={triggerRef}
       data-slot="menubar-sub-trigger"
       data-inset={inset}
       data-state={open ? "open" : "closed"}
@@ -362,6 +376,14 @@ export function MenubarSubTrigger({
       onClick={(e) => {
         onClick?.(e);
         setOpen(!open);
+      }}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (e.key !== "ArrowRight" && e.key !== "Enter" && e.key !== " ") return;
+        e.preventDefault();
+        e.stopPropagation();
+        focusFirst.current = true;
+        setOpen(true);
       }}
       {...props}
     >
@@ -381,13 +403,29 @@ export function MenubarSubTrigger({
   );
 }
 
-export function MenubarSubContent({ className, children, ...props }: React.ComponentProps<"div">) {
-  const { open } = useSub();
+export function MenubarSubContent({ className, children, onKeyDown, ...props }: React.ComponentProps<"div">) {
+  const { open, setOpen, triggerRef, focusFirst } = useSub();
   const { isPresent, ref } = usePresence(open);
+  const inner = React.useRef<HTMLDivElement | null>(null);
+  React.useEffect(() => {
+    if (!open || !focusFirst.current) return;
+    focusFirst.current = false;
+    inner.current?.querySelector<HTMLElement>("[role^='menuitem']")?.focus();
+  }, [open, focusFirst]);
   if (!isPresent) return null;
   return (
     <div
-      ref={ref as React.RefObject<HTMLDivElement>}
+      ref={mergeRefs(ref as React.RefObject<HTMLDivElement>, inner)}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (e.key === "ArrowLeft" || e.key === "Escape") {
+          // Closes this flyout only; Escape would otherwise reach the whole menu's dismissal.
+          e.preventDefault();
+          e.stopPropagation();
+          setOpen(false);
+          triggerRef.current?.focus();
+        }
+      }}
       data-slot="menubar-sub-content"
       data-state={open ? "open" : "closed"}
       role="menu"
