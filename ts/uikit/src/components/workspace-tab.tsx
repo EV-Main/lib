@@ -8,6 +8,9 @@ import { UiIcon } from "./ui-icons";
 interface WorkspaceTabsContextValue {
   value: string;
   setValue: (next: string) => void;
+  /** Values of the mounted tabs, in mount order. */
+  values: readonly string[];
+  register: (value: string) => () => void;
 }
 
 const WorkspaceTabsContext = React.createContext<WorkspaceTabsContextValue | null>(null);
@@ -41,6 +44,11 @@ export function WorkspaceTabs({
     defaultValue,
     ...(onValueChange ? { onChange: onValueChange } : {}),
   });
+  const [values, setValues] = React.useState<readonly string[]>([]);
+  const register = React.useCallback((v: string) => {
+    setValues((prev) => [...prev, v]);
+    return () => setValues((prev) => prev.filter((x) => x !== v));
+  }, []);
   // Tabs come and go as workspaces open and close, so the order is read from the DOM at key time.
   const move = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const tabs = Array.from(e.currentTarget.querySelectorAll<HTMLElement>('[role="tab"]'));
@@ -57,7 +65,7 @@ export function WorkspaceTabs({
     tabs[target]?.focus();
   };
   return (
-    <WorkspaceTabsContext.Provider value={{ value: active, setValue }}>
+    <WorkspaceTabsContext.Provider value={{ value: active, setValue, values, register }}>
       <div
         role="tablist"
         aria-orientation="horizontal"
@@ -94,15 +102,19 @@ export function WorkspaceTab({
   onKeyDown,
   ...props
 }: WorkspaceTabProps) {
-  const { value: active, setValue } = useWorkspaceTabs();
+  const { value: active, setValue, values, register } = useWorkspaceTabs();
+  React.useEffect(() => register(value), [register, value]);
   const selected = active === value;
+  // With no selected tab (nothing chosen yet, or the active one was just closed) the first tab
+  // takes the tab stop, or the row could not be entered from the keyboard.
+  const stop = selected || (!values.includes(active) && values[0] === value);
   return (
     <div
       data-slot="workspace-tab"
       data-state={selected ? "active" : "inactive"}
       className={cn(
         "group inline-flex h-7 items-center rounded-(--control-radius) border border-transparent text-body-s font-medium text-ink-mid transition-colors",
-        "hover:bg-hover hover:text-ink focus-within:ring-2 focus-within:ring-ring",
+        "hover:bg-hover hover:text-ink has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring",
         selected && "border-border-subtle bg-secondary text-ink hover:bg-secondary",
         className,
       )}
@@ -111,7 +123,7 @@ export function WorkspaceTab({
         type="button"
         role="tab"
         aria-selected={selected}
-        tabIndex={selected ? 0 : -1}
+        tabIndex={stop ? 0 : -1}
         className="inline-flex h-full min-w-0 items-center gap-2 rounded-[inherit] pl-2 outline-none"
         onClick={(e) => {
           onClick?.(e);
@@ -121,6 +133,12 @@ export function WorkspaceTab({
           onKeyDown?.(e);
           if (onClose && (e.key === "Delete" || e.key === "Backspace")) {
             e.preventDefault();
+            // Hand focus to a neighbour first: the closed tab's button unmounts and focus would fall to <body>.
+            const tabs = Array.from(
+              e.currentTarget.closest('[role="tablist"]')?.querySelectorAll<HTMLElement>('[role="tab"]') ?? [],
+            );
+            const at = tabs.indexOf(e.currentTarget);
+            (tabs[at + 1] ?? tabs[at - 1])?.focus();
             onClose();
           }
         }}
@@ -135,7 +153,7 @@ export function WorkspaceTab({
           aria-label={closeLabel}
           tabIndex={-1}
           onClick={onClose}
-          className="mx-0.5 inline-flex size-5 items-center justify-center rounded-(--control-radius) text-ink-soft outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring"
+          className="inline-flex size-6 items-center justify-center rounded-(--control-radius) text-ink-soft outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring"
         >
           <UiIcon name="x" />
         </button>

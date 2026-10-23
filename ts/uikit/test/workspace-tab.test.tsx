@@ -24,6 +24,24 @@ describe("WorkspaceTabs", () => {
     expect(screen.getByRole("tab", { name: "Beta" })).toHaveAttribute("tabindex", "-1");
   });
 
+  it("gives the first tab the tab stop when no tab is selected", () => {
+    render(
+      <WorkspaceTabs defaultValue="gone">
+        <WorkspaceTab value="a">Alpha</WorkspaceTab>
+        <WorkspaceTab value="b">Beta</WorkspaceTab>
+      </WorkspaceTabs>,
+    );
+    expect(screen.getByRole("tab", { name: "Alpha" })).toHaveAttribute("tabindex", "0");
+    expect(screen.getByRole("tab", { name: "Beta" })).toHaveAttribute("tabindex", "-1");
+  });
+
+  it("moves focus to the next tab when Delete closes the focused one", () => {
+    setup();
+    screen.getByRole("tab", { name: "Beta" }).focus();
+    fireEvent.keyDown(screen.getByRole("tab", { name: "Beta" }), { key: "Delete" });
+    expect(screen.getByRole("tab", { name: "Gamma" })).toHaveFocus();
+  });
+
   it("selects a tab on click", () => {
     setup();
     fireEvent.click(screen.getByRole("tab", { name: "Gamma" }));
