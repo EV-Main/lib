@@ -53,8 +53,17 @@ pub fn PopoverAnchor(#[props(default)] class: String, children: Element) -> Elem
 	}
 }
 
+/// `role` and `aria_labelledby` are for content that is a dialog of its own,
+/// such as a form: the TS port forwards them as plain props.
 #[component]
-pub fn PopoverContent(#[props(default)] side: Side, #[props(default = String::from("center"))] align: String, #[props(default)] class: String, children: Element) -> Element {
+pub fn PopoverContent(
+	#[props(default)] side: Side,
+	#[props(default = String::from("center"))] align: String,
+	role: Option<String>,
+	aria_labelledby: Option<String>,
+	#[props(default)] class: String,
+	children: Element,
+) -> Element {
 	let ctx = use_context::<PopoverCtx>();
 	if !ctx.open.get() {
 		return rsx! {};
@@ -67,6 +76,8 @@ pub fn PopoverContent(#[props(default)] side: Side, #[props(default = String::fr
 			onclick: move |_| layer.on_outside(),
 		}
 		div {
+			role,
+			"aria-labelledby": aria_labelledby,
 			class: cls,
 			"data-slot": "popover-content",
 			"data-state": "open",

@@ -31,8 +31,12 @@ pub fn AlertDialogTrigger(#[props(default)] class: String, children: Element) ->
 		}
 	}
 }
+/// `aria_labelledby` and `aria_describedby` name the dialog after its title
+/// and description: pass the ids given to [`AlertDialogTitle`] and
+/// [`AlertDialogDescription`]. As with `DialogContent`, the kit does not wire
+/// them on its own.
 #[component]
-pub fn AlertDialogContent(#[props(default)] class: String, children: Element) -> Element {
+pub fn AlertDialogContent(aria_labelledby: Option<String>, aria_describedby: Option<String>, #[props(default)] class: String, children: Element) -> Element {
 	let ctx = use_context::<AlertDialogCtx>();
 	if !ctx.open.get() {
 		return rsx! {};
@@ -49,6 +53,8 @@ pub fn AlertDialogContent(#[props(default)] class: String, children: Element) ->
 		div {
 			role: "alertdialog",
 			"aria-modal": "true",
+			"aria-labelledby": aria_labelledby,
+			"aria-describedby": aria_describedby,
 			class: cls,
 			"data-slot": "alert-dialog-content",
 			"data-state": "open",
@@ -74,17 +80,17 @@ pub fn AlertDialogFooter(#[props(default)] class: String, children: Element) -> 
 	}
 }
 #[component]
-pub fn AlertDialogTitle(#[props(default)] class: String, children: Element) -> Element {
+pub fn AlertDialogTitle(id: Option<String>, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(ALERT_DIALOG_TITLE, class);
 	rsx! {
-		h2 { class: cls, "data-slot": "alert-dialog-title", {children} }
+		h2 { id, class: cls, "data-slot": "alert-dialog-title", {children} }
 	}
 }
 #[component]
-pub fn AlertDialogDescription(#[props(default)] class: String, children: Element) -> Element {
+pub fn AlertDialogDescription(id: Option<String>, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(ALERT_DIALOG_DESCRIPTION, class);
 	rsx! {
-		p { class: cls, "data-slot": "alert-dialog-description", {children} }
+		p { id, class: cls, "data-slot": "alert-dialog-description", {children} }
 	}
 }
 /// The confirm button: runs `onclick` — the consumer's destructive action —
