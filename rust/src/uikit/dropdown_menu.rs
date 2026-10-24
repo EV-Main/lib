@@ -27,8 +27,10 @@ pub fn DropdownMenu(open: Option<bool>, #[props(default)] default_open: bool, on
 		div { class: "relative inline-block", "data-slot": "dropdown-menu", {children} }
 	}
 }
+/// `aria_label` names a trigger whose text alone says too little: the kit has
+/// no `asChild`, so a model chip cannot pass its "Model: Fast" name another way.
 #[component]
-pub fn DropdownMenuTrigger(#[props(default)] class: String, children: Element) -> Element {
+pub fn DropdownMenuTrigger(#[props(default)] class: String, aria_label: Option<String>, children: Element) -> Element {
 	let ctx = use_context::<DropdownMenuCtx>();
 	let open = ctx.open.get();
 	let data_state = if open { "open" } else { "closed" };
@@ -38,6 +40,7 @@ pub fn DropdownMenuTrigger(#[props(default)] class: String, children: Element) -
 			class,
 			"data-slot": "dropdown-menu-trigger",
 			"data-state": data_state,
+			"aria-label": aria_label,
 			"aria-haspopup": "menu",
 			"aria-expanded": if open { "true" } else { "false" },
 			onclick: move |_| ctx.open.set(!ctx.open.get()),
