@@ -39,8 +39,18 @@ pub fn DialogPortal(children: Element) -> Element {
 		{children}
 	}
 }
+/// `aria_labelledby` and `aria_describedby` name the dialog after its title
+/// and description: pass the ids given to [`DialogTitle`] and
+/// [`DialogDescription`]. The kit does not wire them on its own, unlike the
+/// TS `Dialog`, so a dialog left without them stays unnamed.
 #[component]
-pub fn DialogContent(#[props(default = true)] show_close_button: bool, #[props(default)] class: String, children: Element) -> Element {
+pub fn DialogContent(
+	#[props(default = true)] show_close_button: bool,
+	aria_labelledby: Option<String>,
+	aria_describedby: Option<String>,
+	#[props(default)] class: String,
+	children: Element,
+) -> Element {
 	let ctx = use_context::<DialogCtx>();
 	if !ctx.open.get() {
 		return rsx! {};
@@ -59,6 +69,8 @@ pub fn DialogContent(#[props(default = true)] show_close_button: bool, #[props(d
 		div {
 			role: "dialog",
 			"aria-modal": "true",
+			"aria-labelledby": aria_labelledby,
+			"aria-describedby": aria_describedby,
 			class: cls,
 			"data-slot": "dialog-content",
 			"data-state": "open",
@@ -120,17 +132,17 @@ pub fn DialogFooter(#[props(default)] class: String, children: Element) -> Eleme
 	}
 }
 #[component]
-pub fn DialogTitle(#[props(default)] class: String, children: Element) -> Element {
+pub fn DialogTitle(id: Option<String>, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(DIALOG_TITLE, class);
 	rsx! {
-		h2 { class: cls, "data-slot": "dialog-title", {children} }
+		h2 { id, class: cls, "data-slot": "dialog-title", {children} }
 	}
 }
 #[component]
-pub fn DialogDescription(#[props(default)] class: String, children: Element) -> Element {
+pub fn DialogDescription(id: Option<String>, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(DIALOG_DESCRIPTION, class);
 	rsx! {
-		p { class: cls, "data-slot": "dialog-description", {children} }
+		p { id, class: cls, "data-slot": "dialog-description", {children} }
 	}
 }
 #[derive(Clone)]
