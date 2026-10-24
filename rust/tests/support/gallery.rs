@@ -37,6 +37,7 @@ const GALLERY: &[(&str, fn() -> Element)] = &[
 	("IconButton", d_icon_button), ("StatusItem", d_status_item),
 	("FormRow", d_form_row), ("Settings", d_settings),
 	("SystemBanner", d_system_banner), ("SectionLabel", d_section_label),
+	("WorkspaceTabs", d_workspace_tabs),
 	("Accordion", d_accordion), ("Collapsible", d_collapsible), ("InputGroup", d_input_group),
 	("InputOTP", d_input_otp), ("Carousel", d_carousel), ("Calendar", d_calendar), ("DateTimePicker", d_date_time_picker),
 	("Tooltip", d_tooltip), ("Popover", d_popover), ("HoverCard", d_hover_card),
@@ -719,6 +720,16 @@ fn d_section_label() -> Element {
 		div { class: "flex flex-col gap-2",
 			SectionLabel { "General" }
 			SectionLabel { r#as: SectionLabelAs::H2, tone: SectionLabelTone::Accent, "Portfolio" }
+		}
+	}
+}
+
+fn d_workspace_tabs() -> Element {
+	rsx! {
+		WorkspaceTabs { default_value: "trading",
+			WorkspaceTab { value: "trading", on_close: |_| {}, close_label: "Close Trading", "Trading" }
+			WorkspaceTab { value: "portfolio", on_close: |_| {}, close_label: "Close Portfolio", "Portfolio" }
+			WorkspaceTab { value: "reports", "Reports" }
 		}
 	}
 }

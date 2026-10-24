@@ -35,6 +35,10 @@ accordion-content
 accordion-header
 accordion-item
 accordion-trigger
+after-a:none
+after-a:{next}
+after-b:c after-c:b
+after-b:{show(\
 alert-description
 alert-dialog
 alert-dialog-action
@@ -74,6 +78,7 @@ aria-hidden=\
 aria-invalid
 aria-invalid=\
 aria-label
+aria-label=
 aria-label=\
 aria-labelledby
 aria-labelledby=\
@@ -198,6 +203,7 @@ border-b
 border-b border-border last:border-b-0
 border-b border-border-subtle
 border-border
+border-border-subtle bg-secondary text-ink hover:bg-secondary
 border-chip-error-border
 border-chip-error-border bg-chip-error-bg text-accent-error-ink [a&]:hover:bg-hover
 border-chip-info-border
@@ -242,6 +248,10 @@ card-title
 carousel-content
 carousel-item
 checkbox-indicator
+closed:0
+closed:1
+closed:2
+closed:{closed}
 col-span-2 lg:col-span-2
 col-span-2 lg:col-span-3
 col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight
@@ -336,6 +346,7 @@ data-stack
 data-state
 data-state=\
 data-testid
+data-testid=\
 data-today
 data-today=\
 data-tone
@@ -432,6 +443,7 @@ flex flex-col-reverse gap-2 sm:flex-row sm:justify-end
 flex h-6 items-center px-2 text-body-s text-ink-soft data-[inset]:pl-8
 flex h-8 items-center gap-2 border-b border-border-subtle px-3
 flex items-center
+flex items-center gap-1
 flex items-center gap-2
 flex items-center gap-2 border-t border-border px-3 py-2
 flex items-center gap-2 text-body leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-40 peer-disabled:cursor-not-allowed peer-disabled:opacity-40
@@ -503,12 +515,14 @@ form-row-control
 form-row-label
 gap-1 px-2.5 sm:pl-2.5
 gap-1 px-2.5 sm:pr-2.5
+gap-2
 gap-2.5
 gap-4 px-4 pb-4
 grid gap-0.5 text-ink [&_[data-slot=command-group-heading]]:text-ink-soft overflow-hidden p-1.5 [&>[data-slot=command-group-heading]]:order-first [&_[data-slot=command-group-heading]]:flex [&_[data-slot=command-group-heading]]:h-6 [&_[data-slot=command-group-heading]]:items-center [&_[data-slot=command-group-heading]]:px-2 [&_[data-slot=command-group-heading]]:text-body-s
 grid gap-2
 grid gap-3
 group flex flex-1 list-none items-center justify-center gap-1
+group inline-flex h-7 items-center rounded-(--control-radius) border border-transparent text-body-s font-medium text-ink-mid transition-colors hover:bg-hover hover:text-ink has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring
 group inline-flex h-9 w-max items-center justify-center rounded-[var(--control-radius)] bg-background px-4 py-2 text-body font-medium hover:bg-hover hover:text-ink focus:bg-hover focus:text-ink disabled:pointer-events-none disabled:opacity-40 data-[state=open]:hover:bg-hover data-[state=open]:text-ink data-[state=open]:focus:bg-hover data-[state=open]:bg-hover/50 outline-none transition-colors focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 group-content
 group-label
@@ -550,6 +564,7 @@ h-7
 h-7 aspect-square px-0
 h-7 px-2 min-w-7
 h-7 px-3 text-body has-[>svg]:px-2.5
+h-8
 h-8 aspect-square
 h-8 aspect-square px-0
 h-8 px-2.5 min-w-8
@@ -564,6 +579,7 @@ hover-card-trigger
 hover:after:bg-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex
 hover:bg-hover
 hover:bg-hover data-[state=selected]:bg-selected border-b border-border-subtle transition-colors
+hover:bg-secondary
 hover:text-ink
 hover:text-ink transition-colors
 hover:underline
@@ -579,12 +595,14 @@ info-tip-trigger\
 inline-block
 inline-flex h-5 items-center gap-1.5 px-2 text-caption text-ink-mid
 inline-flex h-5 items-center justify-center rounded-[var(--chip-radius)] border px-1.5 text-caption font-medium w-fit whitespace-nowrap shrink-0 gap-1 overflow-hidden [&>svg]:size-3 [&>svg]:pointer-events-none transition-colors outline-none aria-invalid:border-accent-error focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+inline-flex h-full min-w-0 items-center gap-2 rounded-[inherit] pl-2 outline-none
 inline-flex items-center gap-1
 inline-flex items-center gap-1.5
 inline-flex items-center justify-center bg-brand
 inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-[var(--control-radius)] text-body font-medium transition-colors cursor-pointer disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none aria-invalid:border-accent-error focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 inline-flex items-center justify-center gap-2 rounded-[var(--control-radius)] text-body font-medium hover:bg-hover hover:text-ink disabled:pointer-events-none disabled:opacity-40 data-[state=on]:bg-primary data-[state=on]:text-on-primary [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 focus-visible:border-ring outline-none transition-[color,box-shadow] aria-invalid:border-accent-error whitespace-nowrap focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 inline-flex size-4 shrink-0 cursor-help items-center justify-center rounded-full align-middle text-ink-soft outline-none transition-colors hover:text-ink focus-visible:ring-2 focus-visible:ring-ring data-[state=open]:text-accent-debug
+inline-flex size-6 items-center justify-center rounded-(--control-radius) text-ink-soft outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring
 inline-flex size-7 items-center justify-center rounded-[var(--control-radius)] hover:bg-hover hover:text-ink
 inline-start
 input-group
@@ -709,6 +727,7 @@ peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-[var(--c
 pending:false
 pending:{pending}
 picked:
+picked:c
 picked:{picked}
 pl-4
 placeholder:text-ink-soft
@@ -958,12 +977,14 @@ trades-tape-row
 transform: translateX(-{}%)
 translateX(-100%)
 translateX(-40%)
+truncate
 w-(--sidebar-width)
 w-10
 w-10 h-10 text-white
 w-14 text-center tabular-nums
 w-16
 w-16 h-16 rounded-md
+w-2
 w-2.5
 w-24
 w-3/5 h-3/5
@@ -974,3 +995,7 @@ w-full caption-bottom text-body
 w-full justify-start gap-2 text-left font-normal data-[placeholder]:text-ink-soft [&>svg]:text-ink-soft
 w-full px-[var(--page-px)]
 w-full text-body
+workspace-tab
+workspace-tab-close
+workspace-tab-trigger
+workspace-tabs

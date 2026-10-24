@@ -78,6 +78,7 @@ mod terminal;
 mod textarea;
 mod toggle;
 mod toggle_group;
+mod workspace_tabs;
 
 pub use accordion::{Accordion, AccordionContent, AccordionItem, AccordionTrigger, AccordionType};
 pub use alert::{Alert, AlertDescription, AlertTitle};
@@ -135,6 +136,7 @@ pub use terminal::{
 pub use textarea::Textarea;
 pub use toggle::{Toggle, toggle_classes};
 pub use toggle_group::{ToggleGroup, ToggleGroupItem, ToggleGroupType};
+pub use workspace_tabs::{WorkspaceTab, WorkspaceTabs};
 
 // Tier C — overlay/portal components. Glob-exported (each module's public
 // surface is its components + variant enums). Rust overlays are dep-light:

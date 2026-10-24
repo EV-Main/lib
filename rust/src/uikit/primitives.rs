@@ -165,6 +165,16 @@ impl RovingFocus {
 		!keys.clone().any(|k| k == selected) && keys.next() == Some(key)
 	}
 
+	/// The item after the one keyed `key`, else the one before it, with no wrap:
+	/// where focus goes when `key` is about to unmount, so it lands on the
+	/// closest survivor instead of falling to `<body>`.
+	pub fn neighbour(&self, key: &str) -> Option<String> {
+		let items = self.items.read();
+		let keys: Vec<&str> = items.values().map(|i| i.key.as_str()).collect();
+		let at = keys.iter().position(|k| *k == key)?;
+		keys.get(at + 1).or_else(|| at.checked_sub(1).and_then(|before| keys.get(before))).map(|k| k.to_string())
+	}
+
 	/// Moves DOM focus onto the item keyed `key`. A no-op before that item has
 	/// mounted, and on renderers without a DOM.
 	pub fn focus(&self, key: &str) {

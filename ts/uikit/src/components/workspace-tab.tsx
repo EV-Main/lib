@@ -3,6 +3,15 @@
 import * as React from "react";
 import { cn } from "../lib/cn";
 import { useControllableState } from "../primitives/use-controllable-state";
+import {
+  WORKSPACE_TAB_BASE,
+  WORKSPACE_TAB_CLOSE,
+  WORKSPACE_TAB_LABEL,
+  WORKSPACE_TAB_SELECTED,
+  WORKSPACE_TAB_SPACER,
+  WORKSPACE_TAB_TRIGGER,
+  WORKSPACE_TABS_BASE,
+} from "../generated/workspace-tab";
 import { UiIcon } from "./ui-icons";
 
 interface WorkspaceTabsContextValue {
@@ -70,7 +79,7 @@ export function WorkspaceTabs({
         role="tablist"
         aria-orientation="horizontal"
         data-slot="workspace-tabs"
-        className={cn("flex items-center gap-1", className)}
+        className={cn(WORKSPACE_TABS_BASE, className)}
         onKeyDown={(e) => {
           onKeyDown?.(e);
           if (!e.defaultPrevented) move(e);
@@ -113,9 +122,8 @@ export function WorkspaceTab({
       data-slot="workspace-tab"
       data-state={selected ? "active" : "inactive"}
       className={cn(
-        "group inline-flex h-7 items-center rounded-(--control-radius) border border-transparent text-body-s font-medium text-ink-mid transition-colors",
-        "hover:bg-hover hover:text-ink has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring",
-        selected && "border-border-subtle bg-secondary text-ink hover:bg-secondary",
+        WORKSPACE_TAB_BASE,
+        selected && WORKSPACE_TAB_SELECTED,
         className,
       )}
     >
@@ -124,7 +132,7 @@ export function WorkspaceTab({
         role="tab"
         aria-selected={selected}
         tabIndex={stop ? 0 : -1}
-        className="inline-flex h-full min-w-0 items-center gap-2 rounded-[inherit] pl-2 outline-none"
+        className={WORKSPACE_TAB_TRIGGER}
         onClick={(e) => {
           onClick?.(e);
           setValue(value);
@@ -145,7 +153,7 @@ export function WorkspaceTab({
         {...props}
       >
         {icon ?? <UiIcon name="layers" />}
-        <span className="truncate">{children}</span>
+        <span className={WORKSPACE_TAB_LABEL}>{children}</span>
       </button>
       {onClose ? (
         <button
@@ -153,12 +161,12 @@ export function WorkspaceTab({
           aria-label={closeLabel}
           tabIndex={-1}
           onClick={onClose}
-          className="inline-flex size-6 items-center justify-center rounded-(--control-radius) text-ink-soft outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring"
+          className={WORKSPACE_TAB_CLOSE}
         >
           <UiIcon name="x" />
         </button>
       ) : (
-        <span className="w-2" aria-hidden />
+        <span className={WORKSPACE_TAB_SPACER} aria-hidden />
       )}
     </div>
   );

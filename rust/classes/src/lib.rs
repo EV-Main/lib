@@ -62,6 +62,7 @@ mod terminal;
 mod textarea;
 mod toggle;
 mod tooltip;
+mod workspace_tabs;
 
 pub use accent::{Accent, accent_fill_class, accent_outline_class, accent_text_class, button_accent_class};
 pub use accordion::{ACCORDION_CONTENT, ACCORDION_CONTENT_INNER, ACCORDION_HEADER, ACCORDION_ITEM, ACCORDION_TRIGGER};
@@ -169,6 +170,7 @@ pub use terminal::{
 pub use textarea::{TEXTAREA_BASE, textarea_size_class};
 pub use toggle::{TOGGLE_BASE, ToggleVariant, toggle_size_class};
 pub use tooltip::TOOLTIP_CONTENT;
+pub use workspace_tabs::{WORKSPACE_TAB_BASE, WORKSPACE_TAB_CLOSE, WORKSPACE_TAB_LABEL, WORKSPACE_TAB_SELECTED, WORKSPACE_TAB_SPACER, WORKSPACE_TAB_TRIGGER, WORKSPACE_TABS_BASE};
 
 /// Fuses any number of class fragments into a single `String` with real Tailwind
 /// conflict resolution (like `clsx` + `tailwind-merge`): empty fragments drop, the

@@ -21,6 +21,7 @@ pub fn manifest() -> Vec<(&'static str, Vec<Ts>)> {
 		("settings", uikit_settings()),
 		("system-banner", system_banner()),
 		("section-label", section_label()),
+		("workspace-tab", workspace_tab()),
 		("focus", focus()),
 		("switch", switch()),
 		("checkbox", checkbox()),
@@ -1451,6 +1452,39 @@ fn section_label() -> Vec<Ts> {
 			value: SECTION_LABEL_BASE,
 		},
 		table::<SectionLabelTone>("sectionLabelToneClasses", "SectionLabelTone"),
+	]
+}
+
+fn workspace_tab() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "WORKSPACE_TABS_BASE",
+			value: WORKSPACE_TABS_BASE,
+		},
+		Ts::Const {
+			name: "WORKSPACE_TAB_BASE",
+			value: WORKSPACE_TAB_BASE,
+		},
+		Ts::Const {
+			name: "WORKSPACE_TAB_SELECTED",
+			value: WORKSPACE_TAB_SELECTED,
+		},
+		Ts::Const {
+			name: "WORKSPACE_TAB_TRIGGER",
+			value: WORKSPACE_TAB_TRIGGER,
+		},
+		Ts::Const {
+			name: "WORKSPACE_TAB_LABEL",
+			value: WORKSPACE_TAB_LABEL,
+		},
+		Ts::Const {
+			name: "WORKSPACE_TAB_CLOSE",
+			value: WORKSPACE_TAB_CLOSE,
+		},
+		Ts::Const {
+			name: "WORKSPACE_TAB_SPACER",
+			value: WORKSPACE_TAB_SPACER,
+		},
 	]
 }
 
