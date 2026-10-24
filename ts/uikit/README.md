@@ -357,7 +357,8 @@ The frame a signed-in app sits in — a rail beside the page on a wide screen, a
 tab bar under it on a phone, one page inset and title scale, and the motion
 between screens. It knows nothing about routes, roles or data: the nav is a
 list you build, visibility is a list you filter, and the router comes in as two
-props. TS-only (see [Limitations](#limitations)).
+props. TS-only (see [Limitations](#limitations)), except `TopBar`,
+`SystemBanner` and `SectionLabel`, which have Dioxus twins.
 
 ```tsx
 // app/(app)/layout.tsx — the layout stays a Server Component; the nav is a client leaf
@@ -713,25 +714,31 @@ element across the two ports.
   / `Forbidden` / `ServerError` presets (404 / 403 / 500). The kit ships no
   artwork: `Logo` masks whatever `--brand-mark` / `--brand-aspect` the consumer
   declares beside the palette, and the status pages use it for their mark.
-- **App shell — TS-only (12):** app-shell, shell-nav, bottom-tab-bar,
-  nav-badge (`NavBadge` / `NavDot`), top-bar, account-menu, mobile-app-bar, page-frame (`PageFrame` /
-  `PageHeading` / `SectionLabel`), section-nav, resource-error, system-banner,
-  settled — see [App shell](#app-shell).
-- **Uikit 2.0 — TS-only (new in 1.0):**
+- **App shell — TS-only (10):** app-shell, shell-nav, bottom-tab-bar,
+  nav-badge (`NavBadge` / `NavDot`), account-menu, mobile-app-bar, page-frame
+  (`PageFrame` / `PageHeading`), section-nav, resource-error, settled — see
+  [App shell](#app-shell). `TopBar`, `SystemBanner` and `SectionLabel` have
+  Dioxus twins (next item).
+- **Uikit 2.0 — Rust and TS (new in 1.0):** the class strings live once in
+  `rust/classes/src/<name>.rs`, and `nix run .#gen` writes them to
+  `ts/uikit/src/generated/<name>.ts`.
   - *elements:* `IconButton` (required `aria-label`), `StatusItem` / `StatusDot`,
-    `WorkspaceTabs` / `WorkspaceTab`, `KeyValue` (copy button), `FormRow`;
+    `WorkspaceTabs` / `WorkspaceTab`, `KeyValue` (copy button), `FormRow`,
+    `SystemBanner`, `SectionLabel`;
   - *settings:* `SettingsLayout` / `SettingsSection` / `SettingsRow`,
     `AccountSettingsDialog`, `ConfirmDialog` (async confirm), `AccountList` /
     `AccountListItem`, `PopoverForm`, `CommandPalette` and
-    `useCommandPaletteShortcut`, and a profile form on `AccountMenu`;
-  - *header and asides:* `SmartHeader` (`default`, `collapsed`, `banner`,
-    `search`), `HeaderBalance`, `HeaderSearch`, `NotificationBell`,
-    `AsideHeader`, `AsideRail`, `AsidePanel` (`docked` or `overlay`) and the
-    `AppShell` `aside` slot;
+    `useCommandPaletteShortcut` (Rust: `use_command_palette_shortcut`);
+  - *header and asides:* `TopBar`, `SmartHeader` (`default`, `collapsed`,
+    `banner`, `search`), `HeaderBalance`, `HeaderSearch`, `NotificationBell`,
+    `AsideHeader`, `AsideRail`, `AsidePanel` (`docked` or `overlay`);
   - *AI chat:* `ChatMessage`, `ChatBubble` (`streaming` shows a caret),
-    `ChatMarker`, `ChatAttachment`, `ChatComposer`, `ModelChip`, `ChatPanel`,
-    `ChatDock`, `ChatStreamText` (pass the whole growing string; only the new
-    words fade in) and `ChatTyping` (the "thinking" indicator).
+    `ChatMarker`, `ChatAttachment`, `ChatComposer`, `ModelChip` and `ChatTyping`
+    (the "thinking" indicator).
+- **Uikit 2.0 — TS-only (new in 1.0):** `AnimatedNumber` / `useCountTween`,
+  `ChatPanel`, `ChatDock`, `ChatStreamText` (pass the whole growing string; only
+  the new words fade in), the `AppShell` `aside` slot, and the profile form on
+  `AccountMenu`. How the Rust twins differ is in [Limitations](#limitations).
 
   `Avatar` takes `shape` and `size`; `SectionLabel` and `SystemBanner` follow the
   new look.
@@ -930,12 +937,34 @@ measuring needs host-only `web-sys`). Known gaps:
   The lock-up is composed from `mark` + `brand` (display family) + `tagline`,
   or passed whole as `lockup`. Brand-coloured text reads `primary-ink`.
 - **TS-only for now:** `NativeSelect`, the `Field` id hand-off,
-  `SelectValue` labels, `ListRows` / `ListRow` (a table's phone form), and the whole [app shell](#app-shell) (`AppShell`,
-  `ShellNav`, `BottomTabBar`, `NavBadge` / `NavDot`, `TopBar`, `AccountMenu`, `MobileAppBar`, `PageFrame` /
-  `PageHeading` / `SectionLabel`, `SectionNav`, `ResourceError`, `SystemBanner`,
-  `Settled`) — no Dioxus twin. Its CSS (the entrances, the markers, the motion
-  and shell tokens) ships in the shared sheet, so a Rust app can use the
-  `data-enter` contract today.
+  `SelectValue` labels, `ListRows` / `ListRow` (a table's phone form), the
+  rest of the [app shell](#app-shell) (`AppShell`, `ShellNav`, `BottomTabBar`,
+  `NavBadge` / `NavDot`, `AccountMenu` and its profile form, `MobileAppBar`,
+  `PageFrame` / `PageHeading`, `SectionNav`, `ResourceError`, `Settled`) and
+  the parts that need a browser API Rust does not wrap: `AnimatedNumber` /
+  `useCountTween` (a frame loop and `Intl`), `ChatStreamText` (word diffing and
+  timers), and `ChatPanel` / `ChatDock` (`ResizeObserver`, scroll pinning).
+  Collapsible `ShellNav` / `SectionNav` groups are TS-only too. Their CSS (the
+  entrances, the markers, the motion and shell tokens) ships in the shared
+  sheet, so a Rust app can use the `data-enter` contract today.
+- **uikit 2.0 twins:** the Rust parts keep the TS markup and class strings, with
+  these differences. Overlays keep the limits of the older Rust overlays (inline
+  `position: fixed`, no portal, no focus trap, not on the layer stack).
+  `HeaderBalance` takes a formatted `String` (no rolling digits, no `Settled`).
+  `ConfirmDialog` has `pending` and `error` props in place of a promise, and a
+  `pending` dialog ignores Esc, the scrim and the buttons. `KeyValue` takes a
+  `copy` callback; with the `wasm` feature and no callback it writes through
+  `web-sys`. `CommandPalette` is controllable (`open`, `default_open`,
+  `on_open_change`), and `use_command_palette_shortcut` listens for Ctrl or Cmd
+  K by key code on the `wasm` feature only, so it does nothing in an SSR build.
+  `AsidePanel` has no `matchMedia`: with `AsideCollapse::Md` it renders the
+  docked or sheet form and the drawer form together, and breakpoint classes show
+  one, so its children mount twice. Dialogs, popovers and menus do not name
+  themselves: pass `aria_labelledby` and the title `id`, or `aria_label`. The
+  TS tests that stub `matchMedia`, or that need `SectionNav` or `AppShell`, are
+  ported as markup checks or not at all. `dioxus-ssr` runs no effects, so the
+  clipboard write, the Ctrl+K listener and focus moves are checked in the
+  gallery only.
 - **app shell:** `ShellNav`'s marker is measured (one forced layout read per
   navigation); the tab bar's rule is arithmetic and assumes equal tabs. A
   `data-enter` nested inside another still entering composes both rises (the

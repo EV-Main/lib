@@ -119,6 +119,29 @@ Rust crate and its TypeScript mirror at once.
   rolls its digit columns (or counts up) to each new value, formatted with
   `Intl.NumberFormat`. `HeaderBalance` takes a numeric `amount`; the existing
   `value` still works. No animation library; reduced motion swaps at once.
+- **Dioxus twins of the uikit 2.0 parts** (`ev_lib` `uikit` and
+  `@evinvest/uikit`): `IconButton`, `StatusItem`, `StatusDot`, `FormRow`,
+  `SettingsLayout`, `SettingsSection`, `SettingsRow`, `SystemBanner`,
+  `SectionLabel`, `WorkspaceTabs`, `WorkspaceTab`, `AccountList`,
+  `AccountListItem`, `AccountSettingsDialog`, `PopoverForm`, `ConfirmDialog`,
+  `KeyValue`, `CommandPalette` with `use_command_palette_shortcut`, `TopBar`,
+  `SmartHeader`, `HeaderSearch`, `NotificationBell`, `HeaderBalance`,
+  `AsideHeader`, `AsideRail`, `AsidePanel`, `ChatBubble`, `ChatMessage`,
+  `ChatMarker`, `ChatAttachment`, `ChatTyping`, `ChatComposer` and `ModelChip`.
+  Their class strings now live in `ev_lib_classes`, and the TS components
+  import the generated tables, so the two ports cannot drift. The twins differ
+  where Rust has no browser API: `HeaderBalance` takes a formatted string,
+  `ConfirmDialog` takes `pending` and `error`, `KeyValue` takes a `copy`
+  callback, and `AsidePanel` renders its docked and drawer forms together and
+  lets breakpoint classes pick one. `AnimatedNumber`, `ChatStreamText`,
+  `ChatPanel` and `ChatDock` stay TS-only.
+- **Optional names on the Rust overlays** (`ev_lib` `uikit`): `DialogContent`,
+  `AlertDialogContent` and `CommandDialog` take `aria_labelledby` (and
+  `aria_describedby` where it applies), their titles and descriptions take an
+  `id`, `PopoverContent` takes `role` and `aria_labelledby`, `SheetContent` and
+  `DrawerContent` take `aria_label`, `PopoverTrigger` and `DropdownMenuTrigger`
+  take `aria_label`, and `Textarea` takes `aria_label`, `rows`, `onkeydown` and
+  `onmounted`. All are optional; an unset prop renders no attribute.
 
 ### Removed
 
@@ -160,6 +183,12 @@ Rust crate and its TypeScript mirror at once.
 
 ### Fixed
 
+- **`cn!` merges `font-display` and the `(--var)` shorthand like
+  `tailwind-merge`** (`ev_lib` `uikit`): `font-display` is a font family, so a
+  later `font-light` no longer drops it, and `rounded-(--control-radius)`
+  replaces `rounded-full` instead of sitting beside it.
+- **`CommandDialog` applies its `class`** (`ev_lib` `uikit`): the prop was
+  declared and never merged onto the dialog box.
 - **A popover opened together with its dialog sits above it** (`@evinvest/uikit`):
   when both mount in one commit, the child layer is lifted over its parent,
   keeps focus (Escape closes the popover first), and is placed from the
