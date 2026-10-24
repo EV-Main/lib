@@ -1,4 +1,5 @@
 import * as React from "react";
+import { CHAT_TYPING_BASE, CHAT_TYPING_DOT, CHAT_TYPING_STILL } from "../generated/chat-typing";
 import { cn } from "../lib/cn";
 
 export interface ChatTypingProps extends Omit<React.ComponentProps<"span">, "children"> {
@@ -17,13 +18,13 @@ export function ChatTyping({ label = "Assistant is thinking", className, ...prop
       role="status"
       aria-label={label}
       data-slot="chat-typing"
-      className={cn("inline-flex h-6 items-center gap-1 text-ink-soft", className)}
+      className={cn(CHAT_TYPING_BASE, className)}
       {...props}
     >
-      <span aria-hidden data-dot className="size-1.5 rounded-full bg-current" />
-      <span aria-hidden data-dot className="size-1.5 rounded-full bg-current" />
-      <span aria-hidden data-dot className="size-1.5 rounded-full bg-current" />
-      <span aria-hidden data-still className="text-body leading-none">
+      <span aria-hidden data-dot className={CHAT_TYPING_DOT} />
+      <span aria-hidden data-dot className={CHAT_TYPING_DOT} />
+      <span aria-hidden data-dot className={CHAT_TYPING_DOT} />
+      <span aria-hidden data-still className={CHAT_TYPING_STILL}>
         …
       </span>
     </span>

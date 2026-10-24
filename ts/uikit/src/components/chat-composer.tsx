@@ -1,6 +1,17 @@
 "use client";
 
 import * as React from "react";
+import {
+  CHAT_COMPOSER_ATTACHMENTS,
+  CHAT_COMPOSER_BASE,
+  CHAT_COMPOSER_FIELD,
+  CHAT_COMPOSER_HINT,
+  CHAT_COMPOSER_IDLE,
+  CHAT_COMPOSER_SPACER,
+  CHAT_COMPOSER_STREAMING,
+  CHAT_COMPOSER_TOOLBAR,
+  MODEL_CHIP_BASE,
+} from "../generated/chat-composer";
 import { cn } from "../lib/cn";
 import { useControllableState } from "../primitives/use-controllable-state";
 import {
@@ -36,10 +47,7 @@ export function ModelChip({ models, value, onValueChange, "aria-label": ariaLabe
       <DropdownMenuTrigger
         aria-label={`${ariaLabel}: ${current?.label ?? value}`}
         data-slot="model-chip"
-        className={cn(
-          "inline-flex h-6.5 items-center gap-1 rounded-(--control-radius) border border-border py-1 pl-2 pr-1.5 text-body-s text-ink-mid outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring",
-          className,
-        )}
+        className={cn(MODEL_CHIP_BASE, className)}
       >
         {current?.label ?? value}
         <UiIcon name="chevron-down" />
@@ -124,13 +132,13 @@ export function ChatComposer({
       data-slot="chat-composer"
       data-state={streaming ? "streaming" : "default"}
       className={cn(
-        "flex flex-col gap-2 rounded-lg border bg-card px-3 pb-2.5 pt-3 focus-within:ring-2 focus-within:ring-ring",
-        streaming ? "border-border" : "border-border-strong",
+        CHAT_COMPOSER_BASE,
+        streaming ? CHAT_COMPOSER_STREAMING : CHAT_COMPOSER_IDLE,
         className,
       )}
       {...props}
     >
-      {attachments != null && <div className="flex flex-wrap gap-2">{attachments}</div>}
+      {attachments != null && <div className={CHAT_COMPOSER_ATTACHMENTS}>{attachments}</div>}
       <Textarea
         rows={1}
         value={text}
@@ -146,17 +154,17 @@ export function ChatComposer({
             send();
           }
         }}
-        className="max-h-40 min-h-6 resize-none border-0 bg-transparent p-0 focus-visible:ring-0"
+        className={CHAT_COMPOSER_FIELD}
       />
-      <div className="flex items-center gap-1.5">
+      <div className={CHAT_COMPOSER_TOOLBAR}>
         {onAttach && (
           <IconButton aria-label={labels.attach ?? "Attach file"} size="sm" onClick={onAttach} disabled={disabled}>
             <UiIcon name="plus" />
           </IconButton>
         )}
         {tools}
-        <span className="flex-1" />
-        {hint != null && <span className="hidden text-caption text-ink-soft sm:inline">{hint}</span>}
+        <span className={CHAT_COMPOSER_SPACER} />
+        {hint != null && <span className={CHAT_COMPOSER_HINT}>{hint}</span>}
         {streaming ? (
           <IconButton
             variant="secondary"

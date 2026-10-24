@@ -31,6 +31,9 @@ pub fn manifest() -> Vec<(&'static str, Vec<Ts>)> {
 		("smart-header", smart_header()),
 		("header-controls", header_controls()),
 		("aside", aside()),
+		("chat-message", chat_message()),
+		("chat-typing", chat_typing()),
+		("chat-composer", chat_composer()),
 		("focus", focus()),
 		("switch", switch()),
 		("checkbox", checkbox()),
@@ -1850,6 +1853,204 @@ fn aside() -> Vec<Ts> {
 			value: ASIDE_PANEL_NARROW_ONLY,
 		},
 		table::<AsidePanelSide>("asidePanelSideClasses", "AsidePanelSide"),
+	]
+}
+
+fn chat_message() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "CHAT_BUBBLE_BASE",
+			value: CHAT_BUBBLE_BASE,
+		},
+		table::<ChatBubbleVariant>("chatBubbleVariantClasses", "ChatBubbleVariant"),
+		Ts::Const {
+			name: "CHAT_MESSAGE_BASE",
+			value: CHAT_MESSAGE_BASE,
+		},
+		Ts::Const {
+			name: "CHAT_MESSAGE_USER",
+			value: CHAT_MESSAGE_USER,
+		},
+		Ts::Const {
+			name: "CHAT_MESSAGE_AVATAR",
+			value: CHAT_MESSAGE_AVATAR,
+		},
+		Ts::Const {
+			name: "CHAT_MESSAGE_AVATAR_TILE",
+			value: CHAT_MESSAGE_AVATAR_TILE,
+		},
+		Ts::Const {
+			name: "CHAT_MESSAGE_BODY",
+			value: CHAT_MESSAGE_BODY,
+		},
+		Ts::Const {
+			name: "CHAT_MESSAGE_BODY_USER",
+			value: CHAT_MESSAGE_BODY_USER,
+		},
+		Ts::Const {
+			name: "CHAT_MESSAGE_BODY_ASSISTANT",
+			value: CHAT_MESSAGE_BODY_ASSISTANT,
+		},
+		Ts::Const {
+			name: "CHAT_MESSAGE_HEADER",
+			value: CHAT_MESSAGE_HEADER,
+		},
+		Ts::Const {
+			name: "CHAT_MESSAGE_NAME",
+			value: CHAT_MESSAGE_NAME,
+		},
+		Ts::Const {
+			name: "CHAT_MESSAGE_TIME",
+			value: CHAT_MESSAGE_TIME,
+		},
+		Ts::Const {
+			name: "CHAT_MARKER_SEPARATOR",
+			value: CHAT_MARKER_SEPARATOR,
+		},
+		Ts::Const {
+			name: "CHAT_MARKER_RULE",
+			value: CHAT_MARKER_RULE,
+		},
+		Ts::Const {
+			name: "CHAT_MARKER_SEPARATOR_LABEL",
+			value: CHAT_MARKER_SEPARATOR_LABEL,
+		},
+		Ts::Const {
+			name: "CHAT_MARKER_STATUS",
+			value: CHAT_MARKER_STATUS,
+		},
+		Ts::Const {
+			name: "CHAT_MARKER_DOT",
+			value: CHAT_MARKER_DOT,
+		},
+		table::<ChatStatusState>("chatStatusDotClasses", "ChatStatusState"),
+		Ts::Const {
+			name: "CHAT_MARKER_TOOL",
+			value: CHAT_MARKER_TOOL,
+		},
+		Ts::Const {
+			name: "CHAT_MARKER_TOOL_BORDER",
+			value: CHAT_MARKER_TOOL_BORDER,
+		},
+		Ts::Const {
+			name: "CHAT_MARKER_TOOL_ERROR_BORDER",
+			value: CHAT_MARKER_TOOL_ERROR_BORDER,
+		},
+		Ts::Const {
+			name: "CHAT_MARKER_TOOL_ICON",
+			value: CHAT_MARKER_TOOL_ICON,
+		},
+		Ts::Const {
+			name: "CHAT_MARKER_TOOL_CHECK",
+			value: CHAT_MARKER_TOOL_CHECK,
+		},
+		Ts::Const {
+			name: "CHAT_MARKER_TOOL_BODY",
+			value: CHAT_MARKER_TOOL_BODY,
+		},
+		Ts::Const {
+			name: "CHAT_MARKER_TOOL_TITLE",
+			value: CHAT_MARKER_TOOL_TITLE,
+		},
+		Ts::Const {
+			name: "CHAT_MARKER_TOOL_DETAIL",
+			value: CHAT_MARKER_TOOL_DETAIL,
+		},
+		Ts::Const {
+			name: "CHAT_MARKER_TOOL_META",
+			value: CHAT_MARKER_TOOL_META,
+		},
+		table::<ChatToolState>("chatToolMetaClasses", "ChatToolState"),
+		Ts::Const {
+			name: "CHAT_ATTACHMENT_BASE",
+			value: CHAT_ATTACHMENT_BASE,
+		},
+		Ts::Const {
+			name: "CHAT_ATTACHMENT_ROW",
+			value: CHAT_ATTACHMENT_ROW,
+		},
+		Ts::Const {
+			name: "CHAT_ATTACHMENT_ICON",
+			value: CHAT_ATTACHMENT_ICON,
+		},
+		Ts::Const {
+			name: "CHAT_ATTACHMENT_BODY",
+			value: CHAT_ATTACHMENT_BODY,
+		},
+		Ts::Const {
+			name: "CHAT_ATTACHMENT_NAME",
+			value: CHAT_ATTACHMENT_NAME,
+		},
+		Ts::Const {
+			name: "CHAT_ATTACHMENT_META",
+			value: CHAT_ATTACHMENT_META,
+		},
+		Ts::Const {
+			name: "CHAT_ATTACHMENT_PROGRESS",
+			value: CHAT_ATTACHMENT_PROGRESS,
+		},
+		Ts::Const {
+			name: "CHAT_ATTACHMENT_PROGRESS_FILL",
+			value: CHAT_ATTACHMENT_PROGRESS_FILL,
+		},
+	]
+}
+
+fn chat_typing() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "CHAT_TYPING_BASE",
+			value: CHAT_TYPING_BASE,
+		},
+		Ts::Const {
+			name: "CHAT_TYPING_DOT",
+			value: CHAT_TYPING_DOT,
+		},
+		Ts::Const {
+			name: "CHAT_TYPING_STILL",
+			value: CHAT_TYPING_STILL,
+		},
+	]
+}
+
+fn chat_composer() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "MODEL_CHIP_BASE",
+			value: MODEL_CHIP_BASE,
+		},
+		Ts::Const {
+			name: "CHAT_COMPOSER_BASE",
+			value: CHAT_COMPOSER_BASE,
+		},
+		Ts::Const {
+			name: "CHAT_COMPOSER_STREAMING",
+			value: CHAT_COMPOSER_STREAMING,
+		},
+		Ts::Const {
+			name: "CHAT_COMPOSER_IDLE",
+			value: CHAT_COMPOSER_IDLE,
+		},
+		Ts::Const {
+			name: "CHAT_COMPOSER_ATTACHMENTS",
+			value: CHAT_COMPOSER_ATTACHMENTS,
+		},
+		Ts::Const {
+			name: "CHAT_COMPOSER_FIELD",
+			value: CHAT_COMPOSER_FIELD,
+		},
+		Ts::Const {
+			name: "CHAT_COMPOSER_TOOLBAR",
+			value: CHAT_COMPOSER_TOOLBAR,
+		},
+		Ts::Const {
+			name: "CHAT_COMPOSER_SPACER",
+			value: CHAT_COMPOSER_SPACER,
+		},
+		Ts::Const {
+			name: "CHAT_COMPOSER_HINT",
+			value: CHAT_COMPOSER_HINT,
+		},
 	]
 }
 

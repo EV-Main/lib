@@ -40,7 +40,7 @@ const GALLERY: &[(&str, fn() -> Element)] = &[
 	("WorkspaceTabs", d_workspace_tabs), ("AccountList", d_account_list), ("AccountSettingsDialog", d_account_settings_dialog),
 	("PopoverForm", d_popover_form), ("ConfirmDialog", d_confirm_dialog), ("KeyValue", d_key_value),
 	("TopBar", d_top_bar), ("SmartHeader", d_smart_header), ("HeaderControls", d_header_controls),
-	("Aside", d_aside),
+	("Aside", d_aside), ("ChatMessage", d_chat_message), ("ChatTyping", d_chat_typing), ("ChatComposer", d_chat_composer),
 	("Accordion", d_accordion), ("Collapsible", d_collapsible), ("InputGroup", d_input_group),
 	("InputOTP", d_input_otp), ("Carousel", d_carousel), ("Calendar", d_calendar), ("DateTimePicker", d_date_time_picker),
 	("Tooltip", d_tooltip), ("Popover", d_popover), ("HoverCard", d_hover_card),
@@ -771,6 +771,74 @@ fn d_aside() -> Element {
 				p { class: "p-4 text-body text-ink-mid", "BTC-USD above 64,000" }
 			}
 			AsideRail { items, end_items, value: "chat".to_string(), on_value_change: |_| {} }
+		}
+	}
+}
+
+fn d_chat_message() -> Element {
+	rsx! {
+		div { class: "flex w-150 flex-col gap-4",
+			ChatMarker { kind: ChatMarkerKind::Separator, "Today" }
+			ChatMessage { role: ChatMessageRole::User, name: rsx! { "You" }, time: rsx! { "13:02" },
+				ChatBubble { variant: ChatBubbleVariant::User, "What is my net exposure?" }
+				ChatAttachment { name: "q3-report.pdf", meta: rsx! { "PDF · 1.2 MB" } }
+			}
+			ChatMessage { role: ChatMessageRole::Assistant, name: rsx! { "Assistant" }, time: rsx! { "13:04" },
+				ChatMarker { kind: ChatMarkerKind::Status(ChatStatusState::Done), "Thought for 6s" }
+				ChatMarker {
+					kind: ChatMarkerKind::Tool {
+						state: ChatToolState::Done,
+						title: rsx! { "get_positions" },
+						detail: Some(rsx! { "account=main" }),
+						meta: Some(rsx! { "0.4s" }),
+					},
+				}
+				ChatMarker {
+					kind: ChatMarkerKind::Tool { state: ChatToolState::Error, title: rsx! { "get_quotes" }, detail: None, meta: Some(rsx! { "Failed · 1.2s" }) },
+				}
+				ChatBubble { "Net exposure is 38% long, mostly in two positions." }
+				ChatBubble { variant: ChatBubbleVariant::Muted, "Prices are delayed by 15 minutes." }
+			}
+			ChatMessage { role: ChatMessageRole::Assistant, compact: true,
+				ChatMarker { kind: ChatMarkerKind::Status(ChatStatusState::Running), "Generating response…" }
+				ChatBubble { streaming: true, "Looking at the" }
+			}
+			ChatAttachment { r#type: ChatAttachmentType::Image, state: ChatAttachmentState::Uploading, name: "chart.png", progress: 62.0, on_remove: |_| {} }
+		}
+	}
+}
+
+fn d_chat_typing() -> Element {
+	rsx! {
+		div { class: "flex items-center gap-6",
+			ChatTyping {}
+			ChatTyping { label: "Searching" }
+		}
+	}
+}
+
+fn d_chat_composer() -> Element {
+	let models = vec![
+		ModelOption {
+			id: "fast".into(),
+			label: "Fast".into(),
+		},
+		ModelOption {
+			id: "deep".into(),
+			label: "Reasoning".into(),
+		},
+	];
+	rsx! {
+		div { class: "flex w-150 flex-col gap-4",
+			ChatComposer {
+				on_send: |_| {},
+				on_attach: |_| {},
+				attachments: rsx! { ChatAttachment { name: "q3-report.pdf", meta: rsx! { "PDF · 1.2 MB" }, on_remove: |_| {} } },
+				tools: rsx! { ModelChip { models: models.clone(), value: "fast", on_value_change: |_| {} } },
+				hint: rsx! { "Enter to send · Shift+Enter for a new line" },
+			}
+			ChatComposer { on_send: |_| {}, on_stop: |_| {}, streaming: true, default_value: "And the hedges?" }
+			ChatComposer { on_send: |_| {}, disabled: true, placeholder: "Sign in to chat" }
 		}
 	}
 }

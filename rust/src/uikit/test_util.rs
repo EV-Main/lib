@@ -191,6 +191,13 @@ impl Harness {
 		self.fire("keydown", id, Box::new(data));
 	}
 
+	/// Fires a `keydown` carrying its modifiers and composition state, and says
+	/// whether the default action survived, for a contract that a modifier, an
+	/// IME composition or `preventDefault` decides.
+	pub fn keyboard(&mut self, id: ElementId, data: dioxus::html::SerializedKeyboardData) -> bool {
+		self.fire("keydown", id, Box::new(data))
+	}
+
 	/// Fires an `input` that leaves `value` in the field.
 	pub fn input(&mut self, id: ElementId, value: &str) {
 		self.fire("input", id, Box::new(SerializedFormData::new(value.to_owned(), Vec::new())));
@@ -205,10 +212,13 @@ impl Harness {
 		dioxus_ssr::render(&self.dom)
 	}
 
-	fn fire(&mut self, name: &str, id: ElementId, data: Box<dyn std::any::Any>) {
-		let event = Rc::new(PlatformEventData::new(data));
-		self.dom.runtime().handle_event(name, Event::new(event, false), id);
+	/// Whether the event's default action is still enabled once it was handled.
+	fn fire(&mut self, name: &str, id: ElementId, data: Box<dyn std::any::Any>) -> bool {
+		let event: Event<dyn std::any::Any> = Event::new(Rc::new(PlatformEventData::new(data)), false);
+		// A clone shares the metadata, so it sees a handler's `prevent_default`.
+		self.dom.runtime().handle_event(name, event.clone(), id);
 		self.settle();
+		event.default_action_enabled()
 	}
 
 	fn settle(&mut self) {

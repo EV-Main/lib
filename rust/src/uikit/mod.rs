@@ -26,9 +26,10 @@ mod test_util;
 // prop are re-exported.
 pub(crate) use ev_lib_classes::*;
 pub use ev_lib_classes::{
-	Accent, AlertVariant, AsidePanelSide, BadgeVariant, BookSide, ButtonGroupOrientation, ButtonVariant, ConfirmDialogTone, DrawerDirection, EmptyMediaVariant, FieldOrientation,
-	HeaderBalanceTone, IconButtonVariant, InputGroupAddonAlign, InputGroupButtonSize, ItemMediaVariant, ItemSize, ItemVariant, OrderSide, Orientation, Polarity, ScrollBarOrientation,
-	SectionLabelTone, SettingsSectionTone, Size, StatusTone, Surface, SystemBannerTone, TableAlign, TableDensity, TableVariant, TerminalArea, ToastPosition, ToastVariant, ToggleVariant,
+	Accent, AlertVariant, AsidePanelSide, BadgeVariant, BookSide, ButtonGroupOrientation, ButtonVariant, ChatBubbleVariant, ChatStatusState, ChatToolState, ConfirmDialogTone,
+	DrawerDirection, EmptyMediaVariant, FieldOrientation, HeaderBalanceTone, IconButtonVariant, InputGroupAddonAlign, InputGroupButtonSize, ItemMediaVariant, ItemSize, ItemVariant,
+	OrderSide, Orientation, Polarity, ScrollBarOrientation, SectionLabelTone, SettingsSectionTone, Size, StatusTone, Surface, SystemBannerTone, TableAlign, TableDensity, TableVariant,
+	TerminalArea, ToastPosition, ToastVariant, ToggleVariant,
 };
 
 mod accordion;
@@ -45,6 +46,9 @@ mod button;
 mod button_group;
 mod card;
 mod carousel;
+mod chat_composer;
+mod chat_message;
+mod chat_typing;
 mod checkbox;
 mod collapsible;
 mod command_palette;
@@ -104,6 +108,9 @@ pub use button::{Button, button_classes};
 pub use button_group::{ButtonGroup, ButtonGroupSeparator, ButtonGroupText};
 pub use card::{Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle};
 pub use carousel::{Carousel, CarouselContent, CarouselEdgeFade, CarouselItem, CarouselNext, CarouselOrientation, CarouselPrevious};
+pub use chat_composer::{ChatComposer, ChatComposerLabels, ModelChip, ModelOption};
+pub use chat_message::{ChatAttachment, ChatAttachmentState, ChatAttachmentType, ChatBubble, ChatMarker, ChatMarkerKind, ChatMessage, ChatMessageRole};
+pub use chat_typing::ChatTyping;
 pub use checkbox::Checkbox;
 pub use collapsible::{Collapsible, CollapsibleContent, CollapsibleTrigger};
 pub use command::{Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut};
