@@ -7,6 +7,10 @@ use crate::{
 
 /// Picks up the id and `aria-*` of an enclosing
 /// [`FormControl`](crate::uikit::FormControl); outside one, all three are absent.
+///
+/// `aria_label`, `rows`, `onkeydown` and `onmounted` are opt-in for a field
+/// that a composite part owns: a chat composer names its field without a
+/// label, starts it one line tall, sends on Enter, and puts focus back on it.
 #[component]
 pub fn Textarea(
 	#[props(default)] size: Size,
@@ -17,6 +21,10 @@ pub fn Textarea(
 	name: Option<String>,
 	#[props(default)] required: bool,
 	oninput: Option<EventHandler<FormEvent>>,
+	aria_label: Option<String>,
+	rows: Option<u32>,
+	onkeydown: Option<EventHandler<KeyboardEvent>>,
+	onmounted: Option<EventHandler<MountedEvent>>,
 ) -> Element {
 	let cls = cn!(TEXTAREA_BASE, textarea_size_class(size), class);
 	let form = try_consume_context::<Signal<FormControlContext>>().map(|ctx| ctx.read().clone());
@@ -29,12 +37,16 @@ pub fn Textarea(
 			id: form.as_ref().map(|f| f.id.clone()),
 			"aria-describedby": form.as_ref().map(|f| f.described_by.clone()),
 			"aria-invalid": form.as_ref().map(|f| f.invalid.to_string()),
+			"aria-label": aria_label,
+			rows: rows.map(|r| r.to_string()),
 			name,
 			required,
 			placeholder,
 			disabled,
 			value,
 			oninput: move |e| { if let Some(h) = oninput { h.call(e); } },
+			onkeydown: move |e| { if let Some(h) = onkeydown { h.call(e); } },
+			onmounted: move |e| { if let Some(h) = onmounted { h.call(e); } },
 		}
 	}
 }
