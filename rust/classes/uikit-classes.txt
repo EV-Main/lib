@@ -29,6 +29,7 @@
 [overflow-wrap:anywhere]
 absolute inset-0 h-full w-full opacity-0 disabled:cursor-not-allowed
 absolute inset-0 top-1/2 shrink-0 bg-border h-px w-full
+absolute right-3 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-(--control-radius) text-ink-mid outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring
 absolute size-8 rounded-full
 accordion-content
 accordion-header
@@ -112,6 +113,7 @@ bg-accent-trace text-on-accent-trace hover:bg-accent-trace/90 focus-visible:ring
 bg-accent-warn
 bg-accent-warn 
 bg-accent-warn text-on-accent-warn hover:bg-accent-warn/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+bg-accent-warn/10
 bg-active
 bg-active text-ink hover:bg-active
 bg-background border-border-strong data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-overlay transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=closed]:fill-mode-forwards outline-hidden
@@ -333,6 +335,7 @@ data-slot=\
 data-stack
 data-state
 data-state=\
+data-testid
 data-today
 data-today=\
 data-tone
@@ -446,6 +449,7 @@ flex min-w-0 flex-1 flex-col gap-6
 flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border-dashed p-6 text-center text-balance md:p-12
 flex min-w-0 flex-col gap-0.5
 flex min-w-0 flex-col gap-0.5 sm:w-52 sm:shrink-0
+flex shrink-0
 flex shrink-0 items-center justify-center gap-2 group-has-[[data-slot=item-description]]/item:self-start [&_svg]:pointer-events-none group-has-[[data-slot=item-description]]/item:translate-y-0.5
 flex shrink-0 items-center justify-center mb-2 [&_svg]:pointer-events-none [&_svg]:shrink-0
 flex size-7 items-center justify-center
@@ -483,6 +487,7 @@ focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-rin
 font-display [font-weight:700] max-w-[54rem] tracking-[-0.005em] leading-[1.16] md:leading-[1.14] text-[calc(1.5625rem*var(--display-scale))] md:text-[calc(2.625rem*var(--display-scale))]
 font-medium
 font-medium text-[10px] md:text-[11.5px] tracking-[0.15em] md:tracking-[0.16em] text-primary-ink [.bg-primary_&]:text-on-primary
+font-medium text-primary-ink
 font-semibold
 font-semibold text-positive
 font-serif font-bold text-base tracking-wider text-ink
@@ -641,6 +646,7 @@ min-h-16
 min-h-20
 min-h-20 px-3 py-2 text-base pointer-fine:text-base
 min-h-40
+min-w-0
 min-w-0 flex-auto shrink-0 rounded-none shadow-none first:rounded-l-[var(--control-radius)] last:rounded-r-[var(--control-radius)] focus:z-10 focus-visible:z-10 data-[variant=outline]:-ml-px data-[variant=outline]:first:ml-0 data-[state=on]:z-10
 min-w-0 shrink-0 grow-0 basis-full
 min-w-[max(8rem,var(--select-trigger-width,0px))] max-w-[min(24rem,calc(100vw-2rem))] max-h-[min(24rem,calc(100dvh-2rem))]
@@ -724,6 +730,8 @@ pt-0 pb-4
 pt-4
 px-0
 px-1.5
+px-2
+px-2 py-1 text-ink-soft
 px-2 py-1.5
 px-3
 px-4
@@ -747,6 +755,7 @@ radio-group-item
 relative
 relative -my-2 h-5 text-body group-data-[variant=outline]/field-group:-mb-2
 relative flex items-center gap-2 has-disabled:opacity-40
+relative flex min-h-8 items-center justify-center gap-2 border-b border-border bg-card py-1.5 pl-4 pr-10 text-center text-body text-ink
 relative flex w-full min-w-0 flex-col p-2
 relative flex w-full touch-none items-center select-none data-[disabled]:opacity-40 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col
 relative size-9 shrink-0 p-0 select-none
@@ -768,6 +777,7 @@ section-descriptor
 section-descriptor-body
 section-descriptor-title
 section-head
+section-label
 select-content
 select-group
 select-item
@@ -842,6 +852,7 @@ stroke-linecap
 stroke-linejoin
 stroke-width
 switch-thumb
+system-banner
 table-body
 table-caption
 table-card
@@ -942,6 +953,7 @@ top-4 left-4
 top-4 right-4
 top-left
 tr:hover]:bg-transparent
+tracking-widest
 trades-tape-row
 transform: translateX(-{}%)
 translateX(-100%)

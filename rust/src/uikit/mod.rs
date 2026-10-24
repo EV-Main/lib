@@ -27,8 +27,8 @@ mod test_util;
 pub(crate) use ev_lib_classes::*;
 pub use ev_lib_classes::{
 	Accent, AlertVariant, BadgeVariant, BookSide, ButtonGroupOrientation, ButtonVariant, DrawerDirection, EmptyMediaVariant, FieldOrientation, IconButtonVariant, InputGroupAddonAlign,
-	InputGroupButtonSize, ItemMediaVariant, ItemSize, ItemVariant, OrderSide, Orientation, Polarity, ScrollBarOrientation, SettingsSectionTone, Size, StatusTone, Surface, TableAlign,
-	TableDensity, TableVariant, TerminalArea, ToastPosition, ToastVariant, ToggleVariant,
+	InputGroupButtonSize, ItemMediaVariant, ItemSize, ItemVariant, OrderSide, Orientation, Polarity, ScrollBarOrientation, SectionLabelTone, SettingsSectionTone, Size, StatusTone, Surface,
+	SystemBannerTone, TableAlign, TableDensity, TableVariant, TerminalArea, ToastPosition, ToastVariant, ToggleVariant,
 };
 
 mod accordion;
@@ -62,6 +62,7 @@ mod progress;
 mod radio_group;
 mod scroll_area;
 mod section_descriptor;
+mod section_label;
 mod separator;
 mod settings;
 mod sidebar;
@@ -70,6 +71,7 @@ mod slider;
 mod spinner;
 mod status_item;
 mod switch;
+mod system_banner;
 mod table;
 mod tabs;
 mod terminal;
@@ -110,6 +112,7 @@ pub use progress::Progress;
 pub use radio_group::{RadioGroup, RadioGroupItem};
 pub use scroll_area::{ScrollArea, ScrollBar};
 pub use section_descriptor::SectionDescriptor;
+pub use section_label::{SectionLabel, SectionLabelAs};
 pub use select::{Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue};
 pub use separator::Separator;
 pub use settings::{SettingsLayout, SettingsRow, SettingsSection};
@@ -122,6 +125,7 @@ pub use slider::{Slider, SliderOrientation};
 pub use spinner::Spinner;
 pub use status_item::{StatusDot, StatusItem};
 pub use switch::Switch;
+pub use system_banner::{SystemBanner, SystemBannerLabels};
 pub use table::{Table, TableBody, TableCaption, TableCard, TableCell, TableFooter, TableHead, TableHeader, TableRow};
 pub use tabs::{Tabs, TabsContent, TabsList, TabsOrientation, TabsTrigger};
 pub use terminal::{

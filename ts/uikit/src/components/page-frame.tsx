@@ -1,8 +1,9 @@
 import * as React from "react";
 import { cn } from "../lib/cn";
+import { SECTION_LABEL_BASE, sectionLabelToneClasses, type SectionLabelTone } from "../generated/section-label";
 import type { ShellBreakpoint } from "./app-shell";
 
-export type SectionLabelTone = "muted" | "accent";
+export type { SectionLabelTone };
 
 export interface SectionLabelProps extends React.HTMLAttributes<HTMLElement> {
   as?: React.ElementType;
@@ -15,11 +16,7 @@ export function SectionLabel({ as: Comp = "p", tone = "muted", className, ...pro
   return (
     <Comp
       data-slot="section-label"
-      className={cn(
-        "text-body-s",
-        tone === "accent" ? "font-medium text-primary-ink" : "px-2 py-1 text-ink-soft",
-        className,
-      )}
+      className={cn(SECTION_LABEL_BASE, sectionLabelToneClasses[tone], className)}
       {...props}
     />
   );

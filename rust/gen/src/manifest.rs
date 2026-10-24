@@ -19,6 +19,8 @@ pub fn manifest() -> Vec<(&'static str, Vec<Ts>)> {
 		("status-item", status_item()),
 		("form-row", form_row()),
 		("settings", uikit_settings()),
+		("system-banner", system_banner()),
+		("section-label", section_label()),
 		("focus", focus()),
 		("switch", switch()),
 		("checkbox", checkbox()),
@@ -1401,6 +1403,54 @@ fn uikit_settings() -> Vec<Ts> {
 			value: SETTINGS_ROW_INLINE,
 		},
 		table::<SettingsSectionTone>("settingsSectionToneClasses", "SettingsSectionTone"),
+	]
+}
+
+fn system_banner() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "SYSTEM_BANNER_BASE",
+			value: SYSTEM_BANNER_BASE,
+		},
+		Ts::Const {
+			name: "SYSTEM_BANNER_ICON",
+			value: SYSTEM_BANNER_ICON,
+		},
+		Ts::Const {
+			name: "SYSTEM_BANNER_GLYPH",
+			value: SYSTEM_BANNER_GLYPH,
+		},
+		Ts::Const {
+			name: "SYSTEM_BANNER_MESSAGE",
+			value: SYSTEM_BANNER_MESSAGE,
+		},
+		Ts::Const {
+			name: "SYSTEM_BANNER_TITLE",
+			value: SYSTEM_BANNER_TITLE,
+		},
+		Ts::Const {
+			name: "SYSTEM_BANNER_BODY_AFTER_TITLE",
+			value: SYSTEM_BANNER_BODY_AFTER_TITLE,
+		},
+		Ts::Const {
+			name: "SYSTEM_BANNER_ACTION",
+			value: SYSTEM_BANNER_ACTION,
+		},
+		Ts::Const {
+			name: "SYSTEM_BANNER_DISMISS",
+			value: SYSTEM_BANNER_DISMISS,
+		},
+		table::<SystemBannerTone>("systemBannerIconToneClasses", "SystemBannerTone"),
+	]
+}
+
+fn section_label() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "SECTION_LABEL_BASE",
+			value: SECTION_LABEL_BASE,
+		},
+		table::<SectionLabelTone>("sectionLabelToneClasses", "SectionLabelTone"),
 	]
 }
 

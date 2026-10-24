@@ -36,6 +36,7 @@ const GALLERY: &[(&str, fn() -> Element)] = &[
 	("Toggle", d_toggle), ("ToggleGroup", d_toggle_group), ("Tabs", d_tabs),
 	("IconButton", d_icon_button), ("StatusItem", d_status_item),
 	("FormRow", d_form_row), ("Settings", d_settings),
+	("SystemBanner", d_system_banner), ("SectionLabel", d_section_label),
 	("Accordion", d_accordion), ("Collapsible", d_collapsible), ("InputGroup", d_input_group),
 	("InputOTP", d_input_otp), ("Carousel", d_carousel), ("Calendar", d_calendar), ("DateTimePicker", d_date_time_picker),
 	("Tooltip", d_tooltip), ("Popover", d_popover), ("HoverCard", d_hover_card),
@@ -699,6 +700,25 @@ fn d_settings() -> Element {
 			SettingsSection { title: rsx! { "Delete account" }, tone: SettingsSectionTone::Danger,
 				description: rsx! { "This cannot be undone" },
 			}
+		}
+	}
+}
+
+fn d_system_banner() -> Element {
+	rsx! {
+		div { class: "flex w-full flex-col gap-2",
+			SystemBanner { tone: SystemBannerTone::Warn, title: rsx! { "Maintenance" }, "Read-only from 02:00 to 04:00 UTC" }
+			SystemBanner { action: rsx! { a { href: "#", class: "text-body text-primary-ink underline", "Details" } }, on_dismiss: |_| {}, "New reports are available" }
+			SystemBanner { tone: SystemBannerTone::Neutral, icon: rsx! {}, "Plain notice without a glyph" }
+		}
+	}
+}
+
+fn d_section_label() -> Element {
+	rsx! {
+		div { class: "flex flex-col gap-2",
+			SectionLabel { "General" }
+			SectionLabel { r#as: SectionLabelAs::H2, tone: SectionLabelTone::Accent, "Portfolio" }
 		}
 	}
 }

@@ -2,9 +2,21 @@
 
 import * as React from "react";
 import { cn } from "../lib/cn";
+import {
+  SYSTEM_BANNER_ACTION,
+  SYSTEM_BANNER_BASE,
+  SYSTEM_BANNER_BODY_AFTER_TITLE,
+  SYSTEM_BANNER_DISMISS,
+  SYSTEM_BANNER_GLYPH,
+  SYSTEM_BANNER_ICON,
+  SYSTEM_BANNER_MESSAGE,
+  SYSTEM_BANNER_TITLE,
+  systemBannerIconToneClasses,
+  type SystemBannerTone,
+} from "../generated/system-banner";
 import { CloseIcon, InfoIcon, TriangleAlertIcon } from "./shell-icons";
 
-export type SystemBannerTone = "neutral" | "primary" | "info" | "warn";
+export type { SystemBannerTone };
 
 export interface SystemBannerLabels {
   /** The close button. Default `"Dismiss"`. */
@@ -25,13 +37,6 @@ export interface SystemBannerProps extends Omit<React.ComponentProps<"div">, "ti
   labels?: SystemBannerLabels;
 }
 
-const ICON_TONE: Record<SystemBannerTone, string> = {
-  neutral: "text-ink-soft",
-  primary: "text-primary-ink",
-  info: "text-accent-info-ink",
-  warn: "text-accent-warn-ink",
-};
-
 /**
  * A slim full-width strip above the page — presentation only: where its state
  * comes from, and whether a dismissal sticks, are the caller's. Put it in
@@ -49,33 +54,30 @@ export function SystemBanner({
   ...props
 }: SystemBannerProps) {
   const glyph =
-    icon !== undefined ? icon : tone === "warn" ? <TriangleAlertIcon className="size-4" /> : <InfoIcon className="size-4" />;
+    icon !== undefined ? icon : tone === "warn" ? <TriangleAlertIcon className={SYSTEM_BANNER_GLYPH} /> : <InfoIcon className={SYSTEM_BANNER_GLYPH} />;
   return (
     <div
       data-slot="system-banner"
       data-tone={tone}
       role="status"
-      className={cn(
-        "relative flex min-h-8 items-center justify-center gap-2 border-b border-border bg-card py-1.5 pl-4 pr-10 text-center text-body text-ink",
-        className,
-      )}
+      className={cn(SYSTEM_BANNER_BASE, className)}
       {...props}
     >
-      {glyph !== null && <span className={cn("flex shrink-0", ICON_TONE[tone])}>{glyph}</span>}
-      <div className="min-w-0">
-        {title !== undefined && <span className="font-medium">{title}</span>}
+      {glyph !== null && <span className={cn(SYSTEM_BANNER_ICON, systemBannerIconToneClasses[tone])}>{glyph}</span>}
+      <div className={SYSTEM_BANNER_MESSAGE}>
+        {title !== undefined && <span className={SYSTEM_BANNER_TITLE}>{title}</span>}
         {title !== undefined && children !== undefined && " — "}
-        {children !== undefined && <span className={cn(title !== undefined && "text-ink-mid")}>{children}</span>}
+        {children !== undefined && <span className={cn(title !== undefined && SYSTEM_BANNER_BODY_AFTER_TITLE)}>{children}</span>}
       </div>
-      {action !== undefined && <span className="shrink-0">{action}</span>}
+      {action !== undefined && <span className={SYSTEM_BANNER_ACTION}>{action}</span>}
       {onDismiss && (
         <button
           type="button"
           aria-label={labels.dismiss ?? "Dismiss"}
           onClick={onDismiss}
-          className="absolute right-3 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-(--control-radius) text-ink-mid outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring"
+          className={SYSTEM_BANNER_DISMISS}
         >
-          <CloseIcon className="size-4" />
+          <CloseIcon className={SYSTEM_BANNER_GLYPH} />
         </button>
       )}
     </div>

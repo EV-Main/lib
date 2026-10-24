@@ -43,6 +43,7 @@ mod popover;
 mod progress;
 mod radio_group;
 mod scroll_area;
+mod section_label;
 mod select;
 mod separator;
 mod settings;
@@ -54,6 +55,7 @@ mod slider;
 mod sonner;
 mod status_item;
 mod switch;
+mod system_banner;
 mod table;
 mod tabs;
 mod terminal;
@@ -129,6 +131,7 @@ pub use popover::POPOVER_CONTENT;
 pub use progress::{PROGRESS_INDICATOR, PROGRESS_TRACK};
 pub use radio_group::{RADIO_GROUP_ITEM, RADIO_GROUP_ROOT};
 pub use scroll_area::{SCROLL_AREA_THUMB, SCROLL_AREA_VIEWPORT, SCROLLBAR_BASE, ScrollBarOrientation};
+pub use section_label::{SECTION_LABEL_BASE, SectionLabelTone};
 pub use select::{
 	NATIVE_SELECT_BASE, SELECT_CONTENT_BOUNDS, SELECT_CONTENT_SURFACE, SELECT_ITEM, SELECT_LABEL, SELECT_LIST, SELECT_SEPARATOR, SELECT_TRIGGER_BASE, native_select_size_class,
 	select_trigger_size_class,
@@ -152,6 +155,10 @@ pub use slider::{SLIDER_RANGE, SLIDER_ROOT, SLIDER_THUMB, SLIDER_TRACK};
 pub use sonner::{TOAST_BASE, TOAST_CLOSE, TOAST_CONTENT, TOAST_TITLE, TOASTER_BASE, ToastPosition, ToastVariant};
 pub use status_item::{STATUS_DOT_BASE, STATUS_ITEM_BASE, STATUS_ITEM_VALUE, StatusTone};
 pub use switch::{SWITCH_BASE, SWITCH_THUMB};
+pub use system_banner::{
+	SYSTEM_BANNER_ACTION, SYSTEM_BANNER_BASE, SYSTEM_BANNER_BODY_AFTER_TITLE, SYSTEM_BANNER_DISMISS, SYSTEM_BANNER_GLYPH, SYSTEM_BANNER_ICON, SYSTEM_BANNER_MESSAGE, SYSTEM_BANNER_TITLE,
+	SystemBannerTone,
+};
 pub use table::{TABLE, TABLE_BODY, TABLE_CAPTION, TABLE_CARD, TABLE_CELL, TABLE_CONTAINER, TABLE_FOOTER, TABLE_HEAD, TABLE_HEADER, TABLE_ROW, TableAlign, TableDensity, TableVariant};
 pub use tabs::{TABS_CONTENT, TABS_LIST, TABS_ROOT, TABS_TRIGGER};
 pub use terminal::{
