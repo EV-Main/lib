@@ -1,7 +1,7 @@
 use std::rc::Rc;
 
 use dioxus::{
-	dioxus_core::{Mutation, Mutations},
+	dioxus_core::{ElementId, Mutation, Mutations},
 	html::{
 		PlatformEventData, SerializedFormData,
 		input_data::keyboard_types::{Code, Location, Modifiers},
@@ -145,6 +145,98 @@ pub fn render_after_settled_keys(app: fn() -> Element, keys: &[Key]) -> String {
 pub fn render_after_keys_on_queued_effects(app: fn() -> Element, keys: &[Key]) -> String {
 	keys_settling(app, keys, false)
 }
+/// A mounted app that fires one event at one element, for a contract that a
+/// sweep at every element would blur: a scrim, a cancel and a confirm all
+/// close a dialog, so only a click on one of them says which one did it.
+///
+/// Elements are found by what the mutations reveal about them: the events they
+/// listen for, and their dynamic attributes. Effects settle after every event.
+pub struct Harness {
+	dom: VirtualDom,
+	listeners: Vec<(String, ElementId)>,
+	attributes: Vec<(&'static str, ElementId)>,
+}
+impl Harness {
+	pub fn new(app: fn() -> Element) -> Self {
+		dioxus::html::set_event_converter(Box::new(dioxus::html::SerializedHtmlEventConverter));
+		let mut harness = Self {
+			dom: VirtualDom::new(app),
+			listeners: Vec::new(),
+			attributes: Vec::new(),
+		};
+		let mut mutations = Mutations::default();
+		harness.dom.rebuild(&mut mutations);
+		harness.record(mutations);
+		harness.settle();
+		harness
+	}
+
+	/// The elements that listen for `event`, in the order they were created.
+	pub fn listening(&self, event: &str) -> Vec<ElementId> {
+		dedup(self.listeners.iter().filter(|(name, _)| name == event).map(|(_, id)| *id))
+	}
+
+	/// The elements that carry the dynamic attribute `name`, in the order they
+	/// were created.
+	pub fn with_attribute(&self, name: &str) -> Vec<ElementId> {
+		dedup(self.attributes.iter().filter(|(n, _)| *n == name).map(|(_, id)| *id))
+	}
+
+	pub fn click(&mut self, id: ElementId) {
+		self.fire("click", id, Box::new(dioxus::html::SerializedMouseData::default()));
+	}
+
+	pub fn key(&mut self, id: ElementId, key: Key) {
+		let data = dioxus::html::SerializedKeyboardData::new(key, Code::Unidentified, Location::Standard, false, Modifiers::empty(), false);
+		self.fire("keydown", id, Box::new(data));
+	}
+
+	/// Fires a form event (`submit`, `reset`) with no field values.
+	pub fn form(&mut self, event: &str, id: ElementId) {
+		self.fire(event, id, Box::new(SerializedFormData::new(String::new(), Vec::new())));
+	}
+
+	pub fn html(&self) -> String {
+		dioxus_ssr::render(&self.dom)
+	}
+
+	fn fire(&mut self, name: &str, id: ElementId, data: Box<dyn std::any::Any>) {
+		let event = Rc::new(PlatformEventData::new(data));
+		self.dom.runtime().handle_event(name, Event::new(event, false), id);
+		self.settle();
+	}
+
+	fn settle(&mut self) {
+		// Three passes, one more than `render_with_effects`: an effect that a
+		// prop change re-runs is woken by the render, queued on the next pass,
+		// and what it dirtied renders on the one after.
+		for _ in 0..3 {
+			let mut mutations = Mutations::default();
+			self.dom.render_immediate(&mut mutations);
+			self.record(mutations);
+		}
+	}
+
+	fn record(&mut self, mutations: Mutations) {
+		for edit in mutations.edits {
+			match edit {
+				Mutation::NewEventListener { name, id } => self.listeners.push((name, id)),
+				Mutation::SetAttribute { name, id, .. } => self.attributes.push((name, id)),
+				_ => {}
+			}
+		}
+	}
+}
+fn dedup(ids: impl Iterator<Item = ElementId>) -> Vec<ElementId> {
+	let mut out: Vec<ElementId> = Vec::new();
+	for id in ids {
+		if !out.contains(&id) {
+			out.push(id);
+		}
+	}
+	out
+}
+
 fn mount(app: fn() -> Element) -> VirtualDom {
 	// Listeners receive `PlatformEventData` and a converter turns it back into
 	// the concrete data. The web/desktop platforms install one; under

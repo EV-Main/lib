@@ -24,6 +24,9 @@ pub fn manifest() -> Vec<(&'static str, Vec<Ts>)> {
 		("workspace-tab", workspace_tab()),
 		("account-list", account_list()),
 		("account-settings-dialog", account_settings_dialog()),
+		("popover-form", popover_form()),
+		("confirm-dialog", confirm_dialog()),
+		("key-value", key_value()),
 		("focus", focus()),
 		("switch", switch()),
 		("checkbox", checkbox()),
@@ -1608,6 +1611,106 @@ fn account_settings_dialog() -> Vec<Ts> {
 		Ts::Const {
 			name: "ACCOUNT_SETTINGS_DIALOG_CLOSE",
 			value: ACCOUNT_SETTINGS_DIALOG_CLOSE,
+		},
+	]
+}
+
+fn popover_form() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "POPOVER_FORM_CONTENT",
+			value: POPOVER_FORM_CONTENT,
+		},
+		Ts::Const {
+			name: "POPOVER_FORM_FORM",
+			value: POPOVER_FORM_FORM,
+		},
+		Ts::Const {
+			name: "POPOVER_FORM_TITLE",
+			value: POPOVER_FORM_TITLE,
+		},
+		Ts::Const {
+			name: "POPOVER_FORM_FIELDS",
+			value: POPOVER_FORM_FIELDS,
+		},
+		Ts::Const {
+			name: "POPOVER_FORM_ACTIONS",
+			value: POPOVER_FORM_ACTIONS,
+		},
+	]
+}
+
+fn confirm_dialog() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "CONFIRM_DIALOG_CONTENT",
+			value: CONFIRM_DIALOG_CONTENT,
+		},
+		Ts::Const {
+			name: "CONFIRM_DIALOG_HEADER",
+			value: CONFIRM_DIALOG_HEADER,
+		},
+		Ts::Const {
+			name: "CONFIRM_DIALOG_ICON",
+			value: CONFIRM_DIALOG_ICON,
+		},
+		Ts::Const {
+			name: "CONFIRM_DIALOG_TEXT",
+			value: CONFIRM_DIALOG_TEXT,
+		},
+		Ts::Const {
+			name: "CONFIRM_DIALOG_TITLE",
+			value: CONFIRM_DIALOG_TITLE,
+		},
+		Ts::Const {
+			name: "CONFIRM_DIALOG_DESCRIPTION",
+			value: CONFIRM_DIALOG_DESCRIPTION,
+		},
+		Ts::Const {
+			name: "CONFIRM_DIALOG_ERROR",
+			value: CONFIRM_DIALOG_ERROR,
+		},
+		Ts::Const {
+			name: "CONFIRM_DIALOG_FOOTER",
+			value: CONFIRM_DIALOG_FOOTER,
+		},
+		Ts::Const {
+			name: "CONFIRM_DIALOG_PENDING",
+			value: CONFIRM_DIALOG_PENDING,
+		},
+		Ts::Const {
+			name: "CONFIRM_DIALOG_SPINNER",
+			value: CONFIRM_DIALOG_SPINNER,
+		},
+		table::<ConfirmDialogTone>("confirmDialogIconToneClasses", "ConfirmDialogTone"),
+	]
+}
+
+fn key_value() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "KEY_VALUE_BASE",
+			value: KEY_VALUE_BASE,
+		},
+		Ts::Const {
+			name: "KEY_VALUE_LABEL",
+			value: KEY_VALUE_LABEL,
+		},
+		Ts::Const {
+			name: "KEY_VALUE_ROW",
+			value: KEY_VALUE_ROW,
+		},
+		Ts::Const {
+			name: "KEY_VALUE_VALUE",
+			value: KEY_VALUE_VALUE,
+		},
+		Ts::Const {
+			name: "KEY_VALUE_COPY",
+			value: KEY_VALUE_COPY,
+		},
+		Ts::Const {
+			name: "KEY_VALUE_STATUS",
+			value: KEY_VALUE_STATUS,
 		},
 	]
 }

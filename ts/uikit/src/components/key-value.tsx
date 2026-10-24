@@ -2,6 +2,14 @@
 
 import * as React from "react";
 import { cn } from "../lib/cn";
+import {
+  KEY_VALUE_BASE,
+  KEY_VALUE_COPY,
+  KEY_VALUE_LABEL,
+  KEY_VALUE_ROW,
+  KEY_VALUE_STATUS,
+  KEY_VALUE_VALUE,
+} from "../generated/key-value";
 import { UiIcon } from "./ui-icons";
 
 export interface KeyValueLabels {
@@ -63,22 +71,22 @@ export function KeyValue({ label, value, copyText, labels = {}, className, ...pr
   };
 
   return (
-    <div data-slot="key-value" className={cn("flex min-w-0 flex-col gap-0.5", className)} {...props}>
-      <span className="text-body-s text-ink-mid">{label}</span>
-      <div className="flex min-w-0 items-center gap-1.5">
-        <span className="min-w-0 truncate text-body-l text-ink">{value}</span>
+    <div data-slot="key-value" className={cn(KEY_VALUE_BASE, className)} {...props}>
+      <span className={KEY_VALUE_LABEL}>{label}</span>
+      <div className={KEY_VALUE_ROW}>
+        <span className={KEY_VALUE_VALUE}>{value}</span>
         {copyText !== undefined && (
           <button
             type="button"
             aria-label={labels.copy ?? (typeof label === "string" ? `Copy ${label}` : "Copy")}
             onClick={copy}
-            className="inline-flex size-6 shrink-0 items-center justify-center rounded-(--control-radius) text-ink-soft outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring"
+            className={KEY_VALUE_COPY}
           >
             <UiIcon name={copied ? "check" : "copy"} />
           </button>
         )}
       </div>
-      <span role="status" aria-live="polite" className="sr-only">
+      <span role="status" aria-live="polite" className={KEY_VALUE_STATUS}>
         {copied ? (labels.copied ?? "Copied") : ""}
       </span>
     </div>

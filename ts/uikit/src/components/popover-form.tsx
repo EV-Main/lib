@@ -2,6 +2,13 @@
 
 import * as React from "react";
 import { cn } from "../lib/cn";
+import {
+  POPOVER_FORM_ACTIONS,
+  POPOVER_FORM_CONTENT,
+  POPOVER_FORM_FIELDS,
+  POPOVER_FORM_FORM,
+  POPOVER_FORM_TITLE,
+} from "../generated/popover-form";
 import { useControllableState } from "../primitives/use-controllable-state";
 import { Button } from "./button";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
@@ -50,9 +57,9 @@ export function PopoverForm({
   return (
     <Popover open={isOpen} onOpenChange={setOpen}>
       <PopoverTrigger asChild>{trigger}</PopoverTrigger>
-      <PopoverContent align="start" className={cn("w-70 p-2", className)} aria-labelledby={titleId} role="dialog">
+      <PopoverContent align="start" className={cn(POPOVER_FORM_CONTENT, className)} aria-labelledby={titleId} role="dialog">
         <form
-          className="flex flex-col gap-2.5 px-0 py-1.5"
+          className={POPOVER_FORM_FORM}
           onSubmit={(e) => {
             e.preventDefault();
             onSubmit?.(e);
@@ -60,11 +67,11 @@ export function PopoverForm({
           }}
           onReset={() => onReset?.()}
         >
-          <h3 id={titleId} className="px-0 text-h3 font-medium text-ink">
+          <h3 id={titleId} className={POPOVER_FORM_TITLE}>
             {title}
           </h3>
-          <div className="flex flex-col gap-2.5">{children}</div>
-          <div className="flex justify-end gap-1.5">
+          <div className={POPOVER_FORM_FIELDS}>{children}</div>
+          <div className={POPOVER_FORM_ACTIONS}>
             <Button type="reset" variant="ghost" size="sm">
               {labels.reset ?? "Reset"}
             </Button>

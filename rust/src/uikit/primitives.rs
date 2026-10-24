@@ -441,6 +441,32 @@ pub(crate) fn text_of(children: &Element) -> String {
 	}
 	out
 }
+/// The text of `children` when they are nothing but text — the Rust side of
+/// the TS `typeof node === "string"`, for a label a name is built from. Any
+/// element or component makes it `None`.
+pub(crate) fn plain_text_of(children: &Element) -> Option<String> {
+	let node = children.as_ref().ok()?;
+	let mut out = String::new();
+	plain_vnode_text(node, &mut out).then_some(out)
+}
+fn plain_vnode_text(node: &VNode, out: &mut String) -> bool {
+	node.template.roots.iter().all(|root| match root {
+		TemplateNode::Element { .. } => false,
+		TemplateNode::Text { text } => {
+			out.push_str(text);
+			true
+		}
+		TemplateNode::Dynamic { id } => match node.dynamic_nodes.get(*id) {
+			Some(DynamicNode::Text(text)) => {
+				out.push_str(&text.value);
+				true
+			}
+			Some(DynamicNode::Fragment(nodes)) => nodes.iter().all(|n| plain_vnode_text(n, out)),
+			Some(DynamicNode::Placeholder(_)) => true,
+			Some(DynamicNode::Component(_)) | None => false,
+		},
+	})
+}
 fn vnode_text(node: &VNode, out: &mut String) {
 	for root in node.template.roots.iter() {
 		template_text(node, root, out);

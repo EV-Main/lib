@@ -26,9 +26,9 @@ mod test_util;
 // prop are re-exported.
 pub(crate) use ev_lib_classes::*;
 pub use ev_lib_classes::{
-	Accent, AlertVariant, BadgeVariant, BookSide, ButtonGroupOrientation, ButtonVariant, DrawerDirection, EmptyMediaVariant, FieldOrientation, IconButtonVariant, InputGroupAddonAlign,
-	InputGroupButtonSize, ItemMediaVariant, ItemSize, ItemVariant, OrderSide, Orientation, Polarity, ScrollBarOrientation, SectionLabelTone, SettingsSectionTone, Size, StatusTone, Surface,
-	SystemBannerTone, TableAlign, TableDensity, TableVariant, TerminalArea, ToastPosition, ToastVariant, ToggleVariant,
+	Accent, AlertVariant, BadgeVariant, BookSide, ButtonGroupOrientation, ButtonVariant, ConfirmDialogTone, DrawerDirection, EmptyMediaVariant, FieldOrientation, IconButtonVariant,
+	InputGroupAddonAlign, InputGroupButtonSize, ItemMediaVariant, ItemSize, ItemVariant, OrderSide, Orientation, Polarity, ScrollBarOrientation, SectionLabelTone, SettingsSectionTone, Size,
+	StatusTone, Surface, SystemBannerTone, TableAlign, TableDensity, TableVariant, TerminalArea, ToastPosition, ToastVariant, ToggleVariant,
 };
 
 mod accordion;
@@ -46,6 +46,7 @@ mod card;
 mod carousel;
 mod checkbox;
 mod collapsible;
+mod confirm_dialog;
 mod container;
 mod empty;
 mod field;
@@ -57,9 +58,11 @@ mod input_group;
 mod input_otp;
 mod item;
 mod kbd;
+mod key_value;
 mod label;
 mod logo;
 mod pagination;
+mod popover_form;
 mod progress;
 mod radio_group;
 mod scroll_area;
@@ -98,6 +101,7 @@ pub use carousel::{Carousel, CarouselContent, CarouselEdgeFade, CarouselItem, Ca
 pub use checkbox::Checkbox;
 pub use collapsible::{Collapsible, CollapsibleContent, CollapsibleTrigger};
 pub use command::{Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut};
+pub use confirm_dialog::{ConfirmDialog, ConfirmDialogLabels};
 pub use container::Container;
 pub use drawer::{Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerTitle, DrawerTrigger};
 pub use empty::{Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle};
@@ -110,9 +114,13 @@ pub use input_group::{InputGroup, InputGroupAddon, InputGroupButton, InputGroupI
 pub use input_otp::{InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot};
 pub use item::{Item, ItemActions, ItemContent, ItemDescription, ItemFooter, ItemGroup, ItemHeader, ItemMedia, ItemSeparator, ItemTitle};
 pub use kbd::{Kbd, KbdGroup};
+#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
+pub use key_value::write_clipboard;
+pub use key_value::{KeyValue, KeyValueLabels};
 pub use label::Label;
 pub use logo::Logo;
 pub use pagination::{Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious};
+pub use popover_form::{PopoverForm, PopoverFormLabels};
 pub use progress::Progress;
 pub use radio_group::{RadioGroup, RadioGroupItem};
 pub use scroll_area::{ScrollArea, ScrollBar};

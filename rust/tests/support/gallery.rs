@@ -38,6 +38,7 @@ const GALLERY: &[(&str, fn() -> Element)] = &[
 	("FormRow", d_form_row), ("Settings", d_settings),
 	("SystemBanner", d_system_banner), ("SectionLabel", d_section_label),
 	("WorkspaceTabs", d_workspace_tabs), ("AccountList", d_account_list), ("AccountSettingsDialog", d_account_settings_dialog),
+	("PopoverForm", d_popover_form), ("ConfirmDialog", d_confirm_dialog), ("KeyValue", d_key_value),
 	("Accordion", d_accordion), ("Collapsible", d_collapsible), ("InputGroup", d_input_group),
 	("InputOTP", d_input_otp), ("Carousel", d_carousel), ("Calendar", d_calendar), ("DateTimePicker", d_date_time_picker),
 	("Tooltip", d_tooltip), ("Popover", d_popover), ("HoverCard", d_hover_card),
@@ -781,6 +782,39 @@ fn d_account_settings_dialog() -> Element {
 			description: rsx! { "Manage your profile and sign-in." },
 			sections,
 			sidebar_footer: rsx! { Button { variant: ButtonVariant::Ghost, "Sign out" } },
+		}
+	}
+}
+
+fn d_popover_form() -> Element {
+	rsx! {
+		PopoverForm { default_open: true, trigger: rsx! { "Filter" }, title: rsx! { "Status filter" },
+			label { class: "flex items-center gap-2 text-body text-ink",
+				Checkbox { default_checked: true }
+				"Only favorites"
+			}
+		}
+	}
+}
+
+fn d_confirm_dialog() -> Element {
+	rsx! {
+		ConfirmDialog {
+			default_open: true,
+			tone: ConfirmDialogTone::Danger,
+			title: rsx! { "Delete workspace?" },
+			description: rsx! { "This cannot be undone." },
+			confirm_label: rsx! { "Delete" },
+			on_confirm: |_| {},
+		}
+	}
+}
+
+fn d_key_value() -> Element {
+	rsx! {
+		div { class: "flex gap-8",
+			KeyValue { label: rsx! { "Account ID" }, value: rsx! { "acc_42" }, copy_text: "acc_42" }
+			KeyValue { label: rsx! { "Opened" }, value: rsx! { "12 March 2026" } }
 		}
 	}
 }

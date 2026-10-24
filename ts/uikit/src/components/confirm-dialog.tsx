@@ -2,6 +2,20 @@
 
 import * as React from "react";
 import { cn } from "../lib/cn";
+import {
+  CONFIRM_DIALOG_CONTENT,
+  CONFIRM_DIALOG_DESCRIPTION,
+  CONFIRM_DIALOG_ERROR,
+  CONFIRM_DIALOG_FOOTER,
+  CONFIRM_DIALOG_HEADER,
+  CONFIRM_DIALOG_ICON,
+  CONFIRM_DIALOG_PENDING,
+  CONFIRM_DIALOG_SPINNER,
+  CONFIRM_DIALOG_TEXT,
+  CONFIRM_DIALOG_TITLE,
+  confirmDialogIconToneClasses,
+  type ConfirmDialogTone,
+} from "../generated/confirm-dialog";
 import { useControllableState } from "../primitives/use-controllable-state";
 import {
   AlertDialog,
@@ -16,7 +30,7 @@ import { buttonVariants } from "./button";
 import { Spinner } from "./spinner";
 import { UiIcon } from "./ui-icons";
 
-export type ConfirmDialogTone = "default" | "danger";
+export type { ConfirmDialogTone };
 
 export interface ConfirmDialogLabels {
   cancel?: string;
@@ -45,8 +59,6 @@ export interface ConfirmDialogProps {
   labels?: ConfirmDialogLabels;
   className?: string;
 }
-
-const PENDING = "aria-disabled:cursor-not-allowed aria-disabled:opacity-40";
 
 export function ConfirmDialog({
   open,
@@ -98,35 +110,32 @@ export function ConfirmDialog({
   return (
     <AlertDialog open={isOpen} onOpenChange={change}>
       {trigger != null && <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>}
-      <AlertDialogContent className={cn("max-w-105 gap-4 bg-popover p-5", className)}>
-        <AlertDialogHeader className="flex-row gap-3 text-left">
+      <AlertDialogContent className={cn(CONFIRM_DIALOG_CONTENT, className)}>
+        <AlertDialogHeader className={CONFIRM_DIALOG_HEADER}>
           <span
-            className={cn(
-              "flex size-8 shrink-0 items-center justify-center rounded-(--control-radius)",
-              danger ? "bg-chip-error-bg text-accent-error-ink" : "bg-muted text-ink-mid",
-            )}
+            className={cn(CONFIRM_DIALOG_ICON, confirmDialogIconToneClasses[tone])}
           >
             {icon ?? <UiIcon name="alert" />}
           </span>
-          <div className="flex min-w-0 flex-col gap-1">
-            <AlertDialogTitle className="text-h3 font-medium text-ink">{title}</AlertDialogTitle>
+          <div className={CONFIRM_DIALOG_TEXT}>
+            <AlertDialogTitle className={CONFIRM_DIALOG_TITLE}>{title}</AlertDialogTitle>
             {description != null && (
-              <AlertDialogDescription className="text-body text-ink-mid">{description}</AlertDialogDescription>
+              <AlertDialogDescription className={CONFIRM_DIALOG_DESCRIPTION}>{description}</AlertDialogDescription>
             )}
             {error !== null && (
-              <p role="alert" className="text-body text-accent-error-ink">
+              <p role="alert" className={CONFIRM_DIALOG_ERROR}>
                 {error}
               </p>
             )}
           </div>
         </AlertDialogHeader>
-        <AlertDialogFooter className="flex-row justify-end gap-2">
+        <AlertDialogFooter className={CONFIRM_DIALOG_FOOTER}>
           {/* aria-disabled, not disabled: a disabled button that holds focus drops it to <body> and Tab leaves the dialog. */}
           <button
             type="button"
             aria-disabled={pending}
             onClick={() => change(false)}
-            className={cn(buttonVariants({ variant: "ghost" }), PENDING)}
+            className={cn(buttonVariants({ variant: "ghost" }), CONFIRM_DIALOG_PENDING)}
           >
             {labels.cancel ?? "Cancel"}
           </button>
@@ -135,9 +144,9 @@ export function ConfirmDialog({
             aria-disabled={pending}
             aria-busy={pending}
             onClick={confirm}
-            className={cn(buttonVariants({ variant: danger ? "danger" : "solid" }), PENDING)}
+            className={cn(buttonVariants({ variant: danger ? "danger" : "solid" }), CONFIRM_DIALOG_PENDING)}
           >
-            {pending && <Spinner className="size-3.5" />}
+            {pending && <Spinner className={CONFIRM_DIALOG_SPINNER} />}
             {confirmLabel}
           </button>
         </AlertDialogFooter>
