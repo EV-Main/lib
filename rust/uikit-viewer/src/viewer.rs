@@ -42,7 +42,7 @@ fn Gallery() -> Element {
 				header { class: "space-y-2",
 					div { class: "flex items-center gap-3",
 						h1 { class: "text-2xl font-bold tracking-tight", "ev_lib::uikit" }
-						Badge { variant: BadgeVariant::Success, "Dioxus" }
+						Badge { variant: BadgeVariant::Positive, "Dioxus" }
 					}
 					p { class: "text-ink-soft text-sm",
 						"Live viewer rendered by Dioxus \u{2192} wasm. The React mirror lives in ts/uikit/example."
@@ -60,13 +60,13 @@ fn Gallery() -> Element {
 								onclick: move |_| { toaster.toast("Neutral toast"); }, "neutral" }
 							Button { size: Size::Sm, variant: ButtonVariant::Secondary,
 								onclick: move |_| { toaster.positive("Positive toast"); }, "positive" }
-							Button { size: Size::Sm, variant: ButtonVariant::Destructive,
+							Button { size: Size::Sm, variant: ButtonVariant::Danger,
 								onclick: move |_| { toaster.error("Error toast"); }, "error" }
 							Button { size: Size::Sm, variant: ButtonVariant::Secondary,
 								onclick: move |_| { toaster.info("Info toast"); }, "info" }
 							Button { size: Size::Sm, variant: ButtonVariant::Secondary,
 								onclick: move |_| { toaster.warn("Warn toast"); }, "warn" }
-							Button { size: Size::Sm, variant: ButtonVariant::Outline,
+							Button { size: Size::Sm, variant: ButtonVariant::Ghost,
 								onclick: move |_| { toaster.show("Persistent — won't auto-close", ToastVariant::Neutral, None); }, "persistent" }
 						}
 						Separator {}
@@ -77,7 +77,7 @@ fn Gallery() -> Element {
 									Button {
 										key: "{label}",
 										size: Size::Sm,
-										variant: if position() == pos { ButtonVariant::Primary } else { ButtonVariant::Outline },
+										variant: if position() == pos { ButtonVariant::Primary } else { ButtonVariant::Secondary },
 										onclick: move |_| position.set(pos),
 										"{label}"
 									}
@@ -90,11 +90,11 @@ fn Gallery() -> Element {
 				section { class: "space-y-3",
 					h2 { class: "text-ink text-lg font-semibold", "Buttons" }
 					div { class: "flex flex-wrap items-center gap-3",
-						Button { "Default" }
+						Button { "Primary" }
 						Button { variant: ButtonVariant::Secondary, "Secondary" }
-						Button { variant: ButtonVariant::Outline, "Outline" }
+						Button { variant: ButtonVariant::Solid, "Solid" }
 						Button { variant: ButtonVariant::Ghost, "Ghost" }
-						Button { variant: ButtonVariant::Destructive, "Destructive" }
+						Button { variant: ButtonVariant::Danger, "Danger" }
 						Button { variant: ButtonVariant::Link, "Link" }
 					}
 				}
@@ -102,11 +102,12 @@ fn Gallery() -> Element {
 				section { class: "space-y-3",
 					h2 { class: "text-ink text-lg font-semibold", "Badges" }
 					div { class: "flex flex-wrap items-center gap-3",
-						Badge { "Default" }
-						Badge { variant: BadgeVariant::Secondary, "Secondary" }
-						Badge { variant: BadgeVariant::Success, "Success" }
-						Badge { variant: BadgeVariant::Destructive, "Destructive" }
-						Badge { variant: BadgeVariant::Outline, "Outline" }
+						Badge { "Neutral" }
+						Badge { variant: BadgeVariant::Primary, "Primary" }
+						Badge { variant: BadgeVariant::Positive, "Positive" }
+						Badge { variant: BadgeVariant::Info, "Info" }
+						Badge { variant: BadgeVariant::Warn, "Warn" }
+						Badge { variant: BadgeVariant::Error, "Error" }
 					}
 				}
 
@@ -117,7 +118,7 @@ fn Gallery() -> Element {
 							AlertTitle { "Heads up" }
 							AlertDescription { "This kit is the source of truth the React port mirrors." }
 						}
-						Alert { variant: AlertVariant::Destructive,
+						Alert { variant: AlertVariant::Error,
 							AlertTitle { "Something failed" }
 							AlertDescription { "Check the console for details." }
 						}
