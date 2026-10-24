@@ -30,8 +30,10 @@ pub fn SheetTrigger(#[props(default)] class: String, children: Element) -> Eleme
 		}
 	}
 }
+/// `aria_label` names a sheet that has no `SheetTitle`, as the TS one takes
+/// `aria-label` through its props.
 #[component]
-pub fn SheetContent(#[props(default = Side::Right)] side: Side, #[props(default)] class: String, children: Element) -> Element {
+pub fn SheetContent(#[props(default = Side::Right)] side: Side, #[props(default)] class: String, aria_label: Option<String>, children: Element) -> Element {
 	let ctx = use_context::<SheetCtx>();
 	if !ctx.open.get() {
 		return rsx! {};
@@ -48,6 +50,7 @@ pub fn SheetContent(#[props(default = Side::Right)] side: Side, #[props(default)
 		div {
 			role: "dialog",
 			"aria-modal": "true",
+			"aria-label": aria_label,
 			class: cls,
 			"data-slot": "sheet-content",
 			"data-state": "open",
@@ -188,5 +191,25 @@ mod tests {
 		}
 		let html = render(app);
 		assert!(html.contains("slide-in-from-left"), "{html}");
+	}
+
+	#[test]
+	fn names_itself_only_when_asked() {
+		fn named() -> Element {
+			rsx! {
+				Sheet { default_open: true,
+					SheetContent { aria_label: "Фильтры", "body" }
+				}
+			}
+		}
+		fn plain() -> Element {
+			rsx! {
+				Sheet { default_open: true,
+					SheetContent { "body" }
+				}
+			}
+		}
+		assert!(render(named).contains("aria-label=\"Фильтры\""));
+		assert!(!render(plain).contains("aria-label"));
 	}
 }

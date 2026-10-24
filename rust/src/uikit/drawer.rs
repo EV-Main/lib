@@ -72,8 +72,11 @@ pub fn DrawerOverlay(#[props(default)] class: String) -> Element {
 /// panel flips to `data-state="closed"` and is unmounted when its exit
 /// `transform` transition ends. Re-opening mid-exit just flips the state back
 /// and the same transition carries the panel home.
+///
+/// `aria_label` names a drawer that has no `DrawerTitle`, as the TS one takes
+/// `aria-label` through its props.
 #[component]
-pub fn DrawerContent(#[props(default)] class: String, children: Element) -> Element {
+pub fn DrawerContent(#[props(default)] class: String, aria_label: Option<String>, children: Element) -> Element {
 	let ctx = use_context::<DrawerCtx>();
 	// Seeded from `open` so a drawer that starts open is in the server-rendered
 	// markup — the effect below never runs under SSR.
@@ -110,6 +113,7 @@ pub fn DrawerContent(#[props(default)] class: String, children: Element) -> Elem
 		div {
 			role: "dialog",
 			"aria-modal": "true",
+			"aria-label": aria_label,
 			class: cls,
 			"data-slot": "drawer-content",
 			"data-state": state,
@@ -272,5 +276,25 @@ mod tests {
 		assert!(panel_tag.contains("data-state=\"open\""), "panel: {panel_tag}");
 		assert!(html.contains("data-slot=\"drawer-handle\""), "handle visible for bottom: {html}");
 		assert!(html.contains("data-slot=\"drawer-body\""), "children wrapped in the scroller: {html}");
+	}
+
+	#[test]
+	fn names_itself_only_when_asked() {
+		fn named() -> Element {
+			rsx! {
+				Drawer { default_open: true,
+					DrawerContent { aria_label: "Фильтры", "body" }
+				}
+			}
+		}
+		fn plain() -> Element {
+			rsx! {
+				Drawer { default_open: true,
+					DrawerContent { "body" }
+				}
+			}
+		}
+		assert!(render(named).contains("aria-label=\"Фильтры\""));
+		assert!(!render(plain).contains("aria-label"));
 	}
 }
