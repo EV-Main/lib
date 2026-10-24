@@ -75,6 +75,10 @@ pub fn Command(
 		div { class: cls, "data-slot": "command", {children} }
 	}
 }
+/// `class` is fused over the dialog box, as the TS `className` is.
+/// `aria_labelledby` names the dialog after an element inside it (pass the id
+/// given to a [`DialogTitle`](crate::uikit::DialogTitle)); without it the
+/// dialog stays unnamed, as the TS `CommandDialog` is.
 #[component]
 pub fn CommandDialog(
 	open: Option<bool>,
@@ -83,6 +87,7 @@ pub fn CommandDialog(
 	/// See [`Command`]'s `should_filter`.
 	#[props(default = true)]
 	should_filter: bool,
+	aria_labelledby: Option<String>,
 	#[props(default)] class: String,
 	children: Element,
 ) -> Element {
@@ -90,6 +95,7 @@ pub fn CommandDialog(
 	if !open.get() {
 		return rsx! {};
 	}
+	let cls = cn!(COMMAND_DIALOG_CONTENT, class);
 	rsx! {
 		div {
 			class: COMMAND_DIALOG_OVERLAY,
@@ -98,7 +104,8 @@ pub fn CommandDialog(
 		div {
 			role: "dialog",
 			"aria-modal": "true",
-			class: COMMAND_DIALOG_CONTENT,
+			"aria-labelledby": aria_labelledby,
+			class: cls,
 			"data-slot": "command-dialog",
 			onkeydown: move |e| {
 				if e.key() == Key::Escape {
@@ -788,6 +795,30 @@ mod tests {
 		let tag = &html[html[..at].rfind('<').expect("opening tag")..at];
 		assert!(tag.contains("role=\"dialog\""), "{tag}");
 		assert!(tag.contains("aria-modal=\"true\""), "{tag}");
+	}
+
+	#[test]
+	fn dialog_takes_a_class_and_a_name_when_given() {
+		fn plain() -> Element {
+			rsx! {
+				CommandDialog { default_open: true, CommandInput {} }
+			}
+		}
+		let html = render(plain);
+		assert!(!html.contains("aria-labelledby"), "unnamed unless asked: {html}");
+
+		fn named() -> Element {
+			rsx! {
+				CommandDialog { default_open: true, aria_labelledby: "палитра", class: "top-1/6",
+					CommandInput {}
+				}
+			}
+		}
+		let html = render(named);
+		let at = html.find("data-slot=\"command-dialog\"").expect("dialog rendered");
+		let tag = &html[html[..at].rfind('<').expect("opening tag")..at];
+		assert!(tag.contains("aria-labelledby=\"палитра\""), "{tag}");
+		assert!(tag.contains("top-1/6") && !tag.contains("top-1/2"), "the caller's class wins on the box: {tag}");
 	}
 
 	/// The value of the row marked highlighted, read off its text.
