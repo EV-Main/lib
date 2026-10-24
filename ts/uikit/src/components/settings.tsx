@@ -2,6 +2,24 @@
 
 import * as React from "react";
 import { cn } from "../lib/cn";
+import {
+  SETTINGS_LAYOUT,
+  SETTINGS_MAIN,
+  SETTINGS_NAV,
+  SETTINGS_ROW_INLINE,
+  SETTINGS_SECTION_ACTION,
+  SETTINGS_SECTION_BASE,
+  SETTINGS_SECTION_BODY,
+  SETTINGS_SECTION_BODY_FLUSH,
+  SETTINGS_SECTION_BODY_PADDED,
+  SETTINGS_SECTION_DESCRIPTION,
+  SETTINGS_SECTION_HEADER,
+  SETTINGS_SECTION_HEADER_FLUSH,
+  SETTINGS_SECTION_HEADING,
+  SETTINGS_SECTION_TITLE,
+  settingsSectionToneClasses,
+  type SettingsSectionTone,
+} from "../generated/settings";
 import { FormRow, type FormRowProps } from "./form-row";
 
 export interface SettingsLayoutProps extends Omit<React.ComponentProps<"div">, "title"> {
@@ -18,15 +36,15 @@ export function SettingsLayout({ nav, className, children, ...props }: SettingsL
     <div
       data-slot="settings-layout"
       className={cn(
-        "mx-auto flex w-full max-w-352 flex-col gap-6 px-4 py-8 lg:flex-row lg:gap-8",
+        SETTINGS_LAYOUT,
         className,
       )}
       {...props}
     >
-      <div data-slot="settings-nav" className="shrink-0 lg:w-64">
+      <div data-slot="settings-nav" className={SETTINGS_NAV}>
         {nav}
       </div>
-      <div data-slot="settings-main" className="flex min-w-0 flex-1 flex-col gap-6">
+      <div data-slot="settings-main" className={SETTINGS_MAIN}>
         {children}
       </div>
     </div>
@@ -39,7 +57,7 @@ export interface SettingsSectionProps extends Omit<React.ComponentProps<"section
   /** Top-right control, e.g. a "Create team" button. */
   action?: React.ReactNode;
   /** `danger` draws the destructive-zone edge. */
-  tone?: "default" | "danger";
+  tone?: SettingsSectionTone;
   /** Rows run edge to edge with their hairlines; otherwise the body is padded. */
   flush?: boolean;
 }
@@ -62,23 +80,23 @@ export function SettingsSection({
       data-tone={tone}
       aria-labelledby={headingId}
       className={cn(
-        "flex flex-col rounded-lg border bg-card",
-        tone === "danger" ? "border-accent-error" : "border-border",
+        SETTINGS_SECTION_BASE,
+        settingsSectionToneClasses[tone],
         className,
       )}
       {...props}
     >
-      <header className={cn("flex items-start justify-between gap-4 p-4", flush && "pb-3")}>
-        <div className="flex min-w-0 flex-col gap-0.5">
-          <h3 id={headingId} className="text-h3 font-medium text-ink">
+      <header className={cn(SETTINGS_SECTION_HEADER, flush && SETTINGS_SECTION_HEADER_FLUSH)}>
+        <div className={SETTINGS_SECTION_HEADING}>
+          <h3 id={headingId} className={SETTINGS_SECTION_TITLE}>
             {title}
           </h3>
-          {description != null && <p className="text-body text-ink-mid">{description}</p>}
+          {description != null && <p className={SETTINGS_SECTION_DESCRIPTION}>{description}</p>}
         </div>
-        {action != null && <div className="shrink-0">{action}</div>}
+        {action != null && <div className={SETTINGS_SECTION_ACTION}>{action}</div>}
       </header>
       {children != null && (
-        <div className={cn("flex flex-col", flush ? "border-t border-border-subtle" : "gap-4 px-4 pb-4")}>
+        <div className={cn(SETTINGS_SECTION_BODY, flush ? SETTINGS_SECTION_BODY_FLUSH : SETTINGS_SECTION_BODY_PADDED)}>
           {children}
         </div>
       )}
@@ -97,7 +115,7 @@ export function SettingsRow({ inline = false, className, ...props }: SettingsRow
     <FormRow
       data-inline={inline}
       className={cn(
-        inline && "flex-row items-center justify-between sm:gap-6 [&>[data-slot=form-row-control]]:flex-none [&>[data-slot=form-row-control]]:items-end",
+        inline && SETTINGS_ROW_INLINE,
         className,
       )}
       {...props}

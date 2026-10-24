@@ -28,6 +28,7 @@ mod empty;
 mod field;
 mod focus;
 mod form;
+mod form_row;
 mod hover_card;
 mod icon_button;
 mod input;
@@ -44,6 +45,7 @@ mod radio_group;
 mod scroll_area;
 mod select;
 mod separator;
+mod settings;
 mod sheet;
 mod sidebar;
 mod size;
@@ -101,6 +103,7 @@ pub use field::{
 };
 pub use focus::{FILLED_FOCUS_RING, OPTION_FOCUS_RING};
 pub use form::{FORM_DESCRIPTION, FORM_ITEM, FORM_LABEL, FORM_MESSAGE};
+pub use form_row::{FORM_ROW_BASE, FORM_ROW_CONTROL, FORM_ROW_DESCRIPTION, FORM_ROW_DIVIDER, FORM_ROW_HINT, FORM_ROW_LABEL, FORM_ROW_LABEL_COLUMN};
 pub use hover_card::HOVER_CARD_CONTENT;
 pub use icon_button::{ICON_BUTTON_BASE, ICON_BUTTON_PRESSED, IconButtonVariant};
 pub use input::{INPUT_BASE, input_size_class};
@@ -131,6 +134,11 @@ pub use select::{
 	select_trigger_size_class,
 };
 pub use separator::{Orientation, SEPARATOR_BASE};
+pub use settings::{
+	SETTINGS_LAYOUT, SETTINGS_MAIN, SETTINGS_NAV, SETTINGS_ROW_INLINE, SETTINGS_SECTION_ACTION, SETTINGS_SECTION_BASE, SETTINGS_SECTION_BODY, SETTINGS_SECTION_BODY_FLUSH,
+	SETTINGS_SECTION_BODY_PADDED, SETTINGS_SECTION_DESCRIPTION, SETTINGS_SECTION_HEADER, SETTINGS_SECTION_HEADER_FLUSH, SETTINGS_SECTION_HEADING, SETTINGS_SECTION_TITLE,
+	SettingsSectionTone,
+};
 pub use sheet::{
 	SHEET_CLOSE, SHEET_CONTENT, SHEET_DESCRIPTION, SHEET_FOOTER, SHEET_HEADER, SHEET_OVERLAY, SHEET_SIDE_BOTTOM, SHEET_SIDE_LEFT, SHEET_SIDE_RIGHT, SHEET_SIDE_TOP, SHEET_TITLE,
 };

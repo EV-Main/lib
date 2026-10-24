@@ -35,6 +35,7 @@ const GALLERY: &[(&str, fn() -> Element)] = &[
 	("Switch", d_switch), ("RadioGroup", d_radio_group), ("Slider", d_slider),
 	("Toggle", d_toggle), ("ToggleGroup", d_toggle_group), ("Tabs", d_tabs),
 	("IconButton", d_icon_button), ("StatusItem", d_status_item),
+	("FormRow", d_form_row), ("Settings", d_settings),
 	("Accordion", d_accordion), ("Collapsible", d_collapsible), ("InputGroup", d_input_group),
 	("InputOTP", d_input_otp), ("Carousel", d_carousel), ("Calendar", d_calendar), ("DateTimePicker", d_date_time_picker),
 	("Tooltip", d_tooltip), ("Popover", d_popover), ("HoverCard", d_hover_card),
@@ -668,6 +669,37 @@ fn d_status_item() -> Element {
 		StatusItem { tone: StatusTone::Muted, "Paused" }
 		StatusItem { "Idle" }
 		StatusDot { tone: StatusTone::Positive }
+	}
+}
+
+fn d_form_row() -> Element {
+	rsx! {
+		div { class: "w-full max-w-2xl rounded-lg border bg-card",
+			FormRow { label: rsx! { "Email" }, r#for: "gallery-form-row-email", description: rsx! { "Where receipts go" },
+				// A native input: the kit `Input` takes its id only from a `FormField`.
+				input { id: "gallery-form-row-email", class: ev_lib_classes::INPUT_BASE, placeholder: "you@example.com" }
+			}
+			FormRow { label: rsx! { "Name" }, hint: rsx! { "Max 40 characters" }, "Jane Doe" }
+			FormRow { label: rsx! { "Plan" }, divider: false, "Investor" }
+		}
+	}
+}
+
+fn d_settings() -> Element {
+	rsx! {
+		SettingsLayout { nav: rsx! { nav { "aria-label": "Sections", class: "text-body text-ink-mid", "Account" } },
+			SettingsSection { title: rsx! { "Accounts" }, description: rsx! { "Switch accounts" },
+				action: rsx! { Button { variant: ButtonVariant::Secondary, "Create team" } },
+				p { class: "text-body text-ink", "Personal" }
+			}
+			SettingsSection { title: rsx! { "Notifications" }, flush: true,
+				SettingsRow { label: rsx! { "Email alerts" }, inline: true, Switch {} }
+				SettingsRow { label: rsx! { "Language" }, divider: false, "English" }
+			}
+			SettingsSection { title: rsx! { "Delete account" }, tone: SettingsSectionTone::Danger,
+				description: rsx! { "This cannot be undone" },
+			}
+		}
 	}
 }
 

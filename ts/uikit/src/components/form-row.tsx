@@ -1,5 +1,14 @@
 import * as React from "react";
 import { cn } from "../lib/cn";
+import {
+  FORM_ROW_BASE,
+  FORM_ROW_CONTROL,
+  FORM_ROW_DESCRIPTION,
+  FORM_ROW_DIVIDER,
+  FORM_ROW_HINT,
+  FORM_ROW_LABEL,
+  FORM_ROW_LABEL_COLUMN,
+} from "../generated/form-row";
 
 export interface FormRowProps extends Omit<React.ComponentProps<"div">, "title"> {
   label: React.ReactNode;
@@ -34,21 +43,21 @@ export function FormRow({
       data-slot="form-row"
       data-divider={divider}
       className={cn(
-        "flex flex-col gap-1.5 px-4 py-3 sm:flex-row sm:gap-6",
-        divider && "border-b border-border-subtle",
+        FORM_ROW_BASE,
+        divider && FORM_ROW_DIVIDER,
         className,
       )}
       {...props}
     >
-      <div data-slot="form-row-label" className="flex min-w-0 flex-col gap-0.5 sm:w-52 sm:shrink-0">
-        <Label {...(htmlFor !== undefined ? { htmlFor } : {})} className="text-body text-ink-mid">
+      <div data-slot="form-row-label" className={FORM_ROW_LABEL_COLUMN}>
+        <Label {...(htmlFor !== undefined ? { htmlFor } : {})} className={FORM_ROW_LABEL}>
           {label}
         </Label>
-        {description != null && <span className="text-caption text-ink-soft">{description}</span>}
+        {description != null && <span className={FORM_ROW_DESCRIPTION}>{description}</span>}
       </div>
-      <div data-slot="form-row-control" className="flex min-w-0 flex-1 flex-col gap-1 text-body text-ink">
+      <div data-slot="form-row-control" className={FORM_ROW_CONTROL}>
         {children}
-        {hint != null && <span className="text-caption text-ink-soft">{hint}</span>}
+        {hint != null && <span className={FORM_ROW_HINT}>{hint}</span>}
       </div>
     </div>
   );

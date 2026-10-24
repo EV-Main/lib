@@ -27,8 +27,8 @@ mod test_util;
 pub(crate) use ev_lib_classes::*;
 pub use ev_lib_classes::{
 	Accent, AlertVariant, BadgeVariant, BookSide, ButtonGroupOrientation, ButtonVariant, DrawerDirection, EmptyMediaVariant, FieldOrientation, IconButtonVariant, InputGroupAddonAlign,
-	InputGroupButtonSize, ItemMediaVariant, ItemSize, ItemVariant, OrderSide, Orientation, Polarity, ScrollBarOrientation, Size, StatusTone, Surface, TableAlign, TableDensity, TableVariant,
-	TerminalArea, ToastPosition, ToastVariant, ToggleVariant,
+	InputGroupButtonSize, ItemMediaVariant, ItemSize, ItemVariant, OrderSide, Orientation, Polarity, ScrollBarOrientation, SettingsSectionTone, Size, StatusTone, Surface, TableAlign,
+	TableDensity, TableVariant, TerminalArea, ToastPosition, ToastVariant, ToggleVariant,
 };
 
 mod accordion;
@@ -48,6 +48,7 @@ mod container;
 mod empty;
 mod field;
 mod fonts;
+mod form_row;
 mod icon_button;
 mod input;
 mod input_group;
@@ -62,6 +63,7 @@ mod radio_group;
 mod scroll_area;
 mod section_descriptor;
 mod separator;
+mod settings;
 mod sidebar;
 mod skeleton;
 mod slider;
@@ -94,6 +96,7 @@ pub use drawer::{Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFo
 pub use empty::{Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle};
 pub use field::{Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldLegendVariant, FieldSeparator, FieldSet, FieldTitle};
 pub use fonts::Fonts;
+pub use form_row::FormRow;
 pub use icon_button::IconButton;
 pub use input::Input;
 pub use input_group::{InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText, InputGroupTextarea};
@@ -109,6 +112,7 @@ pub use scroll_area::{ScrollArea, ScrollBar};
 pub use section_descriptor::SectionDescriptor;
 pub use select::{Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue};
 pub use separator::Separator;
+pub use settings::{SettingsLayout, SettingsRow, SettingsSection};
 pub use sidebar::{
 	Sidebar, SidebarCollapsible, SidebarContent, SidebarContext, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu,
 	SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarRail, SidebarSeparator, SidebarSide, SidebarTrigger, SidebarVariant, use_sidebar,

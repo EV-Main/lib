@@ -17,6 +17,8 @@ pub fn manifest() -> Vec<(&'static str, Vec<Ts>)> {
 		("badge", badge()),
 		("icon-button", icon_button()),
 		("status-item", status_item()),
+		("form-row", form_row()),
+		("settings", uikit_settings()),
 		("focus", focus()),
 		("switch", switch()),
 		("checkbox", checkbox()),
@@ -1304,6 +1306,101 @@ fn status_item() -> Vec<Ts> {
 			value: STATUS_ITEM_VALUE,
 		},
 		table::<StatusTone>("statusDotClasses", "StatusTone"),
+	]
+}
+
+fn form_row() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "FORM_ROW_BASE",
+			value: FORM_ROW_BASE,
+		},
+		Ts::Const {
+			name: "FORM_ROW_DIVIDER",
+			value: FORM_ROW_DIVIDER,
+		},
+		Ts::Const {
+			name: "FORM_ROW_LABEL_COLUMN",
+			value: FORM_ROW_LABEL_COLUMN,
+		},
+		Ts::Const {
+			name: "FORM_ROW_LABEL",
+			value: FORM_ROW_LABEL,
+		},
+		Ts::Const {
+			name: "FORM_ROW_DESCRIPTION",
+			value: FORM_ROW_DESCRIPTION,
+		},
+		Ts::Const {
+			name: "FORM_ROW_CONTROL",
+			value: FORM_ROW_CONTROL,
+		},
+		Ts::Const {
+			name: "FORM_ROW_HINT",
+			value: FORM_ROW_HINT,
+		},
+	]
+}
+
+fn uikit_settings() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "SETTINGS_LAYOUT",
+			value: SETTINGS_LAYOUT,
+		},
+		Ts::Const {
+			name: "SETTINGS_NAV",
+			value: SETTINGS_NAV,
+		},
+		Ts::Const {
+			name: "SETTINGS_MAIN",
+			value: SETTINGS_MAIN,
+		},
+		Ts::Const {
+			name: "SETTINGS_SECTION_BASE",
+			value: SETTINGS_SECTION_BASE,
+		},
+		Ts::Const {
+			name: "SETTINGS_SECTION_HEADER",
+			value: SETTINGS_SECTION_HEADER,
+		},
+		Ts::Const {
+			name: "SETTINGS_SECTION_HEADER_FLUSH",
+			value: SETTINGS_SECTION_HEADER_FLUSH,
+		},
+		Ts::Const {
+			name: "SETTINGS_SECTION_HEADING",
+			value: SETTINGS_SECTION_HEADING,
+		},
+		Ts::Const {
+			name: "SETTINGS_SECTION_TITLE",
+			value: SETTINGS_SECTION_TITLE,
+		},
+		Ts::Const {
+			name: "SETTINGS_SECTION_DESCRIPTION",
+			value: SETTINGS_SECTION_DESCRIPTION,
+		},
+		Ts::Const {
+			name: "SETTINGS_SECTION_ACTION",
+			value: SETTINGS_SECTION_ACTION,
+		},
+		Ts::Const {
+			name: "SETTINGS_SECTION_BODY",
+			value: SETTINGS_SECTION_BODY,
+		},
+		Ts::Const {
+			name: "SETTINGS_SECTION_BODY_FLUSH",
+			value: SETTINGS_SECTION_BODY_FLUSH,
+		},
+		Ts::Const {
+			name: "SETTINGS_SECTION_BODY_PADDED",
+			value: SETTINGS_SECTION_BODY_PADDED,
+		},
+		Ts::Const {
+			name: "SETTINGS_ROW_INLINE",
+			value: SETTINGS_ROW_INLINE,
+		},
+		table::<SettingsSectionTone>("settingsSectionToneClasses", "SettingsSectionTone"),
 	]
 }
 
