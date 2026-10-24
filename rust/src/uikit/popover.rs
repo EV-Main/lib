@@ -28,8 +28,10 @@ pub fn Popover(open: Option<bool>, #[props(default)] default_open: bool, on_open
 	}
 }
 
+/// `aria_label` names a trigger that holds only a glyph: the kit has no
+/// `asChild`, so an icon trigger cannot borrow the name of an `IconButton`.
 #[component]
-pub fn PopoverTrigger(#[props(default)] class: String, children: Element) -> Element {
+pub fn PopoverTrigger(#[props(default)] class: String, aria_label: Option<String>, children: Element) -> Element {
 	let ctx = use_context::<PopoverCtx>();
 	let open = ctx.open.get();
 	rsx! {
@@ -37,6 +39,7 @@ pub fn PopoverTrigger(#[props(default)] class: String, children: Element) -> Ele
 			r#type: "button",
 			class,
 			"data-slot": "popover-trigger",
+			"aria-label": aria_label,
 			"aria-expanded": if open { "true" } else { "false" },
 			onclick: move |_| ctx.open.set(!ctx.open.get()),
 			{children}
