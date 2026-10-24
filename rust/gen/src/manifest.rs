@@ -15,6 +15,8 @@ pub fn manifest() -> Vec<(&'static str, Vec<Ts>)> {
 		("alert", alert()),
 		("toggle", toggle()),
 		("badge", badge()),
+		("icon-button", icon_button()),
+		("status-item", status_item()),
 		("focus", focus()),
 		("switch", switch()),
 		("checkbox", checkbox()),
@@ -1271,6 +1273,37 @@ fn badge() -> Vec<Ts> {
 			value: BADGE_BASE,
 		},
 		table::<BadgeVariant>("badgeVariants", "BadgeVariant"),
+	]
+}
+
+fn icon_button() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "ICON_BUTTON_BASE",
+			value: ICON_BUTTON_BASE,
+		},
+		Ts::Const {
+			name: "ICON_BUTTON_PRESSED",
+			value: ICON_BUTTON_PRESSED,
+		},
+	]
+}
+
+fn status_item() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "STATUS_DOT_BASE",
+			value: STATUS_DOT_BASE,
+		},
+		Ts::Const {
+			name: "STATUS_ITEM_BASE",
+			value: STATUS_ITEM_BASE,
+		},
+		Ts::Const {
+			name: "STATUS_ITEM_VALUE",
+			value: STATUS_ITEM_VALUE,
+		},
+		table::<StatusTone>("statusDotClasses", "StatusTone"),
 	]
 }
 

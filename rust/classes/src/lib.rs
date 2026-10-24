@@ -29,6 +29,7 @@ mod field;
 mod focus;
 mod form;
 mod hover_card;
+mod icon_button;
 mod input;
 mod input_group;
 mod input_otp;
@@ -49,6 +50,7 @@ mod size;
 mod skeleton;
 mod slider;
 mod sonner;
+mod status_item;
 mod switch;
 mod table;
 mod tabs;
@@ -100,6 +102,7 @@ pub use field::{
 pub use focus::{FILLED_FOCUS_RING, OPTION_FOCUS_RING};
 pub use form::{FORM_DESCRIPTION, FORM_ITEM, FORM_LABEL, FORM_MESSAGE};
 pub use hover_card::HOVER_CARD_CONTENT;
+pub use icon_button::{ICON_BUTTON_BASE, ICON_BUTTON_PRESSED, IconButtonVariant};
 pub use input::{INPUT_BASE, input_size_class};
 pub use input_group::{
 	INPUT_GROUP_ADDON_BASE, INPUT_GROUP_BASE, INPUT_GROUP_BUTTON_BASE, INPUT_GROUP_INPUT_CONTROL, INPUT_GROUP_TEXT, INPUT_GROUP_TEXTAREA_CONTROL, InputGroupAddonAlign, InputGroupButtonSize,
@@ -139,6 +142,7 @@ pub use size::Size;
 pub use skeleton::SKELETON_BASE;
 pub use slider::{SLIDER_RANGE, SLIDER_ROOT, SLIDER_THUMB, SLIDER_TRACK};
 pub use sonner::{TOAST_BASE, TOAST_CLOSE, TOAST_CONTENT, TOAST_TITLE, TOASTER_BASE, ToastPosition, ToastVariant};
+pub use status_item::{STATUS_DOT_BASE, STATUS_ITEM_BASE, STATUS_ITEM_VALUE, StatusTone};
 pub use switch::{SWITCH_BASE, SWITCH_THUMB};
 pub use table::{TABLE, TABLE_BODY, TABLE_CAPTION, TABLE_CARD, TABLE_CELL, TABLE_CONTAINER, TABLE_FOOTER, TABLE_HEAD, TABLE_HEADER, TABLE_ROW, TableAlign, TableDensity, TableVariant};
 pub use tabs::{TABS_CONTENT, TABS_LIST, TABS_ROOT, TABS_TRIGGER};

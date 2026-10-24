@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../lib/cn";
+import { ICON_BUTTON_BASE, ICON_BUTTON_PRESSED } from "../generated/icon-button";
 import { buttonVariants } from "./button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 
@@ -37,8 +38,8 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(f
       aria-pressed={pressed}
       className={cn(
         buttonVariants({ variant, size, icon: true }),
-        "text-ink-mid hover:text-ink",
-        pressed && "bg-active text-ink hover:bg-active",
+        ICON_BUTTON_BASE,
+        pressed && ICON_BUTTON_PRESSED,
         className,
       )}
       {...props}

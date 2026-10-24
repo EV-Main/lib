@@ -34,6 +34,7 @@ const GALLERY: &[(&str, fn() -> Element)] = &[
 	("Input", d_input), ("Textarea", d_textarea), ("Checkbox", d_checkbox),
 	("Switch", d_switch), ("RadioGroup", d_radio_group), ("Slider", d_slider),
 	("Toggle", d_toggle), ("ToggleGroup", d_toggle_group), ("Tabs", d_tabs),
+	("IconButton", d_icon_button), ("StatusItem", d_status_item),
 	("Accordion", d_accordion), ("Collapsible", d_collapsible), ("InputGroup", d_input_group),
 	("InputOTP", d_input_otp), ("Carousel", d_carousel), ("Calendar", d_calendar), ("DateTimePicker", d_date_time_picker),
 	("Tooltip", d_tooltip), ("Popover", d_popover), ("HoverCard", d_hover_card),
@@ -636,6 +637,37 @@ fn d_toggle() -> Element {
 		Toggle { variant: ToggleVariant::Outline, default_pressed: true, "Italic" }
 		Toggle { size: Size::Sm, "Sm" }
 		Toggle { size: Size::Lg, "Lg" }
+	}
+}
+
+fn glyph() -> Element {
+	rsx! {
+		svg { view_box: "0 0 16 16", fill: "none", stroke: "currentColor", stroke_width: "1.5",
+			circle { cx: "7", cy: "7", r: "4.5" }
+			path { d: "M10.5 10.5 14 14" }
+		}
+	}
+}
+
+fn d_icon_button() -> Element {
+	rsx! {
+		IconButton { aria_label: "Search", {glyph()} }
+		IconButton { aria_label: "Search", variant: IconButtonVariant::Secondary, {glyph()} }
+		IconButton { aria_label: "Pin", pressed: true, {glyph()} }
+		IconButton { aria_label: "Search", size: Size::Sm, {glyph()} }
+		IconButton { aria_label: "Search", size: Size::Touch, variant: IconButtonVariant::Secondary, {glyph()} }
+		IconButton { aria_label: "Search", disabled: true, {glyph()} }
+	}
+}
+
+fn d_status_item() -> Element {
+	rsx! {
+		StatusItem { tone: StatusTone::Positive, "Connected" }
+		StatusItem { tone: StatusTone::Warn, value: rsx! { "49ms" }, "Latency" }
+		StatusItem { tone: StatusTone::Error, "Offline" }
+		StatusItem { tone: StatusTone::Muted, "Paused" }
+		StatusItem { "Idle" }
+		StatusDot { tone: StatusTone::Positive }
 	}
 }
 

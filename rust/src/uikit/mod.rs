@@ -26,9 +26,9 @@ mod test_util;
 // prop are re-exported.
 pub(crate) use ev_lib_classes::*;
 pub use ev_lib_classes::{
-	Accent, AlertVariant, BadgeVariant, BookSide, ButtonGroupOrientation, ButtonVariant, DrawerDirection, EmptyMediaVariant, FieldOrientation, InputGroupAddonAlign, InputGroupButtonSize,
-	ItemMediaVariant, ItemSize, ItemVariant, OrderSide, Orientation, Polarity, ScrollBarOrientation, Size, Surface, TableAlign, TableDensity, TableVariant, TerminalArea, ToastPosition,
-	ToastVariant, ToggleVariant,
+	Accent, AlertVariant, BadgeVariant, BookSide, ButtonGroupOrientation, ButtonVariant, DrawerDirection, EmptyMediaVariant, FieldOrientation, IconButtonVariant, InputGroupAddonAlign,
+	InputGroupButtonSize, ItemMediaVariant, ItemSize, ItemVariant, OrderSide, Orientation, Polarity, ScrollBarOrientation, Size, StatusTone, Surface, TableAlign, TableDensity, TableVariant,
+	TerminalArea, ToastPosition, ToastVariant, ToggleVariant,
 };
 
 mod accordion;
@@ -48,6 +48,7 @@ mod container;
 mod empty;
 mod field;
 mod fonts;
+mod icon_button;
 mod input;
 mod input_group;
 mod input_otp;
@@ -65,6 +66,7 @@ mod sidebar;
 mod skeleton;
 mod slider;
 mod spinner;
+mod status_item;
 mod switch;
 mod table;
 mod tabs;
@@ -92,6 +94,7 @@ pub use drawer::{Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFo
 pub use empty::{Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle};
 pub use field::{Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldLegendVariant, FieldSeparator, FieldSet, FieldTitle};
 pub use fonts::Fonts;
+pub use icon_button::IconButton;
 pub use input::Input;
 pub use input_group::{InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText, InputGroupTextarea};
 pub use input_otp::{InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot};
@@ -113,6 +116,7 @@ pub use sidebar::{
 pub use skeleton::Skeleton;
 pub use slider::{Slider, SliderOrientation};
 pub use spinner::Spinner;
+pub use status_item::{StatusDot, StatusItem};
 pub use switch::Switch;
 pub use table::{Table, TableBody, TableCaption, TableCard, TableCell, TableFooter, TableHead, TableHeader, TableRow};
 pub use tabs::{Tabs, TabsContent, TabsList, TabsOrientation, TabsTrigger};

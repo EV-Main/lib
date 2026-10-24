@@ -1,15 +1,14 @@
 import * as React from "react";
 import { cn } from "../lib/cn";
+import {
+  STATUS_DOT_BASE,
+  STATUS_ITEM_BASE,
+  STATUS_ITEM_VALUE,
+  statusDotClasses,
+  type StatusTone,
+} from "../generated/status-item";
 
-export type StatusTone = "positive" | "neutral" | "warn" | "error" | "muted";
-
-const DOT: Record<StatusTone, string> = {
-  positive: "bg-positive",
-  neutral: "bg-ink-soft",
-  warn: "bg-accent-warn",
-  error: "bg-accent-error",
-  muted: "bg-ink-soft/50",
-};
+export type { StatusTone };
 
 export interface StatusDotProps extends React.ComponentProps<"span"> {
   tone?: StatusTone;
@@ -22,7 +21,7 @@ export function StatusDot({ tone = "neutral", className, ...props }: StatusDotPr
       data-slot="status-dot"
       data-tone={tone}
       aria-hidden
-      className={cn("size-1.5 shrink-0 rounded-full", DOT[tone], className)}
+      className={cn(STATUS_DOT_BASE, statusDotClasses[tone], className)}
       {...props}
     />
   );
@@ -40,12 +39,12 @@ export function StatusItem({ tone = "neutral", value, className, children, ...pr
     <span
       data-slot="status-item"
       data-tone={tone}
-      className={cn("inline-flex h-5 items-center gap-1.5 px-2 text-caption text-ink-mid", className)}
+      className={cn(STATUS_ITEM_BASE, className)}
       {...props}
     >
       <StatusDot tone={tone} />
       <span>{children}</span>
-      {value != null && <span className="tabular-nums text-ink">{value}</span>}
+      {value != null && <span className={STATUS_ITEM_VALUE}>{value}</span>}
     </span>
   );
 }
