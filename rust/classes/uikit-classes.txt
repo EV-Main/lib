@@ -126,6 +126,13 @@ aria-valuenow
 aria-valuenow=100
 aria-valuenow=25
 aria-valuenow=60
+aside-body
+aside-footer
+aside-header
+aside-panel
+aside-panel-narrow
+aside-panel-wide
+aside-rail
 aspect-square
 aspect-square p-[var(--control-py)]
 aspect-square size-full
@@ -254,8 +261,12 @@ border-input [&_[data-placeholder]]:text-ink-soft [&_svg:not([class*='text-'])]:
 border-input placeholder:text-ink-soft focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error flex field-sizing-content min-h-16 w-full rounded-[var(--control-radius)] border bg-muted px-2 py-1.5 text-base pointer-fine:text-body transition-colors outline-none disabled:cursor-not-allowed disabled:opacity-40
 border-input text-ink h-7 w-full min-w-0 appearance-none rounded-[var(--control-radius)] border bg-secondary py-0 pr-9 pl-2 text-base pointer-fine:text-body transition-colors outline-none disabled:pointer-events-none disabled:cursor-not-allowed focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error has-[option[value='']:checked]:text-ink-soft [&_option]:bg-popover [&_option]:text-ink [&_optgroup]:bg-popover [&_optgroup]:text-ink-soft [color-scheme:var(--scheme,normal)]
 border-input text-primary-ink bg-muted aria-invalid:border-accent-error aspect-square size-4 shrink-0 rounded-full border transition-colors outline-none disabled:cursor-not-allowed disabled:opacity-40 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+border-l
+border-l border-border
 border-primary-border bg-selected
 border-primary-ink block size-4 shrink-0 rounded-full border-2 bg-ink transition-colors outline-none focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-40
+border-r
+border-r border-border
 border-t
 border-t border-border-subtle
 border-t border-border-subtle p-1 pt-1.5
@@ -315,6 +326,7 @@ confirm-dialog-description-
 confirm-dialog-error
 confirm-dialog-icon
 confirm-dialog-title
+contents md:hidden
 context-menu
 context-menu-checkbox-item
 context-menu-content
@@ -376,6 +388,8 @@ data-front=\
 data-inline
 data-inline=\
 data-inset
+data-mode
+data-mode=\
 data-orientation
 data-orientation=\
 data-placeholder
@@ -496,11 +510,13 @@ flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=rad
 flex flex-col rounded-lg border bg-card
 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end
 flex h-11 items-center gap-3 border-t border-border py-0 pl-2 pr-3
+flex h-11 shrink-0 items-center gap-1.5 border-b border-border bg-card pl-3 pr-2
 flex h-14 items-center gap-3 border-b border-border bg-background px-8
 flex h-6 items-center px-2 text-body-s text-ink-soft data-[inset]:pl-8
 flex h-6.5 items-center gap-4 border-t border-border bg-background px-3 text-caption text-ink-soft
 flex h-8 items-center gap-2 border-b border-border-subtle px-3
 flex h-8 w-55 items-center gap-2 rounded-(--control-radius) border border-border bg-muted pl-2.5 pr-1.5 text-left text-body text-ink-mid outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring
+flex h-full w-95 shrink-0 flex-col bg-card
 flex items-center
 flex items-center gap-1
 flex items-center gap-1 border-t border-border-subtle pt-2
@@ -518,6 +534,7 @@ flex justify-end gap-1.5
 flex max-h-44 shrink-0 flex-col gap-2 overflow-y-auto border-b border-border-subtle bg-card p-2 md:max-h-none md:w-60 md:border-b-0 md:border-r
 flex max-h-80 flex-col gap-0.5 overflow-y-auto
 flex max-h-[300px] scroll-py-1 flex-col overflow-x-hidden overflow-y-auto [&>*]:shrink-0
+flex max-h-[85dvh] flex-col bg-card
 flex max-h-[90dvh] max-w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden bg-popover p-0 sm:max-w-260 md:h-170 md:flex-row
 flex max-w-sm flex-col items-center gap-2 text-center
 flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden
@@ -537,12 +554,14 @@ flex shrink-0 items-center gap-1
 flex shrink-0 items-center gap-1.5
 flex shrink-0 items-center justify-center gap-2 group-has-[[data-slot=item-description]]/item:self-start [&_svg]:pointer-events-none group-has-[[data-slot=item-description]]/item:translate-y-0.5
 flex shrink-0 items-center justify-center mb-2 [&_svg]:pointer-events-none [&_svg]:shrink-0
+flex shrink-0 items-center justify-end gap-2 border-t border-border bg-card px-4 py-3
 flex size-4 shrink-0 text-primary-ink
 flex size-7 items-center justify-center
 flex size-8 shrink-0 items-center justify-center rounded-(--control-radius)
 flex size-full items-center justify-center rounded-[inherit] text-ink font-medium group-data-[size=sm]/avatar:text-caption group-data-[size=md]/avatar:text-body-s group-data-[size=lg]/avatar:font-display group-data-[size=lg]/avatar:text-h2 group-data-[size=lg]/avatar:font-light
 flex touch-none p-px transition-colors select-none
 flex transition-transform
+flex w-11 shrink-0 flex-col items-center gap-1 border-l border-border bg-card px-1.5 py-2
 flex w-fit items-center gap-2 text-body leading-snug font-medium
 flex w-fit items-center gap-2 text-body leading-snug font-medium group-data-[disabled=true]/field:opacity-40
 flex w-fit items-stretch [&>*]:focus-visible:z-10 [&>*]:focus-visible:relative [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-[var(--control-radius)] has-[>[data-slot=button-group]]:gap-2
@@ -550,6 +569,7 @@ flex w-full items-start gap-2 rounded-(--control-radius) px-2 py-1.5 text-left o
 flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-body text-balance
 flex w-full min-w-0 flex-col gap-1
 flex w-full mt-2
+flex-1
 flex-1 outline-none
 flex-1 resize-none rounded-none border-0 bg-transparent py-3 focus-visible:ring-0
 flex-1 rounded-none border-0 bg-transparent focus-visible:ring-0
@@ -666,6 +686,8 @@ has-data-[slot=card-action]:grid-cols-[1fr_auto]
 header-balance
 header-balance-value
 header-search
+hidden md:contents
+hidden md:flex
 hint-body
 hits:0
 hits:{hits}
@@ -740,6 +762,7 @@ log:{log.read().join(\
 logo-background
 mask-image:var(--brand-mark)
 max-h-72
+max-h-[85dvh]
 max-h-[min(24rem,calc(100dvh-2rem))]
 max-w-105 gap-4 bg-popover p-5
 max-w-3xl
@@ -748,6 +771,7 @@ max-w-[min(24rem,calc(100vw-2rem))]
 max-w-[var(--page-max,90rem)]
 mb-3 font-medium data-[variant=legend]:text-base data-[variant=label]:text-body
 mb-7 h-10 w-auto
+md:hidden
 menu-button
 menu-item
 menubar-checkbox-item
@@ -765,6 +789,7 @@ menubar-sub-content
 menubar-sub-trigger
 menubar-trigger
 min-h-0 flex-1 flex-col gap-0 md:flex-row
+min-h-0 flex-1 overflow-y-auto
 min-h-11 px-6 text-body-l has-[>svg]:px-4
 min-h-14
 min-h-16
@@ -773,6 +798,7 @@ min-h-20 px-3 py-2 text-base pointer-fine:text-base
 min-h-40
 min-w-0
 min-w-0 flex-1 truncate
+min-w-0 flex-1 truncate text-body font-medium text-ink
 min-w-0 flex-auto shrink-0 rounded-none shadow-none first:rounded-l-[var(--control-radius)] last:rounded-r-[var(--control-radius)] focus:z-10 focus-visible:z-10 data-[variant=outline]:-ml-px data-[variant=outline]:first:ml-0 data-[state=on]:z-10
 min-w-0 shrink-0 grow-0 basis-full
 min-w-0 truncate text-body-l text-ink
@@ -976,6 +1002,7 @@ size-3.5
 size-4
 size-4 animate-spin
 size-4 opacity-40
+size-4 rotate-180
 size-4 shrink-0 opacity-40
 size-4 shrink-0 text-accent-debug
 size-4 text-ink-soft
@@ -994,6 +1021,7 @@ slide-in-from-left
 slider-range
 slider-thumb
 slider-track
+sm:max-w-105
 smart-header
 smart-header-context
 smart-header-palette
@@ -1142,6 +1170,7 @@ w-80 p-1
 w-auto p-0
 w-full border-collapse mt-4
 w-full caption-bottom text-body
+w-full gap-0 border-border-strong bg-card p-0 sm:max-w-105 [&>[data-slot=sheet-close]]:hidden
 w-full justify-start gap-2 text-left font-normal data-[placeholder]:text-ink-soft [&>svg]:text-ink-soft
 w-full px-[var(--page-px)]
 w-full text-body

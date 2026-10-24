@@ -30,6 +30,7 @@ pub fn manifest() -> Vec<(&'static str, Vec<Ts>)> {
 		("top-bar", top_bar()),
 		("smart-header", smart_header()),
 		("header-controls", header_controls()),
+		("aside", aside()),
 		("focus", focus()),
 		("switch", switch()),
 		("checkbox", checkbox()),
@@ -1787,6 +1788,68 @@ fn smart_header() -> Vec<Ts> {
 			name: "SMART_HEADER_CONTEXT",
 			value: SMART_HEADER_CONTEXT,
 		},
+	]
+}
+
+fn aside() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "ASIDE_HEADER_BASE",
+			value: ASIDE_HEADER_BASE,
+		},
+		Ts::Const {
+			name: "ASIDE_HEADER_TITLE",
+			value: ASIDE_HEADER_TITLE,
+		},
+		Ts::Const {
+			name: "ASIDE_HEADER_BACK_ICON",
+			value: ASIDE_HEADER_BACK_ICON,
+		},
+		Ts::Const {
+			name: "ASIDE_HEADER_CLOSE_ICON",
+			value: ASIDE_HEADER_CLOSE_ICON,
+		},
+		Ts::Const {
+			name: "ASIDE_RAIL_BASE",
+			value: ASIDE_RAIL_BASE,
+		},
+		Ts::Const {
+			name: "ASIDE_RAIL_SPACER",
+			value: ASIDE_RAIL_SPACER,
+		},
+		Ts::Const {
+			name: "ASIDE_BODY",
+			value: ASIDE_BODY,
+		},
+		Ts::Const {
+			name: "ASIDE_FOOTER",
+			value: ASIDE_FOOTER,
+		},
+		Ts::Const {
+			name: "ASIDE_PANEL_DOCKED",
+			value: ASIDE_PANEL_DOCKED,
+		},
+		Ts::Const {
+			name: "ASIDE_PANEL_DRAWER",
+			value: ASIDE_PANEL_DRAWER,
+		},
+		Ts::Const {
+			name: "ASIDE_PANEL_SHEET",
+			value: ASIDE_PANEL_SHEET,
+		},
+		Ts::Const {
+			name: "ASIDE_PANEL_WIDE_ONLY",
+			value: ASIDE_PANEL_WIDE_ONLY,
+		},
+		Ts::Const {
+			name: "ASIDE_PANEL_WIDE_ONLY_WRAPPER",
+			value: ASIDE_PANEL_WIDE_ONLY_WRAPPER,
+		},
+		Ts::Const {
+			name: "ASIDE_PANEL_NARROW_ONLY",
+			value: ASIDE_PANEL_NARROW_ONLY,
+		},
+		table::<AsidePanelSide>("asidePanelSideClasses", "AsidePanelSide"),
 	]
 }
 

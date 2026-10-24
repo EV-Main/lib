@@ -40,6 +40,7 @@ const GALLERY: &[(&str, fn() -> Element)] = &[
 	("WorkspaceTabs", d_workspace_tabs), ("AccountList", d_account_list), ("AccountSettingsDialog", d_account_settings_dialog),
 	("PopoverForm", d_popover_form), ("ConfirmDialog", d_confirm_dialog), ("KeyValue", d_key_value),
 	("TopBar", d_top_bar), ("SmartHeader", d_smart_header), ("HeaderControls", d_header_controls),
+	("Aside", d_aside),
 	("Accordion", d_accordion), ("Collapsible", d_collapsible), ("InputGroup", d_input_group),
 	("InputOTP", d_input_otp), ("Carousel", d_carousel), ("Calendar", d_calendar), ("DateTimePicker", d_date_time_picker),
 	("Tooltip", d_tooltip), ("Popover", d_popover), ("HoverCard", d_hover_card),
@@ -726,6 +727,50 @@ fn d_top_bar() -> Element {
 				StatusItem { tone: StatusTone::Positive, value: rsx! { "12 ms" }, "Feed" }
 				Avatar { AvatarFallback { "AP" } }
 			},
+		}
+	}
+}
+
+fn d_aside() -> Element {
+	let glyph = |d: &'static str| {
+		rsx! {
+			svg { class: "size-4", view_box: "0 0 24 24", fill: "none", stroke: "currentColor", stroke_width: "1.75", "aria-hidden": "true",
+				path { d }
+			}
+		}
+	};
+	let item = |id: &str, label: &str, d: &'static str| AsideRailItem {
+		id: id.into(),
+		label: label.into(),
+		icon: glyph(d),
+	};
+	let items = vec![
+		item("list", "Watchlist", "M4 6h16M4 12h16M4 18h10"),
+		item("chat", "Assistant", "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"),
+	];
+	let end_items = vec![item("set", "Settings", "M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z")];
+	rsx! {
+		div { class: "flex h-80 w-full overflow-hidden border border-border bg-background",
+			AsidePanel { aria_label: "Navigation", side: AsidePanelSide::Left, collapse_below: AsideCollapse::Never, class: "w-65",
+				header: rsx! { AsideHeader { title: rsx! { "Navigation" } } },
+				p { class: "p-3 text-body text-ink-mid", "Portfolio" }
+			}
+			div { class: "min-w-0 flex-1 p-4 text-body text-ink-mid", "Content" }
+			AsidePanel {
+				aria_label: "Edit alert",
+				collapse_below: AsideCollapse::Never,
+				header: rsx! {
+					AsideHeader {
+						title: rsx! { "Edit alert for a very long instrument name" },
+						on_back: |_| {},
+						on_close: |_| {},
+						actions: rsx! { IconButton { aria_label: "Pin", size: Size::Sm, pressed: true, {glyph("M12 17v5M9 3h6l-1 7 4 3H6l4-3z")} } },
+					}
+				},
+				footer: rsx! { Button { variant: ButtonVariant::Ghost, size: Size::Sm, "Cancel" } Button { size: Size::Sm, "Save" } },
+				p { class: "p-4 text-body text-ink-mid", "BTC-USD above 64,000" }
+			}
+			AsideRail { items, end_items, value: "chat".to_string(), on_value_change: |_| {} }
 		}
 	}
 }

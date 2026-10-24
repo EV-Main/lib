@@ -26,15 +26,16 @@ mod test_util;
 // prop are re-exported.
 pub(crate) use ev_lib_classes::*;
 pub use ev_lib_classes::{
-	Accent, AlertVariant, BadgeVariant, BookSide, ButtonGroupOrientation, ButtonVariant, ConfirmDialogTone, DrawerDirection, EmptyMediaVariant, FieldOrientation, HeaderBalanceTone,
-	IconButtonVariant, InputGroupAddonAlign, InputGroupButtonSize, ItemMediaVariant, ItemSize, ItemVariant, OrderSide, Orientation, Polarity, ScrollBarOrientation, SectionLabelTone,
-	SettingsSectionTone, Size, StatusTone, Surface, SystemBannerTone, TableAlign, TableDensity, TableVariant, TerminalArea, ToastPosition, ToastVariant, ToggleVariant,
+	Accent, AlertVariant, AsidePanelSide, BadgeVariant, BookSide, ButtonGroupOrientation, ButtonVariant, ConfirmDialogTone, DrawerDirection, EmptyMediaVariant, FieldOrientation,
+	HeaderBalanceTone, IconButtonVariant, InputGroupAddonAlign, InputGroupButtonSize, ItemMediaVariant, ItemSize, ItemVariant, OrderSide, Orientation, Polarity, ScrollBarOrientation,
+	SectionLabelTone, SettingsSectionTone, Size, StatusTone, Surface, SystemBannerTone, TableAlign, TableDensity, TableVariant, TerminalArea, ToastPosition, ToastVariant, ToggleVariant,
 };
 
 mod accordion;
 mod account_list;
 mod account_settings_dialog;
 mod alert;
+mod aside;
 mod auth_wall;
 mod avatar;
 mod badge;
@@ -93,6 +94,7 @@ pub use accordion::{Accordion, AccordionContent, AccordionItem, AccordionTrigger
 pub use account_list::{AccountList, AccountListItem};
 pub use account_settings_dialog::{AccountSettingsDialog, AccountSettingsDialogLabels, AccountSettingsSection};
 pub use alert::{Alert, AlertDescription, AlertTitle};
+pub use aside::{AsideCollapse, AsideHeader, AsideHeaderLabels, AsidePanel, AsidePanelMode, AsideRail, AsideRailItem};
 pub use auth_wall::AuthWall;
 pub use avatar::{Avatar, AvatarFallback, AvatarImage};
 pub use badge::Badge;

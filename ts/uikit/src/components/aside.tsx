@@ -2,6 +2,20 @@
 
 import * as React from "react";
 import { cn } from "../lib/cn";
+import {
+  ASIDE_BODY,
+  ASIDE_FOOTER,
+  ASIDE_HEADER_BACK_ICON,
+  ASIDE_HEADER_BASE,
+  ASIDE_HEADER_TITLE,
+  ASIDE_PANEL_DOCKED,
+  ASIDE_PANEL_DRAWER,
+  ASIDE_PANEL_SHEET,
+  ASIDE_RAIL_BASE,
+  ASIDE_RAIL_SPACER,
+  asidePanelSideClasses,
+  type AsidePanelSide,
+} from "../generated/aside";
 import { Drawer, DrawerContent } from "./drawer";
 import { IconButton } from "./icon-button";
 import { Sheet, SheetContent } from "./sheet";
@@ -28,15 +42,15 @@ export function AsideHeader({ title, onBack, onClose, actions, labels = {}, clas
   return (
     <div
       data-slot="aside-header"
-      className={cn("flex h-11 shrink-0 items-center gap-1.5 border-b border-border bg-card pl-3 pr-2", className)}
+      className={cn(ASIDE_HEADER_BASE, className)}
       {...props}
     >
       {onBack && (
         <IconButton aria-label={labels.back ?? "Back"} size="sm" onClick={onBack}>
-          <UiIcon name="chevron-right" className="size-4 rotate-180" />
+          <UiIcon name="chevron-right" className={ASIDE_HEADER_BACK_ICON} />
         </IconButton>
       )}
-      <h2 className="min-w-0 flex-1 truncate text-body font-medium text-ink">{title}</h2>
+      <h2 className={ASIDE_HEADER_TITLE}>{title}</h2>
       {actions}
       {onClose && (
         <IconButton aria-label={labels.close ?? "Close"} size="sm" onClick={onClose}>
@@ -92,11 +106,11 @@ export function AsideRail({
       role="group"
       aria-label={ariaLabel}
       data-slot="aside-rail"
-      className={cn("flex w-11 shrink-0 flex-col items-center gap-1 border-l border-border bg-card px-1.5 py-2", className)}
+      className={cn(ASIDE_RAIL_BASE, className)}
       {...props}
     >
       {items.map(button)}
-      <span className="flex-1" />
+      <span className={ASIDE_RAIL_SPACER} />
       {endItems.map(button)}
     </div>
   );
@@ -123,7 +137,7 @@ export interface AsidePanelProps extends Omit<React.ComponentProps<"aside">, "ti
   "aria-label": string;
   mode?: AsidePanelMode;
   /** Which edge of the screen it hugs. Default `right`. */
-  side?: "left" | "right";
+  side?: AsidePanelSide;
   open?: boolean;
   /**
    * Escape, the scrim and the drawer drag call it with `false`. A docked panel
@@ -166,11 +180,11 @@ export function AsidePanel({
   const body = (
     <>
       {header}
-      <div data-slot="aside-body" className="min-h-0 flex-1 overflow-y-auto">
+      <div data-slot="aside-body" className={ASIDE_BODY}>
         {children}
       </div>
       {footer != null && (
-        <div data-slot="aside-footer" className="flex shrink-0 items-center justify-end gap-2 border-t border-border bg-card px-4 py-3">
+        <div data-slot="aside-footer" className={ASIDE_FOOTER}>
           {footer}
         </div>
       )}
@@ -184,11 +198,7 @@ export function AsidePanel({
         data-slot="aside-panel"
         data-mode="docked"
         data-side={side}
-        className={cn(
-          "flex h-full w-95 shrink-0 flex-col bg-card",
-          side === "right" ? "border-l border-border" : "border-r border-border",
-          className,
-        )}
+        className={cn(ASIDE_PANEL_DOCKED, asidePanelSideClasses[side], className)}
         {...props}
       >
         {body}
@@ -201,7 +211,7 @@ export function AsidePanel({
   if (!wide) {
     return (
       <Drawer open={open} {...(onOpenChange ? { onOpenChange } : {})} direction="bottom">
-        <DrawerContent aria-label={label} className="flex max-h-[85dvh] flex-col bg-card">
+        <DrawerContent aria-label={label} className={ASIDE_PANEL_DRAWER}>
           {body}
         </DrawerContent>
       </Drawer>
@@ -212,10 +222,7 @@ export function AsidePanel({
       <SheetContent
         side={side}
         aria-label={label}
-        className={cn(
-          "w-full gap-0 border-border-strong bg-card p-0 sm:max-w-105 [&>[data-slot=sheet-close]]:hidden",
-          className,
-        )}
+        className={cn(ASIDE_PANEL_SHEET, className)}
       >
         {body}
       </SheetContent>
