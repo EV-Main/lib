@@ -1,6 +1,15 @@
 "use client";
 
 import * as React from "react";
+import {
+  COMMAND_PALETTE_COMMAND,
+  COMMAND_PALETTE_CONTENT,
+  COMMAND_PALETTE_HINT,
+  COMMAND_PALETTE_HINTS,
+  COMMAND_PALETTE_LABEL,
+  COMMAND_PALETTE_LIST,
+  COMMAND_PALETTE_TITLE,
+} from "../generated/command-palette";
 import { cn } from "../lib/cn";
 import { useControllableState } from "../primitives/use-controllable-state";
 import {
@@ -76,12 +85,12 @@ export function CommandPalette({
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogContent
         showCloseButton={false}
-        className={cn("top-1/6 max-w-[calc(100%-2rem)] translate-y-0 gap-0 overflow-hidden bg-popover p-0 sm:max-w-105", className)}
+        className={cn(COMMAND_PALETTE_CONTENT, className)}
       >
-        <DialogTitle className="sr-only">{labels.title ?? "Command palette"}</DialogTitle>
-        <Command className="bg-transparent">
+        <DialogTitle className={COMMAND_PALETTE_TITLE}>{labels.title ?? "Command palette"}</DialogTitle>
+        <Command className={COMMAND_PALETTE_COMMAND}>
           <CommandInput placeholder={labels.placeholder ?? "Type a command or search…"} />
-          <CommandList className="max-h-72">
+          <CommandList className={COMMAND_PALETTE_LIST}>
             <CommandEmpty>{labels.empty ?? "No results."}</CommandEmpty>
             {groups.map((group, i) => (
               <React.Fragment key={group.id}>
@@ -98,7 +107,7 @@ export function CommandPalette({
                       }}
                     >
                       {item.icon}
-                      <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                      <span className={COMMAND_PALETTE_LABEL}>{item.label}</span>
                       {item.shortcut !== undefined && <CommandShortcut>{item.shortcut}</CommandShortcut>}
                     </CommandItem>
                   ))}
@@ -109,17 +118,17 @@ export function CommandPalette({
         </Command>
         <div
           data-slot="command-palette-hints"
-          className="flex items-center gap-3 border-t border-border-subtle px-2 py-1 text-caption text-ink-soft"
+          className={COMMAND_PALETTE_HINTS}
         >
-          <span className="inline-flex items-center gap-1.5">
+          <span className={COMMAND_PALETTE_HINT}>
             <Kbd>↑↓</Kbd>
             {labels.navigate ?? "navigate"}
           </span>
-          <span className="inline-flex items-center gap-1.5">
+          <span className={COMMAND_PALETTE_HINT}>
             <Kbd>↵</Kbd>
             {labels.select ?? "select"}
           </span>
-          <span className="inline-flex items-center gap-1.5">
+          <span className={COMMAND_PALETTE_HINT}>
             <Kbd>esc</Kbd>
             {labels.close ?? "close"}
           </span>

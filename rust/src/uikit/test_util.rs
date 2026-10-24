@@ -191,6 +191,11 @@ impl Harness {
 		self.fire("keydown", id, Box::new(data));
 	}
 
+	/// Fires an `input` that leaves `value` in the field.
+	pub fn input(&mut self, id: ElementId, value: &str) {
+		self.fire("input", id, Box::new(SerializedFormData::new(value.to_owned(), Vec::new())));
+	}
+
 	/// Fires a form event (`submit`, `reset`) with no field values.
 	pub fn form(&mut self, event: &str, id: ElementId) {
 		self.fire(event, id, Box::new(SerializedFormData::new(String::new(), Vec::new())));

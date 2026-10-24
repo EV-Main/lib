@@ -297,6 +297,8 @@ command-input
 command-input-wrapper
 command-item
 command-list
+command-palette-hints
+command-palette-title
 command-separator
 command-shortcut
 confirm-dialog-cancel
@@ -492,6 +494,7 @@ flex items-center gap-1 border-t border-border-subtle pt-2
 flex items-center gap-2
 flex items-center gap-2 border-t border-border px-3 py-2
 flex items-center gap-2 text-body leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-40 peer-disabled:cursor-not-allowed peer-disabled:opacity-40
+flex items-center gap-3 border-t border-border-subtle px-2 py-1 text-caption text-ink-soft
 flex items-center gap-3 rounded-(--control-radius) border p-2.5 pr-3 transition-colors
 flex items-center gap-[7px] whitespace-nowrap
 flex items-center justify-between gap-1 w-full px-1
@@ -639,6 +642,8 @@ h-auto w-full flex-1 flex-col items-stretch justify-start gap-0.5 bg-transparent
 h-full w-2.5 border-l border-l-transparent
 has-data-[slot=card-action]:grid-cols-[1fr_auto]
 hint-body
+hits:0
+hits:{hits}
 hover-card-content
 hover-card-trigger
 hover:after:bg-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex
@@ -707,6 +712,7 @@ light
 log:{log.read().join(\
 logo-background
 mask-image:var(--brand-mark)
+max-h-72
 max-h-[min(24rem,calc(100dvh-2rem))]
 max-w-105 gap-4 bg-popover p-5
 max-w-3xl
@@ -739,6 +745,7 @@ min-h-20
 min-h-20 px-3 py-2 text-base pointer-fine:text-base
 min-h-40
 min-w-0
+min-w-0 flex-1 truncate
 min-w-0 flex-auto shrink-0 rounded-none shadow-none first:rounded-l-[var(--control-radius)] last:rounded-r-[var(--control-radius)] focus:z-10 focus-visible:z-10 data-[variant=outline]:-ml-px data-[variant=outline]:first:ml-0 data-[state=on]:z-10
 min-w-0 shrink-0 grow-0 basis-full
 min-w-0 truncate text-body-l text-ink
@@ -1062,6 +1069,7 @@ top-1/2
 top-1/2 -left-12 -translate-y-1/2
 top-1/2 -right-12 -translate-y-1/2
 top-1/6
+top-1/6 max-w-[calc(100%-2rem)] translate-y-0 gap-0 overflow-hidden bg-popover p-0 sm:max-w-105
 top-4 left-1/2 -translate-x-1/2
 top-4 left-4
 top-4 right-4

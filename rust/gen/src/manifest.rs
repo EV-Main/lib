@@ -51,6 +51,7 @@ pub fn manifest() -> Vec<(&'static str, Vec<Ts>)> {
 		("tooltip", tooltip()),
 		("dialog", dialog()),
 		("command", command()),
+		("command-palette", command_palette()),
 		("table", data_table()),
 		("form", form()),
 		("navigation-menu", navigation_menu()),
@@ -816,6 +817,39 @@ fn dialog() -> Vec<Ts> {
 		Ts::Const {
 			name: "DIALOG_DESCRIPTION",
 			value: DIALOG_DESCRIPTION,
+		},
+	]
+}
+
+fn command_palette() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "COMMAND_PALETTE_CONTENT",
+			value: COMMAND_PALETTE_CONTENT,
+		},
+		Ts::Const {
+			name: "COMMAND_PALETTE_TITLE",
+			value: COMMAND_PALETTE_TITLE,
+		},
+		Ts::Const {
+			name: "COMMAND_PALETTE_COMMAND",
+			value: COMMAND_PALETTE_COMMAND,
+		},
+		Ts::Const {
+			name: "COMMAND_PALETTE_LIST",
+			value: COMMAND_PALETTE_LIST,
+		},
+		Ts::Const {
+			name: "COMMAND_PALETTE_LABEL",
+			value: COMMAND_PALETTE_LABEL,
+		},
+		Ts::Const {
+			name: "COMMAND_PALETTE_HINTS",
+			value: COMMAND_PALETTE_HINTS,
+		},
+		Ts::Const {
+			name: "COMMAND_PALETTE_HINT",
+			value: COMMAND_PALETTE_HINT,
 		},
 	]
 }

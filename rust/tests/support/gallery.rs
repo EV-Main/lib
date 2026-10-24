@@ -44,7 +44,7 @@ const GALLERY: &[(&str, fn() -> Element)] = &[
 	("Tooltip", d_tooltip), ("Popover", d_popover), ("HoverCard", d_hover_card),
 	("DropdownMenu", d_dropdown_menu), ("ContextMenu", d_context_menu), ("Menubar", d_menubar),
 	("Select", d_select), ("Dialog", d_dialog), ("AlertDialog", d_alert_dialog),
-	("Sheet", d_sheet), ("Drawer", d_drawer), ("Command", d_command), ("NavigationMenu", d_navigation_menu),
+	("Sheet", d_sheet), ("Drawer", d_drawer), ("Command", d_command), ("CommandPalette", d_command_palette), ("NavigationMenu", d_navigation_menu),
 	("Sidebar", d_sidebar), ("ScrollArea", d_scroll_area),
 	("Form", d_form), ("Container", d_container), ("Terminal", d_terminal),
 ];
@@ -1139,6 +1139,33 @@ fn d_command() -> Element {
 				}
 			}
 		}
+	}
+}
+
+fn d_command_palette() -> Element {
+	let item = |id: &str, label: &str, shortcut: Option<&str>| CommandPaletteItem {
+		id: id.into(),
+		label: label.into(),
+		icon: None,
+		shortcut: shortcut.map(Into::into),
+		keywords: Vec::new(),
+		disabled: false,
+		on_select: EventHandler::new(|_| {}),
+	};
+	let groups = vec![
+		CommandPaletteGroup {
+			id: "suggestions".into(),
+			heading: Some("Suggestions".into()),
+			items: vec![item("new", "New workspace", Some("⌘N")), item("find", "Search symbol", None)],
+		},
+		CommandPaletteGroup {
+			id: "settings".into(),
+			heading: Some("Settings".into()),
+			items: vec![item("theme", "Switch theme", Some("⌘T"))],
+		},
+	];
+	rsx! {
+		CommandPalette { default_open: true, groups }
 	}
 }
 

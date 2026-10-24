@@ -46,6 +46,7 @@ mod card;
 mod carousel;
 mod checkbox;
 mod collapsible;
+mod command_palette;
 mod confirm_dialog;
 mod container;
 mod empty;
@@ -101,6 +102,7 @@ pub use carousel::{Carousel, CarouselContent, CarouselEdgeFade, CarouselItem, Ca
 pub use checkbox::Checkbox;
 pub use collapsible::{Collapsible, CollapsibleContent, CollapsibleTrigger};
 pub use command::{Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut};
+pub use command_palette::{CommandPalette, CommandPaletteGroup, CommandPaletteItem, CommandPaletteLabels, use_command_palette_shortcut};
 pub use confirm_dialog::{ConfirmDialog, ConfirmDialogLabels};
 pub use container::Container;
 pub use drawer::{Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerTitle, DrawerTrigger};
