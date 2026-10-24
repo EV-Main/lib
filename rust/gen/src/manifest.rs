@@ -22,6 +22,8 @@ pub fn manifest() -> Vec<(&'static str, Vec<Ts>)> {
 		("system-banner", system_banner()),
 		("section-label", section_label()),
 		("workspace-tab", workspace_tab()),
+		("account-list", account_list()),
+		("account-settings-dialog", account_settings_dialog()),
 		("focus", focus()),
 		("switch", switch()),
 		("checkbox", checkbox()),
@@ -1484,6 +1486,128 @@ fn workspace_tab() -> Vec<Ts> {
 		Ts::Const {
 			name: "WORKSPACE_TAB_SPACER",
 			value: WORKSPACE_TAB_SPACER,
+		},
+	]
+}
+
+fn account_list() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "ACCOUNT_LIST_BASE",
+			value: ACCOUNT_LIST_BASE,
+		},
+		Ts::Const {
+			name: "ACCOUNT_LIST_ITEM_BASE",
+			value: ACCOUNT_LIST_ITEM_BASE,
+		},
+		Ts::Const {
+			name: "ACCOUNT_LIST_ITEM_CHECKED",
+			value: ACCOUNT_LIST_ITEM_CHECKED,
+		},
+		Ts::Const {
+			name: "ACCOUNT_LIST_ITEM_UNCHECKED",
+			value: ACCOUNT_LIST_ITEM_UNCHECKED,
+		},
+		Ts::Const {
+			name: "ACCOUNT_LIST_ITEM_DISABLED",
+			value: ACCOUNT_LIST_ITEM_DISABLED,
+		},
+		Ts::Const {
+			name: "ACCOUNT_LIST_ITEM_RADIO",
+			value: ACCOUNT_LIST_ITEM_RADIO,
+		},
+		Ts::Const {
+			name: "ACCOUNT_LIST_ITEM_AVATAR",
+			value: ACCOUNT_LIST_ITEM_AVATAR,
+		},
+		Ts::Const {
+			name: "ACCOUNT_LIST_ITEM_AVATAR_FALLBACK",
+			value: ACCOUNT_LIST_ITEM_AVATAR_FALLBACK,
+		},
+		Ts::Const {
+			name: "ACCOUNT_LIST_ITEM_TEXT",
+			value: ACCOUNT_LIST_ITEM_TEXT,
+		},
+		Ts::Const {
+			name: "ACCOUNT_LIST_ITEM_NAME",
+			value: ACCOUNT_LIST_ITEM_NAME,
+		},
+		Ts::Const {
+			name: "ACCOUNT_LIST_ITEM_HANDLE",
+			value: ACCOUNT_LIST_ITEM_HANDLE,
+		},
+		Ts::Const {
+			name: "ACCOUNT_LIST_ITEM_BADGES",
+			value: ACCOUNT_LIST_ITEM_BADGES,
+		},
+		Ts::Const {
+			name: "ACCOUNT_LIST_ITEM_FIGURE",
+			value: ACCOUNT_LIST_ITEM_FIGURE,
+		},
+		Ts::Const {
+			name: "ACCOUNT_LIST_ITEM_CHECK",
+			value: ACCOUNT_LIST_ITEM_CHECK,
+		},
+		Ts::Const {
+			name: "ACCOUNT_LIST_ITEM_CHECK_HIDDEN",
+			value: ACCOUNT_LIST_ITEM_CHECK_HIDDEN,
+		},
+		Ts::Const {
+			name: "ACCOUNT_LIST_ITEM_ACTIONS",
+			value: ACCOUNT_LIST_ITEM_ACTIONS,
+		},
+	]
+}
+
+fn account_settings_dialog() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "ACCOUNT_SETTINGS_DIALOG_CONTENT",
+			value: ACCOUNT_SETTINGS_DIALOG_CONTENT,
+		},
+		Ts::Const {
+			name: "ACCOUNT_SETTINGS_DIALOG_TABS",
+			value: ACCOUNT_SETTINGS_DIALOG_TABS,
+		},
+		Ts::Const {
+			name: "ACCOUNT_SETTINGS_DIALOG_SIDEBAR",
+			value: ACCOUNT_SETTINGS_DIALOG_SIDEBAR,
+		},
+		Ts::Const {
+			name: "ACCOUNT_SETTINGS_DIALOG_LIST",
+			value: ACCOUNT_SETTINGS_DIALOG_LIST,
+		},
+		Ts::Const {
+			name: "ACCOUNT_SETTINGS_DIALOG_ENTRY",
+			value: ACCOUNT_SETTINGS_DIALOG_ENTRY,
+		},
+		Ts::Const {
+			name: "ACCOUNT_SETTINGS_DIALOG_FOOTER",
+			value: ACCOUNT_SETTINGS_DIALOG_FOOTER,
+		},
+		Ts::Const {
+			name: "ACCOUNT_SETTINGS_DIALOG_PANE",
+			value: ACCOUNT_SETTINGS_DIALOG_PANE,
+		},
+		Ts::Const {
+			name: "ACCOUNT_SETTINGS_DIALOG_HEADING",
+			value: ACCOUNT_SETTINGS_DIALOG_HEADING,
+		},
+		Ts::Const {
+			name: "ACCOUNT_SETTINGS_DIALOG_TITLE",
+			value: ACCOUNT_SETTINGS_DIALOG_TITLE,
+		},
+		Ts::Const {
+			name: "ACCOUNT_SETTINGS_DIALOG_DESCRIPTION",
+			value: ACCOUNT_SETTINGS_DIALOG_DESCRIPTION,
+		},
+		Ts::Const {
+			name: "ACCOUNT_SETTINGS_DIALOG_PANEL",
+			value: ACCOUNT_SETTINGS_DIALOG_PANEL,
+		},
+		Ts::Const {
+			name: "ACCOUNT_SETTINGS_DIALOG_CLOSE",
+			value: ACCOUNT_SETTINGS_DIALOG_CLOSE,
 		},
 	]
 }

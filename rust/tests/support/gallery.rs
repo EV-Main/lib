@@ -37,7 +37,7 @@ const GALLERY: &[(&str, fn() -> Element)] = &[
 	("IconButton", d_icon_button), ("StatusItem", d_status_item),
 	("FormRow", d_form_row), ("Settings", d_settings),
 	("SystemBanner", d_system_banner), ("SectionLabel", d_section_label),
-	("WorkspaceTabs", d_workspace_tabs),
+	("WorkspaceTabs", d_workspace_tabs), ("AccountList", d_account_list), ("AccountSettingsDialog", d_account_settings_dialog),
 	("Accordion", d_accordion), ("Collapsible", d_collapsible), ("InputGroup", d_input_group),
 	("InputOTP", d_input_otp), ("Carousel", d_carousel), ("Calendar", d_calendar), ("DateTimePicker", d_date_time_picker),
 	("Tooltip", d_tooltip), ("Popover", d_popover), ("HoverCard", d_hover_card),
@@ -730,6 +730,57 @@ fn d_workspace_tabs() -> Element {
 			WorkspaceTab { value: "trading", on_close: |_| {}, close_label: "Close Trading", "Trading" }
 			WorkspaceTab { value: "portfolio", on_close: |_| {}, close_label: "Close Portfolio", "Portfolio" }
 			WorkspaceTab { value: "reports", "Reports" }
+		}
+	}
+}
+
+fn d_account_list() -> Element {
+	rsx! {
+		AccountList { aria_label: "Accounts", default_value: "personal", class: "w-[28rem]",
+			AccountListItem {
+				value: "personal",
+				name: "Jane Doe",
+				handle: rsx! { "jane.doe@example.com" },
+				badges: rsx! { Badge { "Owner" } },
+				figure: rsx! { "$12,480" },
+			}
+			AccountListItem {
+				value: "team",
+				name: "Acme Capital",
+				handle: rsx! { "team account" },
+				actions: rsx! { IconButton { aria_label: "More", "⋯" } },
+			}
+			AccountListItem { value: "old", name: "Legacy fund", handle: rsx! { "closed" }, disabled: true }
+		}
+	}
+}
+
+fn d_account_settings_dialog() -> Element {
+	let sections = vec![
+		AccountSettingsSection {
+			id: "profile".into(),
+			label: rsx! { "Profile" },
+			icon: None,
+			content: rsx! {
+				SettingsSection { title: rsx! { "Personal details" },
+					SettingsRow { label: rsx! { "Name" }, Input { value: "Jane Doe" } }
+				}
+			},
+		},
+		AccountSettingsSection {
+			id: "security".into(),
+			label: rsx! { "Security" },
+			icon: None,
+			content: rsx! { p { "Two-factor authentication is on." } },
+		},
+	];
+	rsx! {
+		AccountSettingsDialog {
+			default_open: true,
+			title: rsx! { "Account settings" },
+			description: rsx! { "Manage your profile and sign-in." },
+			sections,
+			sidebar_footer: rsx! { Button { variant: ButtonVariant::Ghost, "Sign out" } },
 		}
 	}
 }

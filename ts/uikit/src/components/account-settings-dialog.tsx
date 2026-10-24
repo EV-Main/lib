@@ -1,4 +1,18 @@
 import * as React from "react";
+import {
+  ACCOUNT_SETTINGS_DIALOG_CLOSE,
+  ACCOUNT_SETTINGS_DIALOG_CONTENT,
+  ACCOUNT_SETTINGS_DIALOG_DESCRIPTION,
+  ACCOUNT_SETTINGS_DIALOG_ENTRY,
+  ACCOUNT_SETTINGS_DIALOG_FOOTER,
+  ACCOUNT_SETTINGS_DIALOG_HEADING,
+  ACCOUNT_SETTINGS_DIALOG_LIST,
+  ACCOUNT_SETTINGS_DIALOG_PANE,
+  ACCOUNT_SETTINGS_DIALOG_PANEL,
+  ACCOUNT_SETTINGS_DIALOG_SIDEBAR,
+  ACCOUNT_SETTINGS_DIALOG_TABS,
+  ACCOUNT_SETTINGS_DIALOG_TITLE,
+} from "../generated/account-settings-dialog";
 import { cn } from "../lib/cn";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "./dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
@@ -35,9 +49,6 @@ export interface AccountSettingsDialogProps {
   className?: string;
 }
 
-const ENTRY =
-  "h-8 w-full flex-none justify-start gap-2.5 rounded-(--control-radius) border-0 px-2.5 text-body font-normal text-ink-mid shadow-none data-[state=active]:bg-active data-[state=active]:text-ink data-[state=active]:shadow-none hover:bg-hover [&_svg]:text-ink-soft";
-
 /**
  * The account modal: a vertical tab rail on the left, the active section on
  * the right. Sections are the caller's, so Profile and Security (or any other)
@@ -66,46 +77,43 @@ export function AccountSettingsDialog({
     >
       <DialogContent
         showCloseButton={false}
-        className={cn(
-          "flex max-h-[90dvh] max-w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden bg-popover p-0 sm:max-w-260 md:h-170 md:flex-row",
-          className,
-        )}
+        className={cn(ACCOUNT_SETTINGS_DIALOG_CONTENT, className)}
       >
         <Tabs
           orientation="vertical"
           {...(value !== undefined ? { value } : { defaultValue: defaultValue ?? first })}
           {...(onValueChange ? { onValueChange } : {})}
-          className="min-h-0 flex-1 flex-col gap-0 md:flex-row"
+          className={ACCOUNT_SETTINGS_DIALOG_TABS}
         >
-          <div className="flex max-h-44 shrink-0 flex-col gap-2 overflow-y-auto border-b border-border-subtle bg-card p-2 md:max-h-none md:w-60 md:border-b-0 md:border-r">
-            <TabsList className="h-auto w-full flex-1 flex-col items-stretch justify-start gap-0.5 bg-transparent p-0">
+          <div className={ACCOUNT_SETTINGS_DIALOG_SIDEBAR}>
+            <TabsList className={ACCOUNT_SETTINGS_DIALOG_LIST}>
               {sections.map((s) => (
-                <TabsTrigger key={s.id} value={s.id} className={ENTRY}>
+                <TabsTrigger key={s.id} value={s.id} className={ACCOUNT_SETTINGS_DIALOG_ENTRY}>
                   {s.icon}
                   {s.label}
                 </TabsTrigger>
               ))}
             </TabsList>
             {sidebarFooter != null && (
-              <div className="flex items-center gap-1 border-t border-border-subtle pt-2">{sidebarFooter}</div>
+              <div className={ACCOUNT_SETTINGS_DIALOG_FOOTER}>{sidebarFooter}</div>
             )}
           </div>
-          <div className="relative flex min-h-0 min-w-0 flex-1 flex-col gap-5 overflow-y-auto p-6 md:p-8">
-            <div className="flex flex-col gap-1 pr-10">
-              <DialogTitle className="font-display text-h1 font-light text-ink">{title}</DialogTitle>
+          <div className={ACCOUNT_SETTINGS_DIALOG_PANE}>
+            <div className={ACCOUNT_SETTINGS_DIALOG_HEADING}>
+              <DialogTitle className={ACCOUNT_SETTINGS_DIALOG_TITLE}>{title}</DialogTitle>
               {description != null && (
-                <DialogDescription className="text-body text-ink-mid">{description}</DialogDescription>
+                <DialogDescription className={ACCOUNT_SETTINGS_DIALOG_DESCRIPTION}>{description}</DialogDescription>
               )}
             </div>
             {sections.map((s) => (
-              <TabsContent key={s.id} value={s.id} className="flex flex-col gap-5">
+              <TabsContent key={s.id} value={s.id} className={ACCOUNT_SETTINGS_DIALOG_PANEL}>
                 {s.content}
               </TabsContent>
             ))}
           </div>
         </Tabs>
         <DialogClose asChild>
-          <IconButton aria-label={labels.close ?? "Close"} className="absolute right-4 top-4">
+          <IconButton aria-label={labels.close ?? "Close"} className={ACCOUNT_SETTINGS_DIALOG_CLOSE}>
             <UiIcon name="x" />
           </IconButton>
         </DialogClose>

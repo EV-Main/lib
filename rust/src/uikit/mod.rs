@@ -32,6 +32,8 @@ pub use ev_lib_classes::{
 };
 
 mod accordion;
+mod account_list;
+mod account_settings_dialog;
 mod alert;
 mod auth_wall;
 mod avatar;
@@ -81,6 +83,8 @@ mod toggle_group;
 mod workspace_tabs;
 
 pub use accordion::{Accordion, AccordionContent, AccordionItem, AccordionTrigger, AccordionType};
+pub use account_list::{AccountList, AccountListItem};
+pub use account_settings_dialog::{AccountSettingsDialog, AccountSettingsDialogLabels, AccountSettingsSection};
 pub use alert::{Alert, AlertDescription, AlertTitle};
 pub use auth_wall::AuthWall;
 pub use avatar::{Avatar, AvatarFallback, AvatarImage};

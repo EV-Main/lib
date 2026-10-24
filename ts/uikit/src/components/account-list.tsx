@@ -1,6 +1,24 @@
 "use client";
 
 import * as React from "react";
+import {
+  ACCOUNT_LIST_BASE,
+  ACCOUNT_LIST_ITEM_ACTIONS,
+  ACCOUNT_LIST_ITEM_AVATAR,
+  ACCOUNT_LIST_ITEM_AVATAR_FALLBACK,
+  ACCOUNT_LIST_ITEM_BADGES,
+  ACCOUNT_LIST_ITEM_BASE,
+  ACCOUNT_LIST_ITEM_CHECK,
+  ACCOUNT_LIST_ITEM_CHECK_HIDDEN,
+  ACCOUNT_LIST_ITEM_CHECKED,
+  ACCOUNT_LIST_ITEM_DISABLED,
+  ACCOUNT_LIST_ITEM_FIGURE,
+  ACCOUNT_LIST_ITEM_HANDLE,
+  ACCOUNT_LIST_ITEM_NAME,
+  ACCOUNT_LIST_ITEM_RADIO,
+  ACCOUNT_LIST_ITEM_TEXT,
+  ACCOUNT_LIST_ITEM_UNCHECKED,
+} from "../generated/account-list";
 import { cn } from "../lib/cn";
 import { useControllableState } from "../primitives/use-controllable-state";
 import { Avatar, AvatarFallback } from "./avatar";
@@ -59,7 +77,7 @@ export function AccountList({
       <div
         role="radiogroup"
         data-slot="account-list"
-        className={cn("flex flex-col gap-2", className)}
+        className={cn(ACCOUNT_LIST_BASE, className)}
         onKeyDown={(e) => {
           onKeyDown?.(e);
           if (!e.defaultPrevented) move(e);
@@ -107,9 +125,9 @@ export function AccountListItem({
       data-slot="account-list-item"
       data-state={checked ? "checked" : "unchecked"}
       className={cn(
-        "flex items-center gap-3 rounded-(--control-radius) border p-2.5 pr-3 transition-colors",
-        checked ? "border-primary-border bg-selected" : "border-border-subtle bg-muted hover:bg-hover",
-        disabled && "opacity-40",
+        ACCOUNT_LIST_ITEM_BASE,
+        checked ? ACCOUNT_LIST_ITEM_CHECKED : ACCOUNT_LIST_ITEM_UNCHECKED,
+        disabled && ACCOUNT_LIST_ITEM_DISABLED,
         className,
       )}
       {...props}
@@ -122,24 +140,24 @@ export function AccountListItem({
         // Until one is chosen every radio is a tab stop, or the group could not be entered.
         tabIndex={checked || ctx.value === "" ? 0 : -1}
         onClick={() => ctx.setValue(value)}
-        className="flex min-w-0 flex-1 items-center gap-3 rounded-(--control-radius) text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className={ACCOUNT_LIST_ITEM_RADIO}
       >
         {avatar ?? (
-          <Avatar className="size-14 shrink-0 rounded-(--control-radius)">
-            <AvatarFallback className="font-display text-h2 font-light text-ink">{initial}</AvatarFallback>
+          <Avatar className={ACCOUNT_LIST_ITEM_AVATAR}>
+            <AvatarFallback className={ACCOUNT_LIST_ITEM_AVATAR_FALLBACK}>{initial}</AvatarFallback>
           </Avatar>
         )}
-        <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <span className="truncate text-body-l text-ink">{name}</span>
-          {handle != null && <span className="truncate text-body text-ink-mid">{handle}</span>}
+        <span className={ACCOUNT_LIST_ITEM_TEXT}>
+          <span className={ACCOUNT_LIST_ITEM_NAME}>{name}</span>
+          {handle != null && <span className={ACCOUNT_LIST_ITEM_HANDLE}>{handle}</span>}
         </span>
-        {badges != null && <span className="flex shrink-0 items-center gap-1.5">{badges}</span>}
-        {figure != null && <span className="shrink-0 font-display text-figure-m font-light tabular-nums text-ink">{figure}</span>}
-        <span className={cn("flex size-4 shrink-0 text-primary-ink", !checked && "invisible")} aria-hidden>
+        {badges != null && <span className={ACCOUNT_LIST_ITEM_BADGES}>{badges}</span>}
+        {figure != null && <span className={ACCOUNT_LIST_ITEM_FIGURE}>{figure}</span>}
+        <span className={cn(ACCOUNT_LIST_ITEM_CHECK, !checked && ACCOUNT_LIST_ITEM_CHECK_HIDDEN)} aria-hidden>
           <UiIcon name="check" />
         </span>
       </button>
-      {actions != null && <div className="flex shrink-0 items-center gap-1">{actions}</div>}
+      {actions != null && <div className={ACCOUNT_LIST_ITEM_ACTIONS}>{actions}</div>}
     </div>
   );
 }
