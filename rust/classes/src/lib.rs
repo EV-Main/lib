@@ -240,15 +240,61 @@ pub const EV_CSS: &str = include_str!("../css/ev.css");
 /// `ring-0` never collide, and the halo's `ring-ring/50` is the one that gets
 /// dropped instead. The TS port reads an arbitrary length as a width; so must
 /// this one, or the two ports fuse the same tables into different classes.
+///
+/// `tailwind_fuse` cannot parse Tailwind v4's `(--var)` shorthand, and keeps a
+/// class it cannot parse beside the one it should replace: `rounded-full
+/// rounded-(--control-radius)` would survive whole, with the CSS order picking
+/// the radius. Such a class is merged in its `[var(--var)]` long form and
+/// written back as the caller wrote it.
 #[doc(hidden)]
 pub fn fuse(class: &str) -> String {
+	if !class.contains("-(") {
+		return merge(class);
+	}
+	let mut written = std::collections::HashMap::new();
+	let long: Vec<String> = class
+		.split_whitespace()
+		.map(|token| match var_long_form(token) {
+			Some(long) => {
+				written.insert(long.clone(), token);
+				long
+			}
+			None => token.to_owned(),
+		})
+		.collect();
+	merge(&long.join(" "))
+		.split(' ')
+		.map(|token| written.get(token).copied().unwrap_or(token))
+		.collect::<Vec<_>>()
+		.join(" ")
+}
+
+fn merge(class: &str) -> String {
 	tailwind_fuse::merge::tw_merge_override(&[class], tailwind_fuse::merge::MergeOptions::default(), ring_width_collision, |_: &str| None)
+}
+
+/// `rounded-(--r)` as `rounded-[var(--r)]`, and `text-(length:--s)` as
+/// `text-[length:var(--s)]`; `None` for a class without the shorthand.
+fn var_long_form(token: &str) -> Option<String> {
+	let inner = token.strip_suffix(')')?;
+	let open = inner.rfind("-(")?;
+	let (head, var) = (&inner[..open], &inner[open + 2..]);
+	match var.split_once(':') {
+		Some((hint, var)) if var.starts_with("--") => Some(format!("{head}-[{hint}:var({var})]")),
+		_ if var.starts_with("--") => Some(format!("{head}-[var({var})]")),
+		_ => None,
+	}
 }
 
 fn ring_width_collision(elements: &[&str], arbitrary: Option<&str>) -> Option<&'static str> {
 	match (elements, arbitrary) {
 		(["ring"], Some(value)) if is_arbitrary_length(value) => Some("ring-width"),
 		(["text", size @ ..], None) if !size.is_empty() && TEXT_SCALE.contains(&size.join("-").as_str()) => Some("font-size"),
+		// The kit's display face (theme.css `--font-display`). `tailwind_fuse`
+		// knows only `sans`/`serif`/`mono` as families and files the rest under
+		// weight, so a later `font-light` would drop the face. `tailwind-merge`
+		// reads it as a family.
+		(["font", "display"], None) => Some("font-family"),
 		_ => None,
 	}
 }
@@ -290,6 +336,25 @@ mod tests {
 		assert_eq!(cn!("text-body", "text-ink"), "text-body text-ink");
 		assert_eq!(cn!("text-body-s text-ink-mid", "text-body-l"), "text-ink-mid text-body-l");
 		assert_eq!(cn!("text-figure-m", "text-sm"), "text-sm");
+	}
+
+	/// Mirrors `tailwind-merge`: the v4 `(--var)` shorthand conflicts like its
+	/// `[var(--var)]` long form, and comes back as written.
+	#[test]
+	fn var_shorthand_conflicts_like_its_long_form() {
+		assert_eq!(cn!("rounded-full size-7", "rounded-(--control-radius)"), "size-7 rounded-(--control-radius)");
+		assert_eq!(cn!("rounded-(--control-radius)", "rounded-full"), "rounded-full");
+		assert_eq!(cn!("hover:rounded-(--a)", "rounded-(--b)"), "hover:rounded-(--a) rounded-(--b)");
+		assert_eq!(cn!("text-(length:--size) text-ink", "text-body"), "text-ink text-body");
+		assert_eq!(cn!("has-[:focus-visible]:ring-2", "p-(--pad) p-2"), "has-[:focus-visible]:ring-2 p-2");
+	}
+
+	/// The display face is a family, not a weight: a weight beside it keeps it,
+	/// and another family replaces it.
+	#[test]
+	fn display_face_is_a_font_family() {
+		assert_eq!(cn!("text-lg font-semibold", "font-display font-light"), "text-lg font-display font-light");
+		assert_eq!(cn!("font-display", "font-sans"), "font-sans");
 	}
 
 	#[test]
