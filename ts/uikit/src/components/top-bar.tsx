@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../lib/cn";
+import { TOP_BAR_BASE, TOP_BAR_END, TOP_BAR_START } from "../generated/top-bar";
 
 export interface TopBarProps extends React.ComponentProps<"header"> {
   /** The app switcher, or the service's name. */
@@ -16,13 +17,13 @@ export function TopBar({ start, end, className, ...props }: TopBarProps) {
   return (
     <header
       data-slot="top-bar"
-      className={cn("flex h-14 items-center gap-3 border-b border-border bg-background px-8", className)}
+      className={cn(TOP_BAR_BASE, className)}
       {...props}
     >
-      <div data-slot="top-bar-start" className="flex min-w-0 items-center gap-2">
+      <div data-slot="top-bar-start" className={TOP_BAR_START}>
         {start}
       </div>
-      <div data-slot="top-bar-end" className="ml-auto flex shrink-0 items-center gap-3">
+      <div data-slot="top-bar-end" className={TOP_BAR_END}>
         {end}
       </div>
     </header>

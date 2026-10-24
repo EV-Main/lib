@@ -39,6 +39,7 @@ const GALLERY: &[(&str, fn() -> Element)] = &[
 	("SystemBanner", d_system_banner), ("SectionLabel", d_section_label),
 	("WorkspaceTabs", d_workspace_tabs), ("AccountList", d_account_list), ("AccountSettingsDialog", d_account_settings_dialog),
 	("PopoverForm", d_popover_form), ("ConfirmDialog", d_confirm_dialog), ("KeyValue", d_key_value),
+	("TopBar", d_top_bar), ("SmartHeader", d_smart_header), ("HeaderControls", d_header_controls),
 	("Accordion", d_accordion), ("Collapsible", d_collapsible), ("InputGroup", d_input_group),
 	("InputOTP", d_input_otp), ("Carousel", d_carousel), ("Calendar", d_calendar), ("DateTimePicker", d_date_time_picker),
 	("Tooltip", d_tooltip), ("Popover", d_popover), ("HoverCard", d_hover_card),
@@ -712,6 +713,69 @@ fn d_system_banner() -> Element {
 			SystemBanner { tone: SystemBannerTone::Warn, title: rsx! { "Maintenance" }, "Read-only from 02:00 to 04:00 UTC" }
 			SystemBanner { action: rsx! { a { href: "#", class: "text-body text-primary-ink underline", "Details" } }, on_dismiss: |_| {}, "New reports are available" }
 			SystemBanner { tone: SystemBannerTone::Neutral, icon: rsx! {}, "Plain notice without a glyph" }
+		}
+	}
+}
+
+fn d_top_bar() -> Element {
+	rsx! {
+		TopBar {
+			class: "w-full",
+			start: rsx! { Logo { class: "h-5" } span { class: "truncate text-body text-ink", "Treasury" } },
+			end: rsx! {
+				StatusItem { tone: StatusTone::Positive, value: rsx! { "12 ms" }, "Feed" }
+				Avatar { AvatarFallback { "AP" } }
+			},
+		}
+	}
+}
+
+fn d_smart_header() -> Element {
+	let start = || rsx! { span { class: "text-body font-medium text-ink", "Trading" } };
+	let end = || rsx! { HeaderBalance { value: "$12,480.00" } };
+	rsx! {
+		div { class: "flex w-full flex-col gap-4",
+			SmartHeader {
+				start: start(),
+				end: end(),
+				toolbar: rsx! { Button { variant: ButtonVariant::Ghost, size: Size::Sm, "Orders" } Button { variant: ButtonVariant::Ghost, size: Size::Sm, "Positions" } },
+				context: rsx! { span { "BTC-USD" } span { "Last 64,210.00" } },
+			}
+			SmartHeader { state: SmartHeaderState::Collapsed, start: start(), end: end(), collapsed: rsx! { span { class: "text-body-s text-ink-mid", "Orders · Positions" } } }
+			SmartHeader {
+				state: SmartHeaderState::Banner,
+				start: start(),
+				end: end(),
+				banner: rsx! { SystemBanner { tone: SystemBannerTone::Warn, "Market data is delayed" } },
+			}
+		}
+	}
+}
+
+fn d_header_controls() -> Element {
+	let notifications = vec![
+		HeaderNotification {
+			id: "a".into(),
+			title: "Order filled".into(),
+			time: Some("2m ago".into()),
+			unread: true,
+			..Default::default()
+		},
+		HeaderNotification {
+			id: "b".into(),
+			title: "Statement ready".into(),
+			description: Some("October".into()),
+			..Default::default()
+		},
+	];
+	rsx! {
+		div { class: "flex flex-wrap items-center gap-3",
+			HeaderSearch {}
+			HeaderBalance { value: "$12,480.00" }
+			HeaderBalance { value: "$0.00", tone: HeaderBalanceTone::Warn, onclick: |_| {} }
+			HeaderBalance { value: "", loading: true }
+			NotificationBell { notifications }
+			NotificationBell { notifications: Vec::new() }
 		}
 	}
 }

@@ -26,9 +26,9 @@ mod test_util;
 // prop are re-exported.
 pub(crate) use ev_lib_classes::*;
 pub use ev_lib_classes::{
-	Accent, AlertVariant, BadgeVariant, BookSide, ButtonGroupOrientation, ButtonVariant, ConfirmDialogTone, DrawerDirection, EmptyMediaVariant, FieldOrientation, IconButtonVariant,
-	InputGroupAddonAlign, InputGroupButtonSize, ItemMediaVariant, ItemSize, ItemVariant, OrderSide, Orientation, Polarity, ScrollBarOrientation, SectionLabelTone, SettingsSectionTone, Size,
-	StatusTone, Surface, SystemBannerTone, TableAlign, TableDensity, TableVariant, TerminalArea, ToastPosition, ToastVariant, ToggleVariant,
+	Accent, AlertVariant, BadgeVariant, BookSide, ButtonGroupOrientation, ButtonVariant, ConfirmDialogTone, DrawerDirection, EmptyMediaVariant, FieldOrientation, HeaderBalanceTone,
+	IconButtonVariant, InputGroupAddonAlign, InputGroupButtonSize, ItemMediaVariant, ItemSize, ItemVariant, OrderSide, Orientation, Polarity, ScrollBarOrientation, SectionLabelTone,
+	SettingsSectionTone, Size, StatusTone, Surface, SystemBannerTone, TableAlign, TableDensity, TableVariant, TerminalArea, ToastPosition, ToastVariant, ToggleVariant,
 };
 
 mod accordion;
@@ -53,6 +53,7 @@ mod empty;
 mod field;
 mod fonts;
 mod form_row;
+mod header_controls;
 mod icon_button;
 mod input;
 mod input_group;
@@ -74,6 +75,7 @@ mod settings;
 mod sidebar;
 mod skeleton;
 mod slider;
+mod smart_header;
 mod spinner;
 mod status_item;
 mod switch;
@@ -84,6 +86,7 @@ mod terminal;
 mod textarea;
 mod toggle;
 mod toggle_group;
+mod top_bar;
 mod workspace_tabs;
 
 pub use accordion::{Accordion, AccordionContent, AccordionItem, AccordionTrigger, AccordionType};
@@ -110,6 +113,7 @@ pub use empty::{Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, 
 pub use field::{Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldLegendVariant, FieldSeparator, FieldSet, FieldTitle};
 pub use fonts::Fonts;
 pub use form_row::FormRow;
+pub use header_controls::{HeaderBalance, HeaderNotification, HeaderSearch, NotificationBell, NotificationBellLabels};
 pub use icon_button::IconButton;
 pub use input::Input;
 pub use input_group::{InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText, InputGroupTextarea};
@@ -137,6 +141,7 @@ pub use sidebar::{
 };
 pub use skeleton::Skeleton;
 pub use slider::{Slider, SliderOrientation};
+pub use smart_header::{SmartHeader, SmartHeaderState};
 pub use spinner::Spinner;
 pub use status_item::{StatusDot, StatusItem};
 pub use switch::Switch;
@@ -150,6 +155,7 @@ pub use terminal::{
 pub use textarea::Textarea;
 pub use toggle::{Toggle, toggle_classes};
 pub use toggle_group::{ToggleGroup, ToggleGroupItem, ToggleGroupType};
+pub use top_bar::TopBar;
 pub use workspace_tabs::{WorkspaceTab, WorkspaceTabs};
 
 // Tier C — overlay/portal components. Glob-exported (each module's public

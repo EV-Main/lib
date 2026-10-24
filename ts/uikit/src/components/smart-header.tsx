@@ -1,5 +1,11 @@
 import * as React from "react";
 import { cn } from "../lib/cn";
+import {
+  SMART_HEADER_BAR,
+  SMART_HEADER_BASE,
+  SMART_HEADER_CONTEXT,
+  SMART_HEADER_TOOLBAR,
+} from "../generated/smart-header";
 import { TopBar } from "./top-bar";
 
 export type SmartHeaderState = "default" | "collapsed" | "banner" | "search";
@@ -49,12 +55,12 @@ export function SmartHeader({
     <div
       data-slot="smart-header"
       data-state={state}
-      className={cn("flex flex-col border border-border bg-card", className)}
+      className={cn(SMART_HEADER_BASE, className)}
       {...props}
     >
       {state === "banner" && banner}
       <TopBar
-        className="h-10 border-border-subtle bg-card px-3"
+        className={SMART_HEADER_BAR}
         start={
           <>
             {start}
@@ -64,18 +70,12 @@ export function SmartHeader({
         end={end}
       />
       {state === "default" && toolbar != null && (
-        <div
-          data-slot="smart-header-toolbar"
-          className="flex h-11 items-center gap-3 border-t border-border py-0 pl-2 pr-3"
-        >
+        <div data-slot="smart-header-toolbar" className={SMART_HEADER_TOOLBAR}>
           {toolbar}
         </div>
       )}
       {state === "default" && context != null && (
-        <div
-          data-slot="smart-header-context"
-          className="flex h-6.5 items-center gap-4 border-t border-border bg-background px-3 text-caption text-ink-soft"
-        >
+        <div data-slot="smart-header-context" className={SMART_HEADER_CONTEXT}>
           {context}
         </div>
       )}

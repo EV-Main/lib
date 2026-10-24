@@ -33,6 +33,7 @@ mod field;
 mod focus;
 mod form;
 mod form_row;
+mod header_controls;
 mod hover_card;
 mod icon_button;
 mod input;
@@ -58,6 +59,7 @@ mod sidebar;
 mod size;
 mod skeleton;
 mod slider;
+mod smart_header;
 mod sonner;
 mod status_item;
 mod switch;
@@ -68,6 +70,7 @@ mod terminal;
 mod textarea;
 mod toggle;
 mod tooltip;
+mod top_bar;
 mod workspace_tabs;
 
 pub use accent::{Accent, accent_fill_class, accent_outline_class, accent_text_class, button_accent_class};
@@ -130,6 +133,12 @@ pub use field::{
 pub use focus::{FILLED_FOCUS_RING, OPTION_FOCUS_RING};
 pub use form::{FORM_DESCRIPTION, FORM_ITEM, FORM_LABEL, FORM_MESSAGE};
 pub use form_row::{FORM_ROW_BASE, FORM_ROW_CONTROL, FORM_ROW_DESCRIPTION, FORM_ROW_DIVIDER, FORM_ROW_HINT, FORM_ROW_LABEL, FORM_ROW_LABEL_COLUMN};
+pub use header_controls::{
+	HEADER_BALANCE_BASE, HEADER_BALANCE_CHEVRON, HEADER_BALANCE_FIGURE, HEADER_BALANCE_INTERACTIVE, HEADER_BALANCE_LABEL, HEADER_BALANCE_SETTLED, HEADER_BALANCE_SKELETON,
+	HEADER_SEARCH_BASE, HEADER_SEARCH_PLACEHOLDER, HeaderBalanceTone, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER, NOTIFICATION_BELL_ITEM,
+	NOTIFICATION_BELL_ITEM_BODY, NOTIFICATION_BELL_ITEM_DESCRIPTION, NOTIFICATION_BELL_ITEM_DOT, NOTIFICATION_BELL_ITEM_DOT_READ, NOTIFICATION_BELL_ITEM_DOT_UNREAD,
+	NOTIFICATION_BELL_ITEM_TIME, NOTIFICATION_BELL_ITEM_TITLE, NOTIFICATION_BELL_ITEM_TITLE_UNREAD, NOTIFICATION_BELL_LIST, NOTIFICATION_BELL_TRIGGER, NOTIFICATION_DOT,
+};
 pub use hover_card::HOVER_CARD_CONTENT;
 pub use icon_button::{ICON_BUTTON_BASE, ICON_BUTTON_PRESSED, IconButtonVariant};
 pub use input::{INPUT_BASE, input_size_class};
@@ -178,6 +187,7 @@ pub use sidebar::{
 pub use size::Size;
 pub use skeleton::SKELETON_BASE;
 pub use slider::{SLIDER_RANGE, SLIDER_ROOT, SLIDER_THUMB, SLIDER_TRACK};
+pub use smart_header::{SMART_HEADER_BAR, SMART_HEADER_BASE, SMART_HEADER_CONTEXT, SMART_HEADER_TOOLBAR};
 pub use sonner::{TOAST_BASE, TOAST_CLOSE, TOAST_CONTENT, TOAST_TITLE, TOASTER_BASE, ToastPosition, ToastVariant};
 pub use status_item::{STATUS_DOT_BASE, STATUS_ITEM_BASE, STATUS_ITEM_VALUE, StatusTone};
 pub use switch::{SWITCH_BASE, SWITCH_THUMB};
@@ -195,6 +205,7 @@ pub use terminal::{
 pub use textarea::{TEXTAREA_BASE, textarea_size_class};
 pub use toggle::{TOGGLE_BASE, ToggleVariant, toggle_size_class};
 pub use tooltip::TOOLTIP_CONTENT;
+pub use top_bar::{TOP_BAR_BASE, TOP_BAR_END, TOP_BAR_START};
 pub use workspace_tabs::{WORKSPACE_TAB_BASE, WORKSPACE_TAB_CLOSE, WORKSPACE_TAB_LABEL, WORKSPACE_TAB_SELECTED, WORKSPACE_TAB_SPACER, WORKSPACE_TAB_TRIGGER, WORKSPACE_TABS_BASE};
 
 /// Fuses any number of class fragments into a single `String` with real Tailwind

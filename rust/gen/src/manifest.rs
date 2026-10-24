@@ -27,6 +27,9 @@ pub fn manifest() -> Vec<(&'static str, Vec<Ts>)> {
 		("popover-form", popover_form()),
 		("confirm-dialog", confirm_dialog()),
 		("key-value", key_value()),
+		("top-bar", top_bar()),
+		("smart-header", smart_header()),
+		("header-controls", header_controls()),
 		("focus", focus()),
 		("switch", switch()),
 		("checkbox", checkbox()),
@@ -1745,6 +1748,146 @@ fn key_value() -> Vec<Ts> {
 		Ts::Const {
 			name: "KEY_VALUE_STATUS",
 			value: KEY_VALUE_STATUS,
+		},
+	]
+}
+
+fn top_bar() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "TOP_BAR_BASE",
+			value: TOP_BAR_BASE,
+		},
+		Ts::Const {
+			name: "TOP_BAR_START",
+			value: TOP_BAR_START,
+		},
+		Ts::Const {
+			name: "TOP_BAR_END",
+			value: TOP_BAR_END,
+		},
+	]
+}
+
+fn smart_header() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "SMART_HEADER_BASE",
+			value: SMART_HEADER_BASE,
+		},
+		Ts::Const {
+			name: "SMART_HEADER_BAR",
+			value: SMART_HEADER_BAR,
+		},
+		Ts::Const {
+			name: "SMART_HEADER_TOOLBAR",
+			value: SMART_HEADER_TOOLBAR,
+		},
+		Ts::Const {
+			name: "SMART_HEADER_CONTEXT",
+			value: SMART_HEADER_CONTEXT,
+		},
+	]
+}
+
+fn header_controls() -> Vec<Ts> {
+	vec![
+		Ts::Const {
+			name: "HEADER_BALANCE_BASE",
+			value: HEADER_BALANCE_BASE,
+		},
+		Ts::Const {
+			name: "HEADER_BALANCE_INTERACTIVE",
+			value: HEADER_BALANCE_INTERACTIVE,
+		},
+		Ts::Const {
+			name: "HEADER_BALANCE_LABEL",
+			value: HEADER_BALANCE_LABEL,
+		},
+		Ts::Const {
+			name: "HEADER_BALANCE_SETTLED",
+			value: HEADER_BALANCE_SETTLED,
+		},
+		Ts::Const {
+			name: "HEADER_BALANCE_SKELETON",
+			value: HEADER_BALANCE_SKELETON,
+		},
+		Ts::Const {
+			name: "HEADER_BALANCE_FIGURE",
+			value: HEADER_BALANCE_FIGURE,
+		},
+		Ts::Const {
+			name: "HEADER_BALANCE_CHEVRON",
+			value: HEADER_BALANCE_CHEVRON,
+		},
+		table::<HeaderBalanceTone>("headerBalanceToneClasses", "HeaderBalanceTone"),
+		Ts::Const {
+			name: "NOTIFICATION_BELL_TRIGGER",
+			value: NOTIFICATION_BELL_TRIGGER,
+		},
+		Ts::Const {
+			name: "NOTIFICATION_DOT",
+			value: NOTIFICATION_DOT,
+		},
+		Ts::Const {
+			name: "NOTIFICATION_BELL_CONTENT",
+			value: NOTIFICATION_BELL_CONTENT,
+		},
+		Ts::Const {
+			name: "NOTIFICATION_BELL_EMPTY",
+			value: NOTIFICATION_BELL_EMPTY,
+		},
+		Ts::Const {
+			name: "NOTIFICATION_BELL_LIST",
+			value: NOTIFICATION_BELL_LIST,
+		},
+		Ts::Const {
+			name: "NOTIFICATION_BELL_ITEM",
+			value: NOTIFICATION_BELL_ITEM,
+		},
+		Ts::Const {
+			name: "NOTIFICATION_BELL_ITEM_DOT",
+			value: NOTIFICATION_BELL_ITEM_DOT,
+		},
+		Ts::Const {
+			name: "NOTIFICATION_BELL_ITEM_DOT_UNREAD",
+			value: NOTIFICATION_BELL_ITEM_DOT_UNREAD,
+		},
+		Ts::Const {
+			name: "NOTIFICATION_BELL_ITEM_DOT_READ",
+			value: NOTIFICATION_BELL_ITEM_DOT_READ,
+		},
+		Ts::Const {
+			name: "NOTIFICATION_BELL_ITEM_BODY",
+			value: NOTIFICATION_BELL_ITEM_BODY,
+		},
+		Ts::Const {
+			name: "NOTIFICATION_BELL_ITEM_TITLE",
+			value: NOTIFICATION_BELL_ITEM_TITLE,
+		},
+		Ts::Const {
+			name: "NOTIFICATION_BELL_ITEM_TITLE_UNREAD",
+			value: NOTIFICATION_BELL_ITEM_TITLE_UNREAD,
+		},
+		Ts::Const {
+			name: "NOTIFICATION_BELL_ITEM_DESCRIPTION",
+			value: NOTIFICATION_BELL_ITEM_DESCRIPTION,
+		},
+		Ts::Const {
+			name: "NOTIFICATION_BELL_ITEM_TIME",
+			value: NOTIFICATION_BELL_ITEM_TIME,
+		},
+		Ts::Const {
+			name: "NOTIFICATION_BELL_FOOTER",
+			value: NOTIFICATION_BELL_FOOTER,
+		},
+		Ts::Const {
+			name: "HEADER_SEARCH_BASE",
+			value: HEADER_SEARCH_BASE,
+		},
+		Ts::Const {
+			name: "HEADER_SEARCH_PLACEHOLDER",
+			value: HEADER_SEARCH_PLACEHOLDER,
 		},
 	]
 }

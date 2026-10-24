@@ -2,6 +2,34 @@
 
 import * as React from "react";
 import { cn } from "../lib/cn";
+import {
+  HEADER_BALANCE_BASE,
+  HEADER_BALANCE_CHEVRON,
+  HEADER_BALANCE_FIGURE,
+  HEADER_BALANCE_INTERACTIVE,
+  HEADER_BALANCE_LABEL,
+  HEADER_BALANCE_SETTLED,
+  HEADER_BALANCE_SKELETON,
+  HEADER_SEARCH_BASE,
+  HEADER_SEARCH_PLACEHOLDER,
+  NOTIFICATION_BELL_CONTENT,
+  NOTIFICATION_BELL_EMPTY,
+  NOTIFICATION_BELL_FOOTER,
+  NOTIFICATION_BELL_ITEM,
+  NOTIFICATION_BELL_ITEM_BODY,
+  NOTIFICATION_BELL_ITEM_DESCRIPTION,
+  NOTIFICATION_BELL_ITEM_DOT,
+  NOTIFICATION_BELL_ITEM_DOT_READ,
+  NOTIFICATION_BELL_ITEM_DOT_UNREAD,
+  NOTIFICATION_BELL_ITEM_TIME,
+  NOTIFICATION_BELL_ITEM_TITLE,
+  NOTIFICATION_BELL_ITEM_TITLE_UNREAD,
+  NOTIFICATION_BELL_LIST,
+  NOTIFICATION_BELL_TRIGGER,
+  NOTIFICATION_DOT,
+  headerBalanceToneClasses,
+  type HeaderBalanceTone,
+} from "../generated/header-controls";
 import { AnimatedNumber } from "./animated-number";
 import { IconButton } from "./icon-button";
 import { Kbd } from "./kbd";
@@ -26,7 +54,7 @@ export interface HeaderBalanceProps extends Omit<React.HTMLAttributes<HTMLElemen
   /** A glyph before the label. */
   icon?: React.ReactNode;
   /** `warn` colours the figure as a low-funds signal. */
-  tone?: "default" | "warn";
+  tone?: HeaderBalanceTone;
 }
 
 const USD: Intl.NumberFormatOptions = { style: "currency", currency: "USD" };
@@ -46,25 +74,21 @@ export function HeaderBalance({
   className,
   ...props
 }: HeaderBalanceProps) {
-  const face = cn(
-    "inline-flex h-8 items-center gap-2 rounded-(--control-radius) border border-border bg-secondary pl-2.5 pr-2 text-body-s",
-    onClick && "cursor-pointer outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring",
-    className,
-  );
+  const face = cn(HEADER_BALANCE_BASE, onClick && HEADER_BALANCE_INTERACTIVE, className);
   const body = (
     <>
       {icon}
-      <span className="text-ink-soft">{label}</span>
+      <span className={HEADER_BALANCE_LABEL}>{label}</span>
       <Settled
         loading={loading}
-        skeleton={<Skeleton className="h-3 w-12" />}
-        className="inline-flex"
+        skeleton={<Skeleton className={HEADER_BALANCE_SKELETON} />}
+        className={HEADER_BALANCE_SETTLED}
       >
-        <span className={cn("font-medium tabular-nums", tone === "warn" ? "text-accent-warn-ink" : "text-ink")}>
+        <span className={cn(HEADER_BALANCE_FIGURE, headerBalanceToneClasses[tone])}>
           {amount === undefined ? value : <AnimatedNumber value={amount} format={format} locales={locales} />}
         </span>
       </Settled>
-      {onClick && <UiIcon name="chevron-down" className="size-4 text-ink-soft" />}
+      {onClick && <UiIcon name="chevron-down" className={HEADER_BALANCE_CHEVRON} />}
     </>
   );
   if (!onClick) {
@@ -116,44 +140,43 @@ export function NotificationBell({ notifications, onSelect, labels = {}, footer,
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <IconButton aria-label={spoken} variant="secondary" className={cn("relative", className)}>
+        <IconButton aria-label={spoken} variant="secondary" className={cn(NOTIFICATION_BELL_TRIGGER, className)}>
           <UiIcon name="bell" />
           {unread > 0 && (
-            <span
-              data-slot="notification-dot"
-              aria-hidden
-              className="absolute right-1 top-1 size-1.5 rounded-full bg-accent-error"
-            />
+            <span data-slot="notification-dot" aria-hidden className={NOTIFICATION_DOT} />
           )}
         </IconButton>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-80 p-1">
+      <PopoverContent align="end" className={NOTIFICATION_BELL_CONTENT}>
         {notifications.length === 0 ? (
-          <p className="px-2 py-3 text-center text-body text-ink-soft">{labels.empty ?? "No notifications"}</p>
+          <p className={NOTIFICATION_BELL_EMPTY}>{labels.empty ?? "No notifications"}</p>
         ) : (
-          <ul className="flex max-h-80 flex-col gap-0.5 overflow-y-auto">
+          <ul className={NOTIFICATION_BELL_LIST}>
             {notifications.map((n) => (
               <li key={n.id}>
                 <button
                   type="button"
                   onClick={() => onSelect?.(n.id)}
-                  className="flex w-full items-start gap-2 rounded-(--control-radius) px-2 py-1.5 text-left outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring"
+                  className={NOTIFICATION_BELL_ITEM}
                 >
                   <span
                     aria-hidden
-                    className={cn("mt-1.5 size-1.5 shrink-0 rounded-full", n.unread ? "bg-primary" : "bg-transparent")}
+                    className={cn(
+                      NOTIFICATION_BELL_ITEM_DOT,
+                      n.unread ? NOTIFICATION_BELL_ITEM_DOT_UNREAD : NOTIFICATION_BELL_ITEM_DOT_READ,
+                    )}
                   />
-                  <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-                    <span className={cn("text-body text-ink", n.unread && "font-medium")}>{n.title}</span>
-                    {n.description != null && <span className="text-body-s text-ink-mid">{n.description}</span>}
+                  <span className={NOTIFICATION_BELL_ITEM_BODY}>
+                    <span className={cn(NOTIFICATION_BELL_ITEM_TITLE, n.unread && NOTIFICATION_BELL_ITEM_TITLE_UNREAD)}>{n.title}</span>
+                    {n.description != null && <span className={NOTIFICATION_BELL_ITEM_DESCRIPTION}>{n.description}</span>}
                   </span>
-                  {n.time != null && <span className="shrink-0 text-caption text-ink-soft">{n.time}</span>}
+                  {n.time != null && <span className={NOTIFICATION_BELL_ITEM_TIME}>{n.time}</span>}
                 </button>
               </li>
             ))}
           </ul>
         )}
-        {footer != null && <div className="border-t border-border-subtle p-1 pt-1.5">{footer}</div>}
+        {footer != null && <div className={NOTIFICATION_BELL_FOOTER}>{footer}</div>}
       </PopoverContent>
     </Popover>
   );
@@ -189,14 +212,11 @@ export function HeaderSearch({
     <button
       type="button"
       data-slot="header-search"
-      className={cn(
-        "flex h-8 w-55 items-center gap-2 rounded-(--control-radius) border border-border bg-muted pl-2.5 pr-1.5 text-left text-body text-ink-mid outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring",
-        className,
-      )}
+      className={cn(HEADER_SEARCH_BASE, className)}
       {...props}
     >
       <UiIcon name="search" />
-      <span className="min-w-0 flex-1 truncate">{placeholder}</span>
+      <span className={HEADER_SEARCH_PLACEHOLDER}>{placeholder}</span>
       <Kbd>{shortcut ?? platformShortcut}</Kbd>
     </button>
   );
