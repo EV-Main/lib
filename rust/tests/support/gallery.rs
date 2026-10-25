@@ -173,8 +173,8 @@ fn palette() -> Vec<(&'static str, &'static str)> {
 		.map(|name| {
 			let decl = format!("--{name}:");
 			let values: Vec<&str> = TOKENS.lines().filter_map(|l| l.trim().strip_prefix(decl.as_str())).collect();
-			// a second declaration would be a polarity or brand override this one swatch cannot show
-			assert_eq!(values.len(), 1, "--{name} declared {} times in TOKENS", values.len());
+			// one declaration per theme: the first is the dark one, and the board renders dark
+			assert!(!values.is_empty(), "--{name} not declared in TOKENS");
 			(name, values[0].trim().trim_end_matches(';'))
 		})
 		.collect()
