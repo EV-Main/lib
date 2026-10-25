@@ -93,10 +93,24 @@ fn standalone(title: &str, fragment: &str) -> String {
 	)
 }
 
+/// Extra cell classes for a demo that cannot live in one grid column. The
+/// board's `.stage` transform boxes a `position: fixed` overlay into its cell
+/// and a fixed overlay adds no height, so a wide modal needs its own row and a
+/// floor under its height; a docked layout only needs the row.
+fn room(name: &str) -> &'static str {
+	match name {
+		"AccountSettingsDialog" => " col-span-full min-h-[48rem]",
+		"CommandPalette" => " min-h-[28rem]",
+		"Aside" | "Settings" => " col-span-full",
+		_ => "",
+	}
+}
+
 /// One labelled cell in the combined board.
 fn cell(name: &str, fragment: &str) -> String {
+	let room = room(name);
 	format!(
-		"<section class=\"stage flex flex-col gap-3 rounded-lg border border-border bg-card/30 p-5\">\
+		"<section class=\"stage flex flex-col gap-3 rounded-lg border border-border bg-card/30 p-5{room}\">\
 		 <h3 class=\"text-xs font-medium uppercase tracking-wide text-ink-soft\">{name}</h3>\
 		 <div class=\"flex flex-1 flex-wrap items-center gap-3\">{fragment}</div></section>"
 	)
@@ -692,6 +706,7 @@ fn d_form_row() -> Element {
 
 fn d_settings() -> Element {
 	rsx! {
+		div { class: "w-full",
 		SettingsLayout { nav: rsx! { nav { "aria-label": "Sections", class: "text-body text-ink-mid", "Account" } },
 			SettingsSection { title: rsx! { "Accounts" }, description: rsx! { "Switch accounts" },
 				action: rsx! { Button { variant: ButtonVariant::Secondary, "Create team" } },
@@ -704,6 +719,7 @@ fn d_settings() -> Element {
 			SettingsSection { title: rsx! { "Delete account" }, tone: SettingsSectionTone::Danger,
 				description: rsx! { "This cannot be undone" },
 			}
+		}
 		}
 	}
 }
