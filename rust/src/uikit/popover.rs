@@ -56,6 +56,11 @@ pub fn PopoverAnchor(#[props(default)] class: String, children: Element) -> Elem
 	}
 }
 
+/// `align` pins the panel's edge to the trigger's: `start` is the left edge,
+/// `end` the right, anything else centres it. Without a measuring layer this is
+/// all the placement there is, and a wide panel under a trigger at the edge of
+/// its container needs `start` or `end` to stay in view.
+///
 /// `role` and `aria_labelledby` are for content that is a dialog of its own,
 /// such as a form: the TS port forwards them as plain props.
 #[component]
@@ -71,7 +76,12 @@ pub fn PopoverContent(
 	if !ctx.open.get() {
 		return rsx! {};
 	}
-	let cls = cn!(POPOVER_CONTENT, "absolute top-full left-1/2 -translate-x-1/2 mt-1", class);
+	let placement = match align.as_str() {
+		"start" => "absolute top-full left-0 mt-1",
+		"end" => "absolute top-full right-0 mt-1",
+		_ => "absolute top-full left-1/2 -translate-x-1/2 mt-1",
+	};
+	let cls = cn!(POPOVER_CONTENT, placement, class);
 	let layer = ctx.layer.clone();
 	rsx! {
 		div {
@@ -101,6 +111,23 @@ struct PopoverCtx {
 mod tests {
 	use super::*;
 	use crate::uikit::test_util::render;
+
+	#[test]
+	fn align_pins_the_panel_to_a_trigger_edge() {
+		fn start() -> Element {
+			rsx! { Popover { default_open: true, PopoverTrigger { "open" } PopoverContent { align: "start", "panel" } } }
+		}
+		fn end() -> Element {
+			rsx! { Popover { default_open: true, PopoverTrigger { "open" } PopoverContent { align: "end", "panel" } } }
+		}
+		fn centred() -> Element {
+			rsx! { Popover { default_open: true, PopoverTrigger { "open" } PopoverContent { "panel" } } }
+		}
+		let (start, end, centred) = (render(start), render(end), render(centred));
+		assert!(start.contains("left-0") && !start.contains("-translate-x-1/2"), "{start}");
+		assert!(end.contains("right-0") && !end.contains("-translate-x-1/2"), "{end}");
+		assert!(centred.contains("left-1/2") && centred.contains("-translate-x-1/2"), "{centred}");
+	}
 
 	#[test]
 	fn closed_by_default_hides_content() {
