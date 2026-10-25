@@ -74,6 +74,7 @@ alert-dialog-header
 alert-dialog-overlay
 alert-dialog-title
 alert-dialog-trigger
+alert-dialog-trigger\
 alert-title
 align-middle
 animate-caret-blink bg-ink h-4 w-px duration-1000

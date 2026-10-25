@@ -4,6 +4,7 @@ use crate::{
 	cn,
 	uikit::{
 		Button, ButtonVariant, POPOVER_FORM_ACTIONS, POPOVER_FORM_CONTENT, POPOVER_FORM_FIELDS, POPOVER_FORM_FORM, POPOVER_FORM_TITLE, Popover, PopoverContent, PopoverTrigger, Size,
+		button_classes,
 		primitives::{use_controllable, use_stable_id},
 	},
 };
@@ -31,6 +32,10 @@ pub fn PopoverForm(
 	#[props(default)] default_open: bool,
 	on_open_change: Option<EventHandler<bool>>,
 	trigger: Element,
+	/// Fused over the secondary button face the trigger wears: the TS caller
+	/// passes a `Button`, and Rust has no `asChild` to take its place.
+	#[props(default)]
+	trigger_class: String,
 	/// The heading; it also names the form's dialog.
 	title: Element,
 	/// Called on submit; the popover closes afterwards.
@@ -47,11 +52,12 @@ pub fn PopoverForm(
 	let state = use_controllable(open, default_open, on_open_change);
 	let title_id = use_stable_id("popover-form-title");
 	let cls = cn!(POPOVER_FORM_CONTENT, class);
+	let trigger_cls = button_classes(&ButtonVariant::Secondary, Size::Md, false, None, &trigger_class);
 	let submit_label = labels.submit.unwrap_or_else(|| String::from("Apply"));
 	let reset_label = labels.reset.unwrap_or_else(|| String::from("Reset"));
 	rsx! {
 		Popover { open: state.get(), on_open_change: move |next| state.set(next),
-			PopoverTrigger { {trigger} }
+			PopoverTrigger { class: trigger_cls, {trigger} }
 			PopoverContent { align: "start", role: "dialog", aria_labelledby: title_id.clone(), class: cls,
 				form {
 					class: POPOVER_FORM_FORM,
@@ -86,6 +92,19 @@ mod tests {
 
 	use super::*;
 	use crate::uikit::test_util::{Harness, render, render_after_click};
+
+	#[test]
+	fn the_trigger_wears_the_secondary_button_face() {
+		fn app() -> Element {
+			rsx! {
+				PopoverForm { trigger: rsx! { "Фильтр" }, trigger_class: "w-40", title: rsx! { "Фильтр статуса" }, "поля" }
+			}
+		}
+		let html = render(app);
+		let trigger = html.split("data-slot=\"popover-trigger\"").next().expect("a trigger");
+		assert!(trigger.contains("bg-secondary"), "{html}");
+		assert!(trigger.contains("w-40"), "the override joins the face: {html}");
+	}
 
 	#[test]
 	fn stays_closed_until_the_trigger_is_pressed() {

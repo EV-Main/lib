@@ -49,6 +49,10 @@ pub fn ConfirmDialog(
 	#[props(default)] default_open: bool,
 	on_open_change: Option<EventHandler<bool>>,
 	trigger: Option<Element>,
+	/// Fused over the secondary button face the trigger wears: the TS caller
+	/// passes a `Button`, and Rust has no `asChild` to take its place.
+	#[props(default)]
+	trigger_class: String,
 	/// The heading; it also names the dialog.
 	title: Element,
 	description: Option<Element>,
@@ -124,10 +128,11 @@ pub fn ConfirmDialog(
 	let glyph = icon.unwrap_or_else(|| rsx! { AlertIcon {} });
 	let cancel_label = labels.cancel.unwrap_or_else(|| String::from("Cancel"));
 	let cls = cn!(CONFIRM_DIALOG_CONTENT, class);
+	let trigger_cls = button_classes(&ButtonVariant::Secondary, Size::Md, false, None, &trigger_class);
 	rsx! {
 		AlertDialog { open: is_open, on_open_change: change,
 			if let Some(trigger) = trigger {
-				AlertDialogTrigger { {trigger} }
+				AlertDialogTrigger { class: trigger_cls, {trigger} }
 			}
 			AlertDialogContent { aria_labelledby: title_id.clone(), aria_describedby: described_by, class: cls,
 				AlertDialogHeader { class: CONFIRM_DIALOG_HEADER,
@@ -512,6 +517,19 @@ mod tests {
 		assert_eq!(CLOSES.load(Ordering::SeqCst), 1);
 		assert_eq!(CONFIRMS.load(Ordering::SeqCst), 0);
 		assert!(!open(&h.html()), "{}", h.html());
+	}
+
+	#[test]
+	fn the_trigger_wears_the_secondary_button_face() {
+		fn app() -> Element {
+			rsx! {
+				ConfirmDialog { trigger: rsx! { "Удалить" }, trigger_class: "w-40", title: rsx! { "Точно?" }, confirm_label: rsx! { "Да" }, on_confirm: |_| {} }
+			}
+		}
+		let html = render(app);
+		let trigger = html.split("data-slot=\"alert-dialog-trigger\"").next().expect("a trigger");
+		assert!(trigger.contains("bg-secondary"), "{html}");
+		assert!(trigger.contains("w-40"), "the override joins the face: {html}");
 	}
 
 	#[test]
