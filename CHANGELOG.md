@@ -187,6 +187,13 @@ Rust crate and its TypeScript mirror at once.
   `tailwind-merge`** (`ev_lib` `uikit`): `font-display` is a font family, so a
   later `font-light` no longer drops it, and `rounded-(--control-radius)`
   replaces `rounded-full` instead of sitting beside it.
+- **`PopoverContent` honours `align`** (`ev_lib` `uikit`): `start` and `end` pin
+  the panel to the trigger's left or right edge. It always centred before, and a
+  wide panel under a trigger at the edge of its container ran off the screen.
+- **`PopoverForm` and `ConfirmDialog` triggers have a face** (`ev_lib` `uikit`):
+  the trigger rendered as bare text, because Rust has no `asChild` for the
+  `Button` the TS caller passes. It now wears the secondary button face, and
+  `trigger_class` fuses over it.
 - **`CommandDialog` applies its `class`** (`ev_lib` `uikit`): the prop was
   declared and never merged onto the dialog box.
 - **A popover opened together with its dialog sits above it** (`@evinvest/uikit`):
