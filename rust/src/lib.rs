@@ -14,7 +14,9 @@
 //! - **`architecture`** — generic, I/O-free, `wasm32`-safe DDD tactical kernel
 //!   (typed ids, entities, aggregate roots, repositories, gateways, the unit of
 //!   work, domain events, specifications). See [`architecture`].
-//! - **`uikit`** — dep-light Dioxus UI kit (mirrors `@evinvest/uikit`). See [`uikit`].
+//! - **`uikit_dioxus`** / **`uikit_leptos`** — the dep-light UI kit (mirrors
+//!   `@evinvest/uikit`), one port per renderer over one framework-free core; both
+//!   render the same HTML. See [`uikit_dioxus`] and [`uikit_leptos`].
 //! - **`analytics`** — PostHog product analytics (mirrors `@evinvest/analytics`):
 //!   native async capture over `reqwest`; pure-Rust fetch on the Dioxus/wasm
 //!   frontend. Does network I/O — opt-in, not the kernel. See [`analytics`].
@@ -61,12 +63,18 @@
 #[cfg(feature = "architecture")]
 pub mod architecture;
 
-#[cfg(feature = "uikit")]
-pub mod uikit;
+#[cfg(any(feature = "uikit_dioxus", feature = "uikit_leptos"))]
+mod uikit;
 
-// The `cn!` fuse macro and styling data live in the Dioxus-free `ev_lib_classes`
+#[cfg(feature = "uikit_dioxus")]
+pub mod uikit_dioxus;
+
+#[cfg(feature = "uikit_leptos")]
+pub mod uikit_leptos;
+
+// The `cn!` fuse macro and styling data live in the framework-free `ev_lib_classes`
 // crate; re-export so the in-crate `crate::cn` path keeps resolving.
-#[cfg(feature = "uikit")]
+#[cfg(any(feature = "uikit_dioxus", feature = "uikit_leptos"))]
 pub use ev_lib_classes::cn;
 
 #[cfg(feature = "analytics")]

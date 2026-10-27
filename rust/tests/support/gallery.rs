@@ -11,7 +11,7 @@
 use std::path::Path;
 
 use dioxus::prelude::*;
-use ev_lib::uikit::*;
+use ev_lib::uikit_dioxus::*;
 
 /// The theme contract plus EV's palette; inlined into the Tailwind-processed
 /// `<style>` so its `@theme`/`:root` tokens drive the utilities. The flattened

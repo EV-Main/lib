@@ -14,20 +14,31 @@ modern = []
 # Each library is opt-in.
 architecture = ["dep:async-trait", "dep:serde", "dep:uuid", "dep:jiff"]
 
-# Dep-light Dioxus UI kit (mirrors `@evinvest/uikit`). Renderer-agnostic RSX components;
-# pulls only Dioxus + tailwind_fuse (the `cn!` engine). Unlike the kernel this
-# library carries runtime deps — a UI kit can't be zero-dep; see AGENTS.md.
-# `document`: the sonner toaster injects its stacking CSS through `document::Style`.
-uikit = [
+# Dep-light UI kit (mirrors `@evinvest/uikit`), one port per renderer over one
+# framework-free core (docs/ARCHITECTURE.md, "The `uikit` library"). Both may be
+# on at once. Unlike the kernel these carry runtime deps — a UI kit can't be
+# zero-dep. `asset` is what puts `asset!` in scope for `Fonts`; `document` is how
+# it and the sonner toaster inject their CSS.
+uikit_dioxus = [
     "dep:dioxus",
     "dep:ev_lib_classes",
     "dep:tailwind_fuse",
     "tailwind_fuse?/variant",
     "dep:strum",
-    # `asset` is what puts `asset!` in scope for `Fonts`; `document` is how it
-    # and the sonner toaster inject their CSS.
     "dioxus?/asset",
     "dioxus?/document",
+]
+# The consumer picks `ssr`, `hydrate` or `csr` on its own `leptos`; this never does.
+# `reactive_graph/hydration` is what lets an id be read off the hydration
+# context, so server and client mint the same one.
+uikit_leptos = [
+    "dep:leptos",
+    "dep:reactive_graph",
+    "reactive_graph?/hydration",
+    "dep:ev_lib_classes",
+    "dep:tailwind_fuse",
+    "tailwind_fuse?/variant",
+    "dep:strum",
 ]
 
 # PostHog product analytics (mirrors `@evinvest/analytics`). A small typed event
@@ -158,6 +169,8 @@ async-trait = { workspace = true, optional = true }
 dioxus = { workspace = true, features = ["macro", "html", "signals", "hooks"], optional = true }
 ev_lib_classes = { workspace = true, optional = true }
 jiff = { workspace = true, features = ["serde"], optional = true }
+leptos = { workspace = true, optional = true }
+reactive_graph = { workspace = true, optional = true }
 serde = { workspace = true, features = ["derive"], optional = true }
 serde_json = { workspace = true, optional = true }
 strum = { workspace = true, optional = true }
@@ -206,10 +219,10 @@ js-sys = { version = "0.3", optional = true }
 reqwest = { version = "0.13", optional = true, default-features = false, features = ["json"] }
 wasm-bindgen = { version = "0.2", optional = true }
 wasm-bindgen-futures = { version = "0.4", optional = true }
-web-sys = { version = "0.3", optional = true, features = ["Document", "Window", "HtmlDocument", "Storage", "Navigator", "Element", "TransitionEvent", "Location"] }
+web-sys = { version = "0.3", optional = true, features = ["Document", "Window", "HtmlDocument", "Storage", "Navigator", "Element", "TransitionEvent", "Location", "Node", "KeyboardEvent", "MutationObserver", "MutationObserverInit", "ScrollIntoViewOptions", "ScrollLogicalPosition", "ScrollBehavior"] }
 
 [dev-dependencies]
-ev_lib = { path = ".", features = ["alerts", "architecture", "uikit", "analytics", "error_monitoring", "experiments", "settings", "settings_drift", "types", "i18n", "kitstart", "ts_gen"] }
+ev_lib = { path = ".", features = ["alerts", "architecture", "uikit_dioxus", "uikit_leptos", "analytics", "error_monitoring", "experiments", "settings", "settings_drift", "types", "i18n", "kitstart", "ts_gen"] }
 
 async-trait.workspace = true
 axum = { workspace = true, features = ["ws", "multipart"] }
@@ -217,6 +230,8 @@ dioxus = { workspace = true, features = ["signals", "hooks"] }
 dioxus-liveview = { workspace = true, features = ["axum"] }
 dioxus-ssr.workspace = true
 jiff = { workspace = true, features = ["serde"] }
+leptos = { workspace = true, features = ["ssr"] }
+scraper.workspace = true
 serde = { workspace = true, features = ["derive"] }
 serde_json.workspace = true
 tempfile.workspace = true
@@ -227,4 +242,4 @@ uuid = { workspace = true, features = ["serde", "v4"] }
 
 [[example]]
 name = "all_primitives"
-required-features = ["uikit"]
+required-features = ["uikit_dioxus"]

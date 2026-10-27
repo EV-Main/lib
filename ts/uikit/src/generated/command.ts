@@ -8,7 +8,7 @@ export const COMMAND_DIALOG_CONTENT = "fixed top-1/2 left-1/2 z-50 w-full max-w-
 
 export const COMMAND_DIALOG_COMMAND = "[&_[data-slot=command-input-wrapper]]:h-12 [&_[data-slot=command-input]]:h-12";
 
-export const COMMAND_INPUT_WRAPPER = "flex h-9 items-center gap-2 border-b border-border px-3";
+export const COMMAND_INPUT_WRAPPER = "flex h-9 items-center gap-2 border-b border-border px-3 has-[[aria-invalid=true]]:border-accent-error";
 
 export const COMMAND_INPUT = "placeholder:text-ink-soft flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50";
 

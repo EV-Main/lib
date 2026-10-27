@@ -1,0 +1,94 @@
+use dioxus::prelude::*;
+
+use crate::{
+	cn,
+	uikit_dioxus::{Size, TEXTAREA_BASE, form::FormControlContext, textarea_size_class},
+};
+
+/// Picks up the id and `aria-*` of an enclosing
+/// [`FormControl`](crate::uikit_dioxus::FormControl); outside one, all three are absent.
+#[component]
+pub fn Textarea(
+	#[props(default)] size: Size,
+	#[props(default)] class: String,
+	#[props(default)] placeholder: String,
+	#[props(default)] disabled: bool,
+	#[props(default)] value: String,
+	name: Option<String>,
+	#[props(default)] required: bool,
+	oninput: Option<EventHandler<FormEvent>>,
+) -> Element {
+	let cls = cn!(TEXTAREA_BASE, textarea_size_class(size), class);
+	let form = try_consume_context::<Signal<FormControlContext>>().map(|ctx| ctx.read().clone());
+
+	rsx! {
+		textarea {
+			class: cls,
+			"data-slot": "textarea",
+			"data-size": size.as_ref(),
+			id: form.as_ref().map(|f| f.id.clone()),
+			"aria-describedby": form.as_ref().map(|f| f.described_by.clone()),
+			"aria-invalid": form.as_ref().map(|f| f.invalid.to_string()),
+			name,
+			required,
+			placeholder,
+			disabled,
+			value,
+			oninput: move |e| { if let Some(h) = oninput { h.call(e); } },
+		}
+	}
+}
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+	use crate::uikit_dioxus::test_util::render;
+
+	#[test]
+	fn renders_base_and_slot() {
+		fn app() -> Element {
+			rsx! { Textarea {} }
+		}
+		let html = render(app);
+		assert!(html.contains("data-slot=\"textarea\""), "{html}");
+		assert!(html.contains("field-sizing-content"), "{html}");
+		assert!(html.contains("min-h-16"), "{html}");
+	}
+
+	#[test]
+	fn honors_placeholder() {
+		fn app() -> Element {
+			rsx! {
+				Textarea { placeholder: "Write here" }
+			}
+		}
+		let html = render(app);
+		assert!(html.contains("Write here"), "{html}");
+	}
+
+	#[test]
+	fn class_override_wins() {
+		fn app() -> Element {
+			rsx! {
+				Textarea { class: "min-h-40" }
+			}
+		}
+		let html = render(app);
+		assert!(html.contains("min-h-40"), "{html}");
+		assert!(!html.contains("min-h-16"), "override should drop base min-h-16: {html}");
+	}
+
+	#[test]
+	fn large_size_grows_and_keeps_16px_text() {
+		fn app() -> Element {
+			rsx! {
+				Textarea { size: Size::Lg }
+			}
+		}
+		let html = render(app);
+		assert!(html.contains("min-h-20"), "{html}");
+		assert!(html.contains("md:text-base"), "{html}");
+		assert!(!html.contains("min-h-16"), "{html}");
+		assert!(!html.contains("md:text-sm"), "{html}");
+	}
+}
