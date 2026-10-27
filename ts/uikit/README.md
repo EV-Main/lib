@@ -1,10 +1,11 @@
 # @evinvest/uikit
 
 A **dep-light** React UI kit with shadcn-style semantics — the TypeScript mirror
-of the `uikit` feature of the [`ev_lib`](https://github.com/EV-invest/lib) Rust crate
-(`ev_lib::uikit`, Dioxus). Both ports are driven from the same canonical class
-strings and the same design tokens, so a component looks and behaves the same
-whether it is rendered by React or by Dioxus.
+of the UI kit of the [`ev_lib`](https://github.com/EV-invest/lib) Rust crate,
+which ships it for Dioxus (`ev_lib::uikit_dioxus`) and Leptos
+(`ev_lib::uikit_leptos`) over one framework-free core. All three are driven from
+the same canonical class strings and the same design tokens, so a component
+looks and behaves the same whether it is rendered by React, Dioxus or Leptos.
 
 "Dep-light" means: **no `@radix-ui/*`, no `class-variance-authority`, no
 `lucide-react`, no charting / carousel / date-picker / OTP / toast libraries.**
@@ -584,9 +585,11 @@ hold focus, so a bare list is pointer-only. The live demo is `CommandDemo` in
 
 The Rust crate is the source of truth; this package preserves its _semantics_
 while reading like idiomatic React. Canonical class strings are identical per
-element across the two ports.
+element across all ports. The two Rust ports render the same HTML (pinned by
+`rust/tests/parity.rs`) and share every row below; where Leptos idiom differs
+the cell says so.
 
-| Concept | Rust (`ev_lib::uikit`) | TS (`@evinvest/uikit`) |
+| Concept | Rust (`ev_lib::uikit_dioxus` / `ev_lib::uikit_leptos`) | TS (`@evinvest/uikit`) |
 | --- | --- | --- |
 | class fusion | `cn!` macro (`tailwind_fuse`) | `cn` (`clsx` + `tailwind-merge`) |
 | variants | `enum` + `fn class()` match | `as const` map keyed by variant |
@@ -769,7 +772,8 @@ npm run build       # tsup → dist/ (ESM + d.ts)
 The Rust counterpart is verified from the repo root:
 
 ```sh
-cargo test  -p ev_lib --features uikit
-cargo clippy -p ev_lib --features uikit --all-targets -- -D warnings
-cargo check -p ev_lib --features "uikit wasm" --target wasm32-unknown-unknown
+cargo test  -p ev_lib --features "uikit_dioxus uikit_leptos"
+cargo clippy -p ev_lib --features "uikit_dioxus uikit_leptos" --all-targets -- -D warnings
+cargo check -p ev_lib --features "uikit_dioxus wasm" --target wasm32-unknown-unknown
+cargo check -p ev_lib --features "uikit_leptos wasm" --target wasm32-unknown-unknown
 ```

@@ -9,6 +9,7 @@
 -top-12 left-1/2 -translate-x-1/2 rotate-90
 12:00:01
 2026-06-10 09:05
+2026-06-10T09:05
 @container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6
 [&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none
 [&>svg]:size-3.5
