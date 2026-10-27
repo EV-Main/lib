@@ -1,0 +1,56 @@
+jobs:
+  publish:
+    name: ${{ inputs.tag || github.ref_name }}
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          TAG: ${{ inputs.tag || github.ref_name }}
+        id: tag
+        name: Read the tag
+        run: |
+          name="${TAG%-v*}"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "dir=ts/${name#@evinvest/}" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG##*-v}" >> "$GITHUB_OUTPUT"
+      - name: Checkout the tag
+        uses: actions/checkout@v5
+        with:
+          ref: refs/tags/${{ steps.tag.outputs.tag }}
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@latest
+      - name: Build the packages it links by path
+        run: |
+          node -e '
+            const p = require("./package.json");
+            for (const deps of [p.dependencies, p.devDependencies, p.peerDependencies])
+              for (const v of Object.values(deps ?? {}))
+                if (v.startsWith("file:")) console.log(v.slice(5));
+          ' | while read -r dep; do
+            (cd "$dep" && npm ci --ignore-scripts && npm run build)
+          done
+        working-directory: ${{ steps.tag.outputs.dir }}
+      - env:
+          VERSION: ${{ steps.tag.outputs.version }}
+        name: Publish
+        run: |
+          test "$(node -p 'require("./package.json").version')" = "$VERSION"
+          npm ci
+          npm publish --access public
+        working-directory: ${{ steps.tag.outputs.dir }}
+name: release-npm
+on:
+  push:
+    tags:
+      - '@evinvest/*-v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: release tag, e.g. @evinvest/<pkg>-v1.2.3
+        required: true
+permissions:
+  contents: read
+  id-token: write

@@ -1,12 +1,12 @@
 # Hand-written: `ts/kitstart/template/` installed exactly as a brand installs
 # it — from npm, no tarballs, no workspace links — then its types, tests, lint,
-# `next build`, the bundle budget and the live smoke. Runs once npm-publish has
+# `next build`, the bundle budget and the live smoke. Runs once release-npm has
 # uploaded a kitstart release (a tag-push trigger races the upload), and weekly, so a published version that no longer builds (a
 # peer moved under it) is found before the next brand is.
 name: kitstart (registry)
 'on':
   workflow_run:
-    workflows: [npm-publish]
+    workflows: [release-npm]
     types: [completed]
   schedule:
     - cron: '17 5 * * 1'

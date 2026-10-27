@@ -79,6 +79,10 @@
               .claude/
             '';
             lfs = false;
+            npmRelease = {
+              scope = "evinvest";
+              packagesDir = "ts";
+            };
           };
 
           readme = v_flakes.readme-fw {
