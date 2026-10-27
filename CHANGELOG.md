@@ -24,6 +24,11 @@ Rust crate and its TypeScript mirror at once.
 
 ### Added
 
+- **`uikit_leptos`** (`ev_lib`): the same kit for Leptos 0.8 — every component
+  the Dioxus port exports, with the same names and props in Leptos idiom, over
+  the same core, rendering the same HTML (held by `rust/tests/parity.rs`). It
+  never enables `ssr`, `hydrate` or `csr`; the consumer's `leptos` picks one.
+
 - **`PlaceLive.reviewUrl` and `panelLocale`** (`@evinvest/kitstart`, minor).
   `reviewUrl`: where the place asks for a Google review, read from the live
   source and merged onto `Place.reviewUrl`; only `https:` on `g.page` or
@@ -47,6 +52,17 @@ Rust crate and its TypeScript mirror at once.
   constants): no consumer used them. The `chart-1 … chart-5` palette tokens stay.
 
 ### Changed
+
+- **The `uikit` feature is now `uikit_dioxus`, and `ev_lib::uikit` is
+  `ev_lib::uikit_dioxus`** (`ev_lib`, breaking → minor). The kit's behaviour
+  moved into a crate-private, framework-free core that both Rust ports drive;
+  the Dioxus components keep their behaviour. Swap the feature name and the
+  module path. Interface changes the split forced, mirrored in the Leptos port
+  and listed in `ts/uikit/README.md`'s Rust↔TS table: Select options name
+  their label explicitly instead of the kit reading it off the children, and
+  Form/Field are told which optional slots are present instead of inspecting
+  the children. `CommandInput` gains `invalid`, and `CommandDialog` now applies
+  its `class` to the dialog.
 
 - **`Field` no longer imports the controls it labels** (`@evinvest/uikit`):
   `Input`, `Textarea`, `NativeSelect`, `Checkbox`, `Switch`, `SelectTrigger`

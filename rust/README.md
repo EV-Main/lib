@@ -10,7 +10,9 @@ rust/
 ├── src/
 │   ├── lib.rs
 │   ├── architecture/      the `architecture` feature (DDD tactical kernel)
-│   ├── uikit/             the `uikit` feature (dep-light Dioxus UI kit)
+│   ├── uikit/             the UI kit's framework-free core (crate-private)
+│   ├── uikit_dioxus/      the `uikit_dioxus` feature (the kit for Dioxus)
+│   ├── uikit_leptos/      the `uikit_leptos` feature (the kit for Leptos)
 │   ├── analytics/         the `analytics` feature (PostHog product analytics)
 │   ├── error_monitoring/  the `error_monitoring` feature (Sentry error monitoring)
 │   ├── experiments/       the `experiments` feature (frontend-only A/B testing)
@@ -21,14 +23,15 @@ rust/
 └── tests/              integration tests
 ```
 
-Unlike `architecture`, the `uikit` feature carries runtime deps (`dioxus`,
-`tailwind_fuse`) — a UI kit can't be zero-dep. It mirrors the `@evinvest/uikit`
-TypeScript package and ships the shared design tokens; see its rustdoc and
+Unlike `architecture`, the two `uikit_*` features carry runtime deps (`dioxus` or
+`leptos`, and `tailwind_fuse`) — a UI kit can't be zero-dep. Both ports run over
+one crate-private core and render the same HTML; they mirror the `@evinvest/uikit`
+TypeScript package and ship the shared design tokens; see their rustdoc and
 [`../ts/uikit/README.md`](../ts/uikit/README.md), which carries the token table.
 
-The class strings live once, in the Dioxus-free `ev_lib_classes` crate
+The class strings live once, in the framework-free `ev_lib_classes` crate
 ([`classes/`](classes)); `ev_lib_gen` emits the TypeScript half from them, so the
-two ports cannot drift. `uikit` re-exports only the types a caller has to *name*
+ports cannot drift. Each port re-exports only the types a caller has to *name*
 to build a prop (`ButtonVariant`, `Size`, `Polarity`, `Surface`, …) — the class
 constants are an implementation detail.
 

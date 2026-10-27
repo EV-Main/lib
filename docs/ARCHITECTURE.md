@@ -13,7 +13,7 @@ lib/                 (repo: EV-invest/lib)
 ├── tokens.css       the shared design tokens, one copy for both ports
 ├── rust/            the crate (sources); one library per Cargo feature
 │   ├── Cargo.toml
-│   ├── src/{lib.rs, architecture/, uikit/, analytics/, error_monitoring/, experiments/, settings/, otel/, i18n/, kitstart/}
+│   ├── src/{lib.rs, architecture/, uikit/ (+ uikit_dioxus/, uikit_leptos/), analytics/, error_monitoring/, experiments/, settings/, otel/, i18n/, kitstart/}
 │   └── tests/
 ├── ts/              TypeScript packages, one directory per library
 │   ├── architecture/
@@ -46,7 +46,7 @@ ev_lib = { git = "https://github.com/EV-invest/lib.git", default-features = fals
 
 ## Component map
 
-_As of 2026-10-09._
+_As of 2026-10-27._
 
 ```
                          ┌───────────────────────── repo root ─────────────────────────┐
@@ -68,9 +68,9 @@ _As of 2026-10-09._
 │                                                                                      │
 │  KERNEL (I/O-free, zero-dep)       UI                     I/O libraries (wasm-safe)  │
 │  ┌──────────────┐          ┌───────────────────┐   ┌───────────┐ ┌────────────────┐ │
-│  │ architecture │          │ uikit (Dioxus,    │   │ analytics │ │error_monitoring│ │
-│  │ Id, Entity,  │          │ ~63 components,   │   │ (PostHog) │ │ (Sentry)       │ │
-│  │ Repository,  │          │ primitives)       │   └───────────┘ └───────┬────────┘ │
+│  │ architecture │          │ uikit core: no DOM│   │ analytics │ │error_monitoring│ │
+│  │ Id, Entity,  │          │ ├ uikit_dioxus    │   │ (PostHog) │ │ (Sentry)       │ │
+│  │ Repository,  │          │ └ uikit_leptos    │   └───────────┘ └───────┬────────┘ │
 │  │ UnitOfWork ✗─┼─Gateway  └───────────────────┘   ┌───────────┐         │ used by │
 │  │ DomainEvent, │          (Gateway can't be       │experiments│ ┌───────▼──────┐  │
 │  │ Specification│           enrolled in UoW)       │ ─sink▶    │ │ otel (native)│  │
@@ -103,7 +103,7 @@ _As of 2026-10-09._
 │  css:        tokens/theme/ev ─▶ rust/classes/css + ts/uikit/styles
 │  inventory:  ─▶ rust/classes/uikit-classes.txt                   │
 └──────────────────────────────────────────────────────────────────┘
-  uikit-viewer (Dioxus web app) ─uses─▶ ev_lib[uikit,wasm]   ≙ ts/uikit/example
+  uikit-viewer (Dioxus web app) ─uses─▶ ev_lib[uikit_dioxus,wasm]   ≙ ts/uikit/example
 ```
 
 What of `ts/` is hand-written rather than generated, and why:
@@ -143,45 +143,90 @@ outbox **inside the same `UnitOfWork`** as the state change — which is why
 
 ## The `uikit` library
 
-A **dep-light** UI kit — 63 shadcn-semantics components — shipped as the Rust
-feature `uikit` (`ev_lib::uikit`, Dioxus) and the TS package `@evinvest/uikit` (React). It
-is the kit consolidated out of the EV-invest apps (`cabinet`'s Dioxus components
-and `landing`'s React bricks), so both apps depend on one versioned source.
+A **dep-light** UI kit — 63 shadcn-semantics components — shipped as two Rust
+ports over one core, `uikit_dioxus` (`ev_lib::uikit_dioxus`) and `uikit_leptos`
+(`ev_lib::uikit_leptos`), and as the TS package `@evinvest/uikit` (React). It is
+the kit consolidated out of the EV-invest apps (`cabinet`'s Dioxus components and
+`landing`'s React bricks), so every app depends on one versioned source.
+
+```
+ev_lib_classes      class strings · variants · cn!/fuse · tokens.css · CLASS_INVENTORY
+      │
+ev_lib::uikit       crate-private core, compiled when either port is on; no dioxus,
+      │             no leptos, no web_sys. One plain struct per stateful component,
+      │             `&mut self` methods over plain values (KeyInput, now_ms, Placement),
+      │             read back as view data
+  ┌───┴──────────────────────┐
+uikit_dioxus             uikit_leptos       one reactive cell per instance + glue:
+feature `uikit_dioxus`   feature `uikit_leptos`   events → core inputs, view data → markup
+```
+
+The core is `pub(crate)`: both ports live in this crate, so it never joins the
+public interface. A port re-exports only the types a caller has to name to build
+a prop (the `ev_lib_classes` variants, `Side`, `DismissReason`, `FormControlContext`,
+…). The two features may be on together; neither pulls in the other's framework —
+`wasm` reaches Dioxus only through the weak `dioxus?/web`. The Leptos port never
+enables `ssr`, `hydrate` or `csr`; the consumer's own `leptos` picks one.
 
 Unlike the kernel, `uikit` is **not** zero-dep and **not** I/O-free — a UI kit
-inherently carries a renderer (`dioxus` / `react`) and styling helpers. What it
-keeps from the repo's discipline:
+inherently carries a renderer and styling helpers. What it keeps from the repo's
+discipline:
 
 - **Dep-light:** no `@radix-ui`, no `class-variance-authority`, no icon/charting/
   date/toast libraries. Variants are `enum`+`match` (Rust) / `as const` maps (TS)
-  fused by the `cn!`/`cn` helper; overlay behaviour is hand-rolled in
-  `primitives/`; icons are inline SVG.
-- **One canon, two ports:** the Rust feature is the source of truth; canonical
-  Tailwind class strings are identical per element across Rust and TS. Variants
-  are the **superset** of the two original sources.
+  fused by the `cn!`/`cn` helper; overlay behaviour is hand-rolled; icons are
+  inline SVG.
+- **Rust core, two Rust ports, TS mirror:** behaviour lives once, in the core;
+  each Rust port is glue over it and renders the same markup from its own
+  template (nothing in Rust can share a view across Dioxus and Leptos, so
+  `rust/tests/parity.rs` is what holds them together). The TS port mirrors the
+  semantics; canonical Tailwind class strings are identical per element across
+  all three. Variants are the **superset** of the two original sources.
 - **`tokens.css` is the contract:** the design tokens (CSS custom properties +
   Tailwind `@theme inline`) live once at the repo root. `nix run .#gen`
-  flattens them into both ports — `ts/uikit/styles/` for npm and
+  flattens them into both languages — `ts/uikit/styles/` for npm and
   `rust/classes/css/` for the crate, the latter because Tailwind can neither
   scan nor `@import` a crates.io checkout. Every component class references a
   token; a consumer must `@import` the sheet.
 - **Nothing derived is hand-written or copied:** `nix run .#gen` is the only
-  producer of the TS class tables, the Tailwind class inventory and the two
-  token sheets, and the `generated` pre-commit hook re-runs it and re-stages.
-  A committed artefact therefore cannot disagree with its source — which
-  matters because the failure is silent: Tailwind answers an undefined token by
-  emitting no rule, so a drifted sheet is a colour quietly going missing on a
-  consumer, not a build error.
-- **CSS is generated at runtime by the v4 browser CDN**, which DOM-scans the
-  live page — so class strings may be composed dynamically (`format!("h-{}", n)`),
-  e.g. the shared `Size` whose `scale()` magnitude each component applies on its
-  own axis (`h-`/`size-`/`min-w-`). A consumer on a *static* Tailwind build must
-  likewise DOM-scan or safelist the kit's magnitudes.
+  producer of the TS class tables, the Tailwind class inventory (the tables plus
+  every literal in the core and both ports) and the two token sheets, and the
+  `generated` pre-commit hook re-runs it and re-stages. A committed artefact
+  therefore cannot disagree with its source — which matters because the failure
+  is silent: Tailwind answers an undefined token by emitting no rule, so a
+  drifted sheet is a colour quietly going missing on a consumer, not a build
+  error.
+- **Class strings may be composed at runtime** (`format!("h-{}", n)`), e.g. the
+  shared `Size` whose `scale()` magnitude each component applies on its own axis
+  (`h-`/`size-`/`min-w-`). A consumer on the v4 browser CDN gets them by its DOM
+  scan; one on a *static* Tailwind build `@source`s `CLASS_INVENTORY` and must
+  likewise safelist the kit's magnitudes.
 
-Because Dioxus has no renderer-agnostic portal and layout measuring is host-only,
+Because there is no renderer-agnostic portal and layout measuring is host-only,
 the Rust overlays/engines carry documented fidelity gaps (inline positioning
 instead of portals, keyboard instead of pointer-drag, no recharts/embla/vaul) —
 the full list is in [`ts/uikit/README.md`](../ts/uikit/README.md#limitations).
+
+### Invariants
+
+- **The core is DOM-free and framework-free.** No `dioxus`, `leptos` or `web_sys`
+  under `rust/src/uikit/`. Keys arrive as a core `KeyInput` (each port has
+  `From<&its event>`); anything needing a clock takes `now_ms`; document order
+  is an input (`Placement`, which the port answers from its DOM). The core never
+  stores elements or callbacks — it keeps ids, and the port maps id → element /
+  handler and carries out the effects the core returns (focus, scroll, select).
+- **Each port is a reactive cell plus glue.** One reactive cell holds a
+  component instance's core state; the port turns its events into core inputs
+  and renders markup from the view data, deriving per-part reads so a change
+  re-renders only the parts whose state changed. Behaviour a port re-implements
+  is a bug in the split.
+- **Both ports render the same HTML.** `rust/tests/parity.rs` renders every
+  gallery entry through dioxus-ssr and Leptos SSR and compares them after
+  canonicalising (attribute order and spelling, comments and hydration markers,
+  whitespace-only text, and ids renamed by first appearance).
+- **A component exists in both ports or neither.** The same test fails on a
+  gallery label present on one side only, and on a `#[component]` exported by
+  one port only; every exported component appears in a gallery entry.
 
 ## The I/O libraries — analytics, error_monitoring, experiments
 
@@ -199,7 +244,7 @@ The property taxonomy is deliberate:
 
 - **I/O-free** is a property of the **kernel only**. The kernel ships zero
   runtime deps and touches no host.
-- **wasm-safe** holds for the kernel **and** `uikit` **and** these three.
+- **wasm-safe** holds for the kernel **and** both `uikit` ports **and** these three.
 - **"no I/O" is *not*** a property of these three. Network I/O is their purpose:
   `analytics` POSTs PostHog events, `error_monitoring` reports to Sentry. Asking
   them to be I/O-free would defeat them.
