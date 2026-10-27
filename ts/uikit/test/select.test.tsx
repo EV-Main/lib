@@ -94,6 +94,15 @@ describe("Select", () => {
     expect(option).toHaveAttribute("aria-selected", "true");
   });
 
+  it("marks the option a reset would put back, chosen or not", () => {
+    const marked = () => screen.getAllByRole("option").filter((o) => o.hasAttribute("data-reset"));
+    const { unmount } = render(tree({ defaultValue: "a", resetValue: "b", defaultOpen: true }));
+    expect(marked().map((o) => o.textContent)).toEqual(["Banana"]);
+    unmount();
+    render(tree({ defaultValue: "b", resetValue: "b", defaultOpen: true }));
+    expect(marked().map((o) => o.getAttribute("aria-selected"))).toEqual(["true"]);
+  });
+
   it("defaults the trigger to the md size", () => {
     render(tree());
     expect(screen.getByRole("combobox")).toHaveAttribute("data-size", "md");

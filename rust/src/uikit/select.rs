@@ -23,6 +23,8 @@ const TYPEAHEAD_MS: f64 = 500.0;
 pub fn Select(
 	value: Option<String>,
 	#[props(default)] default_value: String,
+	/// What a reset would put back: its option is marked, beneath the chosen one's mark.
+	reset_value: Option<String>,
 	on_value_change: Option<EventHandler<String>>,
 	open: Option<bool>,
 	#[props(default)] default_open: bool,
@@ -32,6 +34,10 @@ pub fn Select(
 ) -> Element {
 	let value = use_controllable(value, default_value, on_value_change);
 	let open = use_controllable(open, default_open, on_open_change);
+	let mut reset = use_signal(|| reset_value.clone());
+	if *reset.peek() != reset_value {
+		reset.set(reset_value);
+	}
 	let id = use_stable_id("select-content");
 	let content_id = use_signal(move || id);
 	let trigger = use_signal(|| None);
@@ -40,6 +46,7 @@ pub fn Select(
 	let typed = use_signal(Typeahead::default);
 	use_context_provider(|| SelectCtx {
 		value,
+		reset,
 		open,
 		content_id,
 		trigger,
@@ -179,6 +186,7 @@ pub fn SelectItem(
 ) -> Element {
 	let ctx = use_context::<SelectCtx>();
 	let selected = ctx.value.get() == value;
+	let reset = ctx.reset.read().as_deref() == Some(value.as_str());
 	let label = text_value.unwrap_or_else(|| text_of(&children).trim().to_string());
 	let id = use_select_option(
 		ctx,
@@ -215,6 +223,7 @@ pub fn SelectItem(
 			class: cls,
 			"data-slot": "select-item",
 			"aria-selected": if selected { "true" } else { "false" },
+			"data-reset": reset.then_some(""),
 			"aria-disabled": disabled.then_some("true"),
 			"data-disabled": disabled.then_some(""),
 			tabindex: "-1",
@@ -266,6 +275,7 @@ pub fn SelectSeparator(#[props(default)] class: String) -> Element {
 #[derive(Clone, Copy)]
 struct SelectCtx {
 	value: Controllable<String>,
+	reset: Signal<Option<String>>,
 	open: Controllable<bool>,
 	/// The listbox's id, for the trigger's `aria-controls`.
 	content_id: Signal<String>,
@@ -635,6 +645,36 @@ mod tests {
 		assert!(html.contains("max-w-[min(24rem,calc(100vw-2rem))]"), "width capped inside the viewport: {html}");
 		assert!(html.contains("[overflow-wrap:anywhere]"), "a long option wraps: {html}");
 		assert!(!html.contains("--radix-"), "no dead Radix vars: {html}");
+	}
+
+	#[test]
+	fn reset_value_marks_its_option_whether_chosen_or_not() {
+		fn app(chosen: &str) -> Element {
+			rsx! {
+				Select { default_value: chosen.to_string(), reset_value: "b".to_string(), default_open: true,
+					SelectTrigger {
+						SelectValue {}
+					}
+					SelectContent {
+						SelectItem { value: "a", "Apple" }
+						SelectItem { value: "b", "Banana" }
+					}
+				}
+			}
+		}
+		fn chose_a() -> Element {
+			app("a")
+		}
+		fn chose_b() -> Element {
+			app("b")
+		}
+		let marked = |html: &str| html.matches("data-reset=").count();
+		let html = render(chose_a);
+		assert_eq!(marked(&html), 1, "{html}");
+		assert!(html.contains("aria-selected:bg-accent-info/20"), "the chosen row is tinted: {html}");
+		assert!(html.contains("data-[reset]:not-aria-selected:bg-accent-trace/20"), "the reset row, quieter: {html}");
+		let html = render(chose_b);
+		assert_eq!(marked(&html), 1, "chosen too; the tint is then the chosen one's: {html}");
 	}
 
 	#[test]
