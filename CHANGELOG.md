@@ -36,6 +36,10 @@ Rust crate and its TypeScript mirror at once.
   caller it is not for — an `Empty` with a lock, a title, a description and an
   action slot (a guest's sign-in button; nothing, or "request access", for a
   signed-in caller without the permission).
+- **`Select` marks what applies and what a reset puts back** (`ev_lib` `uikit`
+  and `@evinvest/uikit`): the chosen option is tinted `accent-info`; a
+  `reset_value` / `resetValue` marks its option `data-reset`, tinted
+  `accent-trace` unless it is the chosen one.
 
 ### Removed
 

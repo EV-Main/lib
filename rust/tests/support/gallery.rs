@@ -870,7 +870,7 @@ fn d_menubar() -> Element {
 
 fn d_select() -> Element {
 	rsx! {
-		Select { default_open: true, class: "w-56",
+		Select { default_open: true, default_value: "jungle".to_string(), reset_value: "rice".to_string(), class: "w-56",
 			SelectTrigger {
 				SelectValue { placeholder: "Pick a fund" }
 			}
