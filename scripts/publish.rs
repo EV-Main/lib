@@ -709,18 +709,13 @@ fn main() -> ExitCode {
 			for tag in &tags {
 				eprintln!("    git tag -a {tag} -m {tag}");
 			}
-			eprintln!("    git push --follow-tags");
+			eprintln!("    git push");
+			for tag in &tags {
+				eprintln!("    git push origin refs/tags/{tag}");
+			}
 			return ExitCode::FAILURE;
 		}
 		for tag in &tags {
-			// `-a` is load-bearing, not style. `--follow-tags` below pushes only
-			// ANNOTATED tags, so a plain `git tag` created the tag locally and
-			// silently left it behind — the release commit went up, the tag did
-			// not. On any other machine `changed()` then saw the package as never
-			// published and the next run tried to publish over the live version.
-			// @evinvest/{uikit-v0.9.0,settings-v0.3.0,types-v0.3.0} were all
-			// stranded this way, which is the real cause of the missing tags
-			// AGENTS.md blames on hand-publishing.
 			if !try_run(Command::new("git").args(["tag", "-a", tag.as_str(), "-m", tag.as_str()])) {
 				untagged.push(tag);
 			}
@@ -732,13 +727,18 @@ fn main() -> ExitCode {
 				eprintln!("    git tag -a {tag} -m {tag} HEAD");
 			}
 		}
-		if !try_run(Command::new("git").args(["push", "--follow-tags"])) {
+		// a tag at a time: GitHub fires no workflow for any tag of a push carrying more than three
+		let pushed = try_run(Command::new("git").args(["push"])) && tags.iter().all(|tag| try_run(Command::new("git").args(["push", "origin", &format!("refs/tags/{tag}")])));
+		if !pushed {
 			unpushed = true;
 			eprintln!();
 			eprintln!("!! the push failed, so CI publishes nothing yet: the release commit and tags for {}", tags.join(", "));
 			eprintln!("   exist HERE ONLY. Finish it:");
 			eprintln!();
-			eprintln!("    git pull --no-rebase && git push --follow-tags");
+			eprintln!("    git pull --no-rebase && git push");
+			for tag in &tags {
+				eprintln!("    git push origin refs/tags/{tag}");
+			}
 			eprintln!();
 			eprintln!("   Not a rebase: the tags point at the release commit as it is. The next run");
 			eprintln!("   also lists any tag the remote is missing, with the command to push it.");
