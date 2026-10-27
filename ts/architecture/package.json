@@ -1,6 +1,6 @@
 {
   "name": "@evinvest/architecture",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Generic, I/O-free DDD tactical kernel: typed ids, entities, aggregate roots, domain events, repositories, gateways, the unit of work, and specifications.",
   "license": "BlueOak-1.0.0",
   "publishConfig": {

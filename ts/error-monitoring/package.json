@@ -1,6 +1,6 @@
 {
   "name": "@evinvest/error-monitoring",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vendor-neutral error-monitoring toolkit: a tiny injectable ErrorSink core plus Sentry adapters for React, Node/Edge, and Next.js. Mirrors the error_monitoring Cargo feature.",
   "license": "BlueOak-1.0.0",
   "publishConfig": {
