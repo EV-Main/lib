@@ -61,8 +61,9 @@ jobs:
           extra-conf: 'lazy-trees = true'
       - name: ev_lib_classes
         run: nix develop --command env RUSTC_WRAPPER= cargo test -p ev_lib_classes
+      # Both ports at once: the parity test renders every gallery entry through each.
       - name: ev_lib uikit
-        run: nix develop --command env RUSTC_WRAPPER= cargo test -p ev_lib --features uikit
+        run: nix develop --command env RUSTC_WRAPPER= cargo test -p ev_lib --features "uikit_dioxus uikit_leptos"
       # The generated files are committed, so a change to their source that was
       # not regenerated (or an edit to the output by hand) shows up as a diff.
       # `gen` brings rustc but not a linker, so it runs from the dev shell (as the

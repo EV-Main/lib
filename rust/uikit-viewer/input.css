@@ -12,4 +12,5 @@
    Tailwind generates the utilities they use */
 @source "../classes/src";
 @source "../src/uikit";
+@source "../src/uikit_dioxus";
 @source "./src";
