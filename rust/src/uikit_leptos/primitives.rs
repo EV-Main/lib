@@ -28,6 +28,8 @@ impl From<&leptos::ev::KeyboardEvent> for KeyInput {
 	}
 }
 
+type DismissFn = Arc<dyn Fn(DismissReason) + Send + Sync>;
+
 /// Controlled/uncontrolled state, the mirror of TS `useControllableState`. While
 /// `controlled` holds a value the component is controlled — reads return it and
 /// [`Controllable::set`] only forwards to `on_change`; otherwise it owns an
@@ -78,12 +80,6 @@ pub fn use_controllable<T: Clone + Send + Sync + 'static>(controlled: MaybeProp<
 /// process-wide counter cannot disagree with anything.
 pub fn use_stable_id(prefix: &str) -> String {
 	format!("{prefix}-{}", stable_id())
-}
-
-/// The number behind [`use_stable_id`], for a part whose registration id is its DOM id.
-pub(crate) fn stable_id() -> usize {
-	static NEXT: AtomicUsize = AtomicUsize::new(0);
-	Owner::current_shared_context().map_or_else(|| NEXT.fetch_add(1, Ordering::Relaxed), |sc| sc.next_id().into_inner())
 }
 
 /// Arrow-key roving focus over a group of items — the mirror of the TS
@@ -155,13 +151,6 @@ where
 		roving.els.update_value(|els| drop(els.remove(&id)));
 	});
 }
-
-type DismissFn = Arc<dyn Fn(DismissReason) + Send + Sync>;
-
-/// The open layers of one page and their dismiss handlers, kept on the root
-/// owner so every overlay shares it without a provider of the caller's.
-#[derive(Clone, Copy)]
-struct Layers(StoredValue<(LayerStack, BTreeMap<usize, DismissFn>)>);
 
 /// One overlay's place on the page's layer stack — the Rust side of the TS
 /// `useDismissableLayer`. No document listener: only a key that reaches some
@@ -239,3 +228,14 @@ pub fn use_dismissable_layer(open: Signal<bool>, on_dismiss: impl Fn(DismissReas
 	});
 	DismissableLayer { id, stack }
 }
+
+/// The number behind [`use_stable_id`], for a part whose registration id is its DOM id.
+pub(crate) fn stable_id() -> usize {
+	static NEXT: AtomicUsize = AtomicUsize::new(0);
+	Owner::current_shared_context().map_or_else(|| NEXT.fetch_add(1, Ordering::Relaxed), |sc| sc.next_id().into_inner())
+}
+
+/// The open layers of one page and their dismiss handlers, kept on the root
+/// owner so every overlay shares it without a provider of the caller's.
+#[derive(Clone, Copy)]
+struct Layers(StoredValue<(LayerStack, BTreeMap<usize, DismissFn>)>);

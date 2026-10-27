@@ -16,26 +16,6 @@ pub(crate) struct Command {
 	/// the query): every row stays, in the caller's order.
 	pub should_filter: bool,
 }
-
-#[derive(Clone, Debug, PartialEq)]
-pub(crate) struct Row {
-	pub value: String,
-	pub disabled: bool,
-	/// What the input's `aria-activedescendant` names while this row is highlighted.
-	pub dom_id: String,
-	/// The group it renders in; `order` only reorders siblings, so keyboard order is per group.
-	pub group: Option<usize>,
-}
-
-/// What a key asks the port to do.
-#[derive(Clone, Debug, PartialEq)]
-pub(crate) enum CommandKey {
-	/// The highlight moved onto this row: scroll it into view.
-	Moved(usize),
-	/// Enter on this row: fire its `on_select` with its value.
-	Select(usize, String),
-}
-
 impl Command {
 	pub(crate) fn new(should_filter: bool) -> Self {
 		Self {
@@ -133,6 +113,25 @@ impl Command {
 		self.moved = Some((target, query));
 		Some(CommandKey::Moved(target))
 	}
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub(crate) struct Row {
+	pub value: String,
+	pub disabled: bool,
+	/// What the input's `aria-activedescendant` names while this row is highlighted.
+	pub dom_id: String,
+	/// The group it renders in; `order` only reorders siblings, so keyboard order is per group.
+	pub group: Option<usize>,
+}
+
+/// What a key asks the port to do.
+#[derive(Clone, Debug, PartialEq)]
+pub(crate) enum CommandKey {
+	/// The highlight moved onto this row: scroll it into view.
+	Moved(usize),
+	/// Enter on this row: fire its `on_select` with its value.
+	Select(usize, String),
 }
 
 /// The active query: trimmed, so blank input is not a search, and lowercased
