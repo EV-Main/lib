@@ -22,6 +22,7 @@ ev_lib = { path = "rust", version = "0.28.2" }
 ev_lib_classes = { path = "rust/classes", version = "0.16.1" }
 jiff = "0.2"
 leptos = { version = "0.8", default-features = false }
+leptos_meta = "0.8"
 reactive_graph = "0.2.14"
 scraper = "0.24"
 serde = "1"

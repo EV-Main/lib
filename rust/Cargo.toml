@@ -33,6 +33,7 @@ uikit_dioxus = [
 # context, so server and client mint the same one.
 uikit_leptos = [
     "dep:leptos",
+    "dep:leptos_meta",
     "dep:reactive_graph",
     "reactive_graph?/hydration",
     "dep:ev_lib_classes",
@@ -170,6 +171,7 @@ dioxus = { workspace = true, features = ["macro", "html", "signals", "hooks"], o
 ev_lib_classes = { workspace = true, optional = true }
 jiff = { workspace = true, features = ["serde"], optional = true }
 leptos = { workspace = true, optional = true }
+leptos_meta = { workspace = true, optional = true }
 reactive_graph = { workspace = true, optional = true }
 serde = { workspace = true, features = ["derive"], optional = true }
 serde_json = { workspace = true, optional = true }
@@ -219,7 +221,7 @@ js-sys = { version = "0.3", optional = true }
 reqwest = { version = "0.13", optional = true, default-features = false, features = ["json"] }
 wasm-bindgen = { version = "0.2", optional = true }
 wasm-bindgen-futures = { version = "0.4", optional = true }
-web-sys = { version = "0.3", optional = true, features = ["Document", "Window", "HtmlDocument", "Storage", "Navigator", "Element", "TransitionEvent", "Location", "Node", "KeyboardEvent", "MutationObserver", "MutationObserverInit", "ScrollIntoViewOptions", "ScrollLogicalPosition", "ScrollBehavior"] }
+web-sys = { version = "0.3", optional = true, features = ["Document", "Window", "HtmlDocument", "Storage", "Navigator", "Element", "TransitionEvent", "Location", "Node", "KeyboardEvent", "MutationObserver", "MutationObserverInit", "ScrollIntoViewOptions", "ScrollLogicalPosition", "ScrollBehavior", "DomRect"] }
 
 [dev-dependencies]
 ev_lib = { path = ".", features = ["alerts", "architecture", "uikit_dioxus", "uikit_leptos", "analytics", "error_monitoring", "experiments", "settings", "settings_drift", "types", "i18n", "kitstart", "ts_gen"] }

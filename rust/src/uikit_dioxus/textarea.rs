@@ -19,6 +19,7 @@ pub fn Textarea(
 	oninput: Option<EventHandler<FormEvent>>,
 ) -> Element {
 	let cls = cn!(TEXTAREA_BASE, textarea_size_class(size), class);
+	let text = value.clone();
 	let form = try_consume_context::<Signal<FormControlContext>>().map(|ctx| ctx.read().clone());
 
 	rsx! {
@@ -35,6 +36,8 @@ pub fn Textarea(
 			disabled,
 			value,
 			oninput: move |e| { if let Some(h) = oninput { h.call(e); } },
+			// `value` drives the live property on the client; a server-rendered textarea shows its text content
+			{text}
 		}
 	}
 }

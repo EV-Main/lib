@@ -12,19 +12,12 @@
 
 use dioxus::prelude::*;
 
+pub use crate::uikit::{StatusLinkData, status_cta_class};
 use crate::{
 	cn,
-	uikit_dioxus::{Accent, ButtonVariant, Logo, Size, accent_text_class, button_classes},
+	uikit_dioxus::{Accent, ButtonVariant, Logo, accent_text_class},
 };
 
-/// One CTA in a [`StatusScreen`]'s action row.
-#[derive(Clone, Debug, PartialEq)]
-pub struct StatusLinkData {
-	pub label: String,
-	pub href: String,
-	pub variant: ButtonVariant,
-	pub leading_arrow: bool,
-}
 /// Shared skeleton for the 404 / 403 / 500 status pages: a centred hero with the
 /// logo mark, a mono eyebrow, a giant Playfair code, a headline whose final clause
 /// is an italic accent, supporting copy, and the CTAs. The accent threads through
@@ -171,17 +164,6 @@ pub fn ServerError(#[props(default = "/".to_string())] home_href: String, reset:
 		}
 	}
 }
-/// A status CTA is a [`Button`](crate::uikit_dioxus::Button) at the page's accent: the
-/// canonical button string for that variant and rung, then the mono/uppercase
-/// treatment the error pages wear.
-///
-/// Public because a host that renders its own action into [`StatusScreen`]'s
-/// slot — a retry button wired to a framework's `reset`, say — has to be able to
-/// match the CTAs beside it.
-pub fn status_cta_class(accent: Accent, variant: ButtonVariant) -> String {
-	cn!(button_classes(&variant, Size::Lg, false, Some(accent), ""), "font-mono text-xs uppercase tracking-widest")
-}
-
 // lucide `arrow-left`, inlined so the kit keeps its zero-icon-dep footprint.
 fn arrow_left_icon() -> Element {
 	rsx! {

@@ -1,29 +1,9 @@
 use dioxus::prelude::*;
 
+pub use crate::uikit::{FooterLink, FooterLinkGroup, FooterOffice};
 use crate::uikit_dioxus::Container;
 
 const HEADING: &str = "font-mono text-xs text-ink uppercase tracking-widest mb-6";
-
-/// A footer sitemap link.
-#[derive(Clone, Debug, PartialEq)]
-pub struct FooterLink {
-	pub label: String,
-	pub href: String,
-}
-
-/// A footer sitemap column: a heading over its links. Each renders `lg:col-span-2`.
-#[derive(Clone, Debug, PartialEq)]
-pub struct FooterLinkGroup {
-	pub heading: String,
-	pub links: Vec<FooterLink>,
-}
-
-/// An office entry in the footer's offices column.
-#[derive(Clone, Debug, PartialEq)]
-pub struct FooterOffice {
-	pub name: String,
-	pub address: String,
-}
 
 /// A 12-col footer grid — brand 3 | sitemap groups 2 each | offices 3 |
 /// newsletter 2 — with the legal links and copyright line. On mobile the sitemap

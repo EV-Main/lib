@@ -8,6 +8,7 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
+	uikit::depth_percent,
 	uikit_dioxus::{
 		BookSide, OPEN_ORDERS_EMPTY, ORDER_BOOK, ORDER_BOOK_DEPTH, ORDER_BOOK_HEAD, ORDER_BOOK_PRICE, ORDER_BOOK_ROW, ORDER_BOOK_SPREAD, ORDER_FORM, ORDER_FORM_LABEL, ORDER_FORM_ROW,
 		ORDER_FORM_SUBMIT_BASE, ORDER_FORM_VALUE, OrderSide, TERMINAL_CHART, TERMINAL_PANE, TERMINAL_PANE_BODY, TERMINAL_PANE_HEADER, TERMINAL_ROOT, TERMINAL_TICKER, TERMINAL_TICKER_LABEL,
@@ -220,16 +221,6 @@ pub fn OpenOrdersEmpty(#[props(default)] class: String, children: Element) -> El
 		div { class: cls, "data-slot": "open-orders-empty", {children} }
 	}
 }
-/// The bar is a CSS percentage, so the fraction is clamped and rounded once
-/// here; a NaN from an empty book reads as no depth rather than as `NaN%`.
-fn depth_percent(depth: f64) -> u8 {
-	if depth.is_nan() {
-		return 0;
-	}
-	// Truncation is the point: the value is clamped to 0..=100 first.
-	(depth.clamp(0.0, 1.0) * 100.0).round() as u8
-}
-
 #[cfg(test)]
 mod tests {
 	use super::*;
@@ -278,15 +269,6 @@ mod tests {
 		assert!(html.contains("bg-accent-error/15"), "{html}");
 		assert!(html.contains("width: 42%"), "{html}");
 		assert!(html.contains("data-side=\"ask\""), "{html}");
-	}
-
-	#[test]
-	fn depth_is_clamped_to_a_percentage() {
-		assert_eq!(depth_percent(-0.5), 0);
-		assert_eq!(depth_percent(0.0), 0);
-		assert_eq!(depth_percent(0.5), 50);
-		assert_eq!(depth_percent(1.7), 100);
-		assert_eq!(depth_percent(f64::NAN), 0);
 	}
 
 	#[test]
