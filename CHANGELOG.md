@@ -84,6 +84,9 @@ Rust crate and its TypeScript mirror at once.
 
 ### Fixed
 
+- **`uikit_leptos` `ContextMenu` builds under `web_sys_unstable_apis`**
+  (`ev_lib`, patch): web-sys's `MouseEvent::client_x` is `f64` there and
+  `i32` otherwise; the pointer position now takes either.
 - **Dropdown, context and menubar items are clickable again** (`ev_lib` `uikit`):
   they rendered `data-disabled="false"` and `data-inset="false"`, which the
   classes' `data-[disabled]` / `data-[inset]` match on presence, so every item

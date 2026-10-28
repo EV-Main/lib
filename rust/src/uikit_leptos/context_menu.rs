@@ -20,7 +20,7 @@ pub fn ContextMenu(
 	let state = use_controllable(open, default_open, on_open_change);
 	let provided = ContextMenuCtx {
 		open: state,
-		point: RwSignal::new((0, 0)),
+		point: RwSignal::new((0.0, 0.0)),
 	};
 	view! {
 		<Provider value=provided>
@@ -38,7 +38,7 @@ pub fn ContextMenuTrigger(#[prop(optional, into)] class: String, children: Child
 			data-slot="context-menu-trigger"
 			on:contextmenu=move |e| {
 				e.prevent_default();
-				ctx.point.set((e.client_x(), e.client_y()));
+				ctx.point.set((f64::from(e.client_x()), f64::from(e.client_y())));
 				ctx.open.set(true);
 			}
 		>
@@ -324,7 +324,7 @@ pub fn ContextMenuSubContent(#[prop(optional, into)] class: String, children: Ch
 #[derive(Clone, Copy)]
 struct ContextMenuCtx {
 	open: Controllable<bool>,
-	point: RwSignal<(i32, i32)>,
+	point: RwSignal<(f64, f64)>,
 }
 impl ContextMenuCtx {
 	/// An item's click: the caller's handler, then the menu closes — unless the item is disabled.
