@@ -5,6 +5,7 @@
 #![cfg(feature = "uikit_dioxus")]
 
 include!("support/gallery.rs");
+include!("support/board.rs");
 
 use std::{collections::BTreeMap, path::PathBuf, process::Command};
 
