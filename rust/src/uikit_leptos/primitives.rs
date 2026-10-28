@@ -181,11 +181,6 @@ impl DismissableLayer {
 		}
 	}
 
-	/// Whether no layer is open above this one (and this one is open).
-	pub fn is_top(&self) -> bool {
-		self.stack.0.with_value(|(stack, _)| stack.is_top(self.id))
-	}
-
 	fn dismiss(&self, layer: usize, reason: DismissReason) {
 		// Cloned out so the callback may re-enter the stack.
 		let dismiss = self.stack.0.with_value(|(_, fns)| fns[&layer].clone());
@@ -195,8 +190,12 @@ impl DismissableLayer {
 
 /// Puts the calling overlay on the layer stack while `open`, calling
 /// `on_dismiss` when it is the top layer and Escape or an outside click arrives.
-/// The stack follows `open` through an effect, so a layer that closes itself is
-/// still on top while the Escape that closed it propagates.
+///
+/// The stack follows renders, not handlers (see `LayerStack`): `open` is synced
+/// by a render effect, which lands with the overlay's own re-render, after the
+/// handler that closed it has finished. Created in the overlay's body, ahead of
+/// its content, it runs before the content renders — so an overlay opening
+/// inside another is pushed above it, in render order, as in the Dioxus port.
 pub fn use_dismissable_layer(open: Signal<bool>, on_dismiss: impl Fn(DismissReason) + Send + Sync + 'static) -> DismissableLayer {
 	static NEXT: AtomicUsize = AtomicUsize::new(0);
 	let id = NEXT.fetch_add(1, Ordering::Relaxed);
@@ -209,7 +208,7 @@ pub fn use_dismissable_layer(open: Signal<bool>, on_dismiss: impl Fn(DismissReas
 		})
 	});
 	let on_dismiss: DismissFn = Arc::new(on_dismiss);
-	Effect::new(move |_| {
+	let sync = RenderEffect::new(move |_| {
 		let open = open.get();
 		stack.0.update_value(|(layers, fns)| {
 			layers.sync(id, open);
@@ -221,6 +220,7 @@ pub fn use_dismissable_layer(open: Signal<bool>, on_dismiss: impl Fn(DismissReas
 		});
 	});
 	on_cleanup(move || {
+		drop(sync);
 		stack.0.update_value(|(layers, fns)| {
 			layers.remove(id);
 			fns.remove(&id);
@@ -233,6 +233,18 @@ pub fn use_dismissable_layer(open: Signal<bool>, on_dismiss: impl Fn(DismissReas
 pub(crate) fn stable_id() -> usize {
 	static NEXT: AtomicUsize = AtomicUsize::new(0);
 	Owner::current_shared_context().map_or_else(|| NEXT.fetch_add(1, Ordering::Relaxed), |sc| sc.next_id().into_inner())
+}
+
+/// Whether a `transitionend` is the element's own exit `transform` finishing.
+///
+/// Every exiting overlay (toast, drawer) stays mounted with
+/// `data-state="closed"` until its slide-out transition ends, then drops the
+/// node. But `transitionend` bubbles, so the closing element also sees its
+/// descendants' — a button's `transition-colors`, a child's own transform — and
+/// dropping on those cuts the slide-out short. Mirrors the TS guard
+/// (`e.propertyName === "transform"`).
+pub(crate) fn is_transform_transition(e: &leptos::ev::TransitionEvent) -> bool {
+	e.target().is_some_and(|target| e.current_target().is_some_and(|current| current == target)) && e.property_name() == "transform"
 }
 
 /// The open layers of one page and their dismiss handlers, kept on the root

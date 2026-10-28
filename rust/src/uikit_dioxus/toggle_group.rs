@@ -2,20 +2,13 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
+	uikit::{TOGGLE_GROUP_ITEM, TOGGLE_GROUP_ROOT, toggled},
 	uikit_dioxus::{
-		Size, ToggleVariant,
+		Size, ToggleGroupType, ToggleVariant,
 		primitives::{Controllable, use_controllable},
-		toggle::toggle_classes,
+		toggle_classes,
 	},
 };
-
-/// `Single` keeps at most one item pressed; `Multiple` allows several.
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
-pub enum ToggleGroupType {
-	#[default]
-	Single,
-	Multiple,
-}
 
 /// Grouped container that owns the selection, like the TS port: items carry a
 /// `value` and read their pressed state from the group.
@@ -45,7 +38,7 @@ pub fn ToggleGroup(
 		shared.set(look);
 	}
 	use_context_provider(|| ToggleGroupCtx { selected, look: shared });
-	let cls = cn!("group/toggle-group flex w-fit items-center rounded-md data-[variant=outline]:shadow-xs", class);
+	let cls = cn!(TOGGLE_GROUP_ROOT, class);
 	rsx! {
 		div {
 			class: cls,
@@ -91,11 +84,7 @@ pub fn ToggleGroupItem(
 		_ => Driver::Own(own),
 	};
 	let on = driver.is_on();
-	let cls = cn!(
-		toggle_classes(&variant, size, ""),
-		"min-w-0 flex-auto shrink-0 rounded-none shadow-none first:rounded-l-md last:rounded-r-md focus:z-10 focus-visible:z-10 data-[variant=outline]:-ml-px data-[variant=outline]:first:ml-0 data-[state=on]:z-10",
-		class
-	);
+	let cls = cn!(toggle_classes(&variant, size, ""), TOGGLE_GROUP_ITEM, class);
 	rsx! {
 		button {
 			r#type: "button",
@@ -133,25 +122,7 @@ impl ToggleGroupCtx {
 	/// Reads the selection at click time, not render time, so presses that land
 	/// before the next render still compose.
 	fn toggle(&self, value: &str) {
-		let current = self.selected.get();
-		let present = current.iter().any(|v| v == value);
-		let next = match self.look.peek().kind {
-			ToggleGroupType::Single =>
-				if present {
-					Vec::new()
-				} else {
-					vec![value.to_owned()]
-				},
-			ToggleGroupType::Multiple =>
-				if present {
-					current.into_iter().filter(|v| v != value).collect()
-				} else {
-					let mut next = current;
-					next.push(value.to_owned());
-					next
-				},
-		};
-		self.selected.set(next);
+		self.selected.set(toggled(&self.selected.get(), value, self.look.peek().kind == ToggleGroupType::Multiple, true));
 	}
 }
 

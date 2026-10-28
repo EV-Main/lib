@@ -2,8 +2,9 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
+	uikit::sheet_side_class,
 	uikit_dioxus::{
-		SHEET_CLOSE, SHEET_CONTENT, SHEET_DESCRIPTION, SHEET_FOOTER, SHEET_HEADER, SHEET_OVERLAY, SHEET_SIDE_BOTTOM, SHEET_SIDE_LEFT, SHEET_SIDE_RIGHT, SHEET_SIDE_TOP, SHEET_TITLE,
+		SHEET_CLOSE, SHEET_CONTENT, SHEET_DESCRIPTION, SHEET_FOOTER, SHEET_HEADER, SHEET_OVERLAY, SHEET_TITLE,
 		primitives::{Controllable, Side, use_controllable},
 	},
 };
@@ -36,7 +37,7 @@ pub fn SheetContent(#[props(default = Side::Right)] side: Side, #[props(default)
 	if !ctx.open.get() {
 		return rsx! {};
 	}
-	let cls = cn!(SHEET_CONTENT, side_class(side), class);
+	let cls = cn!(SHEET_CONTENT, sheet_side_class(side), class);
 	rsx! {
 		// dep-light: native focus order, no trap/portal — see README Limitations
 		div {
@@ -119,16 +120,6 @@ pub fn SheetDescription(#[props(default)] class: String, children: Element) -> E
 		p { class: cls, "data-slot": "sheet-description", {children} }
 	}
 }
-/// Per-side slide-in/positioning classes, canonical with the TS `sheetSideClasses`.
-fn side_class(side: Side) -> &'static str {
-	match side {
-		Side::Right => SHEET_SIDE_RIGHT,
-		Side::Left => SHEET_SIDE_LEFT,
-		Side::Top => SHEET_SIDE_TOP,
-		Side::Bottom => SHEET_SIDE_BOTTOM,
-	}
-}
-
 #[derive(Clone, Copy)]
 struct SheetCtx {
 	open: Controllable<bool>,

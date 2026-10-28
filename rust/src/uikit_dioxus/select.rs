@@ -8,18 +8,15 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	uikit::{Placement, sort_by_position},
+	uikit::{self, SelectKey, SelectOption},
 	uikit_dioxus::{
 		SELECT_CONTENT_BOUNDS, SELECT_ITEM, Size,
-		primitives::{Controllable, DismissReason, text_of, use_controllable, use_dismissable_layer, use_stable_id},
+		primitives::{Controllable, DismissReason, use_controllable, use_dismissable_layer, use_stable_id},
 		select_trigger_size_class,
 	},
 };
 
 // dep-light: inline positioning + backdrop; no portal/floating/drag — see README Limitations
-
-/// Keys typed within this long of each other build one type-ahead query.
-const TYPEAHEAD_MS: f64 = 500.0;
 #[component]
 pub fn Select(
 	value: Option<String>,
@@ -42,18 +39,16 @@ pub fn Select(
 	let id = use_stable_id("select-content");
 	let content_id = use_signal(move || id);
 	let trigger = use_signal(|| None);
-	let options = use_signal(BTreeMap::new);
-	let active = use_signal(|| None);
-	let typed = use_signal(Typeahead::default);
+	let state = use_signal(uikit::Select::default);
+	let els = use_signal(BTreeMap::new);
 	use_context_provider(|| SelectCtx {
 		value,
 		reset,
 		open,
 		content_id,
 		trigger,
-		options,
-		active,
-		typed,
+		state,
+		els,
 	});
 	let cls = cn!("relative", class);
 	rsx! {
@@ -143,9 +138,9 @@ pub fn SelectContent(#[props(default)] class: String, children: Element) -> Elem
 		// A caller's controlled `open: false` closes the list without
 		// `SelectCtx::close`; an option left active would stop the next open
 		// from landing, and focus would stay on the trigger.
-		let mut active = ctx.active;
-		if active.peek().is_some() {
-			active.set(None);
+		let mut state = ctx.state;
+		if state.peek().active().is_some() {
+			state.write().close();
 		}
 		return rsx! {};
 	}
@@ -179,8 +174,9 @@ pub fn SelectContent(#[props(default)] class: String, children: Element) -> Elem
 #[component]
 pub fn SelectItem(
 	value: String,
-	/// What type-ahead matches; defaults to the text of `children`.
-	text_value: Option<String>,
+	/// What the type-ahead matches — the text the option reads as, which the
+	/// kit cannot read off `children`.
+	text_value: String,
 	#[props(default)] disabled: bool,
 	#[props(default)] class: String,
 	children: Element,
@@ -188,14 +184,12 @@ pub fn SelectItem(
 	let ctx = use_context::<SelectCtx>();
 	let selected = ctx.value.get() == value;
 	let reset = ctx.reset.read().as_deref() == Some(value.as_str());
-	let label = text_value.unwrap_or_else(|| text_of(&children).trim().to_string());
 	let id = use_select_option(
 		ctx,
 		SelectOption {
 			value: value.clone(),
-			label,
+			label: text_value,
 			disabled,
-			el: None,
 		},
 	);
 	let cls = cn!(SELECT_ITEM, class);
@@ -212,9 +206,9 @@ pub fn SelectItem(
 		move |_| {
 			// A disabled row takes focus from a click too: it becomes active, so
 			// the arrows go on from it, and Enter or Space on it does nothing.
-			let mut active = ctx.active;
-			if active.peek().as_deref() != Some(value.as_str()) {
-				active.set(Some(value.clone()));
+			let mut state = ctx.state;
+			if state.peek().active() != Some(value.as_str()) {
+				state.write().focused(value.clone());
 			}
 		}
 	};
@@ -282,13 +276,10 @@ struct SelectCtx {
 	content_id: Signal<String>,
 	/// Where focus goes back to once the list closes on a key or a choice.
 	trigger: Signal<Option<Rc<MountedData>>>,
-	/// The mounted options in render order, keyed by registration — read from
-	/// handlers only, so rendering never subscribes to it.
-	options: Signal<BTreeMap<usize, SelectOption>>,
-	/// The option holding focus while the list is open; `None` before the list
-	/// has landed on one, when the arrows walk from where it would land.
-	active: Signal<Option<String>>,
-	typed: Signal<Typeahead>,
+	/// Read from handlers only, so rendering never subscribes to it.
+	state: Signal<uikit::Select>,
+	/// The options' mounted elements: their document order, and where focus lands.
+	els: Signal<BTreeMap<usize, Rc<MountedData>>>,
 }
 impl SelectCtx {
 	fn choose(&self, value: String) {
@@ -300,192 +291,44 @@ impl SelectCtx {
 	/// choice, never after a click elsewhere.
 	fn close(&self, restore_focus: bool) {
 		self.open.set(false);
-		let mut active = self.active;
-		active.set(None);
+		let mut state = self.state;
+		state.write().close();
 		if restore_focus && let Some(el) = self.trigger.peek().clone() {
 			focus(el);
 		}
 	}
 
-	/// The options the keys can reach, as `(value, lowercased label)`, in the
-	/// order on screen.
-	fn reachable(&self) -> Vec<(String, String)> {
-		self.on_screen().into_iter().filter(|o| !o.disabled).map(|o| (o.value, o.label)).collect()
-	}
-
-	/// Every option, disabled ones too, in the order on screen; labels lowercased.
-	fn on_screen(&self) -> Vec<ListedOption> {
-		let options = self.options.peek();
-		let els: BTreeMap<usize, Rc<MountedData>> = options.iter().filter_map(|(id, o)| o.el.clone().map(|el| (*id, el))).collect();
-		let mut all: Vec<(usize, &SelectOption)> = options.iter().map(|(id, o)| (*id, o)).collect();
-		sort_by_position(&mut all, |(id, _)| els.placed(*id), |(a, _), (b, _)| els.precedes(*a, *b));
-		all.into_iter()
-			.map(|(_, o)| ListedOption {
-				value: o.value.clone(),
-				label: o.label.to_lowercase(),
-				disabled: o.disabled,
-			})
-			.collect()
-	}
-
-	fn enabled(&self) -> Vec<String> {
-		self.reachable().into_iter().map(|(value, _)| value).collect()
-	}
-
-	/// Where opening lands: the chosen option, else the first, as a native
-	/// select does.
-	fn landing(&self) -> Option<String> {
-		let enabled = self.enabled();
-		let chosen = self.value.get();
-		enabled.iter().find(|v| **v == chosen).or(enabled.first()).cloned()
-	}
-
 	fn mounted(&self, id: usize, el: Rc<MountedData>) {
-		let value = {
-			let mut options = self.options;
-			let mut options = options.write();
-			let Some(option) = options.get_mut(&id) else { return };
-			option.el = Some(el);
-			option.value.clone()
-		};
-		if self.active.peek().is_some() {
-			return;
-		}
-		// Decide without the document-order sort while options are still
-		// mounting: one sort per mount would cost ~n² DOM calls on opening a long
-		// list. A reachable chosen option is found by value alone; with none, the
-		// first option on screen is known once every option has mounted.
-		let chosen = self.value.get();
-		let chosen_reachable = self.options.peek().values().any(|o| !o.disabled && o.value == chosen);
-		if chosen_reachable {
-			if value == chosen {
-				self.move_to(value);
-			}
-			return;
-		}
-		if self.options.peek().values().all(|o| o.el.is_some())
-			&& let Some(first) = self.landing()
-		{
-			self.move_to(first);
+		let mut els = self.els;
+		els.write().insert(id, el);
+		let mut state = self.state;
+		let landed = state.write().mounted(id, &self.value.get(), &*self.els.peek());
+		if let Some(id) = landed {
+			self.focus_option(id);
 		}
 	}
 
-	fn move_to(&self, value: String) {
-		let el = self.options.peek().values().find(|o| o.value == value).and_then(|o| o.el.clone());
-		let mut active = self.active;
-		active.set(Some(value));
-		if let Some(el) = el {
+	fn focus_option(&self, id: usize) {
+		if let Some(el) = self.els.peek().get(&id).cloned() {
 			focus(el);
 		}
 	}
 
-	/// Arrows, Home, End, Enter, Space, Tab and type-ahead on the open list.
 	fn on_list_key(&self, e: &KeyboardEvent) {
-		let key = e.key();
-		let all = self.on_screen();
-		let (enabled, labels): (Vec<String>, Vec<String>) = all.iter().filter(|o| !o.disabled).map(|o| (o.value.clone(), o.label.clone())).unzip();
-		let current = self.active.peek().clone().or_else(|| self.landing());
-		let at = current.as_ref().and_then(|c| enabled.iter().position(|v| v == c));
-		// On a focused disabled option: how many reachable options come before it,
-		// so the arrows and the type-ahead go on from where it sits.
-		let before = match (at, &current) {
-			(None, Some(c)) => all.iter().position(|o| o.value == *c).map(|i| all[..i].iter().filter(|o| !o.disabled).count()),
-			_ => None,
+		let mut state = self.state;
+		let Some(effect) = state.write().key(&e.into(), &self.value.get(), now_ms(), &*self.els.peek()) else {
+			return;
 		};
-		// Only an option the keys can reach is chosen — never a disabled one,
-		// not even the previous active one behind it.
-		let chosen = at.map(|at| enabled[at].clone());
-		let now = now_ms();
-		let typing = self.typed.peek().is_typing(now);
-		let last = enabled.len().checked_sub(1);
-		let to = match (&key, last) {
-			(Key::ArrowDown, Some(last)) => Some(match (at, before) {
-				(Some(at), _) =>
-					if at == last {
-						0
-					} else {
-						at + 1
-					},
-				(None, Some(before)) =>
-					if before > last {
-						0
-					} else {
-						before
-					},
-				(None, None) => 0,
-			}),
-			(Key::ArrowUp, Some(last)) => Some(match (at, before) {
-				(Some(at), _) =>
-					if at == 0 {
-						last
-					} else {
-						at - 1
-					},
-				(None, Some(before)) =>
-					if before == 0 {
-						last
-					} else {
-						before - 1
-					},
-				(None, None) => last,
-			}),
-			(Key::Home, Some(_)) => Some(0),
-			(Key::End, Some(last)) => Some(last),
-			(Key::Enter, _) => {
-				e.prevent_default();
-				if let Some(value) = chosen {
-					self.choose(value);
-				}
-				return;
-			}
-			// Mid-query a space is part of the name ("united s"), as in Radix.
-			(Key::Character(c), _) if c == " " && !typing => {
-				e.prevent_default();
-				if let Some(value) = chosen {
-					self.choose(value);
-				}
-				return;
-			}
-			// Without a portal the list sits right after its trigger, so the
-			// browser's own Tab already goes on from there: close, keep focus moving.
-			(Key::Tab, _) => {
-				self.close(false);
-				return;
-			}
-			(Key::Character(c), _) => {
-				let mut chars = c.chars();
-				let (Some(ch), None) = (chars.next(), chars.next()) else { return };
-				let mods = e.modifiers();
-				if mods.ctrl() || mods.meta() || mods.alt() {
-					return;
-				}
-				e.prevent_default();
-				let mut typed = self.typed;
-				let query = typed.write().push(ch, now);
-				typeahead_match(&labels, at.or_else(|| before.and_then(|b| b.checked_sub(1))), &query)
-			}
-			_ => return,
-		};
-		if let Some(to) = to {
-			e.prevent_default();
-			self.move_to(enabled[to].clone());
+		if effect == SelectKey::Leave {
+			return self.close(false);
+		}
+		e.prevent_default();
+		match effect {
+			SelectKey::Moved(id) => self.focus_option(id),
+			SelectKey::Choose(value) => self.choose(value),
+			SelectKey::Held | SelectKey::Leave => {}
 		}
 	}
-}
-
-struct ListedOption {
-	value: String,
-	label: String,
-	disabled: bool,
-}
-
-struct SelectOption {
-	value: String,
-	/// Lowercased by the type-ahead, not here: the label is the caller's text.
-	label: String,
-	disabled: bool,
-	/// Set on mount, so it stays `None` under SSR and on non-web renderers.
-	el: Option<Rc<MountedData>>,
 }
 
 /// Registers the calling item with its list, in render order, returning the id
@@ -493,20 +336,15 @@ struct SelectOption {
 /// already know the order before anything has mounted.
 fn use_select_option(ctx: SelectCtx, option: SelectOption) -> usize {
 	let id = use_hook(|| NEXT_OPTION_ID.fetch_add(1, Ordering::Relaxed));
-	let mut options = ctx.options;
-	// `peek` and a guarded write: no component renders from the registry, and a
-	// write on every render would still dirty the signal for nothing.
-	let stale = options
-		.peek()
-		.get(&id)
-		.is_none_or(|o| o.value != option.value || o.label != option.label || o.disabled != option.disabled);
-	if stale {
-		let mut options = options.write();
-		let el = options.remove(&id).and_then(|o| o.el);
-		options.insert(id, SelectOption { el, ..option });
+	let mut state = ctx.state;
+	// A guarded write: a write on every render would dirty the signal for nothing.
+	if state.peek().option(id) != Some(&option) {
+		state.write().register(id, option);
 	}
 	use_drop(move || {
-		options.write().remove(&id);
+		state.write().unregister(id);
+		let mut els = ctx.els;
+		els.write().remove(&id);
 	});
 	id
 }
@@ -520,50 +358,8 @@ fn focus(el: Rc<MountedData>) {
 	});
 }
 
-#[derive(Default)]
-struct Typeahead {
-	text: String,
-	at: Option<f64>,
-}
-impl Typeahead {
-	/// Whether a query is under way: something typed, within the window.
-	fn is_typing(&self, now: Option<f64>) -> bool {
-		!self.text.is_empty() && matches!((now, self.at), (Some(now), Some(at)) if now - at <= TYPEAHEAD_MS)
-	}
-
-	/// Adds `ch` to the query, starting a new one after a pause — or on every
-	/// key where there is no clock, which still leaves a repeated letter cycling.
-	fn push(&mut self, ch: char, now: Option<f64>) -> String {
-		let fresh = match (now, self.at) {
-			(Some(now), Some(at)) => now - at > TYPEAHEAD_MS,
-			_ => true,
-		};
-		if fresh {
-			self.text.clear();
-		}
-		self.text.extend(ch.to_lowercase());
-		self.at = now;
-		self.text.clone()
-	}
-}
-
-/// The option the type-ahead `typed` lands on, from the option at `current`.
-/// One letter repeated cycles through the options that start with it; a word
-/// stays on the current option while it still matches. `labels` are lowercased.
-fn typeahead_match(labels: &[String], current: Option<usize>, typed: &str) -> Option<usize> {
-	let first = typed.chars().next()?;
-	let repeated = typed.chars().all(|c| c == first);
-	let query = if repeated { first.to_string() } else { typed.to_string() };
-	let from = match current {
-		Some(at) if repeated => at + 1,
-		Some(at) => at,
-		None => 0,
-	};
-	(0..labels.len()).map(|i| (from + i) % labels.len()).find(|&i| labels[i].trim_start().starts_with(&query))
-}
-
-/// Milliseconds on some monotonic-enough clock; `None` on bare `wasm32`
-/// without `wasm`, where `SystemTime::now` panics.
+/// Milliseconds on some monotonic-enough clock, for the type-ahead window;
+/// `None` on bare `wasm32` without `wasm`, where `SystemTime::now` panics.
 fn now_ms() -> Option<f64> {
 	#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
 	{
@@ -596,7 +392,7 @@ mod tests {
 						SelectValue { placeholder: "Pick".to_string() }
 					}
 					SelectContent {
-						SelectItem { value: "a", "Apple" }
+						SelectItem { value: "a", text_value: "Apple", "Apple" }
 					}
 				}
 			}
@@ -616,7 +412,7 @@ mod tests {
 						SelectValue { placeholder: "Pick".to_string() }
 					}
 					SelectContent {
-						SelectItem { value: "a", "Apple" }
+						SelectItem { value: "a", text_value: "Apple", "Apple" }
 					}
 				}
 			}
@@ -636,7 +432,7 @@ mod tests {
 						SelectValue { placeholder: "Pick".to_string() }
 					}
 					SelectContent {
-						SelectItem { value: "a", "Apple" }
+						SelectItem { value: "a", text_value: "Apple", "Apple" }
 					}
 				}
 			}
@@ -658,8 +454,8 @@ mod tests {
 						SelectValue {}
 					}
 					SelectContent {
-						SelectItem { value: "a", "Apple" }
-						SelectItem { value: "b", "Banana" }
+						SelectItem { value: "a", text_value: "Apple", "Apple" }
+						SelectItem { value: "b", text_value: "Banana", "Banana" }
 					}
 				}
 			}
@@ -688,7 +484,7 @@ mod tests {
 						SelectValue { placeholder: "Pick".to_string() }
 					}
 					SelectContent {
-						SelectItem { value: "a", "Apple" }
+						SelectItem { value: "a", text_value: "Apple", "Apple" }
 					}
 				}
 			}
@@ -729,10 +525,6 @@ mod tests {
 		assert!(html.contains("rounded-[var(--control-radius)]"), "{html}");
 	}
 
-	fn ch(c: &str) -> Key {
-		Key::Character(c.to_string())
-	}
-
 	/// The value the trigger shows, i.e. what the keys chose.
 	fn shown(html: &str) -> &str {
 		let from = html.find("data-slot=\"select-value\"").expect("a select value");
@@ -748,11 +540,11 @@ mod tests {
 					SelectValue { placeholder: "Pick".to_string() }
 				}
 				SelectContent {
-					SelectItem { value: "apple", "Apple" }
-					SelectItem { value: "banana", "Banana" }
-					SelectItem { value: "blueberry", "Blueberry" }
-					SelectItem { value: "cherry", disabled: true, "Cherry" }
-					SelectItem { value: "date", "Date" }
+					SelectItem { value: "apple", text_value: "Apple", "Apple" }
+					SelectItem { value: "banana", text_value: "Banana", "Banana" }
+					SelectItem { value: "blueberry", text_value: "Blueberry", "Blueberry" }
+					SelectItem { value: "cherry", text_value: "Cherry", disabled: true, "Cherry" }
+					SelectItem { value: "date", text_value: "Date", "Date" }
 				}
 			}
 		}
@@ -765,9 +557,9 @@ mod tests {
 					SelectValue { placeholder: "Pick".to_string() }
 				}
 				SelectContent {
-					SelectItem { value: "apple", "Apple" }
-					SelectItem { value: "banana", "Banana" }
-					SelectItem { value: "blueberry", "Blueberry" }
+					SelectItem { value: "apple", text_value: "Apple", "Apple" }
+					SelectItem { value: "banana", text_value: "Banana", "Banana" }
+					SelectItem { value: "blueberry", text_value: "Blueberry", "Blueberry" }
 				}
 			}
 		}
@@ -805,43 +597,6 @@ mod tests {
 	}
 
 	#[test]
-	fn arrows_skip_disabled_options_and_wrap() {
-		let html = render_after_keys(fruit, &[Key::ArrowDown, Key::End, Key::ArrowUp, Key::Enter]);
-		assert_eq!(shown(&html), "blueberry", "the disabled cherry is skipped: {html}");
-		let html = render_after_keys(fruit, &[Key::ArrowDown, Key::ArrowUp, Key::Enter]);
-		assert_eq!(shown(&html), "date", "ArrowUp from the first wraps to the last: {html}");
-		let html = render_after_keys(fruit, &[Key::ArrowDown, Key::End, Key::ArrowDown, Key::Enter]);
-		assert_eq!(shown(&html), "apple", "ArrowDown from the last wraps to the first: {html}");
-		let html = render_after_keys(fruit, &[Key::ArrowDown, Key::End, Key::Home, Key::Enter]);
-		assert_eq!(shown(&html), "apple", "{html}");
-	}
-
-	#[test]
-	fn opening_lands_on_the_chosen_option() {
-		let html = render_after_keys(fruit_open_on_banana, &[Key::ArrowDown, Key::Enter]);
-		assert_eq!(shown(&html), "blueberry", "{html}");
-	}
-
-	#[test]
-	fn space_chooses_like_enter() {
-		let html = render_after_keys(fruit, &[Key::ArrowDown, Key::ArrowDown, ch(" ")]);
-		assert_eq!(shown(&html), "banana", "{html}");
-		assert!(!html.contains("role=\"listbox\""), "{html}");
-	}
-
-	#[test]
-	fn typeahead_finds_by_letters() {
-		let html = render_after_keys(fruit, &[Key::ArrowDown, ch("b"), Key::Enter]);
-		assert_eq!(shown(&html), "banana", "{html}");
-		let html = render_after_keys(fruit, &[Key::ArrowDown, ch("b"), ch("b"), Key::Enter]);
-		assert_eq!(shown(&html), "blueberry", "a repeated letter cycles: {html}");
-		let html = render_after_keys(fruit, &[Key::ArrowDown, ch("b"), ch("l"), Key::Enter]);
-		assert_eq!(shown(&html), "blueberry", "letters build a word: {html}");
-		let html = render_after_keys(fruit, &[Key::ArrowDown, ch("c"), Key::Enter]);
-		assert_eq!(shown(&html), "apple", "a disabled option is not a match: {html}");
-	}
-
-	#[test]
 	fn escape_and_tab_close_without_choosing() {
 		for key in [Key::Escape, Key::Tab] {
 			let html = render_after_keydown(fruit_open_on_banana, key);
@@ -859,7 +614,7 @@ mod tests {
 						SelectValue { placeholder: "Pick".to_string() }
 					}
 					SelectContent {
-						SelectItem { value: "cherry", disabled: true, "Cherry" }
+						SelectItem { value: "cherry", text_value: "Cherry", disabled: true, "Cherry" }
 					}
 				}
 			}
@@ -878,7 +633,7 @@ mod tests {
 							SelectValue { placeholder: "Pick".to_string() }
 						}
 						SelectContent {
-							SelectItem { value: "a", "A" }
+							SelectItem { value: "a", text_value: "A", "A" }
 						}
 					}
 				}
@@ -903,71 +658,6 @@ mod tests {
 	}
 
 	#[test]
-	fn typeahead_query_restarts_after_a_pause() {
-		let mut t = Typeahead::default();
-		assert_eq!(t.push('B', Some(0.0)), "b");
-		assert_eq!(t.push('l', Some(100.0)), "bl");
-		assert_eq!(t.push('c', Some(700.0)), "c");
-		assert_eq!(t.push('h', None), "h", "no clock: every key starts afresh");
-	}
-
-	#[test]
-	fn typeahead_match_cycles_a_repeated_letter_and_holds_a_word() {
-		let labels: Vec<String> = ["apple", "banana", "blueberry", "date"].map(String::from).to_vec();
-		assert_eq!(typeahead_match(&labels, None, "b"), Some(1));
-		assert_eq!(typeahead_match(&labels, Some(1), "bb"), Some(2));
-		assert_eq!(typeahead_match(&labels, Some(2), "b"), Some(1), "wraps past the end");
-		assert_eq!(typeahead_match(&labels, Some(1), "ba"), Some(1), "a word stays while it matches");
-		assert_eq!(typeahead_match(&labels, Some(0), "z"), None);
-	}
-
-	#[test]
-	fn a_focused_disabled_option_is_not_chosen_by_enter() {
-		fn app() -> Element {
-			rsx! {
-				Select { default_open: true,
-					SelectTrigger {
-						SelectValue { placeholder: "Pick".to_string() }
-					}
-					SelectContent {
-						SelectItem { value: "apple", "Apple" }
-						SelectItem { value: "banana", disabled: true, "Banana" }
-					}
-				}
-			}
-		}
-		// A click on a disabled row still focuses it; the sweep focuses it last.
-		for key in [Key::Enter, ch(" ")] {
-			let html = render_after_steps(app, &[Step::Focus, Step::Key(key)]);
-			assert_eq!(shown(&html), "Pick", "nothing is chosen, not even the option focused before: {html}");
-			assert!(html.contains("role=\"listbox\""), "the list stays open: {html}");
-		}
-	}
-
-	#[test]
-	fn arrows_go_on_from_a_focused_disabled_option() {
-		fn app() -> Element {
-			rsx! {
-				Select { default_open: true,
-					SelectTrigger {
-						SelectValue { placeholder: "Pick".to_string() }
-					}
-					SelectContent {
-						SelectItem { value: "apple", "Apple" }
-						SelectItem { value: "cherry", "Cherry" }
-						SelectItem { value: "banana", disabled: true, "Banana" }
-					}
-				}
-			}
-		}
-		// The sweep focuses Cherry, then the disabled Banana last.
-		let html = render_after_steps(app, &[Step::Focus, Step::Key(Key::ArrowUp), Step::Key(Key::Enter)]);
-		assert_eq!(shown(&html), "cherry", "up from Banana is Cherry: {html}");
-		let html = render_after_steps(app, &[Step::Focus, Step::Key(Key::ArrowDown), Step::Key(Key::Enter)]);
-		assert_eq!(shown(&html), "apple", "down from the last wraps: {html}");
-	}
-
-	#[test]
 	fn closing_from_outside_lets_the_next_open_land_again() {
 		fn app() -> Element {
 			let mut open = use_signal(|| false);
@@ -985,8 +675,8 @@ mod tests {
 						SelectValue { placeholder: "Pick".to_string() }
 					}
 					SelectContent {
-						SelectItem { value: "apple", "Apple" }
-						SelectItem { value: "banana", "Banana" }
+						SelectItem { value: "apple", text_value: "Apple", "Apple" }
+						SelectItem { value: "banana", text_value: "Banana", "Banana" }
 					}
 				}
 			}
@@ -994,28 +684,5 @@ mod tests {
 		let steps = [Step::Key(Key::ArrowDown), Step::Focus, Step::Key(Key::F2), Step::Key(Key::ArrowDown), Step::Key(Key::Enter)];
 		let html = render_after_steps(app, &steps);
 		assert_eq!(shown(&html), "apple", "the reopened list lands on the first option, not the stale one: {html}");
-	}
-
-	#[test]
-	fn space_inside_a_typeahead_query_is_part_of_it() {
-		fn app() -> Element {
-			rsx! {
-				Select {
-					SelectTrigger {
-						SelectValue { placeholder: "Pick".to_string() }
-					}
-					SelectContent {
-						SelectItem { value: "apple", "Apple" }
-						SelectItem { value: "uk", "United Kingdom" }
-						SelectItem { value: "us", "United States" }
-					}
-				}
-			}
-		}
-		let mut keys = vec![Key::ArrowDown];
-		keys.extend("united s".chars().map(|c| ch(&c.to_string())));
-		keys.push(Key::Enter);
-		let html = render_after_keys(app, &keys);
-		assert_eq!(shown(&html), "us", "{html}");
 	}
 }

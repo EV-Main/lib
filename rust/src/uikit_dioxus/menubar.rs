@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
 
+pub use crate::uikit::MenubarItemVariant;
 use crate::{
 	cn,
 	uikit_dioxus::{
@@ -8,15 +9,6 @@ use crate::{
 		primitives::{Controllable, use_controllable},
 	},
 };
-
-/// Item visual tone — the canonical superset mirrors the TS `variant` prop.
-#[derive(Clone, Default, PartialEq, strum::AsRefStr)]
-#[strum(serialize_all = "kebab-case")]
-pub enum MenubarItemVariant {
-	#[default]
-	Neutral,
-	Destructive,
-}
 
 #[component]
 pub fn Menubar(#[props(default)] class: String, children: Element) -> Element {

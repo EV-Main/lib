@@ -2,18 +2,16 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
+	uikit::{SIDEBAR_STYLE, sidebar_state},
 	uikit_dioxus::{
 		ButtonVariant, SIDEBAR_CONTENT, SIDEBAR_FLAT, SIDEBAR_FOOTER, SIDEBAR_GROUP, SIDEBAR_GROUP_CONTENT, SIDEBAR_GROUP_LABEL, SIDEBAR_HEADER, SIDEBAR_INNER, SIDEBAR_INSET, SIDEBAR_MENU,
-		SIDEBAR_MENU_BUTTON_BASE, SIDEBAR_MENU_ITEM, SIDEBAR_RAIL, SIDEBAR_SEPARATOR, SIDEBAR_TRIGGER, SIDEBAR_WRAPPER, Size,
+		SIDEBAR_MENU_BUTTON_BASE, SIDEBAR_MENU_ITEM, SIDEBAR_RAIL, SIDEBAR_SEPARATOR, SIDEBAR_TRIGGER, SIDEBAR_WRAPPER, SidebarCollapsible, SidebarSide, SidebarVariant, Size,
 		primitives::{Controllable, use_controllable},
 		sidebar_menu_button_size_class,
 	},
 };
 
 // omitted: mobile sheet, cookie, kbd shortcut — see README Limitations
-
-const SIDEBAR_WIDTH: &str = "16rem";
-const SIDEBAR_WIDTH_ICON: &str = "3rem";
 
 /// Shared sidebar state, provided by [`SidebarProvider`] and read by the parts.
 /// Wraps the `Copy` [`Controllable<bool>`] so the whole context is `Copy`.
@@ -36,7 +34,7 @@ impl SidebarContext {
 	}
 
 	pub fn state(&self) -> &'static str {
-		if self.open.get() { "expanded" } else { "collapsed" }
+		sidebar_state(self.open.get())
 	}
 }
 
@@ -58,37 +56,11 @@ pub fn SidebarProvider(
 	rsx! {
 		div {
 			"data-slot": "sidebar-wrapper",
-			style: "--sidebar-width: {SIDEBAR_WIDTH}; --sidebar-width-icon: {SIDEBAR_WIDTH_ICON};",
+			style: SIDEBAR_STYLE,
 			class: cls,
 			{children}
 		}
 	}
-}
-
-#[derive(Clone, Default, PartialEq, strum::AsRefStr)]
-#[strum(serialize_all = "kebab-case")]
-pub enum SidebarSide {
-	#[default]
-	Left,
-	Right,
-}
-
-#[derive(Clone, Default, PartialEq, strum::AsRefStr)]
-#[strum(serialize_all = "kebab-case")]
-pub enum SidebarVariant {
-	#[default]
-	Sidebar,
-	Floating,
-	Inset,
-}
-
-#[derive(Clone, Default, PartialEq, strum::AsRefStr)]
-#[strum(serialize_all = "kebab-case")]
-pub enum SidebarCollapsible {
-	#[default]
-	Offcanvas,
-	Icon,
-	None,
 }
 
 #[component]
@@ -109,7 +81,7 @@ pub fn Sidebar(
 	}
 
 	let state = ctx.state();
-	let data_collapsible = if state == "collapsed" { collapsible.as_ref() } else { "" };
+	let data_collapsible = collapsible.data(ctx.open());
 	let inner = cn!(SIDEBAR_INNER, class);
 	rsx! {
 		div {

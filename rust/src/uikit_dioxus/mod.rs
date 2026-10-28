@@ -74,7 +74,7 @@ mod textarea;
 mod toggle;
 mod toggle_group;
 
-pub use accordion::{Accordion, AccordionContent, AccordionItem, AccordionTrigger, AccordionType};
+pub use accordion::{Accordion, AccordionContent, AccordionItem, AccordionTrigger};
 pub use alert::{Alert, AlertDescription, AlertTitle};
 pub use auth_wall::AuthWall;
 pub use avatar::{Avatar, AvatarFallback, AvatarImage};
@@ -84,7 +84,7 @@ pub use breadcrumb::{Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbL
 pub use button::{Button, button_classes};
 pub use button_group::{ButtonGroup, ButtonGroupSeparator, ButtonGroupText};
 pub use card::{Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle};
-pub use carousel::{Carousel, CarouselContent, CarouselEdgeFade, CarouselItem, CarouselNext, CarouselOrientation, CarouselPrevious};
+pub use carousel::{Carousel, CarouselContent, CarouselEdgeFade, CarouselItem, CarouselNext, CarouselPrevious};
 pub use checkbox::Checkbox;
 pub use collapsible::{Collapsible, CollapsibleContent, CollapsibleTrigger};
 pub use command::{Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut};
@@ -108,22 +108,24 @@ pub use section_descriptor::SectionDescriptor;
 pub use select::{Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue};
 pub use separator::Separator;
 pub use sidebar::{
-	Sidebar, SidebarCollapsible, SidebarContent, SidebarContext, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu,
-	SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarRail, SidebarSeparator, SidebarSide, SidebarTrigger, SidebarVariant, use_sidebar,
+	Sidebar, SidebarContent, SidebarContext, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton,
+	SidebarMenuItem, SidebarProvider, SidebarRail, SidebarSeparator, SidebarTrigger, use_sidebar,
 };
 pub use skeleton::Skeleton;
-pub use slider::{Slider, SliderOrientation};
+pub use slider::Slider;
 pub use spinner::Spinner;
 pub use switch::Switch;
 pub use table::{Table, TableBody, TableCaption, TableCard, TableCell, TableFooter, TableHead, TableHeader, TableRow};
-pub use tabs::{Tabs, TabsContent, TabsList, TabsOrientation, TabsTrigger};
+pub use tabs::{Tabs, TabsContent, TabsList, TabsTrigger};
 pub use terminal::{
 	OpenOrdersEmpty, OrderBook, OrderBookHead, OrderBookRow, OrderBookSpread, OrderForm, OrderFormRow, OrderFormSubmit, Terminal, TerminalChart, TerminalPane, TerminalPaneBody,
 	TerminalPaneHeader, TerminalTicker, TickerStat, TradesTapeRow,
 };
 pub use textarea::Textarea;
-pub use toggle::{Toggle, toggle_classes};
-pub use toggle_group::{ToggleGroup, ToggleGroupItem, ToggleGroupType};
+pub use toggle::Toggle;
+pub use toggle_group::{ToggleGroup, ToggleGroupItem};
+
+pub use crate::uikit::{AccordionType, CarouselOrientation, SidebarCollapsible, SidebarSide, SidebarVariant, SliderOrientation, TabsOrientation, ToggleGroupType, toggle_classes};
 
 // Tier C — overlay/portal components. Glob-exported (each module's public
 // surface is its components + variant enums). Rust overlays are dep-light:

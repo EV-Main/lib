@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
 
+pub use crate::uikit::DropdownMenuItemVariant;
 use crate::{
 	cn,
 	uikit_dioxus::{
@@ -8,15 +9,6 @@ use crate::{
 		primitives::{Controllable, DismissableLayer, Side, use_controllable, use_dismissable_layer},
 	},
 };
-
-/// Neutral vs destructive item styling; mirrors the TS `variant` union.
-#[derive(Clone, Copy, Default, PartialEq, strum::AsRefStr)]
-#[strum(serialize_all = "kebab-case")]
-pub enum DropdownMenuItemVariant {
-	#[default]
-	Neutral,
-	Destructive,
-}
 
 #[component]
 pub fn DropdownMenu(open: Option<bool>, #[props(default)] default_open: bool, on_open_change: Option<EventHandler<bool>>, children: Element) -> Element {

@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
 
+pub use crate::uikit::navigation_menu_trigger_style;
 use crate::{
 	cn,
 	uikit_dioxus::{
@@ -8,13 +9,6 @@ use crate::{
 		primitives::{Controllable, use_controllable},
 	},
 };
-
-/// Canonical class for a navigation-menu trigger, the mirror of the TS
-/// `navigationMenuTriggerStyle` helper so callers can style a plain link the
-/// same way without rendering a [`NavigationMenuTrigger`].
-pub fn navigation_menu_trigger_style() -> &'static str {
-	NAVIGATION_MENU_TRIGGER_STYLE
-}
 
 #[component]
 pub fn NavigationMenu(#[props(default = true)] viewport: bool, #[props(default)] class: String, children: Element) -> Element {

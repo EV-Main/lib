@@ -142,10 +142,6 @@ impl LayerStack {
 		self.0.last().copied()
 	}
 
-	pub(crate) fn is_top(&self, id: usize) -> bool {
-		self.top() == Some(id)
-	}
-
 	/// The layer an Escape heard by layer `id` dismisses: the topmost, when `id`
 	/// is open. A closed layer leaves the key alone, for the layer around it,
 	/// and the port lets it propagate.
@@ -165,7 +161,7 @@ mod tests {
 		stack.sync(1, true);
 		assert_eq!(stack.escape(0, &"Escape".into()), Some(1));
 		stack.sync(0, true);
-		assert!(stack.is_top(1), "a lower layer re-rendering keeps its place");
+		assert_eq!(stack.top(), Some(1), "a lower layer re-rendering keeps its place");
 		stack.sync(1, false);
 		assert_eq!(stack.escape(0, &"Escape".into()), Some(0));
 	}

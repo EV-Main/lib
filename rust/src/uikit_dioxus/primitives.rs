@@ -16,10 +16,7 @@ use std::{
 	sync::atomic::{AtomicUsize, Ordering},
 };
 
-use dioxus::{
-	dioxus_core::{DynamicNode, TemplateNode, provide_root_context},
-	prelude::*,
-};
+use dioxus::{dioxus_core::provide_root_context, prelude::*};
 
 pub use crate::uikit::{DismissReason, RovingOrientation, Side};
 use crate::uikit::{KeyInput, LayerStack, Placement, Roving};
@@ -228,11 +225,6 @@ impl DismissableLayer {
 		}
 	}
 
-	/// Whether no layer is open above this one (and this one is open).
-	pub fn is_top(&self) -> bool {
-		self.stack.0.borrow().0.is_top(self.id)
-	}
-
 	fn dismiss(&self, layer: usize, reason: DismissReason) {
 		// Cloned out so the dismiss callback may render or re-enter the stack
 		// without a live borrow.
@@ -316,34 +308,6 @@ fn document_precedes(_: &MountedData, _: &MountedData) -> bool {
 	false
 }
 
-/// The text `children` would render, as far as it can be read off the vnode —
-/// the Rust side of the DOM's `textContent` for a type-ahead or a label. A
-/// child component's text is invisible (knowing it would mean rendering it),
-/// so a caller with one should pass the text explicitly.
-pub(crate) fn text_of(children: &Element) -> String {
-	let mut out = String::new();
-	if let Ok(node) = children {
-		vnode_text(node, &mut out);
-	}
-	out
-}
-fn vnode_text(node: &VNode, out: &mut String) {
-	for root in node.template.roots.iter() {
-		template_text(node, root, out);
-	}
-}
-fn template_text(node: &VNode, template: &TemplateNode, out: &mut String) {
-	match template {
-		TemplateNode::Element { children, .. } => children.iter().for_each(|c| template_text(node, c, out)),
-		TemplateNode::Text { text } => out.push_str(text),
-		TemplateNode::Dynamic { id } => match node.dynamic_nodes.get(*id) {
-			Some(DynamicNode::Text(text)) => out.push_str(&text.value),
-			Some(DynamicNode::Fragment(nodes)) => nodes.iter().for_each(|n| vnode_text(n, out)),
-			Some(DynamicNode::Component(_) | DynamicNode::Placeholder(_)) | None => {}
-		},
-	}
-}
-
 /// Whether a `transitionend` is the element's own exit `transform` finishing.
 ///
 /// Every exiting overlay (toast, drawer) stays mounted with
@@ -369,33 +333,6 @@ pub(crate) fn is_transform_transition(e: &Event<TransitionData>) -> bool {
 #[cfg(not(all(target_arch = "wasm32", feature = "wasm")))]
 pub(crate) fn is_transform_transition(_: &Event<TransitionData>) -> bool {
 	true
-}
-
-/// Whether `children` would render anything — the Rust side of the TS ports'
-/// `!children` checks. A Dioxus component always receives an `Element`, even
-/// when the caller passed nothing or an empty string (`{error_text}` with no
-/// error), so emptiness has to be read off the vnode rather than the prop's
-/// presence. A child component counts as content: knowing what it renders would
-/// mean rendering it.
-pub(crate) fn has_content(children: &Element) -> bool {
-	// An error must still surface where the children would have rendered.
-	let Ok(node) = children else { return true };
-	vnode_has_content(node)
-}
-fn vnode_has_content(node: &VNode) -> bool {
-	node.template.roots.iter().any(|root| match root {
-		TemplateNode::Element { .. } => true,
-		TemplateNode::Text { text } => !text.is_empty(),
-		TemplateNode::Dynamic { id } => node.dynamic_nodes.get(*id).is_some_and(dynamic_has_content),
-	})
-}
-fn dynamic_has_content(node: &DynamicNode) -> bool {
-	match node {
-		DynamicNode::Component(_) => true,
-		DynamicNode::Text(text) => !text.value.is_empty(),
-		DynamicNode::Placeholder(_) => false,
-		DynamicNode::Fragment(nodes) => nodes.iter().any(vnode_has_content),
-	}
 }
 
 #[cfg(test)]
@@ -452,43 +389,6 @@ mod tests {
 		}
 		let html = render_after_keys(app, &[Key::Escape]);
 		assert!(!html.contains("role=\"dialog\""), "{html}");
-	}
-
-	#[test]
-	fn has_content_sees_through_empty_children() {
-		let empty = String::new();
-		let none: Option<&str> = None;
-		let blanks = [String::new()];
-		assert!(!has_content(&VNode::empty()));
-		assert!(!has_content(&rsx! {}));
-		assert!(!has_content(&rsx! { {empty} }));
-		assert!(!has_content(&rsx! { {none} }));
-		assert!(!has_content(&rsx! {
-			for b in blanks.iter() {
-				{b.clone()}
-			}
-		}));
-	}
-
-	#[test]
-	fn has_content_sees_text_elements_and_components() {
-		#[component]
-		fn Child() -> Element {
-			rsx! {}
-		}
-		let text = String::from("required");
-		assert!(has_content(&rsx! { "or" }));
-		assert!(has_content(&rsx! { {text} }));
-		assert!(has_content(&rsx! { span {} }));
-		assert!(has_content(&rsx! { Child {} }));
-	}
-
-	#[test]
-	fn text_of_reads_static_and_dynamic_text() {
-		let name = String::from("Blue");
-		assert_eq!(text_of(&rsx! { "Apple" }), "Apple");
-		assert_eq!(text_of(&rsx! { span { {name} } " berry" }), "Blue berry");
-		assert_eq!(text_of(&rsx! {}), "");
 	}
 
 	#[test]

@@ -2,21 +2,12 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
+	uikit::{ACCORDION_CHEVRON, toggled},
 	uikit_dioxus::{
-		ACCORDION_CONTENT, ACCORDION_CONTENT_INNER, ACCORDION_HEADER, ACCORDION_ITEM, ACCORDION_TRIGGER,
+		ACCORDION_CONTENT, ACCORDION_CONTENT_INNER, ACCORDION_HEADER, ACCORDION_ITEM, ACCORDION_TRIGGER, AccordionType,
 		primitives::{Controllable, use_controllable},
 	},
 };
-
-const CHEVRON: &str = "text-ink-soft pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200";
-
-/// Single keeps at most one item open; Multiple allows several.
-#[derive(Clone, Copy, Default, PartialEq)]
-pub enum AccordionType {
-	#[default]
-	Single,
-	Multiple,
-}
 
 #[component]
 pub fn Accordion(
@@ -59,7 +50,7 @@ pub fn AccordionTrigger(#[props(default)] class: String, children: Element) -> E
 				"data-slot": "accordion-trigger",
 				"data-state": data_state,
 				"aria-expanded": aria_expanded,
-				onclick: move |_| ctx.toggle(value.clone()),
+				onclick: move |_| ctx.toggle(&value),
 				{children}
 				svg {
 					xmlns: "http://www.w3.org/2000/svg",
@@ -71,7 +62,7 @@ pub fn AccordionTrigger(#[props(default)] class: String, children: Element) -> E
 					stroke_width: "2",
 					stroke_linecap: "round",
 					stroke_linejoin: "round",
-					class: CHEVRON,
+					class: ACCORDION_CHEVRON,
 					path { d: "m6 9 6 6 6-6" }
 				}
 			}
@@ -104,26 +95,8 @@ impl AccordionCtx {
 		self.open.get().iter().any(|v| v == value)
 	}
 
-	fn toggle(&self, value: String) {
-		let current = self.open.get();
-		let present = current.contains(&value);
-		let next = match self.kind {
-			AccordionType::Multiple =>
-				if present {
-					current.into_iter().filter(|v| *v != value).collect()
-				} else {
-					let mut next = current;
-					next.push(value);
-					next
-				},
-			AccordionType::Single =>
-				if present {
-					if self.collapsible { Vec::new() } else { current }
-				} else {
-					vec![value]
-				},
-		};
-		self.open.set(next);
+	fn toggle(&self, value: &str) {
+		self.open.set(toggled(&self.open.get(), value, self.kind == AccordionType::Multiple, self.collapsible));
 	}
 }
 

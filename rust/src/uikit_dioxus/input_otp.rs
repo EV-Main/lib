@@ -2,6 +2,7 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
+	uikit::InputOtp,
 	uikit_dioxus::{
 		INPUT_OTP_CONTAINER, INPUT_OTP_GROUP, INPUT_OTP_INPUT, INPUT_OTP_SLOT, INPUT_OTP_SLOT_CARET, INPUT_OTP_SLOT_CARET_WRAPPER,
 		primitives::{Controllable, use_controllable},
@@ -21,17 +22,14 @@ pub fn InputOTP(
 ) -> Element {
 	let value = use_controllable(value, default_value, on_change);
 	let mut focused = use_signal(|| false);
+	let otp = InputOtp { max_length };
 	// Kept in a signal so slots re-derive when the prop changes (the context
 	// struct itself is only built on the first render).
-	let mut max_len = use_signal(|| max_length);
-	if *max_len.peek() != max_length {
-		max_len.set(max_length);
+	let mut shared = use_signal(|| otp);
+	if *shared.peek() != otp {
+		shared.set(otp);
 	}
-	use_context_provider(|| InputOtpContext {
-		value,
-		focused,
-		max_length: max_len,
-	});
+	use_context_provider(|| InputOtpContext { value, focused, otp: shared });
 
 	let current = value.get();
 	let container_cls = cn!(INPUT_OTP_CONTAINER, container_class);
@@ -46,10 +44,7 @@ pub fn InputOTP(
 				value: current,
 				disabled,
 				class: input_cls,
-				oninput: move |e| {
-						let next: String = e.value().chars().take(max_length).collect();
-						value.set(next);
-				},
+				oninput: move |e| value.set(otp.accept(&e.value())),
 				onfocus: move |_| focused.set(true),
 				onblur: move |_| focused.set(false),
 			}
@@ -66,19 +61,15 @@ pub fn InputOTPGroup(#[props(default)] class: String, children: Element) -> Elem
 #[component]
 pub fn InputOTPSlot(index: usize, #[props(default)] class: String) -> Element {
 	let ctx = use_context::<InputOtpContext>();
-	let value = ctx.value.get();
-	let char = value.chars().nth(index);
-	let is_active = ctx.active_index() == Some(index);
-	let has_fake_caret = is_active && char.is_none();
-
+	let slot = ctx.otp.read().slot(&ctx.value.get(), (ctx.focused)(), index);
 	let cls = cn!(INPUT_OTP_SLOT, class);
 	rsx! {
 		div {
 			class: cls,
 			"data-slot": "input-otp-slot",
-			"data-active": is_active,
-			{char.map(|c| c.to_string())}
-			if has_fake_caret {
+			"data-active": slot.active,
+			{slot.char.map(|c| c.to_string())}
+			if slot.caret {
 				div { class: INPUT_OTP_SLOT_CARET_WRAPPER,
 					div { class: INPUT_OTP_SLOT_CARET }
 				}
@@ -108,20 +99,7 @@ pub fn InputOTPSeparator() -> Element {
 struct InputOtpContext {
 	value: Controllable<String>,
 	focused: Signal<bool>,
-	max_length: Signal<usize>,
-}
-
-impl InputOtpContext {
-	/// The slot the next character lands in, derived on every render so the ring
-	/// and caret follow typing. Mirrors the TS port's
-	/// `focused ? Math.min(value.length, maxLength - 1) : -1`.
-	fn active_index(&self) -> Option<usize> {
-		if !(self.focused)() {
-			return None;
-		}
-		let len = self.value.get().chars().count();
-		Some(len.min((self.max_length)().saturating_sub(1)))
-	}
+	otp: Signal<InputOtp>,
 }
 
 #[cfg(test)]
@@ -174,24 +152,7 @@ mod tests {
 	}
 
 	#[test]
-	fn active_slot_follows_the_typed_value() {
-		// Nothing typed yet: the next char lands in slot 0.
-		fn empty() -> Element {
-			rsx! {
-				InputOTP { max_length: 4,
-					InputOTPSlot { index: 0 }
-					InputOTPSlot { index: 1 }
-					InputOTPSlot { index: 2 }
-					InputOTPSlot { index: 3 }
-				}
-			}
-		}
-		let html = render_focused(empty);
-		assert_eq!(active_slot_of(&html), Some(0), "{html}");
-		assert!(html.contains(INPUT_OTP_SLOT_CARET), "the empty active slot shows the fake caret: {html}");
-
-		// Two chars typed: the ring and caret must have moved to slot 2, which is
-		// where the next digit actually lands.
+	fn focus_puts_the_ring_and_caret_where_the_next_digit_lands() {
 		fn two_typed() -> Element {
 			rsx! {
 				InputOTP { max_length: 4, value: "12".to_string(),
@@ -203,23 +164,8 @@ mod tests {
 			}
 		}
 		let html = render_focused(two_typed);
-		assert_eq!(active_slot_of(&html), Some(2), "the ring must follow the caret, not stay on slot 0: {html}");
-
-		// Full: the active slot clamps to the last one and, being filled, shows no
-		// caret (mirrors `Math.min(value.length, maxLength - 1)`).
-		fn full() -> Element {
-			rsx! {
-				InputOTP { max_length: 4, value: "1234".to_string(),
-					InputOTPSlot { index: 0 }
-					InputOTPSlot { index: 1 }
-					InputOTPSlot { index: 2 }
-					InputOTPSlot { index: 3 }
-				}
-			}
-		}
-		let html = render_focused(full);
-		assert_eq!(active_slot_of(&html), Some(3), "{html}");
-		assert!(!html.contains(INPUT_OTP_SLOT_CARET), "a filled slot has no caret: {html}");
+		assert_eq!(active_slot_of(&html), Some(2), "{html}");
+		assert!(html.contains(INPUT_OTP_SLOT_CARET), "the empty active slot shows the fake caret: {html}");
 	}
 
 	#[test]

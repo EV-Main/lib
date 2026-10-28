@@ -3,19 +3,10 @@ use dioxus::prelude::*;
 use crate::{
 	cn,
 	uikit_dioxus::{
-		TABS_CONTENT, TABS_LIST, TABS_ROOT, TABS_TRIGGER,
-		primitives::{Controllable, RovingFocus, RovingOrientation, use_controllable, use_roving_focus, use_roving_item},
+		TABS_CONTENT, TABS_LIST, TABS_ROOT, TABS_TRIGGER, TabsOrientation,
+		primitives::{Controllable, RovingFocus, use_controllable, use_roving_focus, use_roving_item},
 	},
 };
-
-/// Tab layout axis; also drives the roving-focus arrow keys.
-#[derive(Clone, Copy, Default, PartialEq, strum::AsRefStr)]
-#[strum(serialize_all = "kebab-case")]
-pub enum TabsOrientation {
-	#[default]
-	Horizontal,
-	Vertical,
-}
 
 #[component]
 pub fn Tabs(
@@ -38,10 +29,7 @@ pub fn Tabs(
 #[component]
 pub fn TabsList(#[props(default)] class: String, children: Element) -> Element {
 	let ctx = use_context::<TabsCtx>();
-	let roving = use_roving_focus(match ctx.orientation {
-		TabsOrientation::Horizontal => RovingOrientation::Horizontal,
-		TabsOrientation::Vertical => RovingOrientation::Vertical,
-	});
+	let roving = use_roving_focus(ctx.orientation.into());
 	use_context_provider(|| roving);
 	let cls = cn!(TABS_LIST, class);
 	rsx! {

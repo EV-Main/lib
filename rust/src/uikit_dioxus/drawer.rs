@@ -13,6 +13,7 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
+	uikit::Presence,
 	uikit_dioxus::{
 		DRAWER_BODY, DRAWER_CONTENT_BASE, DRAWER_DESCRIPTION, DRAWER_FOOTER, DRAWER_HANDLE, DRAWER_HEADER, DRAWER_OVERLAY, DRAWER_TITLE, DrawerDirection,
 		primitives::{Controllable, is_transform_transition, use_controllable},
@@ -68,36 +69,25 @@ pub fn DrawerOverlay(#[props(default)] class: String) -> Element {
 		}
 	}
 }
-/// The panel plus its scrim. Presence outlives `open`: once it turns false the
-/// panel flips to `data-state="closed"` and is unmounted when its exit
-/// `transform` transition ends. Re-opening mid-exit just flips the state back
-/// and the same transition carries the panel home.
+/// The panel plus its scrim. It outlives `open`: closing flips it to
+/// `data-state="closed"`, and it unmounts when its exit `transform` transition ends.
 #[component]
 pub fn DrawerContent(#[props(default)] class: String, children: Element) -> Element {
 	let ctx = use_context::<DrawerCtx>();
 	// Seeded from `open` so a drawer that starts open is in the server-rendered
 	// markup — the effect below never runs under SSR.
-	let mut present = use_signal(|| ctx.open.get());
-	let mut closing = use_signal(|| false);
+	let mut presence = use_signal(|| Presence::new(ctx.open.get()));
 	use_effect(move || {
 		let open = ctx.open.get();
-		// `peek` + equality guards: the effect must not subscribe to (or loop on)
-		// its own writes.
-		if open {
-			if !*present.peek() {
-				present.set(true);
-			}
-			if *closing.peek() {
-				closing.set(false);
-			}
-		} else if *present.peek() && !*closing.peek() {
-			closing.set(true);
+		// `peek` + an equality guard: the effect must not subscribe to (or loop on) its own writes.
+		let next = presence.peek().follow(open);
+		if *presence.peek() != next {
+			presence.set(next);
 		}
 	});
-	if !present() {
+	let Some(state) = presence().state() else {
 		return rsx! {};
-	}
-	let state = if closing() { "closed" } else { "open" };
+	};
 	let direction = ctx.direction;
 	let cls = cn!(DRAWER_CONTENT_BASE, direction.as_class(), class);
 	rsx! {
@@ -120,9 +110,9 @@ pub fn DrawerContent(#[props(default)] class: String, children: Element) -> Elem
 				}
 			},
 			ontransitionend: move |e| {
-				if *closing.peek() && is_transform_transition(&e) {
-					present.set(false);
-					closing.set(false);
+				let next = presence.peek().exit_ended();
+				if next != *presence.peek() && is_transform_transition(&e) {
+					presence.set(next);
 				}
 			},
 			if direction == DrawerDirection::Bottom {

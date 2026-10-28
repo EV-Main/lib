@@ -1,16 +1,7 @@
 use dioxus::prelude::*;
 
-use crate::{
-	cn,
-	uikit_dioxus::{Size, TOGGLE_BASE, ToggleVariant, primitives::use_controllable, toggle_size_class},
-};
+use crate::uikit_dioxus::{Size, ToggleVariant, primitives::use_controllable, toggle_classes};
 
-/// Fuses the base, variant and size classes with a caller override, last wins.
-/// Mirrors the TS `toggleVariants` helper so `toggle-group` can reuse the same
-/// canonical class string.
-pub fn toggle_classes(variant: &ToggleVariant, size: Size, class: &str) -> String {
-	cn!(TOGGLE_BASE, variant.as_class(), toggle_size_class(size), class)
-}
 #[component]
 pub fn Toggle(
 	#[props(default)] variant: ToggleVariant,
