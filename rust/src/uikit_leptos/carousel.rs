@@ -1,6 +1,6 @@
 use std::sync::atomic::{AtomicUsize, Ordering};
 
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn, uikit,
@@ -27,7 +27,6 @@ pub fn Carousel(
 		index,
 		slides: RwSignal::new(uikit::Carousel::default()),
 	};
-	provide_context(ctx);
 	let cls = cn!("relative", class);
 	view! {
 		<div
@@ -46,7 +45,7 @@ pub fn Carousel(
 				}
 			}
 		>
-			{children()}
+			<Provider value=ctx>{children()}</Provider>
 		</div>
 	}
 }

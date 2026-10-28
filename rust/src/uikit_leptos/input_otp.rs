@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
@@ -23,12 +23,15 @@ pub fn InputOTP(
 	let value = use_controllable(value, default_value, on_change);
 	let focused = RwSignal::new(false);
 	let otp = InputOtp { max_length };
-	provide_context(InputOtpContext { value, focused, otp });
 	let container_cls = cn!(INPUT_OTP_CONTAINER, container_class);
 	let input_cls = cn!(INPUT_OTP_INPUT, class);
 	view! {
 		<div class=container_cls data-slot="input-otp">
-			{children()}
+			<Provider value=InputOtpContext {
+				value,
+				focused,
+				otp,
+			}>{children()}</Provider>
 			<input
 				inputmode="numeric"
 				autocomplete="one-time-code"

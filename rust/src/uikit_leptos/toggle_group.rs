@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
@@ -29,12 +29,12 @@ pub fn ToggleGroup(
 	children: Children,
 ) -> impl IntoView {
 	let selected = use_controllable(value, default_value, on_value_change);
-	provide_context(ToggleGroupCtx {
+	let ctx = ToggleGroupCtx {
 		selected,
 		kind: r#type,
 		variant,
 		size,
-	});
+	};
 	let cls = cn!(TOGGLE_GROUP_ROOT, class);
 	view! {
 		<div
@@ -43,7 +43,7 @@ pub fn ToggleGroup(
 			data-variant=variant.as_ref().to_owned()
 			data-size=size.as_ref().to_owned()
 		>
-			{children()}
+			<Provider value=ctx>{children()}</Provider>
 		</div>
 	}
 }

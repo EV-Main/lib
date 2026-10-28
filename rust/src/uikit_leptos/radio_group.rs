@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
@@ -18,8 +18,6 @@ pub fn RadioGroup(
 ) -> impl IntoView {
 	let value = use_controllable(value, default_value, on_value_change);
 	let roving = use_roving_focus(RovingOrientation::Vertical);
-	provide_context(RadioGroupContext { value });
-	provide_context(roving);
 	let cls = cn!(RADIO_GROUP_ROOT, class);
 	view! {
 		<div
@@ -37,7 +35,9 @@ pub fn RadioGroup(
 				}
 			}
 		>
-			{children()}
+			<Provider value=RadioGroupContext { value }>
+				<Provider value=roving>{children()}</Provider>
+			</Provider>
 		</div>
 	}
 }

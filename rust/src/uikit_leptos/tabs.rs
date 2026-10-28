@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
@@ -18,11 +18,10 @@ pub fn Tabs(
 	children: Children,
 ) -> impl IntoView {
 	let value = use_controllable(value, default_value, on_value_change);
-	provide_context(TabsCtx { value, orientation });
 	let cls = cn!(TABS_ROOT, class);
 	view! {
 		<div class=cls data-slot="tabs" data-orientation=orientation.as_ref().to_owned()>
-			{children()}
+			<Provider value=TabsCtx { value, orientation }>{children()}</Provider>
 		</div>
 	}
 }
@@ -33,7 +32,6 @@ pub fn Tabs(
 pub fn TabsList(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let ctx = expect_context::<TabsCtx>();
 	let roving = use_roving_focus(ctx.orientation.into());
-	provide_context(roving);
 	let cls = cn!(TABS_LIST, class);
 	view! {
 		<div
@@ -52,7 +50,7 @@ pub fn TabsList(#[prop(optional, into)] class: String, children: Children) -> im
 				}
 			}
 		>
-			{children()}
+			<Provider value=roving>{children()}</Provider>
 		</div>
 	}
 }

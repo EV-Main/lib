@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::uikit_leptos::primitives::{Controllable, use_controllable};
 
@@ -11,10 +11,9 @@ pub fn Collapsible(
 	children: Children,
 ) -> impl IntoView {
 	let open = use_controllable(open, default_open, on_open_change);
-	provide_context(CollapsibleCtx { open });
 	view! {
 		<div class=class data-slot="collapsible" data-state=move || data_state(open.get())>
-			{children()}
+			<Provider value=CollapsibleCtx { open }>{children()}</Provider>
 		</div>
 	}
 }

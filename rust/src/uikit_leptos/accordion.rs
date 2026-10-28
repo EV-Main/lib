@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
@@ -20,21 +20,23 @@ pub fn Accordion(
 	children: Children,
 ) -> impl IntoView {
 	let open = use_controllable(value, default_value, on_value_change);
-	provide_context(AccordionCtx { open, kind: r#type, collapsible });
 	view! {
 		<div class=class data-slot="accordion">
-			{children()}
+			<Provider value=AccordionCtx {
+				open,
+				kind: r#type,
+				collapsible,
+			}>{children()}</Provider>
 		</div>
 	}
 }
 
 #[component]
 pub fn AccordionItem(#[prop(into)] value: String, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
-	provide_context(ItemCtx(StoredValue::new(value)));
 	let cls = cn!(ACCORDION_ITEM, class);
 	view! {
 		<div class=cls data-slot="accordion-item">
-			{children()}
+			<Provider value=ItemCtx(StoredValue::new(value))>{children()}</Provider>
 		</div>
 	}
 }

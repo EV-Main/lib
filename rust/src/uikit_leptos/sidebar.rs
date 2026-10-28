@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
@@ -50,11 +50,10 @@ pub fn SidebarProvider(
 	children: Children,
 ) -> impl IntoView {
 	let open = use_controllable(open, default_open, on_open_change);
-	provide_context(SidebarContext { open });
 	let cls = cn!(SIDEBAR_WRAPPER, class);
 	view! {
 		<div data-slot="sidebar-wrapper" style=SIDEBAR_STYLE class=cls>
-			{children()}
+			<Provider value=SidebarContext { open }>{children()}</Provider>
 		</div>
 	}
 }
