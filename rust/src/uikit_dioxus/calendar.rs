@@ -33,7 +33,7 @@ pub fn Calendar(
 	/// Fired when the displayed month changes via the nav buttons.
 	on_month_change: Option<EventHandler<CalendarDate>>,
 	/// "Today", highlighted in the grid; the host's current date by default
-	/// ([`CalendarDate::today`]).
+	/// (read where the port has a clock).
 	today: Option<CalendarDate>,
 	/// Earliest selectable day (inclusive); earlier days render disabled.
 	min: Option<CalendarDate>,
@@ -50,7 +50,7 @@ pub fn Calendar(
 ) -> Element {
 	// Both default to the host clock independently, as in the TS port: an
 	// explicit `today` does not move the opening month.
-	let host_today = CalendarDate::today();
+	let host_today = host_today();
 	let today = today.or(host_today);
 	let view = use_controllable(month, default_month.or(host_today).unwrap_or(NO_CLOCK_MONTH), on_month_change);
 	let current = view.get();
@@ -116,6 +116,38 @@ pub fn Calendar(
 				}
 			}
 		}
+	}
+}
+
+/// Today on the host clock, or `None` where the build has no clock to read.
+///
+/// Web (`wasm32` + the `wasm` feature) reads the browser's local date, like the
+/// TS port's `new Date()`. Native reads `SystemTime` and takes the **UTC** date:
+/// the local zone needs tz data the dep-light kit does not carry, so near
+/// midnight a native host can be a day off its wall clock. Bare `wasm32` without
+/// `wasm` has no clock (`SystemTime::now` panics there).
+///
+/// Server-rendered and hydrated, the server's UTC date and the browser's local
+/// one differ near midnight, so the opened month and `data-today` would not
+/// match on hydration — the same as the TS `new Date()`. An SSR page passes
+/// `default_month` and `today` explicitly, computed once.
+pub(crate) fn host_today() -> Option<CalendarDate> {
+	#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
+	{
+		let now = web_sys::js_sys::Date::new_0();
+		Some(CalendarDate::new(now.get_full_year() as i32, now.get_month() + 1, now.get_date()))
+	}
+	#[cfg(not(target_arch = "wasm32"))]
+	{
+		let secs = match std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH) {
+			Ok(after) => after.as_secs() as i64,
+			Err(before) => -(before.duration().as_secs() as i64),
+		};
+		Some(CalendarDate::from_unix_days(secs.div_euclid(86_400)))
+	}
+	#[cfg(all(target_arch = "wasm32", not(feature = "wasm")))]
+	{
+		None
 	}
 }
 
@@ -325,9 +357,9 @@ mod tests {
 		}
 		// Sampled on both sides of the render: a month rollover between the two
 		// reads must not turn into a flake.
-		let before = CalendarDate::today().expect("native builds read SystemTime");
+		let before = host_today().expect("native builds read SystemTime");
 		let html = render(app);
-		let after = CalendarDate::today().expect("native builds read SystemTime");
+		let after = host_today().expect("native builds read SystemTime");
 		let caption = |month| {
 			uikit::Grid {
 				month,

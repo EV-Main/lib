@@ -6,7 +6,10 @@ use crate::{
 	uikit::{self, CalendarDate},
 	uikit_leptos::{
 		ButtonVariant, DATE_TIME_PICKER_CLEAR, DATE_TIME_PICKER_CONTENT, DATE_TIME_PICKER_TIME, DATE_TIME_PICKER_TIME_INPUT, DATE_TIME_PICKER_TIME_SEPARATOR, DATE_TIME_PICKER_TRIGGER,
-		INPUT_BASE, POPOVER_CONTENT, Size, button::button_classes, calendar::Calendar, primitives::use_controllable,
+		INPUT_BASE, POPOVER_CONTENT, Size,
+		button::button_classes,
+		calendar::{Calendar, host_today},
+		primitives::use_controllable,
 	},
 };
 
@@ -21,7 +24,7 @@ const CLOSE_ICON: &str = "M18 6 6 18M6 6l12 12";
 ///
 /// The parent owns the value (like `Calendar`'s `selected`); every edit reports
 /// through `on_change`. `today` defaults to the host date
-/// ([`CalendarDate::today`]), like the TS port's `new Date()`; a time typed
+/// (the host clock), like the TS port's `new Date()`; a time typed
 /// before a day is chosen lands on it. Only where the build has no clock does
 /// that fall back to `min`'s day, else the first of the displayed month. The
 /// overlay is the inline Rust popover (see the README "Limitations").
@@ -64,7 +67,7 @@ pub fn DateTimePicker(
 	#[prop(optional, into)]
 	id: Option<String>,
 ) -> impl IntoView {
-	let host_today = CalendarDate::today();
+	let host_today = host_today();
 	let open = use_controllable(open, default_open, on_open_change);
 	let picker = Memo::new(move |_| uikit::Picker {
 		value: value.get(),

@@ -38,7 +38,7 @@ pub fn Calendar(
 	#[prop(optional)]
 	on_month_change: Option<Callback<CalendarDate>>,
 	/// "Today", highlighted in the grid; the host's current date by default
-	/// ([`CalendarDate::today`]).
+	/// (read where the port has a clock).
 	#[prop(optional, into)]
 	today: MaybeProp<CalendarDate>,
 	/// Earliest selectable day (inclusive); earlier days render disabled.
@@ -60,7 +60,7 @@ pub fn Calendar(
 ) -> impl IntoView {
 	// Both default to the host clock independently, as in the TS port: an
 	// explicit `today` does not move the opening month.
-	let host_today = CalendarDate::today();
+	let host_today = host_today();
 	let view = use_controllable(month, default_month.or(host_today).unwrap_or(NO_CLOCK_MONTH), on_month_change);
 	let grid = Memo::new(move |_| uikit::Grid {
 		month: view.get(),
@@ -130,6 +130,38 @@ pub fn Calendar(
 				</tbody>
 			</table>
 		</div>
+	}
+}
+
+/// Today on the host clock, or `None` where the build has no clock to read.
+///
+/// Web (`wasm32` + the `wasm` feature) reads the browser's local date, like the
+/// TS port's `new Date()`. Native reads `SystemTime` and takes the **UTC** date:
+/// the local zone needs tz data the dep-light kit does not carry, so near
+/// midnight a native host can be a day off its wall clock. Bare `wasm32` without
+/// `wasm` has no clock (`SystemTime::now` panics there).
+///
+/// Server-rendered and hydrated, the server's UTC date and the browser's local
+/// one differ near midnight, so the opened month and `data-today` would not
+/// match on hydration — the same as the TS `new Date()`. An SSR page passes
+/// `default_month` and `today` explicitly, computed once.
+pub(crate) fn host_today() -> Option<CalendarDate> {
+	#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
+	{
+		let now = web_sys::js_sys::Date::new_0();
+		Some(CalendarDate::new(now.get_full_year() as i32, now.get_month() + 1, now.get_date()))
+	}
+	#[cfg(not(target_arch = "wasm32"))]
+	{
+		let secs = match std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH) {
+			Ok(after) => after.as_secs() as i64,
+			Err(before) => -(before.duration().as_secs() as i64),
+		};
+		Some(CalendarDate::from_unix_days(secs.div_euclid(86_400)))
+	}
+	#[cfg(all(target_arch = "wasm32", not(feature = "wasm")))]
+	{
+		None
 	}
 }
 

@@ -9,7 +9,7 @@
 //! `ev-toast-life` animation whose `animationend` dismisses (paused on hover),
 //! and a dismissed toast is dropped on its exit transform's `transitionend`.
 
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
@@ -77,8 +77,8 @@ impl ToasterHandle {
 /// (via [`use_toaster`]) and renders the [`Toaster`].
 #[component]
 pub fn ToasterProvider(children: Children) -> impl IntoView {
-	provide_context(Toasts(RwSignal::new(ToastQueue::default())));
-	children()
+	// A Provider, not `provide_context`: a component has no owner of its own, so a bare provide would reach its siblings.
+	view! { <Provider value=Toasts(RwSignal::new(ToastQueue::default()))>{children()}</Provider> }
 }
 
 /// Returns the imperative [`ToasterHandle`] from the nearest

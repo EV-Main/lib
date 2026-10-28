@@ -3,7 +3,7 @@ use std::{
 	sync::atomic::{AtomicUsize, Ordering},
 };
 
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
@@ -45,7 +45,7 @@ pub fn Command(
 		let search = search.get();
 		state.with(|s| s.highlighted(&search, &Rows))
 	});
-	provide_context(CommandCtx {
+	let ctx = CommandCtx {
 		search,
 		state,
 		#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
@@ -53,11 +53,13 @@ pub fn Command(
 		handlers: StoredValue::new(BTreeMap::new()),
 		highlighted,
 		list_id: Signal::stored(use_stable_id("command-list")),
-	});
+	};
 	let cls = cn!(COMMAND_ROOT, class);
+	// A component has no owner of its own: unscoped, the context would land in
+	// the parent's, where a sibling Command overwrites it.
 	view! {
 		<div class=cls data-slot="command">
-			{children()}
+			<Provider value=ctx>{children()}</Provider>
 		</div>
 	}
 }
@@ -189,13 +191,13 @@ pub fn CommandEmpty(#[prop(optional, into)] class: String, children: ChildrenFn)
 #[component]
 pub fn CommandGroup(#[prop(optional, into)] heading: String, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	static NEXT: AtomicUsize = AtomicUsize::new(0);
-	provide_context(CommandGroupId(NEXT.fetch_add(1, Ordering::Relaxed)));
+	let group = CommandGroupId(NEXT.fetch_add(1, Ordering::Relaxed));
 	let cls = cn!(COMMAND_GROUP, class);
 	view! {
 		<div role="group" class=cls data-slot="command-group">
 			{(!heading.is_empty())
 				.then(|| view! { <div data-slot="command-group-heading">{heading}</div> })}
-			{children()}
+			<Provider value=group>{children()}</Provider>
 		</div>
 	}
 }

@@ -22,14 +22,23 @@ mod dioxus_side {
 	}
 
 	/// The Leptos port registers parts as they render, Dioxus parts often in
-	/// effects; so the effects run first, then whatever they dirtied re-renders.
+	/// effects. Those run a component at a time and a pass can leave the markup
+	/// unchanged mid-chain, so run well past any demo's chain, then check one
+	/// more pass changes nothing.
 	fn settled(app: fn() -> Element) -> String {
 		let mut dom = VirtualDom::new(app);
 		dom.rebuild_in_place();
-		for _ in 0..2 {
+		let mut pass = |dom: &mut VirtualDom| {
+			dom.process_events();
 			dom.render_immediate(&mut dioxus::dioxus_core::NoOpMutations);
+			dioxus_ssr::render(dom)
+		};
+		for _ in 0..32 {
+			pass(&mut dom);
 		}
-		dioxus_ssr::render(&dom)
+		let html = pass(&mut dom);
+		assert_eq!(pass(&mut dom), html, "never settled");
+		html
 	}
 }
 
