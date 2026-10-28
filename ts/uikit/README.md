@@ -1,10 +1,11 @@
 # @evinvest/uikit
 
 A **dep-light** React UI kit with shadcn-style semantics — the TypeScript mirror
-of the `uikit` feature of the [`ev_lib`](https://github.com/EV-invest/lib) Rust crate
-(`ev_lib::uikit`, Dioxus). Both ports are driven from the same canonical class
-strings and the same design tokens, so a component looks and behaves the same
-whether it is rendered by React or by Dioxus.
+of the UI kit of the [`ev_lib`](https://github.com/EV-invest/lib) Rust crate,
+which ships it for Dioxus (`ev_lib::uikit_dioxus`) and Leptos
+(`ev_lib::uikit_leptos`) over one framework-free core. All three are driven from
+the same canonical class strings and the same design tokens, so a component
+looks and behaves the same whether it is rendered by React, Dioxus or Leptos.
 
 "Dep-light" means: **no `@radix-ui/*`, no `class-variance-authority`, no
 `lucide-react`, no charting / carousel / date-picker / OTP / toast libraries.**
@@ -584,9 +585,11 @@ hold focus, so a bare list is pointer-only. The live demo is `CommandDemo` in
 
 The Rust crate is the source of truth; this package preserves its _semantics_
 while reading like idiomatic React. Canonical class strings are identical per
-element across the two ports.
+element across all ports. The two Rust ports render the same HTML (pinned by
+`rust/tests/parity.rs`) and share every row below; where Leptos idiom differs
+the cell says so.
 
-| Concept | Rust (`ev_lib::uikit`) | TS (`@evinvest/uikit`) |
+| Concept | Rust (`ev_lib::uikit_dioxus` / `ev_lib::uikit_leptos`) | TS (`@evinvest/uikit`) |
 | --- | --- | --- |
 | class fusion | `cn!` macro (`tailwind_fuse`) | `cn` (`clsx` + `tailwind-merge`) |
 | variants | `enum` + `fn class()` match | `as const` map keyed by variant |
@@ -595,6 +598,10 @@ element across the two ports.
 | keyboard nav | `use_roving_focus` | `useRovingFocus` |
 | overlay placement | inline `position:fixed` + `data-side` | `Portal` + `useFloating` |
 | dismiss / focus trap | full-screen backdrop / native order | `useDismissableLayer` / `useFocusScope` |
+| brand webfonts | `Fonts`: Dioxus bundles the faces through `asset!`; Leptos has no asset pipeline, so `Fonts base="/fonts"` points the same `@font-face` rules at `base` and the consumer serves `FONT_FILES` there | none — load the files yourself ([Fonts](#fonts)) |
+| optional slot present | an explicit prop, never read off `children`: `FieldSeparator { content: true, "or" }` renders the copy pill; `FormMessage { error, .. }` renders only while `error` (the same flag as `FormControl`'s) | `!!children` / `if (!children) return null` |
+| option label | `SelectItem { value, text_value, .. }`: the text type-ahead matches, an explicit prop in both ports — never read off `children` | `SelectItem`'s `textValue`, else the text of its children |
+| toasts | `ToasterProvider` + `use_toaster()` → `ToasterHandle` (`.toast` `.positive` `.error` `.info` `.warn` `.show` `.dismiss`), same in both ports | global `toast(...)` / `toast.dismiss` |
 
 ### Component inventory (all 75 bricks)
 
@@ -668,8 +675,10 @@ measuring needs host-only `web-sys`). Known gaps:
   (`modal`, `pointerOutside`) and `DismissableLayerScope`; mark a floating
   region that should dismiss nothing with `LAYER_IGNORE_ATTR`.
 - **overlay layers (Rust):** `Select`, `Popover`, `Dialog` and `DropdownMenu`
-  share one dismissable-layer stack per `VirtualDom`
-  (`primitives::use_dismissable_layer`): Escape and a click on a backdrop act
+  share one dismissable-layer stack per `VirtualDom` in Dioxus, per root owner
+  (each island its own) in Leptos (`primitives::use_dismissable_layer`). The
+  stack follows renders, not handlers: a layer that closes itself stays on top
+  until it re-renders closed. Escape and a click on a backdrop act
   on the top layer only, so a `Select` inside a `Dialog` closes first. There is
   no document listener — an Escape counts only once it reaches an open layer's
   `onkeydown` — and `AlertDialog`, `Sheet`, `Drawer`, `ContextMenu`, `Menubar`,
@@ -707,19 +716,19 @@ measuring needs host-only `web-sys`). Known gaps:
   focus, via the shared `data-stack` CSS in `tokens.css`. The enter is a CSS
   keyframe (plays on insertion), the exit slides out on `data-state="closed"` and
   unmounts on `transitionend` (no host timer). React measures each toast's height
-  for exact expanded spacing; Dioxus can't (layout measuring needs host-only
-  `web-sys`), so it assumes a constant height — collapsed pile exact, expanded
-  list uniform. Both **auto-dismiss** (default 4000ms) and **pause while the stack
+  for exact expanded spacing; Rust measures nothing, so it assumes a constant
+  height — collapsed pile exact, expanded list uniform. Both **auto-dismiss** (default 4000ms) and **pause while the stack
   is hovered/focused**, and support **persistent** toasts; React does it with a
-  `setTimeout` (`duration: Infinity` to persist), Dioxus with a host-timer-free
+  `setTimeout` (`duration: Infinity` to persist), both Rust ports with a host-timer-free
   CSS "life" animation whose `animationend` closes the toast (`use_toaster().show(
   msg, variant, None)` to persist). Swipe-to-dismiss (horizontal drag, past 45px
   or a fast flick) is TS-only pointer physics.
 - **form:** react-hook-form is dropped — these are presentational + ARIA-id
   wiring; consumers own validation/state. Rust `FormControl` can't inject ids
   onto an arbitrary child (no `Slot`), so it publishes them as a
-  `FormControlContext` that `Input`/`Textarea` consume; wrap a bare element and
-  you wire them yourself.
+  `FormControlContext` signal that `Input`/`Textarea` consume; wrap a bare
+  element and you wire them yourself. Rust `FormMessage` renders on its `error`
+  flag, not on having children.
 - **carousel:** pointer-drag physics are TS-only (prev/next + keyboard in
   Rust). Embla momentum is not reproduced.
 - **drawer:** the Vaul-style enter/exit motion is shared by both ports via
@@ -769,7 +778,8 @@ npm run build       # tsup → dist/ (ESM + d.ts)
 The Rust counterpart is verified from the repo root:
 
 ```sh
-cargo test  -p ev_lib --features uikit
-cargo clippy -p ev_lib --features uikit --all-targets -- -D warnings
-cargo check -p ev_lib --features "uikit wasm" --target wasm32-unknown-unknown
+cargo test  -p ev_lib --features "uikit_dioxus uikit_leptos"
+cargo clippy -p ev_lib --features "uikit_dioxus uikit_leptos" --all-targets -- -D warnings
+cargo check -p ev_lib --features "uikit_dioxus wasm" --target wasm32-unknown-unknown
+cargo check -p ev_lib --features "uikit_leptos wasm" --target wasm32-unknown-unknown
 ```

@@ -1,198 +1,61 @@
-use dioxus::prelude::*;
+use std::collections::BTreeSet;
 
-use crate::{
-	cn,
-	uikit::{
-		ButtonVariant, CAROUSEL_CONTENT_TRACK, CAROUSEL_CONTENT_TRACK_HORIZONTAL, CAROUSEL_CONTENT_TRACK_VERTICAL, CAROUSEL_CONTENT_VIEWPORT, CAROUSEL_EDGE_FADE_NEXT,
-		CAROUSEL_EDGE_FADE_PREV, CAROUSEL_ITEM, CAROUSEL_ITEM_HORIZONTAL, CAROUSEL_ITEM_VERTICAL, CAROUSEL_NAV, CAROUSEL_NEXT_HORIZONTAL, CAROUSEL_NEXT_VERTICAL,
-		CAROUSEL_PREVIOUS_HORIZONTAL, CAROUSEL_PREVIOUS_VERTICAL, Size,
-		button::Button,
-		primitives::{Controllable, use_controllable},
-	},
-};
+use super::KeyInput;
 
-#[derive(Clone, Copy, Default, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 pub enum CarouselOrientation {
 	#[default]
 	Horizontal,
 	Vertical,
 }
-
-#[component]
-pub fn Carousel(
-	#[props(default)] orientation: CarouselOrientation,
-	index: Option<usize>,
-	#[props(default)] default_index: usize,
-	on_index_change: Option<EventHandler<usize>>,
-	#[props(default)] class: String,
-	children: Element,
-) -> Element {
-	let index = use_controllable(index, default_index, on_index_change);
-	let count = use_signal(|| 0usize);
-	let ctx = use_context_provider(|| CarouselContext { orientation, index, count });
-	let cls = cn!("relative", class);
-	rsx! {
-		div {
-			class: cls,
-			role: "region",
-			"aria-roledescription": "carousel",
-			tabindex: "0",
-			"data-slot": "carousel",
-			onkeydown: move |e| match e.key() {
-					Key::ArrowLeft => {
-							e.prevent_default();
-							ctx.scroll_prev();
-					}
-					Key::ArrowRight => {
-							e.prevent_default();
-							ctx.scroll_next();
-					}
-					_ => {}
-			},
-			{children}
+impl CarouselOrientation {
+	/// The track's `transform` showing slide `index`.
+	pub(crate) fn transform(self, index: usize) -> String {
+		match self {
+			Self::Horizontal => format!("translate3d(-{}%, 0, 0)", index * 100),
+			Self::Vertical => format!("translate3d(0, -{}%, 0)", index * 100),
 		}
 	}
-}
-#[component]
-pub fn CarouselContent(#[props(default)] class: String, children: Element) -> Element {
-	let ctx = use_context::<CarouselContext>();
-	let index = ctx.index.get();
-	// drag/momentum: omitted vs embla — see README Limitations
-	let transform = match ctx.orientation {
-		CarouselOrientation::Horizontal => format!("translate3d(-{}%, 0, 0)", index * 100),
-		CarouselOrientation::Vertical => format!("translate3d(0, -{}%, 0)", index * 100),
-	};
-	let track = match ctx.orientation {
-		CarouselOrientation::Horizontal => CAROUSEL_CONTENT_TRACK_HORIZONTAL,
-		CarouselOrientation::Vertical => CAROUSEL_CONTENT_TRACK_VERTICAL,
-	};
-	let cls = cn!(CAROUSEL_CONTENT_TRACK, track, class);
-	rsx! {
-		div { class: CAROUSEL_CONTENT_VIEWPORT, "data-slot": "carousel-content",
-			div { class: cls, style: "transform: {transform}", {children} }
-		}
-	}
-}
-#[component]
-pub fn CarouselItem(#[props(default)] class: String, children: Element) -> Element {
-	let ctx = use_context::<CarouselContext>();
-	let pad = match ctx.orientation {
-		CarouselOrientation::Horizontal => CAROUSEL_ITEM_HORIZONTAL,
-		CarouselOrientation::Vertical => CAROUSEL_ITEM_VERTICAL,
-	};
-	let cls = cn!(CAROUSEL_ITEM, pad, class);
-	rsx! {
-		div {
-			role: "group",
-			"aria-roledescription": "slide",
-			"data-slot": "carousel-item",
-			class: cls,
-			{children}
-		}
-	}
-}
-#[component]
-pub fn CarouselPrevious(#[props(default)] class: String) -> Element {
-	let ctx = use_context::<CarouselContext>();
-	let pos = match ctx.orientation {
-		CarouselOrientation::Horizontal => CAROUSEL_PREVIOUS_HORIZONTAL,
-		CarouselOrientation::Vertical => CAROUSEL_PREVIOUS_VERTICAL,
-	};
-	let cls = cn!(CAROUSEL_NAV, pos, class);
-	rsx! {
-		Button {
-			variant: ButtonVariant::Outline,
-			size: Size::Md,
-			icon: true,
-			class: cls,
-			disabled: !ctx.can_scroll_prev(),
-			onclick: move |_| ctx.scroll_prev(),
-			svg {
-				xmlns: "http://www.w3.org/2000/svg",
-				view_box: "0 0 24 24",
-				fill: "none",
-				stroke: "currentColor",
-				stroke_width: "2",
-				stroke_linecap: "round",
-				stroke_linejoin: "round",
-				"aria-hidden": "true",
-				path { d: "m15 18-6-6 6-6" }
-			}
-			span { class: "sr-only", "Previous slide" }
-		}
-	}
-}
-#[component]
-pub fn CarouselNext(#[props(default)] class: String) -> Element {
-	let ctx = use_context::<CarouselContext>();
-	let pos = match ctx.orientation {
-		CarouselOrientation::Horizontal => CAROUSEL_NEXT_HORIZONTAL,
-		CarouselOrientation::Vertical => CAROUSEL_NEXT_VERTICAL,
-	};
-	let cls = cn!(CAROUSEL_NAV, pos, class);
-	rsx! {
-		Button {
-			variant: ButtonVariant::Outline,
-			size: Size::Md,
-			icon: true,
-			class: cls,
-			disabled: !ctx.can_scroll_next(),
-			onclick: move |_| ctx.scroll_next(),
-			svg {
-				xmlns: "http://www.w3.org/2000/svg",
-				view_box: "0 0 24 24",
-				fill: "none",
-				stroke: "currentColor",
-				stroke_width: "2",
-				stroke_linecap: "round",
-				stroke_linejoin: "round",
-				"aria-hidden": "true",
-				path { d: "m9 18 6-6-6-6" }
-			}
-			span { class: "sr-only", "Next slide" }
-		}
-	}
-}
-/// Netflix-style edge scrims that dissolve the current slide into the surface
-/// colour, signalling adjacent slides without revealing them. Each side shows
-/// only when there is somewhere to scroll. Drop inside a [`Carousel`].
-#[component]
-pub fn CarouselEdgeFade(#[props(default)] class: String) -> Element {
-	let ctx = use_context::<CarouselContext>();
-	let prev = cn!(CAROUSEL_EDGE_FADE_PREV, if ctx.can_scroll_prev() { "opacity-100" } else { "opacity-0" }, class.clone());
-	let next = cn!(CAROUSEL_EDGE_FADE_NEXT, if ctx.can_scroll_next() { "opacity-100" } else { "opacity-0" }, class);
-	rsx! {
-		div { class: prev, "aria-hidden": "true" }
-		div { class: next, "aria-hidden": "true" }
-	}
-}
-#[derive(Clone, Copy)]
-struct CarouselContext {
-	orientation: CarouselOrientation,
-	index: Controllable<usize>,
-	count: Signal<usize>,
 }
 
-impl CarouselContext {
-	fn can_scroll_prev(&self) -> bool {
-		self.index.get() > 0
+/// One carousel's slides; the index is the port's controllable state, so every
+/// read takes it.
+#[derive(Clone, Debug, Default)]
+pub(crate) struct Carousel {
+	slides: BTreeSet<usize>,
+}
+impl Carousel {
+	pub(crate) fn register(&mut self, id: usize) {
+		self.slides.insert(id);
 	}
 
-	fn can_scroll_next(&self) -> bool {
-		self.index.get() + 1 < (self.count)()
+	pub(crate) fn unregister(&mut self, id: usize) {
+		self.slides.remove(&id);
 	}
 
-	fn scroll_prev(&self) {
-		let i = self.index.get();
-		if i > 0 {
-			self.index.set(i - 1);
-		}
+	pub(crate) fn can_prev(&self, index: usize) -> bool {
+		index > 0
 	}
 
-	fn scroll_next(&self) {
-		let i = self.index.get();
-		if i + 1 < (self.count)() {
-			self.index.set(i + 1);
+	pub(crate) fn can_next(&self, index: usize) -> bool {
+		index + 1 < self.slides.len()
+	}
+
+	pub(crate) fn prev(&self, index: usize) -> Option<usize> {
+		self.can_prev(index).then(|| index - 1)
+	}
+
+	pub(crate) fn next(&self, index: usize) -> Option<usize> {
+		self.can_next(index).then(|| index + 1)
+	}
+
+	/// The index a keydown on the region moves to: `Some` for the arrows it
+	/// handles (consume the key), whose move may be no move at an end.
+	pub(crate) fn key(&self, input: &KeyInput, index: usize) -> Option<Option<usize>> {
+		match input.key.as_str() {
+			"ArrowLeft" => Some(self.prev(index)),
+			"ArrowRight" => Some(self.next(index)),
+			_ => None,
 		}
 	}
 }
@@ -200,71 +63,35 @@ impl CarouselContext {
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use crate::uikit::test_util::render;
 
-	#[test]
-	fn carousel_renders_region_and_slots() {
-		fn app() -> Element {
-			rsx! {
-				Carousel {
-					CarouselContent {
-						CarouselItem { "a" }
-						CarouselItem { "b" }
-					}
-					CarouselPrevious {}
-					CarouselNext {}
-				}
-			}
-		}
-		let html = render(app);
-		assert!(html.contains("data-slot=\"carousel\""), "{html}");
-		assert!(html.contains("aria-roledescription=\"carousel\""), "{html}");
-		assert!(html.contains("data-slot=\"carousel-content\""), "{html}");
-		assert!(html.contains("data-slot=\"carousel-item\""), "{html}");
-		assert!(html.contains("basis-full"), "{html}");
+	fn two_slides() -> Carousel {
+		let mut c = Carousel::default();
+		c.register(7);
+		c.register(9);
+		c
 	}
 
 	#[test]
-	fn item_uses_horizontal_padding_by_default() {
-		fn app() -> Element {
-			rsx! {
-				Carousel {
-					CarouselItem { "a" }
-				}
-			}
-		}
-		let html = render(app);
-		assert!(html.contains("pl-4"), "{html}");
+	fn moves_stop_at_both_ends() {
+		let c = two_slides();
+		assert_eq!(c.next(0), Some(1));
+		assert_eq!(c.next(1), None);
+		assert_eq!(c.prev(0), None);
+		assert!(!c.can_prev(0) && c.can_next(0));
 	}
 
 	#[test]
-	fn previous_disabled_at_start() {
-		fn app() -> Element {
-			rsx! {
-				Carousel {
-					CarouselPrevious {}
-				}
-			}
-		}
-		let html = render(app);
-		assert!(html.contains("data-slot=\"button\""), "{html}");
-		assert!(html.contains("disabled"), "prev should be disabled at index 0: {html}");
-		assert!(html.contains("m15 18-6-6 6-6"), "{html}");
+	fn arrows_are_consumed_even_at_an_end() {
+		let c = two_slides();
+		assert_eq!(c.key(&"ArrowRight".into(), 1), Some(None));
+		assert_eq!(c.key(&"ArrowLeft".into(), 1), Some(Some(0)));
+		assert_eq!(c.key(&"ArrowDown".into(), 0), None);
 	}
 
 	#[test]
-	fn content_transform_translates_by_index() {
-		fn app() -> Element {
-			rsx! {
-				Carousel { index: 1,
-					CarouselContent {
-						CarouselItem { "a" }
-						CarouselItem { "b" }
-					}
-				}
-			}
-		}
-		let html = render(app);
-		assert!(html.contains("translate3d(-100%, 0, 0)"), "{html}");
+	fn an_unmounted_slide_stops_counting() {
+		let mut c = two_slides();
+		c.unregister(9);
+		assert!(!c.can_next(0));
 	}
 }

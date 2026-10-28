@@ -9,7 +9,10 @@
 -top-12 left-1/2 -translate-x-1/2 rotate-90
 12:00:01
 2026-06-10 09:05
+2026-06-10T09:05
 @container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6
+Inter-Italic.ttf
+PlayfairDisplay-Italic.ttf
 [&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none
 [&>svg]:size-3.5
 [&_[data-slot=command-input-wrapper]]:h-12 [&_[data-slot=command-input]]:h-12
@@ -231,6 +234,7 @@ command-group-heading
 command-input
 command-input-wrapper
 command-item
+command-item-{id}
 command-list
 command-separator
 command-shortcut
@@ -399,7 +403,7 @@ flex flex-col gap-2 text-center sm:text-left
 flex flex-col gap-3 p-3 text-sm
 flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3
 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end
-flex h-9 items-center gap-2 border-b border-border px-3
+flex h-9 items-center gap-2 border-b border-border px-3 has-[[aria-invalid=true]]:border-accent-error
 flex h-9 shrink-0 items-center gap-2 border-b border-border px-3 text-xs font-medium text-ink-mid
 flex items-center
 flex items-center gap-2
@@ -738,6 +742,7 @@ rounded-[var(--control-radius)]
 rounded-full
 rounded-md
 rounded-xl
+row-{id}
 scroll-area
 scroll-area-scrollbar
 scroll-area-thumb

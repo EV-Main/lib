@@ -108,7 +108,8 @@ fn write_class_inventory(root: &Path) {
 		}
 	}
 	let mut lines = tabled;
-	for entry in fs::read_dir(root.join("rust/src/uikit")).expect("read uikit dir") {
+	let sources = ["uikit", "uikit_dioxus", "uikit_leptos"].map(|dir| fs::read_dir(root.join("rust/src").join(dir)).expect("read uikit dir"));
+	for entry in sources.into_iter().flatten() {
 		let path = entry.expect("dir entry").path();
 		if path.extension().is_none_or(|e| e != "rs") {
 			continue;

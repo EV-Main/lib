@@ -1,0 +1,182 @@
+use dioxus::prelude::*;
+
+pub use crate::uikit::button_classes;
+use crate::uikit_dioxus::{Accent, ButtonVariant, Size};
+
+/// With `href` this is an `<a>` wearing the button's classes — a link that looks
+/// like a call to action is still a link, and the kit has no `asChild` slot to
+/// express that otherwise.
+#[component]
+pub fn Button(
+	#[props(default)] variant: ButtonVariant,
+	#[props(default)] size: Size,
+	#[props(default)] icon: bool,
+	/// Recolours the button at an [`Accent`] rung; unset is the normal case.
+	accent: Option<Accent>,
+	#[props(default)] class: String,
+	#[props(default)] disabled: bool,
+	href: Option<String>,
+	/// Left unset the HTML default applies (`submit` inside a `Form`), mirroring
+	/// the TS port where `type` is just another forwarded button prop. Callers
+	/// that must not submit — addons, toolbars — pass `"button"`.
+	r#type: Option<String>,
+	onclick: Option<EventHandler<MouseEvent>>,
+	children: Element,
+) -> Element {
+	let cls = button_classes(&variant, size, icon, accent, &class);
+	if let Some(href) = href {
+		return rsx! {
+			a {
+				class: cls,
+				"data-slot": "button",
+				href,
+				onclick: move |e| { if let Some(h) = onclick { h.call(e); } },
+				{children}
+			}
+		};
+	}
+	rsx! {
+		button {
+			class: cls,
+			"data-slot": "button",
+			r#type,
+			disabled,
+			onclick: move |e| { if let Some(h) = onclick { h.call(e); } },
+			{children}
+		}
+	}
+}
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+	use crate::uikit_dioxus::{FILLED_FOCUS_RING, button_size_class, test_util::render};
+
+	#[test]
+	fn default_variant_and_size_render() {
+		fn app() -> Element {
+			rsx! { Button { "go" } }
+		}
+		let html = render(app);
+		assert!(html.contains("bg-primary"), "{html}");
+		assert!(html.contains("h-9"), "{html}");
+		assert!(html.contains("go"));
+		assert!(html.contains("data-slot=\"button\""));
+	}
+
+	#[test]
+	fn icon_sm_size_is_canon_only_here() {
+		fn app() -> Element {
+			rsx! {
+				Button { size: Size::Sm, icon: true, "x" }
+			}
+		}
+		let html = render(app);
+		assert!(html.contains("h-8 aspect-square"), "{html}");
+	}
+
+	#[test]
+	fn icon_lg_drops_text_padding() {
+		fn app() -> Element {
+			rsx! {
+				Button { size: Size::Lg, icon: true, "x" }
+			}
+		}
+		let html = render(app);
+		assert!(html.contains("h-10 aspect-square"), "{html}");
+		assert!(!html.contains("px-6"), "icon button must not carry text padding: {html}");
+	}
+
+	#[test]
+	fn touch_size_holds_the_44px_floor() {
+		fn app() -> Element {
+			rsx! {
+				Button { size: Size::Touch, "go" }
+				Button { size: Size::Touch, icon: true, "x" }
+			}
+		}
+		let html = render(app);
+		// the rendered attribute escapes `>`, so match the escaped class string
+		let text = button_size_class(Size::Touch, false).replace('>', "&#62;");
+		assert!(html.contains(&text), "{html}");
+		assert!(html.contains("size-11 px-0"), "icon touch button must be a 44 px square: {html}");
+	}
+
+	#[test]
+	fn type_is_absent_unless_asked_for() {
+		fn app() -> Element {
+			rsx! { Button { "go" } }
+		}
+		let html = render(app);
+		assert!(!html.contains("type="), "bare Button mirrors TS and emits no type: {html}");
+	}
+
+	#[test]
+	fn type_prop_reaches_the_element() {
+		fn app() -> Element {
+			rsx! {
+				Button { r#type: "button", "go" }
+			}
+		}
+		let html = render(app);
+		assert!(html.contains("type=\"button\""), "{html}");
+	}
+
+	#[test]
+	fn accent_recolours_per_variant() {
+		fn filled() -> Element {
+			rsx! {
+				Button { accent: Accent::Warn, "x" }
+			}
+		}
+		let html = render(filled);
+		assert!(html.contains("bg-accent-warn"), "{html}");
+		assert!(!html.contains("bg-primary"), "the accent replaces the variant's fill: {html}");
+
+		fn outlined() -> Element {
+			rsx! {
+				Button { variant: ButtonVariant::Outline, accent: Accent::Warn, "x" }
+			}
+		}
+		let html = render(outlined);
+		assert!(html.contains("border-accent-warn/40"), "{html}");
+		assert!(!html.contains("bg-accent-warn "), "an outlined button stays outlined: {html}");
+	}
+
+	/// lib#129: a button that paints a fill trades the halo for the offset ring,
+	/// and the fuse has to actually drop the halo's width, not just append.
+	#[test]
+	fn filled_buttons_wear_the_offset_ring() {
+		use strum::IntoEnumIterator;
+
+		for variant in ButtonVariant::iter() {
+			for accent in [None, Some(Accent::Warn)] {
+				let paints_fill = match accent {
+					Some(_) => variant != ButtonVariant::Outline,
+					None => matches!(variant, ButtonVariant::Primary | ButtonVariant::Secondary | ButtonVariant::Destructive),
+				};
+				let classes = button_classes(&variant, Size::Md, false, accent, "");
+				assert_eq!(classes.contains(FILLED_FOCUS_RING), paints_fill, "{variant:?} {accent:?}: {classes}");
+				assert_eq!(classes.contains("focus-visible:ring-[3px]"), !paints_fill, "{variant:?} {accent:?}: {classes}");
+			}
+		}
+
+		fn app() -> Element {
+			rsx! { Button { "go" } }
+		}
+		let html = render(app);
+		assert!(html.contains(FILLED_FOCUS_RING), "{html}");
+	}
+
+	#[test]
+	fn class_override_wins() {
+		fn app() -> Element {
+			rsx! {
+				Button { class: "px-6", "x" }
+			}
+		}
+		let html = render(app);
+		assert!(html.contains("px-6"));
+		assert!(!html.contains("px-4"), "override should drop base px-4: {html}");
+	}
+}
