@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
@@ -16,8 +16,12 @@ pub fn AlertDialog(
 	children: Children,
 ) -> impl IntoView {
 	let state = use_controllable(open, default_open, on_open_change);
-	provide_context(AlertDialogCtx { open: state });
-	view! { <div data-slot="alert-dialog">{children()}</div> }
+	let provided = AlertDialogCtx { open: state };
+	view! {
+		<Provider value=provided>
+			<div data-slot="alert-dialog">{children()}</div>
+		</Provider>
+	}
 }
 
 #[component]

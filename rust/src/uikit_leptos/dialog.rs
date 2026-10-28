@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
@@ -17,8 +17,12 @@ pub fn Dialog(
 ) -> impl IntoView {
 	let state = use_controllable(open, default_open, on_open_change);
 	let layer = use_dismissable_layer(Signal::derive(move || state.get()), move |_| state.set(false));
-	provide_context(DialogCtx { open: state, layer });
-	view! { <div data-slot="dialog">{children()}</div> }
+	let provided = DialogCtx { open: state, layer };
+	view! {
+		<Provider value=provided>
+			<div data-slot="dialog">{children()}</div>
+		</Provider>
+	}
 }
 
 #[component]

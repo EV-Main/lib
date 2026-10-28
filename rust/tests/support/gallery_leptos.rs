@@ -37,7 +37,8 @@ const PARITY_ONLY: &[(&str, fn() -> AnyView)] = &[
 	("DrawerParts", p_drawer_parts), ("DropdownMenuParts", p_dropdown_menu_parts), ("InfoTip", p_info_tip), ("MenubarParts", p_menubar_parts),
 	("NavigationMenuParts", p_navigation_menu_parts), ("PopoverAnchor", p_popover_anchor), ("SelectParts", p_select_parts), ("SheetParts", p_sheet_parts),
 	("FieldParts", p_field_parts), ("FormMessage", p_form_message), ("InputGroupParts", p_input_group_parts), ("Toaster", p_toaster),
-	("CommandParts", p_command_parts),
+	("CommandParts", p_command_parts), ("CommandSiblings", p_command_siblings),
+	("SelectSiblings", p_select_siblings), ("DialogSiblings", p_dialog_siblings), ("PopupSiblings", p_popup_siblings), ("MenuSiblings", p_menu_siblings),
 ];
 
 // ── Tier A — static ────────────────────────────────────────────────────────
@@ -114,8 +115,7 @@ fn d_avatar() -> AnyView {
 }
 
 fn d_separator() -> AnyView {
-	view! { <div class="flex flex-col gap-2 w-40">"Above" <Separator /> "Below"</div> }
-	.into_any()
+	view! { <div class="flex flex-col gap-2 w-40">"Above" <Separator /> "Below"</div> }.into_any()
 }
 
 fn d_skeleton() -> AnyView {
@@ -824,7 +824,8 @@ fn d_container() -> AnyView {
 		<Container class="border border-dashed border-border py-4">
 			"Centered max-width container"
 		</Container>
-	}.into_any()
+	}
+	.into_any()
 }
 
 fn d_terminal() -> AnyView {
@@ -1449,6 +1450,15 @@ fn p_form_message() -> AnyView {
 				</FormControl>
 				<FormMessage error=true>"Username is taken."</FormMessage>
 			</FormItem>
+			// A sibling item: its ids must be its own.
+			<FormItem>
+				<FormLabel>"Email"</FormLabel>
+				<FormControl>
+					<Input placeholder="daneel@example.com" />
+				</FormControl>
+				<FormDescription>"We never share it."</FormDescription>
+				<FormMessage>"Unused while valid."</FormMessage>
+			</FormItem>
 		</Form>
 	}
 	.into_any()
@@ -1483,8 +1493,32 @@ fn p_toaster() -> AnyView {
 			<QueueToast />
 			<Toaster />
 		</ToasterProvider>
+		// A sibling provider keeps its own queue.
+		<ToasterProvider>
+			<QueueToast />
+			<Toaster position=ToastPosition::TopLeft />
+		</ToasterProvider>
 	}
 	.into_any()
+}
+
+fn p_command_siblings() -> AnyView {
+	[("cle", ["cleaning", "plumbing"]), ("lyo", ["Paris", "Lyon"])]
+		.map(|(search, rows)| {
+			view! {
+				<Command default_search=search>
+					<CommandInput />
+					<CommandList>
+						<CommandEmpty>"None."</CommandEmpty>
+						<CommandGroup heading=search>
+							{rows.map(|row| view! { <CommandItem value=row>{row}</CommandItem> }).collect_view()}
+						</CommandGroup>
+					</CommandList>
+				</Command>
+			}
+		})
+		.collect_view()
+		.into_any()
 }
 
 fn p_command_parts() -> AnyView {
@@ -1501,6 +1535,197 @@ fn p_command_parts() -> AnyView {
 				</CommandGroup>
 			</CommandList>
 		</CommandDialog>
+	}
+	.into_any()
+}
+
+fn p_select_siblings() -> AnyView {
+	view! {
+		<Select default_open=true default_value="a">
+			<SelectTrigger>
+				<SelectValue />
+			</SelectTrigger>
+			<SelectContent>
+				<SelectItem value="a" text_value="A">
+					"A"
+				</SelectItem>
+				<SelectItem value="b" text_value="B">
+					"B"
+				</SelectItem>
+			</SelectContent>
+		</Select>
+		<Select default_value="b">
+			<SelectTrigger>
+				<SelectValue />
+			</SelectTrigger>
+			<SelectContent>
+				<SelectItem value="a" text_value="A">
+					"A"
+				</SelectItem>
+				<SelectItem value="b" text_value="B">
+					"B"
+				</SelectItem>
+			</SelectContent>
+		</Select>
+	}
+	.into_any()
+}
+
+fn p_dialog_siblings() -> AnyView {
+	view! {
+		<Dialog default_open=true>
+			<DialogTrigger>"first"</DialogTrigger>
+			<DialogContent>"first dialog"</DialogContent>
+		</Dialog>
+		<Dialog>
+			<DialogTrigger>"second"</DialogTrigger>
+			<DialogContent>"second dialog"</DialogContent>
+		</Dialog>
+		<AlertDialog default_open=true>
+			<AlertDialogContent>"first alert"</AlertDialogContent>
+		</AlertDialog>
+		<AlertDialog>
+			<AlertDialogContent>"second alert"</AlertDialogContent>
+		</AlertDialog>
+		<Sheet default_open=true>
+			<SheetContent>"first sheet"</SheetContent>
+		</Sheet>
+		<Sheet>
+			<SheetContent>"second sheet"</SheetContent>
+		</Sheet>
+		<Drawer default_open=true direction=DrawerDirection::Right>
+			<DrawerContent>"first drawer"</DrawerContent>
+		</Drawer>
+		<Drawer>
+			<DrawerContent>"second drawer"</DrawerContent>
+		</Drawer>
+	}
+	.into_any()
+}
+
+fn p_popup_siblings() -> AnyView {
+	view! {
+		<Popover default_open=true>
+			<PopoverTrigger>"first"</PopoverTrigger>
+			<PopoverContent>"first popover"</PopoverContent>
+		</Popover>
+		<Popover>
+			<PopoverTrigger>"second"</PopoverTrigger>
+			<PopoverContent>"second popover"</PopoverContent>
+		</Popover>
+		<Tooltip default_open=true>
+			<TooltipTrigger>"first"</TooltipTrigger>
+			<TooltipContent>"first tooltip"</TooltipContent>
+		</Tooltip>
+		<Tooltip>
+			<TooltipTrigger>"second"</TooltipTrigger>
+			<TooltipContent>"second tooltip"</TooltipContent>
+		</Tooltip>
+		<HoverCard default_open=true>
+			<HoverCardTrigger>"first"</HoverCardTrigger>
+			<HoverCardContent>"first card"</HoverCardContent>
+		</HoverCard>
+		<HoverCard>
+			<HoverCardTrigger>"second"</HoverCardTrigger>
+			<HoverCardContent>"second card"</HoverCardContent>
+		</HoverCard>
+		<InfoTip default_open=true>
+			<InfoTipTrigger />
+			<InfoTipContent>"first tip"</InfoTipContent>
+		</InfoTip>
+		<InfoTip>
+			<InfoTipTrigger />
+			<InfoTipContent>"second tip"</InfoTipContent>
+		</InfoTip>
+	}
+	.into_any()
+}
+
+fn p_menu_siblings() -> AnyView {
+	view! {
+		<DropdownMenu default_open=true>
+			<DropdownMenuTrigger>"first"</DropdownMenuTrigger>
+			<DropdownMenuContent>
+				<DropdownMenuRadioGroup default_value="day">
+					<DropdownMenuRadioItem value="day">"Day"</DropdownMenuRadioItem>
+				</DropdownMenuRadioGroup>
+				<DropdownMenuRadioGroup default_value="week">
+					<DropdownMenuRadioItem value="day">"Day"</DropdownMenuRadioItem>
+				</DropdownMenuRadioGroup>
+				<DropdownMenuSub default_open=true>
+					<DropdownMenuSubTrigger>"open sub"</DropdownMenuSubTrigger>
+					<DropdownMenuSubContent>"first sub"</DropdownMenuSubContent>
+				</DropdownMenuSub>
+				<DropdownMenuSub>
+					<DropdownMenuSubTrigger>"closed sub"</DropdownMenuSubTrigger>
+					<DropdownMenuSubContent>"second sub"</DropdownMenuSubContent>
+				</DropdownMenuSub>
+			</DropdownMenuContent>
+		</DropdownMenu>
+		<DropdownMenu>
+			<DropdownMenuTrigger>"second"</DropdownMenuTrigger>
+			<DropdownMenuContent>"second menu"</DropdownMenuContent>
+		</DropdownMenu>
+		<ContextMenu default_open=true>
+			<ContextMenuTrigger>"first"</ContextMenuTrigger>
+			<ContextMenuContent>
+				<ContextMenuRadioGroup default_value="day">
+					<ContextMenuRadioItem value="day">"Day"</ContextMenuRadioItem>
+				</ContextMenuRadioGroup>
+				<ContextMenuRadioGroup default_value="week">
+					<ContextMenuRadioItem value="day">"Day"</ContextMenuRadioItem>
+				</ContextMenuRadioGroup>
+				<ContextMenuSub default_open=true>
+					<ContextMenuSubTrigger>"open sub"</ContextMenuSubTrigger>
+					<ContextMenuSubContent>"first sub"</ContextMenuSubContent>
+				</ContextMenuSub>
+				<ContextMenuSub>
+					<ContextMenuSubTrigger>"closed sub"</ContextMenuSubTrigger>
+					<ContextMenuSubContent>"second sub"</ContextMenuSubContent>
+				</ContextMenuSub>
+			</ContextMenuContent>
+		</ContextMenu>
+		<ContextMenu>
+			<ContextMenuTrigger>"second"</ContextMenuTrigger>
+			<ContextMenuContent>"second menu"</ContextMenuContent>
+		</ContextMenu>
+		<Menubar>
+			<MenubarMenu default_open=true>
+				<MenubarTrigger>"File"</MenubarTrigger>
+				<MenubarContent>
+					<MenubarRadioGroup default_value="day">
+						<MenubarRadioItem value="day">"Day"</MenubarRadioItem>
+					</MenubarRadioGroup>
+					<MenubarRadioGroup default_value="week">
+						<MenubarRadioItem value="day">"Day"</MenubarRadioItem>
+					</MenubarRadioGroup>
+					<MenubarSub default_open=true>
+						<MenubarSubTrigger>"open sub"</MenubarSubTrigger>
+						<MenubarSubContent>"first sub"</MenubarSubContent>
+					</MenubarSub>
+					<MenubarSub>
+						<MenubarSubTrigger>"closed sub"</MenubarSubTrigger>
+						<MenubarSubContent>"second sub"</MenubarSubContent>
+					</MenubarSub>
+				</MenubarContent>
+			</MenubarMenu>
+			<MenubarMenu>
+				<MenubarTrigger>"Edit"</MenubarTrigger>
+				<MenubarContent>"second menu"</MenubarContent>
+			</MenubarMenu>
+		</Menubar>
+		<NavigationMenu>
+			<NavigationMenuList>
+				<NavigationMenuItem default_open=true>
+					<NavigationMenuTrigger>"Funds"</NavigationMenuTrigger>
+					<NavigationMenuContent>"first panel"</NavigationMenuContent>
+				</NavigationMenuItem>
+				<NavigationMenuItem>
+					<NavigationMenuTrigger>"About"</NavigationMenuTrigger>
+					<NavigationMenuContent>"second panel"</NavigationMenuContent>
+				</NavigationMenuItem>
+			</NavigationMenuList>
+		</NavigationMenu>
 	}
 	.into_any()
 }

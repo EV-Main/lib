@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
@@ -17,8 +17,12 @@ pub fn Sheet(
 	children: Children,
 ) -> impl IntoView {
 	let state = use_controllable(open, default_open, on_open_change);
-	provide_context(SheetCtx { open: state });
-	view! { <div data-slot="sheet">{children()}</div> }
+	let provided = SheetCtx { open: state };
+	view! {
+		<Provider value=provided>
+			<div data-slot="sheet">{children()}</div>
+		</Provider>
+	}
 }
 
 #[component]

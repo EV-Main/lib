@@ -3,7 +3,7 @@ use std::{
 	sync::atomic::{AtomicUsize, Ordering},
 };
 
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
@@ -31,7 +31,7 @@ pub fn Select(
 	#[prop(optional, into)] class: String,
 	children: Children,
 ) -> impl IntoView {
-	provide_context(SelectCtx {
+	let provided = SelectCtx {
 		value: use_controllable(value, default_value, on_value_change),
 		reset: reset_value,
 		open: use_controllable(open, default_open, on_open_change),
@@ -39,11 +39,13 @@ pub fn Select(
 		trigger: NodeRef::new(),
 		state: StoredValue::new(uikit::Select::default()),
 		els: Els::new(),
-	});
+	};
 	view! {
-		<div class=cn!("relative", class) data-slot="select">
-			{children()}
-		</div>
+		<Provider value=provided>
+			<div class=cn!("relative", class) data-slot="select">
+				{children()}
+			</div>
+		</Provider>
 	}
 }
 

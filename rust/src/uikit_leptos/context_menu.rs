@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 pub use crate::uikit::ContextMenuItemVariant;
 use crate::{
@@ -18,11 +18,15 @@ pub fn ContextMenu(
 	children: Children,
 ) -> impl IntoView {
 	let state = use_controllable(open, default_open, on_open_change);
-	provide_context(ContextMenuCtx {
+	let provided = ContextMenuCtx {
 		open: state,
 		point: RwSignal::new((0, 0)),
-	});
-	view! { <div data-slot="context-menu">{children()}</div> }
+	};
+	view! {
+		<Provider value=provided>
+			<div data-slot="context-menu">{children()}</div>
+		</Provider>
+	}
 }
 
 #[component]
@@ -165,11 +169,13 @@ pub fn ContextMenuRadioGroup(
 	children: Children,
 ) -> impl IntoView {
 	let state = use_controllable(value, default_value, on_value_change);
-	provide_context(ContextMenuRadioCtx { value: state });
+	let provided = ContextMenuRadioCtx { value: state };
 	view! {
-		<div class=class role="group" data-slot="context-menu-radio-group">
-			{children()}
-		</div>
+		<Provider value=provided>
+			<div class=class role="group" data-slot="context-menu-radio-group">
+				{children()}
+			</div>
+		</Provider>
 	}
 }
 
@@ -260,8 +266,12 @@ pub fn ContextMenuSub(
 	children: Children,
 ) -> impl IntoView {
 	let state = use_controllable(open, default_open, on_open_change);
-	provide_context(ContextMenuSubCtx { open: state });
-	view! { <div data-slot="context-menu-sub">{children()}</div> }
+	let provided = ContextMenuSubCtx { open: state };
+	view! {
+		<Provider value=provided>
+			<div data-slot="context-menu-sub">{children()}</div>
+		</Provider>
+	}
 }
 
 #[component]

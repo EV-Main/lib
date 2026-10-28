@@ -3,7 +3,7 @@
 //! the panel stays mounted after `open` turns false, until its exit `transform`'s
 //! `transitionend`. Drag-to-dismiss is TS-only; see the README "Limitations".
 
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
@@ -25,8 +25,12 @@ pub fn Drawer(
 	children: Children,
 ) -> impl IntoView {
 	let open = use_controllable(open, default_open, on_open_change);
-	provide_context(DrawerCtx { open, direction });
-	view! { <div data-slot="drawer">{children()}</div> }
+	let provided = DrawerCtx { open, direction };
+	view! {
+		<Provider value=provided>
+			<div data-slot="drawer">{children()}</div>
+		</Provider>
+	}
 }
 
 #[component]
@@ -52,16 +56,16 @@ pub fn DrawerOverlay(#[prop(optional, into)] class: String) -> impl IntoView {
 	let ctx = expect_context::<DrawerCtx>();
 	let cls = cn!(DRAWER_OVERLAY, class);
 	move || {
-		ctx.open
-			.get()
-			.then(|| view! {
+		ctx.open.get().then(|| {
+			view! {
 				<div
 					class=cls.clone()
 					data-slot="drawer-overlay"
 					data-state="open"
 					on:click=move |_| ctx.open.set(false)
 				></div>
-			})
+			}
+		})
 	}
 }
 

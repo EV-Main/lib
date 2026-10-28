@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
@@ -22,18 +22,20 @@ pub fn InfoTip(
 ) -> impl IntoView {
 	let state = use_controllable(open, default_open, on_open_change);
 	let id = Signal::stored(use_stable_id("info-tip"));
-	provide_context(InfoTipCtx { open: state, id });
+	let provided = InfoTipCtx { open: state, id };
 	view! {
-		<span
-			class="relative inline-flex"
-			on:keydown=move |e| {
-				if e.key() == "Escape" {
-					state.set(false);
+		<Provider value=provided>
+			<span
+				class="relative inline-flex"
+				on:keydown=move |e| {
+					if e.key() == "Escape" {
+						state.set(false);
+					}
 				}
-			}
-		>
-			{children()}
-		</span>
+			>
+				{children()}
+			</span>
+		</Provider>
 	}
 }
 

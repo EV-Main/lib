@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 pub use crate::uikit::MenubarItemVariant;
 use crate::{
@@ -29,12 +29,14 @@ pub fn MenubarMenu(
 	children: Children,
 ) -> impl IntoView {
 	let state = use_controllable(open, default_open, on_open_change);
-	provide_context(MenubarMenuCtx { open: state });
+	let provided = MenubarMenuCtx { open: state };
 	// dep-light: inline positioning + backdrop; no portal/floating — see README Limitations
 	view! {
-		<div class="relative" data-slot="menubar-menu">
-			{children()}
-		</div>
+		<Provider value=provided>
+			<div class="relative" data-slot="menubar-menu">
+				{children()}
+			</div>
+		</Provider>
 	}
 }
 
@@ -177,11 +179,13 @@ pub fn MenubarRadioGroup(
 	children: Children,
 ) -> impl IntoView {
 	let state = use_controllable(value, default_value, on_value_change);
-	provide_context(MenubarRadioCtx { value: state });
+	let provided = MenubarRadioCtx { value: state };
 	view! {
-		<div class=class data-slot="menubar-radio-group" role="group">
-			{children()}
-		</div>
+		<Provider value=provided>
+			<div class=class data-slot="menubar-radio-group" role="group">
+				{children()}
+			</div>
+		</Provider>
 	}
 }
 
@@ -253,12 +257,14 @@ pub fn MenubarSub(
 	children: Children,
 ) -> impl IntoView {
 	let state = use_controllable(open, default_open, on_open_change);
-	provide_context(MenubarSubCtx { open: state });
+	let provided = MenubarSubCtx { open: state };
 	// dep-light: inline positioning + backdrop; no portal/floating — see README Limitations
 	view! {
-		<div class="relative" data-slot="menubar-sub">
-			{children()}
-		</div>
+		<Provider value=provided>
+			<div class="relative" data-slot="menubar-sub">
+				{children()}
+			</div>
+		</Provider>
 	}
 }
 

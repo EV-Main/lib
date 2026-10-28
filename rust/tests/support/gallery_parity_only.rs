@@ -4,7 +4,7 @@
 const PARITY_ONLY: &[(&str, fn() -> Element)] = &[
 	("AlertDialogTrigger", p_alert_dialog_trigger), ("AuthWall", p_auth_wall), ("AvatarImage", p_avatar_image), ("Band", p_band),
 	("BreadcrumbEllipsis", p_breadcrumb_ellipsis), ("ButtonGroupParts", p_button_group_parts), ("CardAction", p_card_action),
-	("CarouselEdgeFade", p_carousel_edge_fade), ("CommandParts", p_command_parts), ("ContextMenuParts", p_context_menu_parts),
+	("CarouselEdgeFade", p_carousel_edge_fade), ("CommandParts", p_command_parts), ("CommandSiblings", p_command_siblings), ("ContextMenuParts", p_context_menu_parts),
 	("DialogParts", p_dialog_parts), ("DrawerParts", p_drawer_parts), ("DropdownMenuParts", p_dropdown_menu_parts),
 	("FieldParts", p_field_parts), ("Fonts", p_fonts), ("Footer", p_footer), ("FormMessage", p_form_message), ("InfoTip", p_info_tip),
 	("InputGroupParts", p_input_group_parts), ("ItemParts", p_item_parts), ("Logo", p_logo), ("MenubarParts", p_menubar_parts),
@@ -12,6 +12,7 @@ const PARITY_ONLY: &[(&str, fn() -> Element)] = &[
 	("SectionDescriptor", p_section_descriptor), ("SelectParts", p_select_parts), ("SheetParts", p_sheet_parts),
 	("SidebarParts", p_sidebar_parts), ("StatusScreen", p_status_screen), ("TableParts", p_table_parts), ("Toaster", p_toaster),
 	("TradesTapeRow", p_trades_tape_row),
+	("SelectSiblings", p_select_siblings), ("DialogSiblings", p_dialog_siblings), ("PopupSiblings", p_popup_siblings), ("MenuSiblings", p_menu_siblings),
 ];
 
 fn p_alert_dialog_trigger() -> Element {
@@ -130,6 +131,25 @@ fn p_command_parts() -> Element {
 					CommandSeparator {}
 					CommandItem { value: "search", "Search funds"
 						CommandShortcut { "⌘K" }
+					}
+				}
+			}
+		}
+	}
+}
+
+// Two instances side by side: each one's parts must find their own Command and group.
+fn p_command_siblings() -> Element {
+	rsx! {
+		for (search, rows) in [("cle", ["cleaning", "plumbing"]), ("lyo", ["Paris", "Lyon"])] {
+			Command { default_search: search,
+				CommandInput {}
+				CommandList {
+					CommandEmpty { "None." }
+					CommandGroup { heading: "{search}",
+						for row in rows {
+							CommandItem { value: row, {row} }
+						}
 					}
 				}
 			}
@@ -278,6 +298,15 @@ fn p_form_message() -> Element {
 					Input { placeholder: "daneel" }
 				}
 				FormMessage { error: true, "Username is taken." }
+			}
+			// A sibling item: its ids must be its own.
+			FormItem {
+				FormLabel { "Email" }
+				FormControl {
+					Input { placeholder: "daneel@example.com" }
+				}
+				FormDescription { "We never share it." }
+				FormMessage { "Unused while valid." }
 			}
 		}
 	}
@@ -541,6 +570,11 @@ fn p_toaster() -> Element {
 			QueueToast {}
 			Toaster {}
 		}
+		// A sibling provider keeps its own queue.
+		ToasterProvider {
+			QueueToast {}
+			Toaster { position: ToastPosition::TopLeft }
+		}
 	}
 }
 
@@ -549,6 +583,181 @@ fn p_trades_tape_row() -> Element {
 		div { class: "flex w-72 flex-col",
 			TradesTapeRow { side: BookSide::Bid, price: "1.024", size: "140", time: "12:00:01" }
 			TradesTapeRow { side: BookSide::Ask, price: "1.026", size: "90", time: "12:00:02" }
+		}
+	}
+}
+
+fn p_select_siblings() -> Element {
+	rsx! {
+		Select { default_open: true, default_value: "a".to_string(),
+			SelectTrigger { SelectValue {} }
+			SelectContent {
+				SelectItem { value: "a", text_value: "A", "A" }
+				SelectItem { value: "b", text_value: "B", "B" }
+			}
+		}
+		Select { default_value: "b".to_string(),
+			SelectTrigger { SelectValue {} }
+			SelectContent {
+				SelectItem { value: "a", text_value: "A", "A" }
+				SelectItem { value: "b", text_value: "B", "B" }
+			}
+		}
+	}
+}
+
+fn p_dialog_siblings() -> Element {
+	rsx! {
+		Dialog { default_open: true,
+			DialogTrigger { "first" }
+			DialogContent { "first dialog" }
+		}
+		Dialog {
+			DialogTrigger { "second" }
+			DialogContent { "second dialog" }
+		}
+		AlertDialog { default_open: true,
+			AlertDialogContent { "first alert" }
+		}
+		AlertDialog {
+			AlertDialogContent { "second alert" }
+		}
+		Sheet { default_open: true,
+			SheetContent { "first sheet" }
+		}
+		Sheet {
+			SheetContent { "second sheet" }
+		}
+		Drawer { default_open: true, direction: DrawerDirection::Right,
+			DrawerContent { "first drawer" }
+		}
+		Drawer {
+			DrawerContent { "second drawer" }
+		}
+	}
+}
+
+fn p_popup_siblings() -> Element {
+	rsx! {
+		Popover { default_open: true,
+			PopoverTrigger { "first" }
+			PopoverContent { "first popover" }
+		}
+		Popover {
+			PopoverTrigger { "second" }
+			PopoverContent { "second popover" }
+		}
+		Tooltip { default_open: true,
+			TooltipTrigger { "first" }
+			TooltipContent { "first tooltip" }
+		}
+		Tooltip {
+			TooltipTrigger { "second" }
+			TooltipContent { "second tooltip" }
+		}
+		HoverCard { default_open: true,
+			HoverCardTrigger { "first" }
+			HoverCardContent { "first card" }
+		}
+		HoverCard {
+			HoverCardTrigger { "second" }
+			HoverCardContent { "second card" }
+		}
+		InfoTip { default_open: true,
+			InfoTipTrigger {}
+			InfoTipContent { "first tip" }
+		}
+		InfoTip {
+			InfoTipTrigger {}
+			InfoTipContent { "second tip" }
+		}
+	}
+}
+
+fn p_menu_siblings() -> Element {
+	rsx! {
+		DropdownMenu { default_open: true,
+			DropdownMenuTrigger { "first" }
+			DropdownMenuContent {
+				DropdownMenuRadioGroup { default_value: "day",
+					DropdownMenuRadioItem { value: "day", "Day" }
+				}
+				DropdownMenuRadioGroup { default_value: "week",
+					DropdownMenuRadioItem { value: "day", "Day" }
+				}
+				DropdownMenuSub { default_open: true,
+					DropdownMenuSubTrigger { "open sub" }
+					DropdownMenuSubContent { "first sub" }
+				}
+				DropdownMenuSub {
+					DropdownMenuSubTrigger { "closed sub" }
+					DropdownMenuSubContent { "second sub" }
+				}
+			}
+		}
+		DropdownMenu {
+			DropdownMenuTrigger { "second" }
+			DropdownMenuContent { "second menu" }
+		}
+		ContextMenu { default_open: true,
+			ContextMenuTrigger { "first" }
+			ContextMenuContent {
+				ContextMenuRadioGroup { default_value: "day",
+					ContextMenuRadioItem { value: "day", "Day" }
+				}
+				ContextMenuRadioGroup { default_value: "week",
+					ContextMenuRadioItem { value: "day", "Day" }
+				}
+				ContextMenuSub { default_open: true,
+					ContextMenuSubTrigger { "open sub" }
+					ContextMenuSubContent { "first sub" }
+				}
+				ContextMenuSub {
+					ContextMenuSubTrigger { "closed sub" }
+					ContextMenuSubContent { "second sub" }
+				}
+			}
+		}
+		ContextMenu {
+			ContextMenuTrigger { "second" }
+			ContextMenuContent { "second menu" }
+		}
+		Menubar {
+			MenubarMenu { default_open: true,
+				MenubarTrigger { "File" }
+				MenubarContent {
+					MenubarRadioGroup { default_value: "day",
+						MenubarRadioItem { value: "day", "Day" }
+					}
+					MenubarRadioGroup { default_value: "week",
+						MenubarRadioItem { value: "day", "Day" }
+					}
+					MenubarSub { default_open: true,
+						MenubarSubTrigger { "open sub" }
+						MenubarSubContent { "first sub" }
+					}
+					MenubarSub {
+						MenubarSubTrigger { "closed sub" }
+						MenubarSubContent { "second sub" }
+					}
+				}
+			}
+			MenubarMenu {
+				MenubarTrigger { "Edit" }
+				MenubarContent { "second menu" }
+			}
+		}
+		NavigationMenu {
+			NavigationMenuList {
+				NavigationMenuItem { default_open: true,
+					NavigationMenuTrigger { "Funds" }
+					NavigationMenuContent { "first panel" }
+				}
+				NavigationMenuItem {
+					NavigationMenuTrigger { "About" }
+					NavigationMenuContent { "second panel" }
+				}
+			}
 		}
 	}
 }

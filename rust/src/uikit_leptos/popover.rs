@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
@@ -17,17 +17,19 @@ pub fn Popover(
 ) -> impl IntoView {
 	let state = use_controllable(open, default_open, on_open_change);
 	let layer = use_dismissable_layer(Signal::derive(move || state.get()), move |_| state.set(false));
-	provide_context(PopoverCtx { open: state, layer });
+	let provided = PopoverCtx { open: state, layer };
 	// dep-light: inline positioning + backdrop; no portal/floating — see README Limitations
 	view! {
-		<div
-			class="relative inline-block"
-			on:keydown=move |e| {
-				layer.on_keydown(&e);
-			}
-		>
-			{children()}
-		</div>
+		<Provider value=provided>
+			<div
+				class="relative inline-block"
+				on:keydown=move |e| {
+					layer.on_keydown(&e);
+				}
+			>
+				{children()}
+			</div>
+		</Provider>
 	}
 }
 

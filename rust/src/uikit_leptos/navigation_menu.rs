@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 pub use crate::uikit::navigation_menu_trigger_style;
 use crate::{
@@ -44,11 +44,13 @@ pub fn NavigationMenuItem(
 	children: Children,
 ) -> impl IntoView {
 	let state = use_controllable(open, default_open, on_open_change);
-	provide_context(NavigationMenuItemCtx { open: state });
+	let provided = NavigationMenuItemCtx { open: state };
 	view! {
-		<li class=cn!(NAVIGATION_MENU_ITEM, class) data-slot="navigation-menu-item">
-			{children()}
-		</li>
+		<Provider value=provided>
+			<li class=cn!(NAVIGATION_MENU_ITEM, class) data-slot="navigation-menu-item">
+				{children()}
+			</li>
+		</Provider>
 	}
 }
 

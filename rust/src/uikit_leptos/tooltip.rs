@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
@@ -22,19 +22,21 @@ pub fn Tooltip(
 	children: Children,
 ) -> impl IntoView {
 	let state = use_controllable(open, default_open, on_open_change);
-	provide_context(TooltipCtx { open: state });
+	let provided = TooltipCtx { open: state };
 	// dep-light: inline positioning + backdrop; no portal/floating — see README Limitations
 	view! {
-		<div
-			class="relative inline-block"
-			on:keydown=move |e| {
-				if e.key() == "Escape" {
-					state.set(false);
+		<Provider value=provided>
+			<div
+				class="relative inline-block"
+				on:keydown=move |e| {
+					if e.key() == "Escape" {
+						state.set(false);
+					}
 				}
-			}
-		>
-			{children()}
-		</div>
+			>
+				{children()}
+			</div>
+		</Provider>
 	}
 }
 

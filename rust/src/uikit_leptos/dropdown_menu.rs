@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 pub use crate::uikit::DropdownMenuItemVariant;
 use crate::{
@@ -19,11 +19,13 @@ pub fn DropdownMenu(
 ) -> impl IntoView {
 	let state = use_controllable(open, default_open, on_open_change);
 	let layer = use_dismissable_layer(Signal::derive(move || state.get()), move |_| state.set(false));
-	provide_context(DropdownMenuCtx { open: state, layer });
+	let provided = DropdownMenuCtx { open: state, layer };
 	view! {
-		<div class="relative inline-block" data-slot="dropdown-menu">
-			{children()}
-		</div>
+		<Provider value=provided>
+			<div class="relative inline-block" data-slot="dropdown-menu">
+				{children()}
+			</div>
+		</Provider>
 	}
 }
 
@@ -163,11 +165,13 @@ pub fn DropdownMenuRadioGroup(
 	children: Children,
 ) -> impl IntoView {
 	let state = use_controllable(value, default_value, on_value_change);
-	provide_context(DropdownMenuRadioCtx { value: state });
+	let provided = DropdownMenuRadioCtx { value: state };
 	view! {
-		<div class=class role="group" data-slot="dropdown-menu-radio-group">
-			{children()}
-		</div>
+		<Provider value=provided>
+			<div class=class role="group" data-slot="dropdown-menu-radio-group">
+				{children()}
+			</div>
+		</Provider>
 	}
 }
 
@@ -259,8 +263,12 @@ pub fn DropdownMenuSub(
 	children: Children,
 ) -> impl IntoView {
 	let state = use_controllable(open, default_open, on_open_change);
-	provide_context(DropdownMenuSubCtx { open: state });
-	view! { <div data-slot="dropdown-menu-sub">{children()}</div> }
+	let provided = DropdownMenuSubCtx { open: state };
+	view! {
+		<Provider value=provided>
+			<div data-slot="dropdown-menu-sub">{children()}</div>
+		</Provider>
+	}
 }
 
 #[component]
