@@ -44,7 +44,7 @@ fn d_button() -> Element {
 		Button { size: Size::Sm, "Small" }
 		Button { size: Size::Lg, "Large" }
 		Button { size: Size::Md, icon: true, "+" }
-		Button { disabled: true, "Disabled" }
+		Button { disabled: true, title: "Unavailable", "Disabled" }
 	}
 }
 

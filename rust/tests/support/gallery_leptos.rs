@@ -59,7 +59,9 @@ fn d_button() -> AnyView {
 		<Button size=Size::Md icon=true>
 			"+"
 		</Button>
-		<Button disabled=true>"Disabled"</Button>
+		<Button disabled=true title="Unavailable">
+			"Disabled"
+		</Button>
 	}
 	.into_any()
 }

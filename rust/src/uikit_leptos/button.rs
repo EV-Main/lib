@@ -17,6 +17,7 @@ pub fn Button(
 	#[prop(optional, into)] class: String,
 	#[prop(optional, into)] disabled: Signal<bool>,
 	#[prop(optional, into)] href: Option<String>,
+	#[prop(optional, into)] title: Option<String>,
 	/// Left unset the HTML default applies (`submit` inside a `Form`), mirroring
 	/// the TS port where `type` is just another forwarded button prop. Callers
 	/// that must not submit — addons, toolbars — pass `"button"`.
@@ -33,13 +34,13 @@ pub fn Button(
 	};
 	match href {
 		Some(href) => view! {
-			<a class=cls data-slot="button" href=href on:click=click>
+			<a class=cls data-slot="button" href=href title=title on:click=click>
 				{children()}
 			</a>
 		}
 		.into_any(),
 		None => view! {
-			<button class=cls data-slot="button" type=r#type disabled=disabled on:click=click>
+			<button class=cls data-slot="button" type=r#type title=title disabled=disabled on:click=click>
 				{children()}
 			</button>
 		}

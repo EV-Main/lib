@@ -16,6 +16,7 @@ pub fn Button(
 	#[props(default)] class: String,
 	#[props(default)] disabled: bool,
 	href: Option<String>,
+	title: Option<String>,
 	/// Left unset the HTML default applies (`submit` inside a `Form`), mirroring
 	/// the TS port where `type` is just another forwarded button prop. Callers
 	/// that must not submit — addons, toolbars — pass `"button"`.
@@ -30,6 +31,7 @@ pub fn Button(
 				class: cls,
 				"data-slot": "button",
 				href,
+				title,
 				onclick: move |e| { if let Some(h) = onclick { h.call(e); } },
 				{children}
 			}
@@ -40,6 +42,7 @@ pub fn Button(
 			class: cls,
 			"data-slot": "button",
 			r#type,
+			title,
 			disabled,
 			onclick: move |e| { if let Some(h) = onclick { h.call(e); } },
 			{children}
