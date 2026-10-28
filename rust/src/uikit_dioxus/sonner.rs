@@ -3,24 +3,24 @@
 //! Where the TS mirror exposes a module-global `toast(...)` function backed by a
 //! singleton store, Dioxus has no clean cross-component mutable singleton, so the
 //! Rust kit uses a [`ToasterProvider`] that owns a [`Toasts`] signal in context
-//! plus a [`use_toaster`] hook returning a [`ToasterHandle`] with `.success`,
-//! `.error`, `.info`, `.warning` and `.dismiss`.
+//! plus a [`use_toaster`] hook returning a [`ToasterHandle`] with `.toast`,
+//! `.positive`, `.error`, `.info`, `.warn`, `.show` and `.dismiss`.
 //!
 //! ## Stacking + animation
 //!
 //! Mirrors Sonner (and the TS port) via the shared `data-stack` CSS in
 //! `tokens.css`: toasts are absolutely stacked at the pinned edge and pile up
-//! collapsed (front [`VISIBLE_TOASTS`] peeking, scaled by depth), expanding into
+//! collapsed (front three peeking, scaled by depth), expanding into
 //! a list on hover / keyboard focus — pure CSS, no host state. Each [`ToastItem`]
 //! feeds the layout vars (`--index`, `--offset`, …); because heights can't be
 //! measured here (that needs host-only `web-sys`), they're derived from a
-//! constant [`TOAST_HEIGHT_EST`], so the collapsed pile is exact and the expanded
+//! constant height estimate, so the collapsed pile is exact and the expanded
 //! list is uniformly spaced.
 //!
 //! Animation stays host-timer-free: the enter is a CSS keyframe (it plays on DOM
 //! insertion, so no host-only mount flip is needed — Dioxus effect timing can't
 //! drive one), [`ToasterHandle::dismiss`] (and the close button) flip
-//! [`ToastState`] to `Closing`/`data-state="closed"` to slide it out, and the
+//! the toast to `data-state="closed"` to slide it out, and the
 //! live node is dropped on the exit transform's `transitionend`
 //! (`ontransitionend`, guarded to the closing state and the transform property)
 //! rather than a `setTimeout`.
@@ -38,130 +38,65 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
+	uikit::{DEFAULT_DURATION_MS, ToastQueue, ToastState, ToastView, toaster_style, y_position},
 	uikit_dioxus::{TOAST_BASE, TOAST_CLOSE, TOAST_CONTENT, TOAST_TITLE, TOASTER_BASE, ToastPosition, ToastVariant, primitives::is_transform_transition},
 };
 
-/// Only the front three toasts show while the stack is collapsed.
-const VISIBLE_TOASTS: usize = 3;
-/// Gap (px) between toasts once the stack is expanded.
-const GAP: u32 = 14;
-/// Dioxus can't measure a toast's height (it needs host-only `web-sys`), so the
-/// stack assumes this height (px) for the collapse clamp and the expanded
-/// spacing: the collapsed pile is exact, the expanded list is uniformly spaced.
-/// Tuned to a single-line toast (p-4 + one text-sm line).
-const TOAST_HEIGHT_EST: u32 = 56;
-/// Default auto-dismiss lifetime (ms). Mirrors the TS `DEFAULT_DURATION`.
-const DEFAULT_DURATION_MS: u32 = 4000;
-
-/// Lifecycle phase of a single toast. A toast mounts `Open` (plays the enter
-/// keyframe); [`ToasterHandle::dismiss`] flips it to `Closing` (slides it out),
-/// and it is dropped from the list once the exit `transitionend` fires. Mirrors
-/// the TS `data-state` of `"open"` / `"closed"`.
-#[derive(Clone, Copy, Default, PartialEq)]
-pub enum ToastState {
-	#[default]
-	Open,
-	Closing,
-}
-
-impl ToastState {
-	fn as_str(&self) -> &'static str {
-		match self {
-			ToastState::Open => "open",
-			ToastState::Closing => "closed",
-		}
-	}
-}
-
-#[derive(Clone, PartialEq)]
-pub struct Toast {
-	pub id: u64,
-	pub message: String,
-	pub variant: ToastVariant,
-	pub state: ToastState,
-	/// Auto-dismiss lifetime in ms, or `None` to persist until dismissed.
-	pub duration: Option<u32>,
-}
-
-/// The live toast list, held in context by [`ToasterProvider`] alongside the
-/// next-id counter.
+/// The live toast queue, held in context by [`ToasterProvider`].
 #[derive(Clone, Copy)]
-pub struct Toasts {
-	items: Signal<Vec<Toast>>,
-	next_id: Signal<u64>,
-}
+pub struct Toasts(Signal<ToastQueue>);
 
 /// Imperative handle, the mirror of the TS global `toast` object. Obtained via
-/// [`use_toaster`]; each method enqueues a toast of the matching variant, and
-/// [`ToasterHandle::dismiss`] removes one by id.
+/// [`use_toaster`]; each method enqueues a toast of the matching variant and
+/// returns its id, and [`ToasterHandle::dismiss`] closes one by id.
 #[derive(Clone, Copy)]
 pub struct ToasterHandle {
 	toasts: Toasts,
 }
 
 impl ToasterHandle {
-	fn push(&self, message: impl Into<String>, variant: ToastVariant, duration: Option<u32>) -> u64 {
-		let mut next_id = self.toasts.next_id;
-		let id = *next_id.peek();
-		next_id.set(id + 1);
-		let mut items = self.toasts.items;
-		items.write().push(Toast {
-			id,
-			message: message.into(),
-			variant,
-			state: ToastState::Open,
-			duration,
-		});
-		id
-	}
-
 	pub fn toast(&self, message: impl Into<String>) -> u64 {
-		self.push(message, ToastVariant::Neutral, Some(DEFAULT_DURATION_MS))
+		self.show(message, ToastVariant::Neutral, Some(DEFAULT_DURATION_MS))
 	}
 
 	pub fn positive(&self, message: impl Into<String>) -> u64 {
-		self.push(message, ToastVariant::Positive, Some(DEFAULT_DURATION_MS))
+		self.show(message, ToastVariant::Positive, Some(DEFAULT_DURATION_MS))
 	}
 
 	pub fn error(&self, message: impl Into<String>) -> u64 {
-		self.push(message, ToastVariant::Error, Some(DEFAULT_DURATION_MS))
+		self.show(message, ToastVariant::Error, Some(DEFAULT_DURATION_MS))
 	}
 
 	pub fn info(&self, message: impl Into<String>) -> u64 {
-		self.push(message, ToastVariant::Info, Some(DEFAULT_DURATION_MS))
+		self.show(message, ToastVariant::Info, Some(DEFAULT_DURATION_MS))
 	}
 
 	pub fn warn(&self, message: impl Into<String>) -> u64 {
-		self.push(message, ToastVariant::Warn, Some(DEFAULT_DURATION_MS))
+		self.show(message, ToastVariant::Warn, Some(DEFAULT_DURATION_MS))
 	}
 
 	/// Full control over variant + lifetime. `duration` is ms, or `None` for a
 	/// **persistent** toast that stays until the close button or
-	/// [`ToasterHandle::dismiss`]. The convenience methods above use
-	/// [`DEFAULT_DURATION_MS`]; this is the mirror of the TS `toast(msg, { duration })`.
+	/// [`ToasterHandle::dismiss`]. The convenience methods above use the TS
+	/// `DEFAULT_DURATION` (4s); this is the mirror of the TS `toast(msg, { duration })`.
 	pub fn show(&self, message: impl Into<String>, variant: ToastVariant, duration: Option<u32>) -> u64 {
-		self.push(message, variant, duration)
+		let mut queue = self.toasts.0;
+		queue.write().push(message.into(), variant, duration)
 	}
 
-	/// Begins the exit animation: the toast flips to [`ToastState::Closing`]
-	/// (`data-state="closed"`) and stays mounted so the exit transition can play.
-	/// The live node is removed by [`ToasterHandle::remove`] when that transition's
-	/// `transitionend` fires — there is no host timer. A toast dismissed before it
-	/// has ever painted mounts closed and so never transitions; [`ToastItem`] drops
-	/// that one on mount instead.
+	/// Begins the exit animation: the toast flips to `data-state="closed"` and
+	/// stays mounted so the exit transition can play; its `transitionend` drops
+	/// it — there is no host timer. A toast dismissed before it has ever painted
+	/// mounts closed and so never transitions; [`ToastItem`] drops that one on
+	/// mount instead.
 	pub fn dismiss(&self, id: u64) {
-		let mut items = self.toasts.items;
-		if let Some(toast) = items.write().iter_mut().find(|t| t.id == id) {
-			toast.state = ToastState::Closing;
-		}
+		let mut queue = self.toasts.0;
+		queue.write().dismiss(id);
 	}
 
-	/// Drops a toast from the list outright. Wired to the exit `animationend`;
-	/// the no-op-when-still-open guard lives at the call site (the enter
-	/// `animationend` fires too, but only `Closing` toasts are removed).
 	fn remove(&self, id: u64) {
-		let mut items = self.toasts.items;
-		items.write().retain(|t| t.id != id);
+		let mut queue = self.toasts.0;
+		queue.write().remove(id);
 	}
 }
 
@@ -169,9 +104,8 @@ impl ToasterHandle {
 /// (via [`use_toaster`]) and renders the [`Toaster`].
 #[component]
 pub fn ToasterProvider(children: Element) -> Element {
-	let items = use_signal(Vec::new);
-	let next_id = use_signal(|| 0u64);
-	use_context_provider(|| Toasts { items, next_id });
+	let queue = use_signal(ToastQueue::default);
+	use_context_provider(|| Toasts(queue));
 	rsx! {
 		{children}
 	}
@@ -186,32 +120,25 @@ pub fn use_toaster() -> ToasterHandle {
 /// Renders the toast stack from context as a Sonner-style pile: collapsed by
 /// default (front three peeking, scaled by depth), expanding into a list on
 /// hover / keyboard focus (pure CSS). Fixed-positioned per `position` (default
-/// bottom-right). Unlike the TS mirror there is no `setTimeout` auto-dismiss (so
-/// nothing to pause on hover) and no swipe — the kit is render-only and
-/// host-timer-free; dismiss happens on the close button or via
-/// [`ToasterHandle::dismiss`], which slides the toast out and drops it on its
-/// `transitionend`.
+/// bottom-right). Unlike the TS mirror there is no `setTimeout` (a lifetime is a
+/// CSS animation, paused on hover) and no swipe; dismiss happens on the close
+/// button, at the end of the lifetime or via [`ToasterHandle::dismiss`], which
+/// slides the toast out and drops it on its `transitionend`.
 #[component]
 pub fn Toaster(#[props(default)] position: ToastPosition, #[props(default)] class: String) -> Element {
 	let toasts = use_context::<Toasts>();
-	let y = match position {
-		ToastPosition::TopLeft | ToastPosition::TopCenter | ToastPosition::TopRight => "top",
-		_ => "bottom",
-	};
 	let cls = cn!(TOASTER_BASE, position.as_class(), class);
-	let items = toasts.items.read();
-	let total = items.len();
+	let stack = toasts.0.read().stack();
 	rsx! {
 		ol {
 			class: cls,
 			"data-slot": "toaster",
 			"data-position": position.as_ref(),
-			"data-y-position": y,
+			"data-y-position": y_position(position),
 			"data-stack": "",
-			style: "--front-height: {TOAST_HEIGHT_EST}px; --gap: {GAP}px;",
-			// newest first → front of the stack (index 0)
-			for (index, t) in items.iter().rev().cloned().enumerate() {
-				ToastItem { key: "{t.id}", toast: t, index, total }
+			style: toaster_style(),
+			for toast in stack {
+				ToastItem { key: "{toast.id}", toast }
 			}
 		}
 	}
@@ -225,7 +152,7 @@ pub fn Toaster(#[props(default)] position: ToastPosition, #[props(default)] clas
 /// toast dismissed before its first paint, which never transitions at all.
 /// Layout vars come from the constant height — no measuring.
 #[component]
-fn ToastItem(toast: Toast, index: usize, total: usize) -> Element {
+fn ToastItem(toast: ToastView) -> Element {
 	let handle = use_toaster();
 	let id = toast.id;
 	let state = toast.state;
@@ -240,14 +167,6 @@ fn ToastItem(toast: Toast, index: usize, total: usize) -> Element {
 			handle.remove(id);
 		}
 	});
-	let front = index == 0;
-	let visible = index < VISIBLE_TOASTS;
-	let offset = index as u32 * (TOAST_HEIGHT_EST + GAP);
-	let z = total - index;
-	// auto-dismiss is a CSS "life" animation (no host timer): its `animationend`
-	// fires after `--life`, and hover pauses it via animation-play-state.
-	let autodismiss = toast.duration.is_some();
-	let life_ms = toast.duration.unwrap_or(0);
 
 	rsx! {
 		li {
@@ -256,10 +175,10 @@ fn ToastItem(toast: Toast, index: usize, total: usize) -> Element {
 			"data-slot": "toast",
 			"data-variant": toast.variant.as_ref(),
 			"data-state": state.as_str(),
-			"data-front": "{front}",
-			"data-visible": "{visible}",
-			"data-autodismiss": "{autodismiss}",
-			style: "--index: {index}; --z-index: {z}; --offset: {offset}px; --initial-height: {TOAST_HEIGHT_EST}px; --life: {life_ms}ms;",
+			"data-front": "{toast.front}",
+			"data-visible": "{toast.visible}",
+			"data-autodismiss": "{toast.autodismiss}",
+			style: toast.style,
 			onanimationend: move |e| {
 				if e.animation_name() == "ev-toast-life" {
 					handle.dismiss(id);

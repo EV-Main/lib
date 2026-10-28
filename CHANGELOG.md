@@ -59,9 +59,11 @@ Rust crate and its TypeScript mirror at once.
   the Dioxus components keep their behaviour. Swap the feature name and the
   module path. Interface changes the split forced, mirrored in the Leptos port
   and listed in `ts/uikit/README.md`'s Rust↔TS table: Select options name
-  their label explicitly instead of the kit reading it off the children, and
-  Form/Field are told which optional slots are present instead of inspecting
-  the children. `CommandInput` gains `invalid`, and `CommandDialog` now applies
+  their label explicitly instead of the kit reading it off the children;
+  `FieldSeparator` renders its copy only with `content: true`, and
+  `FormMessage` only while `error: true` (the flag `FormControl` takes), instead
+  of inspecting the children. `FormItemContext`, `Toast` and `ToastState` are no
+  longer public. `CommandInput` gains `invalid`, and `CommandDialog` now applies
   its `class` to the dialog.
 
 - **`Field` no longer imports the controls it labels** (`@evinvest/uikit`):

@@ -1,20 +1,13 @@
 use dioxus::prelude::*;
 
+pub use crate::uikit::FieldLegendVariant;
 use crate::{
 	cn,
 	uikit_dioxus::{
 		FIELD_BASE, FIELD_CONTENT, FIELD_DESCRIPTION, FIELD_ERROR, FIELD_GROUP, FIELD_LABEL, FIELD_LEGEND, FIELD_SEPARATOR, FIELD_SEPARATOR_CONTENT, FIELD_SEPARATOR_LINE, FIELD_SET,
-		FIELD_TITLE, FieldOrientation, label::Label, primitives::has_content,
+		FIELD_TITLE, FieldOrientation, label::Label,
 	},
 };
-
-#[derive(Clone, Default, PartialEq, strum::AsRefStr)]
-#[strum(serialize_all = "kebab-case")]
-pub enum FieldLegendVariant {
-	#[default]
-	Legend,
-	Label,
-}
 
 #[component]
 pub fn FieldSet(#[props(default)] class: String, children: Element) -> Element {
@@ -86,12 +79,11 @@ pub fn FieldDescription(#[props(default)] class: String, children: Element) -> E
 	}
 }
 
-/// A rule with optional centred copy ("or"). Without children the content span
-/// is omitted: its opaque `bg-background` pill would otherwise notch the line.
+/// A rule with optional centred copy ("or"), rendered only with `content`:
+/// the copy's opaque `bg-background` pill would otherwise notch the line.
 #[component]
-pub fn FieldSeparator(#[props(default)] class: String, children: Element) -> Element {
+pub fn FieldSeparator(#[props(default)] content: bool, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(FIELD_SEPARATOR, class);
-	let content = has_content(&children);
 	rsx! {
 		div {
 			class: cls,
@@ -186,7 +178,7 @@ mod tests {
 	fn separator_renders_content() {
 		fn app() -> Element {
 			rsx! {
-				FieldSeparator { "or" }
+				FieldSeparator { content: true, "or" }
 			}
 		}
 		let html = render(app);
@@ -197,7 +189,7 @@ mod tests {
 	}
 
 	#[test]
-	fn separator_without_children_is_a_plain_rule() {
+	fn separator_without_content_is_a_plain_rule() {
 		fn app() -> Element {
 			rsx! { FieldSeparator {} }
 		}

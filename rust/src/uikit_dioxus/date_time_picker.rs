@@ -1,13 +1,12 @@
 use dioxus::{dioxus_core::needs_update, prelude::*};
 
+pub use crate::uikit::{DateTimePickerLabels, LocalDateTime};
 use crate::{
 	cn,
+	uikit::{self, CalendarDate},
 	uikit_dioxus::{
 		ButtonVariant, DATE_TIME_PICKER_CLEAR, DATE_TIME_PICKER_CONTENT, DATE_TIME_PICKER_TIME, DATE_TIME_PICKER_TIME_INPUT, DATE_TIME_PICKER_TIME_SEPARATOR, DATE_TIME_PICKER_TRIGGER,
-		INPUT_BASE, POPOVER_CONTENT, Size,
-		button::button_classes,
-		calendar::{Calendar, CalendarDate, NO_CLOCK_MONTH},
-		primitives::use_controllable,
+		INPUT_BASE, POPOVER_CONTENT, Size, button::button_classes, calendar::Calendar, primitives::use_controllable,
 	},
 };
 
@@ -16,60 +15,6 @@ const CALENDAR_ICON: [&str; 4] = ["M8 2v4", "M16 2v4", "M3 10h18", "M5 4h14a2 2 
 // lucide `x`.
 const CLOSE_ICON: &str = "M18 6 6 18M6 6l12 12";
 
-/// A wall-clock moment with no zone: what the operator sees in the field.
-///
-/// Fields are declared in `date, hour, minute` order, so the derived ordering
-/// is chronological.
-#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
-pub struct LocalDateTime {
-	pub date: CalendarDate,
-	pub hour: u32,
-	pub minute: u32,
-}
-
-impl LocalDateTime {
-	pub fn new(date: CalendarDate, hour: u32, minute: u32) -> Self {
-		Self { date, hour, minute }
-	}
-
-	/// Inclusive clamp at minute precision.
-	fn clamp_to(self, min: Option<Self>, max: Option<Self>) -> Self {
-		match (min, max) {
-			(Some(lo), _) if self < lo => lo,
-			(_, Some(hi)) if self > hi => hi,
-			_ => self,
-		}
-	}
-
-	/// The default trigger label: `YYYY-MM-DD HH:MM`, 24-hour.
-	fn label(&self) -> String {
-		format!("{:04}-{:02}-{:02} {:02}:{:02}", self.date.year, self.date.month, self.date.day, self.hour, self.minute)
-	}
-
-	/// The hidden form value: `YYYY-MM-DDTHH:MM` (no zone on this side).
-	fn form_value(&self) -> String {
-		format!("{:04}-{:02}-{:02}T{:02}:{:02}", self.date.year, self.date.month, self.date.day, self.hour, self.minute)
-	}
-}
-
-/// The picker's own strings; every one defaults to English.
-#[derive(Clone, Debug, Default, PartialEq)]
-pub struct DateTimePickerLabels {
-	/// `aria-label` of the calendar's previous-month button; "Previous month".
-	pub previous_month: Option<String>,
-	/// `aria-label` of the calendar's next-month button; "Next month".
-	pub next_month: Option<String>,
-	/// `aria-label` of the hours input; "Hours".
-	pub hours: Option<String>,
-	/// `aria-label` of the minutes input; "Minutes".
-	pub minutes: Option<String>,
-	/// Text of the clear button; "Clear".
-	pub clear: Option<String>,
-	/// `aria-label` of the close button; "Close".
-	pub close: Option<String>,
-	/// `aria-label` of the popover dialog; "Choose date and time".
-	pub dialog: Option<String>,
-}
 /// A date + time field over the kit's own bricks: an outline trigger opening a
 /// popover with the [`Calendar`] and two numeric hours/minutes inputs — no
 /// native `datetime-local`, so the browser's locale popup never appears.
@@ -114,25 +59,15 @@ pub fn DateTimePicker(
 	let today = today.or_else(CalendarDate::today);
 	let open = use_controllable(open, default_open, on_open_change);
 	let is_open = open.get();
-	// `min` before `today`: a bound in the future would otherwise open on a fully
-	// disabled grid.
-	let mut month = use_signal(|| value.map(|v| v.date).or(min.map(|m| m.date)).or(today).unwrap_or(NO_CLOCK_MONTH));
+	let picker = uikit::Picker { value, min, max, today };
+	let mut month = use_signal(|| picker.opening_month());
 
 	let emit = move |next: Option<LocalDateTime>| {
 		if let Some(h) = on_change {
 			h.call(next);
 		}
 	};
-	// The day a time lands on while no day is chosen, kept inside the bounds: a
-	// `min` in the future (or a `max` in the past) would otherwise clamp the
-	// whole value to the bound's time and drop the hour just typed.
-	let fallback_day = move || landing_day(today, min.map(|m| m.date), max.map(|m| m.date), month());
-	let base = move || value.unwrap_or_else(|| LocalDateTime::new(fallback_day(), 0, 0));
-
-	let on_select = move |day: CalendarDate| {
-		let (hour, minute) = value.map_or((0, 0), |v| (v.hour, v.minute));
-		emit(Some(LocalDateTime::new(day, hour, minute).clamp_to(min, max)));
-	};
+	let on_select = move |day: CalendarDate| emit(Some(picker.select(day)));
 	// The time fields are controlled, so every keystroke must leave the DOM on
 	// the canonical "HH"/"MM" (as React does). Dioxus rewrites `input.value` on
 	// every render — the attribute is volatile — but nothing re-renders the picker
@@ -141,14 +76,14 @@ pub fn DateTimePicker(
 	// the picker is memoised, so the DOM would keep the raw keystrokes. Ask for
 	// the render explicitly.
 	let on_hours = move |e: FormEvent| {
-		if let Some(hour) = parse_field(&e.value(), 23) {
-			emit(Some(LocalDateTime { hour, ..base() }.clamp_to(min, max)));
+		if let Some(next) = picker.hours(&e.value(), month()) {
+			emit(Some(next));
 		}
 		needs_update();
 	};
 	let on_minutes = move |e: FormEvent| {
-		if let Some(minute) = parse_field(&e.value(), 59) {
-			emit(Some(LocalDateTime { minute, ..base() }.clamp_to(min, max)));
+		if let Some(next) = picker.minutes(&e.value(), month()) {
+			emit(Some(next));
 		}
 		needs_update();
 	};
@@ -183,12 +118,7 @@ pub fn DateTimePicker(
 	let time_input_class = cn!(INPUT_BASE, DATE_TIME_PICKER_TIME_INPUT);
 	let clear_class = button_classes(&ButtonVariant::Ghost, Size::Sm, false, None, DATE_TIME_PICKER_CLEAR);
 	let close_class = button_classes(&ButtonVariant::Ghost, Size::Sm, true, None, "");
-	let (hours, minutes) = value.map_or_else(|| (String::from("00"), String::from("00")), |v| (format!("{:02}", v.hour), format!("{:02}", v.minute)));
-	let hours_label = labels.hours.unwrap_or_else(|| String::from("Hours"));
-	let minutes_label = labels.minutes.unwrap_or_else(|| String::from("Minutes"));
-	let clear_label = labels.clear.unwrap_or_else(|| String::from("Clear"));
-	let close_label = labels.close.unwrap_or_else(|| String::from("Close"));
-	let dialog_label = labels.dialog.unwrap_or_else(|| String::from("Choose date and time"));
+	let (hours, minutes) = picker.time_fields();
 
 	rsx! {
 		div {
@@ -227,7 +157,7 @@ pub fn DateTimePicker(
 				div {
 					class: content_class,
 					role: "dialog",
-					"aria-label": dialog_label,
+					"aria-label": labels.dialog(),
 					"data-slot": "date-time-picker-content",
 					"data-state": "open",
 					"data-side": "bottom",
@@ -241,8 +171,8 @@ pub fn DateTimePicker(
 						min: min.map(|m| m.date),
 						max: max.map(|m| m.date),
 						disabled,
-						previous_month_label: labels.previous_month,
-						next_month_label: labels.next_month,
+						previous_month_label: labels.previous_month.clone(),
+						next_month_label: labels.next_month.clone(),
 					}
 					div { class: DATE_TIME_PICKER_TIME, "data-slot": "date-time-picker-time",
 						input {
@@ -250,7 +180,7 @@ pub fn DateTimePicker(
 							inputmode: "numeric",
 							class: time_input_class.clone(),
 							"data-slot": "date-time-picker-hours",
-							"aria-label": hours_label,
+							"aria-label": labels.hours(),
 							value: hours,
 							disabled,
 							oninput: on_hours,
@@ -266,7 +196,7 @@ pub fn DateTimePicker(
 							inputmode: "numeric",
 							class: time_input_class,
 							"data-slot": "date-time-picker-minutes",
-							"aria-label": minutes_label,
+							"aria-label": labels.minutes(),
 							value: minutes,
 							disabled,
 							oninput: on_minutes,
@@ -278,13 +208,13 @@ pub fn DateTimePicker(
 							"data-slot": "date-time-picker-clear",
 							disabled,
 							onclick: on_clear,
-							{clear_label}
+							{labels.clear()}
 						}
 						button {
 							r#type: "button",
 							class: close_class,
 							"data-slot": "date-time-picker-close",
-							"aria-label": close_label,
+							"aria-label": labels.close(),
 							disabled,
 							onclick: move |_| open.set(false),
 							CloseIcon {}
@@ -295,32 +225,6 @@ pub fn DateTimePicker(
 		}
 	}
 }
-/// The day a time typed before any day is chosen lands on: `today`, else
-/// `min`'s day, else the first of the displayed `month` — then pulled inside
-/// `[min, max]`. Clamping the day rather than the whole value keeps the typed
-/// hour when `min` is in the future (or `max` in the past).
-fn landing_day(today: Option<CalendarDate>, min: Option<CalendarDate>, max: Option<CalendarDate>, month: CalendarDate) -> CalendarDate {
-	let day = today.or(min).unwrap_or_else(|| CalendarDate::new(month.year, month.month, 1));
-	let day = min.map_or(day, |m| day.max(m));
-	max.map_or(day, |m| day.min(m))
-}
-
-/// Parses the digits an operator typed into an hours/minutes field. `None`
-/// (nothing typed, or no digit at all) keeps the last value.
-///
-/// The LAST two digits win: the field is controlled, so what the browser hands
-/// over is the old value plus the keystroke ("01" + "5" = "015"), and the
-/// freshest digits are the ones the operator meant.
-fn parse_field(raw: &str, max: u32) -> Option<u32> {
-	let digits: Vec<char> = raw.chars().filter(char::is_ascii_digit).collect();
-	if digits.is_empty() {
-		return None;
-	}
-	let tail = String::from_iter(&digits[digits.len().saturating_sub(2)..]);
-	// Two ASCII digits always parse; the `unwrap_or` is for the type, not a path.
-	Some(tail.parse::<u32>().unwrap_or(0).min(max))
-}
-
 #[component]
 fn CalendarIcon() -> Element {
 	rsx! {
@@ -372,50 +276,6 @@ mod tests {
 
 	fn june(day: u32, hour: u32, minute: u32) -> LocalDateTime {
 		LocalDateTime::new(CalendarDate::new(2026, 6, day), hour, minute)
-	}
-
-	#[test]
-	fn local_date_time_orders_and_clamps_at_minute_precision() {
-		assert!(june(10, 9, 30) < june(10, 9, 31));
-		assert!(june(10, 23, 59) < june(11, 0, 0));
-		let lo = june(10, 9, 0);
-		let hi = june(20, 18, 0);
-		assert_eq!(june(10, 8, 59).clamp_to(Some(lo), Some(hi)), lo);
-		assert_eq!(june(20, 18, 1).clamp_to(Some(lo), Some(hi)), hi);
-		assert_eq!(june(15, 12, 0).clamp_to(Some(lo), Some(hi)), june(15, 12, 0));
-		assert_eq!(june(1, 0, 0).clamp_to(None, None), june(1, 0, 0));
-	}
-
-	/// A time typed before a day is chosen keeps its hour when `min` is in the
-	/// future: the day moves inside the bounds, the time is not clamped away.
-	#[test]
-	fn landing_day_stays_inside_the_bounds() {
-		let d = |day| CalendarDate::new(2026, 6, day);
-		let month = d(1);
-		assert_eq!(landing_day(Some(d(15)), None, None, month), d(15));
-		assert_eq!(landing_day(Some(d(15)), Some(d(22)), None, month), d(22), "min in the future");
-		assert_eq!(landing_day(Some(d(15)), None, Some(d(8)), month), d(8), "max in the past");
-		assert_eq!(landing_day(None, Some(d(22)), None, month), d(22));
-		assert_eq!(landing_day(None, None, None, d(3)), d(1));
-		// 09:00 on the landing day is above a midnight `min`, so the hour survives.
-		let min = LocalDateTime::new(d(22), 0, 0);
-		let typed = LocalDateTime::new(landing_day(Some(d(15)), Some(d(22)), None, month), 9, 0);
-		assert_eq!(typed.clamp_to(Some(min), None), LocalDateTime::new(d(22), 9, 0));
-	}
-
-	#[test]
-	fn parse_field_clamps_and_keeps_last_on_empty() {
-		assert_eq!(parse_field("7", 23), Some(7));
-		assert_eq!(parse_field("09", 23), Some(9));
-		assert_eq!(parse_field("31", 23), Some(23));
-		assert_eq!(parse_field("75", 59), Some(59));
-		// Sequential typing over a controlled field: "0" + "1", then "01" + "5".
-		assert_eq!(parse_field("01", 23), Some(1));
-		assert_eq!(parse_field("015", 23), Some(15));
-		assert_eq!(parse_field("123", 59), Some(23));
-		assert_eq!(parse_field("1a5", 59), Some(15));
-		assert_eq!(parse_field("", 23), None);
-		assert_eq!(parse_field("ab", 23), None);
 	}
 
 	#[test]
@@ -576,21 +436,5 @@ mod tests {
 		let written = written_values(&mutations_after_input(open_at_nine_oh_five, ""));
 		assert!(written.contains(&String::from("09")), "{written:?}");
 		assert!(written.contains(&String::from("05")), "{written:?}");
-	}
-
-	#[test]
-	fn empty_value_opens_on_the_bound_month_before_today() {
-		fn app() -> Element {
-			rsx! {
-				DateTimePicker {
-					default_open: true,
-					today: CalendarDate::new(2026, 6, 15),
-					min: LocalDateTime::new(CalendarDate::new(2026, 8, 1), 0, 0),
-				}
-			}
-		}
-		let html = render(app);
-		assert!(html.contains("August 2026"), "{html}");
-		assert!(!html.contains("June 2026"), "{html}");
 	}
 }

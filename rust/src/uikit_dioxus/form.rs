@@ -16,32 +16,9 @@ use dioxus::prelude::*;
 pub use crate::uikit::FormControlContext;
 use crate::{
 	cn,
-	uikit_dioxus::{
-		FORM_DESCRIPTION, FORM_ITEM, FORM_LABEL, FORM_MESSAGE,
-		label::Label,
-		primitives::{has_content, use_stable_id},
-	},
+	uikit::FormItemContext,
+	uikit_dioxus::{FORM_DESCRIPTION, FORM_ITEM, FORM_LABEL, FORM_MESSAGE, label::Label, primitives::use_stable_id},
 };
-
-/// The shared id minted by [`FormItem`], plus the derived ids the control,
-/// description and message hang off of so `aria-describedby`/`id` align.
-#[derive(Clone, PartialEq)]
-pub struct FormItemContext {
-	pub id: String,
-}
-impl FormItemContext {
-	pub fn form_item_id(&self) -> String {
-		format!("{}-form-item", self.id)
-	}
-
-	pub fn form_description_id(&self) -> String {
-		format!("{}-form-item-description", self.id)
-	}
-
-	pub fn form_message_id(&self) -> String {
-		format!("{}-form-item-message", self.id)
-	}
-}
 
 /// Passthrough `<form>` wrapper. Mirrors TS `Form` (which is rhf's
 /// `FormProvider`); here it owns no state, so consumers wire submit/onsubmit.
@@ -88,17 +65,7 @@ pub fn FormLabel(#[props(default)] error: bool, #[props(default)] class: String,
 /// the control's own classes.
 #[component]
 pub fn FormControl(#[props(default)] error: bool, children: Element) -> Element {
-	let ctx = use_context::<FormItemContext>();
-	let described_by = if error {
-		format!("{} {}", ctx.form_description_id(), ctx.form_message_id())
-	} else {
-		ctx.form_description_id()
-	};
-	let next = FormControlContext {
-		id: ctx.form_item_id(),
-		described_by,
-		invalid: error,
-	};
+	let next = use_context::<FormItemContext>().control(error);
 	// Provided as a signal and kept in sync with the props: the context value is
 	// built on the first render only, so a plain struct would pin that render's
 	// `error` and the control would never react to validation flipping.
@@ -120,12 +87,14 @@ pub fn FormDescription(#[props(default)] class: String, children: Element) -> El
 		p { class: cls, "data-slot": "form-description", id: ctx.form_description_id(), {children} }
 	}
 }
-/// Error/validation text. Renders only when it has children, so a permanently
-/// mounted message on a valid field leaves no empty row in the item's grid.
+/// Error/validation text. Renders only while `error`, the same flag the
+/// `FormControl` gets — so the control is described by the message exactly when
+/// it exists, and a permanently mounted message on a valid field leaves no empty
+/// row in the item's grid.
 #[component]
-pub fn FormMessage(#[props(default)] class: String, children: Element) -> Element {
+pub fn FormMessage(#[props(default)] error: bool, #[props(default)] class: String, children: Element) -> Element {
 	let ctx = use_context::<FormItemContext>();
-	if !has_content(&children) {
+	if !error {
 		return rsx! {};
 	}
 	let cls = cn!(FORM_MESSAGE, class);
@@ -236,7 +205,7 @@ mod tests {
 						Input { r#type: "email" }
 					}
 					FormDescription { "we never share it" }
-					FormMessage { "Invalid email" }
+					FormMessage { error: true, "Invalid email" }
 				}
 			}
 		}
@@ -316,7 +285,7 @@ mod tests {
 		fn app() -> Element {
 			rsx! {
 				FormItem {
-					FormMessage { "required" }
+					FormMessage { error: true, "required" }
 				}
 			}
 		}
@@ -327,26 +296,16 @@ mod tests {
 	}
 
 	#[test]
-	fn message_without_children_renders_nothing() {
-		fn absent() -> Element {
+	fn message_renders_nothing_while_valid() {
+		fn app() -> Element {
 			rsx! {
 				FormItem {
-					FormMessage {}
+					FormMessage { "required" }
 				}
 			}
 		}
-		fn blank() -> Element {
-			let error_text = String::new();
-			rsx! {
-				FormItem {
-					FormMessage { {error_text} }
-				}
-			}
-		}
-		for app in [absent, blank] {
-			let html = render(app);
-			assert!(!html.contains("form-message"), "{html}");
-			assert!(!html.contains("<p"), "{html}");
-		}
+		let html = render(app);
+		assert!(!html.contains("form-message"), "{html}");
+		assert!(!html.contains("<p"), "{html}");
 	}
 }

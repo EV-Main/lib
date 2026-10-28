@@ -1,134 +1,17 @@
 use dioxus::prelude::*;
 
+pub use crate::uikit::CalendarDate;
 use crate::{
 	cn,
+	uikit::{self, Day, NEXT_MONTH, NO_CLOCK_MONTH, PREVIOUS_MONTH, WEEKDAYS},
 	uikit_dioxus::{
-		ButtonVariant, CALENDAR_CAPTION, CALENDAR_DAY, CALENDAR_DAY_CELL, CALENDAR_DAY_EMPTY, CALENDAR_DAY_SELECTED, CALENDAR_DAY_TODAY, CALENDAR_GRID, CALENDAR_NAV, CALENDAR_NAV_BUTTON,
-		CALENDAR_ROOT, CALENDAR_WEEK, CALENDAR_WEEKDAY, CALENDAR_WEEKDAY_ROW, Size, button::button_classes, primitives::use_controllable,
+		CALENDAR_CAPTION, CALENDAR_DAY_CELL, CALENDAR_DAY_EMPTY, CALENDAR_GRID, CALENDAR_NAV, CALENDAR_ROOT, CALENDAR_WEEK, CALENDAR_WEEKDAY, CALENDAR_WEEKDAY_ROW,
+		primitives::use_controllable,
 	},
 };
 
-const MONTHS: [&str; 12] = [
-	"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December",
-];
-const WEEKDAYS: [&str; 7] = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 const CHEVRON_LEFT: &str = "m15 18-6-6 6-6";
 const CHEVRON_RIGHT: &str = "m9 18 6-6-6-6";
-/// Always six weeks: a popover host must not jump in height when the month
-/// changes, and six rows is the most any month needs with a Monday-first week
-/// (31 days starting on a Sunday).
-const GRID_CELLS: usize = 6 * 7;
-/// What an uncontrolled calendar opens on when the build has no clock to read
-/// (see [`CalendarDate::today`]) and the caller passed no `default_month`.
-pub(crate) const NO_CLOCK_MONTH: CalendarDate = CalendarDate { year: 1970, month: 1, day: 1 };
-/// A calendar date as plain `(year, month 1-12, day 1-31)`. The kernel does its
-/// own date math (no `chrono`/`jiff`): `wasm32`-safe and dependency-free.
-///
-/// Fields are declared in `year, month, day` order, so the derived ordering is
-/// chronological.
-#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
-pub struct CalendarDate {
-	pub year: i32,
-	pub month: u32,
-	pub day: u32,
-}
-
-impl CalendarDate {
-	pub fn new(year: i32, month: u32, day: u32) -> Self {
-		Self { year, month, day }
-	}
-
-	fn is_leap(year: i32) -> bool {
-		(year % 4 == 0 && year % 100 != 0) || year % 400 == 0
-	}
-
-	/// Days in `month` (1-12) of `year`, accounting for leap February.
-	fn days_in_month(year: i32, month: u32) -> u32 {
-		match month {
-			1 | 3 | 5 | 7 | 8 | 10 | 12 => 31,
-			4 | 6 | 9 | 11 => 30,
-			2 if Self::is_leap(year) => 29,
-			2 => 28,
-			_ => 30,
-		}
-	}
-
-	/// Weekday of the first day of the month, **Monday = 0 … Sunday = 6**, via
-	/// Zeller's congruence (week starts Monday).
-	fn first_weekday_monday0(year: i32, month: u32) -> u32 {
-		// Zeller treats Jan/Feb as months 13/14 of the previous year.
-		let (m, y) = if month < 3 { (month + 12, year - 1) } else { (month, year) };
-		let k = y.rem_euclid(100);
-		let j = y.div_euclid(100);
-		let q = 1i32; // first of the month
-		// h: 0 = Saturday, 1 = Sunday, 2 = Monday, …, 6 = Friday.
-		let h = (q + (13 * (m as i32 + 1)) / 5 + k + k / 4 + j / 4 + 5 * j).rem_euclid(7);
-		// Map Saturday-based h to Monday-based 0..=6.
-		((h + 5).rem_euclid(7)) as u32
-	}
-
-	/// Today on the host clock, or `None` where the build has no clock to read.
-	///
-	/// Web (`wasm32` + the `wasm` feature) reads the browser's local date, like
-	/// the TS port's `new Date()`. Native reads `SystemTime` and takes the **UTC**
-	/// date: the local zone needs tz data the dep-light kit does not carry, so
-	/// near midnight a native host can be a day off its wall clock. Bare `wasm32`
-	/// without `wasm` has no clock (`SystemTime::now` panics there) and yields
-	/// `None`.
-	///
-	/// Server-rendered and hydrated: the server's UTC date and the browser's
-	/// local one differ near midnight (and across a month boundary), so the
-	/// opened month and `data-today` would not match on hydration — the same as
-	/// the TS `new Date()`. An SSR page passes `default_month` and `today`
-	/// explicitly, computed once.
-	pub fn today() -> Option<Self> {
-		#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
-		{
-			let now = web_sys::js_sys::Date::new_0();
-			Some(Self::new(now.get_full_year() as i32, now.get_month() + 1, now.get_date()))
-		}
-		#[cfg(not(target_arch = "wasm32"))]
-		{
-			let secs = match std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH) {
-				Ok(after) => after.as_secs() as i64,
-				Err(before) => -(before.duration().as_secs() as i64),
-			};
-			Some(Self::from_unix_days(secs.div_euclid(86_400)))
-		}
-		#[cfg(all(target_arch = "wasm32", not(feature = "wasm")))]
-		{
-			None
-		}
-	}
-
-	/// The civil date `days` after 1970-01-01 (Hinnant's `civil_from_days`).
-	/// Only the `SystemTime` path needs it; the browser hands back a civil date.
-	#[cfg(any(not(target_arch = "wasm32"), test))]
-	fn from_unix_days(days: i64) -> Self {
-		let z = days + 719_468;
-		let era = z.div_euclid(146_097);
-		let doe = z.rem_euclid(146_097);
-		let yoe = (doe - doe / 1_460 + doe / 36_524 - doe / 146_096) / 365;
-		let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
-		let mp = (5 * doy + 2) / 153;
-		let day = (doy - (153 * mp + 2) / 5 + 1) as u32;
-		let month = if mp < 10 { mp + 3 } else { mp - 9 } as u32;
-		let year = (yoe + era * 400 + i64::from(month <= 2)) as i32;
-		Self { year, month, day }
-	}
-
-	/// Same month + day shifted by `delta` months, clamped to the target
-	/// month's length (used by the prev/next nav).
-	fn add_months(&self, delta: i32) -> Self {
-		let zero = (self.year as i64) * 12 + (self.month as i64 - 1) + delta as i64;
-		let year = zero.div_euclid(12) as i32;
-		let month = (zero.rem_euclid(12) + 1) as u32;
-		let day = self.day.min(Self::days_in_month(year, month));
-		Self { year, month, day }
-	}
-}
-
-// Week starts Monday.
 
 /// A dep-light single-month, single-date picker. Mirrors the landing
 /// `Calendar`'s class names while replacing `react-day-picker` with hand-rolled
@@ -175,19 +58,17 @@ pub fn Calendar(
 	let go = move |delta: i32| {
 		view.set(current.add_months(delta));
 	};
-
-	let nav_class = button_classes(&ButtonVariant::Ghost, Size::Md, true, None, CALENDAR_NAV_BUTTON);
-	let caption = format!("{} {}", MONTHS[(current.month - 1) as usize], current.year);
-	let previous_label = previous_month_label.unwrap_or_else(|| String::from("Previous month"));
-	let next_label = next_month_label.unwrap_or_else(|| String::from("Next month"));
-
-	let lead = CalendarDate::first_weekday_monday0(current.year, current.month);
-	let total = CalendarDate::days_in_month(current.year, current.month);
-	// Leading blanks, the days, then trailing blanks up to the fixed 42 cells.
-	let mut cells: Vec<Option<u32>> = (0..lead).map(|_| None).collect();
-	cells.extend((1..=total).map(Some));
-	cells.resize(GRID_CELLS, None);
-	let weeks: Vec<Vec<Option<u32>>> = cells.chunks(7).map(<[Option<u32>]>::to_vec).collect();
+	let grid = uikit::Grid {
+		month: current,
+		selected,
+		today,
+		min,
+		max,
+		disabled,
+	};
+	let nav_class = grid.nav_class();
+	let previous_label = previous_month_label.unwrap_or_else(|| PREVIOUS_MONTH.to_owned());
+	let next_label = next_month_label.unwrap_or_else(|| NEXT_MONTH.to_owned());
 
 	let root = cn!(CALENDAR_ROOT, class);
 
@@ -202,7 +83,7 @@ pub fn Calendar(
 					onclick: move |_| go(-1),
 					Chevron { d: CHEVRON_LEFT }
 				}
-				div { class: CALENDAR_CAPTION, "data-slot": "calendar-caption", {caption} }
+				div { class: CALENDAR_CAPTION, "data-slot": "calendar-caption", {grid.caption()} }
 				button {
 					r#type: "button",
 					class: nav_class.clone(),
@@ -225,19 +106,10 @@ pub fn Calendar(
 					}
 				}
 				tbody {
-					for week in weeks {
+					for week in grid.weeks() {
 						tr { class: CALENDAR_WEEK,
-							for cell in week {
-								DayCell {
-									cell,
-									date: current,
-									selected,
-									today,
-									min,
-									max,
-									disabled,
-									on_select,
-								}
+							for day in week {
+								DayCell { day, on_select }
 							}
 						}
 					}
@@ -248,58 +120,32 @@ pub fn Calendar(
 }
 
 #[component]
-fn DayCell(
-	cell: Option<u32>,
-	date: CalendarDate,
-	selected: Option<CalendarDate>,
-	today: Option<CalendarDate>,
-	min: Option<CalendarDate>,
-	max: Option<CalendarDate>,
-	disabled: bool,
-	on_select: Option<EventHandler<CalendarDate>>,
-) -> Element {
-	let Some(day) = cell else {
+fn DayCell(day: Option<Day>, on_select: Option<EventHandler<CalendarDate>>) -> Element {
+	let Some(day) = day else {
 		return rsx! {
 			td { class: CALENDAR_DAY_EMPTY }
 		};
 	};
-
-	let this = CalendarDate::new(date.year, date.month, day);
-	let is_selected = selected == Some(this);
-	let is_today = today == Some(this);
-	let is_disabled = disabled || min.is_some_and(|lo| this < lo) || max.is_some_and(|hi| this > hi);
-	let aria_selected = if is_selected { "true" } else { "false" };
-
-	let mut day_class = button_classes(&ButtonVariant::Ghost, Size::Md, true, None, CALENDAR_DAY);
-	if is_selected {
-		day_class = cn!(day_class, CALENDAR_DAY_SELECTED);
-	} else if is_today {
-		day_class = cn!(day_class, CALENDAR_DAY_TODAY);
-	}
-
 	rsx! {
 		td {
 			class: CALENDAR_DAY_CELL,
 			role: "gridcell",
-			"aria-selected": aria_selected,
+			"aria-selected": if day.selected { "true" } else { "false" },
 			button {
 				r#type: "button",
-				class: day_class,
+				class: day.class(),
 				"data-slot": "calendar-day",
-				"data-selected": if is_selected { "true" } else { "false" },
-				"data-today": if is_today { "true" } else { "false" },
+				"data-selected": if day.selected { "true" } else { "false" },
+				"data-today": if day.today { "true" } else { "false" },
 				// Absent rather than "false", so the unbounded grid renders as before.
-				"data-disabled": if is_disabled { Some("true") } else { None },
-				disabled: is_disabled,
+				"data-disabled": if day.disabled { Some("true") } else { None },
+				disabled: day.disabled,
 				onclick: move |_| {
-					if is_disabled {
-						return;
-					}
-					if let Some(h) = on_select {
-						h.call(this);
+					if !day.disabled && let Some(h) = on_select {
+						h.call(day.date);
 					}
 				},
-				"{day}"
+				"{day.date.day}"
 			}
 		}
 	}
@@ -328,37 +174,6 @@ fn Chevron(d: &'static str) -> Element {
 mod tests {
 	use super::*;
 	use crate::uikit_dioxus::test_util::render;
-
-	#[test]
-	fn days_in_month_handles_leap_february() {
-		assert_eq!(CalendarDate::days_in_month(2024, 2), 29);
-		assert_eq!(CalendarDate::days_in_month(2023, 2), 28);
-		assert_eq!(CalendarDate::days_in_month(1900, 2), 28);
-		assert_eq!(CalendarDate::days_in_month(2000, 2), 29);
-		assert_eq!(CalendarDate::days_in_month(2026, 4), 30);
-		assert_eq!(CalendarDate::days_in_month(2026, 1), 31);
-	}
-
-	#[test]
-	fn first_weekday_is_monday_zero() {
-		// 1 June 2026 is a Monday.
-		assert_eq!(CalendarDate::first_weekday_monday0(2026, 6), 0);
-		// 1 Jan 2026 is a Thursday.
-		assert_eq!(CalendarDate::first_weekday_monday0(2026, 1), 3);
-		// 1 Feb 2026 is a Sunday.
-		assert_eq!(CalendarDate::first_weekday_monday0(2026, 2), 6);
-	}
-
-	#[test]
-	fn add_months_wraps_year_and_clamps_day() {
-		let dec = CalendarDate::new(2026, 12, 15);
-		assert_eq!(dec.add_months(1), CalendarDate::new(2027, 1, 15));
-		let jan = CalendarDate::new(2026, 1, 10);
-		assert_eq!(jan.add_months(-1), CalendarDate::new(2025, 12, 10));
-		// 31 Jan + 1 month clamps to 28 Feb (non-leap).
-		let jan31 = CalendarDate::new(2026, 1, 31);
-		assert_eq!(jan31.add_months(1), CalendarDate::new(2026, 2, 28));
-	}
 
 	#[test]
 	fn renders_month_grid_with_slots_and_weekdays() {
@@ -483,19 +298,8 @@ mod tests {
 			let html = render(app);
 			assert_eq!(html.matches(CALENDAR_WEEK).count(), 6, "{html}");
 			assert_eq!(html.matches("role=\"gridcell\"").count(), days, "{html}");
-			assert_eq!(html.matches(CALENDAR_DAY_EMPTY).count(), GRID_CELLS - days, "{html}");
+			assert_eq!(html.matches(CALENDAR_DAY_EMPTY).count(), 6 * 7 - days, "{html}");
 		}
-	}
-
-	#[test]
-	fn unix_days_map_to_civil_dates() {
-		assert_eq!(CalendarDate::from_unix_days(0), CalendarDate::new(1970, 1, 1));
-		assert_eq!(CalendarDate::from_unix_days(-1), CalendarDate::new(1969, 12, 31));
-		// 2000 is a leap year divisible by 400: 29 Feb exists, 1 Mar follows it.
-		assert_eq!(CalendarDate::from_unix_days(11_016), CalendarDate::new(2000, 2, 29));
-		assert_eq!(CalendarDate::from_unix_days(11_017), CalendarDate::new(2000, 3, 1));
-		assert_eq!(CalendarDate::from_unix_days(19_723), CalendarDate::new(2024, 1, 1));
-		assert_eq!(CalendarDate::from_unix_days(20_638), CalendarDate::new(2026, 7, 4));
 	}
 
 	#[test]
@@ -524,15 +328,18 @@ mod tests {
 		let before = CalendarDate::today().expect("native builds read SystemTime");
 		let html = render(app);
 		let after = CalendarDate::today().expect("native builds read SystemTime");
-		let caption = |d: CalendarDate| format!("{} {}", MONTHS[(d.month - 1) as usize], d.year);
+		let caption = |month| {
+			uikit::Grid {
+				month,
+				selected: None,
+				today: None,
+				min: None,
+				max: None,
+				disabled: false,
+			}
+			.caption()
+		};
 		assert!(html.contains(&caption(before)) || html.contains(&caption(after)), "{html}");
 		assert_eq!(html.matches("data-today=\"true\"").count(), 1, "{html}");
-	}
-
-	#[test]
-	fn calendar_date_orders_chronologically() {
-		assert!(CalendarDate::new(2026, 6, 10) < CalendarDate::new(2026, 6, 11));
-		assert!(CalendarDate::new(2026, 6, 30) < CalendarDate::new(2026, 7, 1));
-		assert!(CalendarDate::new(2025, 12, 31) < CalendarDate::new(2026, 1, 1));
 	}
 }

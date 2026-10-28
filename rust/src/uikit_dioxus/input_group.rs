@@ -97,6 +97,7 @@ pub fn InputGroupTextarea(
 	oninput: Option<EventHandler<FormEvent>>,
 ) -> Element {
 	let cls = cn!(TEXTAREA_BASE, INPUT_GROUP_TEXTAREA_CONTROL, class);
+	let text = value.clone();
 	rsx! {
 		textarea {
 			class: cls,
@@ -105,6 +106,8 @@ pub fn InputGroupTextarea(
 			disabled,
 			value,
 			oninput: move |e| { if let Some(h) = oninput { h.call(e); } },
+			// `value` drives the live property on the client; a server-rendered textarea shows its text content
+			{text}
 		}
 	}
 }
