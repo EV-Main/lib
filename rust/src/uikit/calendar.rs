@@ -14,7 +14,7 @@ pub(crate) const NEXT_MONTH: &str = "Next month";
 /// (31 days starting on a Sunday).
 const GRID_WEEKS: usize = 6;
 /// What an uncontrolled calendar opens on when the build has no clock to read
-/// (see [`CalendarDate::today`]) and the caller passed no `default_month`.
+/// (see the ports' `host_today`) and the caller passed no `default_month`.
 pub(crate) const NO_CLOCK_MONTH: CalendarDate = CalendarDate { year: 1970, month: 1, day: 1 };
 
 /// A calendar date as plain `(year, month 1-12, day 1-31)`. The kernel does its
@@ -61,44 +61,10 @@ impl CalendarDate {
 		((h + 5).rem_euclid(7)) as u32
 	}
 
-	/// Today on the host clock, or `None` where the build has no clock to read.
-	///
-	/// Web (`wasm32` + the `wasm` feature) reads the browser's local date, like
-	/// the TS port's `new Date()`. Native reads `SystemTime` and takes the **UTC**
-	/// date: the local zone needs tz data the dep-light kit does not carry, so
-	/// near midnight a native host can be a day off its wall clock. Bare `wasm32`
-	/// without `wasm` has no clock (`SystemTime::now` panics there) and yields
-	/// `None`.
-	///
-	/// Server-rendered and hydrated: the server's UTC date and the browser's
-	/// local one differ near midnight (and across a month boundary), so the
-	/// opened month and `data-today` would not match on hydration — the same as
-	/// the TS `new Date()`. An SSR page passes `default_month` and `today`
-	/// explicitly, computed once.
-	pub fn today() -> Option<Self> {
-		#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
-		{
-			let now = web_sys::js_sys::Date::new_0();
-			Some(Self::new(now.get_full_year() as i32, now.get_month() + 1, now.get_date()))
-		}
-		#[cfg(not(target_arch = "wasm32"))]
-		{
-			let secs = match std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH) {
-				Ok(after) => after.as_secs() as i64,
-				Err(before) => -(before.duration().as_secs() as i64),
-			};
-			Some(Self::from_unix_days(secs.div_euclid(86_400)))
-		}
-		#[cfg(all(target_arch = "wasm32", not(feature = "wasm")))]
-		{
-			None
-		}
-	}
-
 	/// The civil date `days` after 1970-01-01 (Hinnant's `civil_from_days`).
-	/// Only the `SystemTime` path needs it; the browser hands back a civil date.
+	/// Only a port's native clock read needs it; the browser hands back a civil date.
 	#[cfg(any(not(target_arch = "wasm32"), test))]
-	fn from_unix_days(days: i64) -> Self {
+	pub(crate) fn from_unix_days(days: i64) -> Self {
 		let z = days + 719_468;
 		let era = z.div_euclid(146_097);
 		let doe = z.rem_euclid(146_097);

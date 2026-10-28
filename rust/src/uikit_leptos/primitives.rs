@@ -235,16 +235,33 @@ pub(crate) fn stable_id() -> usize {
 	Owner::current_shared_context().map_or_else(|| NEXT.fetch_add(1, Ordering::Relaxed), |sc| sc.next_id().into_inner())
 }
 
-/// Whether a `transitionend` is the element's own exit `transform` finishing.
+/// Whether a `transitionend` is `node`'s own exit `transform` finishing.
 ///
 /// Every exiting overlay (toast, drawer) stays mounted with
 /// `data-state="closed"` until its slide-out transition ends, then drops the
 /// node. But `transitionend` bubbles, so the closing element also sees its
 /// descendants' — a button's `transition-colors`, a child's own transform — and
-/// dropping on those cuts the slide-out short. Mirrors the TS guard
-/// (`e.propertyName === "transform"`).
-pub(crate) fn is_transform_transition(e: &leptos::ev::TransitionEvent) -> bool {
-	e.target().is_some_and(|target| e.current_target().is_some_and(|current| current == target)) && e.property_name() == "transform"
+/// dropping on those cuts the slide-out short. The target is compared with
+/// `node` rather than `currentTarget`, which Leptos's event delegation leaves on
+/// the document. Mirrors the TS guard (`e.propertyName === "transform"`).
+#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
+pub(crate) fn is_transform_transition<E>(e: &leptos::ev::TransitionEvent, node: NodeRef<E>) -> bool
+where
+	E: leptos::tachys::html::element::ElementType + 'static,
+	E::Output: leptos::wasm_bindgen::JsCast + Clone + 'static, {
+	use leptos::wasm_bindgen::JsValue;
+	let own = match (e.target(), node.get_untracked()) {
+		(Some(target), Some(node)) => AsRef::<JsValue>::as_ref(&target) == AsRef::<JsValue>::as_ref(&node),
+		_ => false,
+	};
+	own && e.property_name() == "transform"
+}
+#[cfg(not(all(target_arch = "wasm32", feature = "wasm")))]
+pub(crate) fn is_transform_transition<E>(_: &leptos::ev::TransitionEvent, _: NodeRef<E>) -> bool
+where
+	E: leptos::tachys::html::element::ElementType + 'static,
+	E::Output: leptos::wasm_bindgen::JsCast + Clone + 'static, {
+	true // no DOM fires events off the web
 }
 
 /// The open layers of one page and their dismiss handlers, kept on the root

@@ -93,13 +93,6 @@ impl ToastQueue {
 		let total = self.items.len();
 		self.items.iter().rev().enumerate().map(|(index, t)| view(t, index, total)).collect()
 	}
-
-	/// The toast `id` as [`ToastQueue::stack`] renders it, `None` once removed.
-	pub(crate) fn view_of(&self, id: u64) -> Option<ToastView> {
-		let total = self.items.len();
-		let at = self.items.iter().position(|t| t.id == id)?;
-		Some(view(&self.items[at], total - 1 - at, total))
-	}
 }
 
 /// One toast as the stack renders it.
@@ -145,7 +138,6 @@ mod tests {
 		assert_eq!(stack.iter().map(|t| t.front).collect::<Vec<_>>(), [true, false, false, false]);
 		assert_eq!(stack.iter().map(|t| t.visible).collect::<Vec<_>>(), [true, true, true, false]);
 		assert!(stack[1].style.starts_with("--index: 1; --z-index: 3; --offset: 70px;"), "{}", stack[1].style);
-		assert!(q.view_of(ids[2]) == Some(stack[1].clone()));
 	}
 
 	#[test]
@@ -153,9 +145,9 @@ mod tests {
 		let mut q = ToastQueue::default();
 		let id = q.push("bye".to_owned(), ToastVariant::Positive, None);
 		q.dismiss(id);
-		assert_eq!(q.view_of(id).map(|t| t.state), Some(ToastState::Closing));
+		assert_eq!(q.stack()[0].state, ToastState::Closing);
 		q.remove(id);
-		assert!(q.view_of(id).is_none());
+		assert!(q.stack().is_empty());
 		q.dismiss(id);
 		assert!(q.stack().is_empty());
 	}

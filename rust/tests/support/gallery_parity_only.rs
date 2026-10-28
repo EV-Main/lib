@@ -12,6 +12,9 @@ const PARITY_ONLY: &[(&str, fn() -> Element)] = &[
 	("SectionDescriptor", p_section_descriptor), ("SelectParts", p_select_parts), ("SheetParts", p_sheet_parts),
 	("SidebarParts", p_sidebar_parts), ("StatusScreen", p_status_screen), ("TableParts", p_table_parts), ("Toaster", p_toaster),
 	("TradesTapeRow", p_trades_tape_row),
+	("CollapsibleSiblings", p_collapsible_siblings), ("AccordionSiblings", p_accordion_siblings), ("TabsSiblings", p_tabs_siblings),
+	("RadioGroupSiblings", p_radio_group_siblings), ("ToggleGroupSiblings", p_toggle_group_siblings), ("CarouselSiblings", p_carousel_siblings),
+	("InputOTPSiblings", p_input_otp_siblings), ("SidebarSiblings", p_sidebar_siblings),
 	("SelectSiblings", p_select_siblings), ("DialogSiblings", p_dialog_siblings), ("PopupSiblings", p_popup_siblings), ("MenuSiblings", p_menu_siblings),
 ];
 
@@ -573,6 +576,7 @@ fn p_toaster() -> Element {
 		// A sibling provider keeps its own queue.
 		ToasterProvider {
 			QueueToast {}
+			QueueToast {}
 			Toaster { position: ToastPosition::TopLeft }
 		}
 	}
@@ -758,6 +762,116 @@ fn p_menu_siblings() -> Element {
 					NavigationMenuContent { "second panel" }
 				}
 			}
+		}
+	}
+}
+
+// Sibling instances of each component that provides context to its parts: the
+// Leptos port must scope it per instance, not leak the last sibling's.
+fn p_collapsible_siblings() -> Element {
+	rsx! {
+		Collapsible { default_open: true,
+			CollapsibleTrigger { "Show" }
+			CollapsibleContent {
+				CollapsibleTrigger { "Hide" }
+			}
+		}
+		Collapsible {
+			CollapsibleTrigger { "Show" }
+			CollapsibleContent { "B" }
+		}
+	}
+}
+fn p_accordion_siblings() -> Element {
+	rsx! {
+		Accordion { default_value: vec!["a".to_string()],
+			AccordionItem { value: "a",
+				AccordionTrigger { "A" }
+				AccordionContent { "Body A" }
+			}
+		}
+		Accordion { default_value: vec!["b".to_string()],
+			AccordionItem { value: "a",
+				AccordionTrigger { "A" }
+				AccordionContent { "Body A" }
+			}
+		}
+	}
+}
+fn p_tabs_siblings() -> Element {
+	rsx! {
+		Tabs { default_value: "one",
+			TabsList {
+				TabsTrigger { value: "one", "One" }
+				TabsTrigger { value: "two", "Two" }
+			}
+			TabsContent { value: "one", "Panel one" }
+		}
+		Tabs { default_value: "two", orientation: TabsOrientation::Vertical,
+			TabsList {
+				TabsTrigger { value: "one", "One" }
+				TabsTrigger { value: "two", "Two" }
+			}
+			TabsContent { value: "two", "Panel two" }
+		}
+	}
+}
+fn p_radio_group_siblings() -> Element {
+	rsx! {
+		RadioGroup { default_value: "a",
+			RadioGroupItem { value: "a" }
+			RadioGroupItem { value: "b" }
+		}
+		RadioGroup { default_value: "b",
+			RadioGroupItem { value: "a" }
+			RadioGroupItem { value: "b" }
+		}
+	}
+}
+fn p_toggle_group_siblings() -> Element {
+	rsx! {
+		ToggleGroup { variant: ToggleVariant::Outline, default_value: vec!["x".to_string()],
+			ToggleGroupItem { value: "x", "X" }
+		}
+		ToggleGroupItem { value: "x", "Outside" }
+	}
+}
+fn p_carousel_siblings() -> Element {
+	rsx! {
+		Carousel {
+			CarouselContent {
+				CarouselItem { "1" }
+				CarouselItem { "2" }
+			}
+			CarouselNext {}
+		}
+		Carousel { orientation: CarouselOrientation::Vertical,
+			CarouselContent {
+				CarouselItem { "1" }
+			}
+			CarouselNext {}
+		}
+	}
+}
+fn p_input_otp_siblings() -> Element {
+	rsx! {
+		InputOTP { max_length: 2, value: "1".to_string(),
+			InputOTPSlot { index: 0 }
+			InputOTPSlot { index: 1 }
+		}
+		InputOTP { max_length: 2,
+			InputOTPSlot { index: 0 }
+			InputOTPSlot { index: 1 }
+		}
+	}
+}
+fn p_sidebar_siblings() -> Element {
+	rsx! {
+		SidebarProvider {
+			Sidebar { "A" }
+		}
+		SidebarProvider { default_open: false,
+			Sidebar { collapsible: SidebarCollapsible::Icon, "B" }
 		}
 	}
 }

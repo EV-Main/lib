@@ -125,7 +125,7 @@ fn ToastItem(toast: ToastView) -> impl IntoView {
 		handle
 			.toasts
 			.0
-			.with(|q| q.view_of(id))
+			.with(|q| q.stack().into_iter().find(|t| t.id == id))
 			.or_else(|| last.cloned())
 			.expect("a row starts from its toast in the queue")
 	});
@@ -135,8 +135,10 @@ fn ToastItem(toast: ToastView) -> impl IntoView {
 		Effect::new(move |_| handle.remove(id));
 	}
 	let flag = move |f: fn(&ToastView) -> bool| move || view.with(f).to_string();
+	let node = NodeRef::<leptos::html::Li>::new();
 	view! {
 		<li
+			node_ref=node
 			role="status"
 			aria-live="polite"
 			data-slot="toast"
@@ -152,7 +154,9 @@ fn ToastItem(toast: ToastView) -> impl IntoView {
 				}
 			}
 			on:transitionend=move |e| {
-				if view.with_untracked(|t| t.state == ToastState::Closing) && is_transform_transition(&e) {
+				if view.with_untracked(|t| t.state == ToastState::Closing)
+					&& is_transform_transition(&e, node)
+				{
 					handle.remove(id);
 				}
 			}

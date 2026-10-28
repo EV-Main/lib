@@ -33,6 +33,9 @@ const PARITY_ONLY: &[(&str, fn() -> AnyView)] = &[
 	("ItemParts", p_item_parts), ("Logo", p_logo), ("ScrollBar", p_scroll_bar), ("SectionDescriptor", p_section_descriptor),
 	("StatusScreen", p_status_screen), ("TableParts", p_table_parts), ("TradesTapeRow", p_trades_tape_row),
 	("CarouselEdgeFade", p_carousel_edge_fade), ("SidebarParts", p_sidebar_parts),
+	("CollapsibleSiblings", p_collapsible_siblings), ("AccordionSiblings", p_accordion_siblings), ("TabsSiblings", p_tabs_siblings),
+	("RadioGroupSiblings", p_radio_group_siblings), ("ToggleGroupSiblings", p_toggle_group_siblings), ("CarouselSiblings", p_carousel_siblings),
+	("InputOTPSiblings", p_input_otp_siblings), ("SidebarSiblings", p_sidebar_siblings),
 	("AlertDialogTrigger", p_alert_dialog_trigger), ("ContextMenuParts", p_context_menu_parts), ("DialogParts", p_dialog_parts),
 	("DrawerParts", p_drawer_parts), ("DropdownMenuParts", p_dropdown_menu_parts), ("InfoTip", p_info_tip), ("MenubarParts", p_menubar_parts),
 	("NavigationMenuParts", p_navigation_menu_parts), ("PopoverAnchor", p_popover_anchor), ("SelectParts", p_select_parts), ("SheetParts", p_sheet_parts),
@@ -777,6 +780,129 @@ fn p_carousel_edge_fade() -> AnyView {
 	.into_any()
 }
 
+fn p_collapsible_siblings() -> AnyView {
+	view! {
+		<Collapsible default_open=true>
+			<CollapsibleTrigger>"Show"</CollapsibleTrigger>
+			<CollapsibleContent>
+				<CollapsibleTrigger>"Hide"</CollapsibleTrigger>
+			</CollapsibleContent>
+		</Collapsible>
+		<Collapsible>
+			<CollapsibleTrigger>"Show"</CollapsibleTrigger>
+			<CollapsibleContent>"B"</CollapsibleContent>
+		</Collapsible>
+	}
+	.into_any()
+}
+
+fn p_accordion_siblings() -> AnyView {
+	view! {
+		<Accordion default_value=vec!["a".to_string()]>
+			<AccordionItem value="a">
+				<AccordionTrigger>"A"</AccordionTrigger>
+				<AccordionContent>"Body A"</AccordionContent>
+			</AccordionItem>
+		</Accordion>
+		<Accordion default_value=vec!["b".to_string()]>
+			<AccordionItem value="a">
+				<AccordionTrigger>"A"</AccordionTrigger>
+				<AccordionContent>"Body A"</AccordionContent>
+			</AccordionItem>
+		</Accordion>
+	}
+	.into_any()
+}
+
+fn p_tabs_siblings() -> AnyView {
+	view! {
+		<Tabs default_value="one">
+			<TabsList>
+				<TabsTrigger value="one">"One"</TabsTrigger>
+				<TabsTrigger value="two">"Two"</TabsTrigger>
+			</TabsList>
+			<TabsContent value="one">"Panel one"</TabsContent>
+		</Tabs>
+		<Tabs default_value="two" orientation=TabsOrientation::Vertical>
+			<TabsList>
+				<TabsTrigger value="one">"One"</TabsTrigger>
+				<TabsTrigger value="two">"Two"</TabsTrigger>
+			</TabsList>
+			<TabsContent value="two">"Panel two"</TabsContent>
+		</Tabs>
+	}
+	.into_any()
+}
+
+fn p_radio_group_siblings() -> AnyView {
+	view! {
+		<RadioGroup default_value="a">
+			<RadioGroupItem value="a" />
+			<RadioGroupItem value="b" />
+		</RadioGroup>
+		<RadioGroup default_value="b">
+			<RadioGroupItem value="a" />
+			<RadioGroupItem value="b" />
+		</RadioGroup>
+	}
+	.into_any()
+}
+
+fn p_toggle_group_siblings() -> AnyView {
+	view! {
+		<ToggleGroup variant=ToggleVariant::Outline default_value=vec!["x".to_string()]>
+			<ToggleGroupItem value="x">"X"</ToggleGroupItem>
+		</ToggleGroup>
+		<ToggleGroupItem value="x">"Outside"</ToggleGroupItem>
+	}
+	.into_any()
+}
+
+fn p_carousel_siblings() -> AnyView {
+	view! {
+		<Carousel>
+			<CarouselContent>
+				<CarouselItem>"1"</CarouselItem>
+				<CarouselItem>"2"</CarouselItem>
+			</CarouselContent>
+			<CarouselNext />
+		</Carousel>
+		<Carousel orientation=CarouselOrientation::Vertical>
+			<CarouselContent>
+				<CarouselItem>"1"</CarouselItem>
+			</CarouselContent>
+			<CarouselNext />
+		</Carousel>
+	}
+	.into_any()
+}
+
+fn p_input_otp_siblings() -> AnyView {
+	view! {
+		<InputOTP max_length=2 value="1">
+			<InputOTPSlot index=0 />
+			<InputOTPSlot index=1 />
+		</InputOTP>
+		<InputOTP max_length=2>
+			<InputOTPSlot index=0 />
+			<InputOTPSlot index=1 />
+		</InputOTP>
+	}
+	.into_any()
+}
+
+fn p_sidebar_siblings() -> AnyView {
+	view! {
+		<SidebarProvider>
+			<Sidebar>"A"</Sidebar>
+		</SidebarProvider>
+		<SidebarProvider default_open=false>
+			<Sidebar collapsible=SidebarCollapsible::Icon>"B"</Sidebar>
+		</SidebarProvider>
+	}
+	.into_any()
+}
+
 fn p_sidebar_parts() -> AnyView {
 	view! {
 		<SidebarProvider>
@@ -1445,9 +1571,14 @@ fn p_form_message() -> AnyView {
 		<Form class="w-72">
 			<FormItem>
 				<FormLabel error=true>"Username"</FormLabel>
-				<FormControl error=true>
-					<Input placeholder="daneel" />
-				</FormControl>
+				// Mounted lazily, after the sibling item below has run: it must still see its own item.
+				{move || {
+					view! {
+						<FormControl error=true>
+							<Input placeholder="daneel" />
+						</FormControl>
+					}
+				}}
 				<FormMessage error=true>"Username is taken."</FormMessage>
 			</FormItem>
 			// A sibling item: its ids must be its own.
@@ -1491,10 +1622,12 @@ fn p_toaster() -> AnyView {
 	view! {
 		<ToasterProvider>
 			<QueueToast />
-			<Toaster />
+			// Mounted lazily, after the sibling provider below has run: it must still see its own queue.
+			{move || view! { <Toaster /> }}
 		</ToasterProvider>
 		// A sibling provider keeps its own queue.
 		<ToasterProvider>
+			<QueueToast />
 			<QueueToast />
 			<Toaster position=ToastPosition::TopLeft />
 		</ToasterProvider>

@@ -10,7 +10,7 @@
 //! ([`Input`](crate::uikit_leptos::Input), …) apply them to themselves. Wrapping
 //! a bare element is the one case the consumer still wires by hand.
 
-use leptos::prelude::*;
+use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
@@ -34,11 +34,12 @@ pub fn Form(#[prop(optional, into)] class: String, children: Children) -> impl I
 /// the tree ([`use_stable_id`]), so it matches across SSR and hydration.
 #[component]
 pub fn FormItem(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
-	provide_context(FormItemContext { id: use_stable_id("form-item") });
+	let ctx = FormItemContext { id: use_stable_id("form-item") };
 	let cls = cn!(FORM_ITEM, class);
+	// A Provider, not `provide_context`: a component has no owner of its own, so a bare provide would reach its siblings.
 	view! {
 		<div class=cls data-slot="form-item">
-			{children()}
+			<Provider value=ctx>{children()}</Provider>
 		</div>
 	}
 }
@@ -68,8 +69,12 @@ pub fn FormLabel(#[prop(optional, into)] error: Signal<bool>, #[prop(optional, i
 #[component]
 pub fn FormControl(#[prop(optional, into)] error: Signal<bool>, children: Children) -> impl IntoView {
 	let ctx = expect_context::<FormItemContext>();
-	provide_context(Signal::derive(move || ctx.control(error.get())));
-	view! { <div data-slot="form-control">{children()}</div> }
+	let control = Signal::derive(move || ctx.control(error.get()));
+	view! {
+		<div data-slot="form-control">
+			<Provider value=control>{children()}</Provider>
+		</div>
+	}
 }
 
 /// Muted helper copy, carrying the description id the control points at.
