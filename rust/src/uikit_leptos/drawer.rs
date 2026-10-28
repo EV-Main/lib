@@ -10,7 +10,7 @@ use crate::{
 	uikit::Presence,
 	uikit_leptos::{
 		DRAWER_BODY, DRAWER_CONTENT_BASE, DRAWER_DESCRIPTION, DRAWER_FOOTER, DRAWER_HANDLE, DRAWER_HEADER, DRAWER_OVERLAY, DRAWER_TITLE, DrawerDirection,
-		primitives::{Controllable, use_controllable},
+		primitives::{Controllable, is_transform_transition, use_controllable},
 	},
 };
 
@@ -112,7 +112,7 @@ pub fn DrawerContent(#[prop(optional, into)] class: String, children: ChildrenFn
 					}
 					on:transitionend=move |e| {
 						let next = presence.get_untracked().exit_ended();
-						if next != presence.get_untracked() && is_own_transform(&e, panel) {
+						if next != presence.get_untracked() && is_transform_transition(&e, panel) {
 							presence.set(next);
 						}
 					}
@@ -183,23 +183,4 @@ pub fn DrawerDescription(#[prop(optional, into)] class: String, children: Childr
 struct DrawerCtx {
 	open: Controllable<bool>,
 	direction: DrawerDirection,
-}
-
-/// Whether a `transitionend` is the panel's own exit `transform` finishing:
-/// `transitionend` bubbles, and a descendant's (a button's colour fade, a
-/// child's own transform) must not cut the slide-out short. The target is
-/// compared with the panel rather than `currentTarget`, which Leptos's event
-/// delegation leaves on the document. Mirrors the TS `propertyName === "transform"` guard.
-#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
-fn is_own_transform(e: &leptos::ev::TransitionEvent, panel: NodeRef<leptos::html::Div>) -> bool {
-	use leptos::wasm_bindgen::JsCast;
-	let own = match (e.target(), panel.get_untracked()) {
-		(Some(target), Some(panel)) => target.dyn_ref::<web_sys::Element>() == Some(&**panel),
-		_ => false,
-	};
-	own && e.property_name() == "transform"
-}
-#[cfg(not(all(target_arch = "wasm32", feature = "wasm")))]
-fn is_own_transform(_: &leptos::ev::TransitionEvent, _: NodeRef<leptos::html::Div>) -> bool {
-	true
 }

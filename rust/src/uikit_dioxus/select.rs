@@ -316,7 +316,7 @@ impl SelectCtx {
 
 	fn on_list_key(&self, e: &KeyboardEvent) {
 		let mut state = self.state;
-		let Some(effect) = state.write().key(&e.into(), &self.value.get(), now_ms(), &*self.els.peek()) else {
+		let Some(effect) = state.write().key(&e.into(), &self.value.get(), crate::uikit_host::now_ms(), &*self.els.peek()) else {
 			return;
 		};
 		if effect == SelectKey::Leave {
@@ -356,23 +356,6 @@ fn focus(el: Rc<MountedData>) {
 	spawn(async move {
 		let _ = el.set_focus(true).await;
 	});
-}
-
-/// Milliseconds on some monotonic-enough clock, for the type-ahead window;
-/// `None` on bare `wasm32` without `wasm`, where `SystemTime::now` panics.
-fn now_ms() -> Option<f64> {
-	#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
-	{
-		Some(web_sys::js_sys::Date::now())
-	}
-	#[cfg(not(target_arch = "wasm32"))]
-	{
-		std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).ok().map(|d| d.as_secs_f64() * 1000.0)
-	}
-	#[cfg(all(target_arch = "wasm32", not(feature = "wasm")))]
-	{
-		None
-	}
 }
 
 #[cfg(test)]

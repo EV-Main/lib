@@ -6,10 +6,7 @@ use crate::{
 	uikit::{self, CalendarDate},
 	uikit_dioxus::{
 		ButtonVariant, DATE_TIME_PICKER_CLEAR, DATE_TIME_PICKER_CONTENT, DATE_TIME_PICKER_TIME, DATE_TIME_PICKER_TIME_INPUT, DATE_TIME_PICKER_TIME_SEPARATOR, DATE_TIME_PICKER_TRIGGER,
-		INPUT_BASE, POPOVER_CONTENT, Size,
-		button::button_classes,
-		calendar::{Calendar, host_today},
-		primitives::use_controllable,
+		INPUT_BASE, POPOVER_CONTENT, Size, button::button_classes, calendar::Calendar, primitives::use_controllable,
 	},
 };
 
@@ -59,7 +56,7 @@ pub fn DateTimePicker(
 	/// Put on the trigger, so a `FieldLabel`'s `for` reaches it.
 	id: Option<String>,
 ) -> Element {
-	let today = today.or_else(host_today);
+	let today = today.or_else(crate::uikit_host::today);
 	let open = use_controllable(open, default_open, on_open_change);
 	let is_open = open.get();
 	let picker = uikit::Picker { value, min, max, today };

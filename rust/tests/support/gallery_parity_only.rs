@@ -149,7 +149,7 @@ fn p_command_siblings() -> Element {
 				CommandInput {}
 				CommandList {
 					CommandEmpty { "None." }
-					CommandGroup { heading: "{search}",
+					CommandGroup { heading: search,
 						for row in rows {
 							CommandItem { value: row, {row} }
 						}

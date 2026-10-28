@@ -1,7 +1,6 @@
-use std::{
-	collections::BTreeMap,
-	sync::atomic::{AtomicUsize, Ordering},
-};
+#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
+use std::collections::BTreeMap;
+use std::sync::atomic::{AtomicUsize, Ordering};
 
 use leptos::{context::Provider, prelude::*};
 
@@ -339,7 +338,7 @@ impl SelectCtx {
 	fn on_list_key(&self, e: &leptos::ev::KeyboardEvent) {
 		let chosen = self.value.get_untracked();
 		let mut effect = None;
-		self.state.update_value(|s| effect = s.key(&e.into(), &chosen, now_ms(), &self.els));
+		self.state.update_value(|s| effect = s.key(&e.into(), &chosen, crate::uikit_host::now_ms(), &self.els));
 		let Some(effect) = effect else { return };
 		if effect == SelectKey::Leave {
 			return self.close(false);
@@ -407,22 +406,5 @@ impl uikit::Placement<usize> for Els {
 			let _ = (a, b); // no DOM
 			false
 		}
-	}
-}
-
-/// Milliseconds on some monotonic-enough clock, for the type-ahead window;
-/// `None` on bare `wasm32` without `wasm`, where `SystemTime::now` panics.
-fn now_ms() -> Option<f64> {
-	#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
-	{
-		Some(web_sys::js_sys::Date::now())
-	}
-	#[cfg(not(target_arch = "wasm32"))]
-	{
-		std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).ok().map(|d| d.as_secs_f64() * 1000.0)
-	}
-	#[cfg(all(target_arch = "wasm32", not(feature = "wasm")))]
-	{
-		None
 	}
 }

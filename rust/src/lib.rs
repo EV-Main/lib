@@ -65,6 +65,8 @@ pub mod architecture;
 
 #[cfg(any(feature = "uikit_dioxus", feature = "uikit_leptos"))]
 mod uikit;
+#[cfg(any(feature = "uikit_dioxus", feature = "uikit_leptos"))]
+mod uikit_host;
 
 #[cfg(feature = "uikit_dioxus")]
 pub mod uikit_dioxus;

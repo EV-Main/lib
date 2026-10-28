@@ -28,7 +28,7 @@ mod dioxus_side {
 	fn settled(app: fn() -> Element) -> String {
 		let mut dom = VirtualDom::new(app);
 		dom.rebuild_in_place();
-		let mut pass = |dom: &mut VirtualDom| {
+		let pass = |dom: &mut VirtualDom| {
 			dom.process_events();
 			dom.render_immediate(&mut dioxus::dioxus_core::NoOpMutations);
 			dioxus_ssr::render(dom)

@@ -78,24 +78,6 @@ pub fn StatusScreen(
 	}
 }
 
-fn home(label: &str, href: String, variant: ButtonVariant) -> StatusLinkData {
-	StatusLinkData {
-		label: label.to_string(),
-		href,
-		variant,
-		leading_arrow: true,
-	}
-}
-
-fn contact(label: &str, href: String) -> StatusLinkData {
-	StatusLinkData {
-		label: label.to_string(),
-		href,
-		variant: ButtonVariant::Outline,
-		leading_arrow: false,
-	}
-}
-
 /// 404 — page not found.
 #[component]
 pub fn NotFound(#[prop(default = "/".to_string(), into)] home_href: String, #[prop(default = "/contact".to_string(), into)] contact_href: String) -> impl IntoView {
@@ -160,6 +142,24 @@ pub fn ServerError(#[prop(default = "/".to_string(), into)] home_href: String, #
 				"Try again"
 			</button>
 		</StatusScreen>
+	}
+}
+
+fn home(label: &str, href: String, variant: ButtonVariant) -> StatusLinkData {
+	StatusLinkData {
+		label: label.to_string(),
+		href,
+		variant,
+		leading_arrow: true,
+	}
+}
+
+fn contact(label: &str, href: String) -> StatusLinkData {
+	StatusLinkData {
+		label: label.to_string(),
+		href,
+		variant: ButtonVariant::Outline,
+		leading_arrow: false,
 	}
 }
 

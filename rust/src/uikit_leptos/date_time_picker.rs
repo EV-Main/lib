@@ -6,10 +6,7 @@ use crate::{
 	uikit::{self, CalendarDate},
 	uikit_leptos::{
 		ButtonVariant, DATE_TIME_PICKER_CLEAR, DATE_TIME_PICKER_CONTENT, DATE_TIME_PICKER_TIME, DATE_TIME_PICKER_TIME_INPUT, DATE_TIME_PICKER_TIME_SEPARATOR, DATE_TIME_PICKER_TRIGGER,
-		INPUT_BASE, POPOVER_CONTENT, Size,
-		button::button_classes,
-		calendar::{Calendar, host_today},
-		primitives::use_controllable,
+		INPUT_BASE, POPOVER_CONTENT, Size, button::button_classes, calendar::Calendar, primitives::use_controllable,
 	},
 };
 
@@ -67,7 +64,7 @@ pub fn DateTimePicker(
 	#[prop(optional, into)]
 	id: Option<String>,
 ) -> impl IntoView {
-	let host_today = host_today();
+	let host_today = crate::uikit_host::today();
 	let open = use_controllable(open, default_open, on_open_change);
 	let picker = Memo::new(move |_| uikit::Picker {
 		value: value.get(),
