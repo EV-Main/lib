@@ -142,6 +142,7 @@ describe('attribute names', () => {
       mode: 'data-mode',
       name: 'data-name',
       email: 'data-email',
+      profileHref: 'data-profile-href',
       switchHref: 'data-switch-href',
       groups: 'data-groups',
       intent: 'data-intent',
@@ -171,6 +172,7 @@ describe('hostAttributes → readHostProps', () => {
     const attrs = hostAttributes({
       name: 'Valentina Kuznetsova',
       email: 'v@example.com',
+      profileHref: '/admin/account',
       switchHref: '/switch',
       groups,
       layout: 'menu',
@@ -181,6 +183,7 @@ describe('hostAttributes → readHostProps', () => {
     expect(readHostProps(readerOf(attrs))).toEqual({
       name: 'Valentina Kuznetsova',
       email: 'v@example.com',
+      profileHref: '/admin/account',
       switchHref: '/switch',
       groups: [
         {
@@ -220,9 +223,9 @@ describe('hostAttributes → readHostProps', () => {
   });
 
   it('should_leave_out_an_unsafe_href_and_keep_the_others', () => {
-    const attrs = hostAttributes({ name: 'Valentina', switchHref: '//evil.example' });
+    const attrs = hostAttributes({ name: 'Valentina', profileHref: '/account', switchHref: '//evil.example' });
 
-    expect(attrs).toEqual({ 'data-mode': 'host', 'data-name': 'Valentina' });
+    expect(attrs).toEqual({ 'data-mode': 'host', 'data-name': 'Valentina', 'data-profile-href': '/account' });
   });
 
   it('should_leave_out_an_email_longer_than_254_instead_of_cutting_it', () => {
