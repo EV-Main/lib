@@ -20,8 +20,6 @@ export const HOST_ATTRS = {
   mode: 'data-mode',
   name: 'data-name',
   email: 'data-email',
-  manageHref: 'data-manage-href',
-  profileHref: 'data-profile-href',
   switchHref: 'data-switch-href',
   groups: 'data-groups',
   /** Which auth screen the sign-in flow opens on: `signin` or `signup`. */
@@ -76,8 +74,6 @@ export interface MenuGroupInput {
 export interface HostProps {
   name: string | null;
   email: string | null;
-  manageHref: string | null;
-  profileHref: string | null;
   switchHref: string | null;
   groups: MenuGroup[];
 }
@@ -86,8 +82,6 @@ export interface HostProps {
 export interface HostPropsInput {
   name?: string;
   email?: string;
-  manageHref?: string;
-  profileHref?: string;
   switchHref?: string;
   groups?: MenuGroupInput[];
   layout?: 'menu';
@@ -204,8 +198,6 @@ export function readHostProps(read: AttributeReader): HostProps {
   return {
     name: text(read(HOST_ATTRS.name)),
     email: text(read(HOST_ATTRS.email)),
-    manageHref: safeHref(read(HOST_ATTRS.manageHref)),
-    profileHref: safeHref(read(HOST_ATTRS.profileHref)),
     switchHref: safeHref(read(HOST_ATTRS.switchHref)),
     groups: parseGroups(read(HOST_ATTRS.groups)),
   };
@@ -237,8 +229,6 @@ export function hostAttributes(props: HostPropsInput): HostAttributes {
   const email = text(props.email);
   if (email) attrs[HOST_ATTRS.email] = email;
   const hrefs = [
-    [HOST_ATTRS.manageHref, props.manageHref],
-    [HOST_ATTRS.profileHref, props.profileHref],
     [HOST_ATTRS.switchHref, props.switchHref],
   ] as const;
   for (const [attr, value] of hrefs) {

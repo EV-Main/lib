@@ -22,6 +22,12 @@ Rust crate and its TypeScript mirror at once.
 
 ## [Unreleased]
 
+### Removed
+
+- **`@evinvest/mfe` host mode drops `data-profile-href` and `data-manage-href`**
+  (breaking, 0.2.0). The account chip's profile row is always the platform's
+  account page, and "Manage account" is gone, so no element reads them any more.
+
 ### Added
 
 - **`uikit_leptos`** (`ev_lib`): the same kit for Leptos 0.8 — every component
