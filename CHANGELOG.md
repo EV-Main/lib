@@ -30,6 +30,11 @@ Rust crate and its TypeScript mirror at once.
 
 ### Added
 
+- **`@evinvest/mfe` brings `data-profile-href` back** (minor, 0.3.0), in either
+  mode and without `data-manage-href`. The chip's profile row goes to the host's
+  own account route, which embeds the account element inline; a host that sets
+  none still gets the platform's account page.
+
 - **`uikit_leptos`** (`ev_lib`): the same kit for Leptos 0.8 — every component
   the Dioxus port exports, with the same names and props in Leptos idiom, over
   the same core, rendering the same HTML (held by `rust/tests/parity.rs`). It

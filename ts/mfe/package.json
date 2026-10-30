@@ -1,6 +1,6 @@
 {
   "name": "@evinvest/mfe",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Host contract for EV microfrontends: registry manifest, bundle loader, ev:navigate / ev:signed-in / signout events, apiVersion and host-mode attributes, plus a light-DOM React RemoteElement. Mirrors the producer side in the mfe module of the ev_lib crate.",
   "license": "BlueOak-1.0.0",
   "publishConfig": {
