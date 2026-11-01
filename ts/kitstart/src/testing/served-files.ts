@@ -7,11 +7,22 @@ const IMAGE_ROUTE = /^(icon|apple-icon|opengraph-image|twitter-image)\d*$/;
 const CODE = /\.(ts|tsx|js|jsx|mjs)$/;
 const STATIC = /^(favicon\.ico|robots\.txt|sitemap\.xml|manifest\.(json|webmanifest)|(icon|apple-icon|opengraph-image|twitter-image)\d*\.(ico|jpe?g|png|gif|svg))$/;
 
+const SEGMENT_FILE = /^(route|page)\.(ts|tsx|js|jsx|mjs)$/;
+
+/** The route folders under `dir` (`/quote`, `/quote/booking`), each one that holds a `route` or a `page`. */
+function routeFolders(dir: string, path: string): string[] {
+  const entries = readdirSync(dir, { withFileTypes: true });
+  return [
+    ...(entries.some(e => e.isFile() && SEGMENT_FILE.test(e.name)) ? [path] : []),
+    ...entries.filter(e => e.isDirectory() && !/^[[(_@]/.test(e.name)).flatMap(e => routeFolders(join(dir, e.name), `${path}/${e.name}`)),
+  ];
+}
+
 /**
  * Every path a brand tree serves outside `[locale]`: `app/`'s route folders
- * (`/og`), its root metadata files (`app/robots.ts` → `/robots.txt`,
- * `app/icon.svg`) and everything under `public/`. A layout, a stylesheet or
- * a route group serves nothing of its own here.
+ * (`/og`, `/.well-known/sa-site`), its root metadata files (`app/robots.ts` →
+ * `/robots.txt`, `app/icon.svg`) and everything under `public/`. A layout, a
+ * stylesheet or a route group serves nothing of its own here.
  */
 export function servedPaths(root: string): string[] {
   const served: string[] = [];
@@ -19,7 +30,7 @@ export function servedPaths(root: string): string[] {
   for (const entry of existsSync(app) ? readdirSync(app, { withFileTypes: true }) : []) {
     if (entry.isDirectory()) {
       // `[locale]` is the pages; `(group)`, `_private` and `@slot` add no segment.
-      if (!/^[[(_@]/.test(entry.name)) served.push(`/${entry.name}`);
+      if (!/^[[(_@]/.test(entry.name)) served.push(...routeFolders(join(app, entry.name), `/${entry.name}`));
       continue;
     }
     if (STATIC.test(entry.name)) {

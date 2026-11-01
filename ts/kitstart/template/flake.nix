@@ -17,6 +17,8 @@
           inherit pkgs v_flakes sitePort;
           root = ./.;
           pname = "brand-landing";
+          # sites_panel's live data and the conductor's lead ingest, addressed by devops.
+          connected = true;
           buildFiles = [
             "package.json"
             "package-lock.json"

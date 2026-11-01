@@ -148,6 +148,20 @@
       }
     },
     {
+      "name": "passes /.well-known/sa-site",
+      "site": "aquafix",
+      "request": {
+        "host": "royat.aquafix.top",
+        "pathname": "/.well-known/sa-site",
+        "query": "",
+        "acceptLanguage": null,
+        "cookieLang": null
+      },
+      "decision": {
+        "kind": "pass"
+      }
+    },
+    {
       "name": "passes /robots.txt",
       "site": "aquafix",
       "request": {

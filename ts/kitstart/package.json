@@ -52,7 +52,8 @@
       "types": "./dist/testing/e2e.d.ts",
       "import": "./dist/testing/e2e.js",
       "default": "./dist/testing/e2e.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",

@@ -12,10 +12,14 @@ const LIVE: PricingModel = { ...BAKED, validFrom: "2026-11-01", minimumCents: 59
 const plain = fixtureSite("cleaning");
 const site = defineSite({ ...plain, lead: { ...plain.lead, subjects: ["standard", "windows", "deep"], flows: { standard: "estimate", windows: "fixed" } }, pricing: BAKED });
 const log = { error: vi.fn() };
-const source = (base: string | null = "https://panel.example/api/internal/brands/vifnet", over = site) => createPricingSource(over, { baseUrl: () => base, log });
+const source = (internal = "https://panel.example/api/internal", over = site) => {
+  vi.stubEnv("SITES_PANEL_INTERNAL_URL", internal);
+  return createPricingSource(over, { log });
+};
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
   log.error.mockReset();
 });
 
@@ -24,7 +28,7 @@ describe("the live price list", () => {
     const fetch = vi.fn(async (_input: string | URL | Request, _init?: RequestInit) => Response.json(LIVE));
     vi.stubGlobal("fetch", fetch);
     expect(await source().model()).toEqual(LIVE);
-    expect(String(fetch.mock.calls[0]?.[0])).toBe("https://panel.example/api/internal/brands/vifnet/pricing");
+    expect(String(fetch.mock.calls[0]?.[0])).toBe(`https://panel.example/api/internal/brands/${site.brand.id}/pricing`);
     expect(fetch.mock.calls[0]?.[1]).toMatchObject({ cache: "force-cache", next: { revalidate: 600 } });
     expect(fetch.mock.calls[0]?.[1]?.signal).toBeInstanceOf(AbortSignal);
   });
@@ -53,14 +57,14 @@ describe("the live price list", () => {
   it("asks nothing without a source", async () => {
     const fetch = vi.fn();
     vi.stubGlobal("fetch", fetch);
-    expect(await source(null).model()).toBe(BAKED);
+    expect(await source("").model()).toBe(BAKED);
     expect(fetch).not.toHaveBeenCalled();
   });
 
   it("is nothing — every need a quote — for a brand with no baked model and no source", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => new Response(null, { status: 503 })));
     expect(await source(undefined, plain).model()).toBeNull();
-    expect(await source(null, plain).model()).toBeNull();
+    expect(await source("", plain).model()).toBeNull();
   });
 });
 

@@ -6,7 +6,7 @@
 #   landing = ev.lib.mkLanding {
 #     inherit pkgs v_flakes;
 #     root = ./.;
-#     pname = "vifnet"; sitePort = "59082";
+#     pname = "vifnet"; sitePort = "59082"; connected = true;
 #     buildFiles = [ "package.json" "package-lock.json" "app" "src" "assets"
 #                    "next.config.ts" "tsconfig.json" "postcss.config.mjs"
 #                    "proxy.ts" "instrumentation.ts" ];
@@ -26,6 +26,9 @@
 , sitePort
 , # Paths under `root` the build reads; nothing else reaches the sandbox.
   buildFiles
+, # Whether the landing reads sites_panel's live data and posts leads to the
+  # conductor. devops derives both addresses from the contract's `consumes`.
+  connected
 , # Secret-free prod env baked into the image (deploy/config.nix).
   prodEnv ? { }
 , # For the OCI image; without it there is no `container` package.
@@ -75,6 +78,16 @@ let
   versionOk =
     lib.assertMsg (!checkKitstartVersion || lockedKitstart == libKitstart)
       "mkLanding: package-lock.json has @evinvest/kitstart ${toString lockedKitstart}, this lib flake revision is ${libKitstart} — pin the flake to the tag @evinvest/kitstart-v${toString lockedKitstart}";
+
+  # ── addresses: derived by devops, never typed ──────────────────────────
+  consumes = lib.optionalAttrs connected {
+    SITES_PANEL_INTERNAL_URL = "sites_panel.internal";
+    LEAD_WEBHOOK_URL = "panel.ingest";
+  };
+  typedAddresses = lib.intersectLists [ "LOCATIONS_API_URL" "SITES_PANEL_INTERNAL_URL" "LEAD_WEBHOOK_URL" ] (builtins.attrNames prodEnv);
+  addressesOk =
+    lib.assertMsg (typedAddresses == [ ])
+      "mkLanding: prodEnv sets ${lib.concatStringsSep ", " typedAddresses} — LOCATIONS_API_URL is gone, and devops injects the others from `connected = true`; an image copy would only lie";
 
   # ── the hermetic build ──────────────────────────────────────────────────
   # `importNpmLock` fetches each package by the `integrity` package-lock.json
@@ -279,7 +292,7 @@ let
   quoteFields = lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "${n}=${v}") (smoke.quote or { }));
   containerSmoke = pkgs.writeShellApplication {
     name = "${pname}-container-smoke";
-    runtimeInputs = [ pkgs.git pkgs.coreutils pkgs.curl pkgs.gnused pkgs.findutils ];
+    runtimeInputs = [ pkgs.git pkgs.coreutils pkgs.curl pkgs.gnused pkgs.findutils pkgs.jq ];
     runtimeEnv = {
       SMOKE_IMAGE_ATTR = containerAttr;
       SMOKE_IMAGE_NAME = "${pname}:latest";
@@ -315,6 +328,7 @@ let
     '';
   };
 in
+assert addressesOk;
 {
   inherit site bundleBudget;
 
@@ -326,7 +340,8 @@ in
     containerStd.packages // { container = containerStd.packages."${pname}-container"; }
   );
 
-  containers = if containerStd == null then { } else containerStd.containers;
+  # After `implement`, which rejects keys it does not know.
+  containers = if containerStd == null then { } else lib.mapAttrs (_: c: c // { contract = c.contract // lib.optionalAttrs connected { inherit consumes; }; }) containerStd.containers;
 
   checks = {
     inherit site;

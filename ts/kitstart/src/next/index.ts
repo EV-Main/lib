@@ -7,6 +7,7 @@
 export { brandMetadata, metadataBase, placeMetadata, statusMetadata, type PageMeta } from "./metadata";
 export { createPlaceLoader, loadLocale, type PlaceParams } from "./load";
 export { healthRoute, robotsRoute, sitemapRoute } from "./routes";
+export { siteReportRoute } from "./site-report";
 export { ogRoute, type OgCard, type OgFont, type OgOptions } from "./og";
 export { ogPalette, type OgColours } from "./og-palette";
 export { quoteRoute, type QuoteRouteDeps, type UnavailableCopy } from "./quote-route";

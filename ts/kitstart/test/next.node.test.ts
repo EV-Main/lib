@@ -140,7 +140,7 @@ describe("status targets from route params", () => {
 });
 
 describe("the place loader", () => {
-  const load = createPlaceLoader(site, createPlaceSource(site, { baseUrl: () => null }));
+  const load = createPlaceLoader(site, createPlaceSource(site));
 
   it("reads the link mode out of the param", async () => {
     expect((await load({ locale: "fr", location: "_royat" })).href("/prices")).toBe("/fr/prices");

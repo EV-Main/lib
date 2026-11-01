@@ -1,6 +1,6 @@
 # Boots the OCI image a landing ships and holds it to its contract: it answers
 # /health, negotiates the bare URL, renders a page and the OG card from the
-# files it carries, writes a posted lead into its data mount, and refuses to
+# files it carries, reports its sources on /.well-known/sa-site, writes a posted lead into its data mount, and refuses to
 # serve at all when its prod env, or only its lead store, is missing. Linux +
 # docker; the text of mkLanding's `container-smoke` app, which sets every
 # SMOKE_* variable.
@@ -52,6 +52,13 @@ expect 200 "127.0.0.1:$port/health"
 expect 302 "127.0.0.1:$port/"
 expect 200 "${host_header[@]}" "127.0.0.1:$port$SMOKE_PAGE"
 expect 200 "127.0.0.1:$port$SMOKE_OG"
+# No sites_panel in the smoke: the report must still answer, every source unset.
+report="$(curl -fsS "127.0.0.1:$port/.well-known/sa-site")"
+if ! jq -e '(.brand | type == "string" and length > 0) and ([.sources.places[], .sources.pricing, .sources.experiments] | all(.state == "unset"))' <<<"$report" >/dev/null; then
+  echo "✘ /.well-known/sa-site → $report" >&2
+  exit 1
+fi
+echo "✓ 200  /.well-known/sa-site"
 if docker logs smoke 2>&1 | grep -E "EACCES|Failed to update prerender cache"; then
   echo "✘ the server could not write its page cache" >&2
   exit 1

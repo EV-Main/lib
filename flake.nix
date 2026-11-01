@@ -126,6 +126,7 @@
             root = ./nix/mk-landing-fixture;
             pname = "mk-landing-fixture";
             sitePort = "59099";
+            connected = true;
             buildFiles = [ "package.json" "package-lock.json" "build.mjs" ];
             requiredFiles = [ "assets/fonts/Display.ttf" ];
             prodEnv = {

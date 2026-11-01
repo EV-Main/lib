@@ -26,9 +26,10 @@ export interface LandingContractOptions<L extends string> {
   /**
    * The brand's directory: every file `app/` and `public/` serve outside
    * `[locale]` must pass the proxy — be a `NON_PAGE_ROUTES` path or in
-   * `site.publicFiles` — or it answers 404; and every listed file must exist.
+   * `site.publicFiles` — or it answers 404; every listed file must exist; and
+   * the routes every landing mounts (`/health`, `/.well-known/sa-site`) must be there.
    */
-  root?: string;
+  root: string;
   /** The brand's copy, one per locale — every locale must have one. */
   text?: Readonly<Partial<Record<L, unknown>>>;
   /** Places that must be published once the owner's fields are in. */
@@ -39,8 +40,10 @@ export interface LandingContractOptions<L extends string> {
 
 const SOURCE_LINE = /@source\s+["'][^"']*node_modules\/@evinvest\/kitstart\/dist["']/;
 const MATCHER = "/((?!_next/).*)";
+/** What devops probes and the conductor reads, on every landing. */
+const MOUNTED = ["/health", "/.well-known/sa-site"];
 
-export function describeLandingContract<L extends string, P extends string>(site: Site<L, P>, options: LandingContractOptions<L> = {}): void {
+export function describeLandingContract<L extends string, P extends string>(site: Site<L, P>, options: LandingContractOptions<L>): void {
   describe(`landing contract: ${site.brand.id}`, () => {
     it("has a home page and no page at the thank-you path", () => {
       expect(site.pages.home).toBe("");
@@ -124,16 +127,18 @@ export function describeLandingContract<L extends string, P extends string>(site
       });
     }
 
-    if (options.root !== undefined) {
-      const root = options.root;
-      it("passes exactly the files it serves", () => {
-        const served = servedPaths(root);
-        const listed = site.publicFiles ?? [];
-        const passed = [...NON_PAGE_ROUTES, ...listed];
-        expect(served.filter(p => !passed.includes(p)), "served, but the proxy sends it to the 404: list it in site.publicFiles").toEqual([]);
-        expect(listed.filter(p => !served.includes(p)), "in site.publicFiles, but neither app/ nor public/ serves it").toEqual([]);
-      });
-    }
+    it("mounts the probe and the self-report", () => {
+      const served = servedPaths(options.root);
+      expect(MOUNTED.filter(p => !served.includes(p)), "app/health/route.ts (healthRoute) and app/.well-known/sa-site/route.ts (siteReportRoute)").toEqual([]);
+    });
+
+    it("passes exactly the files it serves", () => {
+      const served = servedPaths(options.root);
+      const listed = site.publicFiles ?? [];
+      const passed = [...NON_PAGE_ROUTES, ...listed];
+      expect(served.filter(p => !passed.includes(p)), "served, but the proxy sends it to the 404: list it in site.publicFiles").toEqual([]);
+      expect(listed.filter(p => !served.includes(p)), "in site.publicFiles, but neither app/ nor public/ serves it").toEqual([]);
+    });
 
     if (options.proxySource !== undefined) {
       it("spells the package's matcher in proxy.ts", () => {

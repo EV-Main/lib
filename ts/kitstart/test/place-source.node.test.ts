@@ -5,10 +5,14 @@ import { fixtureSite } from "./support/fixtures";
 
 const site = fixtureSite("aquafix");
 const log = { error: vi.fn() };
-const live = (base: string | null = "https://live.example") => createPlaceSource(site, { baseUrl: () => base, log });
+const live = (internal = "https://panel.example/api/internal") => {
+  vi.stubEnv("SITES_PANEL_INTERNAL_URL", internal);
+  return createPlaceSource(site, { log });
+};
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
   log.error.mockReset();
 });
 
@@ -22,7 +26,7 @@ describe("one place from the live source", () => {
     const place = await live().getPlace("royat", "en");
     expect(place?.channels.phone).toBe("+33 4 11 11 11 11");
     expect(place && storefrontOf(place)?.address.postalCode).toBe("63130");
-    expect(String(fetch.mock.calls[0]?.[0])).toBe("https://live.example/locations/royat?locale=en");
+    expect(String(fetch.mock.calls[0]?.[0])).toBe("https://panel.example/api/internal/brands/aquafix/locations/royat?locale=en");
     expect(fetch.mock.calls[0]?.[1]).toMatchObject({ cache: "force-cache", next: { revalidate: 600 } });
   });
 
@@ -30,7 +34,7 @@ describe("one place from the live source", () => {
     const own = { default: "cal_com", providers: { cal_com: { url: "https://cal.brand.fr/brand/menage" } } };
     vi.stubGlobal("fetch", vi.fn(async () => Response.json({ booking: own })));
     expect((await live().getPlace("royat", "fr"))?.booking).toBeUndefined();
-    const ownHosts = createPlaceSource({ ...site, booking: { calComHosts: ["cal.brand.fr"] } }, { baseUrl: () => "https://live.example", log });
+    const ownHosts = createPlaceSource({ ...site, booking: { calComHosts: ["cal.brand.fr"] } }, { log });
     expect((await ownHosts.getPlace("royat", "fr"))?.booking).toEqual(own);
   });
 
@@ -66,7 +70,7 @@ describe("one place from the live source", () => {
     const fetch = vi.fn();
     vi.stubGlobal("fetch", fetch);
     expect(await live().getPlace("paris", "fr")).toBeNull();
-    expect((await live(null).getPlace("royat", "fr"))?.slug).toBe("royat");
+    expect((await live("").getPlace("royat", "fr"))?.slug).toBe("royat");
     expect(fetch).not.toHaveBeenCalled();
   });
 });
@@ -77,7 +81,7 @@ describe("one place, strictly", () => {
     await expect(live().getPlaceStrict("royat", "fr")).rejects.toThrow(/503/);
     vi.stubGlobal("fetch", vi.fn(async () => new Response(null, { status: 410 })));
     expect(await live().getPlaceStrict("royat", "fr")).toBeNull();
-    expect(await live(null).getPlaceStrict("paris", "fr")).toBeNull();
+    expect(await live("").getPlaceStrict("paris", "fr")).toBeNull();
   });
 });
 

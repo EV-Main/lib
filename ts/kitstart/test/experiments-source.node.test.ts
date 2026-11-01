@@ -1,14 +1,18 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createExperimentsSource, parseExperimentOverrides } from "../src/server/index";
 
-const BASE = "https://panel.example/api/internal/brands/vifnet";
+const site = { brand: { id: "vifnet" } };
 const log = { error: vi.fn() };
 let clock = 0;
-const source = (base: string | null = BASE) => createExperimentsSource({ baseUrl: () => base, ttlMs: 1_000, now: () => clock, log });
+const source = (internal = "https://panel.example/api/internal") => {
+  vi.stubEnv("SITES_PANEL_INTERNAL_URL", internal);
+  return createExperimentsSource(site, { ttlMs: 1_000, now: () => clock, log });
+};
 const answer = (experiments: unknown) => Response.json({ experiments });
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
   log.error.mockReset();
   clock = 0;
 });
@@ -18,7 +22,7 @@ describe("the experiments source", () => {
     const fetch = vi.fn(async (_input: string | URL | Request, _init?: RequestInit) => answer({ hero: { enabled: false, weights: [1, 3], holdout: 0.1 } }));
     vi.stubGlobal("fetch", fetch);
     expect(await source().overrides()).toEqual({ hero: { enabled: false, weights: [1, 3], holdout: 0.1 } });
-    expect(String(fetch.mock.calls[0]?.[0])).toBe(`${BASE}/experiments`);
+    expect(String(fetch.mock.calls[0]?.[0])).toBe("https://panel.example/api/internal/brands/vifnet/experiments");
     expect(fetch.mock.calls[0]?.[1]).toMatchObject({ cache: "no-store" });
     expect(fetch.mock.calls[0]?.[1]?.signal).toBeInstanceOf(AbortSignal);
   });
@@ -59,10 +63,10 @@ describe("the experiments source", () => {
     expect(fetch).toHaveBeenCalledTimes(1);
   });
 
-  it("has no overrides and asks nothing without a base URL", async () => {
+  it("has no overrides and asks nothing without SITES_PANEL_INTERNAL_URL", async () => {
     const fetch = vi.fn();
     vi.stubGlobal("fetch", fetch);
-    expect(await source(null).overrides()).toEqual({});
+    expect(await source("").overrides()).toEqual({});
     expect(fetch).not.toHaveBeenCalled();
   });
 

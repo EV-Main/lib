@@ -1,7 +1,9 @@
 # The prod environment of the server, baked into the image as plain env
 # (flake.nix: `prodEnv`). Secret-free: SMTP_URL, SMS_TOKEN and POSTHOG_KEY
-# (and LEAD_NOTIFY_TO/FROM, LOCATIONS_API_URL when used) arrive from the
-# container environment a Secret injects.
+# (and LEAD_NOTIFY_TO/FROM when used) arrive from the container environment a
+# Secret injects. No address goes here: devops derives SITES_PANEL_INTERNAL_URL
+# and LEAD_WEBHOOK_URL from mkLanding's `connected = true`, and mkLanding
+# refuses either in prodEnv.
 #
 # Explicit because the defaults are dev's: without HOSTNAME the standalone
 # server binds one interface the readiness probe may not reach; without

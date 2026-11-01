@@ -159,6 +159,13 @@ async function smoke() {
     console.log("✓ the callback is in the store, with its consent; one without is not");
     await expect("the thank-you page", "/fr/thanks", {}, 200);
     await expect("the OG card", "/og?l=paris&lang=fr", {}, 200, r => r.headers.get("content-type") === "image/png");
+    // The dot-folder served, the version read from the package, and every source unset with no sites_panel configured.
+    const version = JSON.parse(readFileSync(join(dir, "node_modules/@evinvest/kitstart/package.json"), "utf8")).version;
+    await expect("the self-report", "/.well-known/sa-site", {}, 200, (r, b) => {
+      const report = JSON.parse(b);
+      const states = [...Object.values(report.sources.places), report.sources.pricing, report.sources.experiments].map(s => s.state);
+      return r.headers.get("cache-control") === "no-store" && report.brand === "brand" && report.kitstart === version && states.length > 2 && states.every(s => s === "unset");
+    });
   } finally {
     server.kill();
   }
