@@ -2,7 +2,7 @@ import type { PricingModel } from "@evinvest/kitstart";
 
 /**
  * The baked price list: what `recurring` is priced from until the panel
- * serves one (`GET <LOCATIONS_API_URL>/pricing`), and whenever it is down.
+ * serves one (`createPricingSource`), and whenever it is down.
  * OWNER_TODO: placeholder amounts — the owner sets the real ones in the panel.
  */
 export const PRICING: PricingModel = {

@@ -22,6 +22,30 @@ Rust crate and its TypeScript mirror at once.
 
 ## [Unreleased]
 
+### Changed
+
+- **Connected landings: sites_panel by derived address, and `/.well-known/sa-site`**
+  (`@evinvest/kitstart`, minor, breaking).
+  - `SITES_PANEL_INTERNAL_URL` replaces `LOCATIONS_API_URL`, and the kit
+    composes `/brands/<site.brand.id>/…` itself. `parseServerEnv` throws, naming
+    the replacement, when `LOCATIONS_API_URL` is set; `ServerEnv.locationsApiUrl`
+    is gone.
+  - `createPlaceSource(site, options?)`, `createPricingSource(site, options?)`
+    and `createExperimentsSource(site, options?)` drop `baseUrl` and read the
+    address themselves; `createExperimentsSource` now takes `site`.
+  - `siteReportRoute(site)` (`/next`): each source's state now (`unset`,
+    `live`, `empty`, `withdrawn`, `down` with a `detail`), kitstart's version and
+    `checked_at`, probed `no-store` and kept 30 s; `Cache-Control: no-store`.
+    `/.well-known/sa-site` joins `NON_PAGE_ROUTES` (`ev_lib` `kitstart` too).
+  - `describeLandingContract` requires `root` and fails a landing that does not
+    mount `/health` and `/.well-known/sa-site`; `servedPaths` lists nested route
+    folders (`/quote/booking`, `/.well-known/sa-site`).
+  - `lib.mkLanding` takes a required `connected`: `true` adds
+    `consumes = { SITES_PANEL_INTERNAL_URL = "sites_panel.internal"; LEAD_WEBHOOK_URL = "panel.ingest"; }`
+    to the container contract. Evaluation fails when `prodEnv` sets either, or
+    `LOCATIONS_API_URL`. `container-smoke` holds the image to the self-report.
+  - `exports["./package.json"]`: the report reads the kit's version from it.
+
 ### Removed
 
 - **`@evinvest/mfe` host mode drops `data-profile-href` and `data-manage-href`**

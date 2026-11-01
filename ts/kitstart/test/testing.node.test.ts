@@ -19,13 +19,17 @@ function brandTree(files: Record<string, string>): string {
 
 // The suites a brand runs, run here on both shared sites, so a contract that
 // no valid site can pass fails in this package first.
+/** The routes every landing mounts outside `[locale]`. */
+const MOUNTED = { "app/health/route.ts": "", "app/.well-known/sa-site/route.ts": "" };
+
 describeLandingContract(fixtureSite("aquafix"), {
+  root: brandTree(MOUNTED),
   globalsCss: '@import "tailwindcss";\n@source "../node_modules/@evinvest/kitstart/dist";\n',
   proxySource: `export const config = { matcher: [${JSON.stringify(PROXY_MATCHER)}] };`,
   text: { fr: {}, en: {} },
 });
-describeLandingContract(fixtureSite("cleaning"), { mustPublish: ["paris"], root: brandTree({ "app/icon.svg": "", "public/favicon.ico": "" }) });
-describeLandingContract(fixtureSite("prelaunch"));
+describeLandingContract(fixtureSite("cleaning"), { mustPublish: ["paris"], root: brandTree({ ...MOUNTED, "app/icon.svg": "", "public/favicon.ico": "" }) });
+describeLandingContract(fixtureSite("prelaunch"), { root: brandTree({ ...MOUNTED, "app/icon.svg": "", "public/favicon.ico": "" }) });
 
 describeLeadStoreContract("in memory", () => {
   const rows: unknown[] = [];
@@ -45,6 +49,9 @@ describe("servedPaths", () => {
       "app/[locale]/page.tsx": "",
       "app/(marketing)/x/page.tsx": "",
       "app/og/route.tsx": "",
+      "app/quote/route.ts": "",
+      "app/quote/booking/route.ts": "",
+      "app/.well-known/sa-site/route.ts": "",
       "app/robots.ts": "",
       "app/sitemap.ts": "",
       "app/icon.svg": "",
@@ -53,7 +60,17 @@ describe("servedPaths", () => {
       "app/global-not-found.tsx": "",
       "public/fonts/inter.woff2": "",
     });
-    expect(servedPaths(root)).toEqual(["/apple-icon", "/fonts/inter.woff2", "/icon.svg", "/og", "/robots.txt", "/sitemap.xml"]);
+    expect(servedPaths(root)).toEqual([
+      "/.well-known/sa-site",
+      "/apple-icon",
+      "/fonts/inter.woff2",
+      "/icon.svg",
+      "/og",
+      "/quote",
+      "/quote/booking",
+      "/robots.txt",
+      "/sitemap.xml",
+    ]);
     expect(servedPaths(brandTree({}))).toEqual([]);
   });
 });

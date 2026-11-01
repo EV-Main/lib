@@ -22,7 +22,7 @@ export const GONE = "404";
 
 export const GONE_HEADER = "x-landing-not-found";
 
-export const NON_PAGE_ROUTES = ["/quote", "/quote/booking", "/quote/confirm", "/og", "/health", "/sitemap.xml", "/robots.txt"] as const;
+export const NON_PAGE_ROUTES = ["/quote", "/quote/booking", "/quote/confirm", "/og", "/health", "/.well-known/sa-site", "/sitemap.xml", "/robots.txt"] as const;
 
 export const OG_IMAGE_SIZE = [1200, 630] as const;
 

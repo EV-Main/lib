@@ -36,7 +36,7 @@ unprefixed junk and the `single` topology aquafix cannot exercise.
   the place it belongs to (`location` is the `[location]` param, `_royat` in
   host mode) or the brand (`null`). A path without a language that is not a
   page, `/_next/…`, one of the non-page routes (`/quote`, `/og`, `/health`,
-  `/sitemap.xml`, `/robots.txt`) or one of the site's `publicFiles` is `gone`
+  `/.well-known/sa-site`, `/sitemap.xml`, `/robots.txt`) or one of the site's `publicFiles` is `gone`
   too, in the cookie's or `Accept-Language`'s language. An extension earns
   nothing: `/wp-login.php` and `/fr/x.php` are `gone` like any dead path.
   `/<locale>/404/404` is the 404's own route and passes; `404` is a reserved
