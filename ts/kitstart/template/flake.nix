@@ -3,7 +3,7 @@
     v_flakes.url = "github:valeratrades/v_flakes?ref=v1.6";
     # The lib flake at the tag of the @evinvest/kitstart version in
     # package-lock.json — mkLanding refuses a mismatch.
-    ev.url = "github:EV-Main/lib?ref=@evinvest/kitstart-v0.21.1";
+    ev.url = "github:EV-Main/lib?ref=@evinvest/kitstart-v0.23.0";
     ev.inputs.v_flakes.follows = "v_flakes";
   };
 
@@ -17,6 +17,8 @@
           inherit pkgs v_flakes sitePort;
           root = ./.;
           pname = "brand-landing";
+          # sites_panel's live data and the conductor's lead ingest, addressed by devops.
+          connected = true;
           buildFiles = [
             "package.json"
             "package-lock.json"

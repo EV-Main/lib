@@ -79,6 +79,10 @@
               .claude/
             '';
             lfs = false;
+            npmRelease = {
+              scope = "evinvest";
+              packagesDir = "ts";
+            };
           };
 
           readme = v_flakes.readme-fw {
@@ -122,6 +126,7 @@
             root = ./nix/mk-landing-fixture;
             pname = "mk-landing-fixture";
             sitePort = "59099";
+            connected = true;
             buildFiles = [ "package.json" "package-lock.json" "build.mjs" ];
             requiredFiles = [ "assets/fonts/Display.ttf" ];
             prodEnv = {
@@ -286,7 +291,7 @@
               cd "$(git rev-parse --show-toplevel)"
               # sccache needs a server this one-shot run has no reason to depend on
               export TAILWIND_BROWSER_JS="${visual.tailwind}" RUSTC_WRAPPER=""
-              cargo run -q --example all_primitives --features uikit &
+              cargo run -q --example all_primitives --features uikit_dioxus &
               server=$!
               trap 'kill $server' EXIT
               url=http://127.0.0.1:52414
@@ -311,7 +316,7 @@
                 nix run .#gen                            regenerate every derived file (class tables, token sheets)
                 nix run .#publish -- <major|minor|patch> cargo-release + npm publish of impacted ts packages
                 nix run .#visual                         serve the kit gallery: live board, colorscheme, every page the visual test captures
-                cargo test --test gallery --features uikit   visual regression of the kit gallery (UPDATE_EXPECT=1 accepts)
+                cargo test --test gallery --features uikit_dioxus   visual regression of the kit gallery (UPDATE_EXPECT=1 accepts)
                 nix run .#kitstart-visual [-- --update]  visual regression of the kitstart widget gallery
                 nix run .#mk-landing-smoke               smoke the mk-landing fixture container (linux + docker)
                 nix build .#checks.<system>.mk-landing-budget   mk-landing bundle size gate

@@ -1,6 +1,6 @@
 {
   "name": "@evinvest/analytics",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Vendor-neutral, dep-light product analytics: an injectable event sink with a PostHog factory, a React provider, and a posthog-node server sink — mirroring the ev_lib::analytics Rust feature.",
   "license": "BlueOak-1.0.0",
   "publishConfig": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EV-invest/lib.git",
+    "url": "git+https://github.com/EV-Main/lib.git",
     "directory": "ts/analytics"
   },
   "type": "module",

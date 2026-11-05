@@ -12,10 +12,10 @@
 //! `role="slider"` thumb instead (EV-invest/lib#46).
 //!
 //! Everything else must match byte-for-byte, which is what `EXPECTED` encodes.
-#![cfg(feature = "uikit")]
+#![cfg(feature = "uikit_dioxus")]
 
 use dioxus::prelude::*;
-use ev_lib::uikit::Slider;
+use ev_lib::uikit_dioxus::Slider;
 
 // Reference (browser DOM), for the human reading this test:
 // <span data-slot="slider" data-orientation="horizontal" class="...[&amp;_[data-slot=slider-track]]:bg-background/50..." aria-label="Principal investment">

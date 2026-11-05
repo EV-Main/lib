@@ -3,4 +3,4 @@ name = "uikit-viewer"
 default_platform = "web"
 
 [web.app]
-title = "ev_lib::uikit · Dioxus viewer"
+title = "ev_lib::uikit_dioxus · Dioxus viewer"

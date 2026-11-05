@@ -9,6 +9,7 @@
 //!   → http://127.0.0.1:52414/dist/      static pages (index, colorscheme, one per primitive)
 
 include!("../tests/support/gallery.rs");
+include!("../tests/support/board.rs");
 
 use axum::{
 	Router,

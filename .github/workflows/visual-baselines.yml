@@ -37,7 +37,7 @@ jobs:
         with:
           extra-conf: 'lazy-trees = true'
       - name: Render
-        run: nix develop --command env RUSTC_WRAPPER= UPDATE_EXPECT=1 cargo test -p ev_lib --features uikit --test gallery
+        run: nix develop --command env RUSTC_WRAPPER= UPDATE_EXPECT=1 cargo test -p ev_lib --features uikit_dioxus --test gallery
       - name: Upload
         uses: actions/upload-artifact@v4
         with:

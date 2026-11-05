@@ -16,10 +16,10 @@ stays in the brand.
 | `@evinvest/kitstart` | anywhere (edge, client, server) | `defineSite`, places, routing (`createRouting`), the lead schema and funnel (`createAcceptLead`), the price list (`PricingModel`, `priceOf`, `flowOf`), antispam, JSON-LD / sitemap / robots builders, analytics events, the copy contract |
 | `@evinvest/kitstart/server` | Node, `server-only` | `createServerEnv`, `createPlaceSource`, `createPricingSource`, the lead store (`openLeadStore` by `LEADS_DB_URL`: `sqlite:` today, `postgres://` a stub that refuses at boot), `checkLeadStore`, `leadNotifier`, `leadWebhook` (signed, outboxed), `sendMail`, `clientKey` |
 | `@evinvest/kitstart/proxy` | edge | `createProxy(site)`, `PROXY_MATCHER` |
-| `@evinvest/kitstart/next` | Next server (routes, RSC) | `quoteRoute`, `bookingRoute`, `confirmRoute`, `sitemapRoute`, `robotsRoute`, `ogRoute`, `healthRoute`, `createPlaceLoader`, `loadLocale`, `placeMetadata` / `brandMetadata` / `statusMetadata`, `metadataBase` |
+| `@evinvest/kitstart/next` | Next server (routes, RSC) | `quoteRoute`, `bookingRoute`, `confirmRoute`, `sitemapRoute`, `robotsRoute`, `ogRoute`, `healthRoute`, `siteReportRoute`, `createPlaceLoader`, `loadLocale`, `placeMetadata` / `brandMetadata` / `statusMetadata`, `metadataBase` |
 | `@evinvest/kitstart/next/config` | `next.config.ts`, `vitest.config.ts` | `withLanding`, `buildEnv` and the `assets/` readers |
 | `@evinvest/kitstart/react` | either side | `LangSwitch`, `CallBar`, `StatusScreen`, `PlaceDirectory`, `AreaChips`, `Coverage`, `MapFacade` (client), `QuoteFormShell`, `FormSelect` (client) with `loadLazyParts` for tests, `LeadCapture` (client), `LeadBooking` (client) and its adapters, `Faq`, `AnalyticsBoundary` (client), plus the kit and marketing pieces a landing composes with |
-| `@evinvest/kitstart/testing` | a brand's vitest | `describeLandingContract(site, { globalsCss, proxySource, text })`, `describeLeadStoreContract(name, harness)`, `storefrontPlace`, `serviceAreaPlace`, `testLead` |
+| `@evinvest/kitstart/testing` | a brand's vitest | `describeLandingContract(site, { root, globalsCss, proxySource, text })` (`root` required: it holds the mounted `/health` and `/.well-known/sa-site`), `describeLeadStoreContract(name, harness)`, `storefrontPlace`, `serviceAreaPlace`, `testLead` |
 | `@evinvest/kitstart/testing/e2e` | a brand's Playwright | `defineSectionSuite(sections)`, `settle(page, selector)`, `BREAKPOINTS` |
 | bin `kitstart-size` | plain node | `kitstart-size [<build root>] [--route …] [--budget …]`: first-load JS of a place page against the target in `tests/bundle_budget.txt` (passes with a warning up to its tolerance, 20 % by default — see [The bundle budget](#the-bundle-budget)); fails closed |
 
@@ -45,11 +45,12 @@ brand's `flake.nix` is its own config plus one call — `template/flake.nix` is
 the whole of one:
 
 ```nix
-inputs.ev.url = "github:EV-invest/lib?ref=@evinvest/kitstart-v0.21.1"; # the version in package-lock.json
+inputs.ev.url = "github:EV-invest/lib?ref=@evinvest/kitstart-v0.23.0"; # the version in package-lock.json
 inputs.ev.inputs.v_flakes.follows = "v_flakes";
 
 landing = ev.lib.mkLanding {
   pkgs, root, pname, sitePort, buildFiles,        # required
+  connected,                                      # required: reads sites_panel, posts leads to the conductor
   prodEnv ? { },                                  # baked into the image (deploy/config.nix)
   v_flakes ? null,                                # without it: no `container`
   nodejs ? pkgs.nodejs_22, nodeRuntime ? pkgs.nodejs-slim_22,
@@ -76,6 +77,11 @@ landing = ev.lib.mkLanding {
   `{ "node_modules/@evinvest/kitstart" = ./vendor/kitstart.tgz; }` builds a
   brand against an unpublished kitstart; the self-check vendors one package
   whose `resolved` 404s.
+- `connected = true` adds `consumes = { SITES_PANEL_INTERNAL_URL =
+  "sites_panel.internal"; LEAD_WEBHOOK_URL = "panel.ingest"; }` to each
+  container's contract; devops derives both URLs (and the network policies)
+  from it. `prodEnv` may carry neither, nor `LOCATIONS_API_URL`: evaluation
+  fails.
 - `container`: the OCI image on node-slim, `prodEnv` baked in.
 - `checks.bundle-budget`: `kitstart-size` on the Nix build.
 
@@ -107,7 +113,8 @@ tolerance is a deliberate commit, with a reason, as raising the budget was.
   pinned browsers), `accept-test` (Linux only), `size`, `dev`, `help`.
 - `apps.container-smoke`: boots the image with a host port docker picks
   (`-p 127.0.0.1::<port>`: landing ports sit in Linux's ephemeral range), checks
-  `/health`, the 302, the page, the OG card and the form POST landing in the
+  `/health`, the 302, the page, the OG card, `/.well-known/sa-site` (every
+  source `unset`: the smoke has no sites_panel) and the form POST landing in the
   mount, then boots it again with every `prodEnv` key blanked and wants 500 —
   and once more with only the lead store's key (`LEADS_DB_PATH` /
   `LEADS_DB_URL`) blanked, wanting 500 from the store's refusal alone.
@@ -608,8 +615,8 @@ A need is sold one of three ways, chosen per need — one brand can mix them:
 export const LEAD: LeadSchema<Subject> = { …, flows: { standard: "estimate", deep: "quote" } };
 // shared/config/site.ts — the baked price list
 export const site = defineSite({ …, lead: LEAD, pricing: PRICING });
-// shared/config/env.ts — the live one, from the place source's base URL
-export const pricing = createPricingSource(site, { baseUrl: () => serverEnv().locationsApiUrl });
+// shared/config/env.ts — the live one, from sites_panel
+export const pricing = createPricingSource(site);
 // app/quote/route.ts
 export const POST = quoteRoute(site, { env: serverEnv, notifier, pricing, unavailable });
 // the page: <LeadCapture … flows={LEAD.flows} pricing={await pricing.model()} photos={["deep"]} />
@@ -626,7 +633,8 @@ export const POST = quoteRoute(site, { env: serverEnv, notifier, pricing, unavai
   [`test/fixtures/pricing/`](./test/fixtures/pricing/README.md).
   `defineSite` refuses a baked model that does not validate or lacks a label
   in one of the site's locales.
-- **The live list** (`createPricingSource`): `GET <base>/pricing`, TTL
+- **The live list** (`createPricingSource`): `GET <brand>/pricing` (see
+  [Live data](#live-data-sites_panel)), TTL
   600 s, 3 s timeout; an unreachable source, a non-200, a body that is not
   JSON or a model that does not validate (for every locale of the site) all
   serve the baked model, logged — whole or not at all, never half a model.
@@ -800,6 +808,14 @@ export const GET = confirmRoute(site, { pricing, text: locale => TEXT[locale].le
 export const dynamic = "force-dynamic";
 export const POST = bookingRoute({ env: serverEnv, webhook });
 
+// app/health/route.ts — the readiness probe
+export const dynamic = "force-dynamic";
+export const GET = healthRoute();
+
+// app/.well-known/sa-site/route.ts — the self-report the conductor reads
+export const dynamic = "force-dynamic";
+export const GET = siteReportRoute(site);
+
 // app/sitemap.ts — reads the Host header, so it is dynamic; pages are not
 export const dynamic = "force-dynamic";
 export default sitemapRoute(site, places);
@@ -879,6 +895,35 @@ chooses per visitor answer `Cache-Control: private, no-store`.
   mounted by one node; pods on it take turns through `busy_timeout`. A shared
   network filesystem is not a place for it — that is what the Postgres port
   is for.
+
+## Live data: sites_panel
+
+The places' live half, the price list and the experiment overrides come from
+sites_panel, under one brand path the kit composes:
+`<SITES_PANEL_INTERNAL_URL>/brands/<site.brand.id>/{locations/<slug>?locale=…,pricing,experiments}`.
+devops sets `SITES_PANEL_INTERNAL_URL` from mkLanding's `connected = true`; the
+landing configures nothing — `createPlaceSource(site)`, `createPricingSource(site)`,
+`createExperimentsSource(site)`. Unset, every source is the baked config. Set,
+`LOCATIONS_API_URL` (its predecessor) stops the server at boot.
+
+**`/.well-known/sa-site`** (`siteReportRoute(site)`, required by the landing
+contract) answers what each source says now, asked fresh (`no-store`) in the
+pages' own terms and kept 30 s, so reading it cannot multiply the load on
+sites_panel. `Cache-Control: no-store`:
+
+```json
+{ "brand": "aquafix", "kitstart": "0.23.0", "checked_at": "2026-11-01T15:00:00.000Z",
+  "sources": { "places": { "royat": { "state": "live" } }, "pricing": { "state": "empty" },
+               "experiments": { "state": "down", "detail": "answered 503" } } }
+```
+
+| `state` | means |
+|---|---|
+| `unset` | `SITES_PANEL_INTERNAL_URL` is not set: every source is |
+| `live` | a 2xx with something in it |
+| `empty` | a 2xx with nothing set (`{}`, `{"experiments":{}}`): the baked config |
+| `withdrawn` | places only: a 410, or a 404 in the source's own JSON — the page is a 404 |
+| `down` | anything else — another status, a bare 404, unreachable, a body not the source's shape; `detail` says which |
 
 ## Lead webhook
 
@@ -1008,8 +1053,8 @@ The experiments live in code (`@evinvest/experiments`, one `as const` config
 of variants, split equally); the panel decides any other weights and the kill
 switch, and PostHog counts them.
 
-**Overrides** (`createExperimentsSource`): `GET <base>/experiments`, the same
-base as the place source, `{ "experiments": { "<key>": { enabled?, weights?,
+**Overrides** (`createExperimentsSource`): `GET <brand>/experiments` on
+sites_panel (see [Live data](#live-data-sites_panel)), `{ "experiments": { "<key>": { enabled?, weights?,
 holdout? } } }`. The proxy reads it on every request, so it answers from memory:
 the first call waits for the panel (1.5 s timeout), later ones are served from
 the cache, and past the 30 s TTL the stale answer is served while one refresh
@@ -1020,7 +1065,7 @@ yet; either way the panel is not asked again before the TTL.
 
 ```ts
 // shared/config/env.ts
-export const experimentOverrides = createExperimentsSource({ baseUrl: () => serverEnv().locationsApiUrl });
+export const experimentOverrides = createExperimentsSource(site);
 // proxy.ts — the same applied config wherever a variant is read
 const live = applyOverrides(experiments, await experimentOverrides.overrides());
 ```

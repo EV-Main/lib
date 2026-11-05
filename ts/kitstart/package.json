@@ -1,6 +1,6 @@
 {
   "name": "@evinvest/kitstart",
-  "version": "0.21.1",
+  "version": "0.23.0",
   "description": "Landing-site machinery for local-service brands: a site composition root, the Place/Presence/ServiceArea model with a publication gate, host/locale routing, schema.org and SEO builders, the lead funnel with its antispam, and analytics events. Pure core at '.', more subpaths per runtime.",
   "license": "BlueOak-1.0.0",
   "publishConfig": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EV-invest/lib.git",
+    "url": "git+https://github.com/EV-Main/lib.git",
     "directory": "ts/kitstart"
   },
   "type": "module",
@@ -52,7 +52,8 @@
       "types": "./dist/testing/e2e.d.ts",
       "import": "./dist/testing/e2e.js",
       "default": "./dist/testing/e2e.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",

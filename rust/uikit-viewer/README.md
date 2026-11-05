@@ -1,8 +1,8 @@
-# ev_lib::uikit — Dioxus viewer
+# ev_lib::uikit_dioxus — Dioxus viewer
 
 The Dioxus → wasm mirror of [`ts/uikit/example`](../../ts/uikit/example): the
 same gallery (toaster animations front and centre, plus a representative slice of
-components), rendered by `ev_lib::uikit` instead of `@evinvest/uikit`. Use the two
+components), rendered by `ev_lib::uikit_dioxus` instead of `@evinvest/uikit`. Use the two
 side by side to confirm a component looks and behaves the same in both ports.
 
 It's a **wasm-only** workspace member: the `dioxus`/`ev_lib` deps and the gallery
@@ -30,7 +30,7 @@ another so Tailwind regenerates as you edit class strings.
 - `input.css` imports `tailwindcss`, `tw-animate-css` (the enter/exit utilities
   the overlay components use, as in the React example) and the kit's
   `tokens.css`, then `@source`s the `ev_lib_classes` crate (`../classes/src`,
-  where the class strings live), the kit's components (`../src/uikit`) and this
+  where the class strings live), the kit (`../src/uikit`, `../src/uikit_dioxus`) and this
   viewer's `src` so Tailwind scans the class-string literals and generates the
   utilities. `npm run css` writes
   `assets/tailwind.css` (gitignored), which `src/viewer.rs` links via `asset!`.

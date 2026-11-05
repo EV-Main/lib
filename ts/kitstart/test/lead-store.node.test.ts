@@ -73,8 +73,8 @@ describe("choosing the lead store", () => {
   });
 
   it("defaults to a per-brand file outside production, and reads the rest of the env", () => {
-    const env = parseServerEnv(SITE, { LOCATIONS_API_URL: "https://live.example/", SMTP_URL: " " });
-    expect(env).toMatchObject({ production: false, leadsDbFrom: "default", locationsApiUrl: "https://live.example", smtpUrl: null });
+    const env = parseServerEnv(SITE, { SITES_PANEL_INTERNAL_URL: "https://panel.example/api/internal/", SMTP_URL: " " });
+    expect(env).toMatchObject({ production: false, leadsDbFrom: "default", smtpUrl: null });
     expect(env.leadsDb).toMatchObject({ kind: "sqlite", path: expect.stringContaining("aquafix/leads.db") });
     expect(env.posthogHost).toBe("https://eu.i.posthog.com");
     expect(() => parseServerEnv(SITE, { POSTHOG_HOST: "nope" })).toThrow(/POSTHOG_HOST is not a URL/);

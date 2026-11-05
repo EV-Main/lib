@@ -7,7 +7,7 @@ pub const COMMAND_DIALOG_CONTENT: &str =
 
 pub const COMMAND_DIALOG_COMMAND: &str = "[&_[data-slot=command-input-wrapper]]:h-9 [&_[data-slot=command-input]]:h-8";
 
-pub const COMMAND_INPUT_WRAPPER: &str = "flex h-8 items-center gap-2 border-b border-border-subtle px-3";
+pub const COMMAND_INPUT_WRAPPER: &str = "flex h-8 items-center gap-2 border-b border-border-subtle px-3 has-[[aria-invalid=true]]:border-accent-error";
 
 pub const COMMAND_INPUT: &str =
 	"placeholder:text-ink-soft flex h-7 w-full rounded-[var(--control-radius)] bg-transparent text-body outline-hidden disabled:cursor-not-allowed disabled:opacity-40";

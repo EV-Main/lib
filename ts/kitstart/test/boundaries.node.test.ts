@@ -49,7 +49,7 @@ describe("the declared peers", () => {
     for (const dir of ["core", "server", "next", "proxy", "react", "testing", "cli"]) {
       for (const { text } of files(dir)) {
         for (const [, spec = ""] of text.matchAll(/from\s+"([^."][^"]*)"/g)) {
-          if (spec.startsWith("node:")) continue;
+          if (spec.startsWith("node:") || spec.startsWith(`${manifest.name}/`)) continue; // a self-reference is no peer
           const name = spec.startsWith("@") ? spec.split("/").slice(0, 2).join("/") : (spec.split("/")[0] ?? spec);
           imported.add(name);
         }

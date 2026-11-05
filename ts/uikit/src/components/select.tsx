@@ -29,6 +29,7 @@ export type { SelectTriggerSize };
 
 interface SelectContextValue {
   value: string;
+  resetValue: string | undefined;
   setValue: (next: string) => void;
   open: boolean;
   setOpen: (next: boolean) => void;
@@ -59,6 +60,8 @@ function useSelect(): SelectContextValue {
 export interface SelectProps {
   value?: string;
   defaultValue?: string;
+  /** What a reset would put back: its option is marked, beneath the chosen one's mark. */
+  resetValue?: string;
   onValueChange?: (value: string) => void;
   open?: boolean;
   defaultOpen?: boolean;
@@ -69,6 +72,7 @@ export interface SelectProps {
 export function Select({
   value,
   defaultValue = "",
+  resetValue,
   onValueChange,
   open,
   defaultOpen = false,
@@ -116,6 +120,7 @@ export function Select({
     <SelectContext.Provider
       value={{
         value: currentValue,
+        resetValue,
         setValue,
         open: isOpen,
         setOpen,
@@ -344,7 +349,7 @@ export interface SelectItemProps extends React.ComponentProps<"div"> {
 }
 
 export function SelectItem({ className, value, textValue, children, ...props }: SelectItemProps) {
-  const { value: selectedValue, setValue, close, registerLabel } = useSelect();
+  const { value: selectedValue, resetValue, setValue, close, registerLabel } = useSelect();
   const selected = selectedValue === value;
   const label = itemLabel(value, textValue, children);
   React.useEffect(() => registerLabel(value, label), [registerLabel, value, label]);
@@ -357,6 +362,7 @@ export function SelectItem({ className, value, textValue, children, ...props }: 
       role="option"
       data-slot="select-item"
       aria-selected={selected}
+      {...(resetValue === value ? { "data-reset": "" } : {})}
       tabIndex={-1}
       onClick={choose}
       onKeyDown={(e) => {

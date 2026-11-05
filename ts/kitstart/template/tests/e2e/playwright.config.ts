@@ -35,7 +35,7 @@ export default defineConfig({
         HOSTNAME: "127.0.0.1",
         LEADS_DB_PATH: `/tmp/brand-e2e-${PORT}/leads.db`,
         TRUSTED_PROXY: "xff:1",
-        LOCATIONS_API_URL: `http://127.0.0.1:${MOCK_PORT}`,
+        SITES_PANEL_INTERNAL_URL: `http://127.0.0.1:${MOCK_PORT}/api/internal`,
       },
     },
   ],

@@ -5,11 +5,11 @@ import { site } from "./site";
 /** Parsed once, lazily: `next build` imports this and must need no secrets. */
 export const serverEnv = createServerEnv(site);
 
-/** The live place data, when `LOCATIONS_API_URL` is set; baked otherwise. */
-export const places = createPlaceSource(site, { baseUrl: () => serverEnv().locationsApiUrl });
+/** The live place data from sites_panel (`SITES_PANEL_INTERNAL_URL`); baked without it. */
+export const places = createPlaceSource(site);
 
-/** The live price list from the same source (`<LOCATIONS_API_URL>/pricing`); `site.pricing` otherwise. */
-export const pricing = createPricingSource(site, { baseUrl: () => serverEnv().locationsApiUrl });
+/** The live price list from sites_panel; `site.pricing` without it. */
+export const pricing = createPricingSource(site);
 
 let built: LeadNotifier | undefined;
 

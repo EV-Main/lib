@@ -4,8 +4,8 @@ One PNG per uikit primitive, plus the combined board and the colorscheme page,
 in `__screenshots__/`, compared **byte for byte** by the gallery test.
 
 ```sh
-cargo test --features uikit --test gallery                   # capture and compare
-UPDATE_EXPECT=1 cargo test --features uikit --test gallery   # accept the current render
+cargo test --features uikit_dioxus --test gallery                   # capture and compare
+UPDATE_EXPECT=1 cargo test --features uikit_dioxus --test gallery   # accept the current render
 nix run .#visual                                             # look at the pages
 ```
 

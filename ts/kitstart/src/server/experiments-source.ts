@@ -1,4 +1,6 @@
 import "server-only";
+import { sitesPanelBrand } from "./env";
+import { unreachable, type Down } from "./fetched";
 
 /**
  * An operator's override of one experiment, as the panel serves it — the
@@ -16,8 +18,8 @@ export interface ExperimentOverride {
 export type ExperimentOverrides = Readonly<Record<string, ExperimentOverride>>;
 
 /**
- * The operator's overrides of the brand's experiments: `GET
- * <base>/experiments`, the panel's `{ "experiments": { "<key>": {…} } }`.
+ * The operator's overrides of the brand's experiments: `GET <sites_panel
+ * brand>/experiments`, the panel's `{ "experiments": { "<key>": {…} } }`.
  *
  * Read by the proxy on every request, so the answer comes from memory: the
  * first call waits for the panel (bounded by `timeoutMs`), every later one is
@@ -26,11 +28,9 @@ export type ExperimentOverrides = Readonly<Record<string, ExperimentOverride>>;
  * wait on the panel twice. A failed refresh — an unreachable panel, a
  * non-200, a body that is not the panel's shape — keeps the last good answer:
  * a kill switch must not turn itself back on because the panel blinked. With
- * no good answer yet (or no base URL) it is `{}`, the config in code.
+ * no good answer yet (or no `SITES_PANEL_INTERNAL_URL`) it is `{}`, the config in code.
  */
 export interface ExperimentsSourceOptions {
-  /** The brand's base on the panel (`LOCATIONS_API_URL`), read when asked; `null` → no overrides. */
-  baseUrl: () => string | null;
   /** How long an answer is fresh; 30 s. */
   ttlMs?: number;
   /** How long the panel is given; 1.5 s. The proxy is waiting on the first call. */
@@ -70,47 +70,46 @@ export function parseExperimentOverrides(body: unknown): ExperimentOverrides | n
   return out;
 }
 
-export function createExperimentsSource(options: ExperimentsSourceOptions): ExperimentsSource {
+type FetchedExperiments = { kind: "live" | "empty"; overrides: ExperimentOverrides } | Down;
+
+/** The overrides as the panel answers them now; shared with the site report. */
+export async function fetchExperiments(brand: string, timeoutMs: number): Promise<FetchedExperiments> {
+  let response: Response;
+  try {
+    // `no-store`: the cache is the caller's; Next's data cache would add a second TTL.
+    response = await fetch(`${brand}/experiments`, { cache: "no-store", headers: { Accept: "application/json" }, signal: AbortSignal.timeout(timeoutMs) });
+  } catch (cause) {
+    return unreachable(cause);
+  }
+  if (response.status !== 200) return { kind: "down", detail: `answered ${response.status}` };
+  let body: unknown;
+  try {
+    body = await response.json();
+  } catch (cause) {
+    return { kind: "down", detail: "not JSON", cause };
+  }
+  const overrides = parseExperimentOverrides(body);
+  if (overrides === null) return { kind: "down", detail: "not { experiments: {…} }" };
+  return { kind: Object.keys(overrides).length === 0 ? "empty" : "live", overrides };
+}
+
+export function createExperimentsSource(site: { brand: { id: string } }, options: ExperimentsSourceOptions = {}): ExperimentsSource {
   const ttl = options.ttlMs ?? EXPERIMENTS_TTL_MS;
   const timeoutMs = options.timeoutMs ?? TIMEOUT_MS;
   const now = options.now ?? Date.now;
   const log = options.log ?? console;
-  let cached: { base: string; at: number; value: ExperimentOverrides } | null = null;
+  let brand: string | null | undefined;
+  let cached: { at: number; value: ExperimentOverrides } | null = null;
   let inflight: Promise<ExperimentOverrides> | null = null;
-
-  /** The panel's overrides, or `null` when it could not say. */
-  async function load(base: string): Promise<ExperimentOverrides | null> {
-    let response: Response;
-    try {
-      // `no-store`: the cache is this module's; Next's data cache would add a second TTL.
-      response = await fetch(`${base}/experiments`, { cache: "no-store", headers: { Accept: "application/json" }, signal: AbortSignal.timeout(timeoutMs) });
-    } catch (cause) {
-      log.error("experiments: the panel is unreachable, keeping the last good overrides", cause);
-      return null;
-    }
-    if (response.status !== 200) {
-      log.error(`experiments: the panel answered ${response.status}, keeping the last good overrides`);
-      return null;
-    }
-    let body: unknown;
-    try {
-      body = await response.json();
-    } catch (cause) {
-      log.error("experiments: the panel's body is not JSON, keeping the last good overrides", cause);
-      return null;
-    }
-    const parsed = parseExperimentOverrides(body);
-    if (parsed === null) log.error("experiments: the panel's body is not { experiments: {…} }, keeping the last good overrides");
-    return parsed;
-  }
 
   // One request at a time, however many visitors arrive while it runs.
   function refresh(base: string): Promise<ExperimentOverrides> {
-    inflight ??= load(base)
-      .then(loaded => {
+    inflight ??= fetchExperiments(base, timeoutMs)
+      .then(fetched => {
+        if (fetched.kind === "down") log.error(`experiments: the panel ${fetched.detail}, keeping the last good overrides`, ...(fetched.cause === undefined ? [] : [fetched.cause]));
         // A failure still restarts the clock, so a down panel is asked once per TTL.
-        const value = loaded ?? (cached?.base === base ? cached.value : NONE);
-        cached = { base, at: now(), value };
+        const value = fetched.kind === "down" ? (cached?.value ?? NONE) : fetched.overrides;
+        cached = { at: now(), value };
         return value;
       })
       .finally(() => {
@@ -121,10 +120,10 @@ export function createExperimentsSource(options: ExperimentsSourceOptions): Expe
 
   return {
     async overrides() {
-      const base = options.baseUrl();
-      if (!base) return NONE;
-      if (cached?.base !== base) return refresh(base);
-      if (now() - cached.at >= ttl) void refresh(base);
+      if (brand === undefined) brand = sitesPanelBrand(site, process.env);
+      if (brand === null) return NONE;
+      if (cached === null) return refresh(brand);
+      if (now() - cached.at >= ttl) void refresh(brand);
       return cached.value;
     },
   };

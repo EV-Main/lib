@@ -60,6 +60,35 @@ Rust crate and its TypeScript mirror at once.
   `card` bar with a hairline where only the icon carries the tone.
 - **`@evinvest/kitstart`** moves to the new names: `outline` to `secondary`,
   the filled CTAs to `solid`, large fields to `touch`.
+### Changed
+
+- **Connected landings: sites_panel by derived address, and `/.well-known/sa-site`**
+  (`@evinvest/kitstart`, minor, breaking).
+  - `SITES_PANEL_INTERNAL_URL` replaces `LOCATIONS_API_URL`, and the kit
+    composes `/brands/<site.brand.id>/…` itself. `parseServerEnv` throws, naming
+    the replacement, when `LOCATIONS_API_URL` is set; `ServerEnv.locationsApiUrl`
+    is gone.
+  - `createPlaceSource(site, options?)`, `createPricingSource(site, options?)`
+    and `createExperimentsSource(site, options?)` drop `baseUrl` and read the
+    address themselves; `createExperimentsSource` now takes `site`.
+  - `siteReportRoute(site)` (`/next`): each source's state now (`unset`,
+    `live`, `empty`, `withdrawn`, `down` with a `detail`), kitstart's version and
+    `checked_at`, probed `no-store` and kept 30 s; `Cache-Control: no-store`.
+    `/.well-known/sa-site` joins `NON_PAGE_ROUTES` (`ev_lib` `kitstart` too).
+  - `describeLandingContract` requires `root` and fails a landing that does not
+    mount `/health` and `/.well-known/sa-site`; `servedPaths` lists nested route
+    folders (`/quote/booking`, `/.well-known/sa-site`).
+  - `lib.mkLanding` takes a required `connected`: `true` adds
+    `consumes = { SITES_PANEL_INTERNAL_URL = "sites_panel.internal"; LEAD_WEBHOOK_URL = "panel.ingest"; }`
+    to the container contract. Evaluation fails when `prodEnv` sets either, or
+    `LOCATIONS_API_URL`. `container-smoke` holds the image to the self-report.
+  - `exports["./package.json"]`: the report reads the kit's version from it.
+
+### Removed
+
+- **`@evinvest/mfe` host mode drops `data-profile-href` and `data-manage-href`**
+  (breaking, 0.2.0). The account chip's profile row is always the platform's
+  account page, and "Manage account" is gone, so no element reads them any more.
 
 ### Added
 
@@ -69,6 +98,16 @@ Rust crate and its TypeScript mirror at once.
   all labelled groups. Off by default: a group without it renders as before.
   The rows fold on a grid-rows transition with a fade and a turning chevron,
   closed rows are `inert`, and the group holding the current route opens itself.
+- **`@evinvest/mfe` brings `data-profile-href` back** (minor, 0.3.0), in either
+  mode and without `data-manage-href`. The chip's profile row goes to the host's
+  own account route, which embeds the account element inline; a host that sets
+  none still gets the platform's account page.
+
+- **`uikit_leptos`** (`ev_lib`): the same kit for Leptos 0.8 — every component
+  the Dioxus port exports, with the same names and props in Leptos idiom, over
+  the same core, rendering the same HTML (held by `rust/tests/parity.rs`). It
+  never enables `ssr`, `hydrate` or `csr`; the consumer's `leptos` picks one.
+
 - **`PlaceLive.reviewUrl` and `panelLocale`** (`@evinvest/kitstart`, minor).
   `reviewUrl`: where the place asks for a Google review, read from the live
   source and merged onto `Place.reviewUrl`; only `https:` on `g.page` or
@@ -142,6 +181,10 @@ Rust crate and its TypeScript mirror at once.
   `DrawerContent` take `aria_label`, `PopoverTrigger` and `DropdownMenuTrigger`
   take `aria_label`, and `Textarea` takes `aria_label`, `rows`, `onkeydown` and
   `onmounted`. All are optional; an unset prop renders no attribute.
+- **`Select` marks what applies and what a reset puts back** (`ev_lib` `uikit`
+  and `@evinvest/uikit`): the chosen option is tinted `accent-info`; a
+  `reset_value` / `resetValue` marks its option `data-reset`, tinted
+  `accent-trace` unless it is the chosen one.
 
 ### Removed
 
@@ -165,6 +208,19 @@ Rust crate and its TypeScript mirror at once.
   `@evinvest/uikit`): the outline accent faces, status pages, field and form
   errors read in `accent-error-ink` and its siblings, which clear AA on a light
   plane where the fill does not.
+- **The `uikit` feature is now `uikit_dioxus`, and `ev_lib::uikit` is
+  `ev_lib::uikit_dioxus`** (`ev_lib`, breaking → minor). The kit's behaviour
+  moved into a crate-private, framework-free core that both Rust ports drive;
+  the Dioxus components keep their behaviour. Swap the feature name and the
+  module path. Interface changes the split forced, mirrored in the Leptos port
+  and listed in `ts/uikit/README.md`'s Rust↔TS table: Select options name
+  their label explicitly instead of the kit reading it off the children;
+  `FieldSeparator` renders its copy only with `content: true`, and
+  `FormMessage` only while `error: true` (the flag `FormControl` takes), instead
+  of inspecting the children. `FormItemContext`, `Toast` and `ToastState` are no
+  longer public, nor is `CalendarDate::today()`: the kit's core is clock-free,
+  so an SSR page computes its own `today`. `CommandInput` gains `invalid`, and `CommandDialog` now applies
+  its `class` to the dialog.
 
 - **`Field` no longer imports the controls it labels** (`@evinvest/uikit`):
   `Input`, `Textarea`, `NativeSelect`, `Checkbox`, `Switch`, `SelectTrigger`
@@ -208,6 +264,9 @@ Rust crate and its TypeScript mirror at once.
   longer shrink to fit the list height and clip their items.
 - **NavigationMenu content opens below its trigger on a panel**
   (`@evinvest/uikit`, `ev_lib` `uikit`), not over the trigger without a surface.
+- **`uikit_leptos` `ContextMenu` builds under `web_sys_unstable_apis`**
+  (`ev_lib`, patch): web-sys's `MouseEvent::client_x` is `f64` there and
+  `i32` otherwise; the pointer position now takes either.
 - **Dropdown, context and menubar items are clickable again** (`ev_lib` `uikit`):
   they rendered `data-disabled="false"` and `data-inset="false"`, which the
   classes' `data-[disabled]` / `data-[inset]` match on presence, so every item

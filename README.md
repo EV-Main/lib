@@ -45,7 +45,8 @@ it enables.
 | Feature | What it is |
 | --- | --- |
 | `architecture` | I/O-free, `wasm32`-safe DDD tactical kernel: typed ids, entities, aggregate roots, repositories, gateways, the unit of work, domain events, specifications |
-| `uikit` | dep-light Dioxus UI kit (mirrors `@evinvest/uikit`): 63 shadcn-semantics components on `dioxus` + `tailwind_fuse`, no `@radix-ui`/`cva`. Styled by the repo-root `tokens.css`, shared with the TS kit |
+| `uikit_dioxus` | dep-light UI kit for Dioxus (mirrors `@evinvest/uikit`): 63 shadcn-semantics components on `dioxus` + `tailwind_fuse`, no `@radix-ui`/`cva`. Styled by the repo-root `tokens.css`, shared with the TS kit |
+| `uikit_leptos` | the same kit for Leptos 0.8 — same components, props and HTML, over the same framework-free core; never picks `ssr`/`hydrate`/`csr` for you |
 | `analytics` | PostHog product analytics (mirrors `@evinvest/analytics`): does network I/O, gated per-target — `reqwest` + `serde`/`serde_json` native, pure-Rust HTTP on wasm |
 | `error_monitoring` | Sentry error monitoring (mirrors `@evinvest/error-monitoring`): does network I/O; the native `sentry` crate is native-only, wasm reports over pure-Rust HTTP |
 | `experiments` | frontend-only A/B testing (mirrors `@evinvest/experiments`): reports exposure through an injected sink, never imports `analytics` |
@@ -84,7 +85,7 @@ cargo check -p ev_lib --features "architecture wasm" --target wasm32-unknown-unk
 
 TS packages live under [`ts/`](ts/), one directory per library, each with its own
 `package.json`: [`ts/architecture/`](ts/architecture/) (the DDD kernel),
-[`ts/uikit/`](ts/uikit/) (the dep-light React UI kit mirroring the Rust `uikit`),
+[`ts/uikit/`](ts/uikit/) (the dep-light React UI kit mirroring the Rust `uikit_dioxus`/`uikit_leptos`),
 [`ts/analytics/`](ts/analytics/) (PostHog), [`ts/error-monitoring/`](ts/error-monitoring/)
 (Sentry), [`ts/experiments/`](ts/experiments/) (A/B testing),
 [`ts/mfe/`](ts/mfe/) (the microfrontend host contract — registry, loader, events),

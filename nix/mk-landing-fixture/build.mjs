@@ -1,7 +1,7 @@
 // The shape `next build` + the landing's `postbuild` leave behind, and a
 // server that keeps the contract `container-smoke` holds a landing image to:
-// /health, the bare URL's 302, a page, the OG card, a form POST whose lead
-// lands in the data mount — and a 500 everywhere without its prod env.
+// /health, the bare URL's 302, a page, the OG card, the self-report, a form
+// POST whose lead lands in the data mount — and a 500 everywhere without its prod env.
 import { mkdirSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 
@@ -9,6 +9,7 @@ import { createRequire } from "node:module";
 if (createRequire(import.meta.url)("fixture-vendored") !== "vendored") throw new Error("fixture-vendored missing");
 const chunk = "self.__chunk=" + JSON.stringify("x".repeat(4096)) + ";";
 mkdirSync(".next/standalone/.next/static/chunks", { recursive: true });
+mkdirSync(".next/standalone/.next/server", { recursive: true });
 mkdirSync(".next/standalone/assets/fonts", { recursive: true });
 mkdirSync(".next/static/chunks", { recursive: true });
 mkdirSync(".next/diagnostics", { recursive: true });
@@ -26,6 +27,11 @@ http
     if (url.pathname === "/health") return res.writeHead(200).end("ok");
     if (url.pathname === "/") return res.writeHead(302, { Location: "/fr" }).end();
     if (url.pathname === "/og") return res.writeHead(200, { "Content-Type": "image/png" }).end();
+    if (url.pathname === "/.well-known/sa-site") {
+      const unset = { state: "unset" };
+      const report = { brand: "fixture", kitstart: "0.0.0", checked_at: new Date().toISOString(), sources: { places: { paris: unset }, pricing: unset, experiments: unset } };
+      return res.writeHead(200, { "Content-Type": "application/json", "Cache-Control": "no-store" }).end(JSON.stringify(report));
+    }
     if (url.pathname === "/quote" && req.method === "POST") {
       let body = "";
       req.on("data", c => (body += c));

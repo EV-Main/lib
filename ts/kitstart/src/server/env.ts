@@ -21,8 +21,6 @@ export interface ServerEnv {
   leadsDb: LeadDb;
   /** Which setting chose it, for the boot log. */
   leadsDbFrom: "LEADS_DB_URL" | "LEADS_DB_PATH" | "default";
-  /** Where the live place data comes from; absent → the baked config. */
-  locationsApiUrl: string | null;
   smtpUrl: string | null;
   /** A bare address (`leads@brand.fr`), not `Name <…>`. */
   notifyTo: string | null;
@@ -59,6 +57,19 @@ function url(source: EnvSource, name: string): string | null {
     // Never the value: a URL setting may carry credentials.
     throw new Error(`${name} is not a URL`);
   }
+}
+
+/**
+ * The brand's base on sites_panel, `<SITES_PANEL_INTERNAL_URL>/brands/<brand>`;
+ * `null` when the landing is not connected. devops derives the URL from the
+ * container contract's `consumes`, so no landing types it.
+ */
+export function sitesPanelBrand(site: { brand: { id: string } }, source: EnvSource): string | null {
+  if (opt(source, "LOCATIONS_API_URL") !== null) {
+    throw new Error("LOCATIONS_API_URL is gone: SITES_PANEL_INTERNAL_URL replaces it, set by devops from mkLanding's `connected = true`");
+  }
+  const base = url(source, "SITES_PANEL_INTERNAL_URL");
+  return base === null ? null : `${base}/brands/${encodeURIComponent(site.brand.id)}`;
 }
 
 /**
@@ -112,11 +123,11 @@ export function parseServerEnv(site: { brand: { id: string } }, source: EnvSourc
   if (trust === null && production) {
     throw new Error("TRUSTED_PROXY is required in production: cloudflare, or xff:<n> for n proxies of ours");
   }
+  sitesPanelBrand(site, source); // at boot, not on the first page
   return {
     production,
     trustedProxy: trust === null ? null : parseProxyTrust(trust),
     ...leadsDb(source, production, site.brand.id),
-    locationsApiUrl: url(source, "LOCATIONS_API_URL"),
     smtpUrl: opt(source, "SMTP_URL"),
     notifyTo: opt(source, "LEAD_NOTIFY_TO"),
     notifyFrom: opt(source, "LEAD_NOTIFY_FROM"),

@@ -1,13 +1,8 @@
-use dioxus::prelude::*;
+use super::KeyInput;
 
-use crate::{
-	cn,
-	uikit::{SLIDER_RANGE, SLIDER_ROOT, SLIDER_THUMB, SLIDER_TRACK, primitives::use_controllable},
-};
-
-/// Orientation of a [`Slider`]; rendered as `data-orientation` so the landing
+/// Orientation of a `Slider`; rendered as `data-orientation` so the landing
 /// class selectors lay the track out horizontally or vertically.
-#[derive(Clone, Copy, Default, PartialEq, strum::AsRefStr)]
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::IntoStaticStr)]
 #[strum(serialize_all = "kebab-case")]
 pub enum SliderOrientation {
 	#[default]
@@ -15,303 +10,185 @@ pub enum SliderOrientation {
 	Vertical,
 }
 
-#[component]
-pub fn Slider(
-	#[props(default)] class: String,
-	value: Option<f64>,
-	#[props(default)] default_value: f64,
-	on_value_change: Option<EventHandler<f64>>,
-	#[props(default = 0.0)] min: f64,
-	#[props(default = 100.0)] max: f64,
-	#[props(default = 1.0)] step: f64,
-	#[props(default)] orientation: SliderOrientation,
-	#[props(default)] disabled: bool,
-	aria_label: Option<String>,
-) -> Element {
-	let state = use_controllable(value, default_value, on_value_change);
-	let current = clamp_step(state.get(), min, max, step);
-	let span = (max - min).max(f64::EPSILON);
-	let p = pct(((current - min) / span * 100.0).clamp(0.0, 100.0));
-	let ori: &str = orientation.as_ref();
-
-	let range_style = match orientation {
-		SliderOrientation::Horizontal => format!("width: {p}%;"),
-		SliderOrientation::Vertical => format!("height: {p}%;"),
-	};
-	// The thumb is absolutely positioned within the (relative) root and centred on
-	// the value point; without `position:absolute` the `%` offset is ignored and
-	// flow layout parks it at the end of the row.
-	let thumb_style = match orientation {
-		SliderOrientation::Horizontal => format!("position: absolute; left: {p}%; top: 50%; transform: translate(-50%, -50%);"),
-		SliderOrientation::Vertical => format!("position: absolute; bottom: {p}%; left: 50%; transform: translate(-50%, 50%);"),
-	};
-
-	// Track geometry, captured on mount and re-measured on each press, lets a
-	// pointer drag map cursor position → value (the TS port reads
-	// `getBoundingClientRect`; we use Dioxus' renderer-agnostic `get_client_rect`).
-	let mut track = use_signal(|| Option::<std::rc::Rc<MountedData>>::None);
-	let mut bounds = use_signal(|| (0.0_f64, 1.0_f64));
-	let mut dragging = use_signal(|| false);
-
-	let on_key = move |e: KeyboardEvent| {
-		if disabled {
-			return;
+/// One slider's range, as its props give it on this render.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub(crate) struct Slider {
+	pub min: f64,
+	pub max: f64,
+	pub step: f64,
+	pub orientation: SliderOrientation,
+}
+impl Slider {
+	/// `value` clamped into the range and snapped to the nearest step.
+	pub(crate) fn clamp(&self, value: f64) -> f64 {
+		let clamped = value.clamp(self.min, self.max);
+		if self.step <= 0.0 {
+			return clamped;
 		}
-		let next = match e.key() {
-			Key::ArrowRight | Key::ArrowUp => current + step,
-			Key::ArrowLeft | Key::ArrowDown => current - step,
-			Key::Home => min,
-			Key::End => max,
-			_ => return,
+		let steps = ((clamped - self.min) / self.step).round();
+		(self.min + steps * self.step).clamp(self.min, self.max)
+	}
+
+	/// The value a keydown on the thumb moves `current` to; `None` for a key the
+	/// slider leaves alone.
+	pub(crate) fn key(&self, input: &KeyInput, current: f64) -> Option<f64> {
+		let next = match input.key.as_str() {
+			"ArrowRight" | "ArrowUp" => current + self.step,
+			"ArrowLeft" | "ArrowDown" => current - self.step,
+			"Home" => self.min,
+			"End" => self.max,
+			_ => return None,
 		};
-		e.prevent_default();
-		state.set(clamp_step(next, min, max, step));
-	};
+		Some(self.clamp(next))
+	}
 
-	let axis = move |e: &PointerEvent| match orientation {
-		SliderOrientation::Horizontal => e.client_coordinates().x,
-		SliderOrientation::Vertical => e.client_coordinates().y,
-	};
+	/// Maps a client coordinate along the active axis to a stepped value, given
+	/// the track's origin and size on that axis. Vertical runs bottom-to-top.
+	pub(crate) fn value_at(&self, client: f64, track: Track) -> f64 {
+		let size = track.size.max(f64::EPSILON);
+		let ratio = match self.orientation {
+			SliderOrientation::Horizontal => (client - track.origin) / size,
+			SliderOrientation::Vertical => 1.0 - (client - track.origin) / size,
+		};
+		self.clamp(self.min + ratio * (self.max - self.min))
+	}
 
-	// Pointer handling lives on the root, not the track: the thumb sits above the
-	// track (absolute), so grabbing it must still start a drag.
-	rsx! {
-		span {
-			class: cn!(SLIDER_ROOT, class),
-			"data-slot": "slider",
-			"data-orientation": ori,
-			"data-disabled": disabled.then_some(true),
-			onpointerdown: move |e: PointerEvent| async move {
-				if disabled {
-					return;
-				}
-				let Some(t) = track() else { return };
-				let Ok(rect) = t.get_client_rect().await else { return };
-				let (origin, size) = match orientation {
-					SliderOrientation::Horizontal => (rect.origin.x, rect.size.width),
-					SliderOrientation::Vertical => (rect.origin.y, rect.size.height),
-				};
-				bounds.set((origin, size));
-				dragging.set(true);
-				// Pointer capture (the trick Radix uses): route every later move/up to
-				// the track so a drag keeps tracking once the cursor leaves the thin
-				// ~16px-tall hit area. Web-only; a no-op on other renderers.
-				#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
-				if let Some(el) = t.downcast::<web_sys::Element>() {
-					// best-effort: a stale pointer_id just leaves the drag in its
-					// pre-capture, cursor-must-stay-over mode; it never panics.
-					let _ = el.set_pointer_capture(e.pointer_id());
-				}
-				state.set(value_at(axis(&e), origin, size, min, max, step, orientation));
-			},
-			onpointermove: move |e: PointerEvent| {
-				match drag_step(dragging(), disabled, e.held_buttons().is_empty()) {
-					DragStep::Ignore => {}
-					DragStep::Release => dragging.set(false),
-					DragStep::Track => {
-						let (origin, size) = bounds();
-						state.set(value_at(axis(&e), origin, size, min, max, step, orientation));
-					}
-				}
-			},
-			onpointerup: move |_| dragging.set(false),
-			// Without pointer capture (any non-web renderer) a release off the root
-			// never reaches `onpointerup`; leaving ends the drag instead. Under
-			// capture the pointer counts as over the track until release, so this
-			// does not cut a web drag short.
-			onpointerleave: move |_| dragging.set(false),
-			onpointercancel: move |_| dragging.set(false),
-			span {
-				class: SLIDER_TRACK,
-				"data-slot": "slider-track",
-				"data-orientation": ori,
-				onmounted: move |e: MountedEvent| track.set(Some(e.data())),
-				span {
-					class: SLIDER_RANGE,
-					"data-slot": "slider-range",
-					"data-orientation": ori,
-					style: range_style,
-				}
-			}
-			span {
-				class: SLIDER_THUMB,
-				"data-slot": "slider-thumb",
-				"data-orientation": ori,
-				style: thumb_style,
-				role: "slider",
-				// The name belongs on the focusable `role="slider"` node: on the
-				// role-less root it is prohibited and never announced.
-				"aria-label": aria_label,
-				tabindex: if disabled { "-1" } else { "0" },
-				"aria-valuenow": current,
-				"aria-valuemin": min,
-				"aria-valuemax": max,
-				"aria-orientation": ori,
-				"aria-disabled": disabled.then_some(true),
-				onkeydown: on_key,
-			}
+	/// The range's `style`, filling up to `value`.
+	pub(crate) fn range_style(&self, value: f64) -> String {
+		let p = self.percent(value);
+		match self.orientation {
+			SliderOrientation::Horizontal => format!("width: {p}%;"),
+			SliderOrientation::Vertical => format!("height: {p}%;"),
 		}
 	}
-}
 
-/// What a `pointermove` does to a drag in progress.
-#[derive(Debug, PartialEq)]
-enum DragStep {
-	/// Not dragging (or disabled): hover must not move the value.
-	Ignore,
-	/// A drag is open but no button is held any more — the release happened
-	/// where the root could not see it (no pointer capture off the web). Close
-	/// it instead of letting the bare cursor drive the value.
-	Release,
-	/// A held drag: the value follows the pointer.
-	Track,
-}
+	/// The thumb's `style`: absolutely positioned within the (relative) root and
+	/// centred on `value` — without `position:absolute` the `%` offset is ignored
+	/// and flow layout parks it at the end of the row.
+	pub(crate) fn thumb_style(&self, value: f64) -> String {
+		let p = self.percent(value);
+		match self.orientation {
+			SliderOrientation::Horizontal => format!("position: absolute; left: {p}%; top: 50%; transform: translate(-50%, -50%);"),
+			SliderOrientation::Vertical => format!("position: absolute; bottom: {p}%; left: 50%; transform: translate(-50%, 50%);"),
+		}
+	}
 
-fn drag_step(dragging: bool, disabled: bool, no_buttons_held: bool) -> DragStep {
-	match (dragging && !disabled, no_buttons_held) {
-		(false, _) => DragStep::Ignore,
-		(true, true) => DragStep::Release,
-		(true, false) => DragStep::Track,
+	/// Position as a percentage string, ≤4 decimals with trailing zeros trimmed —
+	/// matches the reference (Radix) serialization (`38.9474`, `25`), keeping the
+	/// emitted `style` byte-stable instead of leaking f64 round-off.
+	fn percent(&self, value: f64) -> String {
+		let span = (self.max - self.min).max(f64::EPSILON);
+		let s = format!("{:.4}", ((value - self.min) / span * 100.0).clamp(0.0, 100.0));
+		s.trim_end_matches('0').trim_end_matches('.').to_owned()
 	}
 }
 
-/// Maps a client coordinate along the active axis to a stepped value, given the
-/// track's origin and size on that axis. Vertical runs bottom-to-top.
-fn value_at(client: f64, origin: f64, size: f64, min: f64, max: f64, step: f64, orientation: SliderOrientation) -> f64 {
-	let size = size.max(f64::EPSILON);
-	let ratio = match orientation {
-		SliderOrientation::Horizontal => (client - origin) / size,
-		SliderOrientation::Vertical => 1.0 - (client - origin) / size,
-	};
-	clamp_step(min + ratio * (max - min), min, max, step)
+/// The track's extent on the slider's axis, as the port measured it.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub(crate) struct Track {
+	pub origin: f64,
+	pub size: f64,
 }
-/// Position as a percentage string, ≤4 decimals with trailing zeros trimmed —
-/// matches the reference (Radix) serialization (`38.9474`, `25`), keeping the
-/// emitted `style` byte-stable instead of leaking f64 round-off.
-fn pct(percent: f64) -> String {
-	let s = format!("{percent:.4}");
-	s.trim_end_matches('0').trim_end_matches('.').to_string()
-}
-fn clamp_step(value: f64, min: f64, max: f64, step: f64) -> f64 {
-	let clamped = value.clamp(min, max);
-	if step <= 0.0 {
-		return clamped;
+
+/// A pointer drag: the track as measured at the press, while one is open.
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
+pub(crate) struct Drag(Option<Track>);
+impl Drag {
+	pub(crate) fn press(&mut self, track: Track) {
+		self.0 = Some(track);
 	}
-	let steps = ((clamped - min) / step).round();
-	(min + steps * step).clamp(min, max)
+
+	pub(crate) fn release(&mut self) {
+		self.0 = None;
+	}
+
+	/// The track a `pointermove` measures against, `None` when it moves nothing:
+	/// no drag open (hover must not move the value), or disabled. A move with no
+	/// button held closes the drag — the release happened where the root could
+	/// not see it (no pointer capture off the web), and the bare cursor must not
+	/// drive the value.
+	pub(crate) fn moved(&mut self, disabled: bool, buttons_held: bool) -> Option<Track> {
+		let track = self.0.filter(|_| !disabled)?;
+		if !buttons_held {
+			self.release();
+			return None;
+		}
+		Some(track)
+	}
 }
 
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use crate::uikit::test_util::render;
+
+	const PERCENT: Slider = Slider {
+		min: 0.0,
+		max: 100.0,
+		step: 1.0,
+		orientation: SliderOrientation::Horizontal,
+	};
+	const TRACK: Track = Track { origin: 10.0, size: 200.0 };
 
 	#[test]
-	fn renders_slots_role_and_aria() {
-		fn app() -> Element {
-			rsx! {
-				Slider { default_value: 25.0 }
-			}
-		}
-		let html = render(app);
-		assert!(html.contains("data-slot=\"slider\""), "{html}");
-		assert!(html.contains("data-slot=\"slider-track\""), "{html}");
-		assert!(html.contains("data-slot=\"slider-range\""), "{html}");
-		assert!(html.contains("data-slot=\"slider-thumb\""), "{html}");
-		assert!(html.contains("role=\"slider\""), "{html}");
-		assert!(html.contains("aria-valuenow=25"), "{html}");
-		assert!(html.contains("aria-valuemin=0"), "{html}");
-		assert!(html.contains("aria-valuemax=100"), "{html}");
-		assert!(html.contains("aria-orientation=\"horizontal\""), "{html}");
+	fn values_clamp_into_the_range_and_snap_to_the_step() {
+		assert_eq!(PERCENT.clamp(150.0), 100.0);
+		assert_eq!(Slider { step: 5.0, ..PERCENT }.clamp(12.4), 10.0);
+		assert_eq!(Slider { step: 0.0, ..PERCENT }.clamp(12.4), 12.4, "a zero step does not snap");
 	}
 
 	#[test]
-	fn aria_label_names_the_thumb_not_the_root() {
-		fn app() -> Element {
-			rsx! {
-				Slider { aria_label: "Volume", default_value: 50.0 }
-			}
-		}
-		let html = render(app);
-		let root_at = html.find("data-slot=\"slider\"").expect("root rendered");
-		let root = &html[html[..root_at].rfind('<').expect("opening tag")..root_at + html[root_at..].find('>').expect("closing bracket")];
-		assert!(!root.contains("aria-label"), "the role-less root must not carry the name: {root}");
-		let thumb_at = html.find("data-slot=\"slider-thumb\"").expect("thumb rendered");
-		let thumb = &html[thumb_at..thumb_at + html[thumb_at..].find('>').expect("closing bracket")];
-		assert!(thumb.contains("role=\"slider\""), "{thumb}");
-		assert!(thumb.contains("aria-label=\"Volume\""), "{thumb}");
+	fn keys_step_and_jump_to_the_ends() {
+		assert_eq!(PERCENT.key(&"ArrowRight".into(), 40.0), Some(41.0));
+		assert_eq!(PERCENT.key(&"ArrowDown".into(), 0.0), Some(0.0), "stepping past min clamps");
+		assert_eq!(PERCENT.key(&"End".into(), 40.0), Some(100.0));
+		assert_eq!(PERCENT.key(&"Tab".into(), 40.0), None);
 	}
 
 	#[test]
-	fn range_and_thumb_reflect_percent() {
-		fn app() -> Element {
-			rsx! {
-				Slider { default_value: 25.0, min: 0.0, max: 100.0 }
-			}
-		}
-		let html = render(app);
-		assert!(html.contains("width: 25%"), "{html}");
-		assert!(html.contains("left: 25%"), "{html}");
+	fn the_pointer_maps_along_the_axis_and_vertical_runs_upward() {
+		assert_eq!(PERCENT.value_at(60.0, TRACK), 25.0);
+		assert_eq!(PERCENT.value_at(-50.0, TRACK), 0.0);
+		let vertical = Slider {
+			orientation: SliderOrientation::Vertical,
+			..PERCENT
+		};
+		assert_eq!(vertical.value_at(60.0, TRACK), 75.0);
 	}
 
 	#[test]
-	fn vertical_uses_height_and_bottom() {
-		fn app() -> Element {
-			rsx! {
-				Slider { default_value: 40.0, orientation: SliderOrientation::Vertical }
-			}
-		}
-		let html = render(app);
-		assert!(html.contains("data-orientation=\"vertical\""), "{html}");
-		assert!(html.contains("height: 40%"), "{html}");
-		assert!(html.contains("bottom: 40%"), "{html}");
-	}
-
-	#[test]
-	fn controlled_value_clamps_to_range() {
-		fn app() -> Element {
-			rsx! {
-				Slider { value: 150.0, min: 0.0, max: 100.0 }
-			}
-		}
-		let html = render(app);
-		assert!(html.contains("aria-valuenow=100"), "{html}");
+	fn styles_print_trimmed_percentages() {
+		let odd = Slider { max: 19.0, step: 0.0, ..PERCENT };
+		assert_eq!(odd.range_style(7.4), "width: 38.9474%;");
+		assert_eq!(PERCENT.thumb_style(25.0), "position: absolute; left: 25%; top: 50%; transform: translate(-50%, -50%);");
 	}
 
 	#[test]
 	fn hover_without_a_drag_never_moves_the_value() {
-		assert_eq!(drag_step(false, false, true), DragStep::Ignore);
-		assert_eq!(drag_step(false, false, false), DragStep::Ignore);
+		let mut drag = Drag::default();
+		assert_eq!(drag.moved(false, true), None);
+		assert_eq!(drag.moved(false, false), None);
 	}
 
 	#[test]
 	fn move_with_no_button_held_ends_a_stuck_drag() {
-		// The off-slider release the root never saw: the next move arrives with
-		// every button up and must close the drag, not track the cursor.
-		assert_eq!(drag_step(true, false, true), DragStep::Release);
+		let mut drag = Drag::default();
+		drag.press(TRACK);
+		assert_eq!(drag.moved(false, false), None);
+		assert_eq!(drag, Drag::default(), "the drag is closed, not just skipped");
 	}
 
 	#[test]
 	fn move_with_a_button_held_tracks() {
-		assert_eq!(drag_step(true, false, false), DragStep::Track);
+		let mut drag = Drag::default();
+		drag.press(TRACK);
+		assert_eq!(drag.moved(false, true), Some(TRACK));
 	}
 
 	#[test]
 	fn disabled_ignores_moves_even_mid_drag() {
-		assert_eq!(drag_step(true, true, false), DragStep::Ignore);
-	}
-
-	#[test]
-	fn class_override_merges() {
-		fn app() -> Element {
-			rsx! {
-				Slider { default_value: 0.0, class: "w-40" }
-			}
-		}
-		let html = render(app);
-		assert!(html.contains("w-40"), "{html}");
-		// the root's standalone `w-full` is dropped by the override; the track's
-		// `data-[orientation=horizontal]:w-full` is a different utility and stays.
-		assert!(!html.contains("flex w-full"), "override should drop root w-full: {html}");
+		let mut drag = Drag::default();
+		drag.press(TRACK);
+		assert_eq!(drag.moved(true, true), None);
+		assert_eq!(drag.moved(false, true), Some(TRACK), "still open once re-enabled");
 	}
 }
