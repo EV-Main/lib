@@ -16,7 +16,7 @@ export const tableDensities = {
 } as const;
 export type TableDensity = keyof typeof tableDensities;
 
-export const TABLE_CARD = "bg-card text-ink overflow-hidden rounded-xl border border-border shadow-sm";
+export const TABLE_CARD = "bg-card text-ink overflow-hidden rounded-panel border border-border shadow-sm";
 
 export const TABLE_HEADER = "[&_tr]:border-b";
 

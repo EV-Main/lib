@@ -298,7 +298,7 @@ const TEXT_SCALE: [&str; 9] = ["caption", "body-s", "body", "body-l", "h3", "h2"
 ///
 /// `tailwind_fuse` cannot parse Tailwind v4's `(--var)` shorthand, and keeps a
 /// class it cannot parse beside the one it should replace: `rounded-full
-/// rounded-(--control-radius)` would survive whole, with the CSS order picking
+/// rounded-control` would survive whole, with the CSS order picking
 /// the radius. Such a class is merged in its `[var(--var)]` long form and
 /// written back as the caller wrote it.
 #[doc(hidden)]
@@ -387,8 +387,8 @@ mod tests {
 	/// `[var(--var)]` long form, and comes back as written.
 	#[test]
 	fn var_shorthand_conflicts_like_its_long_form() {
-		assert_eq!(cn!("rounded-full size-7", "rounded-(--control-radius)"), "size-7 rounded-(--control-radius)");
-		assert_eq!(cn!("rounded-(--control-radius)", "rounded-full"), "rounded-full");
+		assert_eq!(cn!("rounded-full size-7", "rounded-control"), "size-7 rounded-control");
+		assert_eq!(cn!("rounded-control", "rounded-full"), "rounded-full");
 		assert_eq!(cn!("hover:rounded-(--a)", "rounded-(--b)"), "hover:rounded-(--a) rounded-(--b)");
 		assert_eq!(cn!("text-(length:--size) text-ink", "text-body"), "text-ink text-body");
 		assert_eq!(cn!("has-[:focus-visible]:ring-2", "p-(--pad) p-2"), "has-[:focus-visible]:ring-2 p-2");
@@ -403,6 +403,14 @@ mod tests {
 			"px-3 [--control-box:var(--control-h-xs)]"
 		);
 		assert_eq!(cn!("h-(--control-box) min-w-(--control-box)", "h-auto"), "min-w-(--control-box) h-auto");
+	}
+
+	/// A radius role is a radius: it replaces a shape and yields to one.
+	#[test]
+	fn radius_roles_conflict_as_radii() {
+		assert_eq!(cn!("rounded-full size-7", "rounded-control"), "size-7 rounded-control");
+		assert_eq!(cn!("rounded-panel", "rounded-full"), "rounded-full");
+		assert_eq!(cn!("rounded-row", "rounded-l-none"), "rounded-row rounded-l-none");
 	}
 
 	/// The serif face is a family, not a weight: a weight beside it keeps it,

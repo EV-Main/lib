@@ -40,7 +40,7 @@ describe("NavigationMenu", () => {
       </NavigationMenu>,
     );
     const panel = getByText("Intro").closest('[data-slot="navigation-menu-content"]')!;
-    for (const cls of ["absolute", "top-full", "mt-1.5", "bg-popover", "border-border", "rounded-md", "shadow"]) {
+    for (const cls of ["absolute", "top-full", "mt-1.5", "bg-popover", "border-border", "rounded-panel", "shadow"]) {
       expect(panel).toHaveClass(cls);
     }
     expect(container.querySelector('[data-slot="navigation-menu-viewport"]')).toBeNull();

@@ -4,7 +4,7 @@ pub const CONFIRM_DIALOG_CONTENT: &str = "max-w-105 gap-4 bg-popover p-5";
 
 pub const CONFIRM_DIALOG_HEADER: &str = "flex-row gap-3 text-left";
 
-pub const CONFIRM_DIALOG_ICON: &str = "flex size-8 shrink-0 items-center justify-center rounded-(--control-radius)";
+pub const CONFIRM_DIALOG_ICON: &str = "flex size-8 shrink-0 items-center justify-center rounded-control";
 
 pub const CONFIRM_DIALOG_TEXT: &str = "flex min-w-0 flex-col gap-1";
 

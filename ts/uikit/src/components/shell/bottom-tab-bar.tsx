@@ -91,7 +91,7 @@ export function BottomTabBar({
             onItemIntent={onItemIntent}
             onNavigate={onNavigate}
             className={cn(
-              "flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-lg py-1 font-medium transition-colors",
+              "flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-row py-1 font-medium transition-colors",
               "outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-secondary",
               active ? "text-primary-ink" : "text-ink-soft hover:text-ink",
               item.disabled && "cursor-not-allowed opacity-50",

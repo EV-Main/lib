@@ -29,9 +29,9 @@ pub const DRAWER_DESCRIPTION: &str = "text-ink-soft text-sm";
 #[derive(PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
 #[strum(serialize_all = "kebab-case")]
 pub enum DrawerDirection {
-	#[tw(default, class = "inset-x-0 bottom-0 mt-24 max-h-[80vh] flex-col rounded-t-lg border-b-0")]
+	#[tw(default, class = "inset-x-0 bottom-0 mt-24 max-h-[80vh] flex-col rounded-t-panel border-b-0")]
 	Bottom,
-	#[tw(class = "inset-x-0 top-0 mb-24 max-h-[80vh] flex-col rounded-b-lg border-t-0")]
+	#[tw(class = "inset-x-0 top-0 mb-24 max-h-[80vh] flex-col rounded-b-panel border-t-0")]
 	Top,
 	#[tw(class = "inset-y-0 left-0 w-3/4 flex-row border-r sm:max-w-sm")]
 	Left,

@@ -48,7 +48,7 @@ export interface SectionNavProps extends Omit<React.ComponentProps<"nav">, "chil
 }
 
 const ITEM =
-  "flex h-8 w-full items-center gap-2.5 rounded-(--control-radius) px-2.5 text-left text-body outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-40";
+  "flex h-8 w-full items-center gap-2.5 rounded-row px-2.5 text-left text-body outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-40";
 
 /**
  * A screen's own section rail — settings panes, a document's chapters: grouped

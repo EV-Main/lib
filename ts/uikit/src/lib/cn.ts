@@ -6,6 +6,7 @@ import { extendTailwindMerge } from "tailwind-merge";
 // and dropped by a later `text-ink`. The Rust mirror is `fuse` in ev_lib_classes.
 const twMerge = extendTailwindMerge({
   extend: {
+    theme: { radius: ["control", "panel", "chip", "row"] },
     classGroups: {
       "font-size": [{ text: ["caption", "body-s", "body", "body-l", "h3", "h2", "h1", "figure-m", "figure-l"] }],
     },
