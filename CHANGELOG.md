@@ -24,6 +24,11 @@ Rust crate and its TypeScript mirror at once.
 
 ### Breaking
 
+- **Font roles** (`ev_lib` `uikit` and `@evinvest/uikit`): `sans`, `serif` and
+  `mono` are separate parameters (`--brand-font-sans`, `--brand-font-serif`,
+  `--brand-font-mono`); the role formerly called `display` is `serif`. Defaults
+  are Inter, Inter Tight and JetBrains Mono; `data-theme="oldschool"` keeps
+  Playfair Display and Inter as before 1.0.
 - **The TS trading terminal is removed** (`@evinvest/uikit`): `Terminal`,
   `TerminalPane`, `TerminalPaneHeader`, `TerminalPaneBody`, `TerminalChart`,
   `TerminalTicker`, `TickerStat`, `OrderBook`, `OrderBookHead`, `OrderBookRow`,

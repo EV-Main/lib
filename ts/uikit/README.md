@@ -229,13 +229,14 @@ under a brand under another brand may match either.
 
 The families are parameters, one per role, and not part of the 29 colour names:
 a palette is complete without them, and the generator only carries what a
-brand file's `[fonts]` declares. Unset, each is EV's:
+brand file's `[fonts]` declares. Unset, each is EV's, and Oldschool carries the
+families the navy look shipped with:
 
-| parameter | utilities | default (EV) |
-|---|---|---|
-| `--brand-font-sans` | `font-sans`, the page's base family | `--font-inter`, else `"Inter"` |
-| `--brand-font-serif` | `font-serif` | `--font-playfair`, else `"Playfair Display"` |
-| `--brand-font-mono` | `font-mono` | `--font-inter`, else `"Inter"` |
+| parameter | utilities | default (EV) | Oldschool |
+|---|---|---|---|
+| `--brand-font-sans` | `font-sans`, the page's base family | `--font-inter`, else `"Inter"` | same |
+| `--brand-font-serif` | `font-serif` | `--font-inter-tight`, else `"Inter Tight"` | `--font-playfair`, else `"Playfair Display"` |
+| `--brand-font-mono` | `font-mono` | `--font-jetbrains-mono`, else `"JetBrains Mono"` | `--font-inter`, else `"Inter"` |
 
 Declare them on the brand scope (the palette generator writes them from
 `[fonts]`) and load the files yourself — `next/font`, or your own `@font-face`;
@@ -817,6 +818,11 @@ becomes `variant="solid"`.
 
 **Tokens and look**
 
+- Font defaults are Inter (sans), Inter Tight (serif role) and JetBrains Mono
+  (mono). `data-theme="oldschool"` sets Playfair Display and Inter for the serif
+  and mono roles, as the navy look shipped. Load the families a theme uses
+  (`--font-inter-tight`, `--font-jetbrains-mono`, or `--font-playfair` for
+  Oldschool); the kit ships no font files.
 - The font role `display` is `serif`: `--brand-font-display` / `font-display`
   become `--brand-font-serif` / `font-serif` (see [Fonts](#fonts)).
 - A brand file must add `chart-6` (29 names now); `evinvest-palette` names it.

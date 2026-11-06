@@ -217,6 +217,9 @@
 :where([data-theme="oldschool"], [data-theme="oldschool"] :is(.light, .dark)) {
   --scheme: dark;
 
+  --brand-font-serif: var(--font-playfair, "Playfair Display");
+  --brand-font-mono: var(--font-inter, "Inter");
+
   --background: #070d18;
   --card: #16233c;
   --secondary: #0d1526;
