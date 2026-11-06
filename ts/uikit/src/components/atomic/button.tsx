@@ -5,7 +5,7 @@ import { sizeClasses } from "../../generated/size";
 import { accentFillClasses, accentOutlineClasses, type Accent } from "../../generated/accent";
 import {
   BUTTON_BASE,
-  buttonIconSizeClasses,
+  BUTTON_ICON,
   buttonSizeClasses,
   buttonVariantClasses,
   type ButtonSize,
@@ -42,7 +42,7 @@ export function buttonVariants({
     BUTTON_BASE,
     buttonVariantClasses[variant],
     sizeClasses[size],
-    icon ? buttonIconSizeClasses[size] : buttonSizeClasses[size],
+    icon ? BUTTON_ICON : buttonSizeClasses[size],
     accent === undefined ? undefined : accentClass(accent, variant),
     className,
   );

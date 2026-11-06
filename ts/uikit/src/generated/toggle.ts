@@ -14,6 +14,6 @@ export const toggleSizeClasses = {
   "md": "px-2",
   "lg": "px-2.5",
   "xl": "px-3",
-  "touch": "px-3 [--control-box:var(--control-h-xl)]",
+  "touch": "px-3",
 } as const;
 export type ToggleSize = keyof typeof toggleSizeClasses;

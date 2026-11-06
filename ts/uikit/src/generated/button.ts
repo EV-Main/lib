@@ -12,22 +12,14 @@ export const buttonVariantClasses = {
 } as const;
 export type ButtonVariant = keyof typeof buttonVariantClasses;
 
+export const BUTTON_ICON = "aspect-square px-0";
+
 export const buttonSizeClasses = {
   "xs": "gap-1 px-2 text-xs has-[>svg]:px-1.5",
   "sm": "gap-1.5 px-3 has-[>svg]:px-2.5",
   "md": "px-4 has-[>svg]:px-3",
   "lg": "px-6 has-[>svg]:px-4",
-  "xl": "h-auto px-[var(--control-px)] py-[var(--control-py)] text-[length:var(--control-text)]",
+  "xl": "px-[var(--control-px)] text-[length:var(--control-text)]",
   "touch": "px-6 has-[>svg]:px-4",
 } as const;
 export type ButtonSize = keyof typeof buttonSizeClasses;
-
-export const buttonIconSizeClasses = {
-  "xs": "aspect-square px-0",
-  "sm": "aspect-square px-0",
-  "md": "aspect-square px-0",
-  "lg": "aspect-square px-0",
-  "xl": "h-auto aspect-square p-[var(--control-py)]",
-  "touch": "aspect-square px-0",
-} as const;
-export type ButtonIconSize = keyof typeof buttonIconSizeClasses;

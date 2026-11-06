@@ -34,7 +34,7 @@ discrepancy because the key carried no information to contradict.
 
 **A table key names one axis.** A multi-axis table is multiple tables, never a
 product flattened into strings: `buttonSizeClasses` over the sizes and
-`buttonIconSizeClasses` over the same sizes, not one table keyed `"icon-sm"` —
+`BUTTON_ICON` for the shape at any of them, not one table keyed `"icon-sm"` —
 which fuses magnitude with shape and, in `"icon"`, elides the default as well.
 
 **There is one severity vocabulary.** A toast is `{Neutral, Positive, Info,
