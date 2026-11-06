@@ -2,13 +2,6 @@
 
 export const CHAT_BUBBLE_BASE = "min-w-0 break-words whitespace-pre-wrap text-body text-ink";
 
-export const chatBubbleVariantClasses = {
-  "user": "max-w-105 rounded-lg border border-border bg-secondary px-3.5 py-2.5",
-  "assistant": "py-0.5",
-  "muted": "max-w-105 rounded-lg border border-border-subtle bg-muted px-3.5 py-2.5",
-} as const;
-export type ChatBubbleVariant = keyof typeof chatBubbleVariantClasses;
-
 export const CHAT_MESSAGE_BASE = "flex gap-3";
 
 export const CHAT_MESSAGE_USER = "justify-end";
@@ -39,12 +32,6 @@ export const CHAT_MARKER_STATUS = "flex items-center gap-2 text-body-s text-ink-
 
 export const CHAT_MARKER_DOT = "size-1.5 rounded-full";
 
-export const chatStatusDotClasses = {
-  "running": "bg-primary-ink motion-safe:animate-pulse",
-  "done": "bg-ink-soft",
-} as const;
-export type ChatStatusState = keyof typeof chatStatusDotClasses;
-
 export const CHAT_MARKER_TOOL = "flex items-center gap-2.5 rounded-(--control-radius) border bg-card px-2.5 py-2";
 
 export const CHAT_MARKER_TOOL_BORDER = "border-border";
@@ -63,13 +50,6 @@ export const CHAT_MARKER_TOOL_DETAIL = "truncate text-body-s tabular-nums text-i
 
 export const CHAT_MARKER_TOOL_META = "shrink-0 text-caption";
 
-export const chatToolMetaClasses = {
-  "running": "text-primary-ink",
-  "done": "text-ink-soft",
-  "error": "text-accent-error",
-} as const;
-export type ChatToolState = keyof typeof chatToolMetaClasses;
-
 export const CHAT_ATTACHMENT_BASE = "flex w-60 max-w-full flex-col overflow-hidden rounded-(--control-radius) border border-border bg-card";
 
 export const CHAT_ATTACHMENT_ROW = "flex items-center gap-2.5 p-2";
@@ -85,3 +65,23 @@ export const CHAT_ATTACHMENT_META = "truncate text-caption text-ink-soft";
 export const CHAT_ATTACHMENT_PROGRESS = "h-0.5 bg-border-subtle";
 
 export const CHAT_ATTACHMENT_PROGRESS_FILL = "h-full bg-primary";
+
+export const chatBubbleVariantClasses = {
+  "user": "max-w-105 rounded-lg border border-border bg-secondary px-3.5 py-2.5",
+  "assistant": "py-0.5",
+  "muted": "max-w-105 rounded-lg border border-border-subtle bg-muted px-3.5 py-2.5",
+} as const;
+export type ChatBubbleVariant = keyof typeof chatBubbleVariantClasses;
+
+export const chatStatusDotClasses = {
+  "running": "bg-primary-ink motion-safe:animate-pulse",
+  "done": "bg-ink-soft",
+} as const;
+export type ChatStatusState = keyof typeof chatStatusDotClasses;
+
+export const chatToolMetaClasses = {
+  "running": "text-primary-ink",
+  "done": "text-ink-soft",
+  "error": "text-accent-error",
+} as const;
+export type ChatToolState = keyof typeof chatToolMetaClasses;

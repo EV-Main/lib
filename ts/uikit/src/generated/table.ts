@@ -4,18 +4,6 @@ export const TABLE_CONTAINER = "relative w-full overflow-x-auto";
 
 export const TABLE = "w-full caption-bottom text-sm";
 
-export const tableVariants = {
-  "default": "[--table-px:initial] [--table-py:initial] [--table-head-ink:initial] [--table-head-text:initial] [--table-head-tracking:initial] [--table-head-case:initial]",
-  "card": "[--table-px:calc(var(--spacing)*5)] [--table-py:calc(var(--spacing)*3)] [--table-head-ink:var(--ink-soft)] [--table-head-text:var(--text-xs)] [--table-head-tracking:var(--tracking-wide)] [--table-head-case:uppercase] [&>thead>tr:hover]:bg-transparent",
-} as const;
-export type TableVariant = keyof typeof tableVariants;
-
-export const tableDensities = {
-  "default": "[--table-dense-py:initial] [--table-head-h:initial]",
-  "compact": "[--table-dense-py:calc(var(--spacing)*1.5)] [--table-head-h:calc(var(--spacing)*8)]",
-} as const;
-export type TableDensity = keyof typeof tableDensities;
-
 export const TABLE_CARD = "bg-card text-ink overflow-hidden rounded-xl border border-border shadow-sm";
 
 export const TABLE_HEADER = "[&_tr]:border-b";
@@ -30,10 +18,22 @@ export const TABLE_HEAD = "text-[color:var(--table-head-ink,var(--ink))] h-[var(
 
 export const TABLE_CELL = "px-[var(--table-px,calc(var(--spacing)*2))] py-[var(--table-dense-py,var(--table-py,calc(var(--spacing)*2)))] align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]";
 
+export const TABLE_CAPTION = "text-ink-soft mt-4 text-sm";
+
+export const tableVariants = {
+  "default": "[--table-px:initial] [--table-py:initial] [--table-head-ink:initial] [--table-head-text:initial] [--table-head-tracking:initial] [--table-head-case:initial]",
+  "card": "[--table-px:calc(var(--spacing)*5)] [--table-py:calc(var(--spacing)*3)] [--table-head-ink:var(--ink-soft)] [--table-head-text:var(--text-xs)] [--table-head-tracking:var(--tracking-wide)] [--table-head-case:uppercase] [&>thead>tr:hover]:bg-transparent",
+} as const;
+export type TableVariant = keyof typeof tableVariants;
+
+export const tableDensities = {
+  "default": "[--table-dense-py:initial] [--table-head-h:initial]",
+  "compact": "[--table-dense-py:calc(var(--spacing)*1.5)] [--table-head-h:calc(var(--spacing)*8)]",
+} as const;
+export type TableDensity = keyof typeof tableDensities;
+
 export const tableAligns = {
   "start": "text-start",
   "end": "text-end tabular-nums",
 } as const;
 export type TableAlign = keyof typeof tableAligns;
-
-export const TABLE_CAPTION = "text-ink-soft mt-4 text-sm";

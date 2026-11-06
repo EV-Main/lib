@@ -2,6 +2,14 @@
 
 export const TOAST_BASE = "pointer-events-auto flex w-full items-start gap-3 rounded-lg border p-3 text-body shadow-elevated";
 
+export const TOAST_CLOSE = "text-ink/50 hover:text-ink shrink-0 transition-colors";
+
+export const TOAST_CONTENT = "flex-1 space-y-1";
+
+export const TOAST_TITLE = "font-medium";
+
+export const TOASTER_BASE = "pointer-events-none fixed z-100 w-[calc(100%-2rem)] max-w-sm";
+
 export const toastVariantClasses = {
   "neutral": "bg-popover text-ink border-border",
   "positive": "bg-popover text-ink border-chip-positive-border",
@@ -10,8 +18,6 @@ export const toastVariantClasses = {
   "error": "bg-popover text-ink border-accent-error/50",
 } as const;
 export type ToastVariant = keyof typeof toastVariantClasses;
-
-export const TOASTER_BASE = "pointer-events-none fixed z-100 w-[calc(100%-2rem)] max-w-sm";
 
 export const positionClasses = {
   "top-left": "top-4 left-4",
@@ -22,9 +28,3 @@ export const positionClasses = {
   "bottom-right": "bottom-4 right-4",
 } as const;
 export type ToastPosition = keyof typeof positionClasses;
-
-export const TOAST_CLOSE = "text-ink/50 hover:text-ink shrink-0 transition-colors";
-
-export const TOAST_CONTENT = "flex-1 space-y-1";
-
-export const TOAST_TITLE = "font-medium";

@@ -3,7 +3,8 @@
 //!
 //! ```text
 //!   rust/classes/src/*.rs  ─┐                    ┌─▶ ts/uikit/src/generated/*.ts
-//!   (the class tables)      │                    │
+//!   (every pub const, by    │                    │
+//!   build.rs; + manifest)   │                    │
 //!   ev_lib libraries        │                    ├─▶ ts/<pkg>/src/generated/*.ts
 //!   (the shared registries) ├─ ev_lib_gen ───────┤
 //!   theme.css · ev.css      │                    ├─▶ rust/classes/uikit-classes.txt
@@ -23,16 +24,18 @@ use std::{
 };
 
 use ev_lib::ts_gen::Ts;
-use strum::IntoEnumIterator;
-use tailwind_fuse::AsTailwindClass;
 
 mod manifest;
+mod consts {
+	use ev_lib::ts_gen::Ts;
+	include!(concat!(env!("OUT_DIR"), "/consts.rs"));
+}
 
 fn main() {
 	let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
 
-	for (component, exports) in manifest::manifest() {
-		write_module(&root, "uikit", component, &exports);
+	for (module, exports) in uikit() {
+		write_module(&root, "uikit", module, &exports);
 	}
 	for (package, module, exports) in manifest::shared() {
 		write_module(&root, package, module, &exports);
@@ -40,6 +43,20 @@ fn main() {
 
 	write_class_inventory(&root);
 	write_stylesheets(&root);
+}
+
+/// Every uikit module: its `ev_lib_classes` consts, then what the manifest adds.
+fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
+	let mut modules = consts::consts();
+	for (module, extra) in manifest::uikit() {
+		match modules.iter_mut().find(|(m, _)| *m == module) {
+			Some((_, exports)) => exports.extend(extra),
+			None => modules.push((module, extra)),
+		}
+	}
+	// `size.rs` holds only the enum the tables key on.
+	modules.retain(|(_, exports)| !exports.is_empty());
+	modules
 }
 
 /// One generated TS module, into the owning package's `src/generated/`.
@@ -106,7 +123,8 @@ fn flatten_css(root: &Path, name: &str) -> String {
 /// costs anything.
 fn write_class_inventory(root: &Path) {
 	let mut tabled = BTreeSet::new();
-	for (_, exports) in manifest::manifest() {
+	// `copy` is the kit's English, not classes.
+	for (_, exports) in uikit().into_iter().filter(|(module, _)| *module != "copy") {
 		for ts in &exports {
 			collect_classes(ts, &mut tabled);
 		}
@@ -152,18 +170,6 @@ fn collect_classes(ts: &Ts, out: &mut BTreeSet<String>) {
 		// carries "", which would land in the inventory as a blank line.
 		Ts::Table { entries, .. } => out.extend(entries.iter().filter(|(_, class)| !class.is_empty()).map(|(_, class)| class.clone())),
 		Ts::Value { .. } | Ts::Union { .. } | Ts::Types(_) => {}
-	}
-}
-
-/// Any `TwVariant` enum → a `{ kebab-key: "class" }` table. Base classes are split
-/// into a `*_BASE` const, so `as_class()` yields the per-variant string only.
-fn table<T>(name: &'static str, ty: &'static str) -> Ts
-where
-	T: IntoEnumIterator + AsRef<str> + AsTailwindClass, {
-	Ts::Table {
-		name,
-		ty,
-		entries: T::iter().map(|v| (v.as_ref().to_string(), v.as_class().to_string())).collect(),
 	}
 }
 

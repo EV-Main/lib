@@ -4,6 +4,14 @@ export const INPUT_GROUP_BASE = "group/input-group border-input relative flex w-
 
 export const INPUT_GROUP_ADDON_BASE = "text-ink-soft flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&>svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50";
 
+export const INPUT_GROUP_BUTTON_BASE = "text-sm shadow-none flex gap-2 items-center";
+
+export const INPUT_GROUP_TEXT = "text-ink-soft flex items-center gap-2 text-sm [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4";
+
+export const INPUT_GROUP_INPUT_CONTROL = "flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0";
+
+export const INPUT_GROUP_TEXTAREA_CONTROL = "flex-1 resize-none rounded-none border-0 bg-transparent py-3 shadow-none focus-visible:ring-0";
+
 export const inputGroupAddonAligns = {
   "inline-start": "order-first pl-3 has-[>button]:ml-[-0.45rem] has-[>kbd]:ml-[-0.35rem]",
   "inline-end": "order-last pr-3 has-[>button]:mr-[-0.45rem] has-[>kbd]:mr-[-0.35rem]",
@@ -12,8 +20,6 @@ export const inputGroupAddonAligns = {
 } as const;
 export type InputGroupAddonAlign = keyof typeof inputGroupAddonAligns;
 
-export const INPUT_GROUP_BUTTON_BASE = "text-sm shadow-none flex gap-2 items-center";
-
 export const inputGroupButtonSizes = {
   "xs": "h-6 gap-1 px-2 rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-3.5 has-[>svg]:px-2",
   "sm": "h-8 px-2.5 gap-1.5 rounded-md has-[>svg]:px-2.5",
@@ -21,9 +27,3 @@ export const inputGroupButtonSizes = {
   "icon-sm": "size-8 p-0 has-[>svg]:p-0",
 } as const;
 export type InputGroupButtonSize = keyof typeof inputGroupButtonSizes;
-
-export const INPUT_GROUP_TEXT = "text-ink-soft flex items-center gap-2 text-sm [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4";
-
-export const INPUT_GROUP_INPUT_CONTROL = "flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0";
-
-export const INPUT_GROUP_TEXTAREA_CONTROL = "flex-1 resize-none rounded-none border-0 bg-transparent py-3 shadow-none focus-visible:ring-0";

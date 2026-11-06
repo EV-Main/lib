@@ -14,12 +14,6 @@ export const HEADER_BALANCE_FIGURE = "font-medium tabular-nums";
 
 export const HEADER_BALANCE_CHEVRON = "size-4 text-ink-soft";
 
-export const headerBalanceToneClasses = {
-  "default": "text-ink",
-  "warn": "text-accent-warn",
-} as const;
-export type HeaderBalanceTone = keyof typeof headerBalanceToneClasses;
-
 export const NOTIFICATION_BELL_TRIGGER = "relative";
 
 export const NOTIFICATION_DOT = "absolute right-1 top-1 size-1.5 rounded-full bg-accent-error";
@@ -53,3 +47,9 @@ export const NOTIFICATION_BELL_FOOTER = "border-t border-border-subtle p-1 pt-1.
 export const HEADER_SEARCH_BASE = "flex h-8 w-55 items-center gap-2 rounded-(--control-radius) border border-border bg-muted pl-2.5 pr-1.5 text-left text-body text-ink-mid outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring";
 
 export const HEADER_SEARCH_PLACEHOLDER = "min-w-0 flex-1 truncate";
+
+export const headerBalanceToneClasses = {
+  "default": "text-ink",
+  "warn": "text-accent-warn",
+} as const;
+export type HeaderBalanceTone = keyof typeof headerBalanceToneClasses;

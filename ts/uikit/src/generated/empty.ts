@@ -4,6 +4,12 @@ export const EMPTY = "flex min-w-0 flex-1 flex-col items-center justify-center g
 
 export const EMPTY_HEADER = "flex max-w-sm flex-col items-center gap-2 text-center";
 
+export const EMPTY_TITLE = "text-lg font-medium tracking-tight";
+
+export const EMPTY_DESCRIPTION = "text-ink-soft [&>a:hover]:text-primary-ink text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4";
+
+export const EMPTY_CONTENT = "flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance";
+
 export const EMPTY_MEDIA_BASE = "flex shrink-0 items-center justify-center mb-2 [&_svg]:pointer-events-none [&_svg]:shrink-0";
 
 export const emptyMediaVariants = {
@@ -11,9 +17,3 @@ export const emptyMediaVariants = {
   "icon": "bg-muted text-ink flex size-10 shrink-0 items-center justify-center rounded-lg [&_svg:not([class*='size-'])]:size-6",
 } as const;
 export type EmptyMediaVariant = keyof typeof emptyMediaVariants;
-
-export const EMPTY_TITLE = "text-lg font-medium tracking-tight";
-
-export const EMPTY_DESCRIPTION = "text-ink-soft [&>a:hover]:text-primary-ink text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4";
-
-export const EMPTY_CONTENT = "flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance";

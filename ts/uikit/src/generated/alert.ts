@@ -2,6 +2,10 @@
 
 export const ALERT_BASE = "relative w-full rounded-lg border px-4 py-3 text-sm grid has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current";
 
+export const ALERT_TITLE = "col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight";
+
+export const ALERT_DESCRIPTION = "text-ink-soft col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed";
+
 export const alertVariants = {
   "neutral": "bg-card text-ink border-border",
   "destructive": "text-accent-error bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid",
@@ -9,7 +13,3 @@ export const alertVariants = {
   "info": "text-accent-info-ink bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid",
 } as const;
 export type AlertVariant = keyof typeof alertVariants;
-
-export const ALERT_TITLE = "col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight";
-
-export const ALERT_DESCRIPTION = "text-ink-soft col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed";
