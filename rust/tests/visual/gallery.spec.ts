@@ -15,8 +15,22 @@ if (!OUT) throw new Error("EV_SNAPSHOT_OUT unset — this runs through `cargo te
 
 const NAMES: string[] = JSON.parse(readFileSync(new URL("./dist/manifest.json", import.meta.url), "utf8"));
 
-for (const name of NAMES) {
-  test(name, async ({ page }) => {
+// Each theme's root as ev.css selects it. Written into the served page rather
+// than set after load, so no `transition-*` ever animates from one theme to the other.
+const THEMES: Record<string, string> = {
+  dark: '<html class="dark">',
+  light: '<html class="light">',
+  oldschool: '<html class="dark" data-theme="oldschool">',
+};
+
+for (const name of NAMES) for (const [theme, root] of Object.entries(THEMES)) {
+  test(`${name}.${theme}`, async ({ page }) => {
+    await page.route(`**/${name}.html`, async (route) => {
+      const response = await route.fetch();
+      const html = await response.text();
+      if (!html.includes(THEMES.dark)) throw new Error(`${name}.html has no ${THEMES.dark} to theme`);
+      await route.fulfill({ response, body: html.replace(THEMES.dark, root) });
+    });
     await page.goto(`/${name}.html`);
 
     // Tailwind compiles in-browser after load; networkidle fires once its
@@ -28,6 +42,6 @@ for (const name of NAMES) {
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(800);
 
-    await page.screenshot({ path: `${OUT}/${name}.png`, fullPage: true, animations: "disabled" });
+    await page.screenshot({ path: `${OUT}/${name}.${theme}.png`, fullPage: true, animations: "disabled" });
   });
 }
