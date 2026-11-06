@@ -18,10 +18,16 @@ pub const ALERT_DESCRIPTION: &str = "text-ink-soft col-start-2 grid justify-item
 pub enum AlertVariant {
 	#[tw(default, class = "bg-card text-ink border-border")]
 	Neutral,
-	#[tw(class = "text-accent-error bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid")]
+	#[tw(
+		class = "text-accent-error bg-card bg-[image:linear-gradient(var(--tint-error-fill),var(--tint-error-fill))] border-tint-error-edge [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid"
+	)]
 	Destructive,
-	#[tw(class = "text-positive-ink bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid")]
+	#[tw(
+		class = "text-positive-ink bg-card bg-[image:linear-gradient(var(--tint-positive-fill),var(--tint-positive-fill))] border-tint-positive-edge [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid"
+	)]
 	Success,
-	#[tw(class = "text-accent-info-ink bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid")]
+	#[tw(
+		class = "text-accent-info-ink bg-card bg-[image:linear-gradient(var(--tint-info-fill),var(--tint-info-fill))] border-tint-info-edge [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid"
+	)]
 	Info,
 }

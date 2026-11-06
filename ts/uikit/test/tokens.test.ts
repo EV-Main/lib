@@ -103,6 +103,11 @@ function declared(name: string, scope: Scope): string {
  * composited onto the plane under it. A translucent line is only ever seen over
  * whatever is below, so measuring it without the plane would lie.
  */
+/** The share of a tone a pointed-at row or face in it takes. */
+function tintHover(scope: Scope): number {
+  return Number.parseFloat(declared("tint-hover", scope)) / 100;
+}
+
 function paint(name: string, scope: Scope, surface: string): string {
   return paintValue(declared(name, scope), scope, surface);
 }
@@ -256,23 +261,23 @@ describe.each(scopes)("palette $label", (scope) => {
       expect(contrast(t("ink"), tint())).toBeGreaterThanOrEqual(4.5);
     });
 
-    // A destructive menu row swaps the tint for 10 % of --accent-error, so the
-    // ring's inner edge sits on that instead.
+    // A destructive menu row swaps the tint for --accent-error at --tint-hover,
+    // so the ring's inner edge sits on that instead.
     it("the ring reads against a destructive row's tint (non-text 3:1)", () => {
       for (const classes of [DROPDOWN_MENU_ITEM, CONTEXT_MENU_ITEM, MENUBAR_ITEM]) {
-        expect(classes).toMatch(/(^|\s)data-\[variant=destructive\]:focus:bg-accent-error\/10(\s|$)/);
+        expect(classes).toMatch(/(^|\s)data-\[variant=destructive\]:focus:bg-accent-error\/\(--tint-hover\)(\s|$)/);
       }
-      const destructive = composite(t("accent-error"), 0.1, t("popover"));
+      const destructive = composite(t("accent-error"), tintHover(scope), t("popover"));
       expect(contrast(ring(scope), destructive)).toBeGreaterThanOrEqual(3);
     });
   });
 
-  // lib#166. A destructive row is error text on 10 % of the error role, and
+  // lib#166. A destructive row is error text on the error role at --tint-hover, and
   // on the popover unfocused. Error text is held to 3:1, not AA: it exists to
   // grab attention (docs/spec/accents.md).
   describe("destructive menu row", () => {
     it("the text reads on the row's tint (non-text 3:1)", () => {
-      expect(contrast(t("accent-error"), composite(t("accent-error"), 0.1, t("popover")))).toBeGreaterThanOrEqual(3);
+      expect(contrast(t("accent-error"), composite(t("accent-error"), tintHover(scope), t("popover")))).toBeGreaterThanOrEqual(3);
     });
 
     it("the text reads on the popover at rest (non-text 3:1)", () => {
@@ -389,10 +394,10 @@ describe.each(scopes)("palette $label", (scope) => {
     });
   });
 
-  // 1.0 Chips. A tinted fill (or none) and an edge in the role's hue, with the
+  // 1.0 Tints. A tinted fill (or none) and an edge in the role's hue, with the
   // role's text colour as the label. Only the label owes a floor; the edge is
   // decoration. warn and error owe 3:1, the rest AA.
-  describe("chip tints", () => {
+  describe("tints", () => {
     const tones = [
       ["neutral", "ink-mid", 4.5],
       ["primary", "primary-ink", 4.5],
@@ -407,7 +412,7 @@ describe.each(scopes)("palette $label", (scope) => {
     it.each(tones)("the %s label reads on its fill over the planes", (tone, ink, floor) => {
       for (const surface of ["background", "card"]) {
         const plane = t(surface);
-        const fill = paint(`chip-${tone}-bg`, scope, plane);
+        const fill = paint(`tint-${tone}-fill`, scope, plane);
         expect(contrast(paint(ink, scope, fill), fill)).toBeGreaterThanOrEqual(floor);
       }
     });
@@ -498,7 +503,7 @@ describe("list rows ring their keyboard focus", () => {
 describe("the contract half of the sheet", () => {
   const rules = readRules(sheet);
 
-  it("derives the states, lines, inks, status inks, button faces and chips rather than asking a palette for them", () => {
+  it("derives the states, lines, inks, status inks, button faces and tints rather than asking a palette for them", () => {
     expect([...contract.derived].sort()).toEqual([
       "accent-info-ink",
       "active",
@@ -513,18 +518,6 @@ describe("the contract half of the sheet", () => {
       "button-primary-border",
       "button-primary-hover",
       "button-primary-ink",
-      "chip-error-bg",
-      "chip-error-border",
-      "chip-info-bg",
-      "chip-info-border",
-      "chip-neutral-bg",
-      "chip-neutral-border",
-      "chip-positive-bg",
-      "chip-positive-border",
-      "chip-primary-bg",
-      "chip-primary-border",
-      "chip-warn-bg",
-      "chip-warn-border",
       "hover",
       "ink-faint",
       "ink-mid",
@@ -536,10 +529,26 @@ describe("the contract half of the sheet", () => {
       "ring",
       "scrim",
       "selected",
+      "tint-debug-edge",
+      "tint-debug-fill",
+      "tint-error-edge",
+      "tint-error-fill",
+      "tint-info-edge",
+      "tint-info-fill",
+      "tint-neutral-edge",
+      "tint-neutral-fill",
+      "tint-positive-edge",
+      "tint-positive-fill",
+      "tint-primary-edge",
+      "tint-primary-fill",
+      "tint-trace-edge",
+      "tint-trace-fill",
+      "tint-warn-edge",
+      "tint-warn-fill",
     ]);
   });
 
-  it("derives the button faces and chips for a brand that pins none", () => {
+  it("derives the button faces and tints for a brand that pins none", () => {
     const names = [...(facesRule?.declarations.keys() ?? [])];
     expect(names).toEqual(
       expect.arrayContaining([
@@ -551,9 +560,9 @@ describe("the contract half of the sheet", () => {
         "button-danger-hover",
         "button-danger-border",
         "button-danger-ink",
-        "chip-neutral-bg",
-        "chip-primary-border",
-        "chip-error-bg",
+        "tint-neutral-fill",
+        "tint-primary-edge",
+        "tint-error-fill",
       ]),
     );
   });

@@ -456,7 +456,7 @@ mod tests {
 			.unwrap_or_default();
 		assert!(confirm.contains("bg-button-danger-bg"), "{confirm}");
 		assert!(html.contains("data-tone=\"danger\""), "{html}");
-		assert!(html.contains("bg-chip-error-bg"), "the glyph tile follows the tone: {html}");
+		assert!(html.contains("bg-tint-error-fill"), "the glyph tile follows the tone: {html}");
 	}
 
 	#[test]

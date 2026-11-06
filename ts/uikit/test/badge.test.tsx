@@ -7,7 +7,7 @@ describe("Badge", () => {
     const { getByText } = render(<Badge>hi</Badge>);
     const el = getByText("hi");
     expect(el.tagName).toBe("SPAN");
-    expect(el).toHaveClass("bg-chip-neutral-bg", "text-ink-mid", "h-5");
+    expect(el).toHaveClass("bg-tint-neutral-fill", "text-ink-mid", "h-5");
     expect(el).toHaveAttribute("data-slot", "badge");
   });
 
@@ -19,7 +19,7 @@ describe("Badge", () => {
     ["error", "text-accent-error"],
   ] as const)("renders the %s tone on its chip tokens (canon parity with Rust)", (variant, ink) => {
     const { getByText } = render(<Badge variant={variant}>ok</Badge>);
-    expect(getByText("ok")).toHaveClass(`bg-chip-${variant}-bg`, `border-chip-${variant}-border`, ink, "text-caption");
+    expect(getByText("ok")).toHaveClass(`bg-tint-${variant}-fill`, `border-tint-${variant}-edge`, ink, "text-caption");
   });
 
   it("lets className override the base", () => {
@@ -37,6 +37,6 @@ describe("Badge", () => {
     );
     const el = getByRole("link");
     expect(el.tagName).toBe("A");
-    expect(el).toHaveClass("bg-chip-neutral-bg");
+    expect(el).toHaveClass("bg-tint-neutral-fill");
   });
 });

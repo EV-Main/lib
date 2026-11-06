@@ -19,10 +19,10 @@ export const accentFillClasses = {
 export type AccentFill = keyof typeof accentFillClasses;
 
 export const accentOutlineClasses = {
-  "trace": "border border-accent-trace/40 text-accent-trace hover:bg-accent-trace/10",
-  "debug": "border border-accent-debug/40 text-accent-debug hover:bg-accent-debug/10",
-  "info": "border border-accent-info/40 text-accent-info-ink hover:bg-accent-info/10",
-  "warn": "border border-accent-warn/40 text-accent-warn hover:bg-accent-warn/10",
-  "error": "border border-accent-error/40 text-accent-error hover:bg-accent-error/10",
+  "trace": "border border-accent-trace/40 text-accent-trace hover:bg-accent-trace/(--tint-hover)",
+  "debug": "border border-accent-debug/40 text-accent-debug hover:bg-accent-debug/(--tint-hover)",
+  "info": "border border-accent-info/40 text-accent-info-ink hover:bg-accent-info/(--tint-hover)",
+  "warn": "border border-accent-warn/40 text-accent-warn hover:bg-accent-warn/(--tint-hover)",
+  "error": "border border-accent-error/40 text-accent-error hover:bg-accent-error/(--tint-hover)",
 } as const;
 export type AccentOutline = keyof typeof accentOutlineClasses;

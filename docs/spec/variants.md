@@ -41,5 +41,5 @@ which fuses magnitude with shape and, in `"icon"`, elides the default as well.
 Warn, Error}` — the [accent rungs](./accents.md) plus the valence — not a second
 ladder written in different words. A badge adds `Primary`: `{Neutral, Primary,
 Positive, Info, Warn, Error}`. Figma's own names (accent, negative, warning) map
-onto these; the chip tokens `--chip-{tone}-{bg,border}` carry the same six
+onto these; the tint tokens `--tint-{tone}-{fill,edge}` carry the same six
 tones.
