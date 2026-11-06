@@ -26,6 +26,16 @@ share of changed pixels. The old side is the ref's committed baselines
 tree's baselines, or with `--fresh` a capture run without accepting (from inside
 `nix develop`). Default ref `origin/main`, default theme `dark`.
 
+The page is also where the decision is made: per component pick old, new or
+either (click a column caption, or `j`/`k` and `1`/`2`/`3`/`0`), double-click a
+panel for a lockstep zoom. Ctrl+S writes the picks into the file (first save asks
+where; Chromium only, elsewhere it downloads). Regenerating keeps picks for
+labels still present. An agent reads them with:
+
+```sh
+nix run .#visual-review -- --decisions [tmp/visual-review.html]   # marked (label: old|new|both), then unmarked
+```
+
 ## Why it is shaped this way
 
 ```
