@@ -11,6 +11,7 @@ ap.add_argument("ref", nargs="?", default="origin/main")
 ap.add_argument("--themes", default="dark")
 ap.add_argument("--decisions", nargs="?", const="tmp/visual-review.html", metavar="PATH", help="print the decisions embedded in a saved page")
 ap.add_argument("--fresh", action="store_true", help="capture first and use dist/captured/ as the new side")
+ap.add_argument("--summary", metavar="PATH", help="also write the changed-%% table as markdown (the CI comment)")
 args = ap.parse_args()
 themes = args.themes.split(",")
 
@@ -182,5 +183,12 @@ Diff panel: old, dimmed and greyscale; red = changed pixels. {identical} identic
 <script>{(pathlib.Path(__file__).parent / "visual-review.js").read_text()}</script>"""
 out.parent.mkdir(exist_ok=True)
 out.write_text(page)
+if args.summary:
+    table = "".join(f"| {l} | {p:.2f} % |\n" for p, l, *_ in rows)
+    lines = [f"{len(rows)} changed, {identical} identical (fuzz {FUZZ} %, % of each component's area)\n"]
+    lines += ["| component | changed |\n|---|---|\n" + table] if rows else []
+    lines += [f"Added: {', '.join(added)}\n"] if added else []
+    lines += [f"Removed: {', '.join(removed)}\n"] if removed else []
+    pathlib.Path(args.summary).write_text("\n".join(lines))
 shutil.rmtree(tmp)
 print(out)
