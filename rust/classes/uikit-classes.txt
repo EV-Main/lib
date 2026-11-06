@@ -26,6 +26,13 @@ PlayfairDisplay-Italic.ttf
 [&_[data-slot=command-input-wrapper]]:h-12 [&_[data-slot=command-input]]:h-12
 [&_tr:last-child]:border-0
 [&_tr]:border-b
+[--control-box:calc(var(--control-h-xs)_-_var(--control-step))]
+[--control-box:var(--control-h-lg)]
+[--control-box:var(--control-h-md)]
+[--control-box:var(--control-h-sm)]
+[--control-box:var(--control-h-touch)]
+[--control-box:var(--control-h-xl)]
+[--control-box:var(--control-h-xs)]
 [--table-dense-py:calc(var(--spacing)*1.5)]
 [--table-dense-py:calc(var(--spacing)*1.5)] [--table-head-h:calc(var(--spacing)*8)]
 [--table-dense-py:initial]
@@ -141,7 +148,7 @@ aside-panel-narrow
 aside-panel-wide
 aside-rail
 aspect-square
-aspect-square p-[var(--control-py)]
+aspect-square px-0
 aspect-square size-full
 avatar-fallback
 avatar-fallback\
@@ -294,6 +301,7 @@ breadcrumb-page
 breadcrumb-separator
 button-group
 button-group-separator
+calc(var(--control-h-xs)_-_var(--control-step))
 calc(var(--spacing)*5)
 calendar-caption
 calendar-day
@@ -360,6 +368,8 @@ context-menu-sub
 context-menu-sub-content
 context-menu-sub-trigger
 context-menu-trigger
+control-h-md
+control-h-touch
 cursor-pointer
 cursor-pointer list-none [&::-webkit-details-marker]:hidden
 cursor-pointer outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring
@@ -661,8 +671,10 @@ form-message\
 form-row
 form-row-control
 form-row-label
+gap-1 px-2 text-xs has-[>svg]:px-1.5
 gap-1 px-2.5 sm:pl-2.5
 gap-1 px-2.5 sm:pr-2.5
+gap-1.5 px-3 has-[>svg]:px-2.5
 gap-2
 gap-2.5
 gap-4
@@ -688,15 +700,10 @@ group/navigation-menu relative flex max-w-max flex-1 items-center justify-center
 group/sidebar-wrapper has-data-[variant=inset]:bg-secondary flex min-h-svh w-full
 h-0.5 bg-border-subtle
 h-10
-h-10 aspect-square
-h-10 aspect-square px-0
 h-10 border-border-subtle bg-card px-3
-h-10 px-2.5 min-w-10
 h-10 px-3
-h-10 px-6 has-[>svg]:px-4
 h-11 pr-11 pl-3 text-base pointer-fine:text-base
 h-12
-h-12 px-3 min-w-12
 h-12 px-4 text-base
 h-12 px-4 text-base md:text-base file:h-9
 h-12 text-sm group-data-[collapsible=icon]:p-0!
@@ -708,22 +715,14 @@ h-4 w-24
 h-6
 h-6 gap-1 px-2 rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-3.5 has-[>svg]:px-2
 h-7
-h-7 aspect-square px-0
-h-7 gap-1 px-2 text-xs has-[>svg]:px-1.5
-h-7 px-1 min-w-7
 h-7 text-xs
 h-8
-h-8 aspect-square
-h-8 aspect-square px-0
-h-8 gap-1.5 px-3 has-[>svg]:px-2.5
-h-8 px-1.5 min-w-8
 h-8 px-2.5 gap-1.5 rounded-md has-[>svg]:px-2.5
 h-8 text-sm
 h-8 w-full flex-none justify-start gap-2.5 rounded-(--control-radius) border-0 px-2.5 text-body font-normal text-ink-mid shadow-none data-[state=active]:bg-active data-[state=active]:text-ink data-[state=active]:shadow-none hover:bg-hover [&_svg]:text-ink-soft
 h-9
-h-9 aspect-square px-0
-h-9 px-2 min-w-9
-h-9 px-4 py-[var(--control-py)] has-[>svg]:px-3
+h-auto aspect-square p-[var(--control-py)]
+h-auto px-[var(--control-px)] py-[var(--control-py)] text-[length:var(--control-text)]
 h-auto w-full flex-1 flex-col items-stretch justify-start gap-0.5 bg-transparent p-0
 h-full bg-primary
 h-full w-2.5 border-l border-l-transparent
@@ -759,6 +758,8 @@ info-tip-trigger
 info-tip-trigger\
 inline-block
 inline-flex
+inline-flex h-(--control-box) items-center justify-center gap-2 whitespace-nowrap rounded-[var(--control-radius)] text-sm font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error
+inline-flex h-(--control-box) min-w-(--control-box) items-center justify-center gap-2 rounded-[var(--control-radius)] text-sm font-medium hover:bg-muted hover:text-ink-soft disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-primary data-[state=on]:text-on-primary [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 focus-visible:border-ring outline-none transition-[color,box-shadow] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error whitespace-nowrap focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 inline-flex h-5 items-center gap-1.5 px-2 text-caption text-ink-mid
 inline-flex h-5 items-center justify-center rounded-[var(--chip-radius)] border px-1.5 text-caption font-medium w-fit whitespace-nowrap shrink-0 gap-1 overflow-hidden [&>svg]:size-3 [&>svg]:pointer-events-none transition-colors outline-none aria-invalid:border-accent-error focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 inline-flex h-6 items-center gap-1 text-ink-soft
@@ -768,8 +769,6 @@ inline-flex h-full min-w-0 items-center gap-2 rounded-[inherit] pl-2 outline-non
 inline-flex items-center gap-1
 inline-flex items-center gap-1.5
 inline-flex items-center justify-center bg-brand
-inline-flex items-center justify-center gap-2 rounded-[var(--control-radius)] text-sm font-medium hover:bg-muted hover:text-ink-soft disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-primary data-[state=on]:text-on-primary [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 focus-visible:border-ring outline-none transition-[color,box-shadow] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error whitespace-nowrap focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
-inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[var(--control-radius)] text-sm font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error
 inline-flex size-4 shrink-0 cursor-help items-center justify-center rounded-full align-middle text-ink-soft outline-none transition-colors hover:text-ink focus-visible:ring-2 focus-visible:ring-ring data-[state=open]:text-accent-debug
 inline-flex size-6 items-center justify-center rounded-(--control-radius) text-ink-soft outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring
 inline-flex size-6 shrink-0 items-center justify-center rounded-(--control-radius) text-ink-soft outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring
@@ -848,7 +847,6 @@ menubar-sub-trigger
 menubar-trigger
 min-h-0 flex-1 flex-col gap-0 md:flex-row
 min-h-0 flex-1 overflow-y-auto
-min-h-11 px-6 has-[>svg]:px-4
 min-h-14
 min-h-16
 min-h-20
@@ -951,16 +949,21 @@ pt-0 pb-4
 pt-4
 px-0
 px-0 text-h3 font-medium text-ink
+px-1
 px-1.5
+px-2
 px-2 py-1.5
 px-2 py-1.5 text-sm font-medium data-[inset]:pl-8
 px-2 py-3 text-center text-body text-ink-soft
+px-2.5
 px-3
+px-3 [--control-box:var(--control-h-xl)]
 px-4
+px-4 has-[>svg]:px-3
 px-5
 px-6
+px-6 has-[>svg]:px-4
 px-8
-px-[var(--control-px)] py-[var(--control-py)] text-[length:var(--control-text)]
 px-[var(--page-px,1rem)]
 px-[var(--table-px
 px-[var(--table-px,calc(var(--spacing)*2))]
@@ -1052,8 +1055,6 @@ size-1.5 rounded-full bg-current
 size-1.5 shrink-0 rounded-full
 size-10
 size-10 rounded-sm overflow-hidden [&_img]:size-full [&_img]:object-cover
-size-11
-size-11 px-0
 size-14
 size-14 shrink-0 rounded-(--control-radius)
 size-2 fill-current

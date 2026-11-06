@@ -9,6 +9,7 @@ pub fn button_classes(variant: &ButtonVariant, size: Size, icon: bool, accent: O
 	cn!(
 		BUTTON_BASE,
 		variant.as_class(),
+		size.as_class(),
 		button_size_class(size, icon),
 		accent.map_or("", |a| button_accent_class(a, variant)),
 		class
