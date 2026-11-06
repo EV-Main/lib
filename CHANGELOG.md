@@ -28,7 +28,7 @@ Rust crate and its TypeScript mirror at once.
   `mono` are separate parameters (`--brand-font-sans`, `--brand-font-serif`,
   `--brand-font-mono`); the role formerly called `display` is `serif`. Defaults
   are Inter, Inter Tight and JetBrains Mono; `data-theme="oldschool"` keeps
-  Playfair Display and Inter as before 1.0.
+  Playfair Display and Inter.
 - **The TS trading terminal is removed** (`@evinvest/uikit`): `Terminal`,
   `TerminalPane`, `TerminalPaneHeader`, `TerminalPaneBody`, `TerminalChart`,
   `TerminalTicker`, `TickerStat`, `OrderBook`, `OrderBookHead`, `OrderBookRow`,
@@ -38,34 +38,16 @@ Rust crate and its TypeScript mirror at once.
   `OrderBookRowProps`, `OrderFormRowProps`, `OrderFormSubmitProps`,
   `BookSide`, `OrderSide`, `TradesTapeRowProps`. The Rust terminal in
   `ev_lib::uikit` stays.
-- **Uikit 2.0 look** (`ev_lib` `uikit` and `@evinvest/uikit`): the kit follows
-  the new Figma page. Dark is EV's default, `.light` is Light, and the
-  pre-1.0 navy look is opt-in as `data-theme="oldschool"`. The planes are flat
-  steps separated by a hairline; panels are 6 px, controls and chips 4 px, and
-  the shadow tiers are a zero shadow outside Oldschool. A brand file must add
-  `chart-6` (29 names). The font role `display` is renamed `serif`
-  (`--brand-font-display` → `--brand-font-serif`, `font-display` →
-  `font-serif`, `[fonts] display` → `serif`). Brands without their own
-  radius or depth take the u2 shapes. See the README's *Migrating 0.x → 1.0*.
-- **Variant names** (`ev_lib` `uikit` and `@evinvest/uikit`): `ButtonVariant`
-  is `Primary` (outline face, the default), `Secondary`, `Ghost`, `Solid`
-  (the filled call to action), `Danger` and `Link`; `Outline` and `Destructive`
-  are gone and the old filled `Primary` is `Solid`. `BadgeVariant` is
-  `Neutral`, `Primary`, `Positive`, `Info`, `Warn`, `Error`. `AlertVariant`
-  is `Neutral`, `Info`, `Positive`, `Warn`, `Error`. The menu item variant
-  `Destructive` is `Danger` (dropdown, context, menubar).
-- **Field sizes** (`@evinvest/uikit`): `Input`, `Textarea`, `SelectTrigger` and
-  `NativeSelect` take `sm | md | touch`; `lg` is gone. The shared `Size` scale
-  is 20, 24, 28, 32 px (`xs`, `sm`, `md`, `lg`), plus `touch` at 44 px.
-- **Other renames to carry** (`@evinvest/uikit`): `Button` `outline` is gone
-  (use `secondary`) and `primary` is now an outline face, so a `Button` with no
-  `variant` is an outline; the filled call to action is `solid`. `Badge` defaults
-  to `neutral`, not a filled `primary`. `Alert variant="destructive"` is
-  `error`. `NativeSelect size="lg"` is `touch`. `SystemBanner` tones are
-  `neutral`, `primary`, `info`, `warn` (were `warn`, `info`), and the banner is a
-  `card` bar with a hairline where only the icon carries the tone.
-- **`@evinvest/kitstart`** moves to the new names: `outline` to `secondary`,
-  the filled CTAs to `solid`, large fields to `touch`.
+- **Themes** (`ev_lib` `uikit` and `@evinvest/uikit`): Dark is EV's default,
+  `.light` is Light, and the navy look is opt-in as `data-theme="oldschool"`.
+  A brand file must add `chart-6` (29 names). Panels are 6 px at every width,
+  controls and chips 4 px, and the shadow tiers are a zero shadow outside
+  Oldschool; a brand without its own radius or depth takes these. See the
+  README's *Upgrading from 0.30*.
+- **Badge variants** (`ev_lib` `uikit` and `@evinvest/uikit`): `BadgeVariant`
+  is `Neutral` (the default, was a filled `Primary`), `Primary`, `Positive`,
+  `Info`, `Warn`, `Error`; `Secondary`, `Destructive`, `Outline` and `Success`
+  are gone.
 ### Changed
 
 - **Connected landings: sites_panel by derived address, and `/.well-known/sa-site`**
@@ -126,7 +108,7 @@ Rust crate and its TypeScript mirror at once.
   caller it is not for — an `Empty` with a lock, a title, a description and an
   action slot (a guest's sign-in button; nothing, or "request access", for a
   signed-in caller without the permission).
-- **Uikit 2.0 tokens** (`ev_lib` `uikit` and `@evinvest/uikit`): `active`,
+- **Theme tokens** (`ev_lib` `uikit` and `@evinvest/uikit`): `active`,
   `selected`, `scrim`, `border-subtle`, `border-strong`, `ink-faint`,
   `primary-hover`, `primary-border`, the status inks `positive-ink`,
   `accent-info-ink` and `accent-warn-ink`, `chart-6`, the button faces
@@ -136,8 +118,7 @@ Rust crate and its TypeScript mirror at once.
   All are derived for a brand that pins none. `readContract` counts the faces
   and chips as derived.
 - **`IconButton`, `StatusItem`, `StatusDot`, `WorkspaceTabs`, `WorkspaceTab`,
-  `KeyValue`, `FormRow`** (`@evinvest/uikit`): the new elements. `Avatar`
-  takes `shape` (`circle`, `square`) and `size` (`sm`, `md`, `lg`).
+  `KeyValue`, `FormRow`** (`@evinvest/uikit`): the new elements.
 - **Settings and account parts** (`@evinvest/uikit`): `SettingsLayout`,
   `SettingsSection`, `SettingsRow`, `AccountSettingsDialog`, `ConfirmDialog`
   with an async confirm, `AccountList`, `AccountListItem`, `PopoverForm`, and a
@@ -164,7 +145,7 @@ Rust crate and its TypeScript mirror at once.
   rolls its digit columns (or counts up) to each new value, formatted with
   `Intl.NumberFormat`. `HeaderBalance` takes a numeric `amount`; the existing
   `value` still works. No animation library; reduced motion swaps at once.
-- **Dioxus twins of the uikit 2.0 parts** (`ev_lib` `uikit` and
+- **Dioxus and Leptos twins of the composed parts** (`ev_lib` `uikit` and
   `@evinvest/uikit`): `IconButton`, `StatusItem`, `StatusDot`, `FormRow`,
   `SettingsLayout`, `SettingsSection`, `SettingsRow`, `SystemBanner`,
   `SectionLabel`, `WorkspaceTabs`, `WorkspaceTab`, `AccountList`,
@@ -196,20 +177,21 @@ Rust crate and its TypeScript mirror at once.
 
 - **`Chart*` and `Resizable*`** (`ev_lib` + `@evinvest/uikit`, and their class
   constants): no consumer used them. The `chart-1 … chart-5` palette tokens stay.
-- **Badge `Secondary`, `Destructive`, `Outline`, `Success`; Alert `Destructive`,
-  `Success`; Button `Outline`, `Destructive`** (`ev_lib` `uikit` and
-  `@evinvest/uikit`): see *Breaking* for what replaces them.
+- **Badge `Secondary`, `Destructive`, `Outline`, `Success`** (`ev_lib` `uikit`
+  and `@evinvest/uikit`): see *Breaking* for what replaces them.
 
 ### Changed
 
-- **Menus, overlays and controls are restyled** (`ev_lib` `uikit` and
-  `@evinvest/uikit`): 28 px menu rows and fields, a hairline instead of shadows
-  on cards and popovers, the scrim token behind every modal, an underlined
-  `Tabs`, a fully round 28 by 16 px `Switch`, a flat `Card` (6 px radius, 16 px padding),
-  the tooltip as a popover, tracks drawn as 14 % ink (`bg-ink/14`), disabled at
-  40 % opacity, and the offset focus ring on every `Button` variant. The
-  `Select` trigger, list and `NativeSelect` classes now live in the class
-  tables instead of the components.
+- **Restyled** (`ev_lib` `uikit` and `@evinvest/uikit`): a flat `Card` (6 px
+  radius, 16 px padding), `Badge` chips painted by the `chip-*` tokens, a 28 px
+  raised `NativeSelect`, toasts edged in their tone, and the `scrim` token
+  behind every modal. The `Button` `outline` face is raised (`secondary` fill
+  and a hairline), `primary` hovers to `primary-hover`, `destructive` wears the theme's `button-danger-*` face (an
+  outline in Dark and Light, a fill in Oldschool), and a disabled button is
+  40 % opaque. `SystemBanner` takes `neutral` and `primary` tones and an
+  `action`; `info` draws its icon in `accent-info-ink`. The `Select` trigger,
+  list and `NativeSelect` classes now live in the class tables instead of the
+  components.
 - **Status text uses the `-ink` tokens** (`ev_lib` `uikit` and
   `@evinvest/uikit`): the outline accent faces, status pages, field and form
   errors read in `accent-error-ink` and its siblings, which clear AA on a light
@@ -253,7 +235,7 @@ Rust crate and its TypeScript mirror at once.
   wide panel under a trigger at the edge of its container ran off the screen.
 - **`PopoverForm` and `ConfirmDialog` triggers have a face** (`ev_lib` `uikit`):
   the trigger rendered as bare text, because Rust has no `asChild` for the
-  `Button` the TS caller passes. It now wears the secondary button face, and
+  `Button` the TS caller passes. It now wears the outline button face, and
   `trigger_class` fuses over it.
 - **`CommandDialog` applies its `class`** (`ev_lib` `uikit`): the prop was
   declared and never merged onto the dialog box.

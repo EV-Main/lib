@@ -60,14 +60,14 @@ your Tailwind v4 entrypoint — this is the load-bearing part of the kit:
 
 | group | names |
 |---|---|
-| scope | `:root` · `[data-brand="…"]` — a theme root; `.light` · `.dark` — a polarity beneath it; `[data-theme="oldschool"]` — EV's pre-1.0 look |
+| scope | `:root` · `[data-brand="…"]` — a theme root; `.light` · `.dark` — a polarity beneath it; `[data-theme="oldschool"]` — EV's navy look |
 | surfaces | `background` (page) · `card` (surface) · `secondary` (raised) · `popover` (overlay) · `muted` (inset, input fill) |
 | states | `hover` · `active` · `selected` — translucent tints; `scrim` — behind a modal |
 | ink | `ink` · `ink-mid` · `ink-soft` — hierarchy, loudest first; `ink-faint` — disabled only |
 | lines | `border-subtle` (row rule) · `border` (hairline, 14 %) · `border-strong` (state and overlay edges) · `input` (control edge, ≥ 3:1) · `ring` |
-| roles | `brand` `primary` `secondary` `positive` `accent-trace` `accent-debug` `accent-info` `accent-warn` `accent-error`, each with `on-*` where it gets filled; `primary-ink` — the primary role as ink on a surface; `primary-hover` · `primary-border` — the solid button's states |
+| roles | `brand` `primary` `secondary` `positive` `accent-trace` `accent-debug` `accent-info` `accent-warn` `accent-error`, each with `on-*` where it gets filled; `primary-ink` — the primary role as ink on a surface; `primary-hover` · `primary-border` — the primary button's states |
 | status inks | `positive-ink` · `accent-info-ink` · `accent-warn-ink` · `accent-error-ink` — a status role as text on a surface or on its own tint (derived, a palette may pin them) |
-| faces | `button-primary-*` · `button-danger-*` (`bg` `hover` `border` `ink`) and `chip-{neutral,primary,positive,info,warn,error}-{bg,border}` — what a Button or Badge paints; derived for a brand, pinned per theme by EV |
+| faces | `button-danger-*` (`bg` `hover` `border` `ink`) — the destructive `Button`; `chip-{neutral,primary,positive,info,warn,error}-{bg,border}` — the `Badge`; `button-primary-*` — no kit component paints it; derived for a brand, pinned per theme by EV |
 | type | `text-caption` 11/14 · `body-s` 12/16 · `body` 13/18 · `body-l` 14/20 · `h3` 14/20 · `h2` 24/30 · `h1` 32/38 · `figure-m` 20/24 · `figure-l` 28/32 (size and line height each) |
 | scalars | `radius` (panel, 6 px) · `control-radius` (4 px) · `chip-radius` (4 px) · `depth-card` `depth-elevated` `depth-overlay` · `control-py` `display-scale` `band-py` `page-max` `page-px` `shell-rail-w` `shell-tab-bar-h` · `font-*` |
 | motion | `ev-ease-out` `ev-ease-in-out` `ev-dur-fast` `ev-dur-base` `ev-dur-slow` `ev-rise` `ev-stagger` `ev-stagger-section` |
@@ -90,7 +90,7 @@ polarity — so `on-{role}` exists exactly there.
 
 A fill and an ink are different jobs, and `primary` is the one role that
 names them separately: `primary` is the fill (`bg-primary text-on-primary` on
-a solid button, a checked switch or checkbox — `#138377`, white reads on it at
+a primary button, a checked switch or checkbox — `#138377`, white reads on it at
 4.62:1 and it clears 3:1 against every plane) and `primary-ink` is the same hue
 as ink (`text-primary-ink` on a link or eyebrow, a radio dot, a slider range,
 the focus `ring` — `#35a395` in Dark, `#116f65` in Light). The status roles
@@ -105,12 +105,11 @@ EV ships three, each a zero-specificity rule that pins every EV token:
 |---|---|---|
 | **Dark** (default) | nothing: no class, no attribute | near-black neutrals, warm ink, one teal accent, flat |
 | **Light** | `class="light"` on `<html>` or on any wrapper | warm paper planes, same shapes |
-| **Oldschool** | `data-theme="oldschool"` on `<html>` or on any wrapper | the pre-1.0 navy look: radius 8 / control 6 / pill chips, tinted chips, real shadows |
+| **Oldschool** | `data-theme="oldschool"` on `<html>` or on any wrapper | the navy look: radius 8 / control 6 / pill chips, tinted chips, real shadows |
 
-The u2 themes are flat: depth is surface steps and hairlines, and the
+Dark and Light are flat: depth is surface steps and hairlines, and the
 `--depth-*` tiers behind `shadow-card`, `shadow-elevated` and `shadow-overlay`
-are a zero shadow. Oldschool gives them back. Use those three names, never raw
-`shadow-sm/md/lg`.
+are a zero shadow. Oldschool gives them back.
 
 Scoping works the way the polarity classes always did. A `.light` or
 `[data-theme="oldschool"]` wrapper inside a Dark page takes its own full token
@@ -345,12 +344,13 @@ through hydration. Three parts of the kit make that hold:
 </form>
 ```
 
-**Focus.** Every `Button` variant, a `Badge` link, `Switch`, `Checkbox`,
-`RadioGroupItem` and `Toggle` show focus as the solid `ring` standing 2px off
-the control, so both edges of the indicator are against the surface: the ring
-reads on every surface at ≥ 3:1 and so does a fill, on every palette and
-polarity `test/tokens.test.ts` measures. Fields (`Input`, `Select`, …) turn
-their edge to `ring` and add a 1 px ring; tabs and list rows draw it inside.
+**Focus.** A control that paints a fill — `Button` `primary` / `secondary` /
+`destructive` or any accent fill, a `Badge` link, `Switch`, `Checkbox`,
+`Toggle` — shows focus as the solid `ring` standing 2px off it, so both edges of
+the indicator are against the surface: the ring reads on every surface at
+≥ 3:1 and so does the fill, on every palette and polarity `test/tokens.test.ts`
+measures. Controls that sit on the surface (`outline`, `ghost`, inputs) keep
+the `ring` border plus its halo; list rows draw an inset ring.
 
 ## App shell
 
@@ -574,7 +574,7 @@ export function Example() {
     <Card>
       <CardHeader>
         <CardTitle>Portfolio</CardTitle>
-        <Badge variant="success">+12.4%</Badge>
+        <Badge variant="positive">+12.4%</Badge>
       </CardHeader>
       <CardContent>
         <Button onClick={() => {}}>Invest</Button>
@@ -702,6 +702,11 @@ the cell says so.
 | optional slot present | an explicit prop, never read off `children`: `FieldSeparator { content: true, "or" }` renders the copy pill; `FormMessage { error, .. }` renders only while `error` (the same flag as `FormControl`'s) | `!!children` / `if (!children) return null` |
 | option label | `SelectItem { value, text_value, .. }`: the text type-ahead matches, an explicit prop in both ports — never read off `children` | `SelectItem`'s `textValue`, else the text of its children |
 | toasts | `ToasterProvider` + `use_toaster()` → `ToasterHandle` (`.toast` `.positive` `.error` `.info` `.warn` `.show` `.dismiss`), same in both ports | global `toast(...)` / `toast.dismiss` |
+| children present | `SettingsSection` and `SystemBanner`: Dioxus checks that the children render something, Leptos that children were passed | `children !== undefined` |
+| `SystemBanner` glyph | `icon` replaces the tone's glyph; Dioxus drops it with an empty `icon: rsx! {}`, Leptos with `icon=None` | `icon={null}` |
+| `KeyValue` label | Dioxus: an `Element`; Leptos: `KeyValueLabel::{Text, View}` (`.into()` from a string), since only text names the copy button | `label` (`ReactNode`) |
+| time-varying props | Dioxus: plain values; Leptos: signals — `HeaderBalance`, `NotificationBell`, `ModelChip`, `ChatComposer` `streaming` / `disabled`, `ConfirmDialog` `pending` / `error`, `ChatAttachment` `progress`, `AsidePanel` `open` | props |
+| Ctrl+K hook | `use_command_palette_shortcut(on_trigger, enabled)`: `enabled` is a `bool` in Dioxus, a `Signal<bool>` in Leptos | `useCommandPaletteShortcut` |
 
 ### Component inventory (all bricks)
 
@@ -726,7 +731,7 @@ the cell says so.
   (`PageFrame` / `PageHeading`), section-nav, resource-error, settled — see
   [App shell](#app-shell). `TopBar`, `SystemBanner` and `SectionLabel` have
   Dioxus twins (next item).
-- **Uikit 2.0 — Rust and TS (new in 1.0):** the class strings live once in
+- **Composed parts — Rust and TS:** the class strings live once in
   `rust/classes/src/<name>.rs`, and `nix run .#gen` writes them to
   `ts/uikit/src/generated/<name>.ts`.
   - *elements:* `IconButton` (required `aria-label`), `StatusItem` / `StatusDot`,
@@ -742,82 +747,55 @@ the cell says so.
   - *AI chat:* `ChatMessage`, `ChatBubble` (`streaming` shows a caret),
     `ChatMarker`, `ChatAttachment`, `ChatComposer`, `ModelChip` and `ChatTyping`
     (the "thinking" indicator).
-- **Uikit 2.0 — TS-only (new in 1.0):** `AnimatedNumber` / `useCountTween`,
+- **Composed parts — TS-only:** `AnimatedNumber` / `useCountTween`,
   `ChatPanel`, `ChatDock`, `ChatStreamText` (pass the whole growing string; only
   the new words fade in), the `AppShell` `aside` slot, and the profile form on
   `AccountMenu`. How the Rust twins differ is in [Limitations](#limitations).
 
-  `Avatar` takes `shape` and `size`; `SectionLabel` and `SystemBanner` follow the
-  new look.
-
 ### Variant vocabulary
 
 A variant names the state ([`docs/spec/variants.md`](../../docs/spec/variants.md)).
-From 1.0 the tones are one list wherever a component has them:
 
 | component | values |
 |---|---|
-| `Button` | `primary` (outline face, default) · `secondary` · `ghost` · `solid` (the one filled call to action) · `danger` · `link` |
+| `Button` | `primary` (the filled call to action, default) · `secondary` · `outline` · `ghost` · `destructive` · `link` |
 | `Badge` | `neutral` (default) · `primary` · `positive` · `info` · `warn` · `error` |
-| `Alert` | `neutral` (default) · `info` · `positive` · `warn` · `error` |
-| menu item (`DropdownMenuItem`, `ContextMenuItem`, `MenubarItem`) | `neutral` · `danger` |
-| `Avatar` | `shape`: `circle` (default, always round) · `square` (chip radius); `size`: `sm` 20 · `md` 28 · `lg` 56 px |
+| `Alert` | `neutral` (default) · `destructive` · `success` · `info` |
+| menu item (`DropdownMenuItem`, `ContextMenuItem`, `MenubarItem`) | `neutral` · `destructive` |
+| `SystemBanner` | `neutral` · `primary` · `info` (default) · `warn` |
 
-Control sizes are `xs` 20 · `sm` 24 · `md` 28 · `lg` 32 px, plus `xl` for a
-call to action. `size="touch"` is the 44 px pointer-target floor (WCAG 2.5.5)
-for touch-first screens: `min-h-11`, and a 44 × 44 square with `icon`. Form
-fields (`Input`, `Textarea`, `SelectTrigger`, `NativeSelect`) have three steps,
-`sm` · `md` · `touch`; they hold 16 px text on a coarse pointer so iOS does not
-zoom, and `touch` holds it at every width. Disabled is 40 % opacity on every control.
+The canonical variant set is the **superset** of the original cabinet (Rust) and
+landing (TS) sources: `Button` keeps landing's square icon shape at every size,
+as the separate `icon` boolean it always was in Rust. A `destructive` button
+wears the `button-danger-*` face: an outline in Dark and Light, a fill in
+Oldschool.
 
-`Button` keeps landing's square icon shape at every size, as the separate `icon`
-boolean it always was in Rust. A `Primary` and a `Danger` button are outlines whose
-faces come from the `button-*` tokens, so Oldschool fills them without a class change.
+`size="touch"` is the 44 px pointer-target floor (WCAG 2.5.5) for touch-first
+screens: `min-h-11` with `lg`'s padding, and a 44 × 44 square with `icon`. It is
+a button step only — `Input` and `SelectTrigger` already clear it at `lg`.
 
-## Migrating 0.x → 1.0
-
-Breaking, all at once. The package version is bumped by the release script, not
-by hand; a consumer pinned at `^0.x` must bump by hand and read the list.
+## Upgrading from 0.30
 
 **Renames and removals**
 
-| 0.x | 1.0 |
+| 0.30 | now |
 |---|---|
-| `Button variant="primary"` (filled) | `solid` — and `primary` is now the outline face; a `Button` with no `variant` was filled and is now an outline, so add `variant="solid"` where it is the call to action |
-| `variant="outline"` | `secondary` |
-| `variant="destructive"` | `danger` |
 | `Badge variant="outline"` · `"secondary"` | `neutral` |
-| `Badge variant="destructive"` · `"success"` | `error` · `positive` (new: `info`, `warn`; the default is now `neutral`, was filled `primary`) |
-| `Alert variant="destructive"` · `"success"` | `error` · `positive` (new: `warn`) |
-| menu item `variant="destructive"` | `danger` |
-| `Input` / `Textarea` / `SelectTrigger` / `NativeSelect` `size="lg"` | `size="touch"` (`lg` is gone from the field scale) |
-| `NativeSelect size="lg"` | `size="touch"` (the field scale is `sm`, `md`, `touch`) |
-| `SystemBanner` tones `warn`, `info` | `neutral`, `primary`, `info`, `warn`: the fill is always `card` with a bottom hairline and the tone colours only the icon (`info` is the default) |
-| `Avatar` (32 px) | `md` is 28 px; `shape`, `size` are new |
+| `Badge variant="destructive"` · `"success"` | `error` · `positive` (new: `primary`, `info`, `warn`) |
+| `SystemBanner` tones `warn`, `info` | the same, plus `neutral` and `primary`; `info` draws its icon in `accent-info-ink` |
 | `Terminal`, `TerminalPane*`, `TerminalChart`, `TerminalTicker`, `TickerStat`, `OrderBook*`, `TradesTapeRow`, `OrderForm*`, `OpenOrdersEmpty` and their types | removed from the TS kit (the Rust terminal stays) |
 
-**Silent changes: the compiler does not flag these.** Removed names
-(`outline`, `destructive`, `success`) fail the type check, but two defaults
-change their look and still compile:
+**Silent changes: the compiler does not flag these.**
 
-- A `Button` with no `variant`, or with `variant="primary"`, was the filled call
-  to action and is now an outline button.
-- A `Badge` with no `variant` was filled `primary` and is now `neutral`.
+- A `Badge` with no `variant` was filled `primary` and is now `neutral`:
+  `rg -n '<Badge(\s|>)' --glob '*.tsx' | rg -v 'variant='`.
+- A `destructive` `Button` wears the theme's `button-danger-*` face, an outline
+  in Dark and Light; an `outline` one is raised (`secondary` fill and a hairline).
 
-When you bump an app, search for both and decide each one by hand:
+**Tokens and themes**
 
-```sh
-rg -n '<Button(\s|>)' --glob '*.tsx' | rg -v 'variant='
-rg -n 'variant="primary"' --glob '*.tsx'
-rg -n '<Badge(\s|>)' --glob '*.tsx' | rg -v 'variant='
-```
-
-A `<Button` whose props span several lines shows up in the first search even
-when it sets a `variant`; check those by eye. The call to action on a screen
-becomes `variant="solid"`.
-
-**Tokens and look**
-
+- EV's navy palette is opt-in: `data-theme="oldschool"`. Dark is the default
+  and is a different colour set; `.light` is Light.
 - Font defaults are Inter (sans), Inter Tight (serif role) and JetBrains Mono
   (mono). `data-theme="oldschool"` sets Playfair Display and Inter for the serif
   and mono roles, as the navy look shipped. Load the families a theme uses
@@ -827,28 +805,18 @@ becomes `variant="solid"`.
   become `--brand-font-serif` / `font-serif` (see [Fonts](#fonts)).
 - A brand file must add `chart-6` (29 names now); `evinvest-palette` names it.
 - Panel radius is 6 px at every width (the `sm` bump to 8 px is gone), controls
-  4 px, and the depth tiers are flat. **Aquafix, vifnet and any other brand take
-  the u2 shapes and lose their shadows** unless their scope overrides
+  and chips 4 px, and the depth tiers are flat. **Aquafix, vifnet and any other
+  brand take these and lose their card shadow** unless their scope overrides
   `--radius`, `--control-radius`, `--chip-radius` and `--depth-card`,
   `--depth-elevated`, `--depth-overlay`. Check each brand before releasing.
-- EV's pre-1.0 navy palette is now opt-in: `data-theme="oldschool"`. Dark is the
-  default and is a different colour set.
-- A track is `bg-ink/14` (slider, progress); muted is no longer a track.
-- Raw `shadow-xs/sm/md/lg` classes in your own code should move to
-  `shadow-card`, `shadow-elevated` and `shadow-overlay`.
-- Text sizes `text-sm`/`text-xs` still work; the kit itself uses the new scale
-  (`text-body`, `text-body-s`, `text-caption`, …). The kit's class merge knows the
-  scale is a font size, so `text-body text-ink` keeps both.
-- `kitstart` migrated in the same release: its buttons, badges and field sizes
-  follow the table above.
 
 **Layers across bundles**
 
 - The shared layer stack (Escape order, outside clicks, the one shared scrim)
-  keeps its global key `@1`, so a micro-frontend bundling uikit 0.x and a 1.0
-  host still share one stack. A 0.x copy never notifies, so a 1.0 modal's shared
-  scrim may not update when a 0.x layer opens or closes under it; move hosts and
-  the MFEs they mount to 1.0 together to get the full behaviour.
+  keeps its global key `@1`, so a micro-frontend bundling uikit 0.30 and a newer
+  host still share one stack. A 0.30 copy never notifies, so a newer modal's
+  shared scrim may not update when a 0.30 layer opens or closes under it; move
+  hosts and the MFEs they mount together to get the full behaviour.
 
 ## Limitations
 
@@ -961,7 +929,7 @@ measuring needs host-only `web-sys`). Known gaps:
   Collapsible `ShellNav` / `SectionNav` groups are TS-only too. Their CSS (the
   entrances, the markers, the motion and shell tokens) ships in the shared
   sheet, so a Rust app can use the `data-enter` contract today.
-- **uikit 2.0 twins:** the Rust parts keep the TS markup and class strings, with
+- **Rust twins of the composed parts:** they keep the TS markup and class strings, with
   these differences. Overlays keep the limits of the older Rust overlays (inline
   `position: fixed`, no portal, no focus trap, not on the layer stack).
   `HeaderBalance` takes a formatted `String` (no rolling digits, no `Settled`).
