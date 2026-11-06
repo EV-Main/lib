@@ -78,7 +78,7 @@ export function LocalityField(props: {
       <Input
         ref={validity.ref}
         name={name}
-        size="touch"
+        size="lg"
         inputMode={numeric ? "numeric" : "text"}
         autoComplete="postal-code"
         placeholder={props.placeholder}
@@ -98,7 +98,7 @@ export function LocalityField(props: {
             <Button
               key={commune}
               type="button"
-              variant="secondary"
+              variant="outline"
               size="touch"
               className={cn("px-3", c?.chip)}
               onClick={() => {
@@ -199,7 +199,7 @@ export function PhoneField(props: {
     <Input
       ref={validity.ref}
       name={name}
-      size="touch"
+      size="lg"
       {...PHONE_INPUT_PROPS}
       enterKeyHint="send"
       placeholder={props.placeholder ?? text.phonePlaceholder}
@@ -270,7 +270,7 @@ export function NameField(props: {
       <Input
         ref={validity.ref}
         name={name}
-        size="touch"
+        size="lg"
         autoComplete="name"
         enterKeyHint="next"
         placeholder={placeholder}
