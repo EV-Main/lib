@@ -17,6 +17,9 @@ fn matches_baselines() {
 	let shots = format!("{VISUAL}/__screenshots__");
 	let captured = pngs(&capture());
 	assert!(!captured.is_empty(), "playwright captured nothing");
+	if std::env::var_os("EV_CAPTURE_ONLY").is_some() {
+		return; // for `nix run .#visual-review -- --fresh`
+	}
 
 	if std::env::var_os("UPDATE_EXPECT").is_some() {
 		// cleared, not merged into: a page dropped from the manifest must not leave its baseline behind

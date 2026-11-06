@@ -8,11 +8,23 @@ per theme (`<label>.{dark,light,oldschool}.png`) in `__screenshots__/`, compared
 cargo test --features uikit_dioxus --test gallery                   # capture and compare
 UPDATE_EXPECT=1 cargo test --features uikit_dioxus --test gallery   # accept the current render
 nix run .#visual                                             # look at the pages
-nix run .#visual-diff -- origin/main                         # old | new | diff of every moved baseline
 ```
 
 Adding a primitive is still one line in `../support/gallery.rs`; the page list
 flows from there through `dist/manifest.json` into the spec.
+
+## Review a change
+
+```sh
+nix run .#visual-review -- [<git-ref>] [--themes dark,light,oldschool] [--fresh]
+```
+
+Writes `tmp/visual-review.html`: per component whose render moved, a diff panel
+(changed pixels in red over the dimmed old render), the old and the new, with the
+share of changed pixels. The old side is the ref's committed baselines
+(`git show`), so nothing is checked out or rebuilt; the new side is the working
+tree's baselines, or with `--fresh` a capture run without accepting (from inside
+`nix develop`). Default ref `origin/main`, default theme `dark`.
 
 ## Why it is shaped this way
 
