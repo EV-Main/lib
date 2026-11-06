@@ -498,7 +498,7 @@ fn d_system_banner() -> Element {
 	rsx! {
 		div { class: "flex w-full flex-col gap-2",
 			SystemBanner { tone: Tone::Warn, title: rsx! { "Maintenance" }, "Read-only from 02:00 to 04:00 UTC" }
-			SystemBanner { action: rsx! { a { href: "#", class: "text-body text-primary-ink underline", "Details" } }, on_dismiss: |_| {}, "New reports are available" }
+			SystemBanner { tone: Tone::Info, action: rsx! { a { href: "#", class: "text-body text-primary-ink underline", "Details" } }, on_dismiss: |_| {}, "New reports are available" }
 			SystemBanner { tone: Tone::Neutral, icon: rsx! {}, "Plain notice without a glyph" }
 		}
 	}

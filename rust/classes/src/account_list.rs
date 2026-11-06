@@ -4,7 +4,7 @@ pub const ACCOUNT_LIST_ITEM_BASE: &str = "flex items-center gap-3 rounded-panel 
 
 pub const ACCOUNT_LIST_ITEM_CHECKED: &str = "border-primary-border bg-selected";
 
-pub const ACCOUNT_LIST_ITEM_UNCHECKED: &str = "border-input bg-transparent hover:bg-hover";
+pub const ACCOUNT_LIST_ITEM_UNCHECKED: &str = "border-border-subtle bg-muted hover:bg-hover";
 
 pub const ACCOUNT_LIST_ITEM_DISABLED: &str = "opacity-40";
 

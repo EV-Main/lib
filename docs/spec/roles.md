@@ -59,11 +59,15 @@ A fill names where the element sits, not how light it should look:
 
 | role | fill | what sits there |
 |---|---|---|
-| page | `bg-background` | the plane a screen is laid out on |
+| page | `bg-background` | the plane a screen is laid out on, and a panel docked to its edge (sheet, drawer): part of the frame, one step off the scrim |
 | raised | `bg-card` | a surface in flow: card, rail, bar, a chosen tab, the user's bubble |
-| floating | `bg-popover` | an overlay: dialog, sheet, drawer, menu, popover, toast |
-| well | `bg-muted` | a recess: a track, a skeleton, a muted band |
-| control | transparent, `--input` edge | anything typed into or pressed that is not a button face |
+| floating | `bg-popover` | an overlay: dialog, menu, popover, toast |
+| well | `bg-muted` | a recess: a track, a muted band, a read-out |
+| control | transparent, `--input` edge | an empty slot the user fills: input, textarea, select |
+
+A thing holding a value of its own (a balance, a search trigger, an addon, an
+account) keeps a fill: an empty inside reads as a slot to put something in. A
+skeleton is a `bg-hover` tint over whatever it stands in for.
 
 `secondary` is a role fill, the face of the Secondary and Outline buttons, and
 never a plane.

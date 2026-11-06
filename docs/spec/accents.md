@@ -66,10 +66,10 @@ than as a fill. Do not match a text colour to a fill by eye or by value: a
 `bg-accent-error/(--tint-hover)` tint behind `text-accent-error` is the intended pair, and a
 tint is never measured against the 3:1 or 4.5:1 a text colour owes.
 
-**A tone worn as a tint is one rule.** A chip, a toast edge, a banner, an
-alert: the tone's ink at `--tint-fill` for the fill and `--tint-edge` for the
-edge (`--tint-{tone}-{fill,edge}`), and at `--tint-hover` for a pointed-at row
-or face in the tone. A theme picks the shape by those three numbers (u2: an
+**A tone worn as a tint is one rule.** The tone's ink at `--tint-fill` and
+`--tint-edge` is a chip's fill and edge (`--tint-{tone}-{fill,edge}`), at
+`--tint-wash` an area's body (a banner, an alert, over its card), and at
+`--tint-hover` a pointed-at row or face in the tone. A theme picks the shape by those three numbers (u2: an
 outline, Oldschool: a pill with no edge); a tone pins its own fill only where
 its label would fall under a floor, and says which.
 

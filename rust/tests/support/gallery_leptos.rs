@@ -472,6 +472,7 @@ fn d_system_banner() -> AnyView {
 				"Read-only from 02:00 to 04:00 UTC"
 			</SystemBanner>
 			<SystemBanner
+				tone=Tone::Info
 				action=|| {
 					view! {
 						<a href="#" class="text-body text-primary-ink underline">

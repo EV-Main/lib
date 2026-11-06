@@ -20,7 +20,7 @@ export const ASIDE_PANEL_DOCKED = "flex h-full w-95 shrink-0 flex-col bg-card";
 
 export const ASIDE_PANEL_DRAWER = "flex max-h-[85dvh] flex-col bg-card";
 
-export const ASIDE_PANEL_SHEET = "w-full gap-0 border-border-strong bg-popover p-0 sm:max-w-105 [&>[data-slot=sheet-close]]:hidden";
+export const ASIDE_PANEL_SHEET = "w-full gap-0 border-border-strong bg-card p-0 sm:max-w-105 [&>[data-slot=sheet-close]]:hidden";
 
 export const ASIDE_PANEL_WIDE_ONLY = "hidden md:flex";
 
