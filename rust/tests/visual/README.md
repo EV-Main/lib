@@ -1,12 +1,14 @@
 # Visual regression
 
 One PNG per uikit primitive, plus the combined board and the colorscheme page,
-in `__screenshots__/`, compared **byte for byte** by the gallery test.
+per theme (`<label>.{dark,light,oldschool}.png`) in `__screenshots__/`, compared
+**byte for byte** by the gallery test.
 
 ```sh
 cargo test --features uikit_dioxus --test gallery                   # capture and compare
 UPDATE_EXPECT=1 cargo test --features uikit_dioxus --test gallery   # accept the current render
 nix run .#visual                                             # look at the pages
+nix run .#visual-diff -- origin/main                         # old | new | diff of every moved baseline
 ```
 
 Adding a primitive is still one line in `../support/gallery.rs`; the page list
