@@ -33,8 +33,8 @@ interface LayerStore {
 
 // One stack per page, not per module copy: a micro-frontend that bundles its
 // own uikit must see the host's layers, and the host its. Versioned, so a copy
-// with a different store shape keeps to itself instead of misreading this one.
-const STORE_KEY = Symbol.for("@evinvest/uikit/dismissable-layers@2");
+// with an incompatible store shape keeps to itself instead of misreading this one.
+const STORE_KEY = Symbol.for("@evinvest/uikit/dismissable-layers@1");
 
 function isStore(value: unknown): value is LayerStore {
   return typeof value === "object" && value !== null && "stack" in value && Array.isArray(value.stack);
@@ -42,7 +42,11 @@ function isStore(value: unknown): value is LayerStore {
 
 function sharedStore(): LayerStore {
   const existing: unknown = Reflect.get(globalThis, STORE_KEY);
-  if (isStore(existing)) return existing;
+  if (isStore(existing)) {
+    // an older copy created the store: it never notifies, so only this copy's listeners hear changes
+    existing.listeners ??= new Set();
+    return existing;
+  }
   const store: LayerStore = {
     stack: [],
     info: new WeakMap(),

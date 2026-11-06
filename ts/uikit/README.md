@@ -845,10 +845,10 @@ becomes `variant="solid"`.
 **Layers across bundles**
 
 - The shared layer stack (Escape order, outside clicks, the one shared scrim)
-  lives on a global key that is now `@2`. A micro-frontend that bundles uikit
-  0.x keeps its own `@1` stack, so its overlays and the host's 1.0 overlays no
-  longer close in one order or share a scrim. Move hosts and the MFEs they
-  mount (for example the concierge account chip) to 1.0 together.
+  keeps its global key `@1`, so a micro-frontend bundling uikit 0.x and a 1.0
+  host still share one stack. A 0.x copy never notifies, so a 1.0 modal's shared
+  scrim may not update when a 0.x layer opens or closes under it; move hosts and
+  the MFEs they mount to 1.0 together to get the full behaviour.
 
 ## Limitations
 
