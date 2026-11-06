@@ -1,0 +1,39 @@
+{
+  "bool": {
+    "true": ["true", "TRUE", "True", "1"],
+    "false": ["false", "FALSE", "False", "0"],
+    "invalid": ["yes", "no", "2", " true", "true ", ""],
+    "error": "expected one of `true`, `false`, `1`, `0` (case-insensitive)"
+  },
+  "string": [" keep me "],
+  "int": {
+    "accept": [
+      ["8080", 8080],
+      ["+5", 5]
+    ],
+    "reject": [" 8080", "8080 ", "1e3", "0x10", "0b101", "0o17", "5.", "5.0"]
+  },
+  "float": {
+    "accept": [
+      ["8080", 8080],
+      ["1e3", 1000],
+      ["5.", 5],
+      [".5", 0.5]
+    ],
+    "reject": [" 8080", "8080 ", "0x10"]
+  },
+  "list": [
+    ["a, b ,c", ["a", "b", "c"]],
+    ["a,,b", ["a", "b"]],
+    [",,", []],
+    ["a,\ufeffb", ["a", "b"]]
+  ],
+  "int_list": [
+    ["1, 2,3", [1, 2, 3]]
+  ],
+  "int_list_error": {
+    "raw": ",zzz9,2",
+    "prefix": "item 1: ",
+    "item": "zzz9"
+  }
+}
