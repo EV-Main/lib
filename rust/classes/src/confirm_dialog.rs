@@ -29,6 +29,6 @@ pub const CONFIRM_DIALOG_SPINNER: &str = "size-3.5";
 pub enum ConfirmDialogTone {
 	#[tw(default, class = "bg-muted text-ink-mid")]
 	Default,
-	#[tw(class = "bg-chip-error-bg text-accent-error")]
+	#[tw(class = "bg-tint-error-fill text-accent-error")]
 	Danger,
 }

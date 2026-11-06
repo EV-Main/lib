@@ -155,3 +155,42 @@ fn state_is_the_ladder() {
 	);
 	assert!(offending.is_empty(), "a hand-spelled state fill, where bg-{{hover,active,selected}} belongs: {offending:#?}");
 }
+
+/// A tone worn as a tint is its `--tint-{tone}-{fill,edge}`, and a tone's
+/// pointed-at row or face is it at `--tint-hover`; a tone at a numeric alpha
+/// is a tint spelled by hand.
+#[test]
+fn a_tone_is_a_tint() {
+	let literal = |class: &str| {
+		let Some(color) = utility(class).strip_prefix("bg-").or_else(|| utility(class).strip_prefix("border-")) else {
+			return false;
+		};
+		let Some((tone, alpha)) = color.split_once('/') else { return false };
+		["accent-", "positive", "primary"].iter().any(|t| tone.starts_with(t)) && alpha.starts_with(|c: char| c.is_ascii_digit())
+	};
+	const SOLID_HOVER: &str = "a solid face's own hover, not a tint";
+	const OUTLINE_EDGE: &str = "an outlined control's edge, which a tint's (none in Oldschool) cannot be";
+	const MEASURED: &str = "a shape whose ratio docs/spec/accents.md measures";
+	const FILLED_MARK: &str = "a fill at rest in its tone, which u2's tint (an outline) cannot give";
+	let offending = literals(
+		literal,
+		&[
+			("hover:bg-accent-trace/90", SOLID_HOVER),
+			("hover:bg-accent-debug/90", SOLID_HOVER),
+			("hover:bg-accent-info/90", SOLID_HOVER),
+			("hover:bg-accent-warn/90", SOLID_HOVER),
+			("hover:bg-accent-error/90", SOLID_HOVER),
+			("border-accent-trace/40", OUTLINE_EDGE),
+			("border-accent-debug/40", OUTLINE_EDGE),
+			("border-accent-info/40", OUTLINE_EDGE),
+			("border-accent-warn/40", OUTLINE_EDGE),
+			("border-accent-error/40", OUTLINE_EDGE),
+			("bg-primary-ink/20", MEASURED),
+			("has-data-[state=checked]:bg-primary-ink/5", MEASURED),
+			("aria-selected:bg-accent-info/20", FILLED_MARK),
+			("data-[reset]:not-aria-selected:bg-accent-trace/20", FILLED_MARK),
+			("bg-primary-ink/15", FILLED_MARK),
+		],
+	);
+	assert!(offending.is_empty(), "a tone at a numeric alpha, where its --tint-* belongs: {offending:#?}");
+}

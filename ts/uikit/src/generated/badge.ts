@@ -3,11 +3,11 @@
 export const BADGE_BASE = "inline-flex h-5 items-center justify-center rounded-chip border px-1.5 text-caption font-medium w-fit whitespace-nowrap shrink-0 gap-1 overflow-hidden [&>svg]:size-3 [&>svg]:pointer-events-none transition-colors outline-none [a&]:hover:bg-[image:linear-gradient(var(--hover),var(--hover))] aria-invalid:border-accent-error focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 export const badgeVariants = {
-  "neutral": "border-chip-neutral-border bg-chip-neutral-bg text-ink-mid",
-  "primary": "border-chip-primary-border bg-chip-primary-bg text-primary-ink",
-  "positive": "border-chip-positive-border bg-chip-positive-bg text-positive-ink",
-  "info": "border-chip-info-border bg-chip-info-bg text-accent-info-ink",
-  "warn": "border-chip-warn-border bg-chip-warn-bg text-accent-warn",
-  "error": "border-chip-error-border bg-chip-error-bg text-accent-error",
+  "neutral": "border-tint-neutral-edge bg-tint-neutral-fill text-ink-mid",
+  "primary": "border-tint-primary-edge bg-tint-primary-fill text-primary-ink",
+  "positive": "border-tint-positive-edge bg-tint-positive-fill text-positive-ink",
+  "info": "border-tint-info-edge bg-tint-info-fill text-accent-info-ink",
+  "warn": "border-tint-warn-edge bg-tint-warn-fill text-accent-warn",
+  "error": "border-tint-error-edge bg-tint-error-fill text-accent-error",
 } as const;
 export type BadgeVariant = keyof typeof badgeVariants;

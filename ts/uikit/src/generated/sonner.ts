@@ -4,10 +4,10 @@ export const TOAST_BASE = "pointer-events-auto flex w-full items-start gap-3 rou
 
 export const toastVariantClasses = {
   "neutral": "bg-popover text-ink border-border",
-  "positive": "bg-popover text-ink border-chip-positive-border",
-  "info": "bg-popover text-ink border-chip-info-border",
-  "warn": "bg-popover text-ink border-accent-warn/50",
-  "error": "bg-popover text-ink border-accent-error/50",
+  "positive": "bg-popover text-ink border-tint-positive-edge",
+  "info": "bg-popover text-ink border-tint-info-edge",
+  "warn": "bg-popover text-ink border-tint-warn-edge",
+  "error": "bg-popover text-ink border-tint-error-edge",
 } as const;
 export type ToastVariant = keyof typeof toastVariantClasses;
 

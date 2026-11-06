@@ -49,7 +49,7 @@ export const CHAT_MARKER_TOOL = "flex items-center gap-2.5 rounded-panel border 
 
 export const CHAT_MARKER_TOOL_BORDER = "border-border";
 
-export const CHAT_MARKER_TOOL_ERROR_BORDER = "border-chip-error-border";
+export const CHAT_MARKER_TOOL_ERROR_BORDER = "border-tint-error-edge";
 
 export const CHAT_MARKER_TOOL_ICON = "size-4 shrink-0 text-ink-mid";
 

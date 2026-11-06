@@ -100,23 +100,9 @@
   --button-primary-border: #e6e1d399;
   --button-primary-ink: #e6e1d3;
   --button-danger-bg: #f05b5200;
-  --button-danger-hover: #f05b521a;
   --button-danger-border: #f05b52;
   --button-danger-ink: var(--accent-error);
 
-  /* chips are outlines: a transparent fill and the label's hue at 50 % */
-  --chip-neutral-bg: var(--hover);
-  --chip-neutral-border: var(--border);
-  --chip-primary-bg: #35a39500;
-  --chip-primary-border: #35a3958c;
-  --chip-positive-bg: #2e9e5c00;
-  --chip-positive-border: #4abf7680;
-  --chip-info-bg: #4990d800;
-  --chip-info-border: #6ca6e480;
-  --chip-warn-bg: #f5c84e00;
-  --chip-warn-border: #f5c84e80;
-  --chip-error-bg: #f05b5200;
-  --chip-error-border: #f05b5280;
 }
 
 /* ── u2 Light ────────────────────────────────────────────────── */
@@ -183,23 +169,9 @@
   --button-primary-border: #0d0d0fa6;
   --button-primary-ink: #080e1a;
   --button-danger-bg: #db383400;
-  --button-danger-hover: #db383414;
   --button-danger-border: #db3834;
   --button-danger-ink: var(--accent-error);
 
-  /* the solid hue at 50 % (warning 60 %), where Dark uses the ink's */
-  --chip-neutral-bg: var(--hover);
-  --chip-neutral-border: var(--border);
-  --chip-primary-bg: #13837700;
-  --chip-primary-border: #116f658c;
-  --chip-positive-bg: #228a4e00;
-  --chip-positive-border: #228a4e80;
-  --chip-info-bg: #2d79c200;
-  --chip-info-border: #2d79c280;
-  --chip-warn-bg: #a77f1200;
-  --chip-warn-border: #a77f1299;
-  --chip-error-bg: #db383400;
-  --chip-error-border: #db383480;
 }
 
 /* ── Oldschool ───────────────────────────────────────────────── *
@@ -276,21 +248,15 @@
   --button-danger-border: #f05b52;
   --button-danger-ink: #070d18;
 
-  /* chips are tinted pills with no edge */
-  --chip-neutral-bg: var(--hover);
-  --chip-neutral-border: #e6e1d300;
+  /* tints are pills with no edge: the neutral one is the hover plane alone */
+  --tint-fill: 18%;
+  --tint-edge: 0%;
+  --tint-neutral-edge: transparent;
   /* Figma tints the accent chip 16 %, which leaves its teal label at 4.03:1 on
    * the card; 8 % holds 4.56:1 */
-  --chip-primary-bg: #35a39514;
-  --chip-primary-border: #35a39500;
-  --chip-positive-bg: #2e9e5c2e;
-  --chip-positive-border: #4abf7600;
-  --chip-info-bg: #4990d82e;
-  --chip-info-border: #6ca6e400;
-  --chip-warn-bg: #f5c84e29;
-  --chip-warn-border: #f5c84e00;
-  --chip-error-bg: #f05b522e;
-  --chip-error-border: #f06c6100;
+  --tint-primary-fill: color-mix(in srgb, var(--primary-ink) 8%, transparent);
+  /* at 18 % the info label reads 4.43:1 on its fill; 16 % clears 4.5:1 */
+  --tint-info-fill: color-mix(in srgb, var(--accent-info-ink) 16%, transparent);
 
   --radius: 0.5rem;
   --control-radius: 0.375rem;

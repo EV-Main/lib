@@ -22,6 +22,6 @@ export const CONFIRM_DIALOG_SPINNER = "size-3.5";
 
 export const confirmDialogIconToneClasses = {
   "default": "bg-muted text-ink-mid",
-  "danger": "bg-chip-error-bg text-accent-error",
+  "danger": "bg-tint-error-fill text-accent-error",
 } as const;
 export type ConfirmDialogTone = keyof typeof confirmDialogIconToneClasses;

@@ -2,8 +2,8 @@ use tailwind_fuse::{AsTailwindClass, TwVariant};
 
 use crate::focus::filled_focus_ring;
 
-/// A 20 px chip. The fill and the edge come from the `--chip-*` tokens, so a
-/// theme chooses between an outline (Dark, Light) and a tinted pill (Oldschool)
+/// A 20 px chip. The fill and the edge are the tone's `--tint-*`, so a theme
+/// chooses between an outline (Dark, Light) and a tinted pill (Oldschool)
 /// without the class table knowing.
 ///
 /// A badge only takes focus as a link; it then wears the offset ring, and its
@@ -21,16 +21,16 @@ pub const BADGE_BASE: &str = concat!(
 #[derive(PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
 #[strum(serialize_all = "kebab-case")]
 pub enum BadgeVariant {
-	#[tw(default, class = "border-chip-neutral-border bg-chip-neutral-bg text-ink-mid")]
+	#[tw(default, class = "border-tint-neutral-edge bg-tint-neutral-fill text-ink-mid")]
 	Neutral,
-	#[tw(class = "border-chip-primary-border bg-chip-primary-bg text-primary-ink")]
+	#[tw(class = "border-tint-primary-edge bg-tint-primary-fill text-primary-ink")]
 	Primary,
-	#[tw(class = "border-chip-positive-border bg-chip-positive-bg text-positive-ink")]
+	#[tw(class = "border-tint-positive-edge bg-tint-positive-fill text-positive-ink")]
 	Positive,
-	#[tw(class = "border-chip-info-border bg-chip-info-bg text-accent-info-ink")]
+	#[tw(class = "border-tint-info-edge bg-tint-info-fill text-accent-info-ink")]
 	Info,
-	#[tw(class = "border-chip-warn-border bg-chip-warn-bg text-accent-warn")]
+	#[tw(class = "border-tint-warn-edge bg-tint-warn-fill text-accent-warn")]
 	Warn,
-	#[tw(class = "border-chip-error-border bg-chip-error-bg text-accent-error")]
+	#[tw(class = "border-tint-error-edge bg-tint-error-fill text-accent-error")]
 	Error,
 }

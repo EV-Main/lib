@@ -19,13 +19,13 @@ pub const TOASTER_BASE: &str = "pointer-events-none fixed z-100 w-[calc(100%-2re
 pub enum ToastVariant {
 	#[tw(default, class = "bg-popover text-ink border-border")]
 	Neutral,
-	#[tw(class = "bg-popover text-ink border-chip-positive-border")]
+	#[tw(class = "bg-popover text-ink border-tint-positive-edge")]
 	Positive,
-	#[tw(class = "bg-popover text-ink border-chip-info-border")]
+	#[tw(class = "bg-popover text-ink border-tint-info-edge")]
 	Info,
-	#[tw(class = "bg-popover text-ink border-accent-warn/50")]
+	#[tw(class = "bg-popover text-ink border-tint-warn-edge")]
 	Warn,
-	#[tw(class = "bg-popover text-ink border-accent-error/50")]
+	#[tw(class = "bg-popover text-ink border-tint-error-edge")]
 	Error,
 }
 
