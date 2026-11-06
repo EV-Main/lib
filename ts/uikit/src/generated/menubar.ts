@@ -14,7 +14,7 @@ export const MENUBAR_RADIO_ITEM = "focus:bg-hover focus:text-ink focus-visible:i
 
 export const MENUBAR_ITEM_INDICATOR = "pointer-events-none absolute left-2 flex size-4 items-center justify-center";
 
-export const MENUBAR_LABEL = "flex h-6 items-center px-2 text-body-s text-ink-soft data-[inset]:pl-8";
+export const MENUBAR_LABEL = "flex min-h-6 flex-col justify-center px-2 text-body-s text-ink-soft data-[inset]:pl-8";
 
 export const MENUBAR_SEPARATOR = "bg-border-subtle my-1 h-px";
 

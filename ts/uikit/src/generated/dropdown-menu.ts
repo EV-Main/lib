@@ -12,7 +12,7 @@ export const DROPDOWN_MENU_SUB_TRIGGER = "focus:bg-hover focus:text-ink focus-vi
 
 export const DROPDOWN_MENU_ITEM_INDICATOR = "pointer-events-none absolute left-2 flex size-4 items-center justify-center";
 
-export const DROPDOWN_MENU_LABEL = "flex h-6 items-center px-2 text-body-s text-ink-soft data-[inset]:pl-8";
+export const DROPDOWN_MENU_LABEL = "flex min-h-6 flex-col justify-center px-2 text-body-s text-ink-soft data-[inset]:pl-8";
 
 export const DROPDOWN_MENU_SEPARATOR = "bg-border-subtle my-1 h-px";
 

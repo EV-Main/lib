@@ -549,7 +549,6 @@ flex gap-3
 flex h-11 items-center gap-3 border-t border-border py-0 pl-2 pr-3
 flex h-11 shrink-0 items-center gap-1.5 border-b border-border bg-card pl-3 pr-2
 flex h-14 items-center gap-3 border-b border-border bg-background px-8
-flex h-6 items-center px-2 text-body-s text-ink-soft data-[inset]:pl-8
 flex h-6.5 items-center gap-4 border-t border-border bg-background px-3 text-caption text-ink-soft
 flex h-8 items-center gap-2 border-b border-border-subtle px-3 has-[[aria-invalid=true]]:border-accent-error
 flex h-8 w-55 items-center gap-2 rounded-(--control-radius) border border-border bg-muted pl-2.5 pr-1.5 text-left text-body text-ink-mid outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring
@@ -582,6 +581,7 @@ flex max-h-[90dvh] max-w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden bg-pop
 flex max-w-sm flex-col items-center gap-2 text-center
 flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden
 flex min-h-0 flex-1 flex-col overflow-y-auto
+flex min-h-6 flex-col justify-center px-2 text-body-s text-ink-soft data-[inset]:pl-8
 flex min-w-0 flex-1 flex-col gap-0.5
 flex min-w-0 flex-1 flex-col gap-1 text-body text-ink
 flex min-w-0 flex-1 flex-col gap-6

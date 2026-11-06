@@ -109,7 +109,7 @@ export function AccountMenu({
             onOpen={profile.onOpenProfile}
           />
         ) : (
-          <DropdownMenuLabel className="flex flex-col">
+          <DropdownMenuLabel>
             {account.name && <span className="truncate text-ink">{account.name}</span>}
             <span className="truncate font-normal text-ink-soft">{account.email}</span>
           </DropdownMenuLabel>

@@ -10,7 +10,7 @@ export const CONTEXT_MENU_CHECK_ITEM = "focus:bg-hover focus:text-ink focus-visi
 
 export const CONTEXT_MENU_SUB_TRIGGER = "focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[state=open]:bg-hover data-[state=open]:text-ink flex h-7 cursor-default items-center gap-2 rounded-[var(--control-radius)] px-2 text-body text-ink-mid outline-hidden select-none data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-ink-mid";
 
-export const CONTEXT_MENU_LABEL = "flex h-6 items-center px-2 text-body-s text-ink-soft data-[inset]:pl-8";
+export const CONTEXT_MENU_LABEL = "flex min-h-6 flex-col justify-center px-2 text-body-s text-ink-soft data-[inset]:pl-8";
 
 export const CONTEXT_MENU_SEPARATOR = "bg-border-subtle my-1 h-px";
 

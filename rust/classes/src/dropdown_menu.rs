@@ -18,6 +18,6 @@ pub const DROPDOWN_MENU_SUB_TRIGGER: &str = concat!(
 	" data-[state=open]:bg-hover data-[state=open]:text-ink flex h-7 cursor-default items-center gap-2 rounded-[var(--control-radius)] px-2 text-body text-ink-mid outline-hidden select-none data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-ink-mid"
 );
 pub const DROPDOWN_MENU_ITEM_INDICATOR: &str = "pointer-events-none absolute left-2 flex size-4 items-center justify-center";
-pub const DROPDOWN_MENU_LABEL: &str = "flex h-6 items-center px-2 text-body-s text-ink-soft data-[inset]:pl-8";
+pub const DROPDOWN_MENU_LABEL: &str = "flex min-h-6 flex-col justify-center px-2 text-body-s text-ink-soft data-[inset]:pl-8";
 pub const DROPDOWN_MENU_SEPARATOR: &str = "bg-border-subtle my-1 h-px";
 pub const DROPDOWN_MENU_SHORTCUT: &str = "text-ink-soft ml-auto text-caption tabular-nums";
