@@ -61,3 +61,35 @@ export const NOTIFICATION_BELL_EMPTY = "No notifications";
 export const FOOTER_OFFICES = "Offices";
 
 export const FOOTER_NEWSLETTER = "Newsletter";
+
+export const STATUS_HOME = "Back to home";
+
+export const NOT_FOUND_EYEBROW = "Page not found";
+
+export const NOT_FOUND_HEADLINE_LEAD = "You've reached ";
+
+export const NOT_FOUND_HEADLINE_ACCENT = "open water";
+
+export const NOT_FOUND_SUBTEXT = "The page you're looking for has drifted off our coastline — moved, renamed, or never charted. Let's get you back to shore.";
+
+export const NOT_FOUND_CONTACT = "Contact the team";
+
+export const FORBIDDEN_EYEBROW = "Access forbidden";
+
+export const FORBIDDEN_HEADLINE_LEAD = "This harbour is ";
+
+export const FORBIDDEN_HEADLINE_ACCENT = "private";
+
+export const FORBIDDEN_SUBTEXT = "You don't have the credentials to view this page. If you believe you should, our team can open the right doors.";
+
+export const FORBIDDEN_CONTACT = "Request access";
+
+export const SERVER_ERROR_EYEBROW = "Server error";
+
+export const SERVER_ERROR_HEADLINE_LEAD = "Our systems are ";
+
+export const SERVER_ERROR_HEADLINE_ACCENT = "recalibrating";
+
+export const SERVER_ERROR_SUBTEXT = "Something broke on our end — not yours. We've been alerted and are restoring service. Please try again in a moment.";
+
+export const SERVER_ERROR_RETRY = "Try again";

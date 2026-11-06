@@ -9,7 +9,7 @@
 
 use ev_lib_classes::{
 	Icon, STATUS_SCREEN_ACTION_ICON, STATUS_SCREEN_ACTIONS, STATUS_SCREEN_BODY, STATUS_SCREEN_CODE, STATUS_SCREEN_EYEBROW, STATUS_SCREEN_GLOW, STATUS_SCREEN_LOGO, STATUS_SCREEN_ROOT,
-	STATUS_SCREEN_STACK, STATUS_SCREEN_TITLE, STATUS_SCREEN_TITLE_ACCENT,
+	STATUS_SCREEN_STACK, STATUS_SCREEN_TITLE, STATUS_SCREEN_TITLE_ACCENT, copy,
 };
 use leptos::prelude::*;
 
@@ -76,14 +76,14 @@ pub fn NotFound(#[prop(default = "/".to_string(), into)] home_href: String, #[pr
 	view! {
 		<StatusScreen
 			accent=Accent::Debug
-			eyebrow="Page not found"
+			eyebrow=copy::NOT_FOUND_EYEBROW
 			code="404"
-			headline_lead="You've reached "
-			headline_accent="open water"
-			subtext="The page you're looking for has drifted off our coastline — moved, renamed, or never charted. Let's get you back to shore."
+			headline_lead=copy::NOT_FOUND_HEADLINE_LEAD
+			headline_accent=copy::NOT_FOUND_HEADLINE_ACCENT
+			subtext=copy::NOT_FOUND_SUBTEXT
 			links=vec![
-				home("Back to home", home_href, ButtonVariant::Primary),
-				contact("Contact the team", contact_href),
+				home(copy::STATUS_HOME, home_href, ButtonVariant::Primary),
+				contact(copy::NOT_FOUND_CONTACT, contact_href),
 			]
 		/>
 	}
@@ -95,14 +95,14 @@ pub fn Forbidden(#[prop(default = "/".to_string(), into)] home_href: String, #[p
 	view! {
 		<StatusScreen
 			accent=Accent::Warn
-			eyebrow="Access forbidden"
+			eyebrow=copy::FORBIDDEN_EYEBROW
 			code="403"
-			headline_lead="This harbour is "
-			headline_accent="private"
-			subtext="You don't have the credentials to view this page. If you believe you should, our team can open the right doors."
+			headline_lead=copy::FORBIDDEN_HEADLINE_LEAD
+			headline_accent=copy::FORBIDDEN_HEADLINE_ACCENT
+			subtext=copy::FORBIDDEN_SUBTEXT
 			links=vec![
-				home("Back to home", home_href, ButtonVariant::Primary),
-				contact("Request access", contact_href),
+				home(copy::STATUS_HOME, home_href, ButtonVariant::Primary),
+				contact(copy::FORBIDDEN_CONTACT, contact_href),
 			]
 		/>
 	}
@@ -114,12 +114,12 @@ pub fn ServerError(#[prop(default = "/".to_string(), into)] home_href: String, #
 	view! {
 		<StatusScreen
 			accent=Accent::Error
-			eyebrow="Server error"
+			eyebrow=copy::SERVER_ERROR_EYEBROW
 			code="500"
-			headline_lead="Our systems are "
-			headline_accent="recalibrating"
-			subtext="Something broke on our end — not yours. We've been alerted and are restoring service. Please try again in a moment."
-			links=vec![home("Back to home", home_href, ButtonVariant::Outline)]
+			headline_lead=copy::SERVER_ERROR_HEADLINE_LEAD
+			headline_accent=copy::SERVER_ERROR_HEADLINE_ACCENT
+			subtext=copy::SERVER_ERROR_SUBTEXT
+			links=vec![home(copy::STATUS_HOME, home_href, ButtonVariant::Outline)]
 		>
 			<button
 				type="button"
@@ -131,7 +131,7 @@ pub fn ServerError(#[prop(default = "/".to_string(), into)] home_href: String, #
 					}
 				}
 			>
-				"Try again"
+				{copy::SERVER_ERROR_RETRY}
 			</button>
 		</StatusScreen>
 	}

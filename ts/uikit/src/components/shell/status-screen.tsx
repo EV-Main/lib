@@ -7,6 +7,7 @@ import { buttonVariants, type ButtonVariant } from "../atomic/button";
 import { Logo } from "./logo";
 import { STATUS_SCREEN_ACTIONS, STATUS_SCREEN_ACTION_ICON, STATUS_SCREEN_BODY, STATUS_SCREEN_CODE, STATUS_SCREEN_CTA, STATUS_SCREEN_EYEBROW, STATUS_SCREEN_GLOW, STATUS_SCREEN_LOGO, STATUS_SCREEN_ROOT, STATUS_SCREEN_STACK, STATUS_SCREEN_TITLE, STATUS_SCREEN_TITLE_ACCENT } from "../../generated/status-screen";
 import { iconShapes } from "../../icons/icon-shapes";
+import * as copy from "../../generated/copy";
 
 /**
  * The shared 404 / 403 / 500 status surface.
@@ -131,7 +132,7 @@ export function StatusScreen({
 export interface StatusPageProps {
   /** CTA element — `next/link` for soft nav; defaults to `<a>` (full load). */
   linkComponent?: React.ElementType;
-  /** "Back to home" target — `/` for the landing, `/cabinet` for the cabinet. */
+  /** copy.STATUS_HOME target — `/` for the landing, `/cabinet` for the cabinet. */
   homeHref?: string;
   /** Secondary CTA target (contact / request access). */
   contactHref?: string;
@@ -142,15 +143,15 @@ export function NotFound({ linkComponent = "a", homeHref = "/", contactHref = "/
   return (
     <StatusScreen
       accent="debug"
-      eyebrow="Page not found"
+      eyebrow={copy.NOT_FOUND_EYEBROW}
       code="404"
-      headlineLead="You've reached "
-      headlineAccent="open water"
-      subtext="The page you're looking for has drifted off our coastline — moved, renamed, or never charted. Let's get you back to shore."
+      headlineLead={copy.NOT_FOUND_HEADLINE_LEAD}
+      headlineAccent={copy.NOT_FOUND_HEADLINE_ACCENT}
+      subtext={copy.NOT_FOUND_SUBTEXT}
       linkComponent={linkComponent}
       links={[
-        { label: "Back to home", href: homeHref, leadingArrow: true },
-        { label: "Contact the team", href: contactHref, variant: "outline" },
+        { label: copy.STATUS_HOME, href: homeHref, leadingArrow: true },
+        { label: copy.NOT_FOUND_CONTACT, href: contactHref, variant: "outline" },
       ]}
     />
   );
@@ -161,15 +162,15 @@ export function Forbidden({ linkComponent = "a", homeHref = "/", contactHref = "
   return (
     <StatusScreen
       accent="warn"
-      eyebrow="Access forbidden"
+      eyebrow={copy.FORBIDDEN_EYEBROW}
       code="403"
-      headlineLead="This harbour is "
-      headlineAccent="private"
-      subtext="You don't have the credentials to view this page. If you believe you should, our team can open the right doors."
+      headlineLead={copy.FORBIDDEN_HEADLINE_LEAD}
+      headlineAccent={copy.FORBIDDEN_HEADLINE_ACCENT}
+      subtext={copy.FORBIDDEN_SUBTEXT}
       linkComponent={linkComponent}
       links={[
-        { label: "Back to home", href: homeHref, leadingArrow: true },
-        { label: "Request access", href: contactHref, variant: "outline" },
+        { label: copy.STATUS_HOME, href: homeHref, leadingArrow: true },
+        { label: copy.FORBIDDEN_CONTACT, href: contactHref, variant: "outline" },
       ]}
     />
   );
@@ -178,7 +179,7 @@ export function Forbidden({ linkComponent = "a", homeHref = "/", contactHref = "
 export interface ServerErrorProps {
   /** CTA element — `next/link` for soft nav; defaults to `<a>` (full load). */
   linkComponent?: React.ElementType;
-  /** "Back to home" target — `/` for the landing, `/cabinet` for the cabinet. */
+  /** copy.STATUS_HOME target — `/` for the landing, `/cabinet` for the cabinet. */
   homeHref?: string;
   /** Retry handler (e.g. Next's error-boundary `reset`); falls back to a reload. */
   reset?: () => void;
@@ -189,20 +190,20 @@ export function ServerError({ linkComponent = "a", homeHref = "/", reset }: Serv
   return (
     <StatusScreen
       accent="error"
-      eyebrow="Server error"
+      eyebrow={copy.SERVER_ERROR_EYEBROW}
       code="500"
-      headlineLead="Our systems are "
-      headlineAccent="recalibrating"
-      subtext="Something broke on our end — not yours. We've been alerted and are restoring service. Please try again in a moment."
+      headlineLead={copy.SERVER_ERROR_HEADLINE_LEAD}
+      headlineAccent={copy.SERVER_ERROR_HEADLINE_ACCENT}
+      subtext={copy.SERVER_ERROR_SUBTEXT}
       linkComponent={linkComponent}
-      links={[{ label: "Back to home", href: homeHref, variant: "outline", leadingArrow: true }]}
+      links={[{ label: copy.STATUS_HOME, href: homeHref, variant: "outline", leadingArrow: true }]}
     >
       <button
         type="button"
         className={statusCtaClass("error", "primary")}
         onClick={() => (reset ? reset() : window.location.reload())}
       >
-        Try again
+        {copy.SERVER_ERROR_RETRY}
       </button>
     </StatusScreen>
   );

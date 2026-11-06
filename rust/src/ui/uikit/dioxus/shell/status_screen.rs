@@ -13,7 +13,7 @@
 use dioxus::prelude::*;
 use ev_lib_classes::{
 	Icon, STATUS_SCREEN_ACTION_ICON, STATUS_SCREEN_ACTIONS, STATUS_SCREEN_BODY, STATUS_SCREEN_CODE, STATUS_SCREEN_EYEBROW, STATUS_SCREEN_GLOW, STATUS_SCREEN_LOGO, STATUS_SCREEN_ROOT,
-	STATUS_SCREEN_STACK, STATUS_SCREEN_TITLE, STATUS_SCREEN_TITLE_ACCENT,
+	STATUS_SCREEN_STACK, STATUS_SCREEN_TITLE, STATUS_SCREEN_TITLE_ACCENT, copy,
 };
 
 pub use crate::ui::uikit::core::{StatusLinkData, status_cta_class};
@@ -84,20 +84,20 @@ pub fn NotFound(#[props(default = "/".to_string())] home_href: String, #[props(d
 	rsx! {
 		StatusScreen {
 			accent: Accent::Debug,
-			eyebrow: "Page not found",
+			eyebrow: copy::NOT_FOUND_EYEBROW,
 			code: "404",
-			headline_lead: "You've reached ",
-			headline_accent: "open water",
-			subtext: "The page you're looking for has drifted off our coastline — moved, renamed, or never charted. Let's get you back to shore.",
+			headline_lead: copy::NOT_FOUND_HEADLINE_LEAD,
+			headline_accent: copy::NOT_FOUND_HEADLINE_ACCENT,
+			subtext: copy::NOT_FOUND_SUBTEXT,
 			links: vec![
 				StatusLinkData {
-					label: "Back to home".to_string(),
+					label: copy::STATUS_HOME.to_string(),
 					href: home_href,
 					variant: ButtonVariant::Primary,
 					leading_arrow: true,
 				},
 				StatusLinkData {
-					label: "Contact the team".to_string(),
+					label: copy::NOT_FOUND_CONTACT.to_string(),
 					href: contact_href,
 					variant: ButtonVariant::Outline,
 					leading_arrow: false,
@@ -112,20 +112,20 @@ pub fn Forbidden(#[props(default = "/".to_string())] home_href: String, #[props(
 	rsx! {
 		StatusScreen {
 			accent: Accent::Warn,
-			eyebrow: "Access forbidden",
+			eyebrow: copy::FORBIDDEN_EYEBROW,
 			code: "403",
-			headline_lead: "This harbour is ",
-			headline_accent: "private",
-			subtext: "You don't have the credentials to view this page. If you believe you should, our team can open the right doors.",
+			headline_lead: copy::FORBIDDEN_HEADLINE_LEAD,
+			headline_accent: copy::FORBIDDEN_HEADLINE_ACCENT,
+			subtext: copy::FORBIDDEN_SUBTEXT,
 			links: vec![
 				StatusLinkData {
-					label: "Back to home".to_string(),
+					label: copy::STATUS_HOME.to_string(),
 					href: home_href,
 					variant: ButtonVariant::Primary,
 					leading_arrow: true,
 				},
 				StatusLinkData {
-					label: "Request access".to_string(),
+					label: copy::FORBIDDEN_CONTACT.to_string(),
 					href: contact_href,
 					variant: ButtonVariant::Outline,
 					leading_arrow: false,
@@ -140,14 +140,14 @@ pub fn ServerError(#[props(default = "/".to_string())] home_href: String, reset:
 	rsx! {
 		StatusScreen {
 			accent: Accent::Error,
-			eyebrow: "Server error",
+			eyebrow: copy::SERVER_ERROR_EYEBROW,
 			code: "500",
-			headline_lead: "Our systems are ",
-			headline_accent: "recalibrating",
-			subtext: "Something broke on our end — not yours. We've been alerted and are restoring service. Please try again in a moment.",
+			headline_lead: copy::SERVER_ERROR_HEADLINE_LEAD,
+			headline_accent: copy::SERVER_ERROR_HEADLINE_ACCENT,
+			subtext: copy::SERVER_ERROR_SUBTEXT,
 			links: vec![
 				StatusLinkData {
-					label: "Back to home".to_string(),
+					label: copy::STATUS_HOME.to_string(),
 					href: home_href,
 					variant: ButtonVariant::Outline,
 					leading_arrow: true,
@@ -163,7 +163,7 @@ pub fn ServerError(#[props(default = "/".to_string())] home_href: String, reset:
 						let _ = document::eval("window.location.reload();");
 					}
 				},
-				"Try again"
+				{copy::SERVER_ERROR_RETRY}
 			}
 		}
 	}

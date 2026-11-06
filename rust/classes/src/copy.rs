@@ -46,3 +46,20 @@ pub const NOTIFICATION_BELL_EMPTY: &str = "No notifications";
 
 pub const FOOTER_OFFICES: &str = "Offices";
 pub const FOOTER_NEWSLETTER: &str = "Newsletter";
+
+pub const STATUS_HOME: &str = "Back to home";
+pub const NOT_FOUND_EYEBROW: &str = "Page not found";
+pub const NOT_FOUND_HEADLINE_LEAD: &str = "You've reached ";
+pub const NOT_FOUND_HEADLINE_ACCENT: &str = "open water";
+pub const NOT_FOUND_SUBTEXT: &str = "The page you're looking for has drifted off our coastline — moved, renamed, or never charted. Let's get you back to shore.";
+pub const NOT_FOUND_CONTACT: &str = "Contact the team";
+pub const FORBIDDEN_EYEBROW: &str = "Access forbidden";
+pub const FORBIDDEN_HEADLINE_LEAD: &str = "This harbour is ";
+pub const FORBIDDEN_HEADLINE_ACCENT: &str = "private";
+pub const FORBIDDEN_SUBTEXT: &str = "You don't have the credentials to view this page. If you believe you should, our team can open the right doors.";
+pub const FORBIDDEN_CONTACT: &str = "Request access";
+pub const SERVER_ERROR_EYEBROW: &str = "Server error";
+pub const SERVER_ERROR_HEADLINE_LEAD: &str = "Our systems are ";
+pub const SERVER_ERROR_HEADLINE_ACCENT: &str = "recalibrating";
+pub const SERVER_ERROR_SUBTEXT: &str = "Something broke on our end — not yours. We've been alerted and are restoring service. Please try again in a moment.";
+pub const SERVER_ERROR_RETRY: &str = "Try again";
