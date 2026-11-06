@@ -1,7 +1,8 @@
 #![feature(default_field_values)]
-//! Pure styling data for the uikit: Tailwind class tables, variant/size enums and
-//! the `cn!` fuse macro. Carries no Dioxus — it's the single source of truth that
-//! both the Rust components (`ev_lib`) and the TS codegen (`ev_lib_gen`) read from.
+//! The uikit's renderer-neutral data: Tailwind class tables, variant and word-set
+//! enums, Labels defaults, fixed copy, the icon table, and the `cn!` fuse macro.
+//! Carries no framework — it's the single source of truth that both Rust ports
+//! (`ev_lib`) and the TS codegen (`ev_lib_gen`) read from.
 
 mod accent;
 mod accordion;

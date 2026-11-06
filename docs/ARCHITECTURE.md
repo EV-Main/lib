@@ -18,7 +18,7 @@ web_std/
 ├── theme.css · ev.css · tokens.css · motion.css   the design tokens, one copy for both languages
 ├── rust/
 │   ├── src/         crate ev_lib: one library per Cargo feature, grouped by scope (below)
-│   ├── classes/     crate ev_lib_classes: class tables, token sheets, CLASS_INVENTORY
+│   ├── classes/     crate ev_lib_classes: the kit's renderer-neutral data, token sheets
 │   ├── gen/         crate ev_lib_gen: `nix run .#gen`
 │   ├── uikit-viewer/  the Dioxus gallery app
 │   └── tests/
@@ -79,12 +79,12 @@ so the grouping is internal. Inside the crate, paths name the scope
                          └───────────────┬─────────────────────────────────────────────┘
                                          │ read by
 ┌─ crate ev_lib_classes ─┐               │
-│ class tables:          │               │
-│ ButtonVariant, Size,   │               │
-│ Polarity, Accent, …    │               │
-│ cn!/fuse  (tailwind_   │               │
-│ fuse), CLASS_INVENTORY,│               │
-│ TOKENS_CSS             │               │
+│ class tables + consts, │               │
+│ word sets (Side, …),   │               │
+│ Labels defaults, copy, │               │
+│ Icon table, timings,   │               │
+│ cn!/fuse, CLASS_INVEN- │               │
+│ TORY, TOKENS_CSS       │               │
 └───────┬────────────────┘               │
         │ used by                        │
         ▼                                ▼
@@ -113,14 +113,18 @@ so the grouping is internal. Inside the crate, paths name the scope
 └────────────────┼────────────────────────────────────────────────────────────────────┘
                  ▼
 ┌─ crate ev_lib_gen (`nix run .#gen`, re-run by pre-commit hook) ──┐
-│  manifest(): uikit class tables ─▶ ts/uikit/src/generated/*.ts   │
-│  shared():   i18n/locales, experiments/contract,                │
-│              settings/contract, analytics/host                   │
+│  build.rs:   every `pub const` of ev_lib_classes, per module ─┐  │
+│  uikit():    tables, unions, Labels defaults, icons, ts-rs ───┴▶ │
+│              ts/uikit/src/generated/*.ts                         │
+│  shared():   i18n/{locales,policy}, mfe/manifest,                │
+│              experiments/contract, settings/contract,            │
+│              analytics/host                                      │
 │              ─▶ ts/<pkg>/src/generated/*.ts                      │
 │  css:        tokens/theme/ev ─▶ rust/classes/css + ts/uikit/styles
 │  inventory:  ─▶ rust/classes/uikit-classes.txt                   │
 └──────────────────────────────────────────────────────────────────┘
   uikit-viewer (Dioxus web app) ─uses─▶ ev_lib[uikit_dioxus,wasm]   ≙ ts/uikit/example
+  tests/fixtures/<pkg>/*.json: vectors both languages' suites read
 ```
 
 What of `ts/` is hand-written rather than generated, and why:
@@ -167,7 +171,8 @@ the kit consolidated out of the EV-invest apps (`cabinet`'s Dioxus components an
 `landing`'s React bricks), so every app depends on one versioned source.
 
 ```
-ev_lib_classes      class strings · variants · cn!/fuse · tokens.css · CLASS_INVENTORY
+ev_lib_classes      class strings · variants · word sets · Labels defaults · copy · icons
+      │             · cn!/fuse · tokens.css · CLASS_INVENTORY — everything TS needs too
       │
 ev_lib::uikit       crate-private core, compiled when either port is on; no dioxus,
       │             no leptos, no web_sys. One plain struct per stateful component,
@@ -192,7 +197,8 @@ discipline:
 - **Dep-light:** no `@radix-ui`, no `class-variance-authority`, no icon/charting/
   date/toast libraries. Variants are `enum`+`match` (Rust) / `as const` maps (TS)
   fused by the `cn!`/`cn` helper; overlay behaviour is hand-rolled; icons are
-  inline SVG.
+  inline SVG, each site's own frame around the shapes of one
+  `ev_lib_classes::Icon` table.
 - **Rust core, two Rust ports, TS mirror:** behaviour lives once, in the core;
   each Rust port is glue over it and renders the same markup from its own
   template (nothing in Rust can share a view across Dioxus and Leptos, so
@@ -206,8 +212,9 @@ discipline:
   scan nor `@import` a crates.io checkout. Every component class references a
   token; a consumer must `@import` the sheet.
 - **Nothing derived is hand-written or copied:** `nix run .#gen` is the only
-  producer of the TS class tables, the Tailwind class inventory (the tables plus
-  every literal in the core and both ports) and the two token sheets, and the
+  producer of the TS class tables, word sets, Labels defaults, copy and icon
+  table, the Tailwind class inventory (the tables plus every literal in the
+  core and both ports) and the two token sheets, and the
   `generated` pre-commit hook re-runs it and re-stages. A committed artefact
   therefore cannot disagree with its source — which matters because the failure
   is silent: Tailwind answers an undefined token by emitting no rule, so a
@@ -298,7 +305,8 @@ environment is its purpose (no files, no network). Env-only by design: no
 config-file layer, no hot reload (a process's environment is fixed at `exec`).
 The shared semantics — SCREAMING_SNAKE naming, required-by-default,
 empty-string-is-unset, the bool/list parsing rules, aggregate error reporting,
-secret redaction — are pinned by mirrored contract-test vectors in both suites.
+secret redaction — are pinned by `tests/fixtures/settings/contract.json`, which
+both suites read.
 `presets` fixes the org-canonical shared names (`POSTHOG_KEY`, `SENTRY_DSN`,
 `APP_ENV`) once, on both sides.
 
@@ -335,6 +343,13 @@ commits the output and re-runs it from a `generated` pre-commit hook.
   them (`Role::may`) stays in Rust; TS gets the table, not a second predicate.
 - **Closed word sets** — `Ts::Union` emits the array and its type together,
   from the Rust words (`as_str`), so a TS parser's `oneOf` and the type agree.
+
+In this repo the derives a runtime type needs only for generation sit behind
+`#[cfg_attr(feature = "ts_gen", …)]` (ev_lib's `ts_gen`, ev_lib_classes' own
+`ts_gen`), so no runtime build carries them. Whatever the uikit TS needs is
+data in `ev_lib_classes`, which `ev_lib_gen` reads without compiling either
+port; its `build.rs` lists every `pub const` there, so a new class string,
+timing or line of copy is one edit.
 
 ## Cross-language parity
 

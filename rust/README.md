@@ -13,7 +13,7 @@ rust/
 │   ├── ops/            settings · error_monitoring · otel · alerts
 │   ├── ui/             uikit (core + dioxus + leptos ports) · active (mfe)
 │   └── codegen/        ts_gen
-├── classes/            ev_lib_classes: the class tables and token sheets
+├── classes/            ev_lib_classes: the kit's renderer-neutral data and token sheets
 ├── gen/                ev_lib_gen: `nix run .#gen`
 └── tests/              integration tests
 ```
@@ -24,9 +24,9 @@ one crate-private core and render the same HTML; they mirror the `@evinvest/uiki
 TypeScript package and ship the shared design tokens; see their rustdoc and
 [`../ts/uikit/README.md`](../ts/uikit/README.md), which carries the token table.
 
-The class strings live once, in the framework-free `ev_lib_classes` crate
-([`classes/`](classes)); `ev_lib_gen` emits the TypeScript half from them, so the
-ports cannot drift. Each port re-exports only the types a caller has to *name*
+The class strings, word sets, Labels defaults, copy and icons live once, in the
+framework-free `ev_lib_classes` crate ([`classes/`](classes)); `ev_lib_gen` emits
+the TypeScript half from them, so the ports cannot drift. Each port re-exports only the types a caller has to *name*
 to build a prop (`ButtonVariant`, `Size`, `Polarity`, `Surface`, …) — the class
 constants are an implementation detail.
 
