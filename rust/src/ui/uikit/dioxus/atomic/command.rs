@@ -8,6 +8,7 @@ use dioxus::{
 	html::{ScrollBehavior, ScrollLogicalPosition, ScrollToOptions},
 	prelude::*,
 };
+use ev_lib_classes::{COMMAND_INPUT_ICON, Icon};
 
 use crate::{
 	cn,
@@ -16,7 +17,7 @@ use crate::{
 		dioxus::{
 			COMMAND_DIALOG_COMMAND, COMMAND_DIALOG_CONTENT, COMMAND_DIALOG_OVERLAY, COMMAND_EMPTY, COMMAND_GROUP, COMMAND_INPUT, COMMAND_INPUT_WRAPPER, COMMAND_ITEM, COMMAND_LIST,
 			COMMAND_ROOT, COMMAND_SEPARATOR, COMMAND_SHORTCUT,
-			primitives::{Controllable, use_controllable, use_stable_id},
+			primitives::{Controllable, icon_shapes, use_controllable, use_stable_id},
 		},
 	},
 };
@@ -136,10 +137,9 @@ pub fn CommandInput(
 				stroke_width: "2",
 				stroke_linecap: "round",
 				stroke_linejoin: "round",
-				class: "size-4 shrink-0 opacity-50",
+				class: COMMAND_INPUT_ICON,
 				"aria-hidden": "true",
-				circle { cx: "11", cy: "11", r: "8" }
-				path { d: "m21 21-4.3-4.3" }
+				{icon_shapes(Icon::Search)}
 			}
 			input {
 				r#type: "text",

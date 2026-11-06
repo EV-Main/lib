@@ -5,3 +5,14 @@ pub const ACCORDION_TRIGGER: &str = "focus-visible:border-ring focus-visible:rin
                                  focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180";
 pub const ACCORDION_CONTENT: &str = "data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm";
 pub const ACCORDION_CONTENT_INNER: &str = "pt-0 pb-4";
+
+pub const ACCORDION_CHEVRON: &str = "text-ink-soft pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200";
+
+/// `Single` keeps at most one item open; `Multiple` allows several.
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::EnumIter, strum::IntoStaticStr)]
+#[strum(serialize_all = "kebab-case")]
+pub enum AccordionType {
+	#[default]
+	Single,
+	Multiple,
+}

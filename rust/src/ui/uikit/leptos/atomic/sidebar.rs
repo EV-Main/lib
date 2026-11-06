@@ -1,9 +1,10 @@
+use ev_lib_classes::{SIDEBAR_ROOT, copy};
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
 	ui::uikit::{
-		core::{SIDEBAR_STYLE, sidebar_state},
+		core::{sidebar_collapsible_data, sidebar_state, sidebar_style},
 		leptos::{
 			ButtonVariant, SIDEBAR_CONTENT, SIDEBAR_FLAT, SIDEBAR_FOOTER, SIDEBAR_GROUP, SIDEBAR_GROUP_CONTENT, SIDEBAR_GROUP_LABEL, SIDEBAR_HEADER, SIDEBAR_INNER, SIDEBAR_INSET,
 			SIDEBAR_MENU, SIDEBAR_MENU_BUTTON_BASE, SIDEBAR_MENU_ITEM, SIDEBAR_RAIL, SIDEBAR_SEPARATOR, SIDEBAR_TRIGGER, SIDEBAR_WRAPPER, SidebarCollapsible, SidebarSide, SidebarVariant,
@@ -55,7 +56,7 @@ pub fn SidebarProvider(
 	let open = use_controllable(open, default_open, on_open_change);
 	let cls = cn!(SIDEBAR_WRAPPER, class);
 	view! {
-		<div data-slot="sidebar-wrapper" style=SIDEBAR_STYLE class=cls>
+		<div data-slot="sidebar-wrapper" style=sidebar_style() class=cls>
 			<Provider value=SidebarContext { open }>{children()}</Provider>
 		</div>
 	}
@@ -82,9 +83,9 @@ pub fn Sidebar(
 	let inner = cn!(SIDEBAR_INNER, class);
 	view! {
 		<div
-			class="group peer text-ink hidden md:block"
+			class=SIDEBAR_ROOT
 			data-state=move || ctx.state()
-			data-collapsible=move || collapsible.data(ctx.open()).to_owned()
+			data-collapsible=move || sidebar_collapsible_data(collapsible, ctx.open()).to_owned()
 			data-variant=variant.as_ref().to_owned()
 			data-side=side.as_ref().to_owned()
 			data-slot="sidebar"
@@ -106,12 +107,12 @@ pub fn SidebarTrigger(#[prop(optional, into)] class: String, #[prop(optional)] c
 			type="button"
 			data-sidebar="trigger"
 			data-slot="sidebar-trigger"
-			aria-label="Toggle Sidebar"
+			aria-label=copy::SIDEBAR_TOGGLE
 			class=cls
 			on:click=move |_| ctx.toggle_sidebar()
 		>
 			{children.map(|c| c())}
-			<span class="sr-only">"Toggle Sidebar"</span>
+			<span class="sr-only">{copy::SIDEBAR_TOGGLE}</span>
 		</button>
 	}
 }
@@ -125,9 +126,9 @@ pub fn SidebarRail(#[prop(optional, into)] class: String) -> impl IntoView {
 			type="button"
 			data-sidebar="rail"
 			data-slot="sidebar-rail"
-			aria-label="Toggle Sidebar"
+			aria-label=copy::SIDEBAR_TOGGLE
 			tabindex="-1"
-			title="Toggle Sidebar"
+			title=copy::SIDEBAR_TOGGLE
 			class=cls
 			on:click=move |_| ctx.toggle_sidebar()
 		></button>

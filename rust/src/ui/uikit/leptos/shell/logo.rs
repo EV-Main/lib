@@ -1,3 +1,4 @@
+use ev_lib_classes::{LOGO_BACKGROUND, LOGO_MARK, LOGO_MARK_INSET};
 use leptos::prelude::*;
 
 use crate::cn;
@@ -12,7 +13,7 @@ use crate::cn;
 /// Undeclared, the span paints as a solid block: loud, and nobody else's logo.
 #[component]
 pub fn Logo(#[prop(optional, into)] class: String, #[prop(optional)] with_background: bool) -> impl IntoView {
-	let mark_cls = cn!("inline-block", if with_background { "w-3/5 h-3/5".to_string() } else { class.clone() });
+	let mark_cls = cn!(LOGO_MARK, if with_background { LOGO_MARK_INSET.to_string() } else { class.clone() });
 	let mark = view! {
 		<span
 			data-slot="logo"
@@ -26,10 +27,7 @@ pub fn Logo(#[prop(optional, into)] class: String, #[prop(optional)] with_backgr
 		return mark.into_any();
 	}
 	view! {
-		<span
-			data-slot="logo-background"
-			class=cn!("inline-flex items-center justify-center bg-brand", class)
-		>
+		<span data-slot="logo-background" class=cn!(LOGO_BACKGROUND, class)>
 			{mark}
 		</span>
 	}

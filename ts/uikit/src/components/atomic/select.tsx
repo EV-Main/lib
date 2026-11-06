@@ -2,17 +2,7 @@
 
 import * as React from "react";
 import { cn } from "../../lib/cn";
-import {
-  SELECT_CONTENT_BOUNDS,
-  SELECT_CONTENT_SURFACE,
-  SELECT_ITEM,
-  SELECT_LABEL,
-  SELECT_LIST,
-  SELECT_SEPARATOR,
-  SELECT_TRIGGER_BASE,
-  selectTriggerSizeClasses,
-  type SelectTriggerSize,
-} from "../../generated/select";
+import { SELECT_CHEVRON, SELECT_CONTENT_BOUNDS, SELECT_CONTENT_SURFACE, SELECT_ITEM, SELECT_ITEM_INDICATOR, SELECT_LABEL, SELECT_LIST, SELECT_SEPARATOR, SELECT_TRIGGER_BASE, selectTriggerSizeClasses, type SelectTriggerSize } from "../../generated/select";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useFloating } from "../../primitives/use-floating";
 import { DismissableLayerScope, useDismissableLayer } from "../../primitives/dismissable-layer";
@@ -24,6 +14,8 @@ import { markLabelable } from "../../primitives/labelable";
 import { useFieldControlId } from "./field-context";
 import { SelectChevron } from "../../icons/select-chevron";
 import { landOnChosen, tabFromTrigger, useListboxKeys } from "./select-listbox";
+import type { Side } from "../../generated/primitives";
+import { iconShapes } from "../../icons/icon-shapes";
 
 export type { SelectTriggerSize };
 
@@ -212,7 +204,7 @@ export function SelectTrigger({
       {...(props as Record<string, unknown>)}
     >
       {children}
-      <SelectChevron className="size-4 opacity-50" />
+      <SelectChevron className={SELECT_CHEVRON} />
     </button>
   );
 }
@@ -245,7 +237,7 @@ export function SelectValue({ className, placeholder, children, ...props }: Sele
 }
 
 export interface SelectContentProps extends React.ComponentProps<"div"> {
-  side?: "top" | "right" | "bottom" | "left";
+  side?: Side;
   align?: "start" | "center" | "end";
   sideOffset?: number;
 }
@@ -375,7 +367,7 @@ export function SelectItem({ className, value, textValue, children, ...props }: 
       {...(props as Record<string, unknown>)}
     >
       {selected ? (
-        <span className="absolute right-2 flex size-3.5 items-center justify-center">
+        <span className={SELECT_ITEM_INDICATOR}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -389,7 +381,7 @@ export function SelectItem({ className, value, textValue, children, ...props }: 
             className="size-4"
             aria-hidden="true"
           >
-            <path d="M20 6 9 17l-5-5" />
+            {iconShapes("check")}
           </svg>
         </span>
       ) : null}

@@ -1,21 +1,21 @@
 use dioxus::{dioxus_core::needs_update, prelude::*};
+pub use ev_lib_classes::DateTimePickerLabels;
+use ev_lib_classes::Icon;
 
-pub use crate::ui::uikit::core::{DateTimePickerLabels, LocalDateTime};
+pub use crate::ui::uikit::core::LocalDateTime;
 use crate::{
 	cn,
 	ui::uikit::{
 		core::{self as uikit, CalendarDate},
 		dioxus::{
 			ButtonVariant, DATE_TIME_PICKER_CLEAR, DATE_TIME_PICKER_CONTENT, DATE_TIME_PICKER_TIME, DATE_TIME_PICKER_TIME_INPUT, DATE_TIME_PICKER_TIME_SEPARATOR, DATE_TIME_PICKER_TRIGGER,
-			INPUT_BASE, POPOVER_CONTENT, Size, button::button_classes, calendar::Calendar, primitives::use_controllable,
+			INPUT_BASE, POPOVER_CONTENT, Size,
+			button::button_classes,
+			calendar::Calendar,
+			primitives::{icon_shapes, use_controllable},
 		},
 	},
 };
-
-// lucide `calendar`, inlined per the kit's no-icon-dep convention.
-const CALENDAR_ICON: [&str; 4] = ["M8 2v4", "M16 2v4", "M3 10h18", "M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"];
-// lucide `x`.
-const CLOSE_ICON: &str = "M18 6 6 18M6 6l12 12";
 
 /// A date + time field over the kit's own bricks: an outline trigger opening a
 /// popover with the [`Calendar`] and two numeric hours/minutes inputs — no
@@ -159,7 +159,7 @@ pub fn DateTimePicker(
 				div {
 					class: content_class,
 					role: "dialog",
-					"aria-label": labels.dialog(),
+					"aria-label": labels.dialog.clone(),
 					"data-slot": "date-time-picker-content",
 					"data-state": "open",
 					"data-side": "bottom",
@@ -182,7 +182,7 @@ pub fn DateTimePicker(
 							inputmode: "numeric",
 							class: time_input_class.clone(),
 							"data-slot": "date-time-picker-hours",
-							"aria-label": labels.hours(),
+							"aria-label": labels.hours.clone(),
 							value: hours,
 							disabled,
 							oninput: on_hours,
@@ -198,7 +198,7 @@ pub fn DateTimePicker(
 							inputmode: "numeric",
 							class: time_input_class,
 							"data-slot": "date-time-picker-minutes",
-							"aria-label": labels.minutes(),
+							"aria-label": labels.minutes.clone(),
 							value: minutes,
 							disabled,
 							oninput: on_minutes,
@@ -210,13 +210,13 @@ pub fn DateTimePicker(
 							"data-slot": "date-time-picker-clear",
 							disabled,
 							onclick: on_clear,
-							{labels.clear()}
+							{labels.clear.clone()}
 						}
 						button {
 							r#type: "button",
 							class: close_class,
 							"data-slot": "date-time-picker-close",
-							"aria-label": labels.close(),
+							"aria-label": labels.close.clone(),
 							disabled,
 							onclick: move |_| open.set(false),
 							CloseIcon {}
@@ -242,9 +242,7 @@ fn CalendarIcon() -> Element {
 			stroke_linecap: "round",
 			stroke_linejoin: "round",
 			"aria-hidden": "true",
-			for d in CALENDAR_ICON {
-				path { d }
-			}
+			{icon_shapes(Icon::Calendar)}
 		}
 	}
 }
@@ -264,7 +262,7 @@ fn CloseIcon() -> Element {
 			stroke_linecap: "round",
 			stroke_linejoin: "round",
 			"aria-hidden": "true",
-			path { d: CLOSE_ICON }
+			{icon_shapes(Icon::X)}
 		}
 	}
 }
@@ -372,13 +370,13 @@ mod tests {
 					// Pins the opening month (30-day June) instead of the host's.
 					today: CalendarDate::new(2026, 6, 15),
 					labels: DateTimePickerLabels {
-						previous_month: Some("Назад".into()),
-						next_month: Some("Вперёд".into()),
-						hours: Some("Часы".into()),
-						minutes: Some("Минуты".into()),
-						clear: Some("Сбросить".into()),
-						close: Some("Закрыть".into()),
-						dialog: Some("Выберите дату и время".into()),
+						previous_month: "Назад".into(),
+						next_month: "Вперёд".into(),
+						hours: "Часы".into(),
+						minutes: "Минуты".into(),
+						clear: "Сбросить".into(),
+						close: "Закрыть".into(),
+						dialog: "Выберите дату и время".into(),
 					},
 				}
 			}

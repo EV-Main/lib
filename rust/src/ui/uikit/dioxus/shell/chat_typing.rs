@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use ev_lib_classes::copy;
 
 use crate::{
 	cn,
@@ -12,7 +13,7 @@ use crate::{
 /// motion the same sheet swaps the dots for the still "…". It is a status
 /// region, so a screen reader hears `label` once when it appears.
 #[component]
-pub fn ChatTyping(#[props(default = String::from("Assistant is thinking"))] label: String, #[props(default)] class: String) -> Element {
+pub fn ChatTyping(#[props(default = copy::CHAT_TYPING.to_owned())] label: String, #[props(default)] class: String) -> Element {
 	rsx! {
 		span { role: "status", "aria-label": label, "data-slot": "chat-typing", class: cn!(CHAT_TYPING_BASE, class),
 			for _ in 0..3 {

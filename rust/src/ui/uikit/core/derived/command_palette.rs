@@ -1,20 +1,3 @@
-/// The `CommandPalette`'s own strings; every one defaults to English.
-#[derive(Clone, Debug, Default, PartialEq)]
-pub struct CommandPaletteLabels {
-	/// Names the dialog for assistive tech; "Command palette".
-	pub title: Option<String>,
-	/// The search field; "Type a command or search…".
-	pub placeholder: Option<String>,
-	/// Shown when the search matches nothing; "No results.".
-	pub empty: Option<String>,
-	/// The ↑↓ hint; "navigate".
-	pub navigate: Option<String>,
-	/// The ↵ hint; "select".
-	pub select: Option<String>,
-	/// The esc hint; "close".
-	pub close: Option<String>,
-}
-
 /// What one `keydown` means to the ⌘K / Ctrl+K shortcut.
 #[cfg(any(test, all(target_arch = "wasm32", feature = "wasm")))]
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]

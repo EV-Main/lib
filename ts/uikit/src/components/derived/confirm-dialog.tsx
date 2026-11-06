@@ -13,6 +13,7 @@ import {
   CONFIRM_DIALOG_SPINNER,
   CONFIRM_DIALOG_TEXT,
   CONFIRM_DIALOG_TITLE,
+  CONFIRM_DIALOG_LABELS,
 } from "../../generated/confirm-dialog";
 import { toneClasses, type Tone } from "../../generated/tone";
 import { useControllableState } from "../../primitives/use-controllable-state";
@@ -100,7 +101,7 @@ export function ConfirmDialog({
       setOpen(false);
     } catch (e) {
       setPending(false);
-      setError(e instanceof Error && e.message ? e.message : (labels.error ?? "Something went wrong"));
+      setError(e instanceof Error && e.message ? e.message : (labels.error ?? CONFIRM_DIALOG_LABELS.error));
     }
   };
 
@@ -132,7 +133,7 @@ export function ConfirmDialog({
             onClick={() => change(false)}
             className={cn(buttonVariants({ variant: "ghost", size: "xs" }), CONFIRM_DIALOG_PENDING)}
           >
-            {labels.cancel ?? "Cancel"}
+            {labels.cancel ?? CONFIRM_DIALOG_LABELS.cancel}
           </button>
           <button
             type="button"

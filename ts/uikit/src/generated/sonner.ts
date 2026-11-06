@@ -2,7 +2,19 @@
 
 export const TOAST_BASE = "pointer-events-auto flex w-full items-start gap-3 rounded-panel border border-(color:--tone-edge) bg-popover p-3 text-body text-ink shadow-elevated";
 
+export const TOAST_CLOSE = "text-ink/50 hover:text-ink shrink-0 transition-colors";
+
+export const TOAST_CONTENT = "flex-1 space-y-1";
+
+export const TOAST_TITLE = "font-medium";
+
 export const TOASTER_BASE = "pointer-events-none fixed z-100 w-[calc(100%-2rem)] max-w-sm";
+
+export const TOAST_DURATION_MS = 4000;
+
+export const TOAST_VISIBLE = 3;
+
+export const TOAST_GAP = 14;
 
 export const positionClasses = {
   "top-left": "top-4 left-4",
@@ -13,9 +25,3 @@ export const positionClasses = {
   "bottom-right": "bottom-4 right-4",
 } as const;
 export type ToastPosition = keyof typeof positionClasses;
-
-export const TOAST_CLOSE = "text-ink/50 hover:text-ink shrink-0 transition-colors";
-
-export const TOAST_CONTENT = "flex-1 space-y-1";
-
-export const TOAST_TITLE = "font-medium";

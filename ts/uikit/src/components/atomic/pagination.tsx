@@ -1,14 +1,17 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { buttonVariants, type ButtonSize } from "./button";
+import * as copy from "../../generated/copy";
+import { PAGINATION_CONTENT, PAGINATION_ELLIPSIS, PAGINATION_LINK_LABEL, PAGINATION_NEXT_LINK, PAGINATION_PREVIOUS_LINK, PAGINATION_ROOT } from "../../generated/pagination";
+import { iconShapes } from "../../icons/icon-shapes";
 
 export function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
     <nav
       role="navigation"
-      aria-label="pagination"
+      aria-label={copy.PAGINATION}
       data-slot="pagination"
-      className={cn("mx-auto flex w-full justify-center", className)}
+      className={cn(PAGINATION_ROOT, className)}
       {...props}
     />
   );
@@ -21,7 +24,7 @@ export function PaginationContent({
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("flex flex-row items-center gap-1", className)}
+      className={cn(PAGINATION_CONTENT, className)}
       {...props}
     />
   );
@@ -65,13 +68,13 @@ export function PaginationLink({
 
 const ChevronLeft = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-    <path d="m15 18-6-6 6-6" />
+    {iconShapes("chevron-left")}
   </svg>
 );
 
 const ChevronRight = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-    <path d="m9 18 6-6-6-6" />
+    {iconShapes("chevron-right")}
   </svg>
 );
 
@@ -83,9 +86,7 @@ const MoreHorizontal = () => (
     stroke="currentColor"
     strokeWidth={2}
   >
-    <circle cx="12" cy="12" r="1" />
-    <circle cx="19" cy="12" r="1" />
-    <circle cx="5" cy="12" r="1" />
+    {iconShapes("ellipsis")}
   </svg>
 );
 
@@ -95,13 +96,13 @@ export function PaginationPrevious({
 }: React.ComponentProps<typeof PaginationLink>) {
   return (
     <PaginationLink
-      aria-label="Go to previous page"
+      aria-label={copy.PAGINATION_PREVIOUS_PAGE}
       size="md"
-      className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
+      className={cn(PAGINATION_PREVIOUS_LINK, className)}
       {...props}
     >
       <ChevronLeft />
-      <span className="hidden sm:block">Previous</span>
+      <span className={PAGINATION_LINK_LABEL}>{copy.PAGINATION_PREVIOUS}</span>
     </PaginationLink>
   );
 }
@@ -112,12 +113,12 @@ export function PaginationNext({
 }: React.ComponentProps<typeof PaginationLink>) {
   return (
     <PaginationLink
-      aria-label="Go to next page"
+      aria-label={copy.PAGINATION_NEXT_PAGE}
       size="md"
-      className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
+      className={cn(PAGINATION_NEXT_LINK, className)}
       {...props}
     >
-      <span className="hidden sm:block">Next</span>
+      <span className={PAGINATION_LINK_LABEL}>{copy.PAGINATION_NEXT}</span>
       <ChevronRight />
     </PaginationLink>
   );
@@ -131,11 +132,11 @@ export function PaginationEllipsis({
     <span
       aria-hidden
       data-slot="pagination-ellipsis"
-      className={cn("flex size-9 items-center justify-center", className)}
+      className={cn(PAGINATION_ELLIPSIS, className)}
       {...props}
     >
       <MoreHorizontal />
-      <span className="sr-only">More pages</span>
+      <span className="sr-only">{copy.PAGINATION_MORE}</span>
     </span>
   );
 }

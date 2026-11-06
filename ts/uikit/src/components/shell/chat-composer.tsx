@@ -11,6 +11,7 @@ import {
   CHAT_COMPOSER_STREAMING,
   CHAT_COMPOSER_TOOLBAR,
   MODEL_CHIP_BASE,
+  CHAT_COMPOSER_LABELS,
 } from "../../generated/chat-composer";
 import { cn } from "../../lib/cn";
 import { useControllableState } from "../../primitives/use-controllable-state";
@@ -24,6 +25,7 @@ import {
 import { IconButton } from "../derived/icon-button";
 import { Textarea } from "../atomic/textarea";
 import { UiIcon } from "../../icons/ui-icons";
+import * as copy from "../../generated/copy";
 
 export interface ModelOption {
   id: string;
@@ -40,7 +42,7 @@ export interface ModelChipProps {
 }
 
 /** The small bordered button naming the model; opens a radio menu of the options. */
-export function ModelChip({ models, value, onValueChange, "aria-label": ariaLabel = "Model", className }: ModelChipProps) {
+export function ModelChip({ models, value, onValueChange, "aria-label": ariaLabel = copy.MODEL_CHIP, className }: ModelChipProps) {
   const current = models.find((m) => m.id === value);
   return (
     <DropdownMenu>
@@ -102,7 +104,7 @@ export function ChatComposer({
   onSend,
   streaming = false,
   onStop,
-  placeholder = "Ask the assistant…",
+  placeholder = copy.CHAT_COMPOSER_PLACEHOLDER,
   onAttach,
   attachments,
   tools,
@@ -144,7 +146,7 @@ export function ChatComposer({
         value={text}
         disabled={disabled}
         placeholder={placeholder}
-        aria-label={labels.field ?? "Message"}
+        aria-label={labels.field ?? CHAT_COMPOSER_LABELS.field}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={(e) => {
           // Enter during IME composition confirms the candidate; it must not send. Safari reports the
@@ -158,7 +160,7 @@ export function ChatComposer({
       />
       <div className={CHAT_COMPOSER_TOOLBAR}>
         {onAttach && (
-          <IconButton aria-label={labels.attach ?? "Attach file"} size="sm" onClick={onAttach} disabled={disabled}>
+          <IconButton aria-label={labels.attach ?? CHAT_COMPOSER_LABELS.attach} size="sm" onClick={onAttach} disabled={disabled}>
             <UiIcon name="plus" />
           </IconButton>
         )}
@@ -168,7 +170,7 @@ export function ChatComposer({
         {streaming ? (
           <IconButton
             variant="outline"
-            aria-label={labels.stop ?? "Stop"}
+            aria-label={labels.stop ?? CHAT_COMPOSER_LABELS.stop}
             onClick={() => {
               onStop?.();
               // The Stop button turns into Send, so focus would otherwise stay on a swapped-out element.
@@ -180,7 +182,7 @@ export function ChatComposer({
         ) : (
           <IconButton
             variant="outline"
-            aria-label={labels.send ?? "Send"}
+            aria-label={labels.send ?? CHAT_COMPOSER_LABELS.send}
             onClick={send}
             disabled={disabled || trimmed === ""}
           >

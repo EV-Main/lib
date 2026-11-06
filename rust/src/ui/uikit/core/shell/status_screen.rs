@@ -1,4 +1,4 @@
-use ev_lib_classes::{Accent, ButtonVariant, Size, cn};
+use ev_lib_classes::{Accent, ButtonVariant, STATUS_SCREEN_CTA, Size, cn};
 
 use crate::ui::uikit::core::button_classes;
 
@@ -19,5 +19,5 @@ pub struct StatusLinkData {
 /// — a retry button wired to a framework's `reset`, say — has to be able to
 /// match the CTAs beside it.
 pub fn status_cta_class(accent: Accent, variant: ButtonVariant) -> String {
-	cn!(button_classes(&variant, Size::Lg, false, Some(accent), ""), "font-mono text-xs uppercase tracking-widest")
+	cn!(button_classes(&variant, Size::Lg, false, Some(accent), ""), STATUS_SCREEN_CTA)
 }

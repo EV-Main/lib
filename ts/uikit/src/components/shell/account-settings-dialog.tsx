@@ -12,6 +12,7 @@ import {
   ACCOUNT_SETTINGS_DIALOG_SIDEBAR,
   ACCOUNT_SETTINGS_DIALOG_TABS,
   ACCOUNT_SETTINGS_DIALOG_TITLE,
+  ACCOUNT_SETTINGS_DIALOG_LABELS,
 } from "../../generated/account-settings-dialog";
 import { cn } from "../../lib/cn";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "../atomic/dialog";
@@ -113,7 +114,7 @@ export function AccountSettingsDialog({
           </div>
         </Tabs>
         <DialogClose asChild>
-          <IconButton aria-label={labels.close ?? "Close"} className={ACCOUNT_SETTINGS_DIALOG_CLOSE}>
+          <IconButton aria-label={labels.close ?? ACCOUNT_SETTINGS_DIALOG_LABELS.close} className={ACCOUNT_SETTINGS_DIALOG_CLOSE}>
             <UiIcon name="x" />
           </IconButton>
         </DialogClose>

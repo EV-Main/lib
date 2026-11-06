@@ -22,6 +22,9 @@ import {
   SHEET_SIDE_TOP,
   SHEET_TITLE,
 } from "../../generated/sheet";
+import type { Side } from "../../generated/primitives";
+import * as copy from "../../generated/copy";
+import { iconShapes } from "../../icons/icon-shapes";
 
 interface SheetContextValue {
   open: boolean;
@@ -117,12 +120,12 @@ const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
     strokeLinejoin="round"
     {...props}
   >
-    <path d="M18 6 6 18M6 6l12 12" />
+    {iconShapes("x")}
   </svg>
 );
 
 export interface SheetContentProps extends React.ComponentProps<"div"> {
-  side?: "top" | "right" | "bottom" | "left";
+  side?: Side;
   /**
    * Where focus lands on open. Default `container`: a sheet is a panel of
    * content, and its first Tab stop is as likely an action as a field — the
@@ -169,7 +172,7 @@ export function SheetContent({
           className={SHEET_CLOSE}
         >
           <XIcon className="size-4" />
-          <span className="sr-only">Close</span>
+          <span className="sr-only">{copy.CLOSE}</span>
         </button>
       </div>
     </Portal>

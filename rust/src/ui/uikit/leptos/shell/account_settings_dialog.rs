@@ -1,15 +1,16 @@
+pub use ev_lib_classes::AccountSettingsDialogLabels;
+use ev_lib_classes::Icon;
 use leptos::prelude::*;
 
-pub use crate::ui::uikit::core::AccountSettingsDialogLabels;
 use crate::{
 	cn,
 	ui::uikit::leptos::{
 		ACCOUNT_SETTINGS_DIALOG_CLOSE, ACCOUNT_SETTINGS_DIALOG_CONTENT, ACCOUNT_SETTINGS_DIALOG_DESCRIPTION, ACCOUNT_SETTINGS_DIALOG_ENTRY, ACCOUNT_SETTINGS_DIALOG_FOOTER,
 		ACCOUNT_SETTINGS_DIALOG_HEADING, ACCOUNT_SETTINGS_DIALOG_LIST, ACCOUNT_SETTINGS_DIALOG_PANE, ACCOUNT_SETTINGS_DIALOG_PANEL, ACCOUNT_SETTINGS_DIALOG_SIDEBAR,
-		ACCOUNT_SETTINGS_DIALOG_TABS, ACCOUNT_SETTINGS_DIALOG_TITLE, Dialog, DialogContent, DialogDescription, DialogTitle, IconButton, Tabs, TabsContent, TabsList, TabsOrientation,
+		ACCOUNT_SETTINGS_DIALOG_TABS, ACCOUNT_SETTINGS_DIALOG_TITLE, Dialog, DialogContent, DialogDescription, DialogTitle, IconButton, Orientation, Tabs, TabsContent, TabsList,
 		TabsTrigger,
 		icon_button::Glyph,
-		primitives::{use_controllable, use_stable_id},
+		primitives::{icon_shapes, use_controllable, use_stable_id},
 	},
 };
 
@@ -62,7 +63,7 @@ pub fn AccountSettingsDialog(
 	let described_by = description.as_ref().map(|_| description_id.clone());
 	let first = sections.first().map(|s| s.id.clone()).unwrap_or_default();
 	let default_value = default_value.unwrap_or(first);
-	let close_label = labels.close.unwrap_or_else(|| String::from("Close"));
+	let close_label = labels.close;
 	let cls = cn!(ACCOUNT_SETTINGS_DIALOG_CONTENT, class);
 	let labelled_by = title_id.clone();
 	// Run on every opening, so it clones what the inner parts take by value.
@@ -78,7 +79,7 @@ pub fn AccountSettingsDialog(
 		let (title_id, description_id, default_value) = (title_id.clone(), description_id.clone(), default_value.clone());
 		view! {
 			<Tabs
-				orientation=TabsOrientation::Vertical
+				orientation=Orientation::Vertical
 				value=value
 				default_value=default_value
 				on_value_change=Callback::new(move |v| {
@@ -147,9 +148,7 @@ pub fn AccountSettingsDialog(
 				class=ACCOUNT_SETTINGS_DIALOG_CLOSE
 				on_click=Callback::new(move |_| open.set(false))
 			>
-				<Glyph class="size-4">
-					<path d="M18 6 6 18M6 6l12 12" />
-				</Glyph>
+				<Glyph class="size-4">{icon_shapes(Icon::X)}</Glyph>
 			</IconButton>
 		}
 	};

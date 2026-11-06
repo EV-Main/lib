@@ -10,7 +10,7 @@ pub const ICON_BUTTON_PRESSED: &str = "bg-active text-ink hover:bg-active";
 
 /// The two button faces a lone glyph may wear; a filled call to action needs a
 /// label to say what it commits to. Mirrors the TS `IconButtonVariant`.
-#[derive(Clone, Copy, Debug, Default, PartialEq, strum::AsRefStr, strum::EnumIter)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, strum::AsRefStr, strum::EnumIter, strum::IntoStaticStr)]
 #[strum(serialize_all = "kebab-case")]
 pub enum IconButtonVariant {
 	Outline,

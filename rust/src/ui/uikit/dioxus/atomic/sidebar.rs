@@ -1,9 +1,10 @@
 use dioxus::prelude::*;
+use ev_lib_classes::{SIDEBAR_ROOT, copy};
 
 use crate::{
 	cn,
 	ui::uikit::{
-		core::{SIDEBAR_STYLE, sidebar_state},
+		core::{sidebar_collapsible_data, sidebar_state, sidebar_style},
 		dioxus::{
 			ButtonVariant, SIDEBAR_CONTENT, SIDEBAR_FLAT, SIDEBAR_FOOTER, SIDEBAR_GROUP, SIDEBAR_GROUP_CONTENT, SIDEBAR_GROUP_LABEL, SIDEBAR_HEADER, SIDEBAR_INNER, SIDEBAR_INSET,
 			SIDEBAR_MENU, SIDEBAR_MENU_BUTTON_BASE, SIDEBAR_MENU_ITEM, SIDEBAR_RAIL, SIDEBAR_SEPARATOR, SIDEBAR_TRIGGER, SIDEBAR_WRAPPER, SidebarCollapsible, SidebarSide, SidebarVariant,
@@ -59,7 +60,7 @@ pub fn SidebarProvider(
 	rsx! {
 		div {
 			"data-slot": "sidebar-wrapper",
-			style: SIDEBAR_STYLE,
+			style: sidebar_style(),
 			class: cls,
 			{children}
 		}
@@ -84,11 +85,11 @@ pub fn Sidebar(
 	}
 
 	let state = ctx.state();
-	let data_collapsible = collapsible.data(ctx.open());
+	let data_collapsible = sidebar_collapsible_data(collapsible, ctx.open());
 	let inner = cn!(SIDEBAR_INNER, class);
 	rsx! {
 		div {
-			class: "group peer text-ink hidden md:block",
+			class: SIDEBAR_ROOT,
 			"data-state": state,
 			"data-collapsible": data_collapsible,
 			"data-variant": variant.as_ref(),
@@ -108,11 +109,11 @@ pub fn SidebarTrigger(#[props(default)] class: String, children: Element) -> Ele
 			r#type: "button",
 			"data-sidebar": "trigger",
 			"data-slot": "sidebar-trigger",
-			"aria-label": "Toggle Sidebar",
+			"aria-label": copy::SIDEBAR_TOGGLE,
 			class: cls,
 			onclick: move |_| ctx.toggle_sidebar(),
 			{children}
-			span { class: "sr-only", "Toggle Sidebar" }
+			span { class: "sr-only", {copy::SIDEBAR_TOGGLE} }
 		}
 	}
 }
@@ -126,9 +127,9 @@ pub fn SidebarRail(#[props(default)] class: String) -> Element {
 			r#type: "button",
 			"data-sidebar": "rail",
 			"data-slot": "sidebar-rail",
-			"aria-label": "Toggle Sidebar",
+			"aria-label": copy::SIDEBAR_TOGGLE,
 			tabindex: "-1",
-			title: "Toggle Sidebar",
+			title: copy::SIDEBAR_TOGGLE,
 			class: cls,
 			onclick: move |_| ctx.toggle_sidebar(),
 		}

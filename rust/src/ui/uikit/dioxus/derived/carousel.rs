@@ -1,6 +1,7 @@
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 use dioxus::prelude::*;
+use ev_lib_classes::{Icon, copy};
 
 use crate::{
 	cn,
@@ -9,16 +10,16 @@ use crate::{
 		dioxus::{
 			ButtonVariant, CAROUSEL_CONTENT_TRACK, CAROUSEL_CONTENT_TRACK_HORIZONTAL, CAROUSEL_CONTENT_TRACK_VERTICAL, CAROUSEL_CONTENT_VIEWPORT, CAROUSEL_EDGE_FADE_NEXT,
 			CAROUSEL_EDGE_FADE_PREV, CAROUSEL_ITEM, CAROUSEL_ITEM_HORIZONTAL, CAROUSEL_ITEM_VERTICAL, CAROUSEL_NAV, CAROUSEL_NEXT_HORIZONTAL, CAROUSEL_NEXT_VERTICAL,
-			CAROUSEL_PREVIOUS_HORIZONTAL, CAROUSEL_PREVIOUS_VERTICAL, CarouselOrientation, Size,
+			CAROUSEL_PREVIOUS_HORIZONTAL, CAROUSEL_PREVIOUS_VERTICAL, Orientation, Size,
 			button::Button,
-			primitives::{Controllable, use_controllable},
+			primitives::{Controllable, icon_shapes, use_controllable},
 		},
 	},
 };
 
 #[component]
 pub fn Carousel(
-	#[props(default)] orientation: CarouselOrientation,
+	#[props(default)] orientation: Orientation,
 	index: Option<usize>,
 	#[props(default)] default_index: usize,
 	on_index_change: Option<EventHandler<usize>>,
@@ -53,10 +54,10 @@ pub fn CarouselContent(#[props(default)] class: String, children: Element) -> El
 	let ctx = use_context::<CarouselContext>();
 	let index = ctx.index.get();
 	// drag/momentum: omitted vs embla — see README Limitations
-	let transform = ctx.orientation.transform(index);
+	let transform = uikit::carousel_transform(ctx.orientation, index);
 	let track = match ctx.orientation {
-		CarouselOrientation::Horizontal => CAROUSEL_CONTENT_TRACK_HORIZONTAL,
-		CarouselOrientation::Vertical => CAROUSEL_CONTENT_TRACK_VERTICAL,
+		Orientation::Horizontal => CAROUSEL_CONTENT_TRACK_HORIZONTAL,
+		Orientation::Vertical => CAROUSEL_CONTENT_TRACK_VERTICAL,
 	};
 	let cls = cn!(CAROUSEL_CONTENT_TRACK, track, class);
 	rsx! {
@@ -82,8 +83,8 @@ pub fn CarouselItem(#[props(default)] class: String, children: Element) -> Eleme
 		slides.write().unregister(id);
 	});
 	let pad = match ctx.orientation {
-		CarouselOrientation::Horizontal => CAROUSEL_ITEM_HORIZONTAL,
-		CarouselOrientation::Vertical => CAROUSEL_ITEM_VERTICAL,
+		Orientation::Horizontal => CAROUSEL_ITEM_HORIZONTAL,
+		Orientation::Vertical => CAROUSEL_ITEM_VERTICAL,
 	};
 	let cls = cn!(CAROUSEL_ITEM, pad, class);
 	rsx! {
@@ -100,8 +101,8 @@ pub fn CarouselItem(#[props(default)] class: String, children: Element) -> Eleme
 pub fn CarouselPrevious(#[props(default)] class: String) -> Element {
 	let ctx = use_context::<CarouselContext>();
 	let pos = match ctx.orientation {
-		CarouselOrientation::Horizontal => CAROUSEL_PREVIOUS_HORIZONTAL,
-		CarouselOrientation::Vertical => CAROUSEL_PREVIOUS_VERTICAL,
+		Orientation::Horizontal => CAROUSEL_PREVIOUS_HORIZONTAL,
+		Orientation::Vertical => CAROUSEL_PREVIOUS_VERTICAL,
 	};
 	let cls = cn!(CAROUSEL_NAV, pos, class);
 	rsx! {
@@ -121,9 +122,9 @@ pub fn CarouselPrevious(#[props(default)] class: String) -> Element {
 				stroke_linecap: "round",
 				stroke_linejoin: "round",
 				"aria-hidden": "true",
-				path { d: "m15 18-6-6 6-6" }
+				{icon_shapes(Icon::ChevronLeft)}
 			}
-			span { class: "sr-only", "Previous slide" }
+			span { class: "sr-only", {copy::CAROUSEL_PREVIOUS} }
 		}
 	}
 }
@@ -131,8 +132,8 @@ pub fn CarouselPrevious(#[props(default)] class: String) -> Element {
 pub fn CarouselNext(#[props(default)] class: String) -> Element {
 	let ctx = use_context::<CarouselContext>();
 	let pos = match ctx.orientation {
-		CarouselOrientation::Horizontal => CAROUSEL_NEXT_HORIZONTAL,
-		CarouselOrientation::Vertical => CAROUSEL_NEXT_VERTICAL,
+		Orientation::Horizontal => CAROUSEL_NEXT_HORIZONTAL,
+		Orientation::Vertical => CAROUSEL_NEXT_VERTICAL,
 	};
 	let cls = cn!(CAROUSEL_NAV, pos, class);
 	rsx! {
@@ -152,9 +153,9 @@ pub fn CarouselNext(#[props(default)] class: String) -> Element {
 				stroke_linecap: "round",
 				stroke_linejoin: "round",
 				"aria-hidden": "true",
-				path { d: "m9 18 6-6-6-6" }
+				{icon_shapes(Icon::ChevronRight)}
 			}
-			span { class: "sr-only", "Next slide" }
+			span { class: "sr-only", {copy::CAROUSEL_NEXT} }
 		}
 	}
 }
@@ -173,7 +174,7 @@ pub fn CarouselEdgeFade(#[props(default)] class: String) -> Element {
 }
 #[derive(Clone, Copy)]
 struct CarouselContext {
-	orientation: CarouselOrientation,
+	orientation: Orientation,
 	index: Controllable<usize>,
 	slides: Signal<uikit::Carousel>,
 }

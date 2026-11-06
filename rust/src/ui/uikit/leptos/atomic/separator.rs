@@ -2,12 +2,12 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{Orientation, SEPARATOR_BASE},
+	ui::uikit::leptos::{Orientation, SEPARATOR_BASE, separator_orientation_class},
 };
 
 #[component]
 pub fn Separator(#[prop(optional)] orientation: Orientation, #[prop(optional, into)] class: String) -> impl IntoView {
-	let cls = cn!(SEPARATOR_BASE, orientation.as_class(), class);
+	let cls = cn!(SEPARATOR_BASE, separator_orientation_class(orientation), class);
 	view! {
 		<div
 			role="separator"

@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
+pub use ev_lib_classes::FieldLegendVariant;
 
-pub use crate::ui::uikit::core::FieldLegendVariant;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{

@@ -1,8 +1,9 @@
 use std::{cell::Cell, rc::Rc};
 
 use dioxus::prelude::*;
+use ev_lib_classes::Icon;
+pub use ev_lib_classes::{ChatAttachmentState, ChatAttachmentType, ChatMessageRole};
 
-pub use crate::ui::uikit::core::{ChatAttachmentState, ChatAttachmentType, ChatMessageRole};
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
@@ -10,11 +11,9 @@ use crate::{
 		CHAT_ATTACHMENT_ROW, CHAT_BUBBLE_BASE, CHAT_MARKER_DOT, CHAT_MARKER_RULE, CHAT_MARKER_SEPARATOR, CHAT_MARKER_SEPARATOR_LABEL, CHAT_MARKER_STATUS, CHAT_MARKER_TOOL,
 		CHAT_MARKER_TOOL_BODY, CHAT_MARKER_TOOL_BORDER, CHAT_MARKER_TOOL_CHECK, CHAT_MARKER_TOOL_DETAIL, CHAT_MARKER_TOOL_ERROR_BORDER, CHAT_MARKER_TOOL_ICON, CHAT_MARKER_TOOL_META,
 		CHAT_MARKER_TOOL_TITLE, CHAT_MESSAGE_AVATAR, CHAT_MESSAGE_AVATAR_TILE, CHAT_MESSAGE_BASE, CHAT_MESSAGE_BODY, CHAT_MESSAGE_BODY_ASSISTANT, CHAT_MESSAGE_BODY_USER,
-		CHAT_MESSAGE_HEADER, CHAT_MESSAGE_NAME, CHAT_MESSAGE_TIME, CHAT_MESSAGE_USER, ChatBubbleVariant, ChatStatusState, ChatToolState, IconButton, Size,
+		CHAT_MESSAGE_HEADER, CHAT_MESSAGE_NAME, CHAT_MESSAGE_TIME, CHAT_MESSAGE_USER, ChatBubbleVariant, ChatStatusState, ChatToolState, IconButton, Size, primitives::icon_shapes,
 	},
 };
-
-const SPARKLES: &str = "M9.9 4.4 11 8l3.6 1.1L11 10.2 9.9 13.8 8.8 10.2 5.2 9.1 8.8 8ZM18 14l.7 2.3L21 17l-2.3.7L18 20l-.7-2.3L15 17l2.3-.7Z";
 
 /// One block of message text. Mirrors the TS `ChatBubble`.
 ///
@@ -72,7 +71,7 @@ pub fn ChatMessage(
 						{avatar}
 					} else {
 						span { class: CHAT_MESSAGE_AVATAR_TILE,
-							Glyph { class: "size-4", path { d: SPARKLES } }
+							Glyph { class: "size-4", {icon_shapes(Icon::Sparkles)} }
 						}
 					}
 				}
@@ -150,12 +149,7 @@ pub fn ChatMarker(kind: ChatMarkerKind, #[props(default)] class: String, childre
 			rsx! {
 				div { class: cls, "data-slot": "chat-marker", "data-type": "tool", "data-state": state.as_ref(),
 					Glyph { class: CHAT_MARKER_TOOL_ICON,
-						if error {
-							circle { cx: "12", cy: "12", r: "10" }
-							path { d: "M12 8v4M12 16h.01" }
-						} else {
-							path { d: SPARKLES }
-						}
+						{icon_shapes(if error { Icon::Alert } else { Icon::Sparkles })}
 					}
 					div { class: CHAT_MARKER_TOOL_BODY,
 						span { class: CHAT_MARKER_TOOL_TITLE, {title} }
@@ -168,7 +162,7 @@ pub fn ChatMarker(kind: ChatMarkerKind, #[props(default)] class: String, childre
 						span { class: meta_cls, {meta} }
 					}
 					if state == ChatToolState::Done {
-						Glyph { class: CHAT_MARKER_TOOL_CHECK, path { d: "M20 6 9 17l-5-5" } }
+						Glyph { class: CHAT_MARKER_TOOL_CHECK, {icon_shapes(Icon::Check)} }
 					}
 				}
 			}
@@ -209,13 +203,10 @@ pub fn ChatAttachment(
 					Glyph { class: "size-4",
 						match r#type {
 							ChatAttachmentType::Image => rsx! {
-								rect { width: "18", height: "18", x: "3", y: "3", rx: "2" }
-								circle { cx: "9", cy: "9", r: "2" }
-								path { d: "m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" }
+								{icon_shapes(Icon::Image)}
 							},
 							ChatAttachmentType::File => rsx! {
-								path { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" }
-								path { d: "M14 2v4a2 2 0 0 0 2 2h4" }
+								{icon_shapes(Icon::File)}
 							},
 						}
 					}
@@ -226,7 +217,7 @@ pub fn ChatAttachment(
 				}
 				if let Some(remove) = on_remove {
 					IconButton { aria_label: remove_label, size: Size::Sm, onclick: move |_| remove.call(()),
-						Glyph { class: "size-4", path { d: "M18 6 6 18M6 6l12 12" } }
+						Glyph { class: "size-4", {icon_shapes(Icon::X)} }
 					}
 				}
 			}

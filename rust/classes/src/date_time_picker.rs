@@ -14,3 +14,36 @@ pub const DATE_TIME_PICKER_TIME_SEPARATOR: &str = "text-ink-soft select-none";
 
 /// Fused on top of the ghost `sm` button.
 pub const DATE_TIME_PICKER_CLEAR: &str = "ml-auto";
+
+/// The `DateTimePicker`'s own strings. English by default; a caller translates by overriding fields.
+#[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "ts_gen", derive(serde::Serialize), serde(rename_all = "camelCase"))]
+pub struct DateTimePickerLabels {
+	/// `aria-label` of the calendar's previous-month button.
+	pub previous_month: String,
+	/// `aria-label` of the calendar's next-month button.
+	pub next_month: String,
+	/// `aria-label` of the hours input.
+	pub hours: String,
+	/// `aria-label` of the minutes input.
+	pub minutes: String,
+	/// Text of the clear button.
+	pub clear: String,
+	/// `aria-label` of the close button.
+	pub close: String,
+	/// `aria-label` of the popover dialog.
+	pub dialog: String,
+}
+impl Default for DateTimePickerLabels {
+	fn default() -> Self {
+		Self {
+			previous_month: crate::copy::CALENDAR_PREVIOUS_MONTH.to_owned(),
+			next_month: crate::copy::CALENDAR_NEXT_MONTH.to_owned(),
+			hours: "Hours".to_owned(),
+			minutes: "Minutes".to_owned(),
+			clear: "Clear".to_owned(),
+			close: "Close".to_owned(),
+			dialog: "Choose date and time".to_owned(),
+		}
+	}
+}

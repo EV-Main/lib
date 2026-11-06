@@ -18,6 +18,8 @@ import {
   DIALOG_OVERLAY,
   DIALOG_TITLE,
 } from "../../generated/dialog";
+import * as copy from "../../generated/copy";
+import { iconShapes } from "../../icons/icon-shapes";
 
 interface DialogContextValue {
   open: boolean;
@@ -121,7 +123,7 @@ const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
     strokeLinejoin="round"
     {...props}
   >
-    <path d="M18 6 6 18M6 6l12 12" />
+    {iconShapes("x")}
   </svg>
 );
 
@@ -180,7 +182,7 @@ export function DialogContent({
             className={DIALOG_CLOSE}
           >
             <XIcon />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">{copy.CLOSE}</span>
           </button>
         )}
       </div>

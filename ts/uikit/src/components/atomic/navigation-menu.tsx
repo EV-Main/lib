@@ -7,16 +7,8 @@ import { DismissableLayerScope, useDismissableLayer } from "../../primitives/dis
 import { usePresence } from "../../primitives/presence";
 import { mergeRefs } from "../../primitives/merge-refs";
 import { Slot } from "../../primitives/slot";
-import {
-  NAVIGATION_MENU,
-  NAVIGATION_MENU_CONTENT,
-  NAVIGATION_MENU_INDICATOR,
-  NAVIGATION_MENU_ITEM,
-  NAVIGATION_MENU_LINK,
-  NAVIGATION_MENU_LIST,
-  NAVIGATION_MENU_TRIGGER_STYLE,
-  NAVIGATION_MENU_VIEWPORT,
-} from "../../generated/navigation-menu";
+import { NAVIGATION_MENU, NAVIGATION_MENU_CONTENT, NAVIGATION_MENU_INDICATOR, NAVIGATION_MENU_INDICATOR_ARROW, NAVIGATION_MENU_ITEM, NAVIGATION_MENU_LINK, NAVIGATION_MENU_LIST, NAVIGATION_MENU_TRIGGER_CHEVRON, NAVIGATION_MENU_TRIGGER_STYLE, NAVIGATION_MENU_VIEWPORT, NAVIGATION_MENU_VIEWPORT_WRAPPER } from "../../generated/navigation-menu";
+import { iconShapes } from "../../icons/icon-shapes";
 
 /**
  * Fused canonical trigger class string, the mirror of Rust's
@@ -128,7 +120,7 @@ export function NavigationMenuTrigger({
     >
       {children}{" "}
       <svg
-        className="relative top-[1px] ml-1 size-3 transition duration-300 group-data-[state=open]:rotate-180"
+        className={NAVIGATION_MENU_TRIGGER_CHEVRON}
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -137,7 +129,7 @@ export function NavigationMenuTrigger({
         strokeLinejoin="round"
         aria-hidden="true"
       >
-        <path d="m6 9 6 6 6-6" />
+        {iconShapes("chevron-down")}
       </svg>
     </button>
   );
@@ -170,7 +162,7 @@ export function NavigationMenuContent({ className, children, ...props }: React.C
 
 export function NavigationMenuViewport({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div className="absolute top-full left-0 isolate z-50 flex justify-center">
+    <div className={NAVIGATION_MENU_VIEWPORT_WRAPPER}>
       <div
         data-slot="navigation-menu-viewport"
         className={cn(
@@ -211,7 +203,7 @@ export function NavigationMenuIndicator({ className, ...props }: React.Component
       )}
       {...props}
     >
-      <div className="bg-border relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm shadow-md" />
+      <div className={NAVIGATION_MENU_INDICATOR_ARROW} />
     </div>
   );
 }

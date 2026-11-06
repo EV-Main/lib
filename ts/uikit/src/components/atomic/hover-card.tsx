@@ -9,6 +9,7 @@ import { mergeRefs } from "../../primitives/merge-refs";
 import { Portal } from "../../primitives/portal";
 import { Slot } from "../../primitives/slot";
 import { HOVER_CARD_CONTENT } from "../../generated/hover-card";
+import type { Side } from "../../generated/primitives";
 
 interface HoverCardContextValue {
   open: boolean;
@@ -75,7 +76,7 @@ export function HoverCardTrigger({
 }
 
 export interface HoverCardContentProps extends React.ComponentProps<"div"> {
-  side?: "top" | "right" | "bottom" | "left";
+  side?: Side;
   align?: "start" | "center" | "end";
   sideOffset?: number;
 }

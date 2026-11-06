@@ -15,15 +15,9 @@ import {
   DATE_TIME_PICKER_TIME_INPUT,
   DATE_TIME_PICKER_TIME_SEPARATOR,
   DATE_TIME_PICKER_TRIGGER,
+  DATE_TIME_PICKER_LABELS,
 } from "../../generated/date-time-picker";
-
-// lucide `calendar`, inlined per the kit's no-icon-dep convention.
-const CALENDAR_ICON = [
-  "M8 2v4",
-  "M16 2v4",
-  "M3 10h18",
-  "M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z",
-] as const;
+import { iconShapes } from "../../icons/icon-shapes";
 
 function CalendarIcon() {
   return (
@@ -40,14 +34,11 @@ function CalendarIcon() {
       strokeLinejoin="round"
       aria-hidden
     >
-      {CALENDAR_ICON.map(d => (
-        <path key={d} d={d} />
-      ))}
+      {iconShapes("calendar")}
     </svg>
   );
 }
 
-// lucide `x`, inlined like every other icon in the kit.
 function XIcon() {
   return (
     <svg
@@ -63,7 +54,7 @@ function XIcon() {
       strokeLinejoin="round"
       aria-hidden
     >
-      <path d="M18 6 6 18M6 6l12 12" />
+      {iconShapes("x")}
     </svg>
   );
 }
@@ -334,7 +325,7 @@ export function DateTimePicker({
         <PopoverContent
           data-slot="date-time-picker-content"
           role="dialog"
-          aria-label={labels.dialog ?? "Choose date and time"}
+          aria-label={labels.dialog ?? DATE_TIME_PICKER_LABELS.dialog}
           align={align}
           onBlur={onContentBlur}
           onKeyDown={onContentKeyDown}
@@ -363,7 +354,7 @@ export function DateTimePicker({
               className={DATE_TIME_PICKER_TIME_INPUT}
               ref={hoursRef}
               data-slot="date-time-picker-hours"
-              aria-label={labels.hours ?? "Hours"}
+              aria-label={labels.hours ?? DATE_TIME_PICKER_LABELS.hours}
               value={pad(value?.getHours() ?? 0)}
               disabled={disabled}
               onChange={onHours}
@@ -377,7 +368,7 @@ export function DateTimePicker({
               onFocus={selectAll}
               className={DATE_TIME_PICKER_TIME_INPUT}
               data-slot="date-time-picker-minutes"
-              aria-label={labels.minutes ?? "Minutes"}
+              aria-label={labels.minutes ?? DATE_TIME_PICKER_LABELS.minutes}
               value={pad(value?.getMinutes() ?? 0)}
               disabled={disabled}
               onChange={onMinutes}
@@ -389,13 +380,13 @@ export function DateTimePicker({
               disabled={disabled}
               onClick={onClear}
             >
-              {labels.clear ?? "Clear"}
+              {labels.clear ?? DATE_TIME_PICKER_LABELS.clear}
             </button>
             <button
               type="button"
               className={buttonVariants({ variant: "ghost", size: "sm", icon: true })}
               data-slot="date-time-picker-close"
-              aria-label={labels.close ?? "Close"}
+              aria-label={labels.close ?? DATE_TIME_PICKER_LABELS.close}
               disabled={disabled}
               onClick={() => setOpen(false)}
             >

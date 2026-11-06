@@ -1,6 +1,7 @@
 use std::{cell::RefCell, collections::BTreeMap, rc::Rc};
 
 use dioxus::prelude::*;
+use ev_lib_classes::Icon;
 
 use crate::{
 	cn,
@@ -8,7 +9,7 @@ use crate::{
 		ACCOUNT_LIST_BASE, ACCOUNT_LIST_ITEM_ACTIONS, ACCOUNT_LIST_ITEM_AVATAR, ACCOUNT_LIST_ITEM_AVATAR_FALLBACK, ACCOUNT_LIST_ITEM_BADGES, ACCOUNT_LIST_ITEM_BASE, ACCOUNT_LIST_ITEM_CHECK,
 		ACCOUNT_LIST_ITEM_CHECK_HIDDEN, ACCOUNT_LIST_ITEM_CHECKED, ACCOUNT_LIST_ITEM_DISABLED, ACCOUNT_LIST_ITEM_FIGURE, ACCOUNT_LIST_ITEM_HANDLE, ACCOUNT_LIST_ITEM_NAME,
 		ACCOUNT_LIST_ITEM_RADIO, ACCOUNT_LIST_ITEM_TEXT, ACCOUNT_LIST_ITEM_UNCHECKED, Avatar, AvatarFallback,
-		primitives::{Controllable, RovingFocus, RovingOrientation, use_controllable, use_roving_focus, use_roving_item},
+		primitives::{Controllable, RovingFocus, RovingOrientation, icon_shapes, use_controllable, use_roving_focus, use_roving_item},
 	},
 };
 
@@ -146,7 +147,7 @@ pub fn AccountListItem(
 						stroke_linecap: "round",
 						stroke_linejoin: "round",
 						"aria-hidden": "true",
-						path { d: "M20 6 9 17l-5-5" }
+						{icon_shapes(Icon::Check)}
 					}
 				}
 			}

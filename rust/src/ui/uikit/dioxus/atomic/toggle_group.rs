@@ -1,9 +1,10 @@
 use dioxus::prelude::*;
+use ev_lib_classes::{TOGGLE_GROUP_ITEM, TOGGLE_GROUP_ROOT};
 
 use crate::{
 	cn,
 	ui::uikit::{
-		core::{TOGGLE_GROUP_ITEM, TOGGLE_GROUP_ROOT, toggled},
+		core::toggled,
 		dioxus::{
 			Size, ToggleGroupType, ToggleVariant,
 			primitives::{Controllable, use_controllable},

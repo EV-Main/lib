@@ -53,6 +53,11 @@ pub const NATIVE_SELECT_BASE: &str = "border-input text-ink h-7 w-full min-w-0 a
 	 focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error has-[option[value='']:checked]:text-ink-soft \
 	 [&_option]:bg-popover [&_option]:text-ink [&_optgroup]:bg-popover [&_optgroup]:text-ink-soft [color-scheme:var(--scheme,normal)]";
 
+/// How long (ms) typed characters keep extending one typeahead query.
+pub const SELECT_TYPEAHEAD_MS: u32 = 500;
+
+pub const SELECT_CHEVRON: &str = "size-4 opacity-50";
+pub const SELECT_ITEM_INDICATOR: &str = "absolute right-2 flex size-3.5 items-center justify-center";
 /// The `SelectTrigger`'s height, and for `Lg` its inset and type, on the same
 /// three steps as [`input_size_class`](crate::input_size_class), so a trigger
 /// lines up with the input beside it in a form row.

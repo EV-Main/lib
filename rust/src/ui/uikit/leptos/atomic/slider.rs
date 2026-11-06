@@ -4,7 +4,7 @@ use crate::{
 	cn,
 	ui::uikit::{
 		core::{self as uikit, Drag},
-		leptos::{SLIDER_RANGE, SLIDER_ROOT, SLIDER_THUMB, SLIDER_TRACK, SliderOrientation, primitives::use_controllable},
+		leptos::{Orientation, SLIDER_RANGE, SLIDER_ROOT, SLIDER_THUMB, SLIDER_TRACK, primitives::use_controllable},
 	},
 };
 
@@ -17,7 +17,7 @@ pub fn Slider(
 	#[prop(default = 0.0)] min: f64,
 	#[prop(default = 100.0)] max: f64,
 	#[prop(default = 1.0)] step: f64,
-	#[prop(optional)] orientation: SliderOrientation,
+	#[prop(optional)] orientation: Orientation,
 	#[prop(optional, into)] disabled: Signal<bool>,
 	#[prop(optional, into)] aria_label: Option<String>,
 ) -> impl IntoView {
@@ -28,8 +28,8 @@ pub fn Slider(
 	let track = NodeRef::<leptos::html::Span>::new();
 	let drag = StoredValue::new(Drag::default());
 	let axis = move |e: &leptos::ev::PointerEvent| match orientation {
-		SliderOrientation::Horizontal => f64::from(e.client_x()),
-		SliderOrientation::Vertical => f64::from(e.client_y()),
+		Orientation::Horizontal => f64::from(e.client_x()),
+		Orientation::Vertical => f64::from(e.client_y()),
 	};
 	let release = move |_| drag.update_value(Drag::release);
 
@@ -49,13 +49,13 @@ pub fn Slider(
 				if let Some(el) = track.get_untracked() {
 					let rect = el.get_bounding_client_rect();
 					let measured = match orientation {
-						SliderOrientation::Horizontal => {
+						Orientation::Horizontal => {
 							uikit::Track {
 								origin: rect.left(),
 								size: rect.width(),
 							}
 						}
-						SliderOrientation::Vertical => {
+						Orientation::Vertical => {
 							uikit::Track {
 								origin: rect.top(),
 								size: rect.height(),

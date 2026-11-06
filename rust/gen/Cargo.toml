@@ -8,7 +8,8 @@ repository = "https://github.com/EV-Main/web_std"
 
 [dependencies]
 ev_lib = { workspace = true, features = ["analytics", "experiments", "i18n", "settings", "ts_gen"] }
-ev_lib_classes.workspace = true
+ev_lib_classes = { workspace = true, features = ["ts_gen"] }
+serde.workspace = true
 serde_json.workspace = true
 strum.workspace = true
 tailwind_fuse = { workspace = true, features = ["variant"] }

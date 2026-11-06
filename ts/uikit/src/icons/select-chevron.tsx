@@ -1,4 +1,5 @@
 import * as React from "react";
+import { iconShapes } from "./icon-shapes";
 
 /** The kit's select arrow, shared by `SelectTrigger` and `NativeSelect`. */
 export function SelectChevron({ className }: { className?: string }) {
@@ -16,7 +17,7 @@ export function SelectChevron({ className }: { className?: string }) {
       className={className}
       aria-hidden="true"
     >
-      <path d="m6 9 6 6 6-6" />
+      {iconShapes("chevron-down")}
     </svg>
   );
 }

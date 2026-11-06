@@ -28,8 +28,16 @@ export const ASIDE_PANEL_WIDE_ONLY_WRAPPER = "hidden md:contents";
 
 export const ASIDE_PANEL_NARROW_ONLY = "contents md:hidden";
 
+export const ASIDE_HEADER_LABELS = {
+  "back": "Back",
+  "close": "Close",
+} as const;
+
 export const asidePanelSideClasses = {
   "left": "border-r border-border",
   "right": "border-l border-border",
 } as const;
 export type AsidePanelSide = keyof typeof asidePanelSideClasses;
+
+export const ASIDE_PANEL_MODES = ["docked", "overlay"] as const;
+export type AsidePanelMode = (typeof ASIDE_PANEL_MODES)[number];

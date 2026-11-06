@@ -1,14 +1,6 @@
-use crate::ui::uikit::core::KeyInput;
+use ev_lib_classes::Orientation;
 
-/// Orientation of a `Slider`; rendered as `data-orientation` so the landing
-/// class selectors lay the track out horizontally or vertically.
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::IntoStaticStr)]
-#[strum(serialize_all = "kebab-case")]
-pub enum SliderOrientation {
-	#[default]
-	Horizontal,
-	Vertical,
-}
+use crate::ui::uikit::core::KeyInput;
 
 /// One slider's range, as its props give it on this render.
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -16,7 +8,7 @@ pub(crate) struct Slider {
 	pub min: f64,
 	pub max: f64,
 	pub step: f64,
-	pub orientation: SliderOrientation,
+	pub orientation: Orientation,
 }
 impl Slider {
 	/// `value` clamped into the range and snapped to the nearest step.
@@ -47,8 +39,8 @@ impl Slider {
 	pub(crate) fn value_at(&self, client: f64, track: Track) -> f64 {
 		let size = track.size.max(f64::EPSILON);
 		let ratio = match self.orientation {
-			SliderOrientation::Horizontal => (client - track.origin) / size,
-			SliderOrientation::Vertical => 1.0 - (client - track.origin) / size,
+			Orientation::Horizontal => (client - track.origin) / size,
+			Orientation::Vertical => 1.0 - (client - track.origin) / size,
 		};
 		self.clamp(self.min + ratio * (self.max - self.min))
 	}
@@ -57,8 +49,8 @@ impl Slider {
 	pub(crate) fn range_style(&self, value: f64) -> String {
 		let p = self.percent(value);
 		match self.orientation {
-			SliderOrientation::Horizontal => format!("width: {p}%;"),
-			SliderOrientation::Vertical => format!("height: {p}%;"),
+			Orientation::Horizontal => format!("width: {p}%;"),
+			Orientation::Vertical => format!("height: {p}%;"),
 		}
 	}
 
@@ -68,8 +60,8 @@ impl Slider {
 	pub(crate) fn thumb_style(&self, value: f64) -> String {
 		let p = self.percent(value);
 		match self.orientation {
-			SliderOrientation::Horizontal => format!("position: absolute; left: {p}%; top: 50%; transform: translate(-50%, -50%);"),
-			SliderOrientation::Vertical => format!("position: absolute; bottom: {p}%; left: 50%; transform: translate(-50%, 50%);"),
+			Orientation::Horizontal => format!("position: absolute; left: {p}%; top: 50%; transform: translate(-50%, -50%);"),
+			Orientation::Vertical => format!("position: absolute; bottom: {p}%; left: 50%; transform: translate(-50%, 50%);"),
 		}
 	}
 
@@ -125,7 +117,7 @@ mod tests {
 		min: 0.0,
 		max: 100.0,
 		step: 1.0,
-		orientation: SliderOrientation::Horizontal,
+		orientation: Orientation::Horizontal,
 	};
 	const TRACK: Track = Track { origin: 10.0, size: 200.0 };
 
@@ -149,7 +141,7 @@ mod tests {
 		assert_eq!(PERCENT.value_at(60.0, TRACK), 25.0);
 		assert_eq!(PERCENT.value_at(-50.0, TRACK), 0.0);
 		let vertical = Slider {
-			orientation: SliderOrientation::Vertical,
+			orientation: Orientation::Vertical,
 			..PERCENT
 		};
 		assert_eq!(vertical.value_at(60.0, TRACK), 75.0);

@@ -1,10 +1,11 @@
+use ev_lib_classes::{Icon, copy};
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
 	ui::uikit::leptos::{
 		DIALOG_CLOSE, DIALOG_CONTENT, DIALOG_DESCRIPTION, DIALOG_FOOTER, DIALOG_HEADER, DIALOG_OVERLAY, DIALOG_TITLE,
-		primitives::{Controllable, DismissableLayer, use_controllable, use_dismissable_layer},
+		primitives::{Controllable, DismissableLayer, icon_shapes, use_controllable, use_dismissable_layer},
 	},
 };
 
@@ -108,9 +109,9 @@ pub fn DialogContent(
 										stroke-linecap="round"
 										stroke-linejoin="round"
 									>
-										<path d="M18 6 6 18M6 6l12 12"></path>
+										{icon_shapes(Icon::X)}
 									</svg>
-									<span class="sr-only">"Close"</span>
+									<span class="sr-only">{copy::CLOSE}</span>
 								</button>
 							}
 						})}

@@ -20,11 +20,13 @@ import {
   CAROUSEL_PREVIOUS_HORIZONTAL,
   CAROUSEL_PREVIOUS_VERTICAL,
 } from "../../generated/carousel";
+import type { Orientation } from "../../generated/orientation";
+import * as copy from "../../generated/copy";
+import { iconShapes } from "../../icons/icon-shapes";
 
-type CarouselOrientation = "horizontal" | "vertical";
 
 type CarouselContextProps = {
-  orientation: CarouselOrientation;
+  orientation: Orientation;
   index: number;
   count: number;
   setCount: (count: number) => void;
@@ -45,7 +47,7 @@ function useCarousel() {
 }
 
 export interface CarouselProps extends React.ComponentProps<"div"> {
-  orientation?: CarouselOrientation;
+  orientation?: Orientation;
   index?: number;
   defaultIndex?: number;
   onIndexChange?: (index: number) => void;
@@ -246,9 +248,9 @@ export function CarouselPrevious({
         strokeLinejoin="round"
         aria-hidden="true"
       >
-        <path d="m15 18-6-6 6-6" />
+        {iconShapes("chevron-left")}
       </svg>
-      <span className="sr-only">Previous slide</span>
+      <span className="sr-only">{copy.CAROUSEL_PREVIOUS}</span>
     </Button>
   );
 }
@@ -289,9 +291,9 @@ export function CarouselNext({
         strokeLinejoin="round"
         aria-hidden="true"
       >
-        <path d="m9 18 6-6-6-6" />
+        {iconShapes("chevron-right")}
       </svg>
-      <span className="sr-only">Next slide</span>
+      <span className="sr-only">{copy.CAROUSEL_NEXT}</span>
     </Button>
   );
 }

@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
+pub use ev_lib_classes::SmartHeaderState;
 
-pub use crate::ui::uikit::core::SmartHeaderState;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{SMART_HEADER_BAR, SMART_HEADER_BASE, SMART_HEADER_CONTEXT, SMART_HEADER_TOOLBAR, TopBar},

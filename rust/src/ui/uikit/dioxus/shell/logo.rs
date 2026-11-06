@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use ev_lib_classes::{LOGO_BACKGROUND, LOGO_MARK, LOGO_MARK_INSET};
 
 use crate::cn;
 
@@ -21,7 +22,7 @@ pub fn Logo(#[props(default)] class: String, #[props(default)] with_background: 
 			// the ratio's fallback is what makes a missing mark *visible*: a masked
 			// span has no intrinsic size, so `h-N w-auto` without it is zero-width
 			style: "background-color:currentColor;mask-image:var(--brand-mark);-webkit-mask-image:var(--brand-mark);mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center;mask-size:contain;-webkit-mask-size:contain;aspect-ratio:var(--brand-aspect,1)",
-			class: cn!("inline-block", if with_background { "w-3/5 h-3/5".to_string() } else { class.clone() }),
+			class: cn!(LOGO_MARK, if with_background { LOGO_MARK_INSET.to_string() } else { class.clone() }),
 		}
 	};
 
@@ -30,7 +31,7 @@ pub fn Logo(#[props(default)] class: String, #[props(default)] with_background: 
 	}
 
 	rsx! {
-		span { "data-slot": "logo-background", class: cn!("inline-flex items-center justify-center bg-brand", class), {mark} }
+		span { "data-slot": "logo-background", class: cn!(LOGO_BACKGROUND, class), {mark} }
 	}
 }
 

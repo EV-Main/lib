@@ -1,9 +1,10 @@
+use ev_lib_classes::Icon;
+pub use ev_lib_classes::KeyValueLabels;
 use leptos::prelude::*;
 
-pub use crate::ui::uikit::core::KeyValueLabels;
 use crate::{
 	cn,
-	ui::uikit::leptos::{KEY_VALUE_BASE, KEY_VALUE_COPY, KEY_VALUE_LABEL, KEY_VALUE_ROW, KEY_VALUE_STATUS, KEY_VALUE_VALUE, icon_button::Glyph},
+	ui::uikit::leptos::{KEY_VALUE_BASE, KEY_VALUE_COPY, KEY_VALUE_LABEL, KEY_VALUE_ROW, KEY_VALUE_STATUS, KEY_VALUE_VALUE, icon_button::Glyph, primitives::icon_shapes},
 };
 
 /// A [`KeyValue`] label: text, or any view. Text is what the copy button's
@@ -60,7 +61,7 @@ pub fn KeyValue(
 		KeyValueLabel::Text(text) => format!("Copy {text}"),
 		KeyValueLabel::View(_) => String::from("Copy"),
 	});
-	let copied_label = labels.copied.unwrap_or_else(|| String::from("Copied"));
+	let copied_label = labels.copied;
 	let label = match label {
 		KeyValueLabel::Text(text) => text.into_any(),
 		KeyValueLabel::View(view) => view.run(),
@@ -90,20 +91,9 @@ pub fn KeyValue(
 			>
 				{move || {
 					if copied.get() {
-						view! {
-							<Glyph class="size-4">
-								<path d="M20 6 9 17l-5-5" />
-							</Glyph>
-						}
-							.into_any()
+						view! { <Glyph class="size-4">{icon_shapes(Icon::Check)}</Glyph> }.into_any()
 					} else {
-						view! {
-							<Glyph class="size-4">
-								<rect width="14" height="14" x="8" y="8" rx="2" />
-								<path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-							</Glyph>
-						}
-							.into_any()
+						view! { <Glyph class="size-4">{icon_shapes(Icon::Copy)}</Glyph> }.into_any()
 					}
 				}}
 			</button>
@@ -145,7 +135,7 @@ fn announce(copied: RwSignal<bool>, generation: RwSignal<u32>) {
 				copied.try_set(false);
 			}
 		},
-		std::time::Duration::from_millis(crate::ui::uikit::host::COPIED_MS as u64),
+		std::time::Duration::from_millis(ev_lib_classes::KEY_VALUE_COPIED_MS as u64),
 	);
 	// No timer outside `wasm`, so nothing waits on this copy's number.
 	#[cfg(not(all(target_arch = "wasm32", feature = "wasm")))]

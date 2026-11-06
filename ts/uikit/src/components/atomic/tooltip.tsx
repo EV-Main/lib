@@ -9,6 +9,7 @@ import { mergeRefs } from "../../primitives/merge-refs";
 import { Portal } from "../../primitives/portal";
 import { Slot } from "../../primitives/slot";
 import { TOOLTIP_CONTENT } from "../../generated/tooltip";
+import type { Side } from "../../generated/primitives";
 
 interface TooltipContextValue {
   open: boolean;
@@ -95,7 +96,7 @@ export function TooltipTrigger({
 }
 
 export interface TooltipContentProps extends React.ComponentProps<"div"> {
-  side?: "top" | "right" | "bottom" | "left";
+  side?: Side;
   sideOffset?: number;
 }
 

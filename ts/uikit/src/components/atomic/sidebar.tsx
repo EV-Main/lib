@@ -4,34 +4,15 @@ import * as React from "react";
 import { cn } from "../../lib/cn";
 import { Slot } from "../../primitives/slot";
 import { useControllableState } from "../../primitives/use-controllable-state";
-import {
-  SIDEBAR_MENU_BUTTON_BASE,
-  sidebarMenuButtonSizeClasses,
-  SIDEBAR_WRAPPER,
-  SIDEBAR_FLAT,
-  SIDEBAR_INNER,
-  SIDEBAR_TRIGGER,
-  SIDEBAR_RAIL,
-  SIDEBAR_INSET,
-  SIDEBAR_HEADER,
-  SIDEBAR_FOOTER,
-  SIDEBAR_SEPARATOR,
-  SIDEBAR_CONTENT,
-  SIDEBAR_GROUP,
-  SIDEBAR_GROUP_LABEL,
-  SIDEBAR_GROUP_CONTENT,
-  SIDEBAR_MENU,
-  SIDEBAR_MENU_ITEM,
-  type SidebarMenuButtonSize,
-} from "../../generated/sidebar";
+import { SIDEBAR_CONTENT, SIDEBAR_FLAT, SIDEBAR_FOOTER, SIDEBAR_GROUP, SIDEBAR_GROUP_CONTENT, SIDEBAR_GROUP_LABEL, SIDEBAR_HEADER, SIDEBAR_INNER, SIDEBAR_INSET, SIDEBAR_MENU, SIDEBAR_MENU_BUTTON_BASE, SIDEBAR_MENU_ITEM, SIDEBAR_RAIL, SIDEBAR_ROOT, SIDEBAR_SEPARATOR, SIDEBAR_TRIGGER, SIDEBAR_WIDTH, SIDEBAR_WIDTH_ICON, SIDEBAR_WRAPPER, sidebarMenuButtonSizeClasses, type SidebarMenuButtonSize } from "../../generated/sidebar";
 import { buttonVariantClasses, type ButtonVariant } from "../../generated/button";
+import type { SidebarCollapsible, SidebarSide, SidebarVariant } from "../../generated/sidebar";
+import * as copy from "../../generated/copy";
 
 export type { SidebarMenuButtonSize };
 
 // omitted: mobile sheet, cookie, kbd shortcut — see README Limitations
 
-const SIDEBAR_WIDTH = "16rem";
-const SIDEBAR_WIDTH_ICON = "3rem";
 
 interface SidebarContextValue {
   state: "expanded" | "collapsed";
@@ -100,9 +81,9 @@ export function SidebarProvider({
 }
 
 export interface SidebarProps extends React.ComponentProps<"div"> {
-  side?: "left" | "right";
-  variant?: "sidebar" | "floating" | "inset";
-  collapsible?: "offcanvas" | "icon" | "none";
+  side?: SidebarSide;
+  variant?: SidebarVariant;
+  collapsible?: SidebarCollapsible;
 }
 
 export function Sidebar({
@@ -129,7 +110,7 @@ export function Sidebar({
 
   return (
     <div
-      className="group peer text-ink hidden md:block"
+      className={SIDEBAR_ROOT}
       data-state={state}
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}
@@ -160,7 +141,7 @@ export function SidebarTrigger({
       type="button"
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
-      aria-label="Toggle Sidebar"
+      aria-label={copy.SIDEBAR_TOGGLE}
       className={cn(SIDEBAR_TRIGGER, className)}
       onClick={(event) => {
         onClick?.(event);
@@ -169,7 +150,7 @@ export function SidebarTrigger({
       {...props}
     >
       {children}
-      <span className="sr-only">Toggle Sidebar</span>
+      <span className="sr-only">{copy.SIDEBAR_TOGGLE}</span>
     </button>
   );
 }
@@ -185,10 +166,10 @@ export function SidebarRail({
       type="button"
       data-sidebar="rail"
       data-slot="sidebar-rail"
-      aria-label="Toggle Sidebar"
+      aria-label={copy.SIDEBAR_TOGGLE}
       tabIndex={-1}
       onClick={toggleSidebar}
-      title="Toggle Sidebar"
+      title={copy.SIDEBAR_TOGGLE}
       className={cn(SIDEBAR_RAIL, className)}
       {...props}
     />

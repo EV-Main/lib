@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { LOGO_BACKGROUND, LOGO_MARK, LOGO_MARK_INSET } from "../../generated/logo";
 
 /**
  * The consumer's mark, painted as a CSS mask (`backgroundColor: currentColor` +
@@ -43,7 +44,7 @@ export function Logo({ className, withBackground = false }: LogoProps) {
       data-slot="logo"
       aria-hidden
       style={maskStyle}
-      className={cn("inline-block", withBackground ? "w-3/5 h-3/5" : className)}
+      className={cn(LOGO_MARK, withBackground ? LOGO_MARK_INSET : className)}
     />
   );
 
@@ -52,7 +53,7 @@ export function Logo({ className, withBackground = false }: LogoProps) {
   return (
     <span
       data-slot="logo-background"
-      className={cn("inline-flex items-center justify-center bg-brand", className)}
+      className={cn(LOGO_BACKGROUND, className)}
     >
       {mark}
     </span>

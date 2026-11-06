@@ -1,13 +1,7 @@
-use ev_lib_classes::{ButtonVariant, CALENDAR_DAY, CALENDAR_DAY_SELECTED, CALENDAR_DAY_TODAY, CALENDAR_NAV_BUTTON, Size};
+use ev_lib_classes::{ButtonVariant, CALENDAR_DAY, CALENDAR_DAY_SELECTED, CALENDAR_DAY_TODAY, CALENDAR_NAV_BUTTON, Size, copy};
 
 use crate::{cn, ui::uikit::core::button_classes};
 
-const MONTHS: [&str; 12] = [
-	"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December",
-];
-pub(crate) const WEEKDAYS: [&str; 7] = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
-pub(crate) const PREVIOUS_MONTH: &str = "Previous month";
-pub(crate) const NEXT_MONTH: &str = "Next month";
 /// Always six weeks: a popover host must not jump in height when the month
 /// changes, and six rows is the most any month needs with a Monday-first week
 /// (31 days starting on a Sunday).
@@ -101,7 +95,7 @@ pub(crate) struct Grid {
 impl Grid {
 	/// The caption, e.g. "June 2026".
 	pub(crate) fn caption(&self) -> String {
-		format!("{} {}", MONTHS[(self.month.month - 1) as usize], self.month.year)
+		format!("{} {}", copy::MONTHS[(self.month.month - 1) as usize], self.month.year)
 	}
 
 	/// Six weeks of cells: leading blanks, the month's days, trailing blanks.

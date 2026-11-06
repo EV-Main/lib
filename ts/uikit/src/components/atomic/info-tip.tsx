@@ -11,6 +11,10 @@ import { mergeRefs } from "../../primitives/merge-refs";
 import { Portal } from "../../primitives/portal";
 import { Slot } from "../../primitives/slot";
 import { POPOVER_CONTENT } from "../../generated/popover";
+import type { Side } from "../../generated/primitives";
+import * as copy from "../../generated/copy";
+import { INFO_TIP_TRIGGER } from "../../generated/info-tip";
+import { iconShapes } from "../../icons/icon-shapes";
 
 /**
  * `InfoTip` — the ⓘ-beside-a-label *toggletip*. It reuses the popover machinery
@@ -68,7 +72,6 @@ export function InfoTip({
   );
 }
 
-// lucide `info`, inlined per the kit's no-lucide-dep icon convention.
 function InfoGlyph({ className }: { className?: string }) {
   return (
     <svg
@@ -81,9 +84,7 @@ function InfoGlyph({ className }: { className?: string }) {
       aria-hidden
       className={cn("size-4", className)}
     >
-      <circle cx="12" cy="12" r="10" />
-      <path d="M12 16v-4" />
-      <path d="M12 8h.01" />
+      {iconShapes("info")}
     </svg>
   );
 }
@@ -98,7 +99,7 @@ export interface InfoTipTriggerProps extends React.ComponentProps<"button"> {
 
 export function InfoTipTrigger({
   asChild = false,
-  label = "More information",
+  label = copy.MORE_INFORMATION,
   hoverDelay = 500,
   className,
   onClick,
@@ -125,7 +126,7 @@ export function InfoTipTrigger({
       aria-controls={contentId}
       ref={anchorRef as React.Ref<never>}
       className={cn(
-        "inline-flex size-4 shrink-0 cursor-help items-center justify-center rounded-full align-middle text-ink-soft outline-none transition-colors hover:text-ink focus-visible:ring-2 focus-visible:ring-ring data-[state=open]:text-accent-debug",
+        INFO_TIP_TRIGGER,
         className,
       )}
       onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
@@ -152,7 +153,7 @@ export function InfoTipTrigger({
 }
 
 export interface InfoTipContentProps extends React.ComponentProps<"div"> {
-  side?: "top" | "right" | "bottom" | "left";
+  side?: Side;
   align?: "start" | "center" | "end";
   sideOffset?: number;
 }

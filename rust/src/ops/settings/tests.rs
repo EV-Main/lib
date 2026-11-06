@@ -1,12 +1,9 @@
-//! Behaviour tests for the `settings!` macro and the parsing contract.
-//!
-//! The `contract` module is the shared Rust↔TS vector table — it is mirrored
-//! in `ts/settings/test/contract.node.test.ts`. Change the vectors on BOTH
-//! sides or not at all.
+//! Behaviour tests for the `settings!` macro. The parsing contract shared with
+//! TS is `tests/fixtures/settings/contract.json` (`rust/tests/settings.rs`).
 
 use std::collections::HashMap;
 
-use super::{FieldError, FieldErrorKind, FromEnvValue};
+use super::{FieldError, FieldErrorKind};
 
 fn map_source(pairs: &[(&str, &str)]) -> impl FnMut(&str) -> Option<String> {
 	let map: HashMap<String, String> = pairs.iter().map(|(k, v)| (k.to_string(), v.to_string())).collect();
@@ -271,63 +268,4 @@ fn presets_load_with_canonical_names() {
 
 	assert_eq!(AppEnv::from_source(|_| None).unwrap().app_env, "development");
 	assert_eq!(AppEnv::from_source(map_source(&[("APP_ENV", "production")])).unwrap().app_env, "production");
-}
-
-/// Shared Rust↔TS parsing-contract vectors — mirrored byte-for-byte in
-/// `ts/settings/test/contract.node.test.ts`. Change both sides or neither.
-mod contract {
-	use super::*;
-
-	#[test]
-	fn bool_vectors() {
-		for raw in ["true", "TRUE", "True", "1"] {
-			assert_eq!(bool::from_env_value(raw), Ok(true), "raw={raw:?}");
-		}
-		for raw in ["false", "FALSE", "False", "0"] {
-			assert_eq!(bool::from_env_value(raw), Ok(false), "raw={raw:?}");
-		}
-		for raw in ["yes", "no", "2", " true", "true ", ""] {
-			assert!(bool::from_env_value(raw).is_err(), "raw={raw:?} must be invalid");
-		}
-	}
-
-	#[test]
-	fn list_vectors() {
-		assert_eq!(Vec::<String>::from_env_value("a, b ,c"), Ok(vec!["a".to_string(), "b".to_string(), "c".to_string()]));
-		assert_eq!(Vec::<String>::from_env_value("a,,b"), Ok(vec!["a".to_string(), "b".to_string()]));
-		assert_eq!(Vec::<String>::from_env_value(",,"), Ok(vec![]));
-		assert_eq!(Vec::<u16>::from_env_value("1, 2,3"), Ok(vec![1, 2, 3]));
-		// U+FEFF (BOM) trims like whitespace — JS `trim()` semantics.
-		assert_eq!(Vec::<String>::from_env_value("a,\u{feff}b"), Ok(vec!["a".to_string(), "b".to_string()]));
-		// Item numbering counts kept items and never leaks the item value.
-		let error = Vec::<u16>::from_env_value(",zzz9,2").unwrap_err();
-		assert!(error.starts_with("item 1: "), "got {error:?}");
-		assert!(!error.contains("zzz9"), "item value must not leak: {error:?}");
-	}
-
-	#[test]
-	fn scalars_are_not_trimmed() {
-		assert!(u16::from_env_value(" 8080").is_err());
-		assert!(u16::from_env_value("8080 ").is_err());
-		assert_eq!(u16::from_env_value("8080"), Ok(8080));
-		assert_eq!(String::from_env_value(" keep me "), Ok(" keep me ".to_string()));
-	}
-
-	#[test]
-	fn number_vectors() {
-		// Integers: plain decimal only, optional sign.
-		assert_eq!(u16::from_env_value("8080"), Ok(8080));
-		assert_eq!(i64::from_env_value("+5"), Ok(5));
-		for raw in ["1e3", "0x10", "0b101", "0o17", "5.", "5.0"] {
-			assert!(u16::from_env_value(raw).is_err(), "raw={raw:?} must be invalid for an integer");
-		}
-		// Floats: decimal, point, and exponent forms.
-		assert_eq!(f64::from_env_value("1e3"), Ok(1000.0));
-		assert_eq!(f64::from_env_value("5."), Ok(5.0));
-		assert_eq!(f64::from_env_value(".5"), Ok(0.5));
-		assert!(f64::from_env_value("0x10").is_err());
-		// Documented divergences (deliberately NOT mirrored): Rust `f64` also
-		// accepts `inf`/`NaN` where TS `num()` requires finite; Rust 64-bit
-		// integers parse exactly where TS `int()` stops at the safe range.
-	}
 }

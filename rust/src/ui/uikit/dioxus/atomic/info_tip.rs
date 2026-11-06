@@ -1,10 +1,11 @@
 use dioxus::prelude::*;
+use ev_lib_classes::{INFO_TIP_TRIGGER, Icon, copy};
 
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		POPOVER_CONTENT,
-		primitives::{Controllable, Side, use_controllable, use_stable_id},
+		primitives::{Controllable, Side, icon_shapes, use_controllable, use_stable_id},
 	},
 };
 
@@ -36,13 +37,10 @@ pub fn InfoTip(open: Option<bool>, #[props(default)] default_open: bool, on_open
 	}
 }
 #[component]
-pub fn InfoTipTrigger(#[props(default = String::from("More information"))] label: String, #[props(default)] class: String) -> Element {
+pub fn InfoTipTrigger(#[props(default = copy::MORE_INFORMATION.to_owned())] label: String, #[props(default)] class: String) -> Element {
 	let ctx = use_context::<InfoTipCtx>();
 	let open = ctx.open.get();
-	let cls = cn!(
-		"inline-flex size-4 shrink-0 cursor-help items-center justify-center rounded-full align-middle text-ink-soft outline-none transition-colors hover:text-ink focus-visible:ring-2 focus-visible:ring-ring data-[state=open]:text-accent-debug",
-		class
-	);
+	let cls = cn!(INFO_TIP_TRIGGER, class);
 	rsx! {
 		button {
 			r#type: "button",
@@ -53,7 +51,6 @@ pub fn InfoTipTrigger(#[props(default = String::from("More information"))] label
 			"aria-expanded": if open { "true" } else { "false" },
 			"aria-controls": ctx.id.clone(),
 			onclick: move |_| ctx.open.set(!ctx.open.get()),
-			// lucide `info`, inlined per the kit's no-lucide-dep icon convention.
 			svg {
 				xmlns: "http://www.w3.org/2000/svg",
 				view_box: "0 0 24 24",
@@ -64,9 +61,7 @@ pub fn InfoTipTrigger(#[props(default = String::from("More information"))] label
 				stroke_linejoin: "round",
 				class: "size-4",
 				"aria-hidden": "true",
-				circle { cx: "12", cy: "12", r: "10" }
-				path { d: "M12 16v-4" }
-				path { d: "M12 8h.01" }
+				{icon_shapes(Icon::Info)}
 			}
 		}
 	}

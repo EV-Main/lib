@@ -2,13 +2,6 @@
 
 export const SIDEBAR_MENU_BUTTON_BASE = "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-row p-2 text-left text-sm outline-hidden ring-ring transition-[width,height,padding] hover:bg-hover hover:text-ink focus-visible:ring-2 active:bg-active active:text-ink disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-selected data-[active=true]:font-medium data-[active=true]:text-ink data-[state=open]:hover:bg-hover data-[state=open]:hover:text-ink group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0";
 
-export const sidebarMenuButtonSizeClasses = {
-  "xs": "h-7 text-xs",
-  "sm": "h-8 text-sm",
-  "lg": "h-12 text-sm group-data-[collapsible=icon]:p-0!",
-} as const;
-export type SidebarMenuButtonSize = keyof typeof sidebarMenuButtonSizeClasses;
-
 export const SIDEBAR_WRAPPER = "group/sidebar-wrapper has-data-[variant=inset]:bg-card flex min-h-svh w-full";
 
 export const SIDEBAR_FLAT = "bg-card text-ink flex h-full w-(--sidebar-width) flex-col";
@@ -38,3 +31,25 @@ export const SIDEBAR_GROUP_CONTENT = "w-full text-sm";
 export const SIDEBAR_MENU = "flex w-full min-w-0 flex-col gap-1";
 
 export const SIDEBAR_MENU_ITEM = "group/menu-item relative";
+
+export const SIDEBAR_WIDTH = "16rem";
+
+export const SIDEBAR_WIDTH_ICON = "3rem";
+
+export const SIDEBAR_ROOT = "group peer text-ink hidden md:block";
+
+export const SIDEBAR_SIDES = ["left", "right"] as const;
+export type SidebarSide = (typeof SIDEBAR_SIDES)[number];
+
+export const SIDEBAR_VARIANTS = ["sidebar", "floating", "inset"] as const;
+export type SidebarVariant = (typeof SIDEBAR_VARIANTS)[number];
+
+export const SIDEBAR_COLLAPSIBLES = ["offcanvas", "icon", "none"] as const;
+export type SidebarCollapsible = (typeof SIDEBAR_COLLAPSIBLES)[number];
+
+export const sidebarMenuButtonSizeClasses = {
+  "xs": "h-7 text-xs",
+  "sm": "h-8 text-sm",
+  "lg": "h-12 text-sm group-data-[collapsible=icon]:p-0!",
+} as const;
+export type SidebarMenuButtonSize = keyof typeof sidebarMenuButtonSizeClasses;

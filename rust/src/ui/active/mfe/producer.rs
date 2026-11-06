@@ -1,23 +1,4 @@
-//! Producer SDK for landing-host microfrontends.
-//!
-//! A microfrontend producer ships a self-registering ESM bundle: it defines a
-//! custom element (`customElements.define("mfe-…", …)`) whose `connectedCallback`
-//! mounts a Dioxus app into the host node (light DOM). The landing host curates a
-//! registry of `{name, tag, kind}` and decides where to render each `<tag>`.
-//!
-//! This module is the entire Rust side of that contract. A producer crate writes
-//! ~5 lines via [`mfe!`] and gets: the custom-element registration, the origin
-//! self-derivation (so the bundle works cross-origin with no baked env), the
-//! server-fn base override, the `{name,tag,kind}` manifest, and the host's
-//! locale resolved into a [`Translator`](crate::i18n::Translator) above its root
-//! — none of which it can get wrong, because the macro owns the naming
-//! convention, the JSON shape, and where a locale comes from.
-//!
-//! wasm-only (see the `cfg` in `lib.rs`): the one cross-origin bundle is always a
-//! `wasm32-unknown-unknown` cdylib. manganis/`dx` are unusable here — their asset
-//! URLs are root-relative to the *serving* origin, i.e. inherently same-origin —
-//! so producers hand-roll `wasm-bindgen --target web` and this SDK stays
-//! manganis-free, deriving every URL from the bundle's own origin instead.
+//! The wasm half: custom-element registration, origin, mount, and the [`mfe!`](crate::mfe!) macro.
 
 use dioxus::prelude::Element;
 use wasm_bindgen::prelude::*;
@@ -102,7 +83,7 @@ pub fn host_locale(el: &web_sys::Element) -> Locale {
 /// Define a microfrontend producer bundle. Expands in the producer crate (so its
 /// `dioxus` rsx, `wasm-bindgen`, and `web-sys` resolve there), generating the
 /// custom-element registration, the `wasm-bindgen(start)` entrypoint, and the
-/// `MFE_MANIFEST` the build emits as `mfe.json`.
+/// [`MfeManifest`](crate::mfe::MfeManifest) `MFE_MANIFEST` the build serialises as `mfe.json`.
 ///
 /// ```ignore
 /// ev_lib::mfe! {
@@ -113,7 +94,8 @@ pub fn host_locale(el: &web_sys::Element) -> Locale {
 /// ```
 ///
 /// Naming is enforced: the tag is `mfe-{service}-{name}` and the registry name is
-/// `{service}.{name}` — the host can't drift from the producer's identity. One
+/// `{service}.{name}` — the host can't drift from the producer's identity. `kind`
+/// is a [`MfeKind`](crate::mfe::MfeKind) word; any other fails to compile. One
 /// invocation per crate (it owns the single `wasm-bindgen(start)`).
 ///
 /// `messages` is a `fn(Locale) -> Messages` and is **required**, not optional. A
@@ -128,21 +110,12 @@ macro_rules! mfe {
 	(service: $service:literal,name: $name:literal,kind: $kind:ident,root: $root:path,stylesheet: $stylesheet:literal,messages: $messages:path $(,)?) => {
 		const __EV_TAG: &str = concat!("mfe-", $service, "-", $name);
 
-		/// The `{name, tag, kind}` registry contract, emitted by the build as
-		/// `mfe.json`. Single source of truth for the host registry entry.
-		pub const MFE_MANIFEST: &str = concat!(
-			"{\"name\":\"",
-			$service,
-			".",
-			$name,
-			"\",\"tag\":\"mfe-",
-			$service,
-			"-",
-			$name,
-			"\",\"kind\":\"",
-			stringify!($kind),
-			"\"}"
-		);
+		/// The registry contract, serialised by the build as `mfe.json`.
+		pub const MFE_MANIFEST: $crate::mfe::MfeManifest = $crate::mfe::MfeManifest {
+			name: concat!($service, ".", $name),
+			tag: __EV_TAG,
+			kind: $crate::mfe::MfeKind::parse(stringify!($kind)),
+		};
 
 		// `launch_into` takes a bare `fn() -> Element`, which has nowhere to carry
 		// the resolved locale, so it crosses from the mount into the root here.

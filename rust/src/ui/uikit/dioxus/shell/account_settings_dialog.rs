@@ -1,14 +1,15 @@
 use dioxus::prelude::*;
+pub use ev_lib_classes::AccountSettingsDialogLabels;
+use ev_lib_classes::Icon;
 
-pub use crate::ui::uikit::core::AccountSettingsDialogLabels;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		ACCOUNT_SETTINGS_DIALOG_CLOSE, ACCOUNT_SETTINGS_DIALOG_CONTENT, ACCOUNT_SETTINGS_DIALOG_DESCRIPTION, ACCOUNT_SETTINGS_DIALOG_ENTRY, ACCOUNT_SETTINGS_DIALOG_FOOTER,
 		ACCOUNT_SETTINGS_DIALOG_HEADING, ACCOUNT_SETTINGS_DIALOG_LIST, ACCOUNT_SETTINGS_DIALOG_PANE, ACCOUNT_SETTINGS_DIALOG_PANEL, ACCOUNT_SETTINGS_DIALOG_SIDEBAR,
-		ACCOUNT_SETTINGS_DIALOG_TABS, ACCOUNT_SETTINGS_DIALOG_TITLE, Dialog, DialogContent, DialogDescription, DialogTitle, IconButton, Tabs, TabsContent, TabsList, TabsOrientation,
+		ACCOUNT_SETTINGS_DIALOG_TABS, ACCOUNT_SETTINGS_DIALOG_TITLE, Dialog, DialogContent, DialogDescription, DialogTitle, IconButton, Orientation, Tabs, TabsContent, TabsList,
 		TabsTrigger,
-		primitives::{use_controllable, use_stable_id},
+		primitives::{icon_shapes, use_controllable, use_stable_id},
 	},
 };
 
@@ -59,13 +60,13 @@ pub fn AccountSettingsDialog(
 	let described_by = description.as_ref().map(|_| description_id.clone());
 	let first = sections.first().map(|s| s.id.clone()).unwrap_or_default();
 	let default_value = default_value.unwrap_or(first);
-	let close_label = labels.close.unwrap_or_else(|| String::from("Close"));
+	let close_label = labels.close;
 	let cls = cn!(ACCOUNT_SETTINGS_DIALOG_CONTENT, class);
 	rsx! {
 		Dialog { open: open.get(), on_open_change: move |next| open.set(next),
 			DialogContent { show_close_button: false, aria_labelledby: title_id.clone(), aria_describedby: described_by, class: cls,
 				Tabs {
-					orientation: TabsOrientation::Vertical,
+					orientation: Orientation::Vertical,
 					value,
 					default_value,
 					on_value_change,
@@ -107,7 +108,7 @@ pub fn AccountSettingsDialog(
 						stroke_linecap: "round",
 						stroke_linejoin: "round",
 						"aria-hidden": "true",
-						path { d: "M18 6 6 18M6 6l12 12" }
+						{icon_shapes(Icon::X)}
 					}
 				}
 			}
@@ -254,7 +255,7 @@ mod tests {
 					},
 					title: rsx! { "Настройки аккаунта" },
 					sections: sections(),
-					labels: AccountSettingsDialogLabels { close: Some("Закрыть окно".into()) },
+					labels: AccountSettingsDialogLabels { close: "Закрыть окно".into() },
 				}
 				p { "closes:{closes}" }
 			}

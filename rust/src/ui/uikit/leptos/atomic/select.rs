@@ -2,6 +2,7 @@
 use std::collections::BTreeMap;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
+use ev_lib_classes::{Icon, SELECT_CHEVRON, SELECT_ITEM_INDICATOR};
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -10,7 +11,7 @@ use crate::{
 		core::{self as uikit, SelectKey, SelectOption},
 		leptos::{
 			SELECT_CONTENT_BOUNDS, SELECT_CONTENT_SURFACE, SELECT_ITEM, SELECT_LABEL, SELECT_LIST, SELECT_SEPARATOR, SELECT_TRIGGER_BASE, Size,
-			primitives::{Controllable, DismissReason, use_controllable, use_dismissable_layer, use_stable_id},
+			primitives::{Controllable, DismissReason, icon_shapes, use_controllable, use_dismissable_layer, use_stable_id},
 			select_trigger_size_class,
 		},
 	},
@@ -86,9 +87,9 @@ pub fn SelectTrigger(#[prop(optional)] size: Size, #[prop(optional, into)] class
 				stroke-width="2"
 				stroke-linecap="round"
 				stroke-linejoin="round"
-				class="size-4 opacity-50"
+				class=SELECT_CHEVRON
 			>
-				<path d="m6 9 6 6 6-6"></path>
+				{icon_shapes(Icon::ChevronDown)}
 			</svg>
 		</button>
 	}
@@ -218,7 +219,7 @@ pub fn SelectItem(
 					.get()
 					.then(|| {
 						view! {
-							<span class="absolute right-2 flex size-3.5 items-center justify-center">
+							<span class=SELECT_ITEM_INDICATOR>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									width="24"
@@ -232,7 +233,7 @@ pub fn SelectItem(
 									class="size-4"
 									aria-hidden="true"
 								>
-									<path d="M20 6 9 17l-5-5"></path>
+									{icon_shapes(Icon::Check)}
 								</svg>
 							</span>
 						}

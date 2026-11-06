@@ -9,13 +9,17 @@
 //! `ev-toast-life` animation whose `animationend` dismisses (paused on hover),
 //! and a dismissed toast is dropped on its exit transform's `transitionend`.
 
+use ev_lib_classes::{Icon, TOAST_DURATION_MS, copy};
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
 	ui::uikit::{
-		core::{DEFAULT_DURATION_MS, ToastQueue, ToastState, ToastView, toaster_style, y_position},
-		leptos::{TOAST_BASE, TOAST_CLOSE, TOAST_CONTENT, TOAST_TITLE, TOASTER_BASE, ToastPosition, Tone, primitives::is_transform_transition},
+		core::{ToastQueue, ToastState, ToastView, toaster_style, y_position},
+		leptos::{
+			TOAST_BASE, TOAST_CLOSE, TOAST_CONTENT, TOAST_TITLE, TOASTER_BASE, ToastPosition, Tone,
+			primitives::{icon_shapes, is_transform_transition},
+		},
 	},
 };
 
@@ -33,23 +37,23 @@ pub struct ToasterHandle {
 
 impl ToasterHandle {
 	pub fn toast(&self, message: impl Into<String>) -> u64 {
-		self.show(message, Tone::Neutral, Some(DEFAULT_DURATION_MS))
+		self.show(message, Tone::Neutral, Some(TOAST_DURATION_MS))
 	}
 
 	pub fn positive(&self, message: impl Into<String>) -> u64 {
-		self.show(message, Tone::Positive, Some(DEFAULT_DURATION_MS))
+		self.show(message, Tone::Positive, Some(TOAST_DURATION_MS))
 	}
 
 	pub fn error(&self, message: impl Into<String>) -> u64 {
-		self.show(message, Tone::Error, Some(DEFAULT_DURATION_MS))
+		self.show(message, Tone::Error, Some(TOAST_DURATION_MS))
 	}
 
 	pub fn info(&self, message: impl Into<String>) -> u64 {
-		self.show(message, Tone::Info, Some(DEFAULT_DURATION_MS))
+		self.show(message, Tone::Info, Some(TOAST_DURATION_MS))
 	}
 
 	pub fn warn(&self, message: impl Into<String>) -> u64 {
-		self.show(message, Tone::Warn, Some(DEFAULT_DURATION_MS))
+		self.show(message, Tone::Warn, Some(TOAST_DURATION_MS))
 	}
 
 	/// Full control over tone + lifetime. `duration` is ms, or `None` for a
@@ -169,7 +173,7 @@ fn ToastItem(toast: ToastView) -> impl IntoView {
 			</div>
 			<button
 				type="button"
-				aria-label="Close"
+				aria-label=copy::CLOSE
 				data-slot="toast-close"
 				class=TOAST_CLOSE
 				on:click=move |_| handle.dismiss(id)
@@ -186,7 +190,7 @@ fn ToastItem(toast: ToastView) -> impl IntoView {
 					stroke-linejoin="round"
 					aria-hidden="true"
 				>
-					<path d="M18 6 6 18M6 6l12 12"></path>
+					{icon_shapes(Icon::X)}
 				</svg>
 			</button>
 		</li>

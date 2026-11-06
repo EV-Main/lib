@@ -1,21 +1,22 @@
+use ev_lib_classes::{Icon, SPINNER, copy};
 use leptos::prelude::*;
 
-use crate::cn;
+use crate::{cn, ui::uikit::leptos::primitives::icon_shapes};
 
 #[component]
 pub fn Spinner(#[prop(optional, into)] class: String) -> impl IntoView {
-	let cls = cn!("size-4 animate-spin", class);
+	let cls = cn!(SPINNER, class);
 	view! {
 		<svg
 			class=cls
 			role="status"
-			aria-label="Loading"
+			aria-label=copy::LOADING
 			viewBox="0 0 24 24"
 			fill="none"
 			stroke="currentColor"
 			stroke-width="2"
 		>
-			<path d="M21 12a9 9 0 1 1-6.219-8.56" />
+			{icon_shapes(Icon::Spinner)}
 		</svg>
 	}
 }

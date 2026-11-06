@@ -15,6 +15,13 @@ pub const TOAST_TITLE: &str = "font-medium";
 /// Pinned stack container base; the per-position offsets ride on [`ToastPosition`].
 pub const TOASTER_BASE: &str = "pointer-events-none fixed z-100 w-[calc(100%-2rem)] max-w-sm";
 
+/// Default auto-dismiss lifetime (ms).
+pub const TOAST_DURATION_MS: u32 = 4000;
+
+/// Only the front toasts show while the stack is collapsed.
+pub const TOAST_VISIBLE: usize = 3;
+/// Gap (px) between toasts once the stack is expanded.
+pub const TOAST_GAP: u32 = 14;
 #[derive(PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
 #[strum(serialize_all = "kebab-case")]
 pub enum ToastPosition {

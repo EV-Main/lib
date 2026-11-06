@@ -1,61 +1,75 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { bool, int, list, num, str } from '../src/index';
 
-// Shared Rust↔TS parsing-contract vectors — mirrored byte-for-byte in
-// `rust/src/ops/settings/tests.rs` (`mod contract`). Change both sides or neither.
+// Shared with ev_lib::settings (rust/tests/settings.rs).
+const CONTRACT = JSON.parse(readFileSync(join(import.meta.dirname, '../../../tests/fixtures/settings/contract.json'), 'utf8')) as {
+  bool: { true: string[]; false: string[]; invalid: string[]; error: string };
+  string: string[];
+  int: { accept: [string, number][]; reject: string[] };
+  float: { accept: [string, number][]; reject: string[] };
+  list: [string, string[]][];
+  int_list: [string, number[]][];
+  int_list_error: { raw: string; prefix: string; item: string };
+};
+
 describe('parsing contract', () => {
-  it('bool vectors', () => {
-    for (const raw of ['true', 'TRUE', 'True', '1']) {
-      expect(bool().parse(raw), `raw=${JSON.stringify(raw)}`).toBe(true);
-    }
-    for (const raw of ['false', 'FALSE', 'False', '0']) {
-      expect(bool().parse(raw), `raw=${JSON.stringify(raw)}`).toBe(false);
-    }
-    for (const raw of ['yes', 'no', '2', ' true', 'true ', '']) {
-      expect(() => bool().parse(raw), `raw=${JSON.stringify(raw)} must be invalid`).toThrowError();
-    }
+  it.each(CONTRACT.bool.true)('bool %j is true', (raw) => {
+    expect(bool().parse(raw)).toBe(true);
   });
 
-  it('list vectors', () => {
-    expect(list().parse('a, b ,c')).toEqual(['a', 'b', 'c']);
-    expect(list().parse('a,,b')).toEqual(['a', 'b']);
-    expect(list().parse(',,')).toEqual([]);
-    expect(list(num()).parse('1, 2,3')).toEqual([1, 2, 3]);
-    // U+FEFF (BOM) trims like whitespace — JS `trim()` semantics.
-    expect(list().parse('a,\uFEFFb')).toEqual(['a', 'b']);
-    // Item numbering counts kept items and never leaks the item value.
+  it.each(CONTRACT.bool.false)('bool %j is false', (raw) => {
+    expect(bool().parse(raw)).toBe(false);
+  });
+
+  it.each(CONTRACT.bool.invalid)('bool %j is invalid', (raw) => {
+    expect(() => bool().parse(raw)).toThrowError(CONTRACT.bool.error);
+  });
+
+  it.each(CONTRACT.string)('string %j is kept as is', (raw) => {
+    expect(str().parse(raw)).toBe(raw);
+  });
+
+  it.each(CONTRACT.int.accept)('int %j is %d', (raw, parsed) => {
+    expect(int().parse(raw)).toBe(parsed);
+  });
+
+  it.each(CONTRACT.int.reject)('int %j is invalid', (raw) => {
+    expect(() => int().parse(raw)).toThrowError();
+  });
+
+  it.each(CONTRACT.float.accept)('float %j is %d', (raw, parsed) => {
+    expect(num().parse(raw)).toBe(parsed);
+  });
+
+  it.each(CONTRACT.float.reject)('float %j is invalid', (raw) => {
+    expect(() => num().parse(raw)).toThrowError();
+  });
+
+  it.each(CONTRACT.list)('list %j is %j', (raw, parsed) => {
+    expect(list().parse(raw)).toEqual(parsed);
+  });
+
+  it.each(CONTRACT.int_list)('int list %j is %j', (raw, parsed) => {
+    expect(list(int()).parse(raw)).toEqual(parsed);
+  });
+
+  it('numbers a list error by kept item and never leaks the item value', () => {
+    const { raw, prefix, item } = CONTRACT.int_list_error;
     let message = '';
     try {
-      list(num()).parse(',zzz9,2');
+      list(int()).parse(raw);
     } catch (error) {
       message = (error as Error).message;
     }
-    expect(message).toMatch(/^item 1: /);
-    expect(message).not.toContain('zzz9');
+    expect(message.startsWith(prefix)).toBe(true);
+    expect(message).not.toContain(item);
   });
 
-  it('scalars are not trimmed', () => {
-    expect(() => num().parse(' 8080')).toThrowError();
-    expect(() => num().parse('8080 ')).toThrowError();
-    expect(num().parse('8080')).toBe(8080);
-    expect(str().parse(' keep me ')).toBe(' keep me ');
-  });
-
-  it('number vectors', () => {
-    // Integers: plain decimal only, optional sign.
-    expect(int().parse('8080')).toBe(8080);
-    expect(int().parse('+5')).toBe(5);
-    for (const raw of ['1e3', '0x10', '0b101', '0o17', '5.', '5.0']) {
-      expect(() => int().parse(raw), `raw=${JSON.stringify(raw)} must be invalid for an integer`).toThrowError();
-    }
-    // Floats: decimal, point, and exponent forms.
-    expect(num().parse('1e3')).toBe(1000);
-    expect(num().parse('5.')).toBe(5);
-    expect(num().parse('.5')).toBe(0.5);
-    expect(() => num().parse('0x10')).toThrowError();
-    // Documented divergences (deliberately NOT mirrored): Rust `f64` also
-    // accepts `inf`/`NaN` where `num()` requires finite; Rust 64-bit integers
-    // parse exactly where `int()` stops at the safe range.
+  it('diverges from Rust where documented', () => {
+    // Rust `f64` also accepts `inf`/`NaN` where `num()` requires finite; Rust
+    // 64-bit integers parse exactly where `int()` stops at the safe range.
     expect(() => num().parse('NaN')).toThrowError();
     expect(() => num().parse('Infinity')).toThrowError();
     expect(() => int().parse('9007199254740993')).toThrowError(/safe integer/);

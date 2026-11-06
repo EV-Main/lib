@@ -1,10 +1,11 @@
 use dioxus::prelude::*;
+use ev_lib_classes::{Icon, copy};
 
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		DIALOG_CLOSE, DIALOG_CONTENT, DIALOG_DESCRIPTION, DIALOG_FOOTER, DIALOG_HEADER, DIALOG_OVERLAY, DIALOG_TITLE,
-		primitives::{Controllable, DismissableLayer, use_controllable, use_dismissable_layer},
+		primitives::{Controllable, DismissableLayer, icon_shapes, use_controllable, use_dismissable_layer},
 	},
 };
 
@@ -96,9 +97,9 @@ pub fn DialogContent(
 						stroke_width: "2",
 						stroke_linecap: "round",
 						stroke_linejoin: "round",
-						path { d: "M18 6 6 18M6 6l12 12" }
+						{icon_shapes(Icon::X)}
 					}
-					span { class: "sr-only", "Close" }
+					span { class: "sr-only", {copy::CLOSE} }
 				}
 			}
 		}

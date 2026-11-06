@@ -5,6 +5,7 @@ use std::{
 };
 
 use dioxus::prelude::*;
+use ev_lib_classes::{Icon, SELECT_CHEVRON, SELECT_ITEM_INDICATOR};
 
 use crate::{
 	cn,
@@ -12,7 +13,7 @@ use crate::{
 		core::{self as uikit, SelectKey, SelectOption},
 		dioxus::{
 			SELECT_CONTENT_BOUNDS, SELECT_CONTENT_SURFACE, SELECT_ITEM, SELECT_LABEL, SELECT_LIST, SELECT_SEPARATOR, SELECT_TRIGGER_BASE, Size,
-			primitives::{Controllable, DismissReason, use_controllable, use_dismissable_layer, use_stable_id},
+			primitives::{Controllable, DismissReason, icon_shapes, use_controllable, use_dismissable_layer, use_stable_id},
 			select_trigger_size_class,
 		},
 	},
@@ -98,8 +99,8 @@ pub fn SelectTrigger(#[props(default)] size: Size, #[props(default)] class: Stri
 				stroke_width: "2",
 				stroke_linecap: "round",
 				stroke_linejoin: "round",
-				class: "size-4 opacity-50",
-				path { d: "m6 9 6 6 6-6" }
+				class: SELECT_CHEVRON,
+				{icon_shapes(Icon::ChevronDown)}
 			}
 		}
 	}
@@ -214,7 +215,7 @@ pub fn SelectItem(
 			onfocus: on_focus,
 			onclick: choose,
 			if selected {
-				span { class: "absolute right-2 flex size-3.5 items-center justify-center",
+				span { class: SELECT_ITEM_INDICATOR,
 					svg {
 						xmlns: "http://www.w3.org/2000/svg",
 						width: "24",
@@ -227,7 +228,7 @@ pub fn SelectItem(
 						stroke_linejoin: "round",
 						class: "size-4",
 						"aria-hidden": "true",
-						path { d: "M20 6 9 17l-5-5" }
+						{icon_shapes(Icon::Check)}
 					}
 				}
 			}

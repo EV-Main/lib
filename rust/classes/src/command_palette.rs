@@ -13,3 +13,33 @@ pub const COMMAND_PALETTE_LABEL: &str = "min-w-0 flex-1 truncate";
 pub const COMMAND_PALETTE_HINTS: &str = "flex items-center gap-3 border-t border-border-subtle px-2 py-1 text-caption text-ink-soft";
 
 pub const COMMAND_PALETTE_HINT: &str = "inline-flex items-center gap-1.5";
+
+/// The `CommandPalette`'s own strings. English by default; a caller translates by overriding fields.
+#[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "ts_gen", derive(serde::Serialize), serde(rename_all = "camelCase"))]
+pub struct CommandPaletteLabels {
+	/// The dialog's accessible title.
+	pub title: String,
+	/// The search field's placeholder.
+	pub placeholder: String,
+	/// Shown when nothing matches.
+	pub empty: String,
+	/// The arrow-keys hint.
+	pub navigate: String,
+	/// The Enter hint.
+	pub select: String,
+	/// The Escape hint.
+	pub close: String,
+}
+impl Default for CommandPaletteLabels {
+	fn default() -> Self {
+		Self {
+			title: "Command palette".to_owned(),
+			placeholder: "Type a command or search…".to_owned(),
+			empty: "No results.".to_owned(),
+			navigate: "navigate".to_owned(),
+			select: "select".to_owned(),
+			close: "close".to_owned(),
+		}
+	}
+}

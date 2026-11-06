@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   applyOverrides,
@@ -9,20 +11,23 @@ import {
   pickVariantFor,
   resolveVariant,
   type ExperimentConfig,
+  type ExperimentSpec,
 } from '../src/index';
 
-// Cross-language contract: the Rust `experiments` feature asserts the very same
-// numbers, so a change here is a breaking change on both sides.
-describe('fnv1a32 test vectors', () => {
-  it('matches the reference FNV-1a 32-bit values', () => {
-    expect(fnv1a32('')).toBe(0x811c9dc5);
-    expect(fnv1a32('a')).toBe(0xe40c292c);
-    expect(fnv1a32('foobar')).toBe(0xbf9cf968);
+// Shared with ev_lib::experiments (rust/tests/experiments.rs).
+const HASH = JSON.parse(readFileSync(join(import.meta.dirname, '../../../tests/fixtures/experiments/hash.json'), 'utf8')) as {
+  fnv1a32: [string, number][];
+  pick_variant_for: [ExperimentSpec, string, string, string][];
+};
+
+describe('hash vectors', () => {
+  it.each(HASH.fnv1a32)('fnv1a32(%j) is %d, hashToUnit its share of 2^32', (seed, hash) => {
+    expect(fnv1a32(seed)).toBe(hash);
+    expect(hashToUnit(seed)).toBe(hash / 2 ** 32);
   });
 
-  it('hashes UTF-8 bytes, not UTF-16 code units', () => {
-    expect(fnv1a32('h\u00e9llo')).toBe(1252296000); // 0x4aa48540
-    expect(fnv1a32('\u{1F600}')).toBe(0x33a29608); // astral, 4-byte UTF-8
+  it.each(HASH.pick_variant_for)('pickVariantFor(%j, %j, %j) is %j', (spec, key, subject, variant) => {
+    expect(pickVariantFor({ [key]: spec }, key, subject)).toBe(variant);
   });
 
   it('encodes a lone surrogate as U+FFFD, like TextEncoder', () => {
@@ -32,12 +37,6 @@ describe('fnv1a32 test vectors', () => {
 });
 
 describe('hashToUnit', () => {
-  it('is fnv1a32 / 2^32 with pinned values', () => {
-    expect(hashToUnit('exp:loc-1')).toBe(3100395682 / 2 ** 32); // 0.7218671222217381
-    expect(hashToUnit('exp:loc-2')).toBe(3083618063 / 2 ** 32); // 0.7179607783909887
-    expect(hashToUnit('h\u00e9llo')).toBe(1252296000 / 2 ** 32); // 0.2915728837251663
-  });
-
   it('stays in [0, 1)', () => {
     for (let i = 0; i < 1000; i++) {
       const u = hashToUnit(`seed-${i}`);
@@ -193,24 +192,6 @@ describe('holdout', () => {
       if (pickVariantFor(heldAllB, 'hero', `location-${i}`) === 'a') control++;
     }
     expect(Math.abs(control / n - 0.2)).toBeLessThan(0.02);
-  });
-});
-
-// Cross-language contract: the Rust `pick_variant_for_with_holdout_matches_ts_parity_vector`
-// asserts the same config and results. loc-1 (u ≈ 0.063) hits the holdout, loc-4
-// (u ≈ 0.348) the rescale — without the holdout it would land on "b".
-describe('pickVariantFor with holdout parity vector', () => {
-  const held = {
-    hero: { variants: ['a', 'b', 'c'], holdout: 0.25 },
-  } as const satisfies ExperimentConfig;
-
-  it('matches the Rust results per subject', () => {
-    const expected = { 'loc-1': 'a', 'loc-2': 'c', 'loc-3': 'a', 'loc-4': 'a', 'loc-5': 'c', 'loc-6': 'b' };
-    for (const [subject, variant] of Object.entries(expected)) {
-      expect(pickVariantFor(held, 'hero', subject)).toBe(variant);
-    }
-    const plain = { hero: { variants: ['a', 'b', 'c'] } } as const;
-    expect(pickVariantFor(plain, 'hero', 'loc-4')).toBe('b');
   });
 });
 

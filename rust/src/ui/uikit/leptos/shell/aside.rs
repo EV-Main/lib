@@ -1,12 +1,16 @@
+pub use ev_lib_classes::{AsideHeaderLabels, AsidePanelMode};
+use ev_lib_classes::{Icon, copy};
 use leptos::prelude::*;
 
-pub use crate::ui::uikit::core::{AsideCollapse, AsideHeaderLabels, AsidePanelMode};
+pub use crate::ui::uikit::core::AsideCollapse;
 use crate::{
 	cn,
 	ui::uikit::leptos::{
 		ASIDE_BODY, ASIDE_FOOTER, ASIDE_HEADER_BACK_ICON, ASIDE_HEADER_BASE, ASIDE_HEADER_CLOSE_ICON, ASIDE_HEADER_TITLE, ASIDE_PANEL_DOCKED, ASIDE_PANEL_DRAWER, ASIDE_PANEL_NARROW_ONLY,
 		ASIDE_PANEL_SHEET, ASIDE_PANEL_WIDE_ONLY, ASIDE_PANEL_WIDE_ONLY_WRAPPER, ASIDE_RAIL_BASE, ASIDE_RAIL_SPACER, AsidePanelSide, Drawer, DrawerContent, DrawerDirection, IconButton,
-		Sheet, SheetContent, Size, icon_button::Glyph, primitives::Side,
+		Sheet, SheetContent, Size,
+		icon_button::Glyph,
+		primitives::{Side, icon_shapes},
 	},
 };
 
@@ -29,8 +33,8 @@ pub fn AsideHeader(
 	#[prop(optional)] labels: AsideHeaderLabels,
 	#[prop(optional, into)] class: String,
 ) -> impl IntoView {
-	let back_label = labels.back.unwrap_or_else(|| String::from("Back"));
-	let close_label = labels.close.unwrap_or_else(|| String::from("Close"));
+	let back_label = labels.back;
+	let close_label = labels.close;
 	let cls = cn!(ASIDE_HEADER_BASE, class);
 	view! {
 		<div data-slot="aside-header" class=cls>
@@ -42,9 +46,7 @@ pub fn AsideHeader(
 							size=Size::Sm
 							on_click=Callback::new(move |_| back.run(()))
 						>
-							<Glyph class=ASIDE_HEADER_BACK_ICON>
-								<path d="m9 18 6-6-6-6" />
-							</Glyph>
+							<Glyph class=ASIDE_HEADER_BACK_ICON>{icon_shapes(Icon::ChevronRight)}</Glyph>
 						</IconButton>
 					}
 				})}
@@ -58,9 +60,7 @@ pub fn AsideHeader(
 							size=Size::Sm
 							on_click=Callback::new(move |_| close.run(()))
 						>
-							<Glyph class=ASIDE_HEADER_CLOSE_ICON>
-								<path d="M18 6 6 18M6 6l12 12" />
-							</Glyph>
+							<Glyph class=ASIDE_HEADER_CLOSE_ICON>{icon_shapes(Icon::X)}</Glyph>
 						</IconButton>
 					}
 				})}
@@ -92,7 +92,7 @@ pub fn AsideRail(
 	#[prop(optional, into)]
 	value: MaybeProp<String>,
 	on_value_change: Callback<Option<String>>,
-	#[prop(default = String::from("Panels"), into)] aria_label: String,
+	#[prop(default = copy::ASIDE_RAIL.to_owned(), into)] aria_label: String,
 	#[prop(optional, into)] class: String,
 ) -> impl IntoView {
 	let cls = cn!(ASIDE_RAIL_BASE, class);

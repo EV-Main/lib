@@ -11,6 +11,7 @@ import {
   SYSTEM_BANNER_ICON,
   SYSTEM_BANNER_MESSAGE,
   SYSTEM_BANNER_TITLE,
+  SYSTEM_BANNER_LABELS,
 } from "../../generated/system-banner";
 import { toneClasses, type Tone } from "../../generated/tone";
 import { CloseIcon, InfoIcon, TriangleAlertIcon } from "./shell-icons";
@@ -70,7 +71,7 @@ export function SystemBanner({
       {onDismiss && (
         <button
           type="button"
-          aria-label={labels.dismiss ?? "Dismiss"}
+          aria-label={labels.dismiss ?? SYSTEM_BANNER_LABELS.dismiss}
           onClick={onDismiss}
           className={SYSTEM_BANNER_DISMISS}
         >

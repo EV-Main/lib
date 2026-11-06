@@ -1,11 +1,12 @@
+use ev_lib_classes::Icon;
+pub use ev_lib_classes::SystemBannerLabels;
 use leptos::prelude::*;
 
-pub use crate::ui::uikit::core::SystemBannerLabels;
 use crate::{
 	cn,
 	ui::uikit::leptos::{
 		SYSTEM_BANNER_ACTION, SYSTEM_BANNER_BASE, SYSTEM_BANNER_BODY_AFTER_TITLE, SYSTEM_BANNER_DISMISS, SYSTEM_BANNER_GLYPH, SYSTEM_BANNER_ICON, SYSTEM_BANNER_MESSAGE, SYSTEM_BANNER_TITLE,
-		Tone,
+		Tone, primitives::icon_shapes,
 	},
 };
 
@@ -42,7 +43,7 @@ pub fn SystemBanner(
 	};
 	let has_message = children.is_some();
 	let body_cls = title.as_ref().map(|_| SYSTEM_BANNER_BODY_AFTER_TITLE);
-	let dismiss_label = labels.dismiss.unwrap_or_else(|| String::from("Dismiss"));
+	let dismiss_label = labels.dismiss;
 	view! {
 		<div class=cls data-slot="system-banner" data-tone=tone.as_ref().to_owned() role="status">
 			{glyph.map(|g| view! { <span class=SYSTEM_BANNER_ICON>{g}</span> })}
@@ -79,7 +80,7 @@ pub fn SystemBanner(
 }
 
 #[component]
-fn Glyph(paths: &'static [&'static str], circle: bool) -> impl IntoView {
+fn Glyph(icon: Icon) -> impl IntoView {
 	view! {
 		<svg
 			class=SYSTEM_BANNER_GLYPH
@@ -92,32 +93,22 @@ fn Glyph(paths: &'static [&'static str], circle: bool) -> impl IntoView {
 			stroke-linejoin="round"
 			aria-hidden="true"
 		>
-			{circle.then(|| view! { <circle cx="12" cy="12" r="10" /> })}
-			{paths.iter().map(|d| view! { <path d=*d /> }).collect_view()}
+			{icon_shapes(icon)}
 		</svg>
 	}
 }
 
 #[component]
 fn TriangleAlertIcon() -> impl IntoView {
-	view! {
-		<Glyph
-			paths=&[
-				"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3",
-				"M12 9v4",
-				"M12 17h.01",
-			]
-			circle=false
-		/>
-	}
+	view! { <Glyph icon=Icon::TriangleAlert /> }
 }
 
 #[component]
 fn InfoIcon() -> impl IntoView {
-	view! { <Glyph paths=&["M12 16v-4", "M12 8h.01"] circle=true /> }
+	view! { <Glyph icon=Icon::Info /> }
 }
 
 #[component]
 fn CloseIcon() -> impl IntoView {
-	view! { <Glyph paths=&["M18 6 6 18", "m6 6 12 12"] circle=false /> }
+	view! { <Glyph icon=Icon::Close /> }
 }

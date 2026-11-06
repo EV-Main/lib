@@ -1,8 +1,9 @@
 use dioxus::prelude::*;
+use ev_lib_classes::{Icon, copy};
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{BREADCRUMB_ELLIPSIS, BREADCRUMB_ITEM, BREADCRUMB_LINK, BREADCRUMB_LIST, BREADCRUMB_PAGE, BREADCRUMB_SEPARATOR},
+	ui::uikit::dioxus::{BREADCRUMB_ELLIPSIS, BREADCRUMB_ITEM, BREADCRUMB_LINK, BREADCRUMB_LIST, BREADCRUMB_PAGE, BREADCRUMB_SEPARATOR, primitives::icon_shapes},
 };
 
 #[component]
@@ -10,7 +11,7 @@ pub fn Breadcrumb(#[props(default)] class: String, children: Element) -> Element
 	rsx! {
 		nav {
 			class,
-			"aria-label": "breadcrumb",
+			"aria-label": copy::BREADCRUMB,
 			"data-slot": "breadcrumb",
 			{children}
 		}
@@ -82,7 +83,7 @@ pub fn BreadcrumbSeparator(#[props(default)] class: String, children: Option<Ele
 					fill: "none",
 					stroke: "currentColor",
 					stroke_width: "2",
-					path { d: "m9 18 6-6-6-6" }
+					{icon_shapes(Icon::ChevronRight)}
 				}
 			}
 		}
@@ -104,11 +105,9 @@ pub fn BreadcrumbEllipsis(#[props(default)] class: String) -> Element {
 				fill: "none",
 				stroke: "currentColor",
 				stroke_width: "2",
-				circle { cx: "12", cy: "12", r: "1" }
-				circle { cx: "19", cy: "12", r: "1" }
-				circle { cx: "5", cy: "12", r: "1" }
+				{icon_shapes(Icon::Ellipsis)}
 			}
-			span { class: "sr-only", "More" }
+			span { class: "sr-only", {copy::BREADCRUMB_MORE} }
 		}
 	}
 }

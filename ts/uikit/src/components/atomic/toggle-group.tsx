@@ -8,6 +8,7 @@ import {
   type ToggleVariant,
   type ToggleSize,
 } from "./toggle";
+import type { ToggleGroupType } from "../../generated/toggle-group";
 
 type ToggleGroupContextValue = {
   variant: ToggleVariant;
@@ -27,7 +28,7 @@ export interface ToggleGroupProps
   extends Omit<React.ComponentProps<"div">, "onChange"> {
   variant?: ToggleVariant;
   size?: ToggleSize;
-  type?: "single" | "multiple";
+  type?: ToggleGroupType;
   value?: string | string[];
   defaultValue?: string | string[];
   onValueChange?: (value: string | string[]) => void;

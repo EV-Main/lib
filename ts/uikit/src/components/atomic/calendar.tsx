@@ -18,29 +18,12 @@ import {
   CALENDAR_WEEKDAY,
   CALENDAR_WEEKDAY_ROW,
 } from "../../generated/calendar";
+import * as copy from "../../generated/copy";
+import type { IconName } from "../../generated/icons";
+import { iconShapes } from "../../icons/icon-shapes";
 
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-] as const;
 
-// Week starts Monday.
-const WEEKDAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"] as const;
-
-const CHEVRON_LEFT = "m15 18-6-6 6-6";
-const CHEVRON_RIGHT = "m9 18 6-6-6-6";
-
-function Chevron({ d }: { d: string }) {
+function Chevron({ icon }: { icon: IconName }) {
   return (
     <svg
       className="size-4"
@@ -55,7 +38,7 @@ function Chevron({ d }: { d: string }) {
       strokeLinejoin="round"
       aria-hidden
     >
-      <path d={d} />
+      {iconShapes(icon)}
     </svg>
   );
 }
@@ -165,8 +148,8 @@ export function Calendar({
   min,
   max,
   disabled = false,
-  previousMonthLabel = "Previous month",
-  nextMonthLabel = "Next month",
+  previousMonthLabel = copy.CALENDAR_PREVIOUS_MONTH,
+  nextMonthLabel = copy.CALENDAR_NEXT_MONTH,
   locale,
   className,
 }: CalendarProps) {
@@ -185,8 +168,8 @@ export function Calendar({
   const monthIndex = view.getMonth();
   const caption = locale
     ? new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(view)
-    : `${MONTHS[monthIndex]} ${year}`;
-  const weekdays: readonly string[] = locale ? localisedWeekdays(locale) : WEEKDAYS;
+    : `${copy.MONTHS[monthIndex]} ${year}`;
+  const weekdays: readonly string[] = locale ? localisedWeekdays(locale) : copy.WEEKDAYS;
 
   const lead = mondayIndex(view);
   const total = new Date(year, monthIndex + 1, 0).getDate();
@@ -224,7 +207,7 @@ export function Calendar({
           disabled={disabled}
           onClick={() => go(-1)}
         >
-          <Chevron d={CHEVRON_LEFT} />
+          <Chevron icon="chevron-left" />
         </button>
         <div data-slot="calendar-caption" className={CALENDAR_CAPTION}>
           {caption}
@@ -236,7 +219,7 @@ export function Calendar({
           disabled={disabled}
           onClick={() => go(1)}
         >
-          <Chevron d={CHEVRON_RIGHT} />
+          <Chevron icon="chevron-right" />
         </button>
       </div>
       <table className={CALENDAR_GRID} role="grid">

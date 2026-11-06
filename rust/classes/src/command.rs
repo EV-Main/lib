@@ -25,3 +25,4 @@ pub const COMMAND_ITEM: &str = "data-[selected=true]:bg-hover data-[selected=tru
 pub const COMMAND_SEPARATOR: &str = "bg-border -mx-1 h-px";
 
 pub const COMMAND_SHORTCUT: &str = "text-ink-soft ml-auto text-xs tracking-widest";
+pub const COMMAND_INPUT_ICON: &str = "size-4 shrink-0 opacity-50";

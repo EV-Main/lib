@@ -11,6 +11,7 @@ import {
   INPUT_OTP_SLOT_CARET,
   INPUT_OTP_SLOT_CARET_WRAPPER,
 } from "../../generated/input-otp";
+import { iconShapes } from "../../icons/icon-shapes";
 
 type InputOTPContextValue = {
   value: string;
@@ -136,7 +137,7 @@ export function InputOTPSeparator({ ...props }: React.ComponentProps<"div">) {
         strokeLinejoin="round"
         aria-hidden="true"
       >
-        <path d="M5 12h14" />
+        {iconShapes("minus")}
       </svg>
     </div>
   );

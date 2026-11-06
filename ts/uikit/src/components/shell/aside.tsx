@@ -15,11 +15,14 @@ import {
   ASIDE_RAIL_SPACER,
   asidePanelSideClasses,
   type AsidePanelSide,
+  ASIDE_HEADER_LABELS,
 } from "../../generated/aside";
 import { Drawer, DrawerContent } from "../atomic/drawer";
 import { IconButton } from "../derived/icon-button";
 import { Sheet, SheetContent } from "../atomic/sheet";
 import { UiIcon } from "../../icons/ui-icons";
+import type { AsidePanelMode } from "../../generated/aside";
+import * as copy from "../../generated/copy";
 
 export interface AsideHeaderLabels {
   back?: string;
@@ -46,14 +49,14 @@ export function AsideHeader({ title, onBack, onClose, actions, labels = {}, clas
       {...props}
     >
       {onBack && (
-        <IconButton aria-label={labels.back ?? "Back"} size="sm" onClick={onBack}>
+        <IconButton aria-label={labels.back ?? ASIDE_HEADER_LABELS.back} size="sm" onClick={onBack}>
           <UiIcon name="chevron-right" className={ASIDE_HEADER_BACK_ICON} />
         </IconButton>
       )}
       <h2 className={ASIDE_HEADER_TITLE}>{title}</h2>
       {actions}
       {onClose && (
-        <IconButton aria-label={labels.close ?? "Close"} size="sm" onClick={onClose}>
+        <IconButton aria-label={labels.close ?? ASIDE_HEADER_LABELS.close} size="sm" onClick={onClose}>
           <UiIcon name="x" />
         </IconButton>
       )}
@@ -87,7 +90,7 @@ export function AsideRail({
   value,
   onValueChange,
   className,
-  "aria-label": ariaLabel = "Panels",
+  "aria-label": ariaLabel = copy.ASIDE_RAIL,
   ...props
 }: AsideRailProps) {
   const button = (item: AsideRailItem) => (
@@ -130,7 +133,7 @@ function useAtLeast(query: string): boolean {
   );
 }
 
-export type AsidePanelMode = "docked" | "overlay";
+export type { AsidePanelMode };
 
 export interface AsidePanelProps extends Omit<React.ComponentProps<"aside">, "title"> {
   /** Names the panel. */

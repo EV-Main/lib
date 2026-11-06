@@ -7,12 +7,16 @@
 //! renders those with its own hrefs. Links render as a plain `<a>` (a full
 //! document load, which is what you want off an error page).
 
+use ev_lib_classes::{
+	Icon, STATUS_SCREEN_ACTION_ICON, STATUS_SCREEN_ACTIONS, STATUS_SCREEN_BODY, STATUS_SCREEN_CODE, STATUS_SCREEN_EYEBROW, STATUS_SCREEN_GLOW, STATUS_SCREEN_LOGO, STATUS_SCREEN_ROOT,
+	STATUS_SCREEN_STACK, STATUS_SCREEN_TITLE, STATUS_SCREEN_TITLE_ACCENT, copy,
+};
 use leptos::prelude::*;
 
 pub use crate::ui::uikit::core::{StatusLinkData, status_cta_class};
 use crate::{
 	cn,
-	ui::uikit::leptos::{Accent, ButtonVariant, Logo, accent_text_class},
+	ui::uikit::leptos::{Accent, ButtonVariant, Logo, accent_text_class, primitives::icon_shapes},
 };
 
 /// Shared skeleton for the 404 / 403 / 500 status pages: a centred hero with the
@@ -47,32 +51,20 @@ pub fn StatusScreen(
 		})
 		.collect_view();
 	view! {
-		<section class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-6 py-32 text-center">
-			<div
-				aria-hidden="true"
-				class=cn!(
-					"pointer-events-none absolute inset-0 opacity-[0.07] [background:radial-gradient(55%_45%_at_50%_30%,currentColor,transparent_70%)]",
-					accent_text
-				)
-			></div>
-			<div class="relative z-10 flex w-full max-w-2xl flex-col items-center">
-				<Logo class=cn!("mb-7 h-10 w-auto", accent_text) />
-				<p class=cn!(
-					"mb-6 font-mono text-[11px] uppercase tracking-[0.34em]", accent_text
-				)>{eyebrow}</p>
-				<p class=cn!(
-					"font-serif text-[110px] font-medium leading-[0.9] sm:text-[180px]", accent_text
-				)>{code}</p>
-				<h1 class="mt-4 font-serif text-3xl font-light leading-tight text-ink sm:text-5xl">
-					{headline_lead} <span class=cn!("font-serif italic", accent_text)>{headline_accent}</span>
+		<section class=STATUS_SCREEN_ROOT>
+			<div aria-hidden="true" class=cn!(STATUS_SCREEN_GLOW,
+					accent_text)></div>
+			<div class=STATUS_SCREEN_STACK>
+				<Logo class=cn!(STATUS_SCREEN_LOGO, accent_text) />
+				<p class=cn!(STATUS_SCREEN_EYEBROW, accent_text)>{eyebrow}</p>
+				<p class=cn!(STATUS_SCREEN_CODE, accent_text)>{code}</p>
+				<h1 class=STATUS_SCREEN_TITLE>
+					{headline_lead}
+					<span class=cn!(STATUS_SCREEN_TITLE_ACCENT, accent_text)>{headline_accent}</span>
 					{headline_tail}
 				</h1>
-				<p class="mx-auto mt-5 max-w-md text-sm leading-relaxed text-ink/60 sm:text-base">
-					{subtext}
-				</p>
-				<div class="mt-9 flex flex-col items-center gap-3 sm:flex-row">
-					{children.map(|c| c())} {links}
-				</div>
+				<p class=STATUS_SCREEN_BODY>{subtext}</p>
+				<div class=STATUS_SCREEN_ACTIONS>{children.map(|c| c())} {links}</div>
 			</div>
 		</section>
 	}
@@ -84,14 +76,14 @@ pub fn NotFound(#[prop(default = "/".to_string(), into)] home_href: String, #[pr
 	view! {
 		<StatusScreen
 			accent=Accent::Debug
-			eyebrow="Page not found"
+			eyebrow=copy::NOT_FOUND_EYEBROW
 			code="404"
-			headline_lead="You've reached "
-			headline_accent="open water"
-			subtext="The page you're looking for has drifted off our coastline — moved, renamed, or never charted. Let's get you back to shore."
+			headline_lead=copy::NOT_FOUND_HEADLINE_LEAD
+			headline_accent=copy::NOT_FOUND_HEADLINE_ACCENT
+			subtext=copy::NOT_FOUND_SUBTEXT
 			links=vec![
-				home("Back to home", home_href, ButtonVariant::Primary),
-				contact("Contact the team", contact_href),
+				home(copy::STATUS_HOME, home_href, ButtonVariant::Primary),
+				contact(copy::NOT_FOUND_CONTACT, contact_href),
 			]
 		/>
 	}
@@ -103,14 +95,14 @@ pub fn Forbidden(#[prop(default = "/".to_string(), into)] home_href: String, #[p
 	view! {
 		<StatusScreen
 			accent=Accent::Warn
-			eyebrow="Access forbidden"
+			eyebrow=copy::FORBIDDEN_EYEBROW
 			code="403"
-			headline_lead="This harbour is "
-			headline_accent="private"
-			subtext="You don't have the credentials to view this page. If you believe you should, our team can open the right doors."
+			headline_lead=copy::FORBIDDEN_HEADLINE_LEAD
+			headline_accent=copy::FORBIDDEN_HEADLINE_ACCENT
+			subtext=copy::FORBIDDEN_SUBTEXT
 			links=vec![
-				home("Back to home", home_href, ButtonVariant::Primary),
-				contact("Request access", contact_href),
+				home(copy::STATUS_HOME, home_href, ButtonVariant::Primary),
+				contact(copy::FORBIDDEN_CONTACT, contact_href),
 			]
 		/>
 	}
@@ -122,12 +114,12 @@ pub fn ServerError(#[prop(default = "/".to_string(), into)] home_href: String, #
 	view! {
 		<StatusScreen
 			accent=Accent::Error
-			eyebrow="Server error"
+			eyebrow=copy::SERVER_ERROR_EYEBROW
 			code="500"
-			headline_lead="Our systems are "
-			headline_accent="recalibrating"
-			subtext="Something broke on our end — not yours. We've been alerted and are restoring service. Please try again in a moment."
-			links=vec![home("Back to home", home_href, ButtonVariant::Outline)]
+			headline_lead=copy::SERVER_ERROR_HEADLINE_LEAD
+			headline_accent=copy::SERVER_ERROR_HEADLINE_ACCENT
+			subtext=copy::SERVER_ERROR_SUBTEXT
+			links=vec![home(copy::STATUS_HOME, home_href, ButtonVariant::Outline)]
 		>
 			<button
 				type="button"
@@ -139,7 +131,7 @@ pub fn ServerError(#[prop(default = "/".to_string(), into)] home_href: String, #
 					}
 				}
 			>
-				"Try again"
+				{copy::SERVER_ERROR_RETRY}
 			</button>
 		</StatusScreen>
 	}
@@ -163,12 +155,11 @@ fn contact(label: &str, href: String) -> StatusLinkData {
 	}
 }
 
-// lucide `arrow-left`, inlined so the kit keeps its zero-icon-dep footprint.
 fn arrow_left_icon() -> impl IntoView {
 	view! {
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
-			class="mr-2 h-4 w-4"
+			class=STATUS_SCREEN_ACTION_ICON
 			viewBox="0 0 24 24"
 			fill="none"
 			stroke="currentColor"
@@ -177,8 +168,7 @@ fn arrow_left_icon() -> impl IntoView {
 			stroke-linejoin="round"
 			aria-hidden="true"
 		>
-			<path d="m12 19-7-7 7-7" />
-			<path d="M19 12H5" />
+			{icon_shapes(Icon::ArrowLeft)}
 		</svg>
 	}
 }

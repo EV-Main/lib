@@ -23,3 +23,5 @@ export const COMMAND_ITEM = "data-[selected=true]:bg-hover data-[selected=true]:
 export const COMMAND_SEPARATOR = "bg-border -mx-1 h-px";
 
 export const COMMAND_SHORTCUT = "text-ink-soft ml-auto text-xs tracking-widest";
+
+export const COMMAND_INPUT_ICON = "size-4 shrink-0 opacity-50";

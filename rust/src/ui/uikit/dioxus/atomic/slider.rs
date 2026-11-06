@@ -4,7 +4,7 @@ use crate::{
 	cn,
 	ui::uikit::{
 		core::{self as uikit, Drag, Track},
-		dioxus::{SLIDER_RANGE, SLIDER_ROOT, SLIDER_THUMB, SLIDER_TRACK, SliderOrientation, primitives::use_controllable},
+		dioxus::{Orientation, SLIDER_RANGE, SLIDER_ROOT, SLIDER_THUMB, SLIDER_TRACK, primitives::use_controllable},
 	},
 };
 
@@ -17,7 +17,7 @@ pub fn Slider(
 	#[props(default = 0.0)] min: f64,
 	#[props(default = 100.0)] max: f64,
 	#[props(default = 1.0)] step: f64,
-	#[props(default)] orientation: SliderOrientation,
+	#[props(default)] orientation: Orientation,
 	#[props(default)] disabled: bool,
 	aria_label: Option<String>,
 ) -> Element {
@@ -43,8 +43,8 @@ pub fn Slider(
 	};
 
 	let axis = move |e: &PointerEvent| match orientation {
-		SliderOrientation::Horizontal => e.client_coordinates().x,
-		SliderOrientation::Vertical => e.client_coordinates().y,
+		Orientation::Horizontal => e.client_coordinates().x,
+		Orientation::Vertical => e.client_coordinates().y,
 	};
 
 	// Pointer handling lives on the root, not the track: the thumb sits above the
@@ -62,8 +62,8 @@ pub fn Slider(
 				let Some(t) = track() else { return };
 				let Ok(rect) = t.get_client_rect().await else { return };
 				let measured = match orientation {
-					SliderOrientation::Horizontal => Track { origin: rect.origin.x, size: rect.size.width },
-					SliderOrientation::Vertical => Track { origin: rect.origin.y, size: rect.size.height },
+					Orientation::Horizontal => Track { origin: rect.origin.x, size: rect.size.width },
+					Orientation::Vertical => Track { origin: rect.origin.y, size: rect.size.height },
 				};
 				drag.write().press(measured);
 				// Pointer capture (the trick Radix uses): route every later move/up to
@@ -179,7 +179,7 @@ mod tests {
 	fn vertical_uses_height_and_bottom() {
 		fn app() -> Element {
 			rsx! {
-				Slider { default_value: 40.0, orientation: SliderOrientation::Vertical }
+				Slider { default_value: 40.0, orientation: Orientation::Vertical }
 			}
 		}
 		let html = render(app);

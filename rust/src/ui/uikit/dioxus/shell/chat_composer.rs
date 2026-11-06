@@ -1,8 +1,10 @@
 use std::rc::Rc;
 
 use dioxus::prelude::*;
+pub use ev_lib_classes::ChatComposerLabels;
+use ev_lib_classes::{Icon, copy};
 
-pub use crate::ui::uikit::core::{ChatComposerLabels, ModelOption};
+pub use crate::ui::uikit::core::ModelOption;
 use crate::{
 	cn,
 	ui::uikit::{
@@ -10,7 +12,8 @@ use crate::{
 		dioxus::{
 			CHAT_COMPOSER_ATTACHMENTS, CHAT_COMPOSER_BASE, CHAT_COMPOSER_FIELD, CHAT_COMPOSER_HINT, CHAT_COMPOSER_IDLE, CHAT_COMPOSER_SPACER, CHAT_COMPOSER_STREAMING, CHAT_COMPOSER_TOOLBAR,
 			DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger, IconButton, IconButtonVariant, MODEL_CHIP_BASE, Size, Textarea,
-			chat_message::Glyph, primitives::use_controllable,
+			chat_message::Glyph,
+			primitives::{icon_shapes, use_controllable},
 		},
 	},
 };
@@ -25,7 +28,7 @@ pub fn ModelChip(
 	models: Vec<ModelOption>,
 	value: String,
 	on_value_change: EventHandler<String>,
-	#[props(default = String::from("Model"))] aria_label: String,
+	#[props(default = copy::MODEL_CHIP.to_owned())] aria_label: String,
 	#[props(default)] class: String,
 ) -> Element {
 	let shown = models.iter().find(|m| m.id == value).map_or_else(|| value.clone(), |m| m.label.clone());
@@ -33,7 +36,7 @@ pub fn ModelChip(
 		DropdownMenu {
 			DropdownMenuTrigger { aria_label: format!("{aria_label}: {shown}"), class: cn!(MODEL_CHIP_BASE, class),
 				{shown.clone()}
-				Glyph { class: "size-4", path { d: "m6 9 6 6 6-6" } }
+				Glyph { class: "size-4", {icon_shapes(Icon::ChevronDown)} }
 			}
 			DropdownMenuContent {
 				DropdownMenuRadioGroup { value: Some(value), on_value_change: move |id| on_value_change.call(id),
@@ -65,7 +68,7 @@ pub fn ChatComposer(
 	on_send: EventHandler<String>,
 	#[props(default)] streaming: bool,
 	on_stop: Option<EventHandler<()>>,
-	#[props(default = String::from("Ask the assistant…"))] placeholder: String,
+	#[props(default = copy::CHAT_COMPOSER_PLACEHOLDER.to_owned())] placeholder: String,
 	/// Shows the attach button.
 	on_attach: Option<EventHandler<()>>,
 	/// A row of `ChatAttachment`s above the field.
@@ -103,7 +106,7 @@ pub fn ChatComposer(
 				value: text.get(),
 				disabled,
 				placeholder,
-				aria_label: labels.field.unwrap_or_else(|| "Message".into()),
+				aria_label: labels.field,
 				class: CHAT_COMPOSER_FIELD,
 				oninput: move |e: FormEvent| text.set(e.value()),
 				onkeydown: move |e: KeyboardEvent| {
@@ -116,8 +119,8 @@ pub fn ChatComposer(
 			}
 			div { class: CHAT_COMPOSER_TOOLBAR,
 				if let Some(attach) = on_attach {
-					IconButton { aria_label: labels.attach.unwrap_or_else(|| "Attach file".into()), size: Size::Sm, disabled, onclick: move |_| attach.call(()),
-						Glyph { class: "size-4", path { d: "M5 12h14M12 5v14" } }
+					IconButton { aria_label: labels.attach, size: Size::Sm, disabled, onclick: move |_| attach.call(()),
+						Glyph { class: "size-4", {icon_shapes(Icon::Plus)} }
 					}
 				}
 				{tools}
@@ -128,7 +131,7 @@ pub fn ChatComposer(
 				if streaming {
 					IconButton {
 						variant: IconButtonVariant::Outline,
-						aria_label: labels.stop.unwrap_or_else(|| "Stop".into()),
+						aria_label: labels.stop,
 						onclick: move |_| {
 							if let Some(stop) = on_stop {
 								stop.call(());
@@ -141,15 +144,15 @@ pub fn ChatComposer(
 								});
 							}
 						},
-						Glyph { class: "size-4", rect { width: "12", height: "12", x: "6", y: "6", rx: "2" } }
+						Glyph { class: "size-4", {icon_shapes(Icon::Stop)} }
 					}
 				} else {
 					IconButton {
 						variant: IconButtonVariant::Outline,
-						aria_label: labels.send.unwrap_or_else(|| "Send".into()),
+						aria_label: labels.send,
 						disabled: disabled || empty,
 						onclick: move |_| send(),
-						Glyph { class: "size-4", path { d: "m5 12 7-7 7 7M12 19V5" } }
+						Glyph { class: "size-4", {icon_shapes(Icon::ArrowUp)} }
 					}
 				}
 			}
@@ -263,7 +266,7 @@ mod tests {
 			rsx! { ChatComposer { on_send: |_| {} } }
 		}
 		fn translated() -> Element {
-			rsx! { ChatComposer { on_send: |_| {}, labels: ChatComposerLabels { field: Some("Сообщение".into()), send: Some("Отправить".into()), ..Default::default() } } }
+			rsx! { ChatComposer { on_send: |_| {}, labels: ChatComposerLabels { field: "Сообщение".into(), send: "Отправить".into(), ..Default::default() } } }
 		}
 		let html = render(plain);
 		let area = opening_tag(&html, "<textarea");

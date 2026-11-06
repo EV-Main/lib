@@ -36,6 +36,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../atomic/popover";
 import { Settled } from "./settled";
 import { Skeleton } from "../atomic/skeleton";
 import { UiIcon } from "../../icons/ui-icons";
+import * as copy from "../../generated/copy";
 
 export interface HeaderBalanceProps extends Omit<React.HTMLAttributes<HTMLElement>, "children"> {
   /** Only meaningful with `onClick`. */
@@ -60,7 +61,7 @@ const USD: Intl.NumberFormatOptions = { style: "currency", currency: "USD" };
 
 /** "Balance: $0.00" in the header; a button only when given `onClick`. */
 export function HeaderBalance({
-  label = "Balance:",
+  label = copy.HEADER_BALANCE,
   value,
   amount,
   format = USD,
@@ -134,7 +135,7 @@ export interface NotificationBellProps {
 /** The bell with an unread dot; the list opens in a popover. */
 export function NotificationBell({ notifications, onSelect, labels = {}, footer, className }: NotificationBellProps) {
   const unread = notifications.filter((n) => n.unread).length;
-  const name = labels.trigger ?? "Notifications";
+  const name = labels.trigger ?? copy.NOTIFICATION_BELL_TRIGGER;
   const spoken = unread > 0 ? `${name}, ${(labels.unread ?? ((n) => `${n} unread`))(unread)}` : name;
   return (
     <Popover>
@@ -148,7 +149,7 @@ export function NotificationBell({ notifications, onSelect, labels = {}, footer,
       </PopoverTrigger>
       <PopoverContent align="end" className={NOTIFICATION_BELL_CONTENT}>
         {notifications.length === 0 ? (
-          <p className={NOTIFICATION_BELL_EMPTY}>{labels.empty ?? "No notifications"}</p>
+          <p className={NOTIFICATION_BELL_EMPTY}>{labels.empty ?? copy.NOTIFICATION_BELL_EMPTY}</p>
         ) : (
           <ul className={NOTIFICATION_BELL_LIST}>
             {notifications.map((n) => (
@@ -191,17 +192,17 @@ const APPLE = /Mac|iPhone|iPad|iPod/;
 
 // Read after mount, so the server render and the first client render agree.
 function usePlatformShortcut(): string {
-  const [shortcut, setShortcut] = React.useState("Ctrl K");
+  const [shortcut, setShortcut] = React.useState<string>(copy.CTRL_K);
   React.useEffect(() => {
     const nav = navigator as Navigator & { userAgentData?: { platform?: string } };
-    if (APPLE.test(nav.userAgentData?.platform ?? nav.platform ?? "")) setShortcut("⌘K");
+    if (APPLE.test(nav.userAgentData?.platform ?? nav.platform ?? "")) setShortcut(copy.COMMAND_K);
   }, []);
   return shortcut;
 }
 
 /** A button dressed as the search field; it opens the palette rather than taking input. */
 export function HeaderSearch({
-  placeholder = "Search or jump to…",
+  placeholder = copy.HEADER_SEARCH,
   shortcut,
   className,
   ...props

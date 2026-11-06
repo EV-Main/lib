@@ -19,3 +19,8 @@ export const CONFIRM_DIALOG_FOOTER = "flex-row justify-end gap-2";
 export const CONFIRM_DIALOG_PENDING = "aria-disabled:cursor-not-allowed aria-disabled:opacity-40";
 
 export const CONFIRM_DIALOG_SPINNER = "size-3.5";
+
+export const CONFIRM_DIALOG_LABELS = {
+  "cancel": "Cancel",
+  "error": "Something went wrong",
+} as const;

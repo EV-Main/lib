@@ -1,12 +1,13 @@
 use dioxus::prelude::*;
+pub use ev_lib_classes::MenuItemVariant;
+use ev_lib_classes::{Icon, MENU_RADIO_DOT, MENUBAR_SUB_CHEVRON};
 
-pub use crate::ui::uikit::core::MenubarItemVariant;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		MENUBAR_CHECKBOX_ITEM, MENUBAR_CONTENT, MENUBAR_ITEM, MENUBAR_ITEM_INDICATOR, MENUBAR_LABEL, MENUBAR_RADIO_ITEM, MENUBAR_ROOT, MENUBAR_SEPARATOR, MENUBAR_SHORTCUT,
 		MENUBAR_SUB_CONTENT, MENUBAR_SUB_TRIGGER, MENUBAR_TRIGGER,
-		primitives::{Controllable, use_controllable},
+		primitives::{Controllable, icon_shapes, use_controllable},
 	},
 };
 
@@ -81,7 +82,7 @@ pub fn MenubarGroup(#[props(default)] class: String, children: Element) -> Eleme
 #[component]
 pub fn MenubarItem(
 	#[props(default)] inset: bool,
-	#[props(default)] variant: MenubarItemVariant,
+	#[props(default)] variant: MenuItemVariant,
 	#[props(default)] class: String,
 	onclick: Option<EventHandler<MouseEvent>>,
 	children: Element,
@@ -125,7 +126,7 @@ pub fn MenubarCheckboxItem(#[props(default)] checked: bool, #[props(default)] cl
 						stroke_width: "2",
 						stroke_linecap: "round",
 						stroke_linejoin: "round",
-						path { d: "M20 6 9 17l-5-5" }
+						{icon_shapes(Icon::Check)}
 					}
 				}
 			}
@@ -167,9 +168,9 @@ pub fn MenubarRadioItem(value: String, #[props(default)] class: String, children
 			span { class: MENUBAR_ITEM_INDICATOR,
 				if checked {
 					svg {
-						class: "size-2 fill-current",
+						class: MENU_RADIO_DOT,
 						view_box: "0 0 24 24",
-						circle { cx: "12", cy: "12", r: "10" }
+						{icon_shapes(Icon::Dot)}
 					}
 				}
 			}
@@ -229,14 +230,14 @@ pub fn MenubarSubTrigger(#[props(default)] inset: bool, #[props(default)] class:
 			onclick: move |_| ctx.open.set(!ctx.open.get()),
 			{children}
 			svg {
-				class: "ml-auto h-4 w-4",
+				class: MENUBAR_SUB_CHEVRON,
 				view_box: "0 0 24 24",
 				fill: "none",
 				stroke: "currentColor",
 				stroke_width: "2",
 				stroke_linecap: "round",
 				stroke_linejoin: "round",
-				path { d: "m9 18 6-6-6-6" }
+				{icon_shapes(Icon::ChevronRight)}
 			}
 		}
 	}

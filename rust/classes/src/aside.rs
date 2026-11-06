@@ -48,3 +48,32 @@ pub enum AsidePanelSide {
 	#[tw(default, class = "border-l border-border")]
 	Right,
 }
+
+/// How an `AsidePanel` takes its place.
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::EnumIter, strum::IntoStaticStr)]
+#[strum(serialize_all = "kebab-case")]
+pub enum AsidePanelMode {
+	/// Sits in the layout and takes room from the content.
+	#[default]
+	Docked,
+	/// Floats over a scrim on a `Sheet`.
+	Overlay,
+}
+
+/// The `AsideHeader`'s own strings. English by default; a caller translates by overriding fields.
+#[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "ts_gen", derive(serde::Serialize), serde(rename_all = "camelCase"))]
+pub struct AsideHeaderLabels {
+	/// `aria-label` of the back button.
+	pub back: String,
+	/// `aria-label` of the close button.
+	pub close: String,
+}
+impl Default for AsideHeaderLabels {
+	fn default() -> Self {
+		Self {
+			back: "Back".to_owned(),
+			close: "Close".to_owned(),
+		}
+	}
+}

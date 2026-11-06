@@ -1,5 +1,6 @@
 use std::sync::atomic::{AtomicUsize, Ordering};
 
+use ev_lib_classes::{Icon, copy};
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -9,15 +10,15 @@ use crate::{
 		leptos::{
 			Button, ButtonVariant, CAROUSEL_CONTENT_TRACK, CAROUSEL_CONTENT_TRACK_HORIZONTAL, CAROUSEL_CONTENT_TRACK_VERTICAL, CAROUSEL_CONTENT_VIEWPORT, CAROUSEL_EDGE_FADE_NEXT,
 			CAROUSEL_EDGE_FADE_PREV, CAROUSEL_ITEM, CAROUSEL_ITEM_HORIZONTAL, CAROUSEL_ITEM_VERTICAL, CAROUSEL_NAV, CAROUSEL_NEXT_HORIZONTAL, CAROUSEL_NEXT_VERTICAL,
-			CAROUSEL_PREVIOUS_HORIZONTAL, CAROUSEL_PREVIOUS_VERTICAL, CarouselOrientation, Size,
-			primitives::{Controllable, use_controllable},
+			CAROUSEL_PREVIOUS_HORIZONTAL, CAROUSEL_PREVIOUS_VERTICAL, Orientation, Size,
+			primitives::{Controllable, icon_shapes, use_controllable},
 		},
 	},
 };
 
 #[component]
 pub fn Carousel(
-	#[prop(optional)] orientation: CarouselOrientation,
+	#[prop(optional)] orientation: Orientation,
 	#[prop(optional, into)] index: MaybeProp<usize>,
 	#[prop(optional)] default_index: usize,
 	#[prop(optional)] on_index_change: Option<Callback<usize>>,
@@ -58,15 +59,17 @@ pub fn CarouselContent(#[prop(optional, into)] class: String, children: Children
 	let ctx = expect_context::<CarouselContext>();
 	// drag/momentum: omitted vs embla — see README Limitations
 	let track = match ctx.orientation {
-		CarouselOrientation::Horizontal => CAROUSEL_CONTENT_TRACK_HORIZONTAL,
-		CarouselOrientation::Vertical => CAROUSEL_CONTENT_TRACK_VERTICAL,
+		Orientation::Horizontal => CAROUSEL_CONTENT_TRACK_HORIZONTAL,
+		Orientation::Vertical => CAROUSEL_CONTENT_TRACK_VERTICAL,
 	};
 	let cls = cn!(CAROUSEL_CONTENT_TRACK, track, class);
 	view! {
 		<div class=CAROUSEL_CONTENT_VIEWPORT data-slot="carousel-content">
 			<div
 				class=cls
-				style=move || format!("transform: {}", ctx.orientation.transform(ctx.index.get()))
+				style=move || {
+					format!("transform: {}", uikit::carousel_transform(ctx.orientation, ctx.index.get()))
+				}
 			>
 				{children()}
 			</div>
@@ -83,8 +86,8 @@ pub fn CarouselItem(#[prop(optional, into)] class: String, children: Children) -
 	ctx.slides.update(|s| s.register(id));
 	on_cleanup(move || ctx.slides.update(|s| s.unregister(id)));
 	let pad = match ctx.orientation {
-		CarouselOrientation::Horizontal => CAROUSEL_ITEM_HORIZONTAL,
-		CarouselOrientation::Vertical => CAROUSEL_ITEM_VERTICAL,
+		Orientation::Horizontal => CAROUSEL_ITEM_HORIZONTAL,
+		Orientation::Vertical => CAROUSEL_ITEM_VERTICAL,
 	};
 	let cls = cn!(CAROUSEL_ITEM, pad, class);
 	view! {
@@ -98,8 +101,8 @@ pub fn CarouselItem(#[prop(optional, into)] class: String, children: Children) -
 pub fn CarouselPrevious(#[prop(optional, into)] class: String) -> impl IntoView {
 	let ctx = expect_context::<CarouselContext>();
 	let pos = match ctx.orientation {
-		CarouselOrientation::Horizontal => CAROUSEL_PREVIOUS_HORIZONTAL,
-		CarouselOrientation::Vertical => CAROUSEL_PREVIOUS_VERTICAL,
+		Orientation::Horizontal => CAROUSEL_PREVIOUS_HORIZONTAL,
+		Orientation::Vertical => CAROUSEL_PREVIOUS_VERTICAL,
 	};
 	let cls = cn!(CAROUSEL_NAV, pos, class);
 	view! {
@@ -121,9 +124,9 @@ pub fn CarouselPrevious(#[prop(optional, into)] class: String) -> impl IntoView 
 				stroke-linejoin="round"
 				aria-hidden="true"
 			>
-				<path d="m15 18-6-6 6-6"></path>
+				{icon_shapes(Icon::ChevronLeft)}
 			</svg>
-			<span class="sr-only">"Previous slide"</span>
+			<span class="sr-only">{copy::CAROUSEL_PREVIOUS}</span>
 		</Button>
 	}
 }
@@ -132,8 +135,8 @@ pub fn CarouselPrevious(#[prop(optional, into)] class: String) -> impl IntoView 
 pub fn CarouselNext(#[prop(optional, into)] class: String) -> impl IntoView {
 	let ctx = expect_context::<CarouselContext>();
 	let pos = match ctx.orientation {
-		CarouselOrientation::Horizontal => CAROUSEL_NEXT_HORIZONTAL,
-		CarouselOrientation::Vertical => CAROUSEL_NEXT_VERTICAL,
+		Orientation::Horizontal => CAROUSEL_NEXT_HORIZONTAL,
+		Orientation::Vertical => CAROUSEL_NEXT_VERTICAL,
 	};
 	let cls = cn!(CAROUSEL_NAV, pos, class);
 	view! {
@@ -155,9 +158,9 @@ pub fn CarouselNext(#[prop(optional, into)] class: String) -> impl IntoView {
 				stroke-linejoin="round"
 				aria-hidden="true"
 			>
-				<path d="m9 18 6-6-6-6"></path>
+				{icon_shapes(Icon::ChevronRight)}
 			</svg>
-			<span class="sr-only">"Next slide"</span>
+			<span class="sr-only">{copy::CAROUSEL_NEXT}</span>
 		</Button>
 	}
 }
@@ -188,7 +191,7 @@ pub fn CarouselEdgeFade(#[prop(optional, into)] class: String) -> impl IntoView 
 
 #[derive(Clone, Copy)]
 struct CarouselContext {
-	orientation: CarouselOrientation,
+	orientation: Orientation,
 	index: Controllable<usize>,
 	slides: RwSignal<uikit::Carousel>,
 }

@@ -797,7 +797,7 @@ fn p_tabs_siblings() -> Element {
 			}
 			TabsContent { value: "one", "Panel one" }
 		}
-		Tabs { default_value: "two", orientation: TabsOrientation::Vertical,
+		Tabs { default_value: "two", orientation: Orientation::Vertical,
 			TabsList {
 				TabsTrigger { value: "one", "One" }
 				TabsTrigger { value: "two", "Two" }
@@ -835,7 +835,7 @@ fn p_carousel_siblings() -> Element {
 			}
 			CarouselNext {}
 		}
-		Carousel { orientation: CarouselOrientation::Vertical,
+		Carousel { orientation: Orientation::Vertical,
 			CarouselContent {
 				CarouselItem { "1" }
 			}

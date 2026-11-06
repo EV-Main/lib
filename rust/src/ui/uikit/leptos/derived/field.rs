@@ -1,6 +1,6 @@
+pub use ev_lib_classes::FieldLegendVariant;
 use leptos::prelude::*;
 
-pub use crate::ui::uikit::core::FieldLegendVariant;
 use crate::{
 	cn,
 	ui::uikit::leptos::{

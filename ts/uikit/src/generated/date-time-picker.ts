@@ -11,3 +11,13 @@ export const DATE_TIME_PICKER_TIME_INPUT = "w-14 text-center tabular-nums";
 export const DATE_TIME_PICKER_TIME_SEPARATOR = "text-ink-soft select-none";
 
 export const DATE_TIME_PICKER_CLEAR = "ml-auto";
+
+export const DATE_TIME_PICKER_LABELS = {
+  "clear": "Clear",
+  "close": "Close",
+  "dialog": "Choose date and time",
+  "hours": "Hours",
+  "minutes": "Minutes",
+  "nextMonth": "Next month",
+  "previousMonth": "Previous month",
+} as const;

@@ -1,20 +1,14 @@
 use std::collections::BTreeSet;
 
+use ev_lib_classes::Orientation;
+
 use crate::ui::uikit::core::KeyInput;
 
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
-pub enum CarouselOrientation {
-	#[default]
-	Horizontal,
-	Vertical,
-}
-impl CarouselOrientation {
-	/// The track's `transform` showing slide `index`.
-	pub(crate) fn transform(self, index: usize) -> String {
-		match self {
-			Self::Horizontal => format!("translate3d(-{}%, 0, 0)", index * 100),
-			Self::Vertical => format!("translate3d(0, -{}%, 0)", index * 100),
-		}
+/// The track's `transform` showing slide `index`.
+pub(crate) fn carousel_transform(orientation: Orientation, index: usize) -> String {
+	match orientation {
+		Orientation::Horizontal => format!("translate3d(-{}%, 0, 0)", index * 100),
+		Orientation::Vertical => format!("translate3d(0, -{}%, 0)", index * 100),
 	}
 }
 

@@ -15,3 +15,7 @@ export const SYSTEM_BANNER_BODY_AFTER_TITLE = "text-ink-soft";
 export const SYSTEM_BANNER_ACTION = "shrink-0";
 
 export const SYSTEM_BANNER_DISMISS = "-my-0.5 -mr-1 flex size-6 shrink-0 items-center justify-center rounded-control opacity-70 outline-none transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring";
+
+export const SYSTEM_BANNER_LABELS = {
+  "dismiss": "Dismiss",
+} as const;

@@ -3,8 +3,9 @@
 //! the permission gets no action, or the host's own (request access).
 
 use dioxus::prelude::*;
+use ev_lib_classes::Icon;
 
-use crate::ui::uikit::dioxus::{Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyMediaVariant, EmptyTitle};
+use crate::ui::uikit::dioxus::{Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyMediaVariant, EmptyTitle, primitives::icon_shapes};
 
 #[component]
 pub fn AuthWall(
@@ -26,7 +27,6 @@ pub fn AuthWall(
 	}
 }
 
-// lucide `lock`, inlined so the kit keeps its zero-icon-dep footprint.
 fn lock_icon() -> Element {
 	rsx! {
 		svg {
@@ -38,8 +38,7 @@ fn lock_icon() -> Element {
 			stroke_linecap: "round",
 			stroke_linejoin: "round",
 			"aria-hidden": "true",
-			rect { x: "3", y: "11", width: "18", height: "11", rx: "2", ry: "2" }
-			path { d: "M7 11V7a5 5 0 0 1 10 0v4" }
+			{icon_shapes(Icon::Lock)}
 		}
 	}
 }

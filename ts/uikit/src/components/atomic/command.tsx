@@ -7,20 +7,8 @@ import { DismissableLayerScope, useDismissableLayer, useModalScrimStyle } from "
 import { useFocusScope } from "../../primitives/focus-scope";
 import { mergeRefs } from "../../primitives/merge-refs";
 import { Portal } from "../../primitives/portal";
-import {
-  COMMAND_DIALOG_COMMAND,
-  COMMAND_DIALOG_CONTENT,
-  COMMAND_DIALOG_OVERLAY,
-  COMMAND_EMPTY,
-  COMMAND_GROUP,
-  COMMAND_INPUT,
-  COMMAND_INPUT_WRAPPER,
-  COMMAND_ITEM,
-  COMMAND_LIST,
-  COMMAND_ROOT,
-  COMMAND_SEPARATOR,
-  COMMAND_SHORTCUT,
-} from "../../generated/command";
+import { COMMAND_DIALOG_COMMAND, COMMAND_DIALOG_CONTENT, COMMAND_DIALOG_OVERLAY, COMMAND_EMPTY, COMMAND_GROUP, COMMAND_INPUT, COMMAND_INPUT_ICON, COMMAND_INPUT_WRAPPER, COMMAND_ITEM, COMMAND_LIST, COMMAND_ROOT, COMMAND_SEPARATOR, COMMAND_SHORTCUT } from "../../generated/command";
+import { iconShapes } from "../../icons/icon-shapes";
 
 interface CommandContextValue {
   search: string;
@@ -362,11 +350,10 @@ export function CommandInput({
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="size-4 shrink-0 opacity-50"
+        className={COMMAND_INPUT_ICON}
         aria-hidden="true"
       >
-        <circle cx="11" cy="11" r="8" />
-        <path d="m21 21-4.3-4.3" />
+        {iconShapes("search")}
       </svg>
       <input
         type="text"

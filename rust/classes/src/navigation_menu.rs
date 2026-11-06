@@ -37,3 +37,6 @@ pub const NAVIGATION_MENU_VIEWPORT: &str = "origin-top-center bg-popover text-in
                               data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 \
                               relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden \
                               rounded-panel border border-border shadow md:w-[var(--radix-navigation-menu-viewport-width)]";
+pub const NAVIGATION_MENU_TRIGGER_CHEVRON: &str = "relative top-[1px] ml-1 size-3 transition duration-300 group-data-[state=open]:rotate-180";
+pub const NAVIGATION_MENU_VIEWPORT_WRAPPER: &str = "absolute top-full left-0 isolate z-50 flex justify-center";
+pub const NAVIGATION_MENU_INDICATOR_ARROW: &str = "bg-border relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm shadow-md";

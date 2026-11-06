@@ -1,6 +1,7 @@
+pub use ev_lib_classes::ConfirmDialogLabels;
+use ev_lib_classes::Icon;
 use leptos::prelude::*;
 
-pub use crate::ui::uikit::core::ConfirmDialogLabels;
 use crate::{
 	cn,
 	ui::uikit::{
@@ -10,7 +11,7 @@ use crate::{
 			CONFIRM_DIALOG_DESCRIPTION, CONFIRM_DIALOG_ERROR, CONFIRM_DIALOG_FOOTER, CONFIRM_DIALOG_HEADER, CONFIRM_DIALOG_ICON, CONFIRM_DIALOG_PENDING, CONFIRM_DIALOG_SPINNER,
 			CONFIRM_DIALOG_TEXT, CONFIRM_DIALOG_TITLE, Size, Spinner, Tone, button_classes,
 			icon_button::Glyph,
-			primitives::{use_controllable, use_stable_id},
+			primitives::{icon_shapes, use_controllable, use_stable_id},
 		},
 	},
 };
@@ -100,7 +101,7 @@ pub fn ConfirmDialog(
 	let title_id = use_stable_id("confirm-dialog-title");
 	let description_id = use_stable_id("confirm-dialog-description");
 	let described_by = description.as_ref().map(|_| description_id.clone());
-	let error_label = labels.error.unwrap_or_else(|| String::from("Something went wrong"));
+	let error_label = labels.error;
 	let shown_error = move || {
 		error.get().filter(|_| flow.with(ConfirmFlow::shows_error)).map(|e| {
 			let message = if e.is_empty() { error_label.clone() } else { e };
@@ -116,7 +117,7 @@ pub fn ConfirmDialog(
 	let confirm_variant = if danger { ButtonVariant::Destructive } else { ButtonVariant::Primary };
 	let cancel_cls = button_classes(&ButtonVariant::Ghost, Size::Xs, false, None, CONFIRM_DIALOG_PENDING);
 	let confirm_cls = button_classes(&confirm_variant, Size::Xs, false, None, CONFIRM_DIALOG_PENDING);
-	let cancel_label = labels.cancel.unwrap_or_else(|| String::from("Cancel"));
+	let cancel_label = labels.cancel;
 	let cls = cn!(CONFIRM_DIALOG_CONTENT, tone.as_class(), class);
 	let trigger_cls = button_classes(&ButtonVariant::Outline, Size::Xs, false, None, &trigger_class);
 	let labelled_by = title_id.clone();
@@ -127,13 +128,7 @@ pub fn ConfirmDialog(
 		let (cancel_cls, confirm_cls) = (cancel_cls.clone(), confirm_cls.clone());
 		let glyph = match icon {
 			Some(icon) => icon.run(),
-			None => view! {
-				<Glyph class="size-4">
-					<circle cx="12" cy="12" r="10" />
-					<path d="M12 8v4M12 16h.01" />
-				</Glyph>
-			}
-			.into_any(),
+			None => view! { <Glyph class="size-4">{icon_shapes(Icon::Alert)}</Glyph> }.into_any(),
 		};
 		view! {
 			<AlertDialogHeader class=CONFIRM_DIALOG_HEADER>

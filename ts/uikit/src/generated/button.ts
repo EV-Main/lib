@@ -2,6 +2,8 @@
 
 export const BUTTON_BASE = "inline-flex h-(--control-box) items-center justify-center gap-2 whitespace-nowrap rounded-control font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-[calc(1em+2px)] shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error";
 
+export const BUTTON_ICON = "aspect-square px-0";
+
 export const buttonVariantClasses = {
   "primary": "bg-primary text-on-primary hover:bg-primary-hover focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
   "secondary": "bg-secondary text-on-secondary hover:bg-[image:linear-gradient(var(--hover),var(--hover))] focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
@@ -11,8 +13,6 @@ export const buttonVariantClasses = {
   "link": "text-primary-ink underline-offset-4 hover:underline",
 } as const;
 export type ButtonVariant = keyof typeof buttonVariantClasses;
-
-export const BUTTON_ICON = "aspect-square px-0";
 
 export const buttonSizeClasses = {
   "xs": "gap-1 px-2 has-[>svg]:px-1.5",

@@ -1,17 +1,15 @@
+use ev_lib_classes::{Icon, copy};
 use leptos::prelude::*;
 
 pub use crate::ui::uikit::core::HeaderNotification;
 use crate::{
 	cn,
-	ui::uikit::{
-		core::CTRL_K,
-		leptos::{
-			HEADER_BALANCE_BASE, HEADER_BALANCE_CHEVRON, HEADER_BALANCE_FIGURE, HEADER_BALANCE_INTERACTIVE, HEADER_BALANCE_LABEL, HEADER_BALANCE_SKELETON, HEADER_SEARCH_BASE,
-			HEADER_SEARCH_PLACEHOLDER, ICON_BUTTON_BASE, IconButtonVariant, Kbd, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER, NOTIFICATION_BELL_ITEM,
-			NOTIFICATION_BELL_ITEM_BODY, NOTIFICATION_BELL_ITEM_DESCRIPTION, NOTIFICATION_BELL_ITEM_DOT, NOTIFICATION_BELL_ITEM_DOT_READ, NOTIFICATION_BELL_ITEM_DOT_UNREAD,
-			NOTIFICATION_BELL_ITEM_TIME, NOTIFICATION_BELL_ITEM_TITLE, NOTIFICATION_BELL_ITEM_TITLE_UNREAD, NOTIFICATION_BELL_LIST, NOTIFICATION_BELL_TRIGGER, NOTIFICATION_DOT, Popover,
-			PopoverContent, PopoverTrigger, Size, Skeleton, Tone, button_classes, icon_button::Glyph, icon_button_size_class,
-		},
+	ui::uikit::leptos::{
+		HEADER_BALANCE_BASE, HEADER_BALANCE_CHEVRON, HEADER_BALANCE_FIGURE, HEADER_BALANCE_INTERACTIVE, HEADER_BALANCE_LABEL, HEADER_BALANCE_SKELETON, HEADER_SEARCH_BASE,
+		HEADER_SEARCH_PLACEHOLDER, ICON_BUTTON_BASE, IconButtonVariant, Kbd, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER,
+		NOTIFICATION_BELL_ITEM, NOTIFICATION_BELL_ITEM_BODY, NOTIFICATION_BELL_ITEM_DESCRIPTION, NOTIFICATION_BELL_ITEM_DOT, NOTIFICATION_BELL_ITEM_DOT_READ,
+		NOTIFICATION_BELL_ITEM_DOT_UNREAD, NOTIFICATION_BELL_ITEM_TIME, NOTIFICATION_BELL_ITEM_TITLE, NOTIFICATION_BELL_ITEM_TITLE_UNREAD, NOTIFICATION_BELL_LIST, NOTIFICATION_BELL_TRIGGER,
+		NOTIFICATION_DOT, Popover, PopoverContent, PopoverTrigger, Size, Skeleton, Tone, button_classes, icon_button::Glyph, icon_button_size_class, primitives::icon_shapes,
 	},
 };
 
@@ -55,7 +53,7 @@ pub fn HeaderBalance(
 		<span class=HEADER_BALANCE_LABEL>
 			{match label {
 				Some(label) => label.run(),
-				None => "Balance:".into_any(),
+				None => copy::HEADER_BALANCE.into_any(),
 			}}
 		</span>
 		{move || {
@@ -89,25 +87,32 @@ pub fn HeaderBalance(
 			on:click=move |e| on_click.run(e)
 		>
 			{body}
-			<Glyph class=HEADER_BALANCE_CHEVRON>
-				<path d="m6 9 6 6 6-6" />
-			</Glyph>
+			<Glyph class=HEADER_BALANCE_CHEVRON>{icon_shapes(Icon::ChevronDown)}</Glyph>
 		</button>
 	}
 	.into_any()
 }
 
 /// The bell's own strings; every one defaults to English.
-#[derive(Clone, Default)]
+#[derive(Clone)]
 pub struct NotificationBellLabels {
-	/// The bell's name; "Notifications".
-	pub trigger: Option<String>,
+	/// The bell's name.
+	pub trigger: String,
 	/// Spoken after the name when something is unread; gets the count.
 	/// "{n} unread". A callback, not a template, so a language can pick its
 	/// plural form by the count.
 	pub unread: Option<Callback<usize, String>>,
-	/// Shown in place of an empty list; "No notifications".
-	pub empty: Option<String>,
+	/// Shown in place of an empty list.
+	pub empty: String,
+}
+impl Default for NotificationBellLabels {
+	fn default() -> Self {
+		Self {
+			trigger: copy::NOTIFICATION_BELL_TRIGGER.to_owned(),
+			unread: None,
+			empty: copy::NOTIFICATION_BELL_EMPTY.to_owned(),
+		}
+	}
 }
 
 /// The bell with an unread dot; the list opens in a popover. Mirrors the TS
@@ -128,7 +133,7 @@ pub fn NotificationBell(
 	#[prop(optional, into)] class: String,
 ) -> impl IntoView {
 	let unread = Memo::new(move |_| notifications.with(|ns| ns.iter().filter(|n| n.unread).count()));
-	let name = labels.trigger.unwrap_or_else(|| String::from("Notifications"));
+	let name = labels.trigger;
 	let say = labels.unread;
 	let spoken = move || match (unread.get(), say) {
 		(0, _) => name.clone(),
@@ -144,14 +149,11 @@ pub fn NotificationBell(
 		NOTIFICATION_BELL_TRIGGER,
 		class
 	);
-	let empty = labels.empty.unwrap_or_else(|| String::from("No notifications"));
+	let empty = labels.empty;
 	view! {
 		<Popover>
 			<PopoverTrigger class=trigger_cls aria_label=Signal::derive(spoken)>
-				<Glyph class="size-4">
-					<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-					<path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-				</Glyph>
+				<Glyph class="size-4">{icon_shapes(Icon::Bell)}</Glyph>
 				{move || {
 					(unread.get() > 0)
 						.then(|| {
@@ -204,12 +206,12 @@ pub fn HeaderSearch(
 	#[prop(optional)] on_click: Option<Callback<leptos::ev::MouseEvent>>,
 	#[prop(optional, into)] class: String,
 ) -> impl IntoView {
-	let platform = RwSignal::new(CTRL_K);
+	let platform = RwSignal::new(copy::CTRL_K);
 	// Read after mount, so the server render and the first client render agree.
 	#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
 	Effect::new(move |_| platform.set(crate::ui::uikit::host::platform_shortcut()));
 	let cls = cn!(HEADER_SEARCH_BASE, class);
-	let placeholder = placeholder.unwrap_or_else(|| String::from("Search or jump to…"));
+	let placeholder = placeholder.unwrap_or_else(|| copy::HEADER_SEARCH.to_owned());
 	let hint = move || shortcut.clone().unwrap_or_else(|| String::from(platform.get()));
 	view! {
 		<button
@@ -222,10 +224,7 @@ pub fn HeaderSearch(
 				}
 			}
 		>
-			<Glyph class="size-4">
-				<circle cx="11" cy="11" r="8" />
-				<path d="m21 21-4.3-4.3" />
-			</Glyph>
+			<Glyph class="size-4">{icon_shapes(Icon::Search)}</Glyph>
 			<span class=HEADER_SEARCH_PLACEHOLDER>{placeholder}</span>
 			<Kbd>{hint}</Kbd>
 		</button>

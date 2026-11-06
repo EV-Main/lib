@@ -2,13 +2,6 @@
 
 export const FIELD_BASE = "group/field flex w-full gap-3 data-[invalid=true]:text-accent-error";
 
-export const fieldOrientation = {
-  "vertical": "flex-col [&>*]:w-full [&>.sr-only]:w-auto",
-  "horizontal": "flex-row items-center [&>[data-slot=field-label]]:flex-auto has-[>[data-slot=field-content]]:items-start has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px",
-  "responsive": "flex-col [&>*]:w-full [&>.sr-only]:w-auto @md/field-group:flex-row @md/field-group:items-center @md/field-group:[&>*]:w-auto @md/field-group:[&>[data-slot=field-label]]:flex-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px",
-} as const;
-export type FieldOrientation = keyof typeof fieldOrientation;
-
 export const FIELD_SET = "flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3";
 
 export const FIELD_LEGEND = "mb-3 font-medium data-[variant=legend]:text-base data-[variant=label]:text-sm";
@@ -30,3 +23,13 @@ export const FIELD_SEPARATOR_LINE = "absolute inset-0 top-1/2 shrink-0 bg-border
 export const FIELD_SEPARATOR_CONTENT = "bg-background text-ink-soft relative mx-auto block w-fit px-2";
 
 export const FIELD_ERROR = "text-accent-error text-sm font-normal";
+
+export const fieldOrientation = {
+  "vertical": "flex-col [&>*]:w-full [&>.sr-only]:w-auto",
+  "horizontal": "flex-row items-center [&>[data-slot=field-label]]:flex-auto has-[>[data-slot=field-content]]:items-start has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px",
+  "responsive": "flex-col [&>*]:w-full [&>.sr-only]:w-auto @md/field-group:flex-row @md/field-group:items-center @md/field-group:[&>*]:w-auto @md/field-group:[&>[data-slot=field-label]]:flex-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px",
+} as const;
+export type FieldOrientation = keyof typeof fieldOrientation;
+
+export const FIELD_LEGEND_VARIANTS = ["legend", "label"] as const;
+export type FieldLegendVariant = (typeof FIELD_LEGEND_VARIANTS)[number];

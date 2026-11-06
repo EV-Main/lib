@@ -1,9 +1,12 @@
+use ev_lib_classes::{
+	FOOTER_BRAND, FOOTER_COPYRIGHT, FOOTER_DESCRIPTION, FOOTER_GRID, FOOTER_HEADING, FOOTER_LEGAL_LINK, FOOTER_LEGAL_LINKS, FOOTER_LEGAL_SEPARATOR, FOOTER_LOCKUP, FOOTER_LOCKUP_TEXT,
+	FOOTER_NAV_COLUMN, FOOTER_NAV_LINK, FOOTER_NAV_LIST, FOOTER_NEWSLETTER_BLURB, FOOTER_NEWSLETTER_COLUMN, FOOTER_OFFICE_NAME, FOOTER_OFFICES_LIST, FOOTER_ROOT, FOOTER_TAGLINE,
+	FOOTER_VERSION, FOOTER_WIDE_COLUMN, copy,
+};
+pub use ev_lib_classes::{FooterLink, FooterLinkGroup, FooterOffice};
 use leptos::prelude::*;
 
-pub use crate::ui::uikit::core::{FooterLink, FooterLinkGroup, FooterOffice};
 use crate::ui::uikit::leptos::Container;
-
-const HEADING: &str = "font-mono text-xs text-ink uppercase tracking-widest mb-6";
 
 /// A 12-col footer grid — brand 3 | sitemap groups 2 each | offices 3 |
 /// newsletter 2 — with the legal links and copyright line. On mobile the sitemap
@@ -21,10 +24,10 @@ pub fn Footer(
 	mark: Option<ViewFn>,
 	#[prop(optional, into)] tagline: Option<String>,
 	#[prop(optional)] offices: Vec<FooterOffice>,
-	#[prop(default = "Offices".to_string(), into)] offices_heading: String,
+	#[prop(default = copy::FOOTER_OFFICES.to_owned(), into)] offices_heading: String,
 	#[prop(optional)] legal_links: Vec<FooterLink>,
 	#[prop(optional, into)] newsletter: Option<ViewFn>,
-	#[prop(default = "Newsletter".to_string(), into)] newsletter_heading: String,
+	#[prop(default = copy::FOOTER_NEWSLETTER.to_owned(), into)] newsletter_heading: String,
 	#[prop(optional, into)] newsletter_blurb: String,
 	#[prop(optional, into)] version: Option<String>,
 	#[prop(optional, into)] commit_href: Option<String>,
@@ -35,8 +38,8 @@ pub fn Footer(
 		.enumerate()
 		.map(|(i, link)| {
 			view! {
-				{(i > 0).then(|| view! { <span class="text-ink/20">"|"</span> })}
-				<a href=link.href class="hover:underline">
+				{(i > 0).then(|| view! { <span class=FOOTER_LEGAL_SEPARATOR>"|"</span> })}
+				<a href=link.href class=FOOTER_LEGAL_LINK>
 					{link.label}
 				</a>
 			}
@@ -52,10 +55,7 @@ pub fn Footer(
 				.map(|link| {
 					view! {
 						<li>
-							<a
-								href=link.href
-								class="text-xs font-light text-ink/70 hover:text-accent-debug transition-colors"
-							>
+							<a href=link.href class=FOOTER_NAV_LINK>
 								{link.label}
 							</a>
 						</li>
@@ -63,9 +63,9 @@ pub fn Footer(
 				})
 				.collect_view();
 			view! {
-				<nav aria-label=label class="lg:col-span-2">
-					<h4 class=HEADING>{group.heading}</h4>
-					<ul class="space-y-3">{links}</ul>
+				<nav aria-label=label class=FOOTER_NAV_COLUMN>
+					<h4 class=FOOTER_HEADING>{group.heading}</h4>
+					<ul class=FOOTER_NAV_LIST>{links}</ul>
 				</nav>
 			}
 		})
@@ -76,69 +76,59 @@ pub fn Footer(
 			.map(|office| {
 				view! {
 					<li>
-						<strong class="text-ink block font-mono text-[10px] uppercase tracking-wider mb-1">
-							{office.name}
-						</strong>
+						<strong class=FOOTER_OFFICE_NAME>{office.name}</strong>
 						{office.address}
 					</li>
 				}
 			})
 			.collect_view();
 		view! {
-			<div class="col-span-2 lg:col-span-3">
-				<h4 class=HEADING>{offices_heading}</h4>
-				<ul class="space-y-4 text-xs text-ink/70 font-light leading-relaxed">{items}</ul>
+			<div class=FOOTER_WIDE_COLUMN>
+				<h4 class=FOOTER_HEADING>{offices_heading}</h4>
+				<ul class=FOOTER_OFFICES_LIST>{items}</ul>
 			</div>
 		}
 	});
 	let newsletter = newsletter.map(|newsletter| {
 		view! {
-			<div class="col-span-2 lg:col-span-2">
-				<h4 class=HEADING>{newsletter_heading}</h4>
+			<div class=FOOTER_NEWSLETTER_COLUMN>
+				<h4 class=FOOTER_HEADING>{newsletter_heading}</h4>
 				// What the source's `<Tier tier="alt"><Text>` emits: the alt body size + the info variant, then the caller's mb-4.
-				<p class="text-sm sm:text-xs font-light leading-relaxed text-ink/70 mb-4">
-					{newsletter_blurb}
-				</p>
+				<p class=FOOTER_NEWSLETTER_BLURB>{newsletter_blurb}</p>
 				{newsletter.run()}
 			</div>
 		}
 	});
 	view! {
-		<footer class="bg-background border-t border-ink/10 py-16" data-slot="footer">
+		<footer class=FOOTER_ROOT data-slot="footer">
 			{children.map(|c| c())}
 			<Container>
-				<div class="grid grid-cols-2 gap-x-8 gap-y-8 lg:grid-cols-12 mb-12">
-					<div class="col-span-2 lg:col-span-3">
-						<div class="flex items-center gap-3 mb-6">
-							{mark.map(|m| m.run())} <div class="flex flex-col">
-								<span class="font-serif font-bold text-base tracking-wider text-ink">{brand}</span>
+				<div class=FOOTER_GRID>
+					<div class=FOOTER_WIDE_COLUMN>
+						<div class=FOOTER_LOCKUP>
+							{mark.map(|m| m.run())} <div class=FOOTER_LOCKUP_TEXT>
+								<span class=FOOTER_BRAND>{brand}</span>
 								{tagline
 									.map(|tagline| {
-										view! {
-											<span class="text-[8px] font-mono tracking-[0.3em] text-accent-debug uppercase">
-												{tagline}
-											</span>
-										}
+										view! { <span class=FOOTER_TAGLINE>{tagline}</span> }
 									})}
 							</div>
 						</div>
-						<p class="text-ink/40 text-xs font-light max-w-sm leading-relaxed mb-6">
-							{description}
-						</p>
-						<div class="flex gap-4 text-xs font-mono text-accent-debug">{legal}</div>
+						<p class=FOOTER_DESCRIPTION>{description}</p>
+						<div class=FOOTER_LEGAL_LINKS>{legal}</div>
 					</div>
 					{groups}
 					{offices}
 					{newsletter}
 				</div>
-				<div class="border-t border-ink/10 pt-8 text-[10px] font-mono text-ink/40">
+				<div class=FOOTER_COPYRIGHT>
 					<p>
 						{copyright}
 						{version
 							.map(|v| {
 								view! {
 									" "
-									<a href=commit_href class="text-ink/30">
+									<a href=commit_href class=FOOTER_VERSION>
 										{v}
 									</a>
 								}

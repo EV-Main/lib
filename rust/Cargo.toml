@@ -125,16 +125,18 @@ settings = []
 settings_drift = ["settings", "dep:tokio", "tokio?/time", "dep:tracing"]
 
 # TypeScript emitted from Rust types and values, for a repo's own `gen` step
-# (docs/ARCHITECTURE.md, "Generated TypeScript"). Build-time only.
-ts_gen = ["dep:serde_json", "dep:ts-rs"]
+# (docs/ARCHITECTURE.md, "Generated TypeScript"). Build-time only. `strum` is
+# what lets gen walk a zero-dep kernel enum without the kernel depending on it.
+ts_gen = ["dep:serde_json", "dep:ts-rs", "dep:strum", "dep:serde"]
 
 # Shared domain TypeObjects — PhoneNumber, Email, … — with validation.
 # Zero runtime deps, wasm-safe.
 types = []
 
-# Producer SDK for landing-host microfrontends (see `mfe.rs` + the `mfe!` macro).
-# wasm-only: the module is gated to `target_arch = "wasm32"`, so this is inert on
-# native. A producer crate enables it; landing never compiles ev_lib at all.
+# Producer SDK for landing-host microfrontends (see `mfe/` + the `mfe!` macro).
+# The producer is gated to `target_arch = "wasm32"`; the `MfeManifest` contract
+# is not, and `serde` is how a producer writes it out as `mfe.json`. A producer
+# crate enables it; landing never compiles ev_lib at all.
 # `wasm` pulls `dioxus?/web` + `web-sys`; `document` is for the bundle's `<link>`;
 # `launch` is the `LaunchBuilder` behind `launch_into`, which a producer crate
 # would otherwise have to enable itself for this feature to compile.
@@ -142,6 +144,7 @@ types = []
 # invocation, so an element remote cannot ship without having resolved its
 # locale — which is the failure this pairing exists to make impossible.
 mfe = [
+    "dep:serde",
     "dep:dioxus",
     "dep:wasm-bindgen",
     "dep:js-sys",

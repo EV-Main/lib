@@ -1,12 +1,15 @@
 use dioxus::prelude::*;
+pub use ev_lib_classes::{AsideHeaderLabels, AsidePanelMode};
+use ev_lib_classes::{Icon, copy};
 
-pub use crate::ui::uikit::core::{AsideCollapse, AsideHeaderLabels, AsidePanelMode};
+pub use crate::ui::uikit::core::AsideCollapse;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		ASIDE_BODY, ASIDE_FOOTER, ASIDE_HEADER_BACK_ICON, ASIDE_HEADER_BASE, ASIDE_HEADER_CLOSE_ICON, ASIDE_HEADER_TITLE, ASIDE_PANEL_DOCKED, ASIDE_PANEL_DRAWER, ASIDE_PANEL_NARROW_ONLY,
 		ASIDE_PANEL_SHEET, ASIDE_PANEL_WIDE_ONLY, ASIDE_PANEL_WIDE_ONLY_WRAPPER, ASIDE_RAIL_BASE, ASIDE_RAIL_SPACER, AsidePanelSide, Drawer, DrawerContent, DrawerDirection, IconButton,
-		Sheet, SheetContent, Size, primitives::Side,
+		Sheet, SheetContent, Size,
+		primitives::{Side, icon_shapes},
 	},
 };
 
@@ -26,15 +29,15 @@ pub fn AsideHeader(
 	#[props(default)] labels: AsideHeaderLabels,
 	#[props(default)] class: String,
 ) -> Element {
-	let back_label = labels.back.unwrap_or_else(|| String::from("Back"));
-	let close_label = labels.close.unwrap_or_else(|| String::from("Close"));
+	let back_label = labels.back;
+	let close_label = labels.close;
 	let cls = cn!(ASIDE_HEADER_BASE, class);
 	rsx! {
 		div { "data-slot": "aside-header", class: cls,
 			if let Some(back) = on_back {
 				IconButton { aria_label: back_label, size: Size::Sm, onclick: move |_| back.call(()),
 					Glyph { class: ASIDE_HEADER_BACK_ICON,
-						path { d: "m9 18 6-6-6-6" }
+						{icon_shapes(Icon::ChevronRight)}
 					}
 				}
 			}
@@ -43,7 +46,7 @@ pub fn AsideHeader(
 			if let Some(close) = on_close {
 				IconButton { aria_label: close_label, size: Size::Sm, onclick: move |_| close.call(()),
 					Glyph { class: ASIDE_HEADER_CLOSE_ICON,
-						path { d: "M18 6 6 18M6 6l12 12" }
+						{icon_shapes(Icon::X)}
 					}
 				}
 			}
@@ -74,7 +77,7 @@ pub fn AsideRail(
 	/// The open aside's id; `None` when all are closed.
 	value: Option<String>,
 	on_value_change: EventHandler<Option<String>>,
-	#[props(default = String::from("Panels"))] aria_label: String,
+	#[props(default = copy::ASIDE_RAIL.to_owned())] aria_label: String,
 	#[props(default)] class: String,
 ) -> Element {
 	let cls = cn!(ASIDE_RAIL_BASE, class);
@@ -270,7 +273,7 @@ mod tests {
 					title: rsx! { "Изменить оповещение" },
 					on_back: |_| { BACKS.fetch_add(1, Ordering::SeqCst); },
 					on_close: |_| {},
-					labels: AsideHeaderLabels { back: Some("Назад".into()), ..Default::default() },
+					labels: AsideHeaderLabels { back: "Назад".into(), ..Default::default() },
 				}
 			}
 		}

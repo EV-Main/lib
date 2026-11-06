@@ -1,0 +1,20 @@
+{
+  "fnv1a32": [
+    ["", 2166136261],
+    ["a", 3826002220],
+    ["foobar", 3214735720],
+    ["héllo", 1252296000],
+    ["😀", 866293256],
+    ["exp:loc-1", 3100395682],
+    ["exp:loc-2", 3083618063]
+  ],
+  "pick_variant_for": [
+    [{"variants": ["a", "b", "c"], "holdout": 0.25}, "hero", "loc-1", "a"],
+    [{"variants": ["a", "b", "c"], "holdout": 0.25}, "hero", "loc-2", "c"],
+    [{"variants": ["a", "b", "c"], "holdout": 0.25}, "hero", "loc-3", "a"],
+    [{"variants": ["a", "b", "c"], "holdout": 0.25}, "hero", "loc-4", "a"],
+    [{"variants": ["a", "b", "c"], "holdout": 0.25}, "hero", "loc-5", "c"],
+    [{"variants": ["a", "b", "c"], "holdout": 0.25}, "hero", "loc-6", "b"],
+    [{"variants": ["a", "b", "c"]}, "hero", "loc-4", "b"]
+  ]
+}

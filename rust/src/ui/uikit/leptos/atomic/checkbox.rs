@@ -1,8 +1,12 @@
+use ev_lib_classes::Icon;
 use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{CHECKBOX_BASE, CHECKBOX_INDICATOR, primitives::use_controllable},
+	ui::uikit::leptos::{
+		CHECKBOX_BASE, CHECKBOX_INDICATOR,
+		primitives::{icon_shapes, use_controllable},
+	},
 };
 
 #[component]
@@ -43,7 +47,7 @@ pub fn Checkbox(
 									class="size-3.5"
 									aria-hidden="true"
 								>
-									<path d="M20 6 9 17l-5-5"></path>
+									{icon_shapes(Icon::Check)}
 								</svg>
 							</span>
 						}

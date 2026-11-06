@@ -4,6 +4,9 @@ export const ICON_BUTTON_BASE = "text-ink-mid hover:text-ink";
 
 export const ICON_BUTTON_PRESSED = "bg-active text-ink hover:bg-active";
 
+export const ICON_BUTTON_VARIANTS = ["outline", "ghost"] as const;
+export type IconButtonVariant = (typeof ICON_BUTTON_VARIANTS)[number];
+
 export const iconButtonSizeClasses = {
   "sm": "[--control-box:calc(var(--control-h-xs)_-_var(--control-step))]",
   "md": "[--control-box:var(--control-h-xs)]",

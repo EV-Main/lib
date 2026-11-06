@@ -3,9 +3,10 @@ import { cn } from "../../lib/cn";
 import { ICON_BUTTON_BASE, ICON_BUTTON_PRESSED, iconButtonSizeClasses, type IconButtonSize } from "../../generated/icon-button";
 import { buttonVariants } from "../atomic/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../atomic/tooltip";
+import type { IconButtonVariant } from "../../generated/icon-button";
 
 export type { IconButtonSize };
-export type IconButtonVariant = "outline" | "ghost";
+export type { IconButtonVariant };
 
 export interface IconButtonProps extends Omit<React.ComponentPropsWithoutRef<"button">, "aria-label" | "children"> {
   /** Required: a glyph alone names nothing. */

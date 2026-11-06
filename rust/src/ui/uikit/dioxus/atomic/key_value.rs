@@ -2,11 +2,12 @@ use dioxus::{
 	dioxus_core::{DynamicNode, TemplateNode},
 	prelude::*,
 };
+use ev_lib_classes::Icon;
+pub use ev_lib_classes::KeyValueLabels;
 
-pub use crate::ui::uikit::core::KeyValueLabels;
 use crate::{
 	cn,
-	ui::uikit::dioxus::{KEY_VALUE_BASE, KEY_VALUE_COPY, KEY_VALUE_LABEL, KEY_VALUE_ROW, KEY_VALUE_STATUS, KEY_VALUE_VALUE},
+	ui::uikit::dioxus::{KEY_VALUE_BASE, KEY_VALUE_COPY, KEY_VALUE_LABEL, KEY_VALUE_ROW, KEY_VALUE_STATUS, KEY_VALUE_VALUE, primitives::icon_shapes},
 };
 
 /// A small label over its value, with an optional copy button. Mirrors the TS
@@ -37,7 +38,7 @@ pub fn KeyValue(
 		Some(text) => format!("Copy {text}"),
 		None => String::from("Copy"),
 	});
-	let copied_label = labels.copied.unwrap_or_else(|| String::from("Copied"));
+	let copied_label = labels.copied;
 	let has_copy = copy_text.is_some();
 	let on_press = move |_| {
 		let Some(text) = copy_text.clone() else { return };
@@ -115,7 +116,7 @@ fn clear_later(mut copied: Signal<bool>, generation: Signal<u32>, started: u32) 
 		}
 	});
 	// A failed `setTimeout` only leaves the check mark up; nothing to recover.
-	let _ = window.set_timeout_with_callback_and_timeout_and_arguments_0(clear.unchecked_ref::<Function>(), crate::ui::uikit::host::COPIED_MS);
+	let _ = window.set_timeout_with_callback_and_timeout_and_arguments_0(clear.unchecked_ref::<Function>(), ev_lib_classes::KEY_VALUE_COPIED_MS);
 }
 
 #[cfg(all(target_arch = "wasm32", feature = "wasm"))]
@@ -147,8 +148,7 @@ fn Glyph(children: Element) -> Element {
 fn CopyIcon() -> Element {
 	rsx! {
 		Glyph {
-			rect { width: "14", height: "14", x: "8", y: "8", rx: "2" }
-			path { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" }
+			{icon_shapes(Icon::Copy)}
 		}
 	}
 }
@@ -157,7 +157,7 @@ fn CopyIcon() -> Element {
 fn CheckIcon() -> Element {
 	rsx! {
 		Glyph {
-			path { d: "M20 6 9 17l-5-5" }
+			{icon_shapes(Icon::Check)}
 		}
 	}
 }
@@ -245,7 +245,7 @@ mod tests {
 					value: rsx! { "x" },
 					copy_text: "x",
 					copy: |_| {},
-					labels: KeyValueLabels { copied: Some("Скопировано".into()), ..Default::default() },
+					labels: KeyValueLabels { copied: "Скопировано".into(), ..Default::default() },
 				}
 			}
 		}

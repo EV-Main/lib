@@ -10,7 +10,12 @@ import {
   TOASTER_BASE,
   positionClasses,
   type ToastPosition,
+  TOAST_DURATION_MS,
+  TOAST_GAP,
+  TOAST_VISIBLE,
 } from "../../generated/sonner";
+import * as copy from "../../generated/copy";
+import { iconShapes } from "../../icons/icon-shapes";
 import { toneClasses, type Tone } from "../../generated/tone";
 
 export type { ToastPosition };
@@ -43,7 +48,6 @@ export interface Toast {
   state: ToastState;
 }
 
-const DEFAULT_DURATION = 4000;
 
 // Swipe-to-dismiss tuning (pointer physics, TS-only — Rust stays render-only).
 // Values from Sonner: a horizontal drag past 45px, or a flick faster than
@@ -73,7 +77,7 @@ const store = (() => {
       id: ++id,
       message,
       description: opts.description,
-      duration: opts.duration ?? DEFAULT_DURATION,
+      duration: opts.duration ?? TOAST_DURATION_MS,
       tone: opts.tone ?? "neutral",
       state: "open",
     };
@@ -142,10 +146,6 @@ export const toast: ToastFn = Object.assign(
   },
 );
 
-// Sonner-style stacking: only the front VISIBLE_TOASTS show collapsed; GAP is
-// the px between them once expanded.
-const VISIBLE_TOASTS = 3;
-const GAP = 14;
 
 interface ToastItemProps {
   toast: Toast;
@@ -310,7 +310,7 @@ function ToastItem({
       data-tone={t.tone}
       data-state={t.state === "closing" ? "closed" : "open"}
       data-front={index === 0}
-      data-visible={index < VISIBLE_TOASTS}
+      data-visible={index < TOAST_VISIBLE}
       onTransitionEnd={onTransitionEnd}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
@@ -338,7 +338,7 @@ function ToastItem({
       </div>
       <button
         type="button"
-        aria-label="Close"
+        aria-label={copy.CLOSE}
         data-slot="toast-close"
         onClick={() => store.dismiss(t.id)}
         className={TOAST_CLOSE}
@@ -355,7 +355,7 @@ function ToastItem({
           strokeLinejoin="round"
           aria-hidden="true"
         >
-          <path d="M18 6 6 18M6 6l12 12" />
+          {iconShapes("x")}
         </svg>
       </button>
     </li>
@@ -427,10 +427,10 @@ export function Toaster({
     ? (heights.get(ordered[0].id) ?? (known.length ? Math.max(...known) : 0))
     : 0;
 
-  // cumulative offset: heights of the toasts in front of this one + index * GAP
+  // cumulative offset: heights of the toasts in front of this one + index * TOAST_GAP
   let sum = 0;
   const offsets = ordered.map((t, i) => {
-    const o = sum + i * GAP;
+    const o = sum + i * TOAST_GAP;
     sum += heights.get(t.id) ?? 0;
     return o;
   });
@@ -447,7 +447,7 @@ export function Toaster({
       style={
         {
           "--front-height": `${frontHeight}px`,
-          "--gap": `${GAP}px`,
+          "--gap": `${TOAST_GAP}px`,
         } as React.CSSProperties
       }
       className={cn(

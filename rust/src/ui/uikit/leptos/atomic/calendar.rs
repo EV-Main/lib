@@ -1,19 +1,17 @@
+use ev_lib_classes::{Icon, copy};
 use leptos::prelude::*;
 
 pub use crate::ui::uikit::core::CalendarDate;
 use crate::{
 	cn,
 	ui::uikit::{
-		core::{self as uikit, Day, NEXT_MONTH, NO_CLOCK_MONTH, PREVIOUS_MONTH, WEEKDAYS},
+		core::{self as uikit, Day, NO_CLOCK_MONTH},
 		leptos::{
 			CALENDAR_CAPTION, CALENDAR_DAY_CELL, CALENDAR_DAY_EMPTY, CALENDAR_GRID, CALENDAR_NAV, CALENDAR_ROOT, CALENDAR_WEEK, CALENDAR_WEEKDAY, CALENDAR_WEEKDAY_ROW,
-			primitives::use_controllable,
+			primitives::{icon_shapes, use_controllable},
 		},
 	},
 };
-
-const CHEVRON_LEFT: &str = "m15 18-6-6 6-6";
-const CHEVRON_RIGHT: &str = "m9 18 6-6-6-6";
 
 /// A dep-light single-month, single-date picker. Mirrors the landing
 /// `Calendar`'s class names while replacing `react-day-picker` with hand-rolled
@@ -74,8 +72,8 @@ pub fn Calendar(
 	});
 	let go = move |delta: i32| view.set(view.get_untracked().add_months(delta));
 	let nav_class = grid.with_untracked(uikit::Grid::nav_class);
-	let previous_label = move || previous_month_label.get().unwrap_or_else(|| PREVIOUS_MONTH.to_owned());
-	let next_label = move || next_month_label.get().unwrap_or_else(|| NEXT_MONTH.to_owned());
+	let previous_label = move || previous_month_label.get().unwrap_or_else(|| copy::CALENDAR_PREVIOUS_MONTH.to_owned());
+	let next_label = move || next_month_label.get().unwrap_or_else(|| copy::CALENDAR_NEXT_MONTH.to_owned());
 	let root = cn!(CALENDAR_ROOT, class);
 	view! {
 		<div class=root data-slot="calendar" role="application">
@@ -87,7 +85,7 @@ pub fn Calendar(
 					disabled=disabled
 					on:click=move |_| go(-1)
 				>
-					<Chevron d=CHEVRON_LEFT />
+					<Chevron icon=Icon::ChevronLeft />
 				</button>
 				<div class=CALENDAR_CAPTION data-slot="calendar-caption">
 					{move || grid.with(uikit::Grid::caption)}
@@ -99,13 +97,13 @@ pub fn Calendar(
 					disabled=disabled
 					on:click=move |_| go(1)
 				>
-					<Chevron d=CHEVRON_RIGHT />
+					<Chevron icon=Icon::ChevronRight />
 				</button>
 			</div>
 			<table class=CALENDAR_GRID role="grid">
 				<thead>
 					<tr class=CALENDAR_WEEKDAY_ROW>
-						{WEEKDAYS
+						{copy::WEEKDAYS
 							.map(|wd| {
 								view! {
 									<th class=CALENDAR_WEEKDAY scope="col">
@@ -166,7 +164,7 @@ fn DayCell(day: Option<Day>, on_select: Option<Callback<CalendarDate>>) -> impl 
 }
 
 #[component]
-fn Chevron(d: &'static str) -> impl IntoView {
+fn Chevron(icon: Icon) -> impl IntoView {
 	view! {
 		<svg
 			class="size-4"
@@ -180,7 +178,7 @@ fn Chevron(d: &'static str) -> impl IntoView {
 			stroke-linecap="round"
 			stroke-linejoin="round"
 		>
-			<path d=d></path>
+			{icon_shapes(icon)}
 		</svg>
 	}
 }

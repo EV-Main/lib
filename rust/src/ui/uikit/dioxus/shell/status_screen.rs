@@ -11,11 +11,15 @@
 //! [`Footer`](crate::uikit_dioxus::Footer) render their links.
 
 use dioxus::prelude::*;
+use ev_lib_classes::{
+	Icon, STATUS_SCREEN_ACTION_ICON, STATUS_SCREEN_ACTIONS, STATUS_SCREEN_BODY, STATUS_SCREEN_CODE, STATUS_SCREEN_EYEBROW, STATUS_SCREEN_GLOW, STATUS_SCREEN_LOGO, STATUS_SCREEN_ROOT,
+	STATUS_SCREEN_STACK, STATUS_SCREEN_TITLE, STATUS_SCREEN_TITLE_ACCENT, copy,
+};
 
 pub use crate::ui::uikit::core::{StatusLinkData, status_cta_class};
 use crate::{
 	cn,
-	ui::uikit::dioxus::{Accent, ButtonVariant, Logo, accent_text_class},
+	ui::uikit::dioxus::{Accent, ButtonVariant, Logo, accent_text_class, primitives::icon_shapes},
 };
 
 /// Shared skeleton for the 404 / 403 / 500 status pages: a centred hero with the
@@ -38,25 +42,25 @@ pub fn StatusScreen(
 ) -> Element {
 	let accent_text = accent_text_class(accent);
 	rsx! {
-		section { class: "relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-6 py-32 text-center",
+		section { class: STATUS_SCREEN_ROOT,
 			div {
 				aria_hidden: "true",
 				class: cn!(
-					"pointer-events-none absolute inset-0 opacity-[0.07] [background:radial-gradient(55%_45%_at_50%_30%,currentColor,transparent_70%)]",
+					STATUS_SCREEN_GLOW,
 					accent_text
 				),
 			}
-			div { class: "relative z-10 flex w-full max-w-2xl flex-col items-center",
-				Logo { class: cn!("mb-7 h-10 w-auto", accent_text) }
-				p { class: cn!("mb-6 font-mono text-[11px] uppercase tracking-[0.34em]", accent_text), {eyebrow} }
-				p { class: cn!("font-serif text-[110px] font-medium leading-[0.9] sm:text-[180px]", accent_text), {code} }
-				h1 { class: "mt-4 font-serif text-3xl font-light leading-tight text-ink sm:text-5xl",
+			div { class: STATUS_SCREEN_STACK,
+				Logo { class: cn!(STATUS_SCREEN_LOGO, accent_text) }
+				p { class: cn!(STATUS_SCREEN_EYEBROW, accent_text), {eyebrow} }
+				p { class: cn!(STATUS_SCREEN_CODE, accent_text), {code} }
+				h1 { class: STATUS_SCREEN_TITLE,
 					{headline_lead}
-					span { class: cn!("font-serif italic", accent_text), {headline_accent} }
+					span { class: cn!(STATUS_SCREEN_TITLE_ACCENT, accent_text), {headline_accent} }
 					{headline_tail}
 				}
-				p { class: "mx-auto mt-5 max-w-md text-sm leading-relaxed text-ink/60 sm:text-base", {subtext} }
-				div { class: "mt-9 flex flex-col items-center gap-3 sm:flex-row",
+				p { class: STATUS_SCREEN_BODY, {subtext} }
+				div { class: STATUS_SCREEN_ACTIONS,
 					{children}
 					for link in links.iter() {
 						a {
@@ -80,20 +84,20 @@ pub fn NotFound(#[props(default = "/".to_string())] home_href: String, #[props(d
 	rsx! {
 		StatusScreen {
 			accent: Accent::Debug,
-			eyebrow: "Page not found",
+			eyebrow: copy::NOT_FOUND_EYEBROW,
 			code: "404",
-			headline_lead: "You've reached ",
-			headline_accent: "open water",
-			subtext: "The page you're looking for has drifted off our coastline — moved, renamed, or never charted. Let's get you back to shore.",
+			headline_lead: copy::NOT_FOUND_HEADLINE_LEAD,
+			headline_accent: copy::NOT_FOUND_HEADLINE_ACCENT,
+			subtext: copy::NOT_FOUND_SUBTEXT,
 			links: vec![
 				StatusLinkData {
-					label: "Back to home".to_string(),
+					label: copy::STATUS_HOME.to_string(),
 					href: home_href,
 					variant: ButtonVariant::Primary,
 					leading_arrow: true,
 				},
 				StatusLinkData {
-					label: "Contact the team".to_string(),
+					label: copy::NOT_FOUND_CONTACT.to_string(),
 					href: contact_href,
 					variant: ButtonVariant::Outline,
 					leading_arrow: false,
@@ -108,20 +112,20 @@ pub fn Forbidden(#[props(default = "/".to_string())] home_href: String, #[props(
 	rsx! {
 		StatusScreen {
 			accent: Accent::Warn,
-			eyebrow: "Access forbidden",
+			eyebrow: copy::FORBIDDEN_EYEBROW,
 			code: "403",
-			headline_lead: "This harbour is ",
-			headline_accent: "private",
-			subtext: "You don't have the credentials to view this page. If you believe you should, our team can open the right doors.",
+			headline_lead: copy::FORBIDDEN_HEADLINE_LEAD,
+			headline_accent: copy::FORBIDDEN_HEADLINE_ACCENT,
+			subtext: copy::FORBIDDEN_SUBTEXT,
 			links: vec![
 				StatusLinkData {
-					label: "Back to home".to_string(),
+					label: copy::STATUS_HOME.to_string(),
 					href: home_href,
 					variant: ButtonVariant::Primary,
 					leading_arrow: true,
 				},
 				StatusLinkData {
-					label: "Request access".to_string(),
+					label: copy::FORBIDDEN_CONTACT.to_string(),
 					href: contact_href,
 					variant: ButtonVariant::Outline,
 					leading_arrow: false,
@@ -136,14 +140,14 @@ pub fn ServerError(#[props(default = "/".to_string())] home_href: String, reset:
 	rsx! {
 		StatusScreen {
 			accent: Accent::Error,
-			eyebrow: "Server error",
+			eyebrow: copy::SERVER_ERROR_EYEBROW,
 			code: "500",
-			headline_lead: "Our systems are ",
-			headline_accent: "recalibrating",
-			subtext: "Something broke on our end — not yours. We've been alerted and are restoring service. Please try again in a moment.",
+			headline_lead: copy::SERVER_ERROR_HEADLINE_LEAD,
+			headline_accent: copy::SERVER_ERROR_HEADLINE_ACCENT,
+			subtext: copy::SERVER_ERROR_SUBTEXT,
 			links: vec![
 				StatusLinkData {
-					label: "Back to home".to_string(),
+					label: copy::STATUS_HOME.to_string(),
 					href: home_href,
 					variant: ButtonVariant::Outline,
 					leading_arrow: true,
@@ -159,17 +163,16 @@ pub fn ServerError(#[props(default = "/".to_string())] home_href: String, reset:
 						let _ = document::eval("window.location.reload();");
 					}
 				},
-				"Try again"
+				{copy::SERVER_ERROR_RETRY}
 			}
 		}
 	}
 }
-// lucide `arrow-left`, inlined so the kit keeps its zero-icon-dep footprint.
 fn arrow_left_icon() -> Element {
 	rsx! {
 		svg {
 			xmlns: "http://www.w3.org/2000/svg",
-			class: "mr-2 h-4 w-4",
+			class: STATUS_SCREEN_ACTION_ICON,
 			view_box: "0 0 24 24",
 			fill: "none",
 			stroke: "currentColor",
@@ -177,8 +180,7 @@ fn arrow_left_icon() -> Element {
 			stroke_linecap: "round",
 			stroke_linejoin: "round",
 			"aria-hidden": "true",
-			path { d: "m12 19-7-7 7-7" }
-			path { d: "M19 12H5" }
+			{icon_shapes(Icon::ArrowLeft)}
 		}
 	}
 }

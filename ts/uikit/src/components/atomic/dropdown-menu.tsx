@@ -11,17 +11,10 @@ import { useHoverIntent } from "../../primitives/use-hover-intent";
 import { mergeRefs } from "../../primitives/merge-refs";
 import { Portal } from "../../primitives/portal";
 import { Slot } from "../../primitives/slot";
-import {
-  DROPDOWN_MENU_CHECK_ITEM,
-  DROPDOWN_MENU_CONTENT,
-  DROPDOWN_MENU_ITEM,
-  DROPDOWN_MENU_ITEM_INDICATOR,
-  DROPDOWN_MENU_LABEL,
-  DROPDOWN_MENU_SEPARATOR,
-  DROPDOWN_MENU_SHORTCUT,
-  DROPDOWN_MENU_SUB_CONTENT,
-  DROPDOWN_MENU_SUB_TRIGGER,
-} from "../../generated/dropdown-menu";
+import { DROPDOWN_MENU_CHECK_ITEM, DROPDOWN_MENU_CONTENT, DROPDOWN_MENU_ITEM, DROPDOWN_MENU_ITEM_INDICATOR, DROPDOWN_MENU_LABEL, DROPDOWN_MENU_SEPARATOR, DROPDOWN_MENU_SHORTCUT, DROPDOWN_MENU_SUB_CHEVRON, DROPDOWN_MENU_SUB_CONTENT, DROPDOWN_MENU_SUB_TRIGGER } from "../../generated/dropdown-menu";
+import type { MenuItemVariant } from "../../generated/menu";
+import { MENU_RADIO_DOT } from "../../generated/menu";
+import { iconShapes } from "../../icons/icon-shapes";
 
 interface DropdownMenuContextValue {
   open: boolean;
@@ -186,7 +179,7 @@ export interface DropdownMenuItemProps extends React.ComponentProps<"div"> {
   /** Render the child (a link) as the item. */
   asChild?: boolean;
   inset?: boolean;
-  variant?: "neutral" | "destructive";
+  variant?: MenuItemVariant;
   disabled?: boolean;
 }
 
@@ -274,7 +267,7 @@ export function DropdownMenuCheckboxItem({
       <span className={DROPDOWN_MENU_ITEM_INDICATOR}>
         {checked ? (
           <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M20 6 9 17l-5-5" />
+            {iconShapes("check")}
           </svg>
         ) : null}
       </span>
@@ -354,8 +347,8 @@ export function DropdownMenuRadioItem({
     >
       <span className={DROPDOWN_MENU_ITEM_INDICATOR}>
         {checked ? (
-          <svg className="size-2 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" />
+          <svg className={MENU_RADIO_DOT} viewBox="0 0 24 24" aria-hidden="true">
+            {iconShapes("dot")}
           </svg>
         ) : null}
       </span>
@@ -487,8 +480,8 @@ export function DropdownMenuSubTrigger({
       {...props}
     >
       {children}
-      <svg className="ml-auto size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="m9 18 6-6-6-6" />
+      <svg className={DROPDOWN_MENU_SUB_CHEVRON} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        {iconShapes("chevron-right")}
       </svg>
     </div>
   );

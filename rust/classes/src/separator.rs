@@ -1,12 +1,10 @@
-use tailwind_fuse::{AsTailwindClass, TwVariant};
+use crate::Orientation;
 
 pub const SEPARATOR_BASE: &str = "bg-border shrink-0";
 
-#[derive(PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
-#[strum(serialize_all = "kebab-case")]
-pub enum Orientation {
-	#[tw(default, class = "data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full")]
-	Horizontal,
-	#[tw(class = "data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px")]
-	Vertical,
+pub fn separator_orientation_class(orientation: Orientation) -> &'static str {
+	match orientation {
+		Orientation::Horizontal => "data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full",
+		Orientation::Vertical => "data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px",
+	}
 }

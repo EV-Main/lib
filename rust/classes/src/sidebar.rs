@@ -38,6 +38,10 @@ pub const SIDEBAR_MENU: &str = "flex w-full min-w-0 flex-col gap-1";
 
 pub const SIDEBAR_MENU_ITEM: &str = "group/menu-item relative";
 
+pub const SIDEBAR_WIDTH: &str = "16rem";
+
+pub const SIDEBAR_WIDTH_ICON: &str = "3rem";
+pub const SIDEBAR_ROOT: &str = "group peer text-ink hidden md:block";
 /// The rail's rows are full-width and left-aligned, so they take their height
 /// from the shared [`Size`](crate::Size) scale and nothing else — colour comes
 /// from `ButtonVariant`, like every other button in the kit.
@@ -47,4 +51,30 @@ pub fn sidebar_menu_button_size_class(size: crate::Size) -> &'static str {
 		crate::Size::Sm | crate::Size::Md => "h-8 text-sm",
 		crate::Size::Lg | crate::Size::Touch | crate::Size::Xl => "h-12 text-sm group-data-[collapsible=icon]:p-0!",
 	}
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::EnumIter, strum::IntoStaticStr)]
+#[strum(serialize_all = "kebab-case")]
+pub enum SidebarSide {
+	#[default]
+	Left,
+	Right,
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::EnumIter, strum::IntoStaticStr)]
+#[strum(serialize_all = "kebab-case")]
+pub enum SidebarVariant {
+	#[default]
+	Sidebar,
+	Floating,
+	Inset,
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::EnumIter, strum::IntoStaticStr)]
+#[strum(serialize_all = "kebab-case")]
+pub enum SidebarCollapsible {
+	#[default]
+	Offcanvas,
+	Icon,
+	None,
 }

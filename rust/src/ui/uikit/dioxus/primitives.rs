@@ -20,8 +20,10 @@ use dioxus::{
 	dioxus_core::{DynamicNode, TemplateNode, provide_root_context},
 	prelude::*,
 };
+use ev_lib_classes::{Icon, Shape};
+pub use ev_lib_classes::{RovingOrientation, Side};
 
-pub use crate::ui::uikit::core::{DismissReason, RovingOrientation, Side};
+pub use crate::ui::uikit::core::DismissReason;
 use crate::ui::uikit::core::{KeyInput, LayerStack, Placement, Roving};
 
 type DismissFn = Rc<dyn Fn(DismissReason)>;
@@ -372,6 +374,25 @@ fn dynamic_has_content(node: &DynamicNode) -> bool {
 		DynamicNode::Text(text) => !text.value.is_empty(),
 		DynamicNode::Placeholder(_) => false,
 		DynamicNode::Fragment(nodes) => nodes.iter().any(vnode_has_content),
+	}
+}
+
+/// An icon's children, for the `<svg>` frame a site draws around them.
+pub(crate) fn icon_shapes(icon: Icon) -> Element {
+	rsx! {
+		for shape in icon.shapes() {
+			match *shape {
+				Shape::Path { d } => rsx! {
+					path { d }
+				},
+				Shape::Circle { cx, cy, r } => rsx! {
+					circle { cx, cy, r }
+				},
+				Shape::Rect { x, y, width, height, rx, ry } => rsx! {
+					rect { x, y, width, height, rx, ry }
+				},
+			}
+		}
 	}
 }
 

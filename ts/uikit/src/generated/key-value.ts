@@ -11,3 +11,9 @@ export const KEY_VALUE_VALUE = "min-w-0 truncate text-body-l text-ink";
 export const KEY_VALUE_COPY = "inline-flex size-6 shrink-0 items-center justify-center rounded-control text-ink-soft outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring";
 
 export const KEY_VALUE_STATUS = "sr-only";
+
+export const KEY_VALUE_COPIED_MS = 2000;
+
+export const KEY_VALUE_LABELS = {
+  "copied": "Copied",
+} as const;

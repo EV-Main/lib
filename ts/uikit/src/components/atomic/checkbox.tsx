@@ -6,6 +6,7 @@ import { CHECKBOX_BASE, CHECKBOX_INDICATOR } from "../../generated/checkbox";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { markLabelable } from "../../primitives/labelable";
 import { useFieldControlId } from "./field-context";
+import { iconShapes } from "../../icons/icon-shapes";
 
 export interface CheckboxProps
   extends Omit<React.ComponentProps<"button">, "onChange"> {
@@ -62,7 +63,7 @@ export function Checkbox({
             className="size-3.5"
             aria-hidden="true"
           >
-            <path d="M20 6 9 17l-5-5" />
+            {iconShapes("check")}
           </svg>
         </span>
       )}

@@ -6,6 +6,20 @@ export const ITEM_SEPARATOR = "my-0";
 
 export const ITEM_BASE = "group/item flex items-center border border-transparent text-sm rounded-panel transition-colors [a]:hover:bg-hover [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]";
 
+export const ITEM_MEDIA_BASE = "flex shrink-0 items-center justify-center gap-2 group-has-[[data-slot=item-description]]/item:self-start [&_svg]:pointer-events-none group-has-[[data-slot=item-description]]/item:translate-y-0.5";
+
+export const ITEM_CONTENT = "flex flex-1 flex-col gap-1 [&+[data-slot=item-content]]:flex-none";
+
+export const ITEM_TITLE = "flex w-fit items-center gap-2 text-sm leading-snug font-medium";
+
+export const ITEM_DESCRIPTION = "text-ink-soft line-clamp-2 text-sm leading-normal font-normal text-balance [&>a:hover]:text-primary-ink [&>a]:underline [&>a]:underline-offset-4";
+
+export const ITEM_ACTIONS = "flex items-center gap-2";
+
+export const ITEM_HEADER = "flex basis-full items-center justify-between gap-2";
+
+export const ITEM_FOOTER = "flex basis-full items-center justify-between gap-2";
+
 export const itemVariants = {
   "bare": "bg-transparent",
   "outline": "border-border",
@@ -19,23 +33,9 @@ export const itemSizes = {
 } as const;
 export type ItemSize = keyof typeof itemSizes;
 
-export const ITEM_MEDIA_BASE = "flex shrink-0 items-center justify-center gap-2 group-has-[[data-slot=item-description]]/item:self-start [&_svg]:pointer-events-none group-has-[[data-slot=item-description]]/item:translate-y-0.5";
-
 export const itemMediaVariants = {
   "bare": "bg-transparent",
   "icon": "size-8 border border-border rounded-control bg-muted [&_svg:not([class*='size-'])]:size-4",
   "image": "size-10 rounded-control overflow-hidden [&_img]:size-full [&_img]:object-cover",
 } as const;
 export type ItemMediaVariant = keyof typeof itemMediaVariants;
-
-export const ITEM_CONTENT = "flex flex-1 flex-col gap-1 [&+[data-slot=item-content]]:flex-none";
-
-export const ITEM_TITLE = "flex w-fit items-center gap-2 text-sm leading-snug font-medium";
-
-export const ITEM_DESCRIPTION = "text-ink-soft line-clamp-2 text-sm leading-normal font-normal text-balance [&>a:hover]:text-primary-ink [&>a]:underline [&>a]:underline-offset-4";
-
-export const ITEM_ACTIONS = "flex items-center gap-2";
-
-export const ITEM_HEADER = "flex basis-full items-center justify-between gap-2";
-
-export const ITEM_FOOTER = "flex basis-full items-center justify-between gap-2";

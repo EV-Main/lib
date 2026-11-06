@@ -40,6 +40,9 @@
  */
 
 import { DEFAULT_LOCALE, type Locale, type LocaleRegistry, type Messages } from "../index.js";
+import type { RejectionReason } from "../generated/policy.js";
+
+export type { RejectionReason } from "../generated/policy.js";
 
 const CLDR_ORDER: readonly Intl.LDMLPluralRule[] = ["zero", "one", "two", "few", "many", "other"];
 
@@ -60,21 +63,6 @@ export interface TranslatedEntry {
 
 /** A non-English catalogue as authored on disk. */
 export type TranslatedCatalogue = Readonly<Record<string, TranslatedEntry>>;
-
-/** Why a translated entry was refused, and English used instead. */
-export type RejectionReason =
-  /** Today's English differs from the `en` the translation was written against. */
-  | "source-drift"
-  /** The translation interpolates a different set of placeholders. */
-  | "placeholder-mismatch"
-  /** An argument is a plural/select in one language and not the other. */
-  | "argument-type-mismatch"
-  /** A plural is missing a category this locale requires (ru needs few/many). */
-  | "plural-category-missing"
-  /** A key English does not define — rule 1.1: only English introduces keys. */
-  | "orphan-key"
-  /** Blank translation. */
-  | "empty";
 
 /** One refusal, with enough detail to fix it without opening the catalogue. */
 export interface Rejection {

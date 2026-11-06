@@ -2,14 +2,6 @@
 
 export const DRAWER_CONTENT_BASE = "bg-background fixed z-50 flex h-auto border border-border";
 
-export const drawerDirectionClasses = {
-  "bottom": "inset-x-0 bottom-0 mt-24 max-h-[80vh] flex-col rounded-t-panel border-b-0",
-  "top": "inset-x-0 top-0 mb-24 max-h-[80vh] flex-col rounded-b-panel border-t-0",
-  "left": "inset-y-0 left-0 w-3/4 flex-row border-r sm:max-w-sm",
-  "right": "inset-y-0 right-0 w-3/4 flex-row border-l sm:max-w-sm",
-} as const;
-export type DrawerDirection = keyof typeof drawerDirectionClasses;
-
 export const DRAWER_OVERLAY = "fixed inset-0 z-50 bg-scrim data-[state=closed]:pointer-events-none";
 
 export const DRAWER_HANDLE = "bg-muted mx-auto mt-4 h-2 w-[100px] shrink-0 rounded-full";
@@ -23,3 +15,11 @@ export const DRAWER_FOOTER = "mt-auto flex flex-col gap-2 p-4";
 export const DRAWER_TITLE = "text-ink font-semibold";
 
 export const DRAWER_DESCRIPTION = "text-ink-soft text-sm";
+
+export const drawerDirectionClasses = {
+  "bottom": "inset-x-0 bottom-0 mt-24 max-h-[80vh] flex-col rounded-t-panel border-b-0",
+  "top": "inset-x-0 top-0 mb-24 max-h-[80vh] flex-col rounded-b-panel border-t-0",
+  "left": "inset-y-0 left-0 w-3/4 flex-row border-r sm:max-w-sm",
+  "right": "inset-y-0 right-0 w-3/4 flex-row border-l sm:max-w-sm",
+} as const;
+export type DrawerDirection = keyof typeof drawerDirectionClasses;

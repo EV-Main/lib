@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-pub use crate::ui::uikit::core::CommandPaletteLabels;
+pub use ev_lib_classes::CommandPaletteLabels;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
@@ -52,12 +52,12 @@ pub fn CommandPalette(
 	let state = use_controllable(open, default_open, on_open_change);
 	let title_id = use_stable_id("command-palette-title");
 	let cls = cn!(COMMAND_PALETTE_CONTENT, class);
-	let title = labels.title.unwrap_or_else(|| String::from("Command palette"));
-	let placeholder = labels.placeholder.unwrap_or_else(|| String::from("Type a command or search…"));
-	let empty = labels.empty.unwrap_or_else(|| String::from("No results."));
-	let navigate = labels.navigate.unwrap_or_else(|| String::from("navigate"));
-	let select = labels.select.unwrap_or_else(|| String::from("select"));
-	let close = labels.close.unwrap_or_else(|| String::from("close"));
+	let title = labels.title;
+	let placeholder = labels.placeholder;
+	let empty = labels.empty;
+	let navigate = labels.navigate;
+	let select = labels.select;
+	let close = labels.close;
 	rsx! {
 		CommandDialog {
 			open: state.get(),
@@ -247,12 +247,12 @@ mod tests {
 					open: true,
 					groups: Vec::new(),
 					labels: CommandPaletteLabels {
-						title: Some("Палитра команд".into()),
-						placeholder: Some("Команда или поиск…".into()),
-						empty: Some("Ничего не найдено.".into()),
-						navigate: Some("выбрать".into()),
-						select: Some("запустить".into()),
-						close: Some("закрыть".into()),
+						title: "Палитра команд".into(),
+						placeholder: "Команда или поиск…".into(),
+						empty: "Ничего не найдено.".into(),
+						navigate: "выбрать".into(),
+						select: "запустить".into(),
+						close: "закрыть".into(),
 					},
 				}
 			}

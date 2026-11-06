@@ -4,10 +4,6 @@
 
 use crate::ui::uikit::core::CalendarDate;
 
-/// How long a copy's check mark and "Copied" announcement stay, in ms.
-#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
-pub(crate) const COPIED_MS: i32 = 2000;
-
 /// Writes `text` to the clipboard, then calls `done` with whether it got
 /// there. The mirror of the TS `writeClipboard` behind `KeyValue`.
 ///

@@ -102,3 +102,29 @@ pub enum ChatToolState {
 	#[tw(class = "text-accent-error")]
 	Error,
 }
+
+/// Who spoke a `ChatMessage`.
+#[derive(Clone, Copy, Debug, Eq, PartialEq, strum::AsRefStr, strum::EnumIter, strum::IntoStaticStr)]
+#[strum(serialize_all = "kebab-case")]
+pub enum ChatMessageRole {
+	Assistant,
+	User,
+}
+
+/// What a `ChatAttachment` holds; it picks the glyph.
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::EnumIter, strum::IntoStaticStr)]
+#[strum(serialize_all = "kebab-case")]
+pub enum ChatAttachmentType {
+	#[default]
+	File,
+	Image,
+}
+
+/// Whether a `ChatAttachment` is still uploading.
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::EnumIter, strum::IntoStaticStr)]
+#[strum(serialize_all = "kebab-case")]
+pub enum ChatAttachmentState {
+	#[default]
+	Ready,
+	Uploading,
+}

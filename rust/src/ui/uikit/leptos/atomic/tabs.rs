@@ -3,7 +3,7 @@ use leptos::{context::Provider, prelude::*};
 use crate::{
 	cn,
 	ui::uikit::leptos::{
-		TABS_CONTENT, TABS_LIST, TABS_ROOT, TABS_TRIGGER, TabsOrientation,
+		Orientation, TABS_CONTENT, TABS_LIST, TABS_ROOT, TABS_TRIGGER,
 		primitives::{Controllable, RovingFocus, use_controllable, use_roving_focus, use_roving_item},
 	},
 };
@@ -13,7 +13,7 @@ pub fn Tabs(
 	#[prop(optional, into)] value: MaybeProp<String>,
 	#[prop(optional, into)] default_value: String,
 	#[prop(optional)] on_value_change: Option<Callback<String>>,
-	#[prop(optional)] orientation: TabsOrientation,
+	#[prop(optional)] orientation: Orientation,
 	#[prop(optional, into)] class: String,
 	children: Children,
 ) -> impl IntoView {
@@ -101,5 +101,5 @@ pub fn TabsContent(#[prop(into)] value: String, #[prop(optional, into)] class: S
 #[derive(Clone, Copy)]
 struct TabsCtx {
 	value: Controllable<String>,
-	orientation: TabsOrientation,
+	orientation: Orientation,
 }

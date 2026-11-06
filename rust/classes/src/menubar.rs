@@ -56,3 +56,4 @@ pub const MENUBAR_SUB_CONTENT: &str = "bg-popover text-ink data-[state=open]:ani
                            data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 \
                            data-[side=top]:slide-in-from-bottom-2 absolute z-50 min-w-[8rem] overflow-hidden rounded-panel \
                            border border-border p-1 shadow-lg";
+pub const MENUBAR_SUB_CHEVRON: &str = "ml-auto h-4 w-4";

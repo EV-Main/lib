@@ -3,6 +3,7 @@ use std::{
 	sync::atomic::{AtomicUsize, Ordering},
 };
 
+use ev_lib_classes::{COMMAND_INPUT_ICON, Icon};
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -12,7 +13,7 @@ use crate::{
 		leptos::{
 			COMMAND_DIALOG_COMMAND, COMMAND_DIALOG_CONTENT, COMMAND_DIALOG_OVERLAY, COMMAND_EMPTY, COMMAND_GROUP, COMMAND_INPUT, COMMAND_INPUT_WRAPPER, COMMAND_ITEM, COMMAND_LIST,
 			COMMAND_ROOT, COMMAND_SEPARATOR, COMMAND_SHORTCUT,
-			primitives::{Controllable, stable_id, use_controllable, use_stable_id},
+			primitives::{Controllable, icon_shapes, stable_id, use_controllable, use_stable_id},
 		},
 	},
 };
@@ -128,11 +129,10 @@ pub fn CommandInput(
 				stroke-width="2"
 				stroke-linecap="round"
 				stroke-linejoin="round"
-				class="size-4 shrink-0 opacity-50"
+				class=COMMAND_INPUT_ICON
 				aria-hidden="true"
 			>
-				<circle cx="11" cy="11" r="8"></circle>
-				<path d="m21 21-4.3-4.3"></path>
+				{icon_shapes(Icon::Search)}
 			</svg>
 			// Focus stays here and points at the highlighted row (the ARIA
 			// combobox pattern), so the rows never need to be tabbable.

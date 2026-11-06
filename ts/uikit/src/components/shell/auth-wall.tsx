@@ -7,6 +7,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "../atomic/empty";
+import { iconShapes } from "../../icons/icon-shapes";
 
 /**
  * What a section shows a caller it is not for: an `Empty` with a lock, a title, why,
@@ -33,7 +34,6 @@ export function AuthWall({ title, description, children, ...props }: AuthWallPro
   );
 }
 
-// lucide `lock`, inlined so the kit keeps its zero-icon-dep footprint.
 function LockIcon() {
   return (
     <svg
@@ -45,8 +45,7 @@ function LockIcon() {
       strokeLinejoin="round"
       aria-hidden
     >
-      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+      {iconShapes("lock")}
     </svg>
   );
 }

@@ -1,12 +1,13 @@
+use ev_lib_classes::{ACCORDION_CHEVRON, Icon};
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
 	ui::uikit::{
-		core::{ACCORDION_CHEVRON, toggled},
+		core::toggled,
 		leptos::{
 			ACCORDION_CONTENT, ACCORDION_CONTENT_INNER, ACCORDION_HEADER, ACCORDION_ITEM, ACCORDION_TRIGGER, AccordionType,
-			primitives::{Controllable, use_controllable},
+			primitives::{Controllable, icon_shapes, use_controllable},
 		},
 	},
 };
@@ -72,7 +73,7 @@ pub fn AccordionTrigger(#[prop(optional, into)] class: String, children: Childre
 					stroke-linejoin="round"
 					class=ACCORDION_CHEVRON
 				>
-					<path d="m6 9 6 6 6-6"></path>
+					{icon_shapes(Icon::ChevronDown)}
 				</svg>
 			</button>
 		</h3>

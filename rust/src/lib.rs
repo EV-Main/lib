@@ -86,7 +86,7 @@ pub use ops::settings;
 pub use product::analytics;
 #[cfg(feature = "experiments")]
 pub use product::experiments;
-#[cfg(all(feature = "mfe", target_arch = "wasm32"))]
+#[cfg(any(feature = "mfe", feature = "ts_gen"))]
 pub use ui::active::mfe;
 #[cfg(feature = "uikit_dioxus")]
 pub use ui::uikit::dioxus as uikit_dioxus;
