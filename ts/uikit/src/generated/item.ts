@@ -4,12 +4,12 @@ export const ITEM_GROUP = "group/item-group flex flex-col";
 
 export const ITEM_SEPARATOR = "my-0";
 
-export const ITEM_BASE = "group/item flex items-center border border-transparent text-sm rounded-panel transition-colors [a]:hover:bg-hover/50 [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]";
+export const ITEM_BASE = "group/item flex items-center border border-transparent text-sm rounded-panel transition-colors [a]:hover:bg-hover [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]";
 
 export const itemVariants = {
   "bare": "bg-transparent",
   "outline": "border-border",
-  "muted": "bg-muted/50",
+  "muted": "bg-muted",
 } as const;
 export type ItemVariant = keyof typeof itemVariants;
 

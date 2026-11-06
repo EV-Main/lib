@@ -153,7 +153,7 @@ export function NavGroupHeader({
   className,
 }: NavGroupHeaderProps) {
   const chevronId = React.useId();
-  const row = cn(ROW, open ? "bg-active" : "hover:bg-hover", className);
+  const row = cn(ROW, open ? "bg-selected" : "hover:bg-hover", className);
   const chip = cn(
     "grid size-7 shrink-0 place-items-center rounded-control text-ink-mid",
     open && "bg-selected",

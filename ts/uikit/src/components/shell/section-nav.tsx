@@ -167,7 +167,7 @@ function SectionNavRow({
   const Icon = item.icon;
   const className = cn(
     ITEM,
-    active ? "bg-active text-ink" : "text-ink-mid hover:bg-hover",
+    active ? "bg-selected text-ink" : "text-ink-mid hover:bg-hover",
     nested && "h-9",
   );
   const content = (

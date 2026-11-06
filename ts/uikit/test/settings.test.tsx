@@ -14,7 +14,7 @@ describe("Settings", () => {
     expect(document.querySelector('[data-slot="settings-main"]')).toHaveTextContent("Body");
     expect(screen.queryByRole("main")).toBeNull();
     expect(screen.getByRole("button", { name: "Account" })).toHaveAttribute("aria-current", "true");
-    expect(screen.getByRole("button", { name: "Account" })).toHaveClass("bg-active");
+    expect(screen.getByRole("button", { name: "Account" })).toHaveClass("bg-selected");
   });
 
   it("names a section by its title and shows description and action", () => {
