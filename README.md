@@ -2,6 +2,8 @@
 ![Minimum Supported Rust Version](https://img.shields.io/badge/nightly-1.92+-ab6000.svg)
 [<img alt="crates.io" src="https://img.shields.io/crates/v/ev.svg?color=fc8d62&logo=rust" height="20" style=flat-square>](https://crates.io/crates/ev)
 [<img alt="docs.rs" src="https://img.shields.io/badge/docs.rs-66c2a5?style=for-the-badge&labelColor=555555&logo=docs.rs&style=flat-square" height="20">](https://docs.rs/ev)
+![Build time](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/valeratrades/b48e6f02c61942200e7d1e3eeabf9bcb/raw/ev-build.json)
+![Test time](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/valeratrades/b48e6f02c61942200e7d1e3eeabf9bcb/raw/ev-test.json)
 
 [<img alt="TypeScript: strict" src="https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white&style=flat-square" height="20">](ts/architecture)
 <img alt="module: ESM only" src="https://img.shields.io/badge/module-ESM_only-f7df1e?logo=javascript&logoColor=black&style=flat-square" height="20">
@@ -108,7 +110,7 @@ hand-edit generated files.
 <br>
 
 <sup>
-	This repository follows <a href="https://github.com/valeratrades/.github/tree/master/best_practices">my best practices</a> and <a href="https://github.com/tigerbeetle/tigerbeetle/blob/main/docs/TIGER_STYLE.md">Tiger Style</a> (except "proper capitalization for acronyms": (VsrState, not VSRState) and formatting). For project's architecture, see <a href="./docs/ARCHITECTURE.md">ARCHITECTURE.md</a>.
+	This repository follows <a href="https://github.com/valeratrades/.github/tree/master/best_practices">my best practices</a> and <a href="https://github.com/tigerbeetle/tigerbeetle/blob/main/docs/TIGER_STYLE.md">Tiger Style</a> (except "proper capitalization for acronyms": (VsrState, not VSRState) and formatting). For contributing, see <a href="https://github.com/EV-Main/.github/blob/main/code/conventions/git">contribution process</a>. For project's architecture, see <a href="./docs/ARCHITECTURE.md">ARCHITECTURE.md</a>.
 </sup>
 
 #### License

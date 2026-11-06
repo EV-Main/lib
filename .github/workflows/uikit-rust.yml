@@ -44,7 +44,7 @@ name: uikit rust
   workflow_dispatch: {}
 permissions:
   contents: read
-# The repo's cargo config wraps rustc in sccache, which a runner does not have;
+# The repo's cargo config wraps rustc in kache, whose store a runner doesn't keep;
 # an empty wrapper turns it off for every step, `nix run .#gen` included.
 env:
   RUSTC_WRAPPER: ''
@@ -59,6 +59,15 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@main
         with:
           extra-conf: 'lazy-trees = true'
+      # rust-cache reads the toolchain off PATH; the runner's own rustup one would key it wrong
+      - name: Toolchain on PATH
+        run: |
+          nix develop --command bash -c 'dirname "$(command -v rustc)" > /tmp/rust-bin'
+          cat /tmp/rust-bin >> "$GITHUB_PATH"
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: uikit
+          save-if: ${{ github.ref == 'refs/heads/main' }}
       - name: ev_lib_classes
         run: nix develop --command env RUSTC_WRAPPER= cargo test -p ev_lib_classes
       # Both ports at once: the parity test renders every gallery entry through each.
