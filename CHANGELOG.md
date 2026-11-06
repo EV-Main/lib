@@ -22,6 +22,16 @@ Rust crate and its TypeScript mirror at once.
 
 ## [Unreleased]
 
+### Added
+
+- **A landing's pages into Figma from its e2e harness** (`@evinvest/kitstart`
+  0.24, mkLanding). `defineFigmaSuite` (which `defineSectionSuite` calls) adds
+  one `@figma <page>` test per page of the section list and Playwright project;
+  `apps.figma` lists their keys (`-- frames`, with the new `figmaFile`) or builds
+  and captures the ones `FIGMA_CAPTURES` names, through Figma's
+  `generate_figma_design`. Changes under `nix/` now release with kitstart, whose
+  tag pins them.
+
 ### Changed
 
 - **Connected landings: sites_panel by derived address, and `/.well-known/sa-site`**
