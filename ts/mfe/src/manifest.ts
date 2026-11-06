@@ -1,5 +1,5 @@
 // The registry contract: which microfrontends a host may mount and where their
-// bundles live. A producer's build emits `{name, tag, kind}` (the Rust `mfe!`
+// bundles live. A producer's build emits an `MfeManifest` (the Rust `mfe!`
 // macro's `MFE_MANIFEST`, shipped as `mfe.json`); the host — or the producer's
 // published manifest — adds `scriptUrl`.
 //
@@ -11,21 +11,10 @@
 // because a bad entry is easier to read here than in a console full of CSP
 // reports — and a CSP allowing the whole origin would let it run.
 
+import { MFE_KINDS, type MfeKind, type MfeManifest } from './generated/manifest';
 import { isSecureTransport } from './transport';
 
-/** Inline widget inside a host page, or the owner of a whole route. */
-export type MfeKind = 'component' | 'page';
-
-export const MFE_KINDS: readonly MfeKind[] = ['component', 'page'];
-
-/** What a producer's build emits (`mfe.json`), before it has a URL. */
-export interface MfeManifest {
-  /** Logical name, `{service}.{name}` for bundles built with the Rust `mfe!`. */
-  name: string;
-  /** Globally unique custom-element tag the bundle defines. */
-  tag: string;
-  kind: MfeKind;
-}
+export { MFE_KINDS, type MfeKind, type MfeManifest } from './generated/manifest';
 
 /** One registry entry: a manifest plus where its self-registering ESM bundle is. */
 export interface MfeEntry extends MfeManifest {

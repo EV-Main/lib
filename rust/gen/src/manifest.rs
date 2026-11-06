@@ -203,6 +203,7 @@ pub fn shared() -> Vec<(&'static str, &'static str, Vec<Ts>)> {
 		("experiments", "contract", experiments()),
 		("settings", "contract", settings()),
 		("analytics", "host", analytics()),
+		("mfe", "manifest", mfe()),
 	]
 }
 
@@ -345,4 +346,16 @@ fn analytics() -> Vec<Ts> {
 		name: "DEFAULT_HOST",
 		value: ev_lib::analytics::DEFAULT_HOST,
 	}]
+}
+
+fn mfe() -> Vec<Ts> {
+	use ev_lib::mfe::{MfeKind, MfeManifest};
+	vec![
+		Ts::Union {
+			name: "MFE_KINDS",
+			ty: "MfeKind",
+			items: MfeKind::iter().map(MfeKind::as_str).collect(),
+		},
+		Ts::types::<MfeManifest>(),
+	]
 }
