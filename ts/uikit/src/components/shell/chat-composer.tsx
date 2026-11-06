@@ -25,6 +25,7 @@ import {
 import { IconButton } from "../derived/icon-button";
 import { Textarea } from "../atomic/textarea";
 import { UiIcon } from "../../icons/ui-icons";
+import * as copy from "../../generated/copy";
 
 export interface ModelOption {
   id: string;
@@ -41,7 +42,7 @@ export interface ModelChipProps {
 }
 
 /** The small bordered button naming the model; opens a radio menu of the options. */
-export function ModelChip({ models, value, onValueChange, "aria-label": ariaLabel = "Model", className }: ModelChipProps) {
+export function ModelChip({ models, value, onValueChange, "aria-label": ariaLabel = copy.MODEL_CHIP, className }: ModelChipProps) {
   const current = models.find((m) => m.id === value);
   return (
     <DropdownMenu>
@@ -103,7 +104,7 @@ export function ChatComposer({
   onSend,
   streaming = false,
   onStop,
-  placeholder = "Ask the assistant…",
+  placeholder = copy.CHAT_COMPOSER_PLACEHOLDER,
   onAttach,
   attachments,
   tools,

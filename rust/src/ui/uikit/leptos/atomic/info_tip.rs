@@ -1,3 +1,4 @@
+use ev_lib_classes::copy;
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -40,7 +41,7 @@ pub fn InfoTip(
 }
 
 #[component]
-pub fn InfoTipTrigger(#[prop(default = "More information".into(), into)] label: String, #[prop(optional, into)] class: String) -> impl IntoView {
+pub fn InfoTipTrigger(#[prop(default = copy::MORE_INFORMATION.to_owned(), into)] label: String, #[prop(optional, into)] class: String) -> impl IntoView {
 	let ctx = expect_context::<InfoTipCtx>();
 	let cls = cn!(
 		"inline-flex size-4 shrink-0 cursor-help items-center justify-center rounded-full align-middle text-ink-soft outline-none transition-colors hover:text-ink focus-visible:ring-2 focus-visible:ring-ring data-[state=open]:text-accent-debug",

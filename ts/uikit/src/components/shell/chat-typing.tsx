@@ -1,6 +1,7 @@
 import * as React from "react";
 import { CHAT_TYPING_BASE, CHAT_TYPING_DOT, CHAT_TYPING_STILL } from "../../generated/chat-typing";
 import { cn } from "../../lib/cn";
+import * as copy from "../../generated/copy";
 
 export interface ChatTypingProps extends Omit<React.ComponentProps<"span">, "children"> {
   /** Names the state for assistive tech. Default `"Assistant is thinking"`. */
@@ -12,7 +13,7 @@ export interface ChatTypingProps extends Omit<React.ComponentProps<"span">, "chi
  * reduced motion CSS swaps them for a still "…". It is a status region, so a
  * screen reader hears the label once when it appears.
  */
-export function ChatTyping({ label = "Assistant is thinking", className, ...props }: ChatTypingProps) {
+export function ChatTyping({ label = copy.CHAT_TYPING, className, ...props }: ChatTypingProps) {
   return (
     <span
       role="status"

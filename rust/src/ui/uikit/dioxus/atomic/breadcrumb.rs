@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use ev_lib_classes::copy;
 
 use crate::{
 	cn,
@@ -10,7 +11,7 @@ pub fn Breadcrumb(#[props(default)] class: String, children: Element) -> Element
 	rsx! {
 		nav {
 			class,
-			"aria-label": "breadcrumb",
+			"aria-label": copy::BREADCRUMB,
 			"data-slot": "breadcrumb",
 			{children}
 		}
@@ -108,7 +109,7 @@ pub fn BreadcrumbEllipsis(#[props(default)] class: String) -> Element {
 				circle { cx: "19", cy: "12", r: "1" }
 				circle { cx: "5", cy: "12", r: "1" }
 			}
-			span { class: "sr-only", "More" }
+			span { class: "sr-only", {copy::BREADCRUMB_MORE} }
 		}
 	}
 }

@@ -1,10 +1,11 @@
 use dioxus::prelude::*;
+use ev_lib_classes::copy;
 
 pub use crate::ui::uikit::core::CalendarDate;
 use crate::{
 	cn,
 	ui::uikit::{
-		core::{self as uikit, Day, NEXT_MONTH, NO_CLOCK_MONTH, PREVIOUS_MONTH, WEEKDAYS},
+		core::{self as uikit, Day, NO_CLOCK_MONTH},
 		dioxus::{
 			CALENDAR_CAPTION, CALENDAR_DAY_CELL, CALENDAR_DAY_EMPTY, CALENDAR_GRID, CALENDAR_NAV, CALENDAR_ROOT, CALENDAR_WEEK, CALENDAR_WEEKDAY, CALENDAR_WEEKDAY_ROW,
 			primitives::use_controllable,
@@ -69,8 +70,8 @@ pub fn Calendar(
 		disabled,
 	};
 	let nav_class = grid.nav_class();
-	let previous_label = previous_month_label.unwrap_or_else(|| PREVIOUS_MONTH.to_owned());
-	let next_label = next_month_label.unwrap_or_else(|| NEXT_MONTH.to_owned());
+	let previous_label = previous_month_label.unwrap_or_else(|| copy::CALENDAR_PREVIOUS_MONTH.to_owned());
+	let next_label = next_month_label.unwrap_or_else(|| copy::CALENDAR_NEXT_MONTH.to_owned());
 
 	let root = cn!(CALENDAR_ROOT, class);
 
@@ -98,7 +99,7 @@ pub fn Calendar(
 			table { class: CALENDAR_GRID, role: "grid",
 				thead {
 					tr { class: CALENDAR_WEEKDAY_ROW,
-						for wd in WEEKDAYS {
+						for wd in copy::WEEKDAYS {
 							th {
 								class: CALENDAR_WEEKDAY,
 								scope: "col",

@@ -18,6 +18,7 @@ import {
   DIALOG_OVERLAY,
   DIALOG_TITLE,
 } from "../../generated/dialog";
+import * as copy from "../../generated/copy";
 
 interface DialogContextValue {
   open: boolean;
@@ -180,7 +181,7 @@ export function DialogContent({
             className={DIALOG_CLOSE}
           >
             <XIcon />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">{copy.CLOSE}</span>
           </button>
         )}
       </div>

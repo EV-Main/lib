@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use ev_lib_classes::copy;
 
 use crate::cn;
 
@@ -9,7 +10,7 @@ pub fn Spinner(#[props(default)] class: String) -> Element {
 		svg {
 			class: cls,
 			role: "status",
-			"aria-label": "Loading",
+			"aria-label": copy::LOADING,
 			view_box: "0 0 24 24",
 			fill: "none",
 			stroke: "currentColor",

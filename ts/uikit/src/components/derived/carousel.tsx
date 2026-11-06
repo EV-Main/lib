@@ -21,6 +21,7 @@ import {
   CAROUSEL_PREVIOUS_VERTICAL,
 } from "../../generated/carousel";
 import type { Orientation } from "../../generated/orientation";
+import * as copy from "../../generated/copy";
 
 
 type CarouselContextProps = {
@@ -248,7 +249,7 @@ export function CarouselPrevious({
       >
         <path d="m15 18-6-6 6-6" />
       </svg>
-      <span className="sr-only">Previous slide</span>
+      <span className="sr-only">{copy.CAROUSEL_PREVIOUS}</span>
     </Button>
   );
 }
@@ -291,7 +292,7 @@ export function CarouselNext({
       >
         <path d="m9 18 6-6-6-6" />
       </svg>
-      <span className="sr-only">Next slide</span>
+      <span className="sr-only">{copy.CAROUSEL_NEXT}</span>
     </Button>
   );
 }

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Container } from "../atomic/container";
+import * as copy from "../../generated/copy";
 
 /**
  * A 12-col footer grid — brand 3 | sitemap groups 2 each | offices 3 |
@@ -64,10 +65,10 @@ export function Footer({
   copyright,
   nav = [],
   offices = [],
-  officesHeading = "Offices",
+  officesHeading = copy.FOOTER_OFFICES,
   legalLinks = [],
   newsletter,
-  newsletterHeading = "Newsletter",
+  newsletterHeading = copy.FOOTER_NEWSLETTER,
   newsletterBlurb = "",
   version,
   commitHref,

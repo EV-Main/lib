@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use ev_lib_classes::copy;
 
 use crate::{
 	cn,
@@ -79,7 +80,7 @@ pub fn SheetContent(#[props(default = Side::Right)] side: Side, #[props(default)
 					class: "size-4",
 					path { d: "M18 6 6 18M6 6l12 12" }
 				}
-				span { class: "sr-only", "Close" }
+				span { class: "sr-only", {copy::CLOSE} }
 			}
 		}
 	}

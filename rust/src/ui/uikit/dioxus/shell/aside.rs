@@ -1,8 +1,8 @@
 use dioxus::prelude::*;
-pub use ev_lib_classes::AsidePanelMode;
+use ev_lib_classes::copy;
+pub use ev_lib_classes::{AsideHeaderLabels, AsidePanelMode};
 
 pub use crate::ui::uikit::core::AsideCollapse;
-pub use ev_lib_classes::AsideHeaderLabels;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
@@ -76,7 +76,7 @@ pub fn AsideRail(
 	/// The open aside's id; `None` when all are closed.
 	value: Option<String>,
 	on_value_change: EventHandler<Option<String>>,
-	#[props(default = String::from("Panels"))] aria_label: String,
+	#[props(default = copy::ASIDE_RAIL.to_owned())] aria_label: String,
 	#[props(default)] class: String,
 ) -> Element {
 	let cls = cn!(ASIDE_RAIL_BASE, class);

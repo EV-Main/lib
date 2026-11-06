@@ -1,6 +1,7 @@
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 use dioxus::prelude::*;
+use ev_lib_classes::copy;
 
 use crate::{
 	cn,
@@ -123,7 +124,7 @@ pub fn CarouselPrevious(#[props(default)] class: String) -> Element {
 				"aria-hidden": "true",
 				path { d: "m15 18-6-6 6-6" }
 			}
-			span { class: "sr-only", "Previous slide" }
+			span { class: "sr-only", {copy::CAROUSEL_PREVIOUS} }
 		}
 	}
 }
@@ -154,7 +155,7 @@ pub fn CarouselNext(#[props(default)] class: String) -> Element {
 				"aria-hidden": "true",
 				path { d: "m9 18 6-6-6-6" }
 			}
-			span { class: "sr-only", "Next slide" }
+			span { class: "sr-only", {copy::CAROUSEL_NEXT} }
 		}
 	}
 }

@@ -1,3 +1,4 @@
+use ev_lib_classes::copy;
 use leptos::prelude::*;
 
 use crate::{
@@ -8,7 +9,7 @@ use crate::{
 #[component]
 pub fn Breadcrumb(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<nav class=class aria-label="breadcrumb" data-slot="breadcrumb">
+		<nav class=class aria-label=copy::BREADCRUMB data-slot="breadcrumb">
 			{children()}
 		</nav>
 	}
@@ -107,7 +108,7 @@ pub fn BreadcrumbEllipsis(#[prop(optional, into)] class: String) -> impl IntoVie
 				<circle cx="19" cy="12" r="1" />
 				<circle cx="5" cy="12" r="1" />
 			</svg>
-			<span class="sr-only">"More"</span>
+			<span class="sr-only">{copy::BREADCRUMB_MORE}</span>
 		</span>
 	}
 }

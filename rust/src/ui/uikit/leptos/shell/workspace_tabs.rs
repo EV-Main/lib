@@ -1,3 +1,4 @@
+use ev_lib_classes::copy;
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -47,7 +48,7 @@ pub fn WorkspaceTab(
 	#[prop(into)] value: String,
 	#[prop(optional, into)] icon: Option<ViewFn>,
 	#[prop(optional)] on_close: Option<Callback<()>>,
-	#[prop(default = String::from("Close tab"), into)] close_label: String,
+	#[prop(default = copy::WORKSPACE_TAB_CLOSE.to_owned(), into)] close_label: String,
 	#[prop(optional, into)] class: String,
 	children: Children,
 ) -> impl IntoView {

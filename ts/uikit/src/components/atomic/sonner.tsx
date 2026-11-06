@@ -13,6 +13,7 @@ import {
   type ToastPosition,
   type ToastVariant,
 } from "../../generated/sonner";
+import * as copy from "../../generated/copy";
 
 export type { ToastPosition, ToastVariant };
 
@@ -339,7 +340,7 @@ function ToastItem({
       </div>
       <button
         type="button"
-        aria-label="Close"
+        aria-label={copy.CLOSE}
         data-slot="toast-close"
         onClick={() => store.dismiss(t.id)}
         className={TOAST_CLOSE}

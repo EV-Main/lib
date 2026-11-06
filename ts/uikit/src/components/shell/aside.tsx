@@ -22,6 +22,7 @@ import { IconButton } from "../derived/icon-button";
 import { Sheet, SheetContent } from "../atomic/sheet";
 import { UiIcon } from "../../icons/ui-icons";
 import type { AsidePanelMode } from "../../generated/aside";
+import * as copy from "../../generated/copy";
 
 export interface AsideHeaderLabels {
   back?: string;
@@ -89,7 +90,7 @@ export function AsideRail({
   value,
   onValueChange,
   className,
-  "aria-label": ariaLabel = "Panels",
+  "aria-label": ariaLabel = copy.ASIDE_RAIL,
   ...props
 }: AsideRailProps) {
   const button = (item: AsideRailItem) => (

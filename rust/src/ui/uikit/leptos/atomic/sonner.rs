@@ -9,6 +9,7 @@
 //! `ev-toast-life` animation whose `animationend` dismisses (paused on hover),
 //! and a dismissed toast is dropped on its exit transform's `transitionend`.
 
+use ev_lib_classes::copy;
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -169,7 +170,7 @@ fn ToastItem(toast: ToastView) -> impl IntoView {
 			</div>
 			<button
 				type="button"
-				aria-label="Close"
+				aria-label=copy::CLOSE
 				data-slot="toast-close"
 				class=TOAST_CLOSE
 				on:click=move |_| handle.dismiss(id)

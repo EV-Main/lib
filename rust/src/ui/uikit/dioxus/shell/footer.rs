@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use ev_lib_classes::copy;
 
 pub use crate::ui::uikit::core::{FooterLink, FooterLinkGroup, FooterOffice};
 use crate::ui::uikit::dioxus::Container;
@@ -20,10 +21,10 @@ pub fn Footer(
 	mark: Option<Element>,
 	tagline: Option<String>,
 	#[props(default)] offices: Vec<FooterOffice>,
-	#[props(default = "Offices".to_string())] offices_heading: String,
+	#[props(default = copy::FOOTER_OFFICES.to_owned())] offices_heading: String,
 	#[props(default)] legal_links: Vec<FooterLink>,
 	newsletter: Option<Element>,
-	#[props(default = "Newsletter".to_string())] newsletter_heading: String,
+	#[props(default = copy::FOOTER_NEWSLETTER.to_owned())] newsletter_heading: String,
 	#[props(default)] newsletter_blurb: String,
 	version: Option<String>,
 	commit_href: Option<String>,

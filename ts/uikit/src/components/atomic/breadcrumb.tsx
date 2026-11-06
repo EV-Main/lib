@@ -9,9 +9,10 @@ import {
   BREADCRUMB_PAGE,
   BREADCRUMB_SEPARATOR,
 } from "../../generated/breadcrumb";
+import * as copy from "../../generated/copy";
 
 export function Breadcrumb({ ...props }: React.ComponentProps<"nav">) {
-  return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />;
+  return <nav aria-label={copy.BREADCRUMB} data-slot="breadcrumb" {...props} />;
 }
 
 export function BreadcrumbList({
@@ -120,7 +121,7 @@ export function BreadcrumbEllipsis({
         <circle cx="19" cy="12" r="1" />
         <circle cx="5" cy="12" r="1" />
       </svg>
-      <span className="sr-only">More</span>
+      <span className="sr-only">{copy.BREADCRUMB_MORE}</span>
     </span>
   );
 }

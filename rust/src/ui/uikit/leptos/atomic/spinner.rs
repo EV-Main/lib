@@ -1,3 +1,4 @@
+use ev_lib_classes::copy;
 use leptos::prelude::*;
 
 use crate::cn;
@@ -9,7 +10,7 @@ pub fn Spinner(#[prop(optional, into)] class: String) -> impl IntoView {
 		<svg
 			class=cls
 			role="status"
-			aria-label="Loading"
+			aria-label=copy::LOADING
 			viewBox="0 0 24 24"
 			fill="none"
 			stroke="currentColor"

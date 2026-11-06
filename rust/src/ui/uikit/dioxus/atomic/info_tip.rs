@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use ev_lib_classes::copy;
 
 use crate::{
 	cn,
@@ -36,7 +37,7 @@ pub fn InfoTip(open: Option<bool>, #[props(default)] default_open: bool, on_open
 	}
 }
 #[component]
-pub fn InfoTipTrigger(#[props(default = String::from("More information"))] label: String, #[props(default)] class: String) -> Element {
+pub fn InfoTipTrigger(#[props(default = copy::MORE_INFORMATION.to_owned())] label: String, #[props(default)] class: String) -> Element {
 	let ctx = use_context::<InfoTipCtx>();
 	let open = ctx.open.get();
 	let cls = cn!(

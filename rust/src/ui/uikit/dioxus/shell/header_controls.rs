@@ -1,18 +1,15 @@
-use ev_lib_classes::copy;
 use dioxus::prelude::*;
+use ev_lib_classes::copy;
 
 pub use crate::ui::uikit::core::HeaderNotification;
 use crate::{
 	cn,
-	ui::uikit::{
-		core::CTRL_K,
-		dioxus::{
-			HEADER_BALANCE_BASE, HEADER_BALANCE_CHEVRON, HEADER_BALANCE_FIGURE, HEADER_BALANCE_INTERACTIVE, HEADER_BALANCE_LABEL, HEADER_BALANCE_SKELETON, HEADER_SEARCH_BASE,
-			HEADER_SEARCH_PLACEHOLDER, HeaderBalanceTone, ICON_BUTTON_BASE, IconButtonVariant, Kbd, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER,
-			NOTIFICATION_BELL_ITEM, NOTIFICATION_BELL_ITEM_BODY, NOTIFICATION_BELL_ITEM_DESCRIPTION, NOTIFICATION_BELL_ITEM_DOT, NOTIFICATION_BELL_ITEM_DOT_READ,
-			NOTIFICATION_BELL_ITEM_DOT_UNREAD, NOTIFICATION_BELL_ITEM_TIME, NOTIFICATION_BELL_ITEM_TITLE, NOTIFICATION_BELL_ITEM_TITLE_UNREAD, NOTIFICATION_BELL_LIST,
-			NOTIFICATION_BELL_TRIGGER, NOTIFICATION_DOT, Popover, PopoverContent, PopoverTrigger, Size, Skeleton, button_classes, icon_button_size_class,
-		},
+	ui::uikit::dioxus::{
+		HEADER_BALANCE_BASE, HEADER_BALANCE_CHEVRON, HEADER_BALANCE_FIGURE, HEADER_BALANCE_INTERACTIVE, HEADER_BALANCE_LABEL, HEADER_BALANCE_SKELETON, HEADER_SEARCH_BASE,
+		HEADER_SEARCH_PLACEHOLDER, HeaderBalanceTone, ICON_BUTTON_BASE, IconButtonVariant, Kbd, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER,
+		NOTIFICATION_BELL_ITEM, NOTIFICATION_BELL_ITEM_BODY, NOTIFICATION_BELL_ITEM_DESCRIPTION, NOTIFICATION_BELL_ITEM_DOT, NOTIFICATION_BELL_ITEM_DOT_READ,
+		NOTIFICATION_BELL_ITEM_DOT_UNREAD, NOTIFICATION_BELL_ITEM_TIME, NOTIFICATION_BELL_ITEM_TITLE, NOTIFICATION_BELL_ITEM_TITLE_UNREAD, NOTIFICATION_BELL_LIST, NOTIFICATION_BELL_TRIGGER,
+		NOTIFICATION_DOT, Popover, PopoverContent, PopoverTrigger, Size, Skeleton, button_classes, icon_button_size_class,
 	},
 };
 
@@ -46,7 +43,7 @@ pub fn HeaderBalance(
 	#[props(default)] class: String,
 ) -> Element {
 	let cls = cn!(HEADER_BALANCE_BASE, if onclick.is_some() { HEADER_BALANCE_INTERACTIVE } else { "" }, class);
-	let label = label.unwrap_or_else(|| rsx! { "Balance:" });
+	let label = label.unwrap_or_else(|| rsx! { {copy::HEADER_BALANCE} });
 	let figure_cls = cn!(HEADER_BALANCE_FIGURE, tone.as_class());
 	let body = rsx! {
 		{icon}
@@ -179,7 +176,7 @@ pub fn HeaderSearch(
 ) -> Element {
 	let platform = use_platform_shortcut();
 	let cls = cn!(HEADER_SEARCH_BASE, class);
-	let placeholder = placeholder.unwrap_or_else(|| String::from("Search or jump to…"));
+	let placeholder = placeholder.unwrap_or_else(|| copy::HEADER_SEARCH.to_owned());
 	let hint = shortcut.unwrap_or_else(|| String::from(platform()));
 	rsx! {
 		button {
@@ -243,7 +240,7 @@ fn NotificationRow(notification: HeaderNotification, on_select: Option<EventHand
 
 /// Read after mount, so the server render and the first client render agree.
 fn use_platform_shortcut() -> Signal<&'static str> {
-	let shortcut = use_signal(|| CTRL_K);
+	let shortcut = use_signal(|| copy::CTRL_K);
 	#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
 	{
 		let mut shortcut = shortcut;

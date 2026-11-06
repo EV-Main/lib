@@ -1,10 +1,11 @@
+use ev_lib_classes::copy;
 use leptos::prelude::*;
 
 pub use crate::ui::uikit::core::CalendarDate;
 use crate::{
 	cn,
 	ui::uikit::{
-		core::{self as uikit, Day, NEXT_MONTH, NO_CLOCK_MONTH, PREVIOUS_MONTH, WEEKDAYS},
+		core::{self as uikit, Day, NO_CLOCK_MONTH},
 		leptos::{
 			CALENDAR_CAPTION, CALENDAR_DAY_CELL, CALENDAR_DAY_EMPTY, CALENDAR_GRID, CALENDAR_NAV, CALENDAR_ROOT, CALENDAR_WEEK, CALENDAR_WEEKDAY, CALENDAR_WEEKDAY_ROW,
 			primitives::use_controllable,
@@ -74,8 +75,8 @@ pub fn Calendar(
 	});
 	let go = move |delta: i32| view.set(view.get_untracked().add_months(delta));
 	let nav_class = grid.with_untracked(uikit::Grid::nav_class);
-	let previous_label = move || previous_month_label.get().unwrap_or_else(|| PREVIOUS_MONTH.to_owned());
-	let next_label = move || next_month_label.get().unwrap_or_else(|| NEXT_MONTH.to_owned());
+	let previous_label = move || previous_month_label.get().unwrap_or_else(|| copy::CALENDAR_PREVIOUS_MONTH.to_owned());
+	let next_label = move || next_month_label.get().unwrap_or_else(|| copy::CALENDAR_NEXT_MONTH.to_owned());
 	let root = cn!(CALENDAR_ROOT, class);
 	view! {
 		<div class=root data-slot="calendar" role="application">
@@ -105,7 +106,7 @@ pub fn Calendar(
 			<table class=CALENDAR_GRID role="grid">
 				<thead>
 					<tr class=CALENDAR_WEEKDAY_ROW>
-						{WEEKDAYS
+						{copy::WEEKDAYS
 							.map(|wd| {
 								view! {
 									<th class=CALENDAR_WEEKDAY scope="col">

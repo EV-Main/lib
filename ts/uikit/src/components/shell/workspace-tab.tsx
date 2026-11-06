@@ -13,6 +13,7 @@ import {
   WORKSPACE_TABS_BASE,
 } from "../../generated/workspace-tab";
 import { UiIcon } from "../../icons/ui-icons";
+import * as copy from "../../generated/copy";
 
 interface WorkspaceTabsContextValue {
   value: string;
@@ -104,7 +105,7 @@ export function WorkspaceTab({
   value,
   icon,
   onClose,
-  closeLabel = "Close tab",
+  closeLabel = copy.WORKSPACE_TAB_CLOSE,
   className,
   children,
   onClick,

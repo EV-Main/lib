@@ -1,3 +1,4 @@
+use ev_lib_classes::copy;
 use leptos::prelude::*;
 
 pub use crate::ui::uikit::core::{FooterLink, FooterLinkGroup, FooterOffice};
@@ -21,10 +22,10 @@ pub fn Footer(
 	mark: Option<ViewFn>,
 	#[prop(optional, into)] tagline: Option<String>,
 	#[prop(optional)] offices: Vec<FooterOffice>,
-	#[prop(default = "Offices".to_string(), into)] offices_heading: String,
+	#[prop(default = copy::FOOTER_OFFICES.to_owned(), into)] offices_heading: String,
 	#[prop(optional)] legal_links: Vec<FooterLink>,
 	#[prop(optional, into)] newsletter: Option<ViewFn>,
-	#[prop(default = "Newsletter".to_string(), into)] newsletter_heading: String,
+	#[prop(default = copy::FOOTER_NEWSLETTER.to_owned(), into)] newsletter_heading: String,
 	#[prop(optional, into)] newsletter_blurb: String,
 	#[prop(optional, into)] version: Option<String>,
 	#[prop(optional, into)] commit_href: Option<String>,

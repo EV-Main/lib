@@ -1,8 +1,8 @@
-pub use ev_lib_classes::AsidePanelMode;
+use ev_lib_classes::copy;
+pub use ev_lib_classes::{AsideHeaderLabels, AsidePanelMode};
 use leptos::prelude::*;
 
 pub use crate::ui::uikit::core::AsideCollapse;
-pub use ev_lib_classes::AsideHeaderLabels;
 use crate::{
 	cn,
 	ui::uikit::leptos::{
@@ -94,7 +94,7 @@ pub fn AsideRail(
 	#[prop(optional, into)]
 	value: MaybeProp<String>,
 	on_value_change: Callback<Option<String>>,
-	#[prop(default = String::from("Panels"), into)] aria_label: String,
+	#[prop(default = copy::ASIDE_RAIL.to_owned(), into)] aria_label: String,
 	#[prop(optional, into)] class: String,
 ) -> impl IntoView {
 	let cls = cn!(ASIDE_RAIL_BASE, class);

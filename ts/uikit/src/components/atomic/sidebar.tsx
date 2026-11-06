@@ -26,6 +26,7 @@ import {
 } from "../../generated/sidebar";
 import { buttonVariantClasses, type ButtonVariant } from "../../generated/button";
 import type { SidebarCollapsible, SidebarSide, SidebarVariant } from "../../generated/sidebar";
+import * as copy from "../../generated/copy";
 
 export type { SidebarMenuButtonSize };
 
@@ -161,7 +162,7 @@ export function SidebarTrigger({
       type="button"
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
-      aria-label="Toggle Sidebar"
+      aria-label={copy.SIDEBAR_TOGGLE}
       className={cn(SIDEBAR_TRIGGER, className)}
       onClick={(event) => {
         onClick?.(event);
@@ -170,7 +171,7 @@ export function SidebarTrigger({
       {...props}
     >
       {children}
-      <span className="sr-only">Toggle Sidebar</span>
+      <span className="sr-only">{copy.SIDEBAR_TOGGLE}</span>
     </button>
   );
 }
@@ -186,10 +187,10 @@ export function SidebarRail({
       type="button"
       data-sidebar="rail"
       data-slot="sidebar-rail"
-      aria-label="Toggle Sidebar"
+      aria-label={copy.SIDEBAR_TOGGLE}
       tabIndex={-1}
       onClick={toggleSidebar}
-      title="Toggle Sidebar"
+      title={copy.SIDEBAR_TOGGLE}
       className={cn(SIDEBAR_RAIL, className)}
       {...props}
     />

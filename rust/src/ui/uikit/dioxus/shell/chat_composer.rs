@@ -1,9 +1,10 @@
 use std::rc::Rc;
 
 use dioxus::prelude::*;
+pub use ev_lib_classes::ChatComposerLabels;
+use ev_lib_classes::copy;
 
 pub use crate::ui::uikit::core::ModelOption;
-pub use ev_lib_classes::ChatComposerLabels;
 use crate::{
 	cn,
 	ui::uikit::{
@@ -26,7 +27,7 @@ pub fn ModelChip(
 	models: Vec<ModelOption>,
 	value: String,
 	on_value_change: EventHandler<String>,
-	#[props(default = String::from("Model"))] aria_label: String,
+	#[props(default = copy::MODEL_CHIP.to_owned())] aria_label: String,
 	#[props(default)] class: String,
 ) -> Element {
 	let shown = models.iter().find(|m| m.id == value).map_or_else(|| value.clone(), |m| m.label.clone());
@@ -66,7 +67,7 @@ pub fn ChatComposer(
 	on_send: EventHandler<String>,
 	#[props(default)] streaming: bool,
 	on_stop: Option<EventHandler<()>>,
-	#[props(default = String::from("Ask the assistant…"))] placeholder: String,
+	#[props(default = copy::CHAT_COMPOSER_PLACEHOLDER.to_owned())] placeholder: String,
 	/// Shows the attach button.
 	on_attach: Option<EventHandler<()>>,
 	/// A row of `ChatAttachment`s above the field.

@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use ev_lib_classes::copy;
 
 use crate::{
 	cn,
@@ -98,7 +99,7 @@ pub fn DialogContent(
 						stroke_linejoin: "round",
 						path { d: "M18 6 6 18M6 6l12 12" }
 					}
-					span { class: "sr-only", "Close" }
+					span { class: "sr-only", {copy::CLOSE} }
 				}
 			}
 		}

@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use ev_lib_classes::copy;
 
 use crate::{
 	cn,
@@ -45,7 +46,7 @@ pub fn WorkspaceTab(
 	value: String,
 	icon: Option<Element>,
 	on_close: Option<EventHandler<()>>,
-	#[props(default = String::from("Close tab"))] close_label: String,
+	#[props(default = copy::WORKSPACE_TAB_CLOSE.to_owned())] close_label: String,
 	#[props(default)] class: String,
 	children: Element,
 ) -> Element {

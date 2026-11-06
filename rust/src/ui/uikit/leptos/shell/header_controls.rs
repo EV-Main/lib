@@ -4,15 +4,12 @@ use leptos::prelude::*;
 pub use crate::ui::uikit::core::HeaderNotification;
 use crate::{
 	cn,
-	ui::uikit::{
-		core::CTRL_K,
-		leptos::{
-			HEADER_BALANCE_BASE, HEADER_BALANCE_CHEVRON, HEADER_BALANCE_FIGURE, HEADER_BALANCE_INTERACTIVE, HEADER_BALANCE_LABEL, HEADER_BALANCE_SKELETON, HEADER_SEARCH_BASE,
-			HEADER_SEARCH_PLACEHOLDER, HeaderBalanceTone, ICON_BUTTON_BASE, IconButtonVariant, Kbd, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER,
-			NOTIFICATION_BELL_ITEM, NOTIFICATION_BELL_ITEM_BODY, NOTIFICATION_BELL_ITEM_DESCRIPTION, NOTIFICATION_BELL_ITEM_DOT, NOTIFICATION_BELL_ITEM_DOT_READ,
-			NOTIFICATION_BELL_ITEM_DOT_UNREAD, NOTIFICATION_BELL_ITEM_TIME, NOTIFICATION_BELL_ITEM_TITLE, NOTIFICATION_BELL_ITEM_TITLE_UNREAD, NOTIFICATION_BELL_LIST,
-			NOTIFICATION_BELL_TRIGGER, NOTIFICATION_DOT, Popover, PopoverContent, PopoverTrigger, Size, Skeleton, button_classes, icon_button::Glyph, icon_button_size_class,
-		},
+	ui::uikit::leptos::{
+		HEADER_BALANCE_BASE, HEADER_BALANCE_CHEVRON, HEADER_BALANCE_FIGURE, HEADER_BALANCE_INTERACTIVE, HEADER_BALANCE_LABEL, HEADER_BALANCE_SKELETON, HEADER_SEARCH_BASE,
+		HEADER_SEARCH_PLACEHOLDER, HeaderBalanceTone, ICON_BUTTON_BASE, IconButtonVariant, Kbd, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER,
+		NOTIFICATION_BELL_ITEM, NOTIFICATION_BELL_ITEM_BODY, NOTIFICATION_BELL_ITEM_DESCRIPTION, NOTIFICATION_BELL_ITEM_DOT, NOTIFICATION_BELL_ITEM_DOT_READ,
+		NOTIFICATION_BELL_ITEM_DOT_UNREAD, NOTIFICATION_BELL_ITEM_TIME, NOTIFICATION_BELL_ITEM_TITLE, NOTIFICATION_BELL_ITEM_TITLE_UNREAD, NOTIFICATION_BELL_LIST, NOTIFICATION_BELL_TRIGGER,
+		NOTIFICATION_DOT, Popover, PopoverContent, PopoverTrigger, Size, Skeleton, button_classes, icon_button::Glyph, icon_button_size_class,
 	},
 };
 
@@ -57,7 +54,7 @@ pub fn HeaderBalance(
 		<span class=HEADER_BALANCE_LABEL>
 			{match label {
 				Some(label) => label.run(),
-				None => "Balance:".into_any(),
+				None => copy::HEADER_BALANCE.into_any(),
 			}}
 		</span>
 		{move || {
@@ -215,12 +212,12 @@ pub fn HeaderSearch(
 	#[prop(optional)] on_click: Option<Callback<leptos::ev::MouseEvent>>,
 	#[prop(optional, into)] class: String,
 ) -> impl IntoView {
-	let platform = RwSignal::new(CTRL_K);
+	let platform = RwSignal::new(copy::CTRL_K);
 	// Read after mount, so the server render and the first client render agree.
 	#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
 	Effect::new(move |_| platform.set(crate::ui::uikit::host::platform_shortcut()));
 	let cls = cn!(HEADER_SEARCH_BASE, class);
-	let placeholder = placeholder.unwrap_or_else(|| String::from("Search or jump to…"));
+	let placeholder = placeholder.unwrap_or_else(|| copy::HEADER_SEARCH.to_owned());
 	let hint = move || shortcut.clone().unwrap_or_else(|| String::from(platform.get()));
 	view! {
 		<button

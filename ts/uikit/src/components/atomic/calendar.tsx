@@ -18,24 +18,7 @@ import {
   CALENDAR_WEEKDAY,
   CALENDAR_WEEKDAY_ROW,
 } from "../../generated/calendar";
-
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-] as const;
-
-// Week starts Monday.
-const WEEKDAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"] as const;
+import * as copy from "../../generated/copy";
 
 const CHEVRON_LEFT = "m15 18-6-6 6-6";
 const CHEVRON_RIGHT = "m9 18 6-6-6-6";
@@ -165,8 +148,8 @@ export function Calendar({
   min,
   max,
   disabled = false,
-  previousMonthLabel = "Previous month",
-  nextMonthLabel = "Next month",
+  previousMonthLabel = copy.CALENDAR_PREVIOUS_MONTH,
+  nextMonthLabel = copy.CALENDAR_NEXT_MONTH,
   locale,
   className,
 }: CalendarProps) {
@@ -185,8 +168,8 @@ export function Calendar({
   const monthIndex = view.getMonth();
   const caption = locale
     ? new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(view)
-    : `${MONTHS[monthIndex]} ${year}`;
-  const weekdays: readonly string[] = locale ? localisedWeekdays(locale) : WEEKDAYS;
+    : `${copy.MONTHS[monthIndex]} ${year}`;
+  const weekdays: readonly string[] = locale ? localisedWeekdays(locale) : copy.WEEKDAYS;
 
   const lead = mondayIndex(view);
   const total = new Date(year, monthIndex + 1, 0).getDate();

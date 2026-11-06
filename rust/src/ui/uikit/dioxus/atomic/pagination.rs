@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use ev_lib_classes::copy;
 
 use crate::{
 	cn,
@@ -11,7 +12,7 @@ pub fn Pagination(#[props(default)] class: String, children: Element) -> Element
 	rsx! {
 		nav {
 			role: "navigation",
-			"aria-label": "pagination",
+			"aria-label": copy::PAGINATION,
 			"data-slot": "pagination",
 			class: cls,
 			{children}
@@ -70,7 +71,7 @@ pub fn PaginationPrevious(#[props(default)] class: String, href: Option<String>,
 		PaginationLink {
 			is_active: false,
 			icon: false,
-			aria_label: "Go to previous page",
+			aria_label: copy::PAGINATION_PREVIOUS_PAGE,
 			class: cls,
 			href,
 			onclick: move |e| { if let Some(h) = onclick { h.call(e); } },
@@ -81,7 +82,7 @@ pub fn PaginationPrevious(#[props(default)] class: String, href: Option<String>,
 				stroke_width: "2",
 				path { d: "m15 18-6-6 6-6" }
 			}
-			span { class: "hidden sm:block", "Previous" }
+			span { class: "hidden sm:block", {copy::PAGINATION_PREVIOUS} }
 		}
 	}
 }
@@ -93,11 +94,11 @@ pub fn PaginationNext(#[props(default)] class: String, href: Option<String>, onc
 		PaginationLink {
 			is_active: false,
 			icon: false,
-			aria_label: "Go to next page",
+			aria_label: copy::PAGINATION_NEXT_PAGE,
 			class: cls,
 			href,
 			onclick: move |e| { if let Some(h) = onclick { h.call(e); } },
-			span { class: "hidden sm:block", "Next" }
+			span { class: "hidden sm:block", {copy::PAGINATION_NEXT} }
 			svg {
 				view_box: "0 0 24 24",
 				fill: "none",
@@ -127,7 +128,7 @@ pub fn PaginationEllipsis(#[props(default)] class: String) -> Element {
 				circle { cx: "19", cy: "12", r: "1" }
 				circle { cx: "5", cy: "12", r: "1" }
 			}
-			span { class: "sr-only", "More pages" }
+			span { class: "sr-only", {copy::PAGINATION_MORE} }
 		}
 	}
 }

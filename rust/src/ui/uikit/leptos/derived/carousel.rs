@@ -1,5 +1,6 @@
 use std::sync::atomic::{AtomicUsize, Ordering};
 
+use ev_lib_classes::copy;
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -125,7 +126,7 @@ pub fn CarouselPrevious(#[prop(optional, into)] class: String) -> impl IntoView 
 			>
 				<path d="m15 18-6-6 6-6"></path>
 			</svg>
-			<span class="sr-only">"Previous slide"</span>
+			<span class="sr-only">{copy::CAROUSEL_PREVIOUS}</span>
 		</Button>
 	}
 }
@@ -159,7 +160,7 @@ pub fn CarouselNext(#[prop(optional, into)] class: String) -> impl IntoView {
 			>
 				<path d="m9 18 6-6-6-6"></path>
 			</svg>
-			<span class="sr-only">"Next slide"</span>
+			<span class="sr-only">{copy::CAROUSEL_NEXT}</span>
 		</Button>
 	}
 }

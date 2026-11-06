@@ -12,6 +12,7 @@ import { Portal } from "../../primitives/portal";
 import { Slot } from "../../primitives/slot";
 import { POPOVER_CONTENT } from "../../generated/popover";
 import type { Side } from "../../generated/primitives";
+import * as copy from "../../generated/copy";
 
 /**
  * `InfoTip` — the ⓘ-beside-a-label *toggletip*. It reuses the popover machinery
@@ -99,7 +100,7 @@ export interface InfoTipTriggerProps extends React.ComponentProps<"button"> {
 
 export function InfoTipTrigger({
   asChild = false,
-  label = "More information",
+  label = copy.MORE_INFORMATION,
   hoverDelay = 500,
   className,
   onClick,

@@ -1,3 +1,4 @@
+use ev_lib_classes::copy;
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -101,7 +102,7 @@ pub fn SheetContent(
 						>
 							<path d="M18 6 6 18M6 6l12 12"></path>
 						</svg>
-						<span class="sr-only">"Close"</span>
+						<span class="sr-only">{copy::CLOSE}</span>
 					</button>
 				</div>
 			}

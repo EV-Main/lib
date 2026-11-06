@@ -23,6 +23,7 @@ import {
   SHEET_TITLE,
 } from "../../generated/sheet";
 import type { Side } from "../../generated/primitives";
+import * as copy from "../../generated/copy";
 
 interface SheetContextValue {
   open: boolean;
@@ -170,7 +171,7 @@ export function SheetContent({
           className={SHEET_CLOSE}
         >
           <XIcon className="size-4" />
-          <span className="sr-only">Close</span>
+          <span className="sr-only">{copy.CLOSE}</span>
         </button>
       </div>
     </Portal>

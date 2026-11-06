@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use ev_lib_classes::copy;
 
 use crate::{
 	cn,
@@ -108,11 +109,11 @@ pub fn SidebarTrigger(#[props(default)] class: String, children: Element) -> Ele
 			r#type: "button",
 			"data-sidebar": "trigger",
 			"data-slot": "sidebar-trigger",
-			"aria-label": "Toggle Sidebar",
+			"aria-label": copy::SIDEBAR_TOGGLE,
 			class: cls,
 			onclick: move |_| ctx.toggle_sidebar(),
 			{children}
-			span { class: "sr-only", "Toggle Sidebar" }
+			span { class: "sr-only", {copy::SIDEBAR_TOGGLE} }
 		}
 	}
 }
@@ -126,9 +127,9 @@ pub fn SidebarRail(#[props(default)] class: String) -> Element {
 			r#type: "button",
 			"data-sidebar": "rail",
 			"data-slot": "sidebar-rail",
-			"aria-label": "Toggle Sidebar",
+			"aria-label": copy::SIDEBAR_TOGGLE,
 			tabindex: "-1",
-			title: "Toggle Sidebar",
+			title: copy::SIDEBAR_TOGGLE,
 			class: cls,
 			onclick: move |_| ctx.toggle_sidebar(),
 		}

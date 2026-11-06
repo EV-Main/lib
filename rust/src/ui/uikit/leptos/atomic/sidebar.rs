@@ -1,3 +1,4 @@
+use ev_lib_classes::copy;
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -106,12 +107,12 @@ pub fn SidebarTrigger(#[prop(optional, into)] class: String, #[prop(optional)] c
 			type="button"
 			data-sidebar="trigger"
 			data-slot="sidebar-trigger"
-			aria-label="Toggle Sidebar"
+			aria-label=copy::SIDEBAR_TOGGLE
 			class=cls
 			on:click=move |_| ctx.toggle_sidebar()
 		>
 			{children.map(|c| c())}
-			<span class="sr-only">"Toggle Sidebar"</span>
+			<span class="sr-only">{copy::SIDEBAR_TOGGLE}</span>
 		</button>
 	}
 }
@@ -125,9 +126,9 @@ pub fn SidebarRail(#[prop(optional, into)] class: String) -> impl IntoView {
 			type="button"
 			data-sidebar="rail"
 			data-slot="sidebar-rail"
-			aria-label="Toggle Sidebar"
+			aria-label=copy::SIDEBAR_TOGGLE
 			tabindex="-1"
-			title="Toggle Sidebar"
+			title=copy::SIDEBAR_TOGGLE
 			class=cls
 			on:click=move |_| ctx.toggle_sidebar()
 		></button>

@@ -35,6 +35,7 @@
 //! "Limitations".
 
 use dioxus::prelude::*;
+use ev_lib_classes::copy;
 
 use crate::{
 	cn,
@@ -197,7 +198,7 @@ fn ToastItem(toast: ToastView) -> Element {
 			}
 			button {
 				r#type: "button",
-				"aria-label": "Close",
+				"aria-label": copy::CLOSE,
 				"data-slot": "toast-close",
 				class: TOAST_CLOSE,
 				onclick: move |_| handle.dismiss(id),

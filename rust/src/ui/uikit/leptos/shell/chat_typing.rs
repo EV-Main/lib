@@ -1,3 +1,4 @@
+use ev_lib_classes::copy;
 use leptos::prelude::*;
 
 use crate::{
@@ -12,7 +13,7 @@ use crate::{
 /// motion the same sheet swaps the dots for the still "…". It is a status
 /// region, so a screen reader hears `label` once when it appears.
 #[component]
-pub fn ChatTyping(#[prop(default = String::from("Assistant is thinking"), into)] label: String, #[prop(optional, into)] class: String) -> impl IntoView {
+pub fn ChatTyping(#[prop(default = copy::CHAT_TYPING.to_owned(), into)] label: String, #[prop(optional, into)] class: String) -> impl IntoView {
 	view! {
 		<span role="status" aria-label=label data-slot="chat-typing" class=cn!(CHAT_TYPING_BASE, class)>
 			{(0..3)

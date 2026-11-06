@@ -37,8 +37,8 @@ pub struct DateTimePickerLabels {
 impl Default for DateTimePickerLabels {
 	fn default() -> Self {
 		Self {
-			previous_month: "Previous month".to_owned(),
-			next_month: "Next month".to_owned(),
+			previous_month: crate::copy::CALENDAR_PREVIOUS_MONTH.to_owned(),
+			next_month: crate::copy::CALENDAR_NEXT_MONTH.to_owned(),
 			hours: "Hours".to_owned(),
 			minutes: "Minutes".to_owned(),
 			clear: "Clear".to_owned(),

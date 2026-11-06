@@ -62,7 +62,7 @@ const USD: Intl.NumberFormatOptions = { style: "currency", currency: "USD" };
 
 /** "Balance: $0.00" in the header; a button only when given `onClick`. */
 export function HeaderBalance({
-  label = "Balance:",
+  label = copy.HEADER_BALANCE,
   value,
   amount,
   format = USD,
@@ -193,17 +193,17 @@ const APPLE = /Mac|iPhone|iPad|iPod/;
 
 // Read after mount, so the server render and the first client render agree.
 function usePlatformShortcut(): string {
-  const [shortcut, setShortcut] = React.useState("Ctrl K");
+  const [shortcut, setShortcut] = React.useState<string>(copy.CTRL_K);
   React.useEffect(() => {
     const nav = navigator as Navigator & { userAgentData?: { platform?: string } };
-    if (APPLE.test(nav.userAgentData?.platform ?? nav.platform ?? "")) setShortcut("⌘K");
+    if (APPLE.test(nav.userAgentData?.platform ?? nav.platform ?? "")) setShortcut(copy.COMMAND_K);
   }, []);
   return shortcut;
 }
 
 /** A button dressed as the search field; it opens the palette rather than taking input. */
 export function HeaderSearch({
-  placeholder = "Search or jump to…",
+  placeholder = copy.HEADER_SEARCH,
   shortcut,
   className,
   ...props

@@ -1,7 +1,8 @@
+pub use ev_lib_classes::ChatComposerLabels;
+use ev_lib_classes::copy;
 use leptos::prelude::*;
 
 pub use crate::ui::uikit::core::ModelOption;
-pub use ev_lib_classes::ChatComposerLabels;
 use crate::{
 	cn,
 	ui::uikit::{
@@ -24,7 +25,7 @@ pub fn ModelChip(
 	models: Vec<ModelOption>,
 	#[prop(into)] value: Signal<String>,
 	on_value_change: Callback<String>,
-	#[prop(default = String::from("Model"), into)] aria_label: String,
+	#[prop(default = copy::MODEL_CHIP.to_owned(), into)] aria_label: String,
 	#[prop(optional, into)] class: String,
 ) -> impl IntoView {
 	let options = StoredValue::new(models.clone());
@@ -75,7 +76,7 @@ pub fn ChatComposer(
 	on_send: Callback<String>,
 	#[prop(optional, into)] streaming: Signal<bool>,
 	#[prop(optional)] on_stop: Option<Callback<()>>,
-	#[prop(default = String::from("Ask the assistant…"), into)] placeholder: String,
+	#[prop(default = copy::CHAT_COMPOSER_PLACEHOLDER.to_owned(), into)] placeholder: String,
 	/// Shows the attach button.
 	#[prop(optional)]
 	on_attach: Option<Callback<()>>,
