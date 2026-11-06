@@ -10,6 +10,7 @@ use crate::table;
 
 pub fn manifest() -> Vec<(&'static str, Vec<Ts>)> {
 	vec![
+		("size", vec![table::<Size>("sizeClasses", "Size")]),
 		("button", button()),
 		("accent", accent()),
 		("alert", alert()),
@@ -2304,14 +2305,7 @@ fn toggle() -> Vec<Ts> {
 			value: TOGGLE_BASE,
 		},
 		table::<ToggleVariant>("toggleVariantClasses", "ToggleVariant"),
-		Ts::Table {
-			name: "toggleSizeClasses",
-			ty: "ToggleSize",
-			entries: [(Size::Md, "md"), (Size::Xs, "xs"), (Size::Sm, "sm"), (Size::Lg, "lg"), (Size::Xl, "xl")]
-				.into_iter()
-				.map(|(s, k)| (k.to_string(), toggle_size_class(s).to_string()))
-				.collect(),
-		},
+		size_table("toggleSizeClasses", "ToggleSize", toggle_size_class),
 	]
 }
 

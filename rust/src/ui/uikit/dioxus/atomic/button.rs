@@ -52,6 +52,8 @@ pub fn Button(
 
 #[cfg(test)]
 mod tests {
+	use tailwind_fuse::AsTailwindClass;
+
 	use super::*;
 	use crate::ui::uikit::dioxus::{FILLED_FOCUS_RING, button_size_class, test_util::render};
 
@@ -62,7 +64,7 @@ mod tests {
 		}
 		let html = render(app);
 		assert!(html.contains("bg-primary"), "{html}");
-		assert!(html.contains("h-9"), "{html}");
+		assert!(html.contains(Size::Md.as_class()), "{html}");
 		assert!(html.contains("go"));
 		assert!(html.contains("data-slot=\"button\""));
 	}
@@ -75,7 +77,7 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("h-8 aspect-square"), "{html}");
+		assert!(html.contains(Size::Sm.as_class()) && html.contains("aspect-square px-0"), "{html}");
 	}
 
 	#[test]
@@ -86,7 +88,7 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("h-10 aspect-square"), "{html}");
+		assert!(html.contains(Size::Lg.as_class()) && html.contains("aspect-square"), "{html}");
 		assert!(!html.contains("px-6"), "icon button must not carry text padding: {html}");
 	}
 
@@ -102,7 +104,10 @@ mod tests {
 		// the rendered attribute escapes `>`, so match the escaped class string
 		let text = button_size_class(Size::Touch, false).replace('>', "&#62;");
 		assert!(html.contains(&text), "{html}");
-		assert!(html.contains("size-11 px-0"), "icon touch button must be a 44 px square: {html}");
+		assert!(
+			html.contains(Size::Touch.as_class()) && html.contains("aspect-square px-0"),
+			"icon touch button must be a square: {html}"
+		);
 	}
 
 	#[test]

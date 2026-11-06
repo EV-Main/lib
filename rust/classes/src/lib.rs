@@ -394,6 +394,17 @@ mod tests {
 		assert_eq!(cn!("has-[:focus-visible]:ring-2", "p-(--pad) p-2"), "has-[:focus-visible]:ring-2 p-2");
 	}
 
+	/// A step's `--control-box` yields to a later one by property name, and the
+	/// height reading it yields to a literal one.
+	#[test]
+	fn control_box_conflicts_by_property() {
+		assert_eq!(
+			cn!("[--control-box:var(--control-h-sm)] px-3", "[--control-box:var(--control-h-xs)]"),
+			"px-3 [--control-box:var(--control-h-xs)]"
+		);
+		assert_eq!(cn!("h-(--control-box) min-w-(--control-box)", "h-auto"), "min-w-(--control-box) h-auto");
+	}
+
 	/// The serif face is a family, not a weight: a weight beside it keeps it,
 	/// and another family replaces it.
 	#[test]
