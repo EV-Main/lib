@@ -41,7 +41,7 @@ ev_lib = { version = "0.31", default-features = false, features = ["architecture
                     ┌────────────────────────────────┐
                     │ ui                             │
                     │  uikit: core · dioxus · leptos │   ts: uikit, marketing, mfe
-                    │  active: mfe · contact         │
+                    │  active: mfe                   │
                     └───────────────┬────────────────┘
  ┌───────────────────────────┐      │     ┌─────────────────────────────────────┐
  │ product                   │      │     │ ops                                 │
@@ -103,9 +103,9 @@ so the grouping is internal. Inside the crate, paths name the scope
 │  │ types │ │ i18n          │◀──┐ requires          │ analytics │ │ alerts       │  │
 │  │ Phone,│ │ locales, t!,  │   │                   └───────────┘ │ (native,     │  │
 │  │ Email │ │ ICU fmt,policy│ ┌─┴────────────┐ ┌──────────────┐   │  Discord)    │  │
-│  └───────┘ └───────────────┘ │ mfe (wasm)   │ │ contact      │   └──────────────┘  │
-│                              │ mfe! remotes │ │ tel: · wa.me │ ┌──────────────┐    │
-│                              └──────────────┘ └──────────────┘ │ settings     │    │
+│  └───────┘ └───────────────┘ │ mfe (wasm)   │                  └──────────────┘  │
+│                              │ mfe! remotes │                  ┌──────────────┐    │
+│                              └──────────────┘                  │ settings     │    │
 │  ┌───────────────────────────────────┐                         │ settings!    │    │
 │  │ codegen/ts_gen: Ts::{Const,Value, │                         │ (+drift)     │    │
 │  │ Table,Union,Types} via serde+ts-rs│                         └──────────────┘    │
@@ -115,13 +115,12 @@ so the grouping is internal. Inside the crate, paths name the scope
 ┌─ crate ev_lib_gen (`nix run .#gen`, re-run by pre-commit hook) ──┐
 │  manifest(): uikit class tables ─▶ ts/uikit/src/generated/*.ts   │
 │  shared():   i18n/locales, types/e164, experiments/contract,     │
-│              settings/contract, analytics/host, marketing/contact│
+│              settings/contract, analytics/host                   │
 │              ─▶ ts/<pkg>/src/generated/*.ts                      │
 │  css:        tokens/theme/ev ─▶ rust/classes/css + ts/uikit/styles
 │  inventory:  ─▶ rust/classes/uikit-classes.txt                   │
 └──────────────────────────────────────────────────────────────────┘
   uikit-viewer (Dioxus web app) ─uses─▶ ev_lib[uikit_dioxus,wasm]   ≙ ts/uikit/example
-  tests/fixtures/<pkg>/*.json: vectors both languages' suites read
 ```
 
 What of `ts/` is hand-written rather than generated, and why:

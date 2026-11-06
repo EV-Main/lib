@@ -26,7 +26,11 @@ Rust crate and its TypeScript mirror at once.
 
 - **`kitstart` moved to `EV-Service-Arb/sites_tools`** (`ev_lib` feature
   `kitstart`, `@evinvest/kitstart`, `lib.mkLanding`): the npm name is kept and
-  now publishes from there. Contact links stay as the `marketing` feature.
+  now publishes from there.
+- **Contact links moved to `@evinvest/sites-tools`** (`contactChannel`,
+  `telHref`, `whatsappHref`, `ContactLinkTracker`, `ContactClick`): removed
+  from `@evinvest/marketing` together with its `./tracker` subpath, and the
+  `ev_lib` feature `marketing` (the Rust twin) is gone.
 - **Repository renamed** `EV-Main/lib` → `EV-Main/web_std`.
 - **Font roles** (`ev_lib` `uikit` and `@evinvest/uikit`): `sans`, `serif` and
   `mono` are separate parameters (`--brand-font-sans`, `--brand-font-serif`,

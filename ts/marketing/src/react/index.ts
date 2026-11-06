@@ -2,7 +2,7 @@
  * `@evinvest/marketing/react` — the interactive half, a `"use client"` bundle.
  *
  * Motion primitives on `motion` (peer), form pieces on `@evinvest/uikit`
- * (peer), and the click tracker / click-to-load facade. Server-safe values
+ * (peer), and the click-to-load facade. Server-safe values
  * (motion tokens, `accented`, validation, JSON-LD) live in the `.` core — a
  * plain export from this bundle is a client reference on the server.
  */
@@ -27,12 +27,6 @@ export {
 } from "./form/use-validated-form";
 export { TextField, type TextFieldProps } from "./form/text-field";
 export { SentPanel, type SentPanelProps } from "./form/sent-panel";
-
-export {
-  ContactLinkTracker,
-  type ContactClick,
-  type ContactLinkTrackerProps,
-} from "./contact-link-tracker";
 
 export { ClickToLoad, type ClickToLoadProps } from "./click-to-load";
 export { YouTubeFacade, type YouTubeFacadeProps } from "./youtube-facade";

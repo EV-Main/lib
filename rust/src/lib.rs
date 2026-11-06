@@ -52,9 +52,6 @@
 //! - **`ts_gen`** — TypeScript emitted from Rust types (through `ts-rs`) and
 //!   values (through serde), for a repo's own `gen` step. Build-time only. See
 //!   [`ts_gen`].
-//! - **`marketing`** — outbound contact links (the Rust twin of
-//!   `@evinvest/marketing`'s contact core): `tel:` / `wa.me` hrefs and which
-//!   channel a link opens. No I/O, wasm-safe. See [`marketing`].
 
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
@@ -89,8 +86,6 @@ pub use ops::settings;
 pub use product::analytics;
 #[cfg(feature = "experiments")]
 pub use product::experiments;
-#[cfg(feature = "marketing")]
-pub use ui::active::contact as marketing;
 #[cfg(all(feature = "mfe", target_arch = "wasm32"))]
 pub use ui::active::mfe;
 #[cfg(feature = "uikit_dioxus")]

@@ -9,13 +9,10 @@ import {
   JsonLd,
   accented,
   charLength,
-  contactChannel,
   firstFieldErrors,
   fromSafeParse,
   localBusiness,
-  telHref,
   translateErrors,
-  whatsappHref,
 } from "../src/index";
 
 describe("dependency honesty", () => {
@@ -139,27 +136,6 @@ describe("validation", () => {
 
   it("translates keys only at the edge", () => {
     expect(translateErrors({ a: "k.a" }, k => k.toUpperCase())).toEqual({ a: "K.A" });
-  });
-});
-
-// Shared with ev_lib::marketing (rust/tests/marketing.rs).
-const CONTACT = JSON.parse(readFileSync(join(import.meta.dirname, "../../../tests/fixtures/marketing/contact.json"), "utf8")) as {
-  channel: [string, ReturnType<typeof contactChannel>][];
-  tel: [string, string][];
-  whatsapp: [string, string | null, string][];
-};
-
-describe("contact links", () => {
-  it.each(CONTACT.channel)("classifies %s as %s", (href, channel) => {
-    expect(contactChannel(href)).toBe(channel);
-  });
-
-  it.each(CONTACT.tel)("tel href of %s is %s", (phone, href) => {
-    expect(telHref(phone)).toBe(href);
-  });
-
-  it.each(CONTACT.whatsapp)("wa.me href of %s with %s is %s", (phone, message, href) => {
-    expect(whatsappHref(phone, message ?? undefined)).toBe(href);
   });
 });
 

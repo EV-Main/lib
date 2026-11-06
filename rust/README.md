@@ -11,7 +11,7 @@ rust/
 │   ├── kernel/         architecture · i18n · types
 │   ├── product/        analytics · experiments
 │   ├── ops/            settings · error_monitoring · otel · alerts
-│   ├── ui/             uikit (core + dioxus + leptos ports) · active (mfe, marketing)
+│   ├── ui/             uikit (core + dioxus + leptos ports) · active (mfe)
 │   └── codegen/        ts_gen
 ├── classes/            ev_lib_classes: the class tables and token sheets
 ├── gen/                ev_lib_gen: `nix run .#gen`

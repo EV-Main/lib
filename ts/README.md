@@ -13,7 +13,7 @@ ts/
 ├── experiments/       port of the `experiments` Cargo feature (frontend-only A/B testing)
 ├── mfe/               host side of the `mfe` Cargo feature (registry, loader, events, RemoteElement)
 ├── settings/          port of the `settings` Cargo feature (typed env settings)
-├── marketing/         landing-page layer over uikit: motion, form harness, contact tracking
+├── marketing/         landing-page layer over uikit: motion, form harness, click-to-load
 └── i18n/              five-locale i18n: registry, URL contract, ICU-subset formatter
 ```
 
@@ -23,7 +23,7 @@ Two exceptions. `i18n` has no Cargo feature yet; the planned one will read the
 *same* `messages/<locale>/*.json` catalogues to localise transactional
 email, so the two sides share one translation source rather than drifting.
 `marketing` has none by design: it is React-only glue over the kit (motion,
-forms, click tracking) for landing pages.
+forms, click-to-load) for landing pages.
 `node_modules/`, `dist/`, and `*.tsbuildinfo` are git-ignored.
 
 ## What is not generated
@@ -33,12 +33,11 @@ _As of 2026-10-09._
 `ev_lib_gen` emits only **data** (consts, values, unions, tables, types; see
 [`docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md#generated-typescript--ts_gen)).
 That is ~1k of ~40k lines, almost all uikit class tables. The rest is
-hand-written for one of four reasons:
+hand-written for one of three reasons:
 
 - **A** — logic, not data: `ts_gen` cannot emit a function
 - **B** — React / Next / vendor-SDK glue, with no renderer-neutral form
 - **C** — no Rust twin at all
-- **D** — hand-ported mirror of Rust logic, pinned by shared vectors (`tests/fixtures/`, contract tests)
 
 ```
  package      lines  what                                                   why
@@ -62,8 +61,7 @@ hand-written for one of four reasons:
  analytics     1.4k  sink / beacon / consent                                A
                      posthog, react, next                                   B
  error-monitoring 0.6k  Sentry / React / Next wiring                        B
- marketing     2.0k  core/contact                                           D  fixtures/marketing
-                     motion, form harness, react                            C
+ marketing     1.8k  motion, form harness, react                            C
 ```
 
 Known data still copied by hand:

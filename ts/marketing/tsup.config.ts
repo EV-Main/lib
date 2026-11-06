@@ -19,14 +19,12 @@ import { defineConfig, type Options } from "tsup";
 /**
  * The `"use client"` entries. One file per subpath, with code splitting so the
  * pieces they share land in chunks instead of copies: an app that imports only
- * the tracker (`./tracker`) does not download `motion`, which it did while
- * `./react` was the only client entry and one bundle.
+ * `./click-to-load` does not download `motion`.
  */
 export const clientConfig = {
   entry: {
     react: "src/react/index.ts",
     motion: "src/motion/index.ts",
-    tracker: "src/react/contact-link-tracker.tsx",
     "click-to-load": "src/react/embeds.ts",
     form: "src/react/form/index.ts",
   },

@@ -65,7 +65,7 @@ TS packages live under [`ts/`](ts/), one directory per library, each with its ow
 [`ts/mfe/`](ts/mfe/) (the microfrontend host contract — registry, loader, events),
 [`ts/settings/`](ts/settings/) (typed env settings),
 [`ts/marketing/`](ts/marketing/) (the landing-page layer over the kit — motion,
-form harness, contact-link tracking; the `marketing` feature mirrors its contact core), and
+form harness, click-to-load facade, JSON-LD), and
 [`ts/i18n/`](ts/i18n/) (five-locale i18n — the one package with no Cargo
 counterpart yet).
 

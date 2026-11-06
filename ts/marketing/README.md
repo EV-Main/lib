@@ -2,7 +2,7 @@
 
 The **marketing-site layer** on top of [`@evinvest/uikit`](../uikit): what every
 landing page needs and the kit deliberately does not carry — motion primitives,
-a key-based form harness and field, a contact-link click tracker, a
+a key-based form harness and field, a
 click-to-load facade for third-party embeds, and schema.org JSON-LD builders.
 
 It is a separate package so the kit stays **dep-light**: motion pulls in
@@ -14,8 +14,9 @@ entry tracker, the YouTube plate) and generalised: **no brand strings, logos,
 copy, or i18n library**. Anything a reader sees is passed in — a translated
 string, or a translator `t(key)`.
 
-Only the contact-link core has a Rust twin, `ev_lib::marketing`; both run
-`tests/fixtures/marketing/contact.json`. The rest is browser/React glue.
+It is browser/React glue and has no Rust counterpart. Contact links
+(`contactChannel`, `telHref`, `whatsappHref`, `ContactLinkTracker`) live in
+`@evinvest/sites-tools`.
 
 ## Dep honesty
 
@@ -38,8 +39,7 @@ Entry points — import the narrowest one; each ships only what it names:
 
 | Entry | Side | What | Pulls `motion` |
 |---|---|---|---|
-| `.` | server-safe | motion tokens, `accented`, validation, contact-link helpers, JSON-LD | no |
-| `./tracker` | client | `ContactLinkTracker` | no |
+| `.` | server-safe | motion tokens, `accented`, validation, JSON-LD | no |
 | `./click-to-load` | client | `ClickToLoad`, `YouTubeFacade` — needs `@evinvest/uikit` | no |
 | `./form` | client | `useValidatedForm`, `TextField`, `SentPanel` — needs `@evinvest/uikit` | no |
 | `./motion` | client | the motion primitives on `motion` | **yes** |
@@ -47,10 +47,6 @@ Entry points — import the narrowest one; each ships only what it names:
 | `./motion.css` | stylesheet | the engine `./motion-css` needs | no |
 | `./next` | build-time | `withMotionEngine` | no |
 | `./react` | client | everything client above, one barrel (kept for existing call sites) | **yes** |
-
-Importing the tracker from `./react` used to bring `motion` along (~30 KB gz):
-the barrel was one bundle. The client entries are now split with shared
-chunks, so `./tracker` is the tracker.
 
 ## Install
 
@@ -67,7 +63,7 @@ scan the bundle next to the kit's:
 @source "../node_modules/@evinvest/marketing/dist";
 ```
 
-The motion primitives and the tracker use inline styles for the parts that must
+The motion primitives use inline styles for the parts that must
 hold without that scan (the visually-hidden headline copy, `display: contents`).
 
 ## Motion — `./motion`, or `./motion-css` with no JavaScript
@@ -212,30 +208,6 @@ return (
   announced for its control (`aria-invalid` + `aria-describedby`).
 - `fromSafeParse` / `firstFieldErrors` accept any zod-3/4-shaped result
   structurally; the package does not depend on zod.
-
-## Contact-link tracking
-
-```tsx
-import { ContactLinkTracker } from "@evinvest/marketing/tracker";
-
-<ContactLinkTracker onContact={({ channel, href, data }) => capture("contact_clicked", { channel, ...data })}>
-  {children}
-</ContactLinkTracker>
-```
-
-One delegated listener in the **capture phase** reports clicks on `tel:`,
-`mailto:` and WhatsApp (`wa.me`, `api.whatsapp.com`, `web.whatsapp.com`,
-`whatsapp:`) links anywhere below it — including markup the app does not own
-and widgets that stop propagation. It never cancels the navigation. The link's
-`data-*` attributes come through as `data`, so `<a data-location="hero">` tags
-the event without the tracker knowing your vocabulary.
-
-The sink is **injected**: the package never imports `@evinvest/analytics`.
-Pick a beacon transport in your sink — `tel:` / `wa.me` hand the reader to
-another app right after the click.
-
-`contactChannel(href)`, `telHref(phone)` and `whatsappHref(phone, message?)`
-live in the core, so links are built and classified by the same rule.
 
 ## Click-to-load facade
 

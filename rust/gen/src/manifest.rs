@@ -94,7 +94,6 @@ pub fn shared() -> Vec<(&'static str, &'static str, Vec<Ts>)> {
 		("experiments", "contract", experiments()),
 		("settings", "contract", settings()),
 		("analytics", "host", analytics()),
-		("marketing", "contact", contact()),
 	]
 }
 fn band() -> Vec<Ts> {
@@ -2467,19 +2466,4 @@ fn analytics() -> Vec<Ts> {
 		name: "DEFAULT_HOST",
 		value: ev_lib::analytics::DEFAULT_HOST,
 	}]
-}
-
-fn contact() -> Vec<Ts> {
-	use ev_lib::marketing::{ContactChannel, WHATSAPP_HOSTS};
-	vec![
-		Ts::Union {
-			name: "CONTACT_CHANNELS",
-			ty: "ContactChannel",
-			items: ContactChannel::iter().map(ContactChannel::as_str).collect(),
-		},
-		Ts::Value {
-			name: "WHATSAPP_HOSTS",
-			value: WHATSAPP_HOSTS.as_slice().into(),
-		},
-	]
 }

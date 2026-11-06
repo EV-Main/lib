@@ -3,8 +3,8 @@
  *
  * No `"use client"`, no DOM, no hooks: everything here can be imported from a
  * React Server Component and gets the real value, not a client reference.
- * The interactive half (motion, the form field and harness, the click tracker,
- * the click-to-load facade) is `@evinvest/marketing/react`.
+ * The interactive half (motion, the form field and harness, the
+ * click-to-load facade) is `@evinvest/marketing/react`.
  */
 
 export {
@@ -34,13 +34,6 @@ export {
   type Validated,
   type ValidationIssue,
 } from "./core/validation";
-
-export {
-  contactChannel,
-  telHref,
-  whatsappHref,
-  type ContactChannel,
-} from "./core/contact";
 
 export {
   JsonLd,

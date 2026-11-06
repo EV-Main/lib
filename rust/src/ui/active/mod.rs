@@ -1,7 +1,4 @@
-//! Page behaviour beyond the kit: microfrontend remotes, contact links.
-
-#[cfg(feature = "marketing")]
-pub mod contact;
+//! Page behaviour beyond the kit: microfrontend remotes.
 
 // wasm-only: the module links wasm-bindgen/web-sys, which aren't deps on native.
 // The `mfe!` macro is `#[macro_export]`ed from inside, so it too is wasm-only —

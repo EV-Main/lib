@@ -1,7 +1,7 @@
 {
   "name": "@evinvest/marketing",
   "version": "0.5.0",
-  "description": "Marketing-site layer on top of @evinvest/uikit: motion primitives with reduced-motion fallbacks, a key-based form harness and field, a contact-link click tracker with an injected sink, a click-to-load facade for third-party widgets, and schema.org JSON-LD helpers. Server-safe core plus a \"use client\" React subpath.",
+  "description": "Marketing-site layer on top of @evinvest/uikit: motion primitives with reduced-motion fallbacks, a key-based form harness and field, a click-to-load facade for third-party widgets, and schema.org JSON-LD helpers. Server-safe core plus a \"use client\" React subpath.",
   "license": "BlueOak-1.0.0",
   "publishConfig": {
     "access": "public"
@@ -30,10 +30,6 @@
       "import": "./dist/motion-css.js"
     },
     "./motion.css": "./styles/motion.css",
-    "./tracker": {
-      "types": "./dist/tracker.d.ts",
-      "import": "./dist/tracker.js"
-    },
     "./click-to-load": {
       "types": "./dist/click-to-load.d.ts",
       "import": "./dist/click-to-load.js"
