@@ -5,12 +5,6 @@
 /* the kit's theme contract (dark palette + @theme tokens + toast keyframes) */
 @import "../../styles/tokens.css";
 
-/* The kit reads these two names for its fonts; the fontsource packages register
-   the variable families under their own names. */
-:root {
-  --font-inter: "Inter Variable";
-}
-
 html {
   background: var(--background);
   color: var(--ink);

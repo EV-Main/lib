@@ -14,7 +14,7 @@ const BODY = "Net exposure is 38% of equity.";
 const CAPTION = "24h volume · Funding · Updated 13:06";
 const NUMS = "2402.25  2399.77  2402.24";
 
-const SERIF = "Inter Light";
+const SERIF = "Playfair Display Light";
 const SANS = "Inter Regular";
 const SANS_MEDIUM = "Inter Medium";
 
@@ -79,7 +79,7 @@ export default function Type() {
   return (
     <PageRoot
       title="Type"
-      lede="One family, Inter; headings and figures use the serif role, which a brand may point at another face. Letter spacing is 0 and nothing is upper-cased."
+      lede="Inter for text; headings and figures use the serif role (Playfair Display), which a brand may point at another face. Letter spacing is 0 and nothing is upper-cased."
     >
       <Block title="Display" note="Headings and figures use the serif role. Figures are tabular so columns of numbers align.">
         <StyleTable styles={DISPLAY} />

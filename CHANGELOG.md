@@ -38,8 +38,9 @@ Rust crate and its TypeScript mirror at once.
   pre-1.0 navy look is opt-in as `data-theme="oldschool"`. The planes are flat
   steps separated by a hairline; panels are 6 px, controls and chips 4 px, and
   the shadow tiers are a zero shadow outside Oldschool. A brand file must add
-  `chart-6` (29 names). `--font-playfair` is no longer read: the serif face
-  is Source Serif 4 (`--font-source-serif`). Brands without their own
+  `chart-6` (29 names). The font role `display` is renamed `serif`
+  (`--brand-font-display` → `--brand-font-serif`, `font-display` →
+  `font-serif`, `[fonts] display` → `serif`). Brands without their own
   radius or depth take the u2 shapes. See the README's *Migrating 0.x → 1.0*.
 - **Variant names** (`ev_lib` `uikit` and `@evinvest/uikit`): `ButtonVariant`
   is `Primary` (outline face, the default), `Secondary`, `Ghost`, `Solid`

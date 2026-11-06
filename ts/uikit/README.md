@@ -229,13 +229,12 @@ under a brand under another brand may match either.
 
 The families are parameters, one per role, and not part of the 29 colour names:
 a palette is complete without them, and the generator only carries what a
-brand file's `[fonts]` declares. A site that tells kinds of content apart by
-face (a serif for headings and figures, a sans for the rest) sets two roles.
+brand file's `[fonts]` declares. Unset, each is EV's:
 
-| parameter | utilities | unset |
+| parameter | utilities | default (EV) |
 |---|---|---|
 | `--brand-font-sans` | `font-sans`, the page's base family | `--font-inter`, else `"Inter"` |
-| `--brand-font-serif` | `font-serif` | the sans role |
+| `--brand-font-serif` | `font-serif` | `--font-playfair`, else `"Playfair Display"` |
 | `--brand-font-mono` | `font-mono` | `--font-inter`, else `"Inter"` |
 
 Declare them on the brand scope (the palette generator writes them from
@@ -249,9 +248,7 @@ the kit ships no font files:
 ```
 
 The serif role is the second face, for headings, figures, wordmarks, italic
-accents and the avatar initial; it need not have serifs. `--font-playfair` is no
-longer read: a site that wants a serif there sets `--brand-font-serif` to the
-family it loads.
+accents and the avatar initial; it need not have serifs.
 
 The utilities resolve the chain on the element, so a scope re-fonts everything
 under it that carries one. The page's base family resolves once, on `<html>`: a
@@ -820,10 +817,8 @@ becomes `variant="solid"`.
 
 **Tokens and look**
 
-- `--font-playfair` is no longer read; a site that keeps a serif for headings
-  sets `--brand-font-serif` to it (see [Fonts](#fonts)). Anyone who adopted
-  `--brand-font-display` / `font-display` renames them to `--brand-font-serif` /
-  `font-serif`.
+- The font role `display` is `serif`: `--brand-font-display` / `font-display`
+  become `--brand-font-serif` / `font-serif` (see [Fonts](#fonts)).
 - A brand file must add `chart-6` (29 names now); `evinvest-palette` names it.
 - Panel radius is 6 px at every width (the `sm` bump to 8 px is gone), controls
   4 px, and the depth tiers are flat. **Aquafix, vifnet and any other brand take
