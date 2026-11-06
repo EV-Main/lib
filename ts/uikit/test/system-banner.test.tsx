@@ -1,32 +1,23 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { SystemBanner } from "../src/components/shell/system-banner";
+import { toneClasses } from "../src/generated/tone";
 import { SectionLabel } from "../src/components/shell/page-frame";
 
 describe("SystemBanner tones", () => {
-  it("tints a warn strip and its icon", () => {
+  it("fuses the tone onto the strip", () => {
     const { container } = render(
       <SystemBanner tone="warn" icon={<svg data-testid="glyph" />}>
         Maintenance tonight
       </SystemBanner>,
     );
-    expect(screen.getByRole("status")).toHaveClass("rounded-panel", "border", "border-tint-warn-edge", "bg-tint-warn-fill");
-    expect(screen.getByRole("status")).not.toHaveClass("bg-card");
-    expect(screen.getByTestId("glyph").parentElement).toHaveClass("text-accent-warn");
+    expect(screen.getByRole("status")).toHaveClass("rounded-panel", "border", toneClasses.warn);
     expect(container.querySelector('[data-tone="warn"]')).not.toBeNull();
   });
 
-  it.each([
-    ["neutral", "text-ink-soft"],
-    ["primary", "text-primary-ink"],
-    ["info", "text-accent-info-ink"],
-  ] as const)("tints the %s icon", (tone, cls) => {
-    render(
-      <SystemBanner tone={tone} icon={<svg data-testid="glyph" />}>
-        Hello
-      </SystemBanner>,
-    );
-    expect(screen.getByTestId("glyph").parentElement).toHaveClass(cls);
+  it("defaults to the neutral tone", () => {
+    render(<SystemBanner>Hello</SystemBanner>);
+    expect(screen.getByRole("status")).toHaveClass(toneClasses.neutral);
   });
 
   it("renders an action after the message", () => {

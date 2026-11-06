@@ -2,12 +2,12 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{ALERT_BASE, ALERT_DESCRIPTION, ALERT_TITLE, AlertVariant},
+	ui::uikit::dioxus::{ALERT_BASE, ALERT_DESCRIPTION, ALERT_TITLE, Tone},
 };
 
 #[component]
-pub fn Alert(#[props(default)] variant: AlertVariant, #[props(default)] class: String, children: Element) -> Element {
-	let cls = cn!(ALERT_BASE, variant.as_class(), class);
+pub fn Alert(#[props(default)] tone: Tone, #[props(default)] class: String, children: Element) -> Element {
+	let cls = cn!(ALERT_BASE, tone.as_class(), class);
 	rsx! {
 		div { class: cls, "data-slot": "alert", role: "alert", {children} }
 	}
@@ -31,6 +31,8 @@ pub fn AlertDescription(#[props(default)] class: String, children: Element) -> E
 
 #[cfg(test)]
 mod tests {
+	use tailwind_fuse::AsTailwindClass;
+
 	use super::*;
 	use crate::ui::uikit::dioxus::test_util::render;
 
@@ -47,52 +49,15 @@ mod tests {
 	}
 
 	#[test]
-	fn destructive_variant() {
+	fn the_root_wears_the_tone() {
 		fn app() -> Element {
 			rsx! {
-				Alert { variant: AlertVariant::Destructive, "x" }
+				Alert { tone: Tone::Error, AlertDescription { "d" } }
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("text-accent-error"), "{html}");
-	}
-
-	#[test]
-	fn success_variant() {
-		fn app() -> Element {
-			rsx! {
-				Alert { variant: AlertVariant::Success, "x" }
-			}
-		}
-		let html = render(app);
-		assert!(html.contains("text-positive"), "{html}");
-	}
-
-	#[test]
-	fn info_variant() {
-		fn app() -> Element {
-			rsx! {
-				Alert { variant: AlertVariant::Info, "x" }
-			}
-		}
-		let html = render(app);
-		assert!(html.contains("text-accent-info"), "{html}");
-	}
-
-	/// The role tint stays on the root (icon + title inherit it); the description
-	/// child is lifted to ink so body copy and nested controls hold the contrast floor.
-	#[test]
-	fn tinted_variants_keep_description_in_ink() {
-		fn app() -> Element {
-			rsx! {
-				Alert { variant: AlertVariant::Destructive, AlertDescription { "d" } }
-				Alert { variant: AlertVariant::Success, AlertDescription { "s" } }
-				Alert { variant: AlertVariant::Info, AlertDescription { "i" } }
-			}
-		}
-		let html = render(app);
-		assert_eq!(html.matches("*:data-[slot=alert-description]:text-ink-mid").count(), 3, "{html}");
-		assert!(!html.contains("/90"), "{html}");
+		assert!(html.contains(Tone::Error.as_class()) && html.contains("text-(color:--tone-ink)"), "{html}");
+		assert!(html.contains("text-ink-mid"), "the description holds the body-text floor: {html}");
 	}
 
 	#[test]
@@ -108,6 +73,5 @@ mod tests {
 		let html = render(app);
 		assert!(html.contains("data-slot=\"alert-title\""), "{html}");
 		assert!(html.contains("data-slot=\"alert-description\""), "{html}");
-		assert!(html.contains("text-ink-soft"), "{html}");
 	}
 }

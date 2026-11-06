@@ -4,8 +4,7 @@ use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		SETTINGS_LAYOUT, SETTINGS_MAIN, SETTINGS_NAV, SETTINGS_ROW_INLINE, SETTINGS_SECTION_ACTION, SETTINGS_SECTION_BASE, SETTINGS_SECTION_BODY, SETTINGS_SECTION_BODY_FLUSH,
-		SETTINGS_SECTION_BODY_PADDED, SETTINGS_SECTION_DESCRIPTION, SETTINGS_SECTION_HEADER, SETTINGS_SECTION_HEADER_FLUSH, SETTINGS_SECTION_HEADING, SETTINGS_SECTION_TITLE,
-		SettingsSectionTone,
+		SETTINGS_SECTION_BODY_PADDED, SETTINGS_SECTION_DESCRIPTION, SETTINGS_SECTION_HEADER, SETTINGS_SECTION_HEADER_FLUSH, SETTINGS_SECTION_HEADING, SETTINGS_SECTION_TITLE, Tone,
 		form_row::FormRowFrame,
 		primitives::{has_content, use_stable_id},
 	},
@@ -34,7 +33,7 @@ pub fn SettingsSection(
 	title: Element,
 	description: Option<Element>,
 	action: Option<Element>,
-	#[props(default)] tone: SettingsSectionTone,
+	#[props(default)] tone: Tone,
 	#[props(default)] flush: bool,
 	#[props(default)] class: String,
 	children: Element,
@@ -86,6 +85,8 @@ pub fn SettingsRow(
 
 #[cfg(test)]
 mod tests {
+	use tailwind_fuse::AsTailwindClass;
+
 	use super::*;
 	use crate::ui::uikit::dioxus::test_util::render;
 
@@ -126,8 +127,7 @@ mod tests {
 			html.contains(&format!("<div class=\"{SETTINGS_SECTION_ACTION}\"><button type=\"button\">Create team</button></div>")),
 			"{html}"
 		);
-		assert!(html.contains("data-tone=\"default\""), "{html}");
-		assert!(html.contains("border-border"), "{html}");
+		assert!(html.contains("data-tone=\"neutral\""), "{html}");
 	}
 
 	#[test]
@@ -145,14 +145,13 @@ mod tests {
 	}
 
 	#[test]
-	fn marks_the_danger_zone_with_the_error_edge() {
+	fn marks_the_danger_zone_with_the_error_tone() {
 		fn app() -> Element {
-			rsx! { SettingsSection { title: rsx! { "Delete account" }, tone: SettingsSectionTone::Danger } }
+			rsx! { SettingsSection { title: rsx! { "Delete account" }, tone: Tone::Error } }
 		}
 		let html = render(app);
-		assert!(html.contains("border-accent-error"), "{html}");
-		assert!(!html.contains("border-border"), "{html}");
-		assert!(html.contains("data-tone=\"danger\""), "{html}");
+		assert!(html.contains(Tone::Error.as_class()), "{html}");
+		assert!(html.contains("data-tone=\"error\""), "{html}");
 	}
 
 	#[test]

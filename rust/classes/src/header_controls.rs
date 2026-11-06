@@ -1,5 +1,3 @@
-use tailwind_fuse::{AsTailwindClass, TwVariant};
-
 pub const HEADER_BALANCE_BASE: &str = "inline-flex h-8 items-center gap-2 rounded-control border border-border bg-secondary pl-2.5 pr-2 text-body-s";
 
 /// Added only when the balance is a button: a static figure must not look pressable.
@@ -13,7 +11,8 @@ pub const HEADER_BALANCE_SETTLED: &str = "inline-flex";
 
 pub const HEADER_BALANCE_SKELETON: &str = "h-3 w-12";
 
-pub const HEADER_BALANCE_FIGURE: &str = "font-medium tabular-nums";
+/// Wears its [`Tone`](crate::Tone)'s ink: `Warn` is the low-funds signal.
+pub const HEADER_BALANCE_FIGURE: &str = "font-medium tabular-nums text-(color:--tone-ink)";
 
 pub const HEADER_BALANCE_CHEVRON: &str = "size-4 text-ink-soft";
 
@@ -54,13 +53,3 @@ pub const HEADER_SEARCH_BASE: &str = "flex h-8 w-55 items-center gap-2 rounded-c
 /// `min-w-0` with `truncate`: a long placeholder ends in an ellipsis and the
 /// shortcut hint stays visible.
 pub const HEADER_SEARCH_PLACEHOLDER: &str = "min-w-0 flex-1 truncate";
-
-/// The figure's ink. `Warn` is the low-funds signal.
-#[derive(Debug, PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
-#[strum(serialize_all = "kebab-case")]
-pub enum HeaderBalanceTone {
-	#[tw(default, class = "text-ink")]
-	Default,
-	#[tw(class = "text-accent-warn")]
-	Warn,
-}

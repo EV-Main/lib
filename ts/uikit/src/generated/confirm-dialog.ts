@@ -4,7 +4,7 @@ export const CONFIRM_DIALOG_CONTENT = "max-w-105 gap-4 bg-popover p-5";
 
 export const CONFIRM_DIALOG_HEADER = "flex-row gap-3 text-left";
 
-export const CONFIRM_DIALOG_ICON = "flex size-8 shrink-0 items-center justify-center rounded-control";
+export const CONFIRM_DIALOG_ICON = "flex size-8 shrink-0 items-center justify-center rounded-control bg-(color:--tone-fill) text-(color:--tone-ink)";
 
 export const CONFIRM_DIALOG_TEXT = "flex min-w-0 flex-col gap-1";
 
@@ -19,9 +19,3 @@ export const CONFIRM_DIALOG_FOOTER = "flex-row justify-end gap-2";
 export const CONFIRM_DIALOG_PENDING = "aria-disabled:cursor-not-allowed aria-disabled:opacity-40";
 
 export const CONFIRM_DIALOG_SPINNER = "size-3.5";
-
-export const confirmDialogIconToneClasses = {
-  "default": "bg-muted text-ink-mid",
-  "danger": "bg-tint-error-fill text-accent-error",
-} as const;
-export type ConfirmDialogTone = keyof typeof confirmDialogIconToneClasses;

@@ -4,8 +4,8 @@ use crate::{
 	cn,
 	ui::uikit::leptos::{
 		SETTINGS_LAYOUT, SETTINGS_MAIN, SETTINGS_NAV, SETTINGS_ROW_INLINE, SETTINGS_SECTION_ACTION, SETTINGS_SECTION_BASE, SETTINGS_SECTION_BODY, SETTINGS_SECTION_BODY_FLUSH,
-		SETTINGS_SECTION_BODY_PADDED, SETTINGS_SECTION_DESCRIPTION, SETTINGS_SECTION_HEADER, SETTINGS_SECTION_HEADER_FLUSH, SETTINGS_SECTION_HEADING, SETTINGS_SECTION_TITLE,
-		SettingsSectionTone, form_row::FormRowFrame, primitives::use_stable_id,
+		SETTINGS_SECTION_BODY_PADDED, SETTINGS_SECTION_DESCRIPTION, SETTINGS_SECTION_HEADER, SETTINGS_SECTION_HEADER_FLUSH, SETTINGS_SECTION_HEADING, SETTINGS_SECTION_TITLE, Tone,
+		form_row::FormRowFrame, primitives::use_stable_id,
 	},
 };
 
@@ -40,7 +40,7 @@ pub fn SettingsSection(
 	#[prop(into)] title: ViewFn,
 	#[prop(optional, into)] description: Option<ViewFn>,
 	#[prop(optional, into)] action: Option<ViewFn>,
-	#[prop(optional)] tone: SettingsSectionTone,
+	#[prop(optional)] tone: Tone,
 	#[prop(optional)] flush: bool,
 	#[prop(optional, into)] class: String,
 	#[prop(optional)] children: Option<Children>,

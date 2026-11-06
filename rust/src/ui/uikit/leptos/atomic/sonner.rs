@@ -15,7 +15,7 @@ use crate::{
 	cn,
 	ui::uikit::{
 		core::{DEFAULT_DURATION_MS, ToastQueue, ToastState, ToastView, toaster_style, y_position},
-		leptos::{TOAST_BASE, TOAST_CLOSE, TOAST_CONTENT, TOAST_TITLE, TOASTER_BASE, ToastPosition, ToastVariant, primitives::is_transform_transition},
+		leptos::{TOAST_BASE, TOAST_CLOSE, TOAST_CONTENT, TOAST_TITLE, TOASTER_BASE, ToastPosition, Tone, primitives::is_transform_transition},
 	},
 };
 
@@ -24,7 +24,7 @@ use crate::{
 pub struct Toasts(RwSignal<ToastQueue>);
 
 /// Imperative handle, the mirror of the TS global `toast` object. Obtained via
-/// [`use_toaster`]; each method enqueues a toast of the matching variant and
+/// [`use_toaster`]; each method enqueues a toast of the matching tone and
 /// returns its id, and [`ToasterHandle::dismiss`] closes one by id.
 #[derive(Clone, Copy)]
 pub struct ToasterHandle {
@@ -33,32 +33,32 @@ pub struct ToasterHandle {
 
 impl ToasterHandle {
 	pub fn toast(&self, message: impl Into<String>) -> u64 {
-		self.show(message, ToastVariant::Neutral, Some(DEFAULT_DURATION_MS))
+		self.show(message, Tone::Neutral, Some(DEFAULT_DURATION_MS))
 	}
 
 	pub fn positive(&self, message: impl Into<String>) -> u64 {
-		self.show(message, ToastVariant::Positive, Some(DEFAULT_DURATION_MS))
+		self.show(message, Tone::Positive, Some(DEFAULT_DURATION_MS))
 	}
 
 	pub fn error(&self, message: impl Into<String>) -> u64 {
-		self.show(message, ToastVariant::Error, Some(DEFAULT_DURATION_MS))
+		self.show(message, Tone::Error, Some(DEFAULT_DURATION_MS))
 	}
 
 	pub fn info(&self, message: impl Into<String>) -> u64 {
-		self.show(message, ToastVariant::Info, Some(DEFAULT_DURATION_MS))
+		self.show(message, Tone::Info, Some(DEFAULT_DURATION_MS))
 	}
 
 	pub fn warn(&self, message: impl Into<String>) -> u64 {
-		self.show(message, ToastVariant::Warn, Some(DEFAULT_DURATION_MS))
+		self.show(message, Tone::Warn, Some(DEFAULT_DURATION_MS))
 	}
 
-	/// Full control over variant + lifetime. `duration` is ms, or `None` for a
+	/// Full control over tone + lifetime. `duration` is ms, or `None` for a
 	/// **persistent** toast that stays until the close button or
 	/// [`ToasterHandle::dismiss`]; the mirror of the TS `toast(msg, { duration })`.
-	pub fn show(&self, message: impl Into<String>, variant: ToastVariant, duration: Option<u32>) -> u64 {
+	pub fn show(&self, message: impl Into<String>, tone: Tone, duration: Option<u32>) -> u64 {
 		let message = message.into();
 		let mut id = None;
-		self.toasts.0.update(|q| id = Some(q.push(message, variant, duration)));
+		self.toasts.0.update(|q| id = Some(q.push(message, tone, duration)));
 		id.expect("`update` runs its closure")
 	}
 
@@ -144,7 +144,7 @@ fn ToastItem(toast: ToastView) -> impl IntoView {
 			role="status"
 			aria-live="polite"
 			data-slot="toast"
-			data-variant=toast.variant.as_ref().to_owned()
+			data-tone=toast.tone.as_ref().to_owned()
 			data-state=move || view.with(|t| t.state.as_str())
 			data-front=flag(|t| t.front)
 			data-visible=flag(|t| t.visible)
@@ -162,7 +162,7 @@ fn ToastItem(toast: ToastView) -> impl IntoView {
 					handle.remove(id);
 				}
 			}
-			class=cn!(TOAST_BASE, toast.variant.as_class())
+			class=cn!(TOAST_BASE, toast.tone.as_class())
 		>
 			<div class=TOAST_CONTENT>
 				<div class=TOAST_TITLE>{toast.message}</div>

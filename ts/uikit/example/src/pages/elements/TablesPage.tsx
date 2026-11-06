@@ -34,7 +34,7 @@ const FILLS = [
 
 function RevokeCell({ revoked }: { revoked: boolean }) {
   return revoked ? (
-    <Badge variant="neutral">revoked</Badge>
+    <Badge tone="neutral">revoked</Badge>
   ) : (
     <Button size="sm" variant="outline">
       Revoke

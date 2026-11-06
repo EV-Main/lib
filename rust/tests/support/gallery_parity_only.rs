@@ -562,7 +562,7 @@ fn p_table_parts() -> Element {
 #[component]
 fn QueueToast() -> Element {
 	let toaster = use_toaster();
-	use_hook(|| toaster.show("Order filled", ToastVariant::Positive, None));
+	use_hook(|| toaster.show("Order filled", Tone::Positive, None));
 	rsx! {}
 }
 

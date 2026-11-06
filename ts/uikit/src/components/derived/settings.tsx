@@ -17,9 +17,8 @@ import {
   SETTINGS_SECTION_HEADER_FLUSH,
   SETTINGS_SECTION_HEADING,
   SETTINGS_SECTION_TITLE,
-  settingsSectionToneClasses,
-  type SettingsSectionTone,
 } from "../../generated/settings";
+import { toneClasses, type Tone } from "../../generated/tone";
 import { FormRow, type FormRowProps } from "../atomic/form-row";
 
 export interface SettingsLayoutProps extends Omit<React.ComponentProps<"div">, "title"> {
@@ -56,8 +55,8 @@ export interface SettingsSectionProps extends Omit<React.ComponentProps<"section
   description?: React.ReactNode;
   /** Top-right control, e.g. a "Create team" button. */
   action?: React.ReactNode;
-  /** `danger` draws the destructive-zone edge. */
-  tone?: SettingsSectionTone;
+  /** `error` draws the destructive-zone edge. */
+  tone?: Tone;
   /** Rows run edge to edge with their hairlines; otherwise the body is padded. */
   flush?: boolean;
 }
@@ -67,7 +66,7 @@ export function SettingsSection({
   title,
   description,
   action,
-  tone = "default",
+  tone = "neutral",
   flush = false,
   className,
   children,
@@ -81,7 +80,7 @@ export function SettingsSection({
       aria-labelledby={headingId}
       className={cn(
         SETTINGS_SECTION_BASE,
-        settingsSectionToneClasses[tone],
+        toneClasses[tone],
         className,
       )}
       {...props}

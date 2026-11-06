@@ -220,7 +220,7 @@ fn d_hero() -> Element {
 					for accent in [Accent::Trace, Accent::Debug, Accent::Info, Accent::Warn, Accent::Error] {
 						Button { size: Size::Sm, accent, "{accent.as_ref()}" }
 					}
-					Badge { variant: BadgeVariant::Positive, {lorem(1)} }
+					Badge { tone: Tone::Positive, {lorem(1)} }
 					Input { class: "ml-auto w-56", placeholder: lorem(3) }
 					Input { class: "w-40 ring-3 ring-ring/50 border-ring", value: lorem(1) }
 				}

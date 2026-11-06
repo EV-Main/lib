@@ -1,4 +1,4 @@
-use ev_lib_classes::{ToastPosition, ToastVariant};
+use ev_lib_classes::{ToastPosition, Tone};
 
 /// Only the front three toasts show while the stack is collapsed.
 const VISIBLE_TOASTS: usize = 3;
@@ -46,7 +46,7 @@ impl ToastState {
 struct Toast {
 	id: u64,
 	message: String,
-	variant: ToastVariant,
+	tone: Tone,
 	state: ToastState,
 	/// Auto-dismiss lifetime in ms, or `None` to persist until dismissed.
 	duration: Option<u32>,
@@ -61,13 +61,13 @@ pub(crate) struct ToastQueue {
 	next_id: u64,
 }
 impl ToastQueue {
-	pub(crate) fn push(&mut self, message: String, variant: ToastVariant, duration: Option<u32>) -> u64 {
+	pub(crate) fn push(&mut self, message: String, tone: Tone, duration: Option<u32>) -> u64 {
 		let id = self.next_id;
 		self.next_id += 1;
 		self.items.push(Toast {
 			id,
 			message,
-			variant,
+			tone,
 			state: ToastState::Open,
 			duration,
 		});
@@ -100,7 +100,7 @@ impl ToastQueue {
 pub(crate) struct ToastView {
 	pub id: u64,
 	pub message: String,
-	pub variant: ToastVariant,
+	pub tone: Tone,
 	pub state: ToastState,
 	/// The `data-*` attributes and layout vars, in render order.
 	pub front: bool,
@@ -116,7 +116,7 @@ fn view(toast: &Toast, index: usize, total: usize) -> ToastView {
 	ToastView {
 		id: toast.id,
 		message: toast.message.clone(),
-		variant: toast.variant,
+		tone: toast.tone,
 		state: toast.state,
 		front: index == 0,
 		visible: index < VISIBLE_TOASTS,
@@ -132,7 +132,7 @@ mod tests {
 	#[test]
 	fn the_newest_toast_fronts_the_stack_and_only_three_show() {
 		let mut q = ToastQueue::default();
-		let ids: Vec<u64> = (0..4).map(|n| q.push(format!("t{n}"), ToastVariant::Info, Some(DEFAULT_DURATION_MS))).collect();
+		let ids: Vec<u64> = (0..4).map(|n| q.push(format!("t{n}"), Tone::Info, Some(DEFAULT_DURATION_MS))).collect();
 		let stack = q.stack();
 		assert_eq!(stack.iter().map(|t| t.id).collect::<Vec<_>>(), ids.iter().rev().copied().collect::<Vec<_>>());
 		assert_eq!(stack.iter().map(|t| t.front).collect::<Vec<_>>(), [true, false, false, false]);
@@ -143,7 +143,7 @@ mod tests {
 	#[test]
 	fn dismiss_keeps_the_toast_until_its_exit_has_played() {
 		let mut q = ToastQueue::default();
-		let id = q.push("bye".to_owned(), ToastVariant::Positive, None);
+		let id = q.push("bye".to_owned(), Tone::Positive, None);
 		q.dismiss(id);
 		assert_eq!(q.stack()[0].state, ToastState::Closing);
 		q.remove(id);
@@ -155,8 +155,8 @@ mod tests {
 	#[test]
 	fn only_a_lifetime_auto_dismisses() {
 		let mut q = ToastQueue::default();
-		q.push("times out".to_owned(), ToastVariant::Neutral, Some(DEFAULT_DURATION_MS));
-		q.push("sticky".to_owned(), ToastVariant::Neutral, None);
+		q.push("times out".to_owned(), Tone::Neutral, Some(DEFAULT_DURATION_MS));
+		q.push("sticky".to_owned(), Tone::Neutral, None);
 		let stack = q.stack();
 		assert!(!stack[0].autodismiss && stack[0].style.ends_with("--life: 0ms;"));
 		assert!(stack[1].autodismiss && stack[1].style.ends_with("--life: 4000ms;"));
