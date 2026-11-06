@@ -30,7 +30,7 @@ another so Tailwind regenerates as you edit class strings.
 - `input.css` imports `tailwindcss`, `tw-animate-css` (the enter/exit utilities
   the overlay components use, as in the React example) and the kit's
   `tokens.css`, then `@source`s the `ev_lib_classes` crate (`../classes/src`,
-  where the class strings live), the kit (`../src/uikit`, `../src/uikit_dioxus`) and this
+  where the class strings live), the kit (`../src/ui/uikit`) and this
   viewer's `src` so Tailwind scans the class-string literals and generates the
   utilities. `npm run css` writes
   `assets/tailwind.css` (gitignored), which `src/viewer.rs` links via `asset!`.

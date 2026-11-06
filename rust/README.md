@@ -1,24 +1,20 @@
 # rust
 
-The `ev` crate's sources — one library per Cargo feature, so a consumer compiles
+The `ev_lib` crate's sources — one library per Cargo feature, so a consumer compiles
 only what it enables. The thin virtual workspace that anchors the crate for
 repo-root tooling is [`../Cargo.toml`](../Cargo.toml).
 
 ```
 rust/
-├── Cargo.toml          the `ev` package
-├── src/
-│   ├── lib.rs
-│   ├── architecture/      the `architecture` feature (DDD tactical kernel)
-│   ├── uikit/             the UI kit's framework-free core (crate-private)
-│   ├── uikit_dioxus/      the `uikit_dioxus` feature (the kit for Dioxus)
-│   ├── uikit_leptos/      the `uikit_leptos` feature (the kit for Leptos)
-│   ├── analytics/         the `analytics` feature (PostHog product analytics)
-│   ├── error_monitoring/  the `error_monitoring` feature (Sentry error monitoring)
-│   ├── experiments/       the `experiments` feature (frontend-only A/B testing)
-│   ├── settings/          the `settings` feature (typed env settings)
-│   ├── i18n/              the `i18n` feature (five-locale internationalisation)
-│   └── otel/              the `otel` feature (OpenTelemetry logs + traces, native-only)
+├── Cargo.toml          the `ev_lib` package
+├── src/                one module per Cargo feature, grouped by scope (docs/ARCHITECTURE.md, "Scopes")
+│   ├── kernel/         architecture · i18n · types
+│   ├── product/        analytics · experiments
+│   ├── ops/            settings · error_monitoring · otel · alerts
+│   ├── ui/             uikit (core + dioxus + leptos ports) · active (mfe, marketing)
+│   └── codegen/        ts_gen
+├── classes/            ev_lib_classes: the class tables and token sheets
+├── gen/                ev_lib_gen: `nix run .#gen`
 └── tests/              integration tests
 ```
 

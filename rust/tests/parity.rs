@@ -103,8 +103,8 @@ fn ports_render_the_same_html() {
 
 #[test]
 fn every_component_is_in_both_ports_and_the_gallery() {
-	let dioxus = components("src/uikit_dioxus");
-	let leptos = components("src/uikit_leptos");
+	let dioxus = components("src/ui/uikit/dioxus");
+	let leptos = components("src/ui/uikit/leptos");
 	let dioxus_gallery = source("tests/support/gallery.rs") + &source("tests/support/gallery_parity_only.rs");
 	let leptos_gallery = source("tests/support/gallery_leptos.rs");
 	let list = |names: Vec<String>| names.join(", ");
@@ -155,14 +155,12 @@ fn source(rel: &str) -> String {
 	std::fs::read_to_string(&path).unwrap_or_else(|e| panic!("read {path}: {e}"))
 }
 
-/// Every `#[component] pub fn` of a port, name → module. Private components and
-/// test modules (everything after `#[cfg(test)]`) are not exported.
+/// Every `#[component] pub fn` of a port, at any depth, name → module. Private
+/// components and test modules (everything after `#[cfg(test)]`) are not exported.
 fn components(dir: &str) -> BTreeMap<String, String> {
-	let dir = format!("{}/{dir}", env!("CARGO_MANIFEST_DIR"));
 	let mut found = BTreeMap::new();
-	for entry in std::fs::read_dir(&dir).unwrap_or_else(|e| panic!("read {dir}: {e}")) {
-		let path = entry.expect("read_dir entry").path();
-		let module = path.file_stem().expect("read_dir yields named entries").to_string_lossy().into_owned();
+	for path in rust_files(&std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(dir)) {
+		let module = path.file_stem().expect("rust_files yields named files").to_string_lossy().into_owned();
 		let text = std::fs::read_to_string(&path).unwrap_or_else(|e| panic!("read {}: {e}", path.display()));
 		let mut pending = false;
 		for line in text.lines().map(str::trim).take_while(|l| !l.starts_with("#[cfg(test)]")) {
@@ -177,6 +175,19 @@ fn components(dir: &str) -> BTreeMap<String, String> {
 			} else if pending && line.starts_with("fn ") {
 				pending = false;
 			}
+		}
+	}
+	found
+}
+
+fn rust_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
+	let mut found = Vec::new();
+	for entry in std::fs::read_dir(dir).unwrap_or_else(|e| panic!("read {}: {e}", dir.display())) {
+		let path = entry.expect("read_dir entry").path();
+		if path.is_dir() {
+			found.extend(rust_files(&path));
+		} else if path.extension().is_some_and(|e| e == "rs") {
+			found.push(path);
 		}
 	}
 	found

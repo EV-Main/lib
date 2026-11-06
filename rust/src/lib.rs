@@ -58,57 +58,42 @@
 
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
-#[cfg(feature = "architecture")]
-pub mod architecture;
+mod codegen;
+mod kernel;
+mod ops;
+mod product;
+mod ui;
 
-#[cfg(any(feature = "uikit_dioxus", feature = "uikit_leptos"))]
-mod uikit;
-#[cfg(any(feature = "uikit_dioxus", feature = "uikit_leptos"))]
-mod uikit_host;
-
-#[cfg(feature = "uikit_dioxus")]
-pub mod uikit_dioxus;
-
-#[cfg(feature = "uikit_leptos")]
-pub mod uikit_leptos;
-
+// Public names stay flat; the scopes are internal (docs/ARCHITECTURE.md, "Scopes").
+#[cfg(feature = "ts_gen")]
+pub use codegen::ts_gen;
 // The `cn!` fuse macro and styling data live in the framework-free `ev_lib_classes`
 // crate; re-export so the in-crate `crate::cn` path keeps resolving.
 #[cfg(any(feature = "uikit_dioxus", feature = "uikit_leptos"))]
 pub use ev_lib_classes::cn;
-
-#[cfg(feature = "analytics")]
-pub mod analytics;
-
-#[cfg(feature = "error_monitoring")]
-pub mod error_monitoring;
-
-#[cfg(feature = "otel")]
-pub mod otel;
-
-#[cfg(all(feature = "alerts", not(target_arch = "wasm32")))]
-pub mod alerts;
-
-#[cfg(feature = "experiments")]
-pub mod experiments;
-
+#[cfg(feature = "architecture")]
+pub use kernel::architecture;
 #[cfg(feature = "i18n")]
-pub mod i18n;
-
-#[cfg(feature = "marketing")]
-pub mod marketing;
-
-#[cfg(feature = "settings")]
-pub mod settings;
-
-#[cfg(feature = "ts_gen")]
-pub mod ts_gen;
-
+pub use kernel::i18n;
 #[cfg(feature = "types")]
-pub mod types;
-
-// wasm-only: the module links wasm-bindgen/web-sys, which aren't deps on native.
-// The `mfe!` macro is `#[macro_export]`ed from inside, so it too is wasm-only —
-// the sole consumer (a producer cdylib) is always a wasm build.
+pub use kernel::types;
+#[cfg(all(feature = "alerts", not(target_arch = "wasm32")))]
+pub use ops::alerts;
+#[cfg(feature = "error_monitoring")]
+pub use ops::error_monitoring;
+#[cfg(feature = "otel")]
+pub use ops::otel;
+#[cfg(feature = "settings")]
+pub use ops::settings;
+#[cfg(feature = "analytics")]
+pub use product::analytics;
+#[cfg(feature = "experiments")]
+pub use product::experiments;
+#[cfg(feature = "marketing")]
+pub use ui::active::contact as marketing;
 #[cfg(all(feature = "mfe", target_arch = "wasm32"))]
-pub mod mfe;
+pub use ui::active::mfe;
+#[cfg(feature = "uikit_dioxus")]
+pub use ui::uikit::dioxus as uikit_dioxus;
+#[cfg(feature = "uikit_leptos")]
+pub use ui::uikit::leptos as uikit_leptos;

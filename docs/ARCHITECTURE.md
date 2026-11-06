@@ -1,52 +1,76 @@
 # Architecture
 
-`EV-invest/lib` is the organisation's **shared-library monorepo**. Its centre of
-gravity is one thing expressed in two languages: a generic, I/O-free **DDD
-tactical kernel**. The Rust crate is the source of truth; the TypeScript packages
-mirror its _semantics_ idiomatically.
+`EV-Main/web_std` is the organisation's shared library for web products and the
+services behind them: a UI kit, the product and ops plumbing every service
+repeats, and the I/O-free domain vocabulary under both. Each library is one
+thing in two languages. The Rust crate is the source of truth; the TypeScript
+packages mirror its _semantics_ idiomatically.
+
+Access is one-way: anything in the org may depend on web_std; web_std depends
+on no product repo. What is specific to one business (Service-Arb's landing
+machinery is `EV-Service-Arb/sites_tools`) lives with that business.
 
 ## Layout
 
 ```
-lib/                 (repo: EV-invest/lib)
+web_std/
 ├── Cargo.toml       thin virtual workspace — anchors the crate at the repo root
-├── tokens.css       the shared design tokens, one copy for both ports
-├── rust/            the crate (sources); one library per Cargo feature
-│   ├── Cargo.toml
-│   ├── src/{lib.rs, architecture/, uikit/ (+ uikit_dioxus/, uikit_leptos/), analytics/, error_monitoring/, experiments/, settings/, otel/, i18n/, kitstart/}
+├── theme.css · ev.css · tokens.css · motion.css   the design tokens, one copy for both languages
+├── rust/
+│   ├── src/         crate ev_lib: one library per Cargo feature, grouped by scope (below)
+│   ├── classes/     crate ev_lib_classes: class tables, token sheets, CLASS_INVENTORY
+│   ├── gen/         crate ev_lib_gen: `nix run .#gen`
+│   ├── uikit-viewer/  the Dioxus gallery app
 │   └── tests/
-├── ts/              TypeScript packages, one directory per library
-│   ├── architecture/
-│   ├── uikit/
-│   ├── analytics/
-│   ├── error-monitoring/
-│   ├── experiments/
-│   ├── settings/
-│   ├── marketing/
-│   └── kitstart/
-├── tests/fixtures/  test vectors both ports read (kitstart)
-├── nix/            lib.mkLanding — the flake every kitstart landing shares
-├── docs/
-│   ├── ARCHITECTURE.md          (this file)
-│   └── .readme_assets/          README fragments (README.md is generated)
+├── ts/<pkg>/        one npm package per directory, flat (release tooling globs one level)
+├── docs/            this file · .readme_assets/ (README.md is generated)
 └── flake.nix        v_flakes dev shell + generated CI / README / configs
 ```
 
-Each language owns a top-level directory (`rust/`, `ts/`) so neither toolchain
-trips over the other. The shared tooling (CI, formatters, lint config) drives
-`cargo` from the repo root, so a **thin virtual workspace** at `./Cargo.toml`
-anchors the crate there while its sources stay in `rust/`. The crate is still a
-single package: a consumer's git dependency resolves it **by name**, regardless
-of the subdirectory.
+The shared tooling drives `cargo` from the repo root, so a **thin virtual
+workspace** at `./Cargo.toml` anchors the crate there while its sources stay in
+`rust/`.
 
 ```toml
-# native
 ev_lib = { version = "0.31", default-features = false, features = ["architecture"] }
 ```
 
-## Component map
+## Scopes
 
-_As of 2026-10-27._
+```
+                    ┌────────────────────────────────┐
+                    │ ui                             │
+                    │  uikit: core · dioxus · leptos │   ts: uikit, marketing, mfe
+                    │  active: mfe · contact         │
+                    └───────────────┬────────────────┘
+ ┌───────────────────────────┐      │     ┌─────────────────────────────────────┐
+ │ product                   │      │     │ ops                                 │
+ │  analytics · experiments  │      │     │  settings(+drift) · error_monitoring │
+ └─────────────┬─────────────┘      │     │  otel · alerts                      │
+               │                    │     └─────────────────┬───────────────────┘
+               ▼                    ▼                       ▼     ts: analytics, experiments,
+                                                                      settings, error-monitoring
+           ┌──────────────────────────────────────────────────┐
+           │ kernel   architecture · i18n · types   (I/O-free)│   ts: architecture, i18n, types
+           └──────────────────────────────────────────────────┘
+ codegen   ts_gen — build-time only, reached by no scope
+```
+
+Scopes are modules of the one crate, not crates: `lib.rs` re-exports every
+library under its flat feature name (`ev_lib::settings`, `ev_lib::uikit_dioxus`),
+so the grouping is internal. Inside the crate, paths name the scope
+(`crate::kernel::i18n`).
+
+### Invariants
+
+- **Edges only run down the drawing.** `product`, `ops` and `ui` may import
+  `kernel`; nothing imports sideways or up. `ui` never imports `ops`: a page
+  reports through what it is handed, not through a service's plumbing.
+  `rust/tests/scopes.rs` fails on any other `crate::<scope>` edge.
+- **`codegen` is build-time only.** No runtime scope imports it; consumers
+  enable `ts_gen` in their own `gen` binary only.
+
+## Component map
 
 ```
                          ┌───────────────────────── repo root ─────────────────────────┐
@@ -66,44 +90,38 @@ _As of 2026-10-27._
         ▼                                ▼
 ┌──────────────────── crate ev_lib (one library per Cargo feature) ────────────────────┐
 │                                                                                      │
-│  KERNEL (I/O-free, zero-dep)       UI                     I/O libraries (wasm-safe)  │
+│  kernel (I/O-free, zero-dep)       ui                     product / ops (wasm-safe)  │
 │  ┌──────────────┐          ┌───────────────────┐   ┌───────────┐ ┌────────────────┐ │
 │  │ architecture │          │ uikit core: no DOM│   │ analytics │ │error_monitoring│ │
-│  │ Id, Entity,  │          │ ├ uikit_dioxus    │   │ (PostHog) │ │ (Sentry)       │ │
-│  │ Repository,  │          │ └ uikit_leptos    │   └───────────┘ └───────┬────────┘ │
+│  │ Id, Entity,  │          │ ├ dioxus port     │   │ (PostHog) │ │ (Sentry)       │ │
+│  │ Repository,  │          │ └ leptos port     │   └───────────┘ └───────┬────────┘ │
 │  │ UnitOfWork ✗─┼─Gateway  └───────────────────┘   ┌───────────┐         │ used by │
 │  │ DomainEvent, │          (Gateway can't be       │experiments│ ┌───────▼──────┐  │
 │  │ Specification│           enrolled in UoW)       │ ─sink▶    │ │ otel (native)│  │
 │  └──────────────┘                                  │ no import │ └──────────────┘  │
-│  ┌───────┐ ┌──────────┐                            │ of        │ ┌──────────────┐  │
-│  │ types │ │ settings │─(+settings_drift: tokio)   │ analytics │ │ alerts       │  │
-│  │ Phone,│ │ settings!│                            └───────────┘ │ (native,     │  │
-│  │ Email │ └──────────┘                                          │  Discord)    │  │
-│  └───────┘                                                       └──────────────┘  │
-│              ┌───────────────┐   LocaleRegistry   ┌──────────────────────────────┐ │
-│              │ i18n          │◀───────────────────│ kitstart (pure, no I/O/clock)│ │
-│              │ locales, t!,  │                    │ place · routing · site · ld  │ │
-│              │ ICU fmt,policy│◀──┐                │ meta · sitemap · antispam ·  │ │
-│              └───────────────┘   │ requires       │ contact · query · json       │ │
-│                          ┌───────┴──────┐         └──────────────┬───────────────┘ │
-│                          │ mfe (wasm)   │                        │                 │
-│                          │ mfe! remotes │       tests/fixtures/kitstart/*.json ◀─┐ │
-│                          └──────────────┘       (vectors both ports run)         │ │
-│  ┌───────────────────────────────────┐                                           │ │
-│  │ ts_gen: Ts::{Const,Value,Table,   │                                           │ │
-│  │ Union,Types} via serde + ts-rs    │                                           │ │
-│  └─────────────┬─────────────────────┘                                           │ │
-└────────────────┼──────────────────────────────────────────────────────────────────┼─┘
-                 ▼                                                                 │
-┌─ crate ev_lib_gen (`nix run .#gen`, re-run by pre-commit hook) ──┐               │
-│  manifest(): uikit class tables ─▶ ts/uikit/src/generated/*.ts   │ ts/kitstart ──┘
+│  ┌───────┐ ┌───────────────┐                       │ of        │ ┌──────────────┐  │
+│  │ types │ │ i18n          │◀──┐ requires          │ analytics │ │ alerts       │  │
+│  │ Phone,│ │ locales, t!,  │   │                   └───────────┘ │ (native,     │  │
+│  │ Email │ │ ICU fmt,policy│ ┌─┴────────────┐ ┌──────────────┐   │  Discord)    │  │
+│  └───────┘ └───────────────┘ │ mfe (wasm)   │ │ contact      │   └──────────────┘  │
+│                              │ mfe! remotes │ │ tel: · wa.me │ ┌──────────────┐    │
+│                              └──────────────┘ └──────────────┘ │ settings     │    │
+│  ┌───────────────────────────────────┐                         │ settings!    │    │
+│  │ codegen/ts_gen: Ts::{Const,Value, │                         │ (+drift)     │    │
+│  │ Table,Union,Types} via serde+ts-rs│                         └──────────────┘    │
+│  └─────────────┬─────────────────────┘                                             │
+└────────────────┼────────────────────────────────────────────────────────────────────┘
+                 ▼
+┌─ crate ev_lib_gen (`nix run .#gen`, re-run by pre-commit hook) ──┐
+│  manifest(): uikit class tables ─▶ ts/uikit/src/generated/*.ts   │
 │  shared():   i18n/locales, types/e164, experiments/contract,     │
-│              settings/contract, analytics/host, kitstart/contract│
+│              settings/contract, analytics/host, marketing/contact│
 │              ─▶ ts/<pkg>/src/generated/*.ts                      │
 │  css:        tokens/theme/ev ─▶ rust/classes/css + ts/uikit/styles
 │  inventory:  ─▶ rust/classes/uikit-classes.txt                   │
 └──────────────────────────────────────────────────────────────────┘
   uikit-viewer (Dioxus web app) ─uses─▶ ev_lib[uikit_dioxus,wasm]   ≙ ts/uikit/example
+  tests/fixtures/<pkg>/*.json: vectors both languages' suites read
 ```
 
 What of `ts/` is hand-written rather than generated, and why:
@@ -210,7 +228,7 @@ the full list is in [`ts/uikit/README.md`](../ts/uikit/README.md#limitations).
 ### Invariants
 
 - **The core is DOM-free and framework-free.** No `dioxus`, `leptos` or `web_sys`
-  under `rust/src/uikit/`. Keys arrive as a core `KeyInput` (each port has
+  under `rust/src/ui/uikit/core/`. Keys arrive as a core `KeyInput` (each port has
   `From<&its event>`); anything needing a clock takes `now_ms`; document order
   is an input (`Placement`, which the port answers from its DOM). The core never
   stores elements or callbacks — it keeps ids, and the port maps id → element /
@@ -290,7 +308,7 @@ Secrets deliberately live **outside** the library: sops-encrypted env files
 boundary — direnv/`sops exec-env` in dev shells, `SOPS_AGE_KEY` in CI — so
 apps stay sops-unaware and the library never links a decryption stack. The
 workflow is documented in
-[`rust/src/settings/GUIDE.md`](../rust/src/settings/GUIDE.md#secrets-the-sops-boundary).
+[`rust/src/ops/settings/GUIDE.md`](../rust/src/ops/settings/GUIDE.md#secrets-the-sops-boundary).
 
 ## Generated TypeScript — `ts_gen`
 
