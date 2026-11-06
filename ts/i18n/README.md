@@ -196,9 +196,9 @@ const { messages, coverage } = policy.resolveCatalogue("en", fr, enCatalogue);
 policy.availableIn("en", posts, p => p.locales);    // "fr" always sees everything
 ```
 
-A custom registry has **no Rust twin**. `ev_lib::i18n` mirrors only the
-generated five; its plural rules are transcribed per locale by hand, so a
-surface on its own locale set is TS-only.
+`ev_lib::i18n::LocaleRegistry` is the Rust twin of a custom registry's URL
+contract and negotiation. The formatter and policy stay bound to the generated
+five there, their plural rules transcribed per locale by hand.
 
 ## Wiring a Next.js app
 

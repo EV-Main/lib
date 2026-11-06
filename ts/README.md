@@ -47,7 +47,7 @@ hand-written for one of three reasons:
  architecture  0.3k  kernel ports + combinators                             A  README mapping table
  settings      0.7k  createSettings, redaction                              A
                      validators                                             D  contract vectors
- i18n          3.0k  format, policy                                         A
+ i18n          3.0k  format, policy, registry/URL                           D  fixtures/i18n
                      extract CLI, react, next                               B
                      custom registry                                        C
  experiments   1.2k  bucketing                                              A
@@ -56,7 +56,8 @@ hand-written for one of three reasons:
                      react, next                                            B
  mfe           0.9k  manifest, events, host attributes, loader             A
                      RemoteElement                                          B
- analytics     1.4k  sink / beacon / consent                                A
+ analytics     1.4k  beacon body (captureBody)                              D  fixtures/analytics
+                     sink / consent                                         A
                      posthog, react, next                                   B
  error-monitoring 0.6k  Sentry / React / Next wiring                        B
  marketing     1.8k  motion, form harness, react                            C
