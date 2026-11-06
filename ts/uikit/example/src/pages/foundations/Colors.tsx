@@ -16,9 +16,9 @@ const FLOOR: Record<Floor, number> = { text: 4.5, ui: 3, info: 0 };
 
 function Verdict({ ratio, floor }: { ratio: number; floor: Floor }) {
   const label = `${ratio.toFixed(2)}:1`;
-  if (floor === "info") return <Badge variant="neutral">{label}</Badge>;
+  if (floor === "info") return <Badge tone="neutral">{label}</Badge>;
   const pass = ratio >= FLOOR[floor];
-  return <Badge variant={pass ? "positive" : "error"}>{`${label} ${pass ? "pass" : "fail"} ${FLOOR[floor]}`}</Badge>;
+  return <Badge tone={pass ? "positive" : "error"}>{`${label} ${pass ? "pass" : "fail"} ${FLOOR[floor]}`}</Badge>;
 }
 
 function Swatch({ token, colors }: { token: ColorToken; colors: ReadonlyMap<string, Rgba> }) {

@@ -18,7 +18,7 @@ import {
   ToggleGroup,
   ToggleGroupItem,
   toast,
-  type ToastVariant,
+  type Tone,
 } from "@evinvest/uikit";
 import { useComputedProp } from "../../gallery/useComputedProp";
 import { Specimen } from "../../gallery/ui";
@@ -167,9 +167,9 @@ export function SkeletonDemo() {
   );
 }
 
-const TONES: readonly ToastVariant[] = ["neutral", "positive", "info", "warn", "error"];
+const TONES: readonly Exclude<Tone, "primary">[] = ["neutral", "positive", "info", "warn", "error"];
 
-function fire(variant: ToastVariant): void {
+function fire(variant: Exclude<Tone, "primary">): void {
   const title = `${variant[0]?.toUpperCase() ?? ""}${variant.slice(1)} toast`;
   if (variant === "neutral") toast(title);
   else toast[variant](title);

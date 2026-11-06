@@ -6,7 +6,7 @@ export const SETTINGS_NAV = "shrink-0 lg:w-64";
 
 export const SETTINGS_MAIN = "flex min-w-0 flex-1 flex-col gap-6";
 
-export const SETTINGS_SECTION_BASE = "flex flex-col rounded-panel border bg-card";
+export const SETTINGS_SECTION_BASE = "flex flex-col rounded-panel border border-(color:--tone-edge) bg-card bg-[image:linear-gradient(var(--tone-fill),var(--tone-fill))]";
 
 export const SETTINGS_SECTION_HEADER = "flex items-start justify-between gap-4 p-4";
 
@@ -27,9 +27,3 @@ export const SETTINGS_SECTION_BODY_FLUSH = "border-t border-border-subtle";
 export const SETTINGS_SECTION_BODY_PADDED = "gap-4 px-4 pb-4";
 
 export const SETTINGS_ROW_INLINE = "flex-row items-center justify-between sm:gap-6 [&>[data-slot=form-row-control]]:flex-none [&>[data-slot=form-row-control]]:items-end";
-
-export const settingsSectionToneClasses = {
-  "default": "border-border",
-  "danger": "border-accent-error",
-} as const;
-export type SettingsSectionTone = keyof typeof settingsSectionToneClasses;

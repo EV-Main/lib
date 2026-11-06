@@ -39,7 +39,7 @@ export default function SettingsPartsPage() {
             <p className="text-body text-ink-mid">The action sits at the top right.</p>
           </SettingsSection>
           <NotificationRows />
-          <SettingsSection title="Danger" tone="danger">
+          <SettingsSection title="Danger" tone="error">
             <p className="text-body text-ink-mid">The edge uses the error colour.</p>
           </SettingsSection>
         </div></div>
@@ -56,7 +56,7 @@ export default function SettingsPartsPage() {
             <Switch aria-label="Beta features" />
           </SettingsRow>
           <SettingsRow label="Plan" inline divider={false}>
-            <Badge variant="primary">Pro</Badge>
+            <Badge tone="primary">Pro</Badge>
           </SettingsRow>
         </div>
       </Block>

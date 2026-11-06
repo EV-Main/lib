@@ -78,12 +78,12 @@ function Profile() {
         <DropdownMenuSeparator />
         <DropdownMenuItem><UsersIcon />Security</DropdownMenuItem>
         <DropdownMenuItem>
-          <ChartIcon />Documents<Badge variant="neutral" className="ml-auto">New</Badge>
+          <ChartIcon />Documents<Badge tone="neutral" className="ml-auto">New</Badge>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem><HelpIcon />Support center</DropdownMenuItem>
         <DropdownMenuItem>
-          <GlobeIcon />Language<Badge variant="neutral" className="ml-auto">EN</Badge>
+          <GlobeIcon />Language<Badge tone="neutral" className="ml-auto">EN</Badge>
         </DropdownMenuItem>
         <DropdownMenuCheckboxItem checked={dark} onClick={() => setDark((d) => !d)}>
           Dark theme

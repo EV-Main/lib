@@ -113,7 +113,7 @@ describe("ConfirmDialog", () => {
   });
 
   it("uses the danger face for the confirm button", () => {
-    render(<ConfirmDialog open tone="danger" title="Delete?" confirmLabel="Delete" onConfirm={() => {}} />);
+    render(<ConfirmDialog open tone="error" title="Delete?" confirmLabel="Delete" onConfirm={() => {}} />);
     expect(screen.getByRole("button", { name: "Delete" }).className).toContain("danger");
   });
 

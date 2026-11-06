@@ -1,18 +1,17 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { Slot } from "../../primitives/slot";
-import { BADGE_BASE, badgeVariants, type BadgeVariant } from "../../generated/badge";
-
-export type { BadgeVariant };
+import { BADGE_BASE } from "../../generated/badge";
+import { toneClasses, type Tone } from "../../generated/tone";
 
 export interface BadgeProps extends React.ComponentProps<"span"> {
-  variant?: BadgeVariant;
+  tone?: Tone;
   asChild?: boolean;
 }
 
 export function Badge({
   className,
-  variant = "neutral",
+  tone = "neutral",
   asChild = false,
   ...props
 }: BadgeProps) {
@@ -20,7 +19,7 @@ export function Badge({
   return (
     <Comp
       data-slot="badge"
-      className={cn(BADGE_BASE, badgeVariants[variant], className)}
+      className={cn(BADGE_BASE, toneClasses[tone], className)}
       {...(props as Record<string, unknown>)}
     />
   );

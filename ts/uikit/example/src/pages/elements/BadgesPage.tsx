@@ -1,7 +1,7 @@
-import { Avatar, AvatarFallback, Badge, Kbd, KbdGroup, StatusItem, type BadgeVariant, type StatusTone } from "@evinvest/uikit";
+import { Avatar, AvatarFallback, Badge, Kbd, KbdGroup, StatusItem, type Tone, type StatusTone } from "@evinvest/uikit";
 import { Block, PageRoot, Specimen } from "../../gallery/ui";
 
-const BADGES: readonly BadgeVariant[] = ["neutral", "primary", "positive", "info", "warn", "error"];
+const BADGES: readonly Tone[] = ["neutral", "primary", "positive", "info", "warn", "error"];
 const TONES: readonly StatusTone[] = ["positive", "neutral", "warn", "error", "muted"];
 
 export default function BadgesPage() {
@@ -13,7 +13,7 @@ export default function BadgesPage() {
       <Block title="Badge" note="Six tones. The tone sets the ink, the edge and the chip fill.">
         <Specimen>
           {BADGES.map((v) => (
-            <Badge key={v} variant={v}>
+            <Badge key={v} tone={v}>
               {v}
             </Badge>
           ))}

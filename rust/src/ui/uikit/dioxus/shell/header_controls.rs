@@ -7,10 +7,10 @@ use crate::{
 		core::CTRL_K,
 		dioxus::{
 			HEADER_BALANCE_BASE, HEADER_BALANCE_CHEVRON, HEADER_BALANCE_FIGURE, HEADER_BALANCE_INTERACTIVE, HEADER_BALANCE_LABEL, HEADER_BALANCE_SKELETON, HEADER_SEARCH_BASE,
-			HEADER_SEARCH_PLACEHOLDER, HeaderBalanceTone, ICON_BUTTON_BASE, IconButtonVariant, Kbd, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER,
-			NOTIFICATION_BELL_ITEM, NOTIFICATION_BELL_ITEM_BODY, NOTIFICATION_BELL_ITEM_DESCRIPTION, NOTIFICATION_BELL_ITEM_DOT, NOTIFICATION_BELL_ITEM_DOT_READ,
-			NOTIFICATION_BELL_ITEM_DOT_UNREAD, NOTIFICATION_BELL_ITEM_TIME, NOTIFICATION_BELL_ITEM_TITLE, NOTIFICATION_BELL_ITEM_TITLE_UNREAD, NOTIFICATION_BELL_LIST,
-			NOTIFICATION_BELL_TRIGGER, NOTIFICATION_DOT, Popover, PopoverContent, PopoverTrigger, Size, Skeleton, button_classes, icon_button_size_class,
+			HEADER_SEARCH_PLACEHOLDER, ICON_BUTTON_BASE, IconButtonVariant, Kbd, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER, NOTIFICATION_BELL_ITEM,
+			NOTIFICATION_BELL_ITEM_BODY, NOTIFICATION_BELL_ITEM_DESCRIPTION, NOTIFICATION_BELL_ITEM_DOT, NOTIFICATION_BELL_ITEM_DOT_READ, NOTIFICATION_BELL_ITEM_DOT_UNREAD,
+			NOTIFICATION_BELL_ITEM_TIME, NOTIFICATION_BELL_ITEM_TITLE, NOTIFICATION_BELL_ITEM_TITLE_UNREAD, NOTIFICATION_BELL_LIST, NOTIFICATION_BELL_TRIGGER, NOTIFICATION_DOT, Popover,
+			PopoverContent, PopoverTrigger, Size, Skeleton, Tone, button_classes, icon_button_size_class,
 		},
 	},
 };
@@ -33,7 +33,7 @@ pub fn HeaderBalance(
 	loading: bool,
 	/// A glyph before the label.
 	icon: Option<Element>,
-	#[props(default)] tone: HeaderBalanceTone,
+	#[props(default)] tone: Tone,
 	/// Makes the balance a button, with a chevron after the figure.
 	onclick: Option<EventHandler<MouseEvent>>,
 	/// Only meaningful with `onclick`.
@@ -44,16 +44,15 @@ pub fn HeaderBalance(
 	aria_label: Option<String>,
 	#[props(default)] class: String,
 ) -> Element {
-	let cls = cn!(HEADER_BALANCE_BASE, if onclick.is_some() { HEADER_BALANCE_INTERACTIVE } else { "" }, class);
+	let cls = cn!(HEADER_BALANCE_BASE, tone.as_class(), if onclick.is_some() { HEADER_BALANCE_INTERACTIVE } else { "" }, class);
 	let label = label.unwrap_or_else(|| rsx! { "Balance:" });
-	let figure_cls = cn!(HEADER_BALANCE_FIGURE, tone.as_class());
 	let body = rsx! {
 		{icon}
 		span { class: HEADER_BALANCE_LABEL, {label} }
 		if loading {
 			Skeleton { class: HEADER_BALANCE_SKELETON }
 		} else {
-			span { class: figure_cls, "data-slot": "header-balance-value", {value} }
+			span { class: HEADER_BALANCE_FIGURE, "data-slot": "header-balance-value", {value} }
 		}
 	};
 	let Some(onclick) = onclick else {
@@ -316,13 +315,14 @@ mod tests {
 	}
 
 	#[test]
-	fn the_balance_colours_the_figure_for_the_warn_tone() {
+	fn the_balance_inks_the_figure_in_its_tone() {
 		fn app() -> Element {
-			rsx! { HeaderBalance { value: "$0.00", tone: HeaderBalanceTone::Warn } }
+			rsx! { HeaderBalance { value: "$0.00", tone: Tone::Warn } }
 		}
 		let html = render(app);
+		assert!(html.contains(tailwind_fuse::AsTailwindClass::as_class(&Tone::Warn)), "{html}");
 		let figure = html.split("data-slot=\"header-balance-value\"").next().and_then(|b| b.rsplit("<span").next()).expect("figure");
-		assert!(figure.contains("text-accent-warn") && !figure.contains("text-ink "), "{figure}");
+		assert!(figure.contains("text-(color:--tone-ink)"), "{figure}");
 	}
 
 	#[test]

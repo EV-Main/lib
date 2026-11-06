@@ -102,11 +102,11 @@ fn d_kbd() -> AnyView {
 fn d_badge() -> AnyView {
 	view! {
 		<Badge>"Neutral"</Badge>
-		<Badge variant=BadgeVariant::Primary>"Primary"</Badge>
-		<Badge variant=BadgeVariant::Positive>"Positive"</Badge>
-		<Badge variant=BadgeVariant::Info>"Info"</Badge>
-		<Badge variant=BadgeVariant::Warn>"Warn"</Badge>
-		<Badge variant=BadgeVariant::Error>"Error"</Badge>
+		<Badge tone=Tone::Primary>"Primary"</Badge>
+		<Badge tone=Tone::Positive>"Positive"</Badge>
+		<Badge tone=Tone::Info>"Info"</Badge>
+		<Badge tone=Tone::Warn>"Warn"</Badge>
+		<Badge tone=Tone::Error>"Error"</Badge>
 	}
 	.into_any()
 }
@@ -163,15 +163,15 @@ fn d_alert() -> AnyView {
 				<AlertTitle>"Heads up"</AlertTitle>
 				<AlertDescription>"This is a neutral informational alert."</AlertDescription>
 			</Alert>
-			<Alert variant=AlertVariant::Destructive>
+			<Alert tone=Tone::Error>
 				<AlertTitle>"Something failed"</AlertTitle>
 				<AlertDescription>"Your changes could not be saved."</AlertDescription>
 			</Alert>
-			<Alert variant=AlertVariant::Success>
+			<Alert tone=Tone::Positive>
 				<AlertTitle>"Order filled"</AlertTitle>
 				<AlertDescription>"120 units bought at 1.024."</AlertDescription>
 			</Alert>
-			<Alert variant=AlertVariant::Info>
+			<Alert tone=Tone::Info>
 				<AlertTitle>"Valuation pending"</AlertTitle>
 				<AlertDescription>"The next NAV mark lands on Monday."</AlertDescription>
 			</Alert>
@@ -456,7 +456,7 @@ fn d_settings() -> AnyView {
 				</SettingsSection>
 				<SettingsSection
 					title=|| "Delete account"
-					tone=SettingsSectionTone::Danger
+					tone=Tone::Error
 					description=|| "This cannot be undone"
 				/>
 			</SettingsLayout>
@@ -468,7 +468,7 @@ fn d_settings() -> AnyView {
 fn d_system_banner() -> AnyView {
 	view! {
 		<div class="flex w-full flex-col gap-2">
-			<SystemBanner tone=SystemBannerTone::Warn title=|| "Maintenance">
+			<SystemBanner tone=Tone::Warn title=|| "Maintenance">
 				"Read-only from 02:00 to 04:00 UTC"
 			</SystemBanner>
 			<SystemBanner
@@ -483,7 +483,7 @@ fn d_system_banner() -> AnyView {
 			>
 				"New reports are available"
 			</SystemBanner>
-			<SystemBanner tone=SystemBannerTone::Neutral icon=None>
+			<SystemBanner tone=Tone::Neutral icon=None>
 				"Plain notice without a glyph"
 			</SystemBanner>
 		</div>
@@ -728,9 +728,7 @@ fn d_smart_header() -> AnyView {
 				start=start
 				end=end
 				banner=|| {
-					view! {
-						<SystemBanner tone=SystemBannerTone::Warn>"Market data is delayed"</SystemBanner>
-					}
+					view! { <SystemBanner tone=Tone::Warn>"Market data is delayed"</SystemBanner> }
 				}
 			/>
 		</div>
@@ -758,7 +756,7 @@ fn d_header_controls() -> AnyView {
 		<div class="flex flex-wrap items-center gap-3">
 			<HeaderSearch />
 			<HeaderBalance value="$12,480.00" />
-			<HeaderBalance value="$0.00" tone=HeaderBalanceTone::Warn on_click=Callback::new(|_| {}) />
+			<HeaderBalance value="$0.00" tone=Tone::Warn on_click=Callback::new(|_| {}) />
 			<HeaderBalance value="" loading=true />
 			<NotificationBell notifications />
 			<NotificationBell notifications=Vec::new() />
@@ -865,7 +863,7 @@ fn d_confirm_dialog() -> AnyView {
 	view! {
 		<ConfirmDialog
 			default_open=true
-			tone=ConfirmDialogTone::Danger
+			tone=Tone::Error
 			title=|| "Delete workspace?"
 			description=|| "This cannot be undone."
 			confirm_label=|| "Delete"
@@ -2139,7 +2137,7 @@ fn p_input_group_parts() -> AnyView {
 
 #[component]
 fn QueueToast() -> impl IntoView {
-	use_toaster().show("Order filled", ToastVariant::Positive, None);
+	use_toaster().show("Order filled", Tone::Positive, None);
 }
 
 fn p_toaster() -> AnyView {

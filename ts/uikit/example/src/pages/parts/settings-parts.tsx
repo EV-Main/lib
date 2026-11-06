@@ -59,7 +59,7 @@ export const SETTINGS_NAV: readonly SectionNavGroup[] = [
     id: "monitoring",
     label: "Analytics & monitoring",
     items: [
-      { id: "activity", label: "Activity", icon: ActivityIcon, trailing: <Badge variant="neutral">Beta</Badge> },
+      { id: "activity", label: "Activity", icon: ActivityIcon, trailing: <Badge tone="neutral">Beta</Badge> },
       { id: "errors", label: "Errors", icon: AlertIcon },
       { id: "history", label: "Audit history", icon: HistoryIcon },
     ],
@@ -110,8 +110,8 @@ export function AccountsSection() {
           handle="jane.doe"
           badges={
             <>
-              <Badge variant="neutral">Personal</Badge>
-              <Badge variant="neutral">Owner</Badge>
+              <Badge tone="neutral">Personal</Badge>
+              <Badge tone="neutral">Owner</Badge>
             </>
           }
         />
@@ -119,7 +119,7 @@ export function AccountsSection() {
           value="team"
           name="Desk 7"
           handle="desk-7"
-          badges={<Badge variant="neutral">Team</Badge>}
+          badges={<Badge tone="neutral">Team</Badge>}
           figure="$12,480.00"
         />
       </AccountList>
@@ -129,13 +129,13 @@ export function AccountsSection() {
 
 export function DeleteSection() {
   return (
-    <SettingsSection title="Delete account" tone="danger">
+    <SettingsSection title="Delete account" tone="error">
       <div className="flex flex-wrap items-center gap-4">
         <p className="text-body text-ink-mid min-w-0 flex-1">
           Request permanent deletion of your account and data. This sends a request to our support team for review.
         </p>
         <ConfirmDialog
-          tone="danger"
+          tone="error"
           trigger={<Button size="xs" variant="destructive">Request deletion</Button>}
           title="Request deletion?"
           description="Support reviews the request and writes back within two business days."

@@ -5,7 +5,7 @@ use crate::{
 	cn,
 	ui::uikit::leptos::{
 		SYSTEM_BANNER_ACTION, SYSTEM_BANNER_BASE, SYSTEM_BANNER_BODY_AFTER_TITLE, SYSTEM_BANNER_DISMISS, SYSTEM_BANNER_GLYPH, SYSTEM_BANNER_ICON, SYSTEM_BANNER_MESSAGE, SYSTEM_BANNER_TITLE,
-		SystemBannerTone, system_banner_tone_class,
+		Tone,
 	},
 };
 
@@ -19,7 +19,7 @@ use crate::{
 /// no `icon` glyph for `None`, no message without children.
 #[component]
 pub fn SystemBanner(
-	#[prop(optional)] tone: SystemBannerTone,
+	#[prop(optional)] tone: Tone,
 	/// A bold lead before the message.
 	#[prop(optional, into)]
 	title: Option<ViewFn>,
@@ -34,19 +34,18 @@ pub fn SystemBanner(
 	#[prop(optional, into)] class: String,
 	#[prop(optional)] children: Option<Children>,
 ) -> impl IntoView {
-	let cls = cn!(SYSTEM_BANNER_BASE, system_banner_tone_class(&tone), class);
+	let cls = cn!(SYSTEM_BANNER_BASE, tone.as_class(), class);
 	let glyph = match icon {
 		Some(icon) => icon.map(|i| i.run()),
-		None if tone == SystemBannerTone::Warn => Some(view! { <TriangleAlertIcon /> }.into_any()),
+		None if tone == Tone::Warn => Some(view! { <TriangleAlertIcon /> }.into_any()),
 		None => Some(view! { <InfoIcon /> }.into_any()),
 	};
-	let icon_cls = cn!(SYSTEM_BANNER_ICON, tone.as_class());
 	let has_message = children.is_some();
 	let body_cls = title.as_ref().map(|_| SYSTEM_BANNER_BODY_AFTER_TITLE);
 	let dismiss_label = labels.dismiss.unwrap_or_else(|| String::from("Dismiss"));
 	view! {
 		<div class=cls data-slot="system-banner" data-tone=tone.as_ref().to_owned() role="status">
-			{glyph.map(|g| view! { <span class=icon_cls>{g}</span> })}
+			{glyph.map(|g| view! { <span class=SYSTEM_BANNER_ICON>{g}</span> })}
 			<div class=SYSTEM_BANNER_MESSAGE>
 				{title
 					.map(|t| {

@@ -11,6 +11,7 @@ use crate::table;
 pub fn manifest() -> Vec<(&'static str, Vec<Ts>)> {
 	vec![
 		("size", vec![table::<Size>("sizeClasses", "Size")]),
+		("tone", vec![table::<Tone>("toneClasses", "Tone")]),
 		("button", button()),
 		("accent", accent()),
 		("alert", alert()),
@@ -363,7 +364,6 @@ fn sonner() -> Vec<Ts> {
 			name: "TOAST_BASE",
 			value: TOAST_BASE,
 		},
-		table::<ToastVariant>("toastVariantClasses", "ToastVariant"),
 		Ts::Const {
 			name: "TOASTER_BASE",
 			value: TOASTER_BASE,
@@ -1317,13 +1317,10 @@ fn container() -> Vec<Ts> {
 }
 
 fn badge() -> Vec<Ts> {
-	vec![
-		Ts::Const {
-			name: "BADGE_BASE",
-			value: BADGE_BASE,
-		},
-		table::<BadgeVariant>("badgeVariants", "BadgeVariant"),
-	]
+	vec![Ts::Const {
+		name: "BADGE_BASE",
+		value: BADGE_BASE,
+	}]
 }
 
 fn icon_button() -> Vec<Ts> {
@@ -1456,7 +1453,6 @@ fn uikit_settings() -> Vec<Ts> {
 			name: "SETTINGS_ROW_INLINE",
 			value: SETTINGS_ROW_INLINE,
 		},
-		table::<SettingsSectionTone>("settingsSectionToneClasses", "SettingsSectionTone"),
 	]
 }
 
@@ -1493,12 +1489,6 @@ fn system_banner() -> Vec<Ts> {
 		Ts::Const {
 			name: "SYSTEM_BANNER_DISMISS",
 			value: SYSTEM_BANNER_DISMISS,
-		},
-		table::<SystemBannerTone>("systemBannerIconToneClasses", "SystemBannerTone"),
-		Ts::Table {
-			name: "systemBannerToneClasses",
-			ty: "SystemBannerFill",
-			entries: SystemBannerTone::iter().map(|t| (t.as_ref().to_string(), system_banner_tone_class(&t).to_string())).collect(),
 		},
 	]
 }
@@ -1735,7 +1725,6 @@ fn confirm_dialog() -> Vec<Ts> {
 			name: "CONFIRM_DIALOG_SPINNER",
 			value: CONFIRM_DIALOG_SPINNER,
 		},
-		table::<ConfirmDialogTone>("confirmDialogIconToneClasses", "ConfirmDialogTone"),
 	]
 }
 
@@ -2096,7 +2085,6 @@ fn header_controls() -> Vec<Ts> {
 			name: "HEADER_BALANCE_CHEVRON",
 			value: HEADER_BALANCE_CHEVRON,
 		},
-		table::<HeaderBalanceTone>("headerBalanceToneClasses", "HeaderBalanceTone"),
 		Ts::Const {
 			name: "NOTIFICATION_BELL_TRIGGER",
 			value: NOTIFICATION_BELL_TRIGGER,
@@ -2286,7 +2274,6 @@ fn alert() -> Vec<Ts> {
 			name: "ALERT_BASE",
 			value: ALERT_BASE,
 		},
-		table::<AlertVariant>("alertVariants", "AlertVariant"),
 		Ts::Const {
 			name: "ALERT_TITLE",
 			value: ALERT_TITLE,

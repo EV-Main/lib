@@ -72,11 +72,11 @@ fn d_button_accent() -> Element {
 fn d_badge() -> Element {
 	rsx! {
 		Badge { "Neutral" }
-		Badge { variant: BadgeVariant::Primary, "Primary" }
-		Badge { variant: BadgeVariant::Positive, "Positive" }
-		Badge { variant: BadgeVariant::Info, "Info" }
-		Badge { variant: BadgeVariant::Warn, "Warn" }
-		Badge { variant: BadgeVariant::Error, "Error" }
+		Badge { tone: Tone::Primary, "Primary" }
+		Badge { tone: Tone::Positive, "Positive" }
+		Badge { tone: Tone::Info, "Info" }
+		Badge { tone: Tone::Warn, "Warn" }
+		Badge { tone: Tone::Error, "Error" }
 	}
 }
 
@@ -144,15 +144,15 @@ fn d_alert() -> Element {
 				AlertTitle { "Heads up" }
 				AlertDescription { "This is a neutral informational alert." }
 			}
-			Alert { variant: AlertVariant::Destructive,
+			Alert { tone: Tone::Error,
 				AlertTitle { "Something failed" }
 				AlertDescription { "Your changes could not be saved." }
 			}
-			Alert { variant: AlertVariant::Success,
+			Alert { tone: Tone::Positive,
 				AlertTitle { "Order filled" }
 				AlertDescription { "120 units bought at 1.024." }
 			}
-			Alert { variant: AlertVariant::Info,
+			Alert { tone: Tone::Info,
 				AlertTitle { "Valuation pending" }
 				AlertDescription { "The next NAV mark lands on Monday." }
 			}
@@ -486,7 +486,7 @@ fn d_settings() -> Element {
 				SettingsRow { label: rsx! { "Email alerts" }, inline: true, Switch {} }
 				SettingsRow { label: rsx! { "Language" }, divider: false, "English" }
 			}
-			SettingsSection { title: rsx! { "Delete account" }, tone: SettingsSectionTone::Danger,
+			SettingsSection { title: rsx! { "Delete account" }, tone: Tone::Error,
 				description: rsx! { "This cannot be undone" },
 			}
 		}
@@ -497,9 +497,9 @@ fn d_settings() -> Element {
 fn d_system_banner() -> Element {
 	rsx! {
 		div { class: "flex w-full flex-col gap-2",
-			SystemBanner { tone: SystemBannerTone::Warn, title: rsx! { "Maintenance" }, "Read-only from 02:00 to 04:00 UTC" }
+			SystemBanner { tone: Tone::Warn, title: rsx! { "Maintenance" }, "Read-only from 02:00 to 04:00 UTC" }
 			SystemBanner { action: rsx! { a { href: "#", class: "text-body text-primary-ink underline", "Details" } }, on_dismiss: |_| {}, "New reports are available" }
-			SystemBanner { tone: SystemBannerTone::Neutral, icon: rsx! {}, "Plain notice without a glyph" }
+			SystemBanner { tone: Tone::Neutral, icon: rsx! {}, "Plain notice without a glyph" }
 		}
 	}
 }
@@ -645,7 +645,7 @@ fn d_smart_header() -> Element {
 				state: SmartHeaderState::Banner,
 				start: start(),
 				end: end(),
-				banner: rsx! { SystemBanner { tone: SystemBannerTone::Warn, "Market data is delayed" } },
+				banner: rsx! { SystemBanner { tone: Tone::Warn, "Market data is delayed" } },
 			}
 		}
 	}
@@ -671,7 +671,7 @@ fn d_header_controls() -> Element {
 		div { class: "flex flex-wrap items-center gap-3",
 			HeaderSearch {}
 			HeaderBalance { value: "$12,480.00" }
-			HeaderBalance { value: "$0.00", tone: HeaderBalanceTone::Warn, onclick: |_| {} }
+			HeaderBalance { value: "$0.00", tone: Tone::Warn, onclick: |_| {} }
 			HeaderBalance { value: "", loading: true }
 			NotificationBell { notifications }
 			NotificationBell { notifications: Vec::new() }
@@ -764,7 +764,7 @@ fn d_confirm_dialog() -> Element {
 	rsx! {
 		ConfirmDialog {
 			default_open: true,
-			tone: ConfirmDialogTone::Danger,
+			tone: Tone::Error,
 			title: rsx! { "Delete workspace?" },
 			description: rsx! { "This cannot be undone." },
 			confirm_label: rsx! { "Delete" },

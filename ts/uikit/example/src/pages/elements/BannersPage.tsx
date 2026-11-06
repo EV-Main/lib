@@ -6,13 +6,12 @@ import {
   Button,
   ResourceError,
   SystemBanner,
-  type AlertVariant,
-  type SystemBannerTone,
+  type Tone,
 } from "@evinvest/uikit";
 import { Block, PageRoot } from "../../gallery/ui";
 
-const BANNER_TONES: readonly SystemBannerTone[] = ["info", "primary", "warn", "neutral"];
-const ALERTS: readonly AlertVariant[] = ["neutral", "info", "success", "destructive"];
+const BANNER_TONES: readonly Tone[] = ["info", "primary", "warn", "neutral"];
+const ALERTS: readonly Tone[] = ["neutral", "info", "positive", "error"];
 
 function Banners() {
   const [shown, setShown] = useState(true);
@@ -49,9 +48,9 @@ export default function BannersPage() {
       </Block>
       <Block title="Alert">
         <div className="flex max-w-xl flex-col gap-3">
-          {ALERTS.map((variant) => (
-            <Alert key={variant} variant={variant}>
-              <AlertTitle>{variant[0]?.toUpperCase()}{variant.slice(1)}</AlertTitle>
+          {ALERTS.map((tone) => (
+            <Alert key={tone} tone={tone}>
+              <AlertTitle>{tone[0]?.toUpperCase()}{tone.slice(1)}</AlertTitle>
               <AlertDescription>This kit mirrors the Rust crate's semantics.</AlertDescription>
             </Alert>
           ))}

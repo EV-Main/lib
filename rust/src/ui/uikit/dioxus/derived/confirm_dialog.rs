@@ -8,7 +8,7 @@ use crate::{
 		dioxus::{
 			AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, ButtonVariant, CONFIRM_DIALOG_CONTENT,
 			CONFIRM_DIALOG_DESCRIPTION, CONFIRM_DIALOG_ERROR, CONFIRM_DIALOG_FOOTER, CONFIRM_DIALOG_HEADER, CONFIRM_DIALOG_ICON, CONFIRM_DIALOG_PENDING, CONFIRM_DIALOG_SPINNER,
-			CONFIRM_DIALOG_TEXT, CONFIRM_DIALOG_TITLE, ConfirmDialogTone, Size, Spinner,
+			CONFIRM_DIALOG_TEXT, CONFIRM_DIALOG_TITLE, Size, Spinner, Tone,
 			button::button_classes,
 			primitives::{use_controllable, use_stable_id},
 		},
@@ -51,7 +51,7 @@ pub fn ConfirmDialog(
 	/// The heading; it also names the dialog.
 	title: Element,
 	description: Option<Element>,
-	#[props(default)] tone: ConfirmDialogTone,
+	#[props(default)] tone: Tone,
 	confirm_label: Element,
 	on_confirm: EventHandler<()>,
 	#[props(default)] pending: bool,
@@ -104,14 +104,13 @@ pub fn ConfirmDialog(
 		}
 	});
 	let busy = if pending { "true" } else { "false" };
-	let danger = tone == ConfirmDialogTone::Danger;
+	let danger = tone == Tone::Error;
 	let confirm_variant = if danger { ButtonVariant::Destructive } else { ButtonVariant::Primary };
 	let cancel_cls = button_classes(&ButtonVariant::Ghost, Size::Xs, false, None, CONFIRM_DIALOG_PENDING);
 	let confirm_cls = button_classes(&confirm_variant, Size::Xs, false, None, CONFIRM_DIALOG_PENDING);
-	let icon_cls = cn!(CONFIRM_DIALOG_ICON, tone.as_class());
 	let glyph = icon.unwrap_or_else(|| rsx! { AlertIcon {} });
 	let cancel_label = labels.cancel.unwrap_or_else(|| String::from("Cancel"));
-	let cls = cn!(CONFIRM_DIALOG_CONTENT, class);
+	let cls = cn!(CONFIRM_DIALOG_CONTENT, tone.as_class(), class);
 	let trigger_cls = button_classes(&ButtonVariant::Outline, Size::Xs, false, None, &trigger_class);
 	rsx! {
 		AlertDialog { open: is_open, on_open_change: change,
@@ -120,7 +119,7 @@ pub fn ConfirmDialog(
 			}
 			AlertDialogContent { aria_labelledby: title_id.clone(), aria_describedby: described_by, class: cls,
 				AlertDialogHeader { class: CONFIRM_DIALOG_HEADER,
-					span { class: icon_cls, "data-slot": "confirm-dialog-icon", "data-tone": tone.as_ref(), {glyph} }
+					span { class: CONFIRM_DIALOG_ICON, "data-slot": "confirm-dialog-icon", "data-tone": tone.as_ref(), {glyph} }
 					div { class: CONFIRM_DIALOG_TEXT,
 						AlertDialogTitle { id: title_id, class: CONFIRM_DIALOG_TITLE, {title} }
 						if let Some(description) = description {
@@ -182,6 +181,7 @@ mod tests {
 	use std::sync::atomic::{AtomicUsize, Ordering};
 
 	use dioxus::dioxus_core::ElementId;
+	use tailwind_fuse::AsTailwindClass;
 
 	use super::*;
 	use crate::ui::uikit::dioxus::test_util::{Harness, render, render_after_click};
@@ -441,7 +441,7 @@ mod tests {
 			rsx! {
 				ConfirmDialog {
 					open: true,
-					tone: ConfirmDialogTone::Danger,
+					tone: Tone::Error,
 					title: rsx! { "Удалить?" },
 					confirm_label: rsx! { "Удалить" },
 					on_confirm: |_| {},
@@ -455,8 +455,8 @@ mod tests {
 			.and_then(|h| h.rsplit("<button").next())
 			.unwrap_or_default();
 		assert!(confirm.contains("bg-button-danger-bg"), "{confirm}");
-		assert!(html.contains("data-tone=\"danger\""), "{html}");
-		assert!(html.contains("bg-tint-error-fill"), "the glyph tile follows the tone: {html}");
+		assert!(html.contains("data-tone=\"error\""), "{html}");
+		assert!(html.contains(Tone::Error.as_class()), "the glyph tile follows the tone: {html}");
 	}
 
 	#[test]
