@@ -79,7 +79,9 @@ pub fn TooltipContent(#[prop(optional, into)] class: String, children: ChildrenF
 	}
 }
 
+/// Crate-visible so a component can be its own trigger (`IconButton`): the kit
+/// has no `asChild`, and `TooltipTrigger` would nest a button in a button.
 #[derive(Clone, Copy)]
-struct TooltipCtx {
-	open: Controllable<bool>,
+pub(crate) struct TooltipCtx {
+	pub(crate) open: Controllable<bool>,
 }

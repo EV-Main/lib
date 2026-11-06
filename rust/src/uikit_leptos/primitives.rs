@@ -101,6 +101,16 @@ impl RovingFocus {
 		self.roving.with_untracked(|r| r.next(&e.into(), from))
 	}
 
+	/// [`RovingFocus::next`], stepping over the keys `skip` holds.
+	pub(crate) fn next_enabled(&self, e: &leptos::ev::KeyboardEvent, from: &str, skip: impl Fn(&str) -> bool) -> Option<String> {
+		self.roving.with_untracked(|r| r.next_enabled(&e.into(), from, skip))
+	}
+
+	/// The item after the one keyed `key`, else the one before it, with no wrap.
+	pub fn neighbour(&self, key: &str) -> Option<String> {
+		self.roving.with_untracked(|r| r.neighbour(key))
+	}
+
 	/// Whether the item keyed `key` is the group's single tab stop.
 	pub fn is_tab_stop(&self, key: &str, selected: &str) -> bool {
 		self.roving.with(|r| r.is_tab_stop(key, selected))

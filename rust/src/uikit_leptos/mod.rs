@@ -17,9 +17,10 @@ pub mod primitives;
 // to build a prop are re-exported.
 pub(crate) use ev_lib_classes::*;
 pub use ev_lib_classes::{
-	Accent, AlertVariant, AvatarShape, AvatarSize, BadgeVariant, BookSide, ButtonGroupOrientation, ButtonVariant, DrawerDirection, EmptyMediaVariant, FieldOrientation, InputGroupAddonAlign,
-	InputGroupButtonSize, ItemMediaVariant, ItemSize, ItemVariant, OrderSide, Orientation, Polarity, ScrollBarOrientation, Size, Surface, TableAlign, TableDensity, TableVariant,
-	TerminalArea, ToastPosition, ToastVariant, ToggleVariant,
+	Accent, AlertVariant, AsidePanelSide, AvatarShape, AvatarSize, BadgeVariant, BookSide, ButtonGroupOrientation, ButtonVariant, ChatBubbleVariant, ChatStatusState, ChatToolState,
+	ConfirmDialogTone, DrawerDirection, EmptyMediaVariant, FieldOrientation, HeaderBalanceTone, IconButtonVariant, InputGroupAddonAlign, InputGroupButtonSize, ItemMediaVariant, ItemSize,
+	ItemVariant, OrderSide, Orientation, Polarity, ScrollBarOrientation, SectionLabelTone, SettingsSectionTone, Size, StatusTone, Surface, SystemBannerTone, TableAlign, TableDensity,
+	TableVariant, TerminalArea, ToastPosition, ToastVariant, ToggleVariant,
 };
 
 pub use crate::uikit::FormControlContext;
@@ -53,7 +54,32 @@ mod table;
 mod terminal;
 mod textarea;
 
+// The u2 app chrome: header, settings, account, chat and command parts.
+mod account_list;
+mod account_settings_dialog;
+mod aside;
+mod chat_composer;
+mod chat_message;
+mod chat_typing;
+mod command_palette;
+mod confirm_dialog;
+mod form_row;
+mod header_controls;
+mod icon_button;
+mod key_value;
+mod popover_form;
+mod section_label;
+mod settings;
+mod smart_header;
+mod status_item;
+mod system_banner;
+mod top_bar;
+mod workspace_tabs;
+
+pub use account_list::{AccountList, AccountListItem};
+pub use account_settings_dialog::{AccountSettingsDialog, AccountSettingsDialogLabels, AccountSettingsSection};
 pub use alert::{Alert, AlertDescription, AlertTitle};
+pub use aside::{AsideCollapse, AsideHeader, AsideHeaderLabels, AsidePanel, AsidePanelMode, AsideRail, AsideRailItem};
 pub use auth_wall::AuthWall;
 pub use avatar::{Avatar, AvatarFallback, AvatarImage};
 pub use badge::Badge;
@@ -62,28 +88,48 @@ pub use breadcrumb::{Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbL
 pub use button::{Button, button_classes};
 pub use button_group::{ButtonGroup, ButtonGroupSeparator, ButtonGroupText};
 pub use card::{Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle};
+pub use chat_composer::{ChatComposer, ChatComposerLabels, ModelChip, ModelOption};
+pub use chat_message::{ChatAttachment, ChatAttachmentState, ChatAttachmentType, ChatBubble, ChatMarker, ChatMarkerKind, ChatMessage, ChatMessageRole};
+pub use chat_typing::ChatTyping;
 pub use command::*;
+pub use command_palette::{CommandPalette, CommandPaletteGroup, CommandPaletteItem, CommandPaletteLabels, use_command_palette_shortcut};
+pub use confirm_dialog::{ConfirmDialog, ConfirmDialogLabels};
 pub use container::Container;
 pub use empty::{Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle};
 pub use fonts::{FONT_FILES, Fonts};
+pub use form_row::FormRow;
+pub use header_controls::{HeaderBalance, HeaderNotification, HeaderSearch, NotificationBell, NotificationBellLabels};
+pub use icon_button::IconButton;
 pub use input::Input;
 pub use item::{Item, ItemActions, ItemContent, ItemDescription, ItemFooter, ItemGroup, ItemHeader, ItemMedia, ItemSeparator, ItemTitle};
 pub use kbd::{Kbd, KbdGroup};
+pub use key_value::{KeyValue, KeyValueLabel, KeyValueLabels};
 pub use label::Label;
 pub use logo::Logo;
 pub use pagination::{Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious};
+pub use popover_form::{PopoverForm, PopoverFormLabels};
 pub use progress::Progress;
 pub use scroll_area::{ScrollArea, ScrollBar};
 pub use section_descriptor::SectionDescriptor;
+pub use section_label::{SectionLabel, SectionLabelAs};
 pub use separator::Separator;
+pub use settings::{SettingsLayout, SettingsRow, SettingsSection};
 pub use skeleton::Skeleton;
+pub use smart_header::{SmartHeader, SmartHeaderState};
 pub use spinner::Spinner;
+pub use status_item::{StatusDot, StatusItem};
+pub use system_banner::{SystemBanner, SystemBannerLabels};
 pub use table::{Table, TableBody, TableCaption, TableCard, TableCell, TableFooter, TableHead, TableHeader, TableRow};
 pub use terminal::{
 	OpenOrdersEmpty, OrderBook, OrderBookHead, OrderBookRow, OrderBookSpread, OrderForm, OrderFormRow, OrderFormSubmit, Terminal, TerminalChart, TerminalPane, TerminalPaneBody,
 	TerminalPaneHeader, TerminalTicker, TickerStat, TradesTapeRow,
 };
 pub use textarea::Textarea;
+pub use top_bar::TopBar;
+pub use workspace_tabs::{WorkspaceTab, WorkspaceTabs};
+
+#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
+pub use crate::uikit_host::write_clipboard;
 
 // Tier B — interactive, over the core's roving, selection, slider, OTP and
 // carousel state.

@@ -23,6 +23,14 @@ const GALLERY: &[(&str, fn() -> AnyView)] = &[
 	("ContextMenu", d_context_menu), ("Menubar", d_menubar), ("Select", d_select), ("Dialog", d_dialog),
 	("AlertDialog", d_alert_dialog), ("Sheet", d_sheet), ("Drawer", d_drawer), ("NavigationMenu", d_navigation_menu),
 	("Field", d_field), ("InputGroup", d_input_group), ("Calendar", d_calendar), ("DateTimePicker", d_date_time_picker), ("Form", d_form),
+	("IconButton", d_icon_button), ("StatusItem", d_status_item),
+	("FormRow", d_form_row), ("Settings", d_settings),
+	("SystemBanner", d_system_banner), ("SectionLabel", d_section_label),
+	("WorkspaceTabs", d_workspace_tabs), ("AccountList", d_account_list), ("AccountSettingsDialog", d_account_settings_dialog),
+	("PopoverForm", d_popover_form), ("ConfirmDialog", d_confirm_dialog), ("KeyValue", d_key_value),
+	("TopBar", d_top_bar), ("SmartHeader", d_smart_header), ("HeaderControls", d_header_controls),
+	("Aside", d_aside), ("ChatMessage", d_chat_message), ("ChatTyping", d_chat_typing), ("ChatComposer", d_chat_composer),
+	("CommandPalette", d_command_palette),
 ];
 
 #[rustfmt::skip]
@@ -350,6 +358,555 @@ fn d_button_group() -> AnyView {
 		</ButtonGroup>
 	}
 	.into_any()
+}
+
+// ── App chrome ─────────────────────────────────────────────────────────────
+
+fn glyph() -> AnyView {
+	view! {
+		<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+			<circle cx="7" cy="7" r="4.5" />
+			<path d="M10.5 10.5 14 14" />
+		</svg>
+	}
+	.into_any()
+}
+
+fn d_icon_button() -> AnyView {
+	view! {
+		<IconButton aria_label="Search">{glyph()}</IconButton>
+		<IconButton aria_label="Search" variant=IconButtonVariant::Secondary>
+			{glyph()}
+		</IconButton>
+		<IconButton aria_label="Pin" pressed=true>
+			{glyph()}
+		</IconButton>
+		<IconButton aria_label="Search" size=Size::Sm>
+			{glyph()}
+		</IconButton>
+		<IconButton aria_label="Search" size=Size::Touch variant=IconButtonVariant::Secondary>
+			{glyph()}
+		</IconButton>
+		<IconButton aria_label="Search" disabled=true>
+			{glyph()}
+		</IconButton>
+	}
+	.into_any()
+}
+
+fn d_status_item() -> AnyView {
+	view! {
+		<StatusItem tone=StatusTone::Positive>"Connected"</StatusItem>
+		<StatusItem tone=StatusTone::Warn value=|| "49ms">
+			"Latency"
+		</StatusItem>
+		<StatusItem tone=StatusTone::Error>"Offline"</StatusItem>
+		<StatusItem tone=StatusTone::Muted>"Paused"</StatusItem>
+		<StatusItem>"Idle"</StatusItem>
+		<StatusDot tone=StatusTone::Positive />
+	}
+	.into_any()
+}
+
+fn d_form_row() -> AnyView {
+	view! {
+		<div class="w-full max-w-2xl rounded-lg border bg-card">
+			<FormRow label=|| "Email" r#for="gallery-form-row-email" description=|| "Where receipts go">
+				// A native input: the kit `Input` takes its id only from a `FormField`.
+				<input
+					id="gallery-form-row-email"
+					class=ev_lib_classes::INPUT_BASE
+					placeholder="you@example.com"
+				/>
+			</FormRow>
+			<FormRow label=|| "Name" hint=|| "Max 40 characters">
+				"Jane Doe"
+			</FormRow>
+			<FormRow label=|| "Plan" divider=false>
+				"Investor"
+			</FormRow>
+		</div>
+	}
+	.into_any()
+}
+
+fn d_settings() -> AnyView {
+	view! {
+		<div class="w-full">
+			<SettingsLayout nav=|| {
+				view! {
+					<nav aria-label="Sections" class="text-body text-ink-mid">
+						"Account"
+					</nav>
+				}
+			}>
+				<SettingsSection
+					title=|| "Accounts"
+					description=|| "Switch accounts"
+					action=|| view! { <Button variant=ButtonVariant::Secondary>"Create team"</Button> }
+				>
+					<p class="text-body text-ink">"Personal"</p>
+				</SettingsSection>
+				<SettingsSection title=|| "Notifications" flush=true>
+					<SettingsRow label=|| "Email alerts" inline=true>
+						<Switch />
+					</SettingsRow>
+					<SettingsRow label=|| "Language" divider=false>
+						"English"
+					</SettingsRow>
+				</SettingsSection>
+				<SettingsSection
+					title=|| "Delete account"
+					tone=SettingsSectionTone::Danger
+					description=|| "This cannot be undone"
+				/>
+			</SettingsLayout>
+		</div>
+	}
+	.into_any()
+}
+
+fn d_system_banner() -> AnyView {
+	view! {
+		<div class="flex w-full flex-col gap-2">
+			<SystemBanner tone=SystemBannerTone::Warn title=|| "Maintenance">
+				"Read-only from 02:00 to 04:00 UTC"
+			</SystemBanner>
+			<SystemBanner
+				action=|| {
+					view! {
+						<a href="#" class="text-body text-primary-ink underline">
+							"Details"
+						</a>
+					}
+				}
+				on_dismiss=Callback::new(|_| {})
+			>
+				"New reports are available"
+			</SystemBanner>
+			<SystemBanner tone=SystemBannerTone::Neutral icon=None>
+				"Plain notice without a glyph"
+			</SystemBanner>
+		</div>
+	}
+	.into_any()
+}
+
+fn d_top_bar() -> AnyView {
+	view! {
+		<TopBar
+			class="w-full"
+			start=|| {
+				view! {
+					<Logo class="h-5" />
+					<span class="truncate text-body text-ink">"Treasury"</span>
+				}
+			}
+			end=|| {
+				view! {
+					<StatusItem tone=StatusTone::Positive value=|| "12 ms">
+						"Feed"
+					</StatusItem>
+					<Avatar>
+						<AvatarFallback>"AP"</AvatarFallback>
+					</Avatar>
+				}
+			}
+		/>
+	}
+	.into_any()
+}
+
+fn d_aside() -> AnyView {
+	let glyph = |d: &'static str| {
+		ViewFn::from(move || {
+			view! {
+				<svg
+					class="size-4"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.75"
+					aria-hidden="true"
+				>
+					<path d=d />
+				</svg>
+			}
+		})
+	};
+	let item = |id: &str, label: &str, d: &'static str| AsideRailItem {
+		id: id.into(),
+		label: label.into(),
+		icon: glyph(d),
+	};
+	let items = vec![
+		item("list", "Watchlist", "M4 6h16M4 12h16M4 18h10"),
+		item("chat", "Assistant", "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"),
+	];
+	let end_items = vec![item("set", "Settings", "M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z")];
+	view! {
+		<div class="flex h-80 w-full overflow-hidden border border-border bg-background">
+			<AsidePanel
+				aria_label="Navigation"
+				side=AsidePanelSide::Left
+				collapse_below=AsideCollapse::Never
+				class="w-65"
+				header=|| view! { <AsideHeader title=|| "Navigation" /> }
+			>
+				<p class="p-3 text-body text-ink-mid">"Portfolio"</p>
+			</AsidePanel>
+			<div class="min-w-0 flex-1 p-4 text-body text-ink-mid">"Content"</div>
+			<AsidePanel
+				aria_label="Edit alert"
+				collapse_below=AsideCollapse::Never
+				header=move || {
+					view! {
+						<AsideHeader
+							title=|| "Edit alert for a very long instrument name"
+							on_back=Callback::new(|_| {})
+							on_close=Callback::new(|_| {})
+							actions=move || {
+								view! {
+									<IconButton aria_label="Pin" size=Size::Sm pressed=true>
+										{glyph("M12 17v5M9 3h6l-1 7 4 3H6l4-3z").run()}
+									</IconButton>
+								}
+							}
+						/>
+					}
+				}
+				footer=|| {
+					view! {
+						<Button variant=ButtonVariant::Ghost size=Size::Sm>
+							"Cancel"
+						</Button>
+						<Button size=Size::Sm>"Save"</Button>
+					}
+				}
+			>
+				<p class="p-4 text-body text-ink-mid">"BTC-USD above 64,000"</p>
+			</AsidePanel>
+			<AsideRail items end_items value="chat".to_string() on_value_change=Callback::new(|_| {}) />
+		</div>
+	}
+	.into_any()
+}
+
+fn d_chat_message() -> AnyView {
+	view! {
+		<div class="flex w-150 flex-col gap-4">
+			<ChatMarker kind=ChatMarkerKind::Separator>"Today"</ChatMarker>
+			<ChatMessage role=ChatMessageRole::User name=|| "You" time=|| "13:02">
+				<ChatBubble variant=ChatBubbleVariant::User>"What is my net exposure?"</ChatBubble>
+				<ChatAttachment name="q3-report.pdf" meta=|| "PDF · 1.2 MB" />
+			</ChatMessage>
+			<ChatMessage role=ChatMessageRole::Assistant name=|| "Assistant" time=|| "13:04">
+				<ChatMarker kind=ChatMarkerKind::Status(ChatStatusState::Done)>"Thought for 6s"</ChatMarker>
+				<ChatMarker kind=ChatMarkerKind::Tool {
+					state: ChatToolState::Done,
+					title: ViewFn::from(|| "get_positions"),
+					detail: Some(ViewFn::from(|| "account=main")),
+					meta: Some(ViewFn::from(|| "0.4s")),
+				} />
+				<ChatMarker kind=ChatMarkerKind::Tool {
+					state: ChatToolState::Error,
+					title: ViewFn::from(|| "get_quotes"),
+					detail: None,
+					meta: Some(ViewFn::from(|| "Failed · 1.2s")),
+				} />
+				<ChatBubble>"Net exposure is 38% long, mostly in two positions."</ChatBubble>
+				<ChatBubble variant=ChatBubbleVariant::Muted>
+					"Prices are delayed by 15 minutes."
+				</ChatBubble>
+			</ChatMessage>
+			<ChatMessage role=ChatMessageRole::Assistant compact=true>
+				<ChatMarker kind=ChatMarkerKind::Status(
+					ChatStatusState::Running,
+				)>"Generating response…"</ChatMarker>
+				<ChatBubble streaming=true>"Looking at the"</ChatBubble>
+			</ChatMessage>
+			<ChatAttachment
+				r#type=ChatAttachmentType::Image
+				state=ChatAttachmentState::Uploading
+				name="chart.png"
+				progress=62.0
+				on_remove=Callback::new(|_| {})
+			/>
+		</div>
+	}
+	.into_any()
+}
+
+fn d_chat_typing() -> AnyView {
+	view! {
+		<div class="flex items-center gap-6">
+			<ChatTyping />
+			<ChatTyping label="Searching" />
+		</div>
+	}
+	.into_any()
+}
+
+fn d_chat_composer() -> AnyView {
+	let models = vec![
+		ModelOption {
+			id: "fast".into(),
+			label: "Fast".into(),
+		},
+		ModelOption {
+			id: "deep".into(),
+			label: "Reasoning".into(),
+		},
+	];
+	view! {
+		<div class="flex w-150 flex-col gap-4">
+			<ChatComposer
+				on_send=Callback::new(|_| {})
+				on_attach=Callback::new(|_| {})
+				attachments=|| {
+					view! {
+						<ChatAttachment
+							name="q3-report.pdf"
+							meta=|| "PDF · 1.2 MB"
+							on_remove=Callback::new(|_| {})
+						/>
+					}
+				}
+				tools=move || {
+					view! {
+						<ModelChip models=models.clone() value="fast" on_value_change=Callback::new(|_| {}) />
+					}
+				}
+				hint=|| "Enter to send · Shift+Enter for a new line"
+			/>
+			<ChatComposer
+				on_send=Callback::new(|_| {})
+				on_stop=Callback::new(|_| {})
+				streaming=true
+				default_value="And the hedges?"
+			/>
+			<ChatComposer on_send=Callback::new(|_| {}) disabled=true placeholder="Sign in to chat" />
+		</div>
+	}
+	.into_any()
+}
+
+fn d_smart_header() -> AnyView {
+	let start = || view! { <span class="text-body font-medium text-ink">"Trading"</span> };
+	let end = || view! { <HeaderBalance value="$12,480.00" /> };
+	view! {
+		<div class="flex w-full flex-col gap-4">
+			<SmartHeader
+				start=start
+				end=end
+				toolbar=|| {
+					view! {
+						<Button variant=ButtonVariant::Ghost size=Size::Sm>
+							"Orders"
+						</Button>
+						<Button variant=ButtonVariant::Ghost size=Size::Sm>
+							"Positions"
+						</Button>
+					}
+				}
+				context=|| {
+					view! {
+						<span>"BTC-USD"</span>
+						<span>"Last 64,210.00"</span>
+					}
+				}
+			/>
+			<SmartHeader
+				state=SmartHeaderState::Collapsed
+				start=start
+				end=end
+				collapsed=|| view! { <span class="text-body-s text-ink-mid">"Orders · Positions"</span> }
+			/>
+			<SmartHeader
+				state=SmartHeaderState::Banner
+				start=start
+				end=end
+				banner=|| {
+					view! {
+						<SystemBanner tone=SystemBannerTone::Warn>"Market data is delayed"</SystemBanner>
+					}
+				}
+			/>
+		</div>
+	}
+	.into_any()
+}
+
+fn d_header_controls() -> AnyView {
+	let notifications = vec![
+		HeaderNotification {
+			id: "a".into(),
+			title: "Order filled".into(),
+			time: Some("2m ago".into()),
+			unread: true,
+			..Default::default()
+		},
+		HeaderNotification {
+			id: "b".into(),
+			title: "Statement ready".into(),
+			description: Some("October".into()),
+			..Default::default()
+		},
+	];
+	view! {
+		<div class="flex flex-wrap items-center gap-3">
+			<HeaderSearch />
+			<HeaderBalance value="$12,480.00" />
+			<HeaderBalance value="$0.00" tone=HeaderBalanceTone::Warn on_click=Callback::new(|_| {}) />
+			<HeaderBalance value="" loading=true />
+			<NotificationBell notifications />
+			<NotificationBell notifications=Vec::new() />
+		</div>
+	}
+	.into_any()
+}
+
+fn d_section_label() -> AnyView {
+	view! {
+		<div class="flex flex-col gap-2">
+			<SectionLabel>"General"</SectionLabel>
+			<SectionLabel r#as=SectionLabelAs::H2 tone=SectionLabelTone::Accent>
+				"Portfolio"
+			</SectionLabel>
+		</div>
+	}
+	.into_any()
+}
+
+fn d_workspace_tabs() -> AnyView {
+	view! {
+		<WorkspaceTabs default_value="trading">
+			<WorkspaceTab value="trading" on_close=Callback::new(|_| {}) close_label="Close Trading">
+				"Trading"
+			</WorkspaceTab>
+			<WorkspaceTab value="portfolio" on_close=Callback::new(|_| {}) close_label="Close Portfolio">
+				"Portfolio"
+			</WorkspaceTab>
+			<WorkspaceTab value="reports">"Reports"</WorkspaceTab>
+		</WorkspaceTabs>
+	}
+	.into_any()
+}
+
+fn d_account_list() -> AnyView {
+	view! {
+		<AccountList aria_label="Accounts" default_value="personal" class="w-[28rem]">
+			<AccountListItem
+				value="personal"
+				name="Jane Doe"
+				handle=|| "jane.doe@example.com"
+				badges=|| view! { <Badge>"Owner"</Badge> }
+				figure=|| "$12,480"
+			/>
+			<AccountListItem
+				value="team"
+				name="Acme Capital"
+				handle=|| "team account"
+				actions=|| view! { <IconButton aria_label="More">"⋯"</IconButton> }
+			/>
+			<AccountListItem value="old" name="Legacy fund" handle=|| "closed" disabled=true />
+		</AccountList>
+	}
+	.into_any()
+}
+
+fn d_account_settings_dialog() -> AnyView {
+	let sections = vec![
+		AccountSettingsSection {
+			id: "profile".into(),
+			label: ViewFn::from(|| "Profile"),
+			icon: None,
+			content: ViewFn::from(|| {
+				view! {
+					<SettingsSection title=|| "Personal details">
+						<SettingsRow label=|| "Name"><Input value="Jane Doe" /></SettingsRow>
+					</SettingsSection>
+				}
+			}),
+		},
+		AccountSettingsSection {
+			id: "security".into(),
+			label: ViewFn::from(|| "Security"),
+			icon: None,
+			content: ViewFn::from(|| view! { <p>"Two-factor authentication is on."</p> }),
+		},
+	];
+	view! {
+		<AccountSettingsDialog
+			default_open=true
+			title=|| "Account settings"
+			description=|| "Manage your profile and sign-in."
+			sections
+			sidebar_footer=|| view! { <Button variant=ButtonVariant::Ghost>"Sign out"</Button> }
+		/>
+	}
+	.into_any()
+}
+
+fn d_popover_form() -> AnyView {
+	view! {
+		<PopoverForm default_open=true trigger=|| "Filter" title=|| "Status filter">
+			<label class="flex items-center gap-2 text-body text-ink">
+				<Checkbox default_checked=true />
+				"Only favorites"
+			</label>
+		</PopoverForm>
+	}
+	.into_any()
+}
+
+fn d_confirm_dialog() -> AnyView {
+	view! {
+		<ConfirmDialog
+			default_open=true
+			tone=ConfirmDialogTone::Danger
+			title=|| "Delete workspace?"
+			description=|| "This cannot be undone."
+			confirm_label=|| "Delete"
+			on_confirm=Callback::new(|_| {})
+		/>
+	}
+	.into_any()
+}
+
+fn d_key_value() -> AnyView {
+	view! {
+		<div class="flex gap-8">
+			<KeyValue label="Account ID" value=|| "acc_42" copy_text="acc_42" />
+			<KeyValue label="Opened" value=|| "12 March 2026" />
+		</div>
+	}
+	.into_any()
+}
+
+fn d_command_palette() -> AnyView {
+	let item = |id: &str, label: &str, shortcut: Option<&str>| CommandPaletteItem {
+		id: id.into(),
+		label: label.into(),
+		icon: None,
+		shortcut: shortcut.map(Into::into),
+		keywords: Vec::new(),
+		disabled: false,
+		on_select: Callback::new(|_| {}),
+	};
+	let groups = vec![
+		CommandPaletteGroup {
+			id: "suggestions".into(),
+			heading: Some("Suggestions".into()),
+			items: vec![item("new", "New workspace", Some("⌘N")), item("find", "Search symbol", None)],
+		},
+		CommandPaletteGroup {
+			id: "settings".into(),
+			heading: Some("Settings".into()),
+			items: vec![item("theme", "Switch theme", Some("⌘T"))],
+		},
+	];
+	view! { <CommandPalette default_open=true groups /> }.into_any()
 }
 
 // ── Tier B — interactive ───────────────────────────────────────────────────
