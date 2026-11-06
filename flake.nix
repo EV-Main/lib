@@ -220,8 +220,56 @@
               wait $server
             '';
           };
+
+          # `nix run .#visual-diff -- <git-ref>`: every baseline that differs from
+          # `<ref>` as an `old | new | diff` strip in tmp/visual-diff/, indexed by
+          # changed pixel count, so a deliberate delta is reviewed by eye.
+          visual-diff = pkgs.writeShellApplication {
+            name = "visual-diff";
+            runtimeInputs = [ pkgs.git pkgs.imagemagick pkgs.coreutils ];
+            text = ''
+              ref="''${1:?usage: visual-diff <git-ref>}"
+              root="$(git rev-parse --show-toplevel)"
+              shots=rust/tests/visual/__screenshots__
+              out="$root/tmp/visual-diff"
+              rm -rf "$out" && mkdir -p "$out/old"
+              rows=()
+              for new in "$root/$shots"/*.png; do
+                name="$(basename "$new")"
+                old="$out/old/$name"
+                # a baseline from before the per-theme capture is the dark one
+                git -C "$root" show "$ref:$shots/$name" >"$old" 2>/dev/null \
+                  || git -C "$root" show "$ref:$shots/''${name%.dark.png}.png" >"$old" 2>/dev/null \
+                  || { rows+=("999999999 $name (new)"); continue; }
+                cmp -s "$old" "$new" && continue
+                w="$(magick identify -format '%w\n' "$old" "$new" | sort -n | tail -1)"
+                h="$(magick identify -format '%h\n' "$old" "$new" | sort -n | tail -1)"
+                pad=(-background '#ff00ff' -gravity northwest -extent "''${w}x''${h}")
+                magick "$old" "''${pad[@]}" "$out/a.png"
+                magick "$new" "''${pad[@]}" "$out/b.png"
+                px="$(magick compare -metric AE "$out/a.png" "$out/b.png" "$out/d.png" 2>&1 >/dev/null | cut -d' ' -f1 || true)"
+                magick "$out/a.png" "$out/b.png" "$out/d.png" -bordercolor '#ff00ff' -border 2 +append "$out/$name"
+                rows+=("$px $name")
+              done
+              rm -f "$out/a.png" "$out/b.png" "$out/d.png"
+              {
+                echo "<!doctype html><title>visual diff vs $ref</title><body style='background:#222;color:#ddd;font:14px sans-serif'>"
+                echo "<p>old | new | diff, against $ref</p>"
+                printf '%s\n' "''${rows[@]}" | sort -rn | while read -r px name rest; do
+                  echo "<h3>$name $rest — $px px</h3><img src='$name' style='max-width:100%'>"
+                done
+              } >"$out/index.html"
+              printf '%s\n' "''${rows[@]}" | sort -rn
+              echo "$out/index.html"
+            '';
+          };
         in
         {
+          apps.visual-diff = {
+            type = "app";
+            program = "${visual-diff}/bin/visual-diff";
+          };
+
           apps.help = {
             type = "app";
             program = "${pkgs.writeShellScriptBin "help" ''
@@ -234,6 +282,7 @@
                 nix run .#publish -- <major|minor|patch> cargo-release + npm publish of impacted ts packages
                 nix run .#visual                         serve the kit gallery: live board, colorscheme, every page the visual test captures
                 cargo test --test gallery --features uikit_dioxus   visual regression of the kit gallery (UPDATE_EXPECT=1 accepts)
+                nix run .#visual-diff -- <git-ref>       old | new | diff of every baseline that moved since <git-ref>, in tmp/visual-diff/
 
               Docs: README.md, docs/
               EOF

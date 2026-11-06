@@ -1,6 +1,6 @@
 //! Visual regression of the uikit: every primitive (all variants), the
 //! combined board and the colorscheme page, rendered via dioxus-ssr, captured by
-//! Playwright and compared byte for byte against `tests/visual/__screenshots__/`.
+//! Playwright in each theme and compared byte for byte against `tests/visual/__screenshots__/`.
 //! `UPDATE_EXPECT=1` accepts the current render instead. See tests/visual/README.md.
 #![cfg(feature = "uikit_dioxus")]
 

@@ -22,7 +22,7 @@ const GALLERY: &[(&str, fn() -> AnyView)] = &[
 	("ContextMenu", d_context_menu), ("Menubar", d_menubar), ("Select", d_select), ("Dialog", d_dialog),
 	("AlertDialog", d_alert_dialog), ("Sheet", d_sheet), ("Drawer", d_drawer), ("NavigationMenu", d_navigation_menu),
 	("Field", d_field), ("InputGroup", d_input_group), ("Calendar", d_calendar), ("DateTimePicker", d_date_time_picker), ("Form", d_form),
-	("IconButton", d_icon_button), ("StatusItem", d_status_item),
+	("IconButton", d_icon_button), ("Sizes", d_sizes), ("StatusItem", d_status_item),
 	("FormRow", d_form_row), ("Settings", d_settings),
 	("SystemBanner", d_system_banner), ("SectionLabel", d_section_label),
 	("WorkspaceTabs", d_workspace_tabs), ("AccountList", d_account_list), ("AccountSettingsDialog", d_account_settings_dialog),
@@ -1195,6 +1195,35 @@ fn d_slider() -> AnyView {
 	view! {
 		<div class="w-64">
 			<Slider default_value=40.0 />
+		</div>
+	}
+	.into_any()
+}
+
+fn d_sizes() -> AnyView {
+	view! {
+		<div class="flex flex-col items-start gap-3">
+			{[Size::Xs, Size::Sm, Size::Md, Size::Lg, Size::Xl, Size::Touch]
+				.map(|size| {
+					view! {
+						<div class="flex items-center gap-3">
+							<Button size>{size.as_ref().to_owned()}</Button>
+							<Button size variant=ButtonVariant::Outline>
+								{glyph()}
+								{size.as_ref().to_owned()}
+							</Button>
+							<Button size icon=true variant=ButtonVariant::Outline>
+								{glyph()}
+							</Button>
+							<Toggle size variant=ToggleVariant::Outline>
+								{size.as_ref().to_owned()}
+							</Toggle>
+							<IconButton aria_label="Search" size variant=IconButtonVariant::Outline>
+								{glyph()}
+							</IconButton>
+						</div>
+					}
+				})}
 		</div>
 	}
 	.into_any()

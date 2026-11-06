@@ -21,7 +21,7 @@ const GALLERY: &[(&str, fn() -> Element)] = &[
 	("Input", d_input), ("Textarea", d_textarea), ("Checkbox", d_checkbox),
 	("Switch", d_switch), ("RadioGroup", d_radio_group), ("Slider", d_slider),
 	("Toggle", d_toggle), ("ToggleGroup", d_toggle_group), ("Tabs", d_tabs),
-	("IconButton", d_icon_button), ("StatusItem", d_status_item),
+	("IconButton", d_icon_button), ("Sizes", d_sizes), ("StatusItem", d_status_item),
 	("FormRow", d_form_row), ("Settings", d_settings),
 	("SystemBanner", d_system_banner), ("SectionLabel", d_section_label),
 	("WorkspaceTabs", d_workspace_tabs), ("AccountList", d_account_list), ("AccountSettingsDialog", d_account_settings_dialog),
@@ -429,6 +429,24 @@ fn d_icon_button() -> Element {
 		IconButton { aria_label: "Search", size: Size::Sm, {glyph()} }
 		IconButton { aria_label: "Search", size: Size::Touch, variant: IconButtonVariant::Outline, {glyph()} }
 		IconButton { aria_label: "Search", disabled: true, {glyph()} }
+	}
+}
+
+// Every control at every step of the ramp, a row per step, so a change to the
+// ramp shows up as one board.
+fn d_sizes() -> Element {
+	rsx! {
+		div { class: "flex flex-col items-start gap-3",
+			for size in [Size::Xs, Size::Sm, Size::Md, Size::Lg, Size::Xl, Size::Touch] {
+				div { class: "flex items-center gap-3",
+					Button { size, "{size.as_ref()}" }
+					Button { size, variant: ButtonVariant::Outline, {glyph()} "{size.as_ref()}" }
+					Button { size, icon: true, variant: ButtonVariant::Outline, {glyph()} }
+					Toggle { size, variant: ToggleVariant::Outline, "{size.as_ref()}" }
+					IconButton { aria_label: "Search", size, variant: IconButtonVariant::Outline, {glyph()} }
+				}
+			}
+		}
 	}
 }
 
