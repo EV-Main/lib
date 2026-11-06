@@ -4,7 +4,7 @@ use ev_lib_classes::{INFO_TIP_TRIGGER, Icon, copy};
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
-		POPOVER_CONTENT,
+		POPOVER_CONTENT, Slot,
 		primitives::{Controllable, Side, icon_shapes, use_controllable, use_stable_id},
 	},
 };
@@ -45,7 +45,7 @@ pub fn InfoTipTrigger(#[props(default = copy::MORE_INFORMATION.to_owned())] labe
 		button {
 			r#type: "button",
 			class: cls,
-			"data-slot": "info-tip-trigger",
+			"data-slot": Slot::InfoTipTrigger.as_str(),
 			"data-state": if open { "open" } else { "closed" },
 			"aria-label": label,
 			"aria-expanded": if open { "true" } else { "false" },
@@ -83,7 +83,7 @@ pub fn InfoTipContent(#[props(default)] side: Side, #[props(default = String::fr
 			role: "status",
 			"aria-live": "polite",
 			class: cls,
-			"data-slot": "info-tip-content",
+			"data-slot": Slot::InfoTipContent.as_str(),
 			"data-state": "open",
 			"data-side": side.as_ref(),
 			"data-align": align,

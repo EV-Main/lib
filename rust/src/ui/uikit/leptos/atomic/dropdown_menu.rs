@@ -6,7 +6,7 @@ use crate::{
 	cn,
 	ui::uikit::leptos::{
 		DROPDOWN_MENU_CHECK_ITEM, DROPDOWN_MENU_CONTENT, DROPDOWN_MENU_ITEM, DROPDOWN_MENU_ITEM_INDICATOR, DROPDOWN_MENU_LABEL, DROPDOWN_MENU_SEPARATOR, DROPDOWN_MENU_SHORTCUT,
-		DROPDOWN_MENU_SUB_CONTENT, DROPDOWN_MENU_SUB_TRIGGER,
+		DROPDOWN_MENU_SUB_CONTENT, DROPDOWN_MENU_SUB_TRIGGER, Slot,
 		primitives::{Controllable, DismissableLayer, Side, icon_shapes, use_controllable, use_dismissable_layer},
 	},
 };
@@ -23,7 +23,7 @@ pub fn DropdownMenu(
 	let provided = DropdownMenuCtx { open: state, layer };
 	view! {
 		<Provider value=provided>
-			<div class="relative inline-block" data-slot="dropdown-menu">
+			<div class="relative inline-block" data-slot=Slot::DropdownMenu.as_str()>
 				{children()}
 			</div>
 		</Provider>
@@ -39,7 +39,7 @@ pub fn DropdownMenuTrigger(#[prop(optional, into)] class: String, #[prop(optiona
 		<button
 			type="button"
 			class=class
-			data-slot="dropdown-menu-trigger"
+			data-slot=Slot::DropdownMenuTrigger.as_str()
 			data-state=move || if ctx.open.get() { "open" } else { "closed" }
 			aria-label=move || aria_label.get()
 			aria-haspopup="menu"
@@ -64,7 +64,7 @@ pub fn DropdownMenuContent(#[prop(optional)] side: Side, #[prop(optional, into)]
 					class=cls.clone()
 					role="menu"
 					tabindex="-1"
-					data-slot="dropdown-menu-content"
+					data-slot=Slot::DropdownMenuContent.as_str()
 					data-state="open"
 					data-side=side.as_ref().to_owned()
 					on:keydown=move |e| {
@@ -81,7 +81,7 @@ pub fn DropdownMenuContent(#[prop(optional)] side: Side, #[prop(optional, into)]
 #[component]
 pub fn DropdownMenuGroup(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class=class role="group" data-slot="dropdown-menu-group">
+		<div class=class role="group" data-slot=Slot::DropdownMenuGroup.as_str()>
 			{children()}
 		</div>
 	}
@@ -102,7 +102,7 @@ pub fn DropdownMenuItem(
 			class=cn!(DROPDOWN_MENU_ITEM, class)
 			role="menuitem"
 			tabindex="-1"
-			data-slot="dropdown-menu-item"
+			data-slot=Slot::DropdownMenuItem.as_str()
 			data-variant=variant.as_ref().to_owned()
 			data-inset=inset.then_some("")
 			data-disabled=move || disabled.get().then_some("")
@@ -127,7 +127,7 @@ pub fn DropdownMenuCheckboxItem(
 			class=cn!(DROPDOWN_MENU_CHECK_ITEM, class)
 			role="menuitemcheckbox"
 			tabindex="-1"
-			data-slot="dropdown-menu-checkbox-item"
+			data-slot=Slot::DropdownMenuCheckboxItem.as_str()
 			data-state=move || if checked.get() { "checked" } else { "unchecked" }
 			data-disabled=move || disabled.get().then_some("")
 			aria-checked=move || checked.get().to_string()
@@ -172,7 +172,7 @@ pub fn DropdownMenuRadioGroup(
 	let provided = DropdownMenuRadioCtx { value: state };
 	view! {
 		<Provider value=provided>
-			<div class=class role="group" data-slot="dropdown-menu-radio-group">
+			<div class=class role="group" data-slot=Slot::DropdownMenuRadioGroup.as_str()>
 				{children()}
 			</div>
 		</Provider>
@@ -192,7 +192,7 @@ pub fn DropdownMenuRadioItem(#[prop(into)] value: String, #[prop(optional, into)
 			class=cn!(DROPDOWN_MENU_CHECK_ITEM, class)
 			role="menuitemradio"
 			tabindex="-1"
-			data-slot="dropdown-menu-radio-item"
+			data-slot=Slot::DropdownMenuRadioItem.as_str()
 			data-state=move || if checked.get() { "checked" } else { "unchecked" }
 			data-disabled=move || disabled.get().then_some("")
 			aria-checked=move || checked.get().to_string()
@@ -227,7 +227,7 @@ pub fn DropdownMenuLabel(#[prop(optional)] inset: bool, #[prop(optional, into)] 
 	view! {
 		<div
 			class=cn!(DROPDOWN_MENU_LABEL, class)
-			data-slot="dropdown-menu-label"
+			data-slot=Slot::DropdownMenuLabel.as_str()
 			data-inset=inset.then_some("")
 		>
 			{children()}
@@ -241,7 +241,7 @@ pub fn DropdownMenuSeparator(#[prop(optional, into)] class: String) -> impl Into
 		<div
 			class=cn!(DROPDOWN_MENU_SEPARATOR, class)
 			role="separator"
-			data-slot="dropdown-menu-separator"
+			data-slot=Slot::DropdownMenuSeparator.as_str()
 		></div>
 	}
 }
@@ -249,7 +249,7 @@ pub fn DropdownMenuSeparator(#[prop(optional, into)] class: String) -> impl Into
 #[component]
 pub fn DropdownMenuShortcut(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<span class=cn!(DROPDOWN_MENU_SHORTCUT, class) data-slot="dropdown-menu-shortcut">
+		<span class=cn!(DROPDOWN_MENU_SHORTCUT, class) data-slot=Slot::DropdownMenuShortcut.as_str()>
 			{children()}
 		</span>
 	}
@@ -270,7 +270,7 @@ pub fn DropdownMenuSub(
 	let provided = DropdownMenuSubCtx { open: state };
 	view! {
 		<Provider value=provided>
-			<div data-slot="dropdown-menu-sub">{children()}</div>
+			<div data-slot=Slot::DropdownMenuSub.as_str()>{children()}</div>
 		</Provider>
 	}
 }
@@ -283,7 +283,7 @@ pub fn DropdownMenuSubTrigger(#[prop(optional)] inset: bool, #[prop(optional, in
 			class=cn!(DROPDOWN_MENU_SUB_TRIGGER, class)
 			role="menuitem"
 			tabindex="-1"
-			data-slot="dropdown-menu-sub-trigger"
+			data-slot=Slot::DropdownMenuSubTrigger.as_str()
 			data-state=move || if ctx.open.get() { "open" } else { "closed" }
 			data-inset=inset.then_some("")
 			aria-haspopup="menu"
@@ -314,7 +314,12 @@ pub fn DropdownMenuSubContent(#[prop(optional, into)] class: String, children: C
 	move || {
 		ctx.open.get().then(|| {
 			view! {
-				<div class=cls.clone() role="menu" data-slot="dropdown-menu-sub-content" data-state="open">
+				<div
+					class=cls.clone()
+					role="menu"
+					data-slot=Slot::DropdownMenuSubContent.as_str()
+					data-state="open"
+				>
 					{children()}
 				</div>
 			}

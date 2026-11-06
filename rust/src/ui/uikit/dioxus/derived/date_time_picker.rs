@@ -9,7 +9,7 @@ use crate::{
 		core::{self as uikit, CalendarDate},
 		dioxus::{
 			ButtonVariant, DATE_TIME_PICKER_CLEAR, DATE_TIME_PICKER_CONTENT, DATE_TIME_PICKER_TIME, DATE_TIME_PICKER_TIME_INPUT, DATE_TIME_PICKER_TIME_SEPARATOR, DATE_TIME_PICKER_TRIGGER,
-			INPUT_BASE, POPOVER_CONTENT, Size,
+			INPUT_BASE, POPOVER_CONTENT, Size, Slot,
 			button::button_classes,
 			calendar::Calendar,
 			primitives::{icon_shapes, use_controllable},
@@ -125,7 +125,7 @@ pub fn DateTimePicker(
 	rsx! {
 		div {
 			class: "relative",
-			"data-slot": "date-time-picker",
+			"data-slot": Slot::DateTimePicker.as_str(),
 			onkeydown: move |e| {
 				if e.key() == Key::Escape {
 					open.set(false);
@@ -135,7 +135,7 @@ pub fn DateTimePicker(
 				r#type: "button",
 				id,
 				class: trigger_class,
-				"data-slot": "date-time-picker-trigger",
+				"data-slot": Slot::DateTimePickerTrigger.as_str(),
 				"data-placeholder": if is_empty { Some("true") } else { None },
 				"aria-haspopup": "dialog",
 				"aria-expanded": if is_open { "true" } else { "false" },
@@ -160,7 +160,7 @@ pub fn DateTimePicker(
 					class: content_class,
 					role: "dialog",
 					"aria-label": labels.dialog.clone(),
-					"data-slot": "date-time-picker-content",
+					"data-slot": Slot::DateTimePickerContent.as_str(),
 					"data-state": "open",
 					"data-side": "bottom",
 					"data-align": "start",
@@ -176,12 +176,12 @@ pub fn DateTimePicker(
 						previous_month_label: labels.previous_month.clone(),
 						next_month_label: labels.next_month.clone(),
 					}
-					div { class: DATE_TIME_PICKER_TIME, "data-slot": "date-time-picker-time",
+					div { class: DATE_TIME_PICKER_TIME, "data-slot": Slot::DateTimePickerTime.as_str(),
 						input {
 							r#type: "text",
 							inputmode: "numeric",
 							class: time_input_class.clone(),
-							"data-slot": "date-time-picker-hours",
+							"data-slot": Slot::DateTimePickerHours.as_str(),
 							"aria-label": labels.hours.clone(),
 							value: hours,
 							disabled,
@@ -197,7 +197,7 @@ pub fn DateTimePicker(
 							r#type: "text",
 							inputmode: "numeric",
 							class: time_input_class,
-							"data-slot": "date-time-picker-minutes",
+							"data-slot": Slot::DateTimePickerMinutes.as_str(),
 							"aria-label": labels.minutes.clone(),
 							value: minutes,
 							disabled,
@@ -207,7 +207,7 @@ pub fn DateTimePicker(
 						button {
 							r#type: "button",
 							class: clear_class,
-							"data-slot": "date-time-picker-clear",
+							"data-slot": Slot::DateTimePickerClear.as_str(),
 							disabled,
 							onclick: on_clear,
 							{labels.clear.clone()}
@@ -215,7 +215,7 @@ pub fn DateTimePicker(
 						button {
 							r#type: "button",
 							class: close_class,
-							"data-slot": "date-time-picker-close",
+							"data-slot": Slot::DateTimePickerClose.as_str(),
 							"aria-label": labels.close.clone(),
 							disabled,
 							onclick: move |_| open.set(false),

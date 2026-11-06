@@ -7,7 +7,7 @@ use crate::{
 	ui::uikit::dioxus::{
 		ACCOUNT_SETTINGS_DIALOG_CLOSE, ACCOUNT_SETTINGS_DIALOG_CONTENT, ACCOUNT_SETTINGS_DIALOG_DESCRIPTION, ACCOUNT_SETTINGS_DIALOG_ENTRY, ACCOUNT_SETTINGS_DIALOG_FOOTER,
 		ACCOUNT_SETTINGS_DIALOG_HEADING, ACCOUNT_SETTINGS_DIALOG_LIST, ACCOUNT_SETTINGS_DIALOG_PANE, ACCOUNT_SETTINGS_DIALOG_PANEL, ACCOUNT_SETTINGS_DIALOG_SIDEBAR,
-		ACCOUNT_SETTINGS_DIALOG_TABS, ACCOUNT_SETTINGS_DIALOG_TITLE, Dialog, DialogContent, DialogDescription, DialogTitle, IconButton, Orientation, Tabs, TabsContent, TabsList,
+		ACCOUNT_SETTINGS_DIALOG_TABS, ACCOUNT_SETTINGS_DIALOG_TITLE, Dialog, DialogContent, DialogDescription, DialogTitle, IconButton, Orientation, Slot, Tabs, TabsContent, TabsList,
 		TabsTrigger,
 		primitives::{icon_shapes, use_controllable, use_stable_id},
 	},
@@ -71,7 +71,7 @@ pub fn AccountSettingsDialog(
 					default_value,
 					on_value_change,
 					class: ACCOUNT_SETTINGS_DIALOG_TABS,
-					div { "data-slot": "account-settings-dialog-sidebar", class: ACCOUNT_SETTINGS_DIALOG_SIDEBAR,
+					div { "data-slot": Slot::AccountSettingsDialogSidebar.as_str(), class: ACCOUNT_SETTINGS_DIALOG_SIDEBAR,
 						TabsList { class: ACCOUNT_SETTINGS_DIALOG_LIST,
 							for s in sections.iter() {
 								TabsTrigger { key: "{s.id}", value: s.id.clone(), class: ACCOUNT_SETTINGS_DIALOG_ENTRY,
@@ -83,11 +83,11 @@ pub fn AccountSettingsDialog(
 							}
 						}
 						if let Some(footer) = sidebar_footer {
-							div { "data-slot": "account-settings-dialog-footer", class: ACCOUNT_SETTINGS_DIALOG_FOOTER, {footer} }
+							div { "data-slot": Slot::AccountSettingsDialogFooter.as_str(), class: ACCOUNT_SETTINGS_DIALOG_FOOTER, {footer} }
 						}
 					}
-					div { "data-slot": "account-settings-dialog-pane", class: ACCOUNT_SETTINGS_DIALOG_PANE,
-						div { "data-slot": "account-settings-dialog-heading", class: ACCOUNT_SETTINGS_DIALOG_HEADING,
+					div { "data-slot": Slot::AccountSettingsDialogPane.as_str(), class: ACCOUNT_SETTINGS_DIALOG_PANE,
+						div { "data-slot": Slot::AccountSettingsDialogHeading.as_str(), class: ACCOUNT_SETTINGS_DIALOG_HEADING,
 							DialogTitle { id: title_id, class: ACCOUNT_SETTINGS_DIALOG_TITLE, {title} }
 							if let Some(description) = description {
 								DialogDescription { id: description_id, class: ACCOUNT_SETTINGS_DIALOG_DESCRIPTION, {description} }

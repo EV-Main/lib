@@ -1,6 +1,9 @@
 use dioxus::prelude::*;
 
-use crate::ui::uikit::dioxus::primitives::{Controllable, use_controllable};
+use crate::ui::uikit::dioxus::{
+	Slot,
+	primitives::{Controllable, use_controllable},
+};
 
 #[component]
 pub fn Collapsible(open: Option<bool>, #[props(default)] default_open: bool, on_open_change: Option<EventHandler<bool>>, #[props(default)] class: String, children: Element) -> Element {
@@ -8,7 +11,7 @@ pub fn Collapsible(open: Option<bool>, #[props(default)] default_open: bool, on_
 	use_context_provider(|| CollapsibleCtx { open: state });
 	let data_state = if state.get() { "open" } else { "closed" };
 	rsx! {
-		div { class, "data-slot": "collapsible", "data-state": data_state, {children} }
+		div { class, "data-slot": Slot::Collapsible.as_str(), "data-state": data_state, {children} }
 	}
 }
 #[component]
@@ -21,7 +24,7 @@ pub fn CollapsibleTrigger(#[props(default)] class: String, children: Element) ->
 		button {
 			r#type: "button",
 			class,
-			"data-slot": "collapsible-trigger",
+			"data-slot": Slot::CollapsibleTrigger.as_str(),
 			"data-state": data_state,
 			"aria-expanded": aria_expanded,
 			onclick: move |_| ctx.open.set(!ctx.open.get()),
@@ -36,7 +39,7 @@ pub fn CollapsibleContent(#[props(default)] class: String, children: Element) ->
 		return rsx! {};
 	}
 	rsx! {
-		div { class, "data-slot": "collapsible-content", "data-state": "open", {children} }
+		div { class, "data-slot": Slot::CollapsibleContent.as_str(), "data-state": "open", {children} }
 	}
 }
 #[derive(Clone, Copy)]

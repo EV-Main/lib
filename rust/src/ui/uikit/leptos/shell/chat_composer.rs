@@ -9,7 +9,7 @@ use crate::{
 		core::{KeyInput, enter_sends},
 		leptos::{
 			CHAT_COMPOSER_ATTACHMENTS, CHAT_COMPOSER_BASE, CHAT_COMPOSER_FIELD, CHAT_COMPOSER_HINT, CHAT_COMPOSER_IDLE, CHAT_COMPOSER_SPACER, CHAT_COMPOSER_STREAMING, CHAT_COMPOSER_TOOLBAR,
-			DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger, IconButton, IconButtonVariant, MODEL_CHIP_BASE, Size, Textarea,
+			DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger, IconButton, IconButtonVariant, MODEL_CHIP_BASE, Size, Slot, Textarea,
 			icon_button::Glyph,
 			primitives::{icon_shapes, use_controllable},
 		},
@@ -116,7 +116,7 @@ pub fn ChatComposer(
 	view! {
 		<div
 			class=cls
-			data-slot="chat-composer"
+			data-slot=Slot::ChatComposer.as_str()
 			data-state=move || if streaming.get() { "streaming" } else { "default" }
 		>
 			{attachments.map(|a| view! { <div class=CHAT_COMPOSER_ATTACHMENTS>{a.run()}</div> })}

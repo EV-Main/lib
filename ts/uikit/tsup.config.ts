@@ -17,7 +17,7 @@ export default defineConfig([
     // `bundle: false` keeps the module graph as written; `scripts/fully-specify.mjs`
     // (run by `build`/`prepare` after tsup, with `scripts/emit-barrel.mjs`) adds the `.js` a strict ESM
     // resolver needs to every relative import.
-    entry: ['src/**/*.{ts,tsx}', '!src/palette/**', '!src/**/*.d.ts'],
+    entry: ['src/**/*.{ts,tsx}', '!src/palette/**', '!src/**/*.d.ts', '!src/ts-only-slots.ts'],
     format: ['esm'],
     bundle: false,
     dts: { entry: { index: 'src/index.ts' } },

@@ -251,6 +251,7 @@ the full list is in [`ts/uikit/README.md`](../ts/uikit/README.md#limitations).
 - **A component exists in both ports or neither.** The same test fails on a
   gallery label present on one side only, and on a `#[component]` exported by
   one port only; every exported component appears in a gallery entry.
+- **Slot names come from `ev_lib_classes::Slot`.** Both ports render `Slot::X.as_str()`; TS types `data-slot` against the generated `DataSlot`, plus the TS-only names it declares itself. `rust/tests/slots.rs` and `ts/uikit/test/slots.test.ts` hold it.
 - **A class table names a role, never a magnitude**
   ([spec/roles.md](spec/roles.md)). A literal where the theme has a role token
   is a missing token; `rust/tests/roles.rs` fails on one.

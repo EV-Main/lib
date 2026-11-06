@@ -4,7 +4,7 @@ use leptos::{context::Provider, prelude::*};
 use crate::{
 	cn,
 	ui::uikit::leptos::{
-		POPOVER_CONTENT,
+		POPOVER_CONTENT, Slot,
 		primitives::{Controllable, Side, icon_shapes, use_controllable, use_stable_id},
 	},
 };
@@ -48,7 +48,7 @@ pub fn InfoTipTrigger(#[prop(default = copy::MORE_INFORMATION.to_owned(), into)]
 		<button
 			type="button"
 			class=cls
-			data-slot="info-tip-trigger"
+			data-slot=Slot::InfoTipTrigger.as_str()
 			data-state=move || if ctx.open.get() { "open" } else { "closed" }
 			aria-label=label
 			aria-expanded=move || ctx.open.get().to_string()
@@ -85,7 +85,7 @@ pub fn InfoTipContent(#[prop(optional)] side: Side, #[prop(default = "center".in
 					role="status"
 					aria-live="polite"
 					class=cls.clone()
-					data-slot="info-tip-content"
+					data-slot=Slot::InfoTipContent.as_str()
 					data-state="open"
 					data-side=side.as_ref().to_owned()
 					data-align=align.clone()

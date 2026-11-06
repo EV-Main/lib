@@ -10,7 +10,7 @@ use crate::{
 		dioxus::{
 			ButtonVariant, CAROUSEL_CONTENT_TRACK, CAROUSEL_CONTENT_TRACK_HORIZONTAL, CAROUSEL_CONTENT_TRACK_VERTICAL, CAROUSEL_CONTENT_VIEWPORT, CAROUSEL_EDGE_FADE_NEXT,
 			CAROUSEL_EDGE_FADE_PREV, CAROUSEL_ITEM, CAROUSEL_ITEM_HORIZONTAL, CAROUSEL_ITEM_VERTICAL, CAROUSEL_NAV, CAROUSEL_NEXT_HORIZONTAL, CAROUSEL_NEXT_VERTICAL,
-			CAROUSEL_PREVIOUS_HORIZONTAL, CAROUSEL_PREVIOUS_VERTICAL, Orientation, Size,
+			CAROUSEL_PREVIOUS_HORIZONTAL, CAROUSEL_PREVIOUS_VERTICAL, Orientation, Size, Slot,
 			button::Button,
 			primitives::{Controllable, icon_shapes, use_controllable},
 		},
@@ -36,7 +36,7 @@ pub fn Carousel(
 			role: "region",
 			"aria-roledescription": "carousel",
 			tabindex: "0",
-			"data-slot": "carousel",
+			"data-slot": Slot::Carousel.as_str(),
 			onkeydown: move |e| {
 				if let Some(to) = ctx.slides.read().key(&(&e).into(), ctx.index.get()) {
 					e.prevent_default();
@@ -61,7 +61,7 @@ pub fn CarouselContent(#[props(default)] class: String, children: Element) -> El
 	};
 	let cls = cn!(CAROUSEL_CONTENT_TRACK, track, class);
 	rsx! {
-		div { class: CAROUSEL_CONTENT_VIEWPORT, "data-slot": "carousel-content",
+		div { class: CAROUSEL_CONTENT_VIEWPORT, "data-slot": Slot::CarouselContent.as_str(),
 			div { class: cls, style: "transform: {transform}", {children} }
 		}
 	}
@@ -91,7 +91,7 @@ pub fn CarouselItem(#[props(default)] class: String, children: Element) -> Eleme
 		div {
 			role: "group",
 			"aria-roledescription": "slide",
-			"data-slot": "carousel-item",
+			"data-slot": Slot::CarouselItem.as_str(),
 			class: cls,
 			{children}
 		}

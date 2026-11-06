@@ -42,7 +42,7 @@ use crate::{
 	ui::uikit::{
 		core::{ToastQueue, ToastState, ToastView, toaster_style, y_position},
 		dioxus::{
-			TOAST_BASE, TOAST_CLOSE, TOAST_CONTENT, TOAST_TITLE, TOASTER_BASE, ToastPosition, Tone,
+			Slot, TOAST_BASE, TOAST_CLOSE, TOAST_CONTENT, TOAST_TITLE, TOASTER_BASE, ToastPosition, Tone,
 			primitives::{icon_shapes, is_transform_transition},
 		},
 	},
@@ -138,7 +138,7 @@ pub fn Toaster(#[props(default)] position: ToastPosition, #[props(default)] clas
 	rsx! {
 		ol {
 			class: cls,
-			"data-slot": "toaster",
+			"data-slot": Slot::Toaster.as_str(),
 			"data-position": position.as_ref(),
 			"data-y-position": y_position(position),
 			"data-stack": "",
@@ -178,7 +178,7 @@ fn ToastItem(toast: ToastView) -> Element {
 		li {
 			role: "status",
 			"aria-live": "polite",
-			"data-slot": "toast",
+			"data-slot": Slot::Toast.as_str(),
 			"data-tone": toast.tone.as_ref(),
 			"data-state": state.as_str(),
 			"data-front": "{toast.front}",
@@ -202,7 +202,7 @@ fn ToastItem(toast: ToastView) -> Element {
 			button {
 				r#type: "button",
 				"aria-label": copy::CLOSE,
-				"data-slot": "toast-close",
+				"data-slot": Slot::ToastClose.as_str(),
 				class: TOAST_CLOSE,
 				onclick: move |_| handle.dismiss(id),
 				svg {

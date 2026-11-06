@@ -69,7 +69,3 @@ The rest is hand-written for one of four reasons:
  error-monitoring 0.6k  Sentry / React / Next wiring                        B
  marketing     1.8k  motion, form harness, react                            C
 ```
-
-Known data still copied by hand:
-
-- `data-slot` names: each port and the TS write them inline.

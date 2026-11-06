@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{SWITCH_BASE, SWITCH_THUMB, primitives::use_controllable},
+	ui::uikit::leptos::{SWITCH_BASE, SWITCH_THUMB, Slot, primitives::use_controllable},
 };
 
 #[component]
@@ -21,13 +21,13 @@ pub fn Switch(
 			type="button"
 			role="switch"
 			class=cls
-			data-slot="switch"
+			data-slot=Slot::Switch.as_str()
 			data-state=data_state
 			aria-checked=move || state.get().to_string()
 			disabled=disabled
 			on:click=move |_| state.set(!state.get_untracked())
 		>
-			<span class=SWITCH_THUMB data-slot="switch-thumb" data-state=data_state></span>
+			<span class=SWITCH_THUMB data-slot=Slot::SwitchThumb.as_str() data-state=data_state></span>
 		</button>
 	}
 }

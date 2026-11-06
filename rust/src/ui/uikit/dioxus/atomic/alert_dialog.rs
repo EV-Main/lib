@@ -3,7 +3,7 @@ use dioxus::prelude::*;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
-		ALERT_DIALOG_CONTENT, ALERT_DIALOG_DESCRIPTION, ALERT_DIALOG_FOOTER, ALERT_DIALOG_HEADER, ALERT_DIALOG_OVERLAY, ALERT_DIALOG_TITLE, ButtonVariant, Size,
+		ALERT_DIALOG_CONTENT, ALERT_DIALOG_DESCRIPTION, ALERT_DIALOG_FOOTER, ALERT_DIALOG_HEADER, ALERT_DIALOG_OVERLAY, ALERT_DIALOG_TITLE, ButtonVariant, Size, Slot,
 		button::button_classes,
 		primitives::{Controllable, use_controllable},
 	},
@@ -14,7 +14,7 @@ pub fn AlertDialog(open: Option<bool>, #[props(default)] default_open: bool, on_
 	let state = use_controllable(open, default_open, on_open_change);
 	use_context_provider(|| AlertDialogCtx { open: state });
 	rsx! {
-		div { "data-slot": "alert-dialog", {children} }
+		div { "data-slot": Slot::AlertDialog.as_str(), {children} }
 	}
 }
 #[component]
@@ -24,7 +24,7 @@ pub fn AlertDialogTrigger(#[props(default)] class: String, children: Element) ->
 		button {
 			r#type: "button",
 			class,
-			"data-slot": "alert-dialog-trigger",
+			"data-slot": Slot::AlertDialogTrigger.as_str(),
 			"aria-expanded": if ctx.open.get() { "true" } else { "false" },
 			onclick: move |_| ctx.open.set(true),
 			{children}
@@ -46,7 +46,7 @@ pub fn AlertDialogContent(aria_labelledby: Option<String>, aria_describedby: Opt
 		// dep-light: native focus order, no trap/portal — see README Limitations
 		div {
 			class: ALERT_DIALOG_OVERLAY,
-			"data-slot": "alert-dialog-overlay",
+			"data-slot": Slot::AlertDialogOverlay.as_str(),
 			"data-state": "open",
 			onclick: move |_| ctx.open.set(false),
 		}
@@ -56,7 +56,7 @@ pub fn AlertDialogContent(aria_labelledby: Option<String>, aria_describedby: Opt
 			"aria-labelledby": aria_labelledby,
 			"aria-describedby": aria_describedby,
 			class: cls,
-			"data-slot": "alert-dialog-content",
+			"data-slot": Slot::AlertDialogContent.as_str(),
 			"data-state": "open",
 			tabindex: "-1",
 			onclick: move |e| e.stop_propagation(),
@@ -69,28 +69,28 @@ pub fn AlertDialogContent(aria_labelledby: Option<String>, aria_describedby: Opt
 pub fn AlertDialogHeader(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(ALERT_DIALOG_HEADER, class);
 	rsx! {
-		div { class: cls, "data-slot": "alert-dialog-header", {children} }
+		div { class: cls, "data-slot": Slot::AlertDialogHeader.as_str(), {children} }
 	}
 }
 #[component]
 pub fn AlertDialogFooter(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(ALERT_DIALOG_FOOTER, class);
 	rsx! {
-		div { class: cls, "data-slot": "alert-dialog-footer", {children} }
+		div { class: cls, "data-slot": Slot::AlertDialogFooter.as_str(), {children} }
 	}
 }
 #[component]
 pub fn AlertDialogTitle(id: Option<String>, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(ALERT_DIALOG_TITLE, class);
 	rsx! {
-		h2 { id, class: cls, "data-slot": "alert-dialog-title", {children} }
+		h2 { id, class: cls, "data-slot": Slot::AlertDialogTitle.as_str(), {children} }
 	}
 }
 #[component]
 pub fn AlertDialogDescription(id: Option<String>, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(ALERT_DIALOG_DESCRIPTION, class);
 	rsx! {
-		p { id, class: cls, "data-slot": "alert-dialog-description", {children} }
+		p { id, class: cls, "data-slot": Slot::AlertDialogDescription.as_str(), {children} }
 	}
 }
 /// The confirm button: runs `onclick` — the consumer's destructive action —
@@ -103,7 +103,7 @@ pub fn AlertDialogAction(onclick: Option<EventHandler<MouseEvent>>, #[props(defa
 		button {
 			r#type: "button",
 			class: cls,
-			"data-slot": "alert-dialog-action",
+			"data-slot": Slot::AlertDialogAction.as_str(),
 			onclick: move |e| {
 				if let Some(h) = onclick {
 					h.call(e);
@@ -123,7 +123,7 @@ pub fn AlertDialogCancel(onclick: Option<EventHandler<MouseEvent>>, #[props(defa
 		button {
 			r#type: "button",
 			class: cls,
-			"data-slot": "alert-dialog-cancel",
+			"data-slot": Slot::AlertDialogCancel.as_str(),
 			onclick: move |e| {
 				if let Some(h) = onclick {
 					h.call(e);

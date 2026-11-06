@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-use crate::ui::uikit::leptos::{Size, ToggleVariant, primitives::use_controllable, toggle_classes};
+use crate::ui::uikit::leptos::{Size, Slot, ToggleVariant, primitives::use_controllable, toggle_classes};
 
 #[component]
 pub fn Toggle(
@@ -19,7 +19,7 @@ pub fn Toggle(
 		<button
 			type="button"
 			class=cls
-			data-slot="toggle"
+			data-slot=Slot::Toggle.as_str()
 			data-state=move || if state.get() { "on" } else { "off" }
 			aria-pressed=move || state.get().to_string()
 			disabled=disabled

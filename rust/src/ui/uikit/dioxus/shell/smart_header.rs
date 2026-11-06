@@ -3,7 +3,7 @@ pub use ev_lib_classes::SmartHeaderState;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{SMART_HEADER_BAR, SMART_HEADER_BASE, SMART_HEADER_CONTEXT, SMART_HEADER_TOOLBAR, TopBar},
+	ui::uikit::dioxus::{SMART_HEADER_BAR, SMART_HEADER_BASE, SMART_HEADER_CONTEXT, SMART_HEADER_TOOLBAR, Slot, TopBar},
 };
 
 /// A page header that adapts to scroll and alerts. Mirrors the TS
@@ -40,7 +40,7 @@ pub fn SmartHeader(
 	let context = context.filter(|_| state == SmartHeaderState::Default);
 	let palette = palette.filter(|_| state == SmartHeaderState::Search);
 	rsx! {
-		div { class: cls, "data-slot": "smart-header", "data-state": state.as_ref(),
+		div { class: cls, "data-slot": Slot::SmartHeader.as_str(), "data-state": state.as_ref(),
 			{banner}
 			TopBar {
 				class: SMART_HEADER_BAR,
@@ -51,13 +51,13 @@ pub fn SmartHeader(
 				end,
 			}
 			if let Some(toolbar) = toolbar {
-				div { class: SMART_HEADER_TOOLBAR, "data-slot": "smart-header-toolbar", {toolbar} }
+				div { class: SMART_HEADER_TOOLBAR, "data-slot": Slot::SmartHeaderToolbar.as_str(), {toolbar} }
 			}
 			if let Some(context) = context {
-				div { class: SMART_HEADER_CONTEXT, "data-slot": "smart-header-context", {context} }
+				div { class: SMART_HEADER_CONTEXT, "data-slot": Slot::SmartHeaderContext.as_str(), {context} }
 			}
 			if let Some(palette) = palette {
-				div { "data-slot": "smart-header-palette", {palette} }
+				div { "data-slot": Slot::SmartHeaderPalette.as_str(), {palette} }
 			}
 		}
 	}

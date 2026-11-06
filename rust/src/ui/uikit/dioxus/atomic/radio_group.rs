@@ -4,7 +4,7 @@ use ev_lib_classes::{Icon, RADIO_GROUP_DOT, RADIO_GROUP_INDICATOR};
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
-		RADIO_GROUP_ITEM, RADIO_GROUP_ROOT,
+		RADIO_GROUP_ITEM, RADIO_GROUP_ROOT, Slot,
 		primitives::{Controllable, RovingFocus, RovingOrientation, icon_shapes, use_controllable, use_roving_focus, use_roving_item},
 	},
 };
@@ -25,7 +25,7 @@ pub fn RadioGroup(
 	rsx! {
 		div {
 			class: cls,
-			"data-slot": "radio-group",
+			"data-slot": Slot::RadioGroup.as_str(),
 			role: "radiogroup",
 			// The arrows both move and check, as native radios do — which is
 			// what the `role="radio"` contract promises ("1 of 3, use arrow
@@ -54,7 +54,7 @@ pub fn RadioGroupItem(value: String, #[props(default)] class: String, #[props(de
 		button {
 			r#type: "button",
 			class: cls,
-			"data-slot": "radio-group-item",
+			"data-slot": Slot::RadioGroupItem.as_str(),
 			"data-state": if checked { "checked" } else { "unchecked" },
 			role: "radio",
 			"aria-checked": checked,
@@ -64,7 +64,7 @@ pub fn RadioGroupItem(value: String, #[props(default)] class: String, #[props(de
 			onclick: move |_| ctx.value.set(select_value.clone()),
 			if checked {
 				span {
-					"data-slot": "radio-group-indicator",
+					"data-slot": Slot::RadioGroupIndicator.as_str(),
 					class: RADIO_GROUP_INDICATOR,
 					svg {
 						class: RADIO_GROUP_DOT,

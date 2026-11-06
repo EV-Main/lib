@@ -9,7 +9,7 @@ use crate::{
 		dioxus::{
 			AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, ButtonVariant, CONFIRM_DIALOG_CONTENT,
 			CONFIRM_DIALOG_DESCRIPTION, CONFIRM_DIALOG_ERROR, CONFIRM_DIALOG_FOOTER, CONFIRM_DIALOG_HEADER, CONFIRM_DIALOG_ICON, CONFIRM_DIALOG_PENDING, CONFIRM_DIALOG_SPINNER,
-			CONFIRM_DIALOG_TEXT, CONFIRM_DIALOG_TITLE, Size, Spinner, Tone,
+			CONFIRM_DIALOG_TEXT, CONFIRM_DIALOG_TITLE, Size, Slot, Spinner, Tone,
 			button::button_classes,
 			primitives::{icon_shapes, use_controllable, use_stable_id},
 		},
@@ -114,14 +114,14 @@ pub fn ConfirmDialog(
 			}
 			AlertDialogContent { aria_labelledby: title_id.clone(), aria_describedby: described_by, class: cls,
 				AlertDialogHeader { class: CONFIRM_DIALOG_HEADER,
-					span { class: CONFIRM_DIALOG_ICON, "data-slot": "confirm-dialog-icon", "data-tone": tone.as_ref(), {glyph} }
+					span { class: CONFIRM_DIALOG_ICON, "data-slot": Slot::ConfirmDialogIcon.as_str(), "data-tone": tone.as_ref(), {glyph} }
 					div { class: CONFIRM_DIALOG_TEXT,
 						AlertDialogTitle { id: title_id, class: CONFIRM_DIALOG_TITLE, {title} }
 						if let Some(description) = description {
 							AlertDialogDescription { id: description_id, class: CONFIRM_DIALOG_DESCRIPTION, {description} }
 						}
 						if let Some(message) = shown_error {
-							p { role: "alert", class: CONFIRM_DIALOG_ERROR, "data-slot": "confirm-dialog-error", {message} }
+							p { role: "alert", class: CONFIRM_DIALOG_ERROR, "data-slot": Slot::ConfirmDialogError.as_str(), {message} }
 						}
 					}
 				}
@@ -129,7 +129,7 @@ pub fn ConfirmDialog(
 					button {
 						r#type: "button",
 						class: cancel_cls,
-						"data-slot": "confirm-dialog-cancel",
+						"data-slot": Slot::ConfirmDialogCancel.as_str(),
 						"aria-disabled": busy,
 						onclick: move |_| change(false),
 						{cancel_label}
@@ -137,7 +137,7 @@ pub fn ConfirmDialog(
 					button {
 						r#type: "button",
 						class: confirm_cls,
-						"data-slot": "confirm-dialog-confirm",
+						"data-slot": Slot::ConfirmDialogConfirm.as_str(),
 						"aria-disabled": busy,
 						"aria-busy": busy,
 						onclick: confirm,

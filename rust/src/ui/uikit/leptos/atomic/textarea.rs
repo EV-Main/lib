@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{FormControlContext, Size, TEXTAREA_BASE, textarea_size_class},
+	ui::uikit::leptos::{FormControlContext, Size, Slot, TEXTAREA_BASE, textarea_size_class},
 };
 
 /// Picks up the id and `aria-*` of an enclosing `FormControl`; outside one, all
@@ -32,7 +32,7 @@ pub fn Textarea(
 	view! {
 		<textarea
 			class=cls
-			data-slot="textarea"
+			data-slot=Slot::Textarea.as_str()
 			data-size=size.as_ref().to_owned()
 			id=move || form.map(|f| f.get().id)
 			aria-describedby=move || form.map(|f| f.get().described_by)

@@ -4,7 +4,7 @@ use crate::{
 	cn,
 	ui::uikit::leptos::{
 		SETTINGS_LAYOUT, SETTINGS_MAIN, SETTINGS_NAV, SETTINGS_ROW_INLINE, SETTINGS_SECTION_ACTION, SETTINGS_SECTION_BASE, SETTINGS_SECTION_BODY, SETTINGS_SECTION_BODY_FLUSH,
-		SETTINGS_SECTION_BODY_PADDED, SETTINGS_SECTION_DESCRIPTION, SETTINGS_SECTION_HEADER, SETTINGS_SECTION_HEADER_FLUSH, SETTINGS_SECTION_HEADING, SETTINGS_SECTION_TITLE, Tone,
+		SETTINGS_SECTION_BODY_PADDED, SETTINGS_SECTION_DESCRIPTION, SETTINGS_SECTION_HEADER, SETTINGS_SECTION_HEADER_FLUSH, SETTINGS_SECTION_HEADING, SETTINGS_SECTION_TITLE, Slot, Tone,
 		form_row::FormRowFrame, primitives::use_stable_id,
 	},
 };
@@ -16,11 +16,11 @@ use crate::{
 pub fn SettingsLayout(#[prop(into)] nav: ViewFn, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(SETTINGS_LAYOUT, class);
 	view! {
-		<div class=cls data-slot="settings-layout">
-			<div class=SETTINGS_NAV data-slot="settings-nav">
+		<div class=cls data-slot=Slot::SettingsLayout.as_str()>
+			<div class=SETTINGS_NAV data-slot=Slot::SettingsNav.as_str()>
 				{nav.run()}
 			</div>
-			<div class=SETTINGS_MAIN data-slot="settings-main">
+			<div class=SETTINGS_MAIN data-slot=Slot::SettingsMain.as_str()>
 				{children()}
 			</div>
 		</div>
@@ -53,7 +53,7 @@ pub fn SettingsSection(
 	view! {
 		<section
 			class=cls
-			data-slot="settings-section"
+			data-slot=Slot::SettingsSection.as_str()
 			data-tone=tone.as_ref().to_owned()
 			aria-labelledby=labelled_by
 		>

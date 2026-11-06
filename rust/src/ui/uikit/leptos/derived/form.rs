@@ -16,7 +16,7 @@ use crate::{
 	cn,
 	ui::uikit::{
 		core::FormItemContext,
-		leptos::{FORM_DESCRIPTION, FORM_ITEM, FORM_LABEL, FORM_MESSAGE, label::Label, primitives::use_stable_id},
+		leptos::{FORM_DESCRIPTION, FORM_ITEM, FORM_LABEL, FORM_MESSAGE, Slot, label::Label, primitives::use_stable_id},
 	},
 };
 
@@ -25,7 +25,7 @@ use crate::{
 #[component]
 pub fn Form(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<form class=class data-slot="form">
+		<form class=class data-slot=Slot::Form.as_str()>
 			{children()}
 		</form>
 	}
@@ -40,7 +40,7 @@ pub fn FormItem(#[prop(optional, into)] class: String, children: Children) -> im
 	let cls = cn!(FORM_ITEM, class);
 	// A Provider, not `provide_context`: a component has no owner of its own, so a bare provide would reach its siblings.
 	view! {
-		<div class=cls data-slot="form-item">
+		<div class=cls data-slot=Slot::FormItem.as_str()>
 			<Provider value=ctx>{children()}</Provider>
 		</div>
 	}
@@ -73,7 +73,7 @@ pub fn FormControl(#[prop(optional, into)] error: Signal<bool>, children: Childr
 	let ctx = expect_context::<FormItemContext>();
 	let control = Signal::derive(move || ctx.control(error.get()));
 	view! {
-		<div data-slot="form-control">
+		<div data-slot=Slot::FormControl.as_str()>
 			<Provider value=control>{children()}</Provider>
 		</div>
 	}
@@ -85,7 +85,7 @@ pub fn FormDescription(#[prop(optional, into)] class: String, children: Children
 	let ctx = expect_context::<FormItemContext>();
 	let cls = cn!(FORM_DESCRIPTION, class);
 	view! {
-		<p class=cls data-slot="form-description" id=ctx.form_description_id()>
+		<p class=cls data-slot=Slot::FormDescription.as_str() id=ctx.form_description_id()>
 			{children()}
 		</p>
 	}
@@ -103,7 +103,7 @@ pub fn FormMessage(#[prop(optional, into)] error: Signal<bool>, #[prop(optional,
 		error.get().then(|| {
 			let children = children.clone();
 			view! {
-				<p class=cls.clone() data-slot="form-message" id=ctx.form_message_id()>
+				<p class=cls.clone() data-slot=Slot::FormMessage.as_str() id=ctx.form_message_id()>
 					{children()}
 				</p>
 			}

@@ -4,7 +4,7 @@ use crate::{
 	cn,
 	ui::uikit::leptos::{
 		ITEM_ACTIONS, ITEM_BASE, ITEM_CONTENT, ITEM_DESCRIPTION, ITEM_FOOTER, ITEM_GROUP, ITEM_HEADER, ITEM_MEDIA_BASE, ITEM_SEPARATOR, ITEM_TITLE, ItemMediaVariant, ItemSize, ItemVariant,
-		Orientation, Separator,
+		Orientation, Separator, Slot,
 	},
 };
 
@@ -12,7 +12,7 @@ use crate::{
 pub fn ItemGroup(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(ITEM_GROUP, class);
 	view! {
-		<div role="list" class=cls data-slot="item-group">
+		<div role="list" class=cls data-slot=Slot::ItemGroup.as_str()>
 			{children()}
 		</div>
 	}
@@ -30,7 +30,7 @@ pub fn Item(#[prop(optional)] variant: ItemVariant, #[prop(optional)] size: Item
 	view! {
 		<div
 			class=cls
-			data-slot="item"
+			data-slot=Slot::Item.as_str()
 			data-variant=variant.as_ref().to_owned()
 			data-size=size.as_ref().to_owned()
 		>
@@ -43,7 +43,7 @@ pub fn Item(#[prop(optional)] variant: ItemVariant, #[prop(optional)] size: Item
 pub fn ItemMedia(#[prop(optional)] variant: ItemMediaVariant, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(ITEM_MEDIA_BASE, variant.as_class(), class);
 	view! {
-		<div class=cls data-slot="item-media" data-variant=variant.as_ref().to_owned()>
+		<div class=cls data-slot=Slot::ItemMedia.as_str() data-variant=variant.as_ref().to_owned()>
 			{children()}
 		</div>
 	}
@@ -53,7 +53,7 @@ pub fn ItemMedia(#[prop(optional)] variant: ItemMediaVariant, #[prop(optional, i
 pub fn ItemContent(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(ITEM_CONTENT, class);
 	view! {
-		<div class=cls data-slot="item-content">
+		<div class=cls data-slot=Slot::ItemContent.as_str()>
 			{children()}
 		</div>
 	}
@@ -63,7 +63,7 @@ pub fn ItemContent(#[prop(optional, into)] class: String, children: Children) ->
 pub fn ItemTitle(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(ITEM_TITLE, class);
 	view! {
-		<div class=cls data-slot="item-title">
+		<div class=cls data-slot=Slot::ItemTitle.as_str()>
 			{children()}
 		</div>
 	}
@@ -73,7 +73,7 @@ pub fn ItemTitle(#[prop(optional, into)] class: String, children: Children) -> i
 pub fn ItemDescription(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(ITEM_DESCRIPTION, class);
 	view! {
-		<p class=cls data-slot="item-description">
+		<p class=cls data-slot=Slot::ItemDescription.as_str()>
 			{children()}
 		</p>
 	}
@@ -83,7 +83,7 @@ pub fn ItemDescription(#[prop(optional, into)] class: String, children: Children
 pub fn ItemActions(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(ITEM_ACTIONS, class);
 	view! {
-		<div class=cls data-slot="item-actions">
+		<div class=cls data-slot=Slot::ItemActions.as_str()>
 			{children()}
 		</div>
 	}
@@ -93,7 +93,7 @@ pub fn ItemActions(#[prop(optional, into)] class: String, children: Children) ->
 pub fn ItemHeader(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(ITEM_HEADER, class);
 	view! {
-		<div class=cls data-slot="item-header">
+		<div class=cls data-slot=Slot::ItemHeader.as_str()>
 			{children()}
 		</div>
 	}
@@ -103,7 +103,7 @@ pub fn ItemHeader(#[prop(optional, into)] class: String, children: Children) -> 
 pub fn ItemFooter(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(ITEM_FOOTER, class);
 	view! {
-		<div class=cls data-slot="item-footer">
+		<div class=cls data-slot=Slot::ItemFooter.as_str()>
 			{children()}
 		</div>
 	}

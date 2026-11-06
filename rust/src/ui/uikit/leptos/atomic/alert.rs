@@ -2,14 +2,14 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{ALERT_BASE, ALERT_DESCRIPTION, ALERT_TITLE, Tone},
+	ui::uikit::leptos::{ALERT_BASE, ALERT_DESCRIPTION, ALERT_TITLE, Slot, Tone},
 };
 
 #[component]
 pub fn Alert(#[prop(optional)] tone: Tone, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(ALERT_BASE, tone.as_class(), class);
 	view! {
-		<div class=cls data-slot="alert" role="alert">
+		<div class=cls data-slot=Slot::Alert.as_str() role="alert">
 			{children()}
 		</div>
 	}
@@ -19,7 +19,7 @@ pub fn Alert(#[prop(optional)] tone: Tone, #[prop(optional, into)] class: String
 pub fn AlertTitle(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(ALERT_TITLE, class);
 	view! {
-		<div class=cls data-slot="alert-title">
+		<div class=cls data-slot=Slot::AlertTitle.as_str()>
 			{children()}
 		</div>
 	}
@@ -29,7 +29,7 @@ pub fn AlertTitle(#[prop(optional, into)] class: String, children: Children) -> 
 pub fn AlertDescription(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(ALERT_DESCRIPTION, class);
 	view! {
-		<div class=cls data-slot="alert-description">
+		<div class=cls data-slot=Slot::AlertDescription.as_str()>
 			{children()}
 		</div>
 	}

@@ -6,7 +6,7 @@ use ev_lib_classes::{
 pub use ev_lib_classes::{FooterLink, FooterLinkGroup, FooterOffice};
 use leptos::prelude::*;
 
-use crate::ui::uikit::leptos::Container;
+use crate::ui::uikit::leptos::{Container, Slot};
 
 /// A 12-col footer grid — brand 3 | sitemap groups 2 each | offices 3 |
 /// newsletter 2 — with the legal links and copyright line. On mobile the sitemap
@@ -100,7 +100,7 @@ pub fn Footer(
 		}
 	});
 	view! {
-		<footer class=FOOTER_ROOT data-slot="footer">
+		<footer class=FOOTER_ROOT data-slot=Slot::Footer.as_str()>
 			{children.map(|c| c())}
 			<Container>
 				<div class=FOOTER_GRID>

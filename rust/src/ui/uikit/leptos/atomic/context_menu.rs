@@ -6,7 +6,7 @@ use crate::{
 	cn,
 	ui::uikit::leptos::{
 		CONTEXT_MENU_CHECK_ITEM, CONTEXT_MENU_CONTENT, CONTEXT_MENU_ITEM, CONTEXT_MENU_LABEL, CONTEXT_MENU_SEPARATOR, CONTEXT_MENU_SHORTCUT, CONTEXT_MENU_SUB_CONTENT,
-		CONTEXT_MENU_SUB_TRIGGER,
+		CONTEXT_MENU_SUB_TRIGGER, Slot,
 		primitives::{Controllable, icon_shapes, use_controllable},
 	},
 };
@@ -25,7 +25,7 @@ pub fn ContextMenu(
 	};
 	view! {
 		<Provider value=provided>
-			<div data-slot="context-menu">{children()}</div>
+			<div data-slot=Slot::ContextMenu.as_str()>{children()}</div>
 		</Provider>
 	}
 }
@@ -36,7 +36,7 @@ pub fn ContextMenuTrigger(#[prop(optional, into)] class: String, children: Child
 	view! {
 		<div
 			class=class
-			data-slot="context-menu-trigger"
+			data-slot=Slot::ContextMenuTrigger.as_str()
 			on:contextmenu=move |e| {
 				e.prevent_default();
 				ctx.point.set((f64::from(e.client_x()), f64::from(e.client_y())));
@@ -63,7 +63,7 @@ pub fn ContextMenuContent(#[prop(optional, into)] class: String, children: Child
 					role="menu"
 					tabindex="-1"
 					style=format!("position: fixed; left: {x}px; top: {y}px;")
-					data-slot="context-menu-content"
+					data-slot=Slot::ContextMenuContent.as_str()
 					data-state="open"
 					data-side="bottom"
 					on:keydown=move |e| {
@@ -82,7 +82,7 @@ pub fn ContextMenuContent(#[prop(optional, into)] class: String, children: Child
 #[component]
 pub fn ContextMenuGroup(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class=class role="group" data-slot="context-menu-group">
+		<div class=class role="group" data-slot=Slot::ContextMenuGroup.as_str()>
 			{children()}
 		</div>
 	}
@@ -103,7 +103,7 @@ pub fn ContextMenuItem(
 			class=cn!(CONTEXT_MENU_ITEM, class)
 			role="menuitem"
 			tabindex="-1"
-			data-slot="context-menu-item"
+			data-slot=Slot::ContextMenuItem.as_str()
 			data-variant=variant.as_ref().to_owned()
 			data-inset=inset.then_some("")
 			data-disabled=move || disabled.get().then_some("")
@@ -128,7 +128,7 @@ pub fn ContextMenuCheckboxItem(
 			class=cn!(CONTEXT_MENU_CHECK_ITEM, class)
 			role="menuitemcheckbox"
 			tabindex="-1"
-			data-slot="context-menu-checkbox-item"
+			data-slot=Slot::ContextMenuCheckboxItem.as_str()
 			data-state=move || if checked.get() { "checked" } else { "unchecked" }
 			data-disabled=move || disabled.get().then_some("")
 			aria-checked=move || checked.get().to_string()
@@ -173,7 +173,7 @@ pub fn ContextMenuRadioGroup(
 	let provided = ContextMenuRadioCtx { value: state };
 	view! {
 		<Provider value=provided>
-			<div class=class role="group" data-slot="context-menu-radio-group">
+			<div class=class role="group" data-slot=Slot::ContextMenuRadioGroup.as_str()>
 				{children()}
 			</div>
 		</Provider>
@@ -193,7 +193,7 @@ pub fn ContextMenuRadioItem(#[prop(into)] value: String, #[prop(optional, into)]
 			class=cn!(CONTEXT_MENU_CHECK_ITEM, class)
 			role="menuitemradio"
 			tabindex="-1"
-			data-slot="context-menu-radio-item"
+			data-slot=Slot::ContextMenuRadioItem.as_str()
 			data-state=move || if checked.get() { "checked" } else { "unchecked" }
 			data-disabled=move || disabled.get().then_some("")
 			aria-checked=move || checked.get().to_string()
@@ -228,7 +228,7 @@ pub fn ContextMenuLabel(#[prop(optional)] inset: bool, #[prop(optional, into)] c
 	view! {
 		<div
 			class=cn!(CONTEXT_MENU_LABEL, class)
-			data-slot="context-menu-label"
+			data-slot=Slot::ContextMenuLabel.as_str()
 			data-inset=inset.then_some("")
 		>
 			{children()}
@@ -242,7 +242,7 @@ pub fn ContextMenuSeparator(#[prop(optional, into)] class: String) -> impl IntoV
 		<div
 			class=cn!(CONTEXT_MENU_SEPARATOR, class)
 			role="separator"
-			data-slot="context-menu-separator"
+			data-slot=Slot::ContextMenuSeparator.as_str()
 		></div>
 	}
 }
@@ -250,7 +250,7 @@ pub fn ContextMenuSeparator(#[prop(optional, into)] class: String) -> impl IntoV
 #[component]
 pub fn ContextMenuShortcut(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<span class=cn!(CONTEXT_MENU_SHORTCUT, class) data-slot="context-menu-shortcut">
+		<span class=cn!(CONTEXT_MENU_SHORTCUT, class) data-slot=Slot::ContextMenuShortcut.as_str()>
 			{children()}
 		</span>
 	}
@@ -270,7 +270,7 @@ pub fn ContextMenuSub(
 	let provided = ContextMenuSubCtx { open: state };
 	view! {
 		<Provider value=provided>
-			<div data-slot="context-menu-sub">{children()}</div>
+			<div data-slot=Slot::ContextMenuSub.as_str()>{children()}</div>
 		</Provider>
 	}
 }
@@ -283,7 +283,7 @@ pub fn ContextMenuSubTrigger(#[prop(optional)] inset: bool, #[prop(optional, int
 			class=cn!(CONTEXT_MENU_SUB_TRIGGER, class)
 			role="menuitem"
 			tabindex="-1"
-			data-slot="context-menu-sub-trigger"
+			data-slot=Slot::ContextMenuSubTrigger.as_str()
 			data-state=move || if ctx.open.get() { "open" } else { "closed" }
 			data-inset=inset.then_some("")
 			aria-haspopup="menu"
@@ -314,7 +314,12 @@ pub fn ContextMenuSubContent(#[prop(optional, into)] class: String, children: Ch
 	move || {
 		ctx.open.get().then(|| {
 			view! {
-				<div class=cls.clone() role="menu" data-slot="context-menu-sub-content" data-state="open">
+				<div
+					class=cls.clone()
+					role="menu"
+					data-slot=Slot::ContextMenuSubContent.as_str()
+					data-state="open"
+				>
 					{children()}
 				</div>
 			}

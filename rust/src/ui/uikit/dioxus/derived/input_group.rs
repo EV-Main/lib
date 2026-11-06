@@ -4,7 +4,7 @@ use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		ButtonVariant, INPUT_BASE, INPUT_GROUP_ADDON_BASE, INPUT_GROUP_BASE, INPUT_GROUP_BUTTON_BASE, INPUT_GROUP_INPUT_CONTROL, INPUT_GROUP_TEXT, INPUT_GROUP_TEXTAREA_CONTROL,
-		InputGroupAddonAlign, InputGroupButtonSize, TEXTAREA_BASE, button::Button, input_group_button_size_class,
+		InputGroupAddonAlign, InputGroupButtonSize, Slot, TEXTAREA_BASE, button::Button, input_group_button_size_class,
 	},
 };
 
@@ -12,7 +12,7 @@ use crate::{
 pub fn InputGroup(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(INPUT_GROUP_BASE, class);
 	rsx! {
-		div { class: cls, "data-slot": "input-group", role: "group", {children} }
+		div { class: cls, "data-slot": Slot::InputGroup.as_str(), role: "group", {children} }
 	}
 }
 
@@ -23,7 +23,7 @@ pub fn InputGroupAddon(#[props(default)] align: InputGroupAddonAlign, #[props(de
 		div {
 			role: "group",
 			class: cls,
-			"data-slot": "input-group-addon",
+			"data-slot": Slot::InputGroupAddon.as_str(),
 			"data-align": align.as_ref(),
 			{children}
 		}
@@ -79,7 +79,7 @@ pub fn InputGroupInput(
 		input {
 			r#type: input_type,
 			class: cls,
-			"data-slot": "input-group-control",
+			"data-slot": Slot::InputGroupControl.as_str(),
 			placeholder,
 			disabled,
 			value,
@@ -101,7 +101,7 @@ pub fn InputGroupTextarea(
 	rsx! {
 		textarea {
 			class: cls,
-			"data-slot": "input-group-control",
+			"data-slot": Slot::InputGroupControl.as_str(),
 			placeholder,
 			disabled,
 			value,

@@ -6,7 +6,7 @@ use crate::{
 	ui::uikit::{
 		core::toggled,
 		leptos::{
-			ACCORDION_CONTENT, ACCORDION_CONTENT_INNER, ACCORDION_HEADER, ACCORDION_ITEM, ACCORDION_TRIGGER, AccordionType,
+			ACCORDION_CONTENT, ACCORDION_CONTENT_INNER, ACCORDION_HEADER, ACCORDION_ITEM, ACCORDION_TRIGGER, AccordionType, Slot,
 			primitives::{Controllable, icon_shapes, use_controllable},
 		},
 	},
@@ -24,7 +24,7 @@ pub fn Accordion(
 ) -> impl IntoView {
 	let open = use_controllable(value, default_value, on_value_change);
 	view! {
-		<div class=class data-slot="accordion">
+		<div class=class data-slot=Slot::Accordion.as_str()>
 			<Provider value=AccordionCtx {
 				open,
 				kind: r#type,
@@ -38,7 +38,7 @@ pub fn Accordion(
 pub fn AccordionItem(#[prop(into)] value: String, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(ACCORDION_ITEM, class);
 	view! {
-		<div class=cls data-slot="accordion-item">
+		<div class=cls data-slot=Slot::AccordionItem.as_str()>
 			<Provider value=ItemCtx(StoredValue::new(value))>{children()}</Provider>
 		</div>
 	}
@@ -51,11 +51,11 @@ pub fn AccordionTrigger(#[prop(optional, into)] class: String, children: Childre
 	let open = move || ctx.is_open(item);
 	let cls = cn!(ACCORDION_TRIGGER, class);
 	view! {
-		<h3 class=ACCORDION_HEADER data-slot="accordion-header">
+		<h3 class=ACCORDION_HEADER data-slot=Slot::AccordionHeader.as_str()>
 			<button
 				type="button"
 				class=cls
-				data-slot="accordion-trigger"
+				data-slot=Slot::AccordionTrigger.as_str()
 				data-state=move || if open() { "open" } else { "closed" }
 				aria-expanded=move || open().to_string()
 				on:click=move |_| ctx.toggle(item)
@@ -88,7 +88,7 @@ pub fn AccordionContent(#[prop(optional, into)] class: String, children: Childre
 	move || {
 		ctx.is_open(item).then(|| {
 			view! {
-				<div class=ACCORDION_CONTENT data-slot="accordion-content" data-state="open">
+				<div class=ACCORDION_CONTENT data-slot=Slot::AccordionContent.as_str() data-state="open">
 					<div class=inner.clone()>{children()}</div>
 				</div>
 			}

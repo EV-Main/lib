@@ -10,7 +10,7 @@ use crate::{
 	ui::uikit::{
 		core::Presence,
 		leptos::{
-			DRAWER_BODY, DRAWER_CONTENT_BASE, DRAWER_DESCRIPTION, DRAWER_FOOTER, DRAWER_HANDLE, DRAWER_HEADER, DRAWER_OVERLAY, DRAWER_TITLE, DrawerDirection,
+			DRAWER_BODY, DRAWER_CONTENT_BASE, DRAWER_DESCRIPTION, DRAWER_FOOTER, DRAWER_HANDLE, DRAWER_HEADER, DRAWER_OVERLAY, DRAWER_TITLE, DrawerDirection, Slot,
 			primitives::{Controllable, is_transform_transition, use_controllable},
 		},
 	},
@@ -30,7 +30,7 @@ pub fn Drawer(
 	let provided = DrawerCtx { open, direction };
 	view! {
 		<Provider value=provided>
-			<div data-slot="drawer">{children()}</div>
+			<div data-slot=Slot::Drawer.as_str()>{children()}</div>
 		</Provider>
 	}
 }
@@ -42,7 +42,7 @@ pub fn DrawerTrigger(#[prop(optional, into)] class: String, children: Children) 
 		<button
 			type="button"
 			class=class
-			data-slot="drawer-trigger"
+			data-slot=Slot::DrawerTrigger.as_str()
 			on:click=move |_| ctx.open.set(true)
 		>
 			{children()}
@@ -62,7 +62,7 @@ pub fn DrawerOverlay(#[prop(optional, into)] class: String) -> impl IntoView {
 			view! {
 				<div
 					class=cls.clone()
-					data-slot="drawer-overlay"
+					data-slot=Slot::DrawerOverlay.as_str()
 					data-state="open"
 					on:click=move |_| ctx.open.set(false)
 				></div>
@@ -98,7 +98,7 @@ pub fn DrawerContent(#[prop(optional, into)] class: String, #[prop(optional, int
 			view! {
 				<div
 					class=DRAWER_OVERLAY
-					data-slot="drawer-overlay"
+					data-slot=Slot::DrawerOverlay.as_str()
 					data-state=state
 					on:click=move |_| ctx.open.set(false)
 				></div>
@@ -107,7 +107,7 @@ pub fn DrawerContent(#[prop(optional, into)] class: String, #[prop(optional, int
 					aria-modal="true"
 					aria-label=aria_label.clone()
 					class=cls.clone()
-					data-slot="drawer-content"
+					data-slot=Slot::DrawerContent.as_str()
 					data-state=state
 					data-vaul-drawer-direction=direction.as_ref().to_owned()
 					node_ref=panel
@@ -124,8 +124,10 @@ pub fn DrawerContent(#[prop(optional, into)] class: String, #[prop(optional, int
 					}
 				>
 					{(direction == DrawerDirection::Bottom)
-						.then(|| view! { <div class=DRAWER_HANDLE data-slot="drawer-handle"></div> })}
-					<div class=DRAWER_BODY data-slot="drawer-body">
+						.then(|| {
+							view! { <div class=DRAWER_HANDLE data-slot=Slot::DrawerHandle.as_str()></div> }
+						})}
+					<div class=DRAWER_BODY data-slot=Slot::DrawerBody.as_str()>
 						{children()}
 					</div>
 				</div>
@@ -141,7 +143,7 @@ pub fn DrawerClose(#[prop(optional, into)] class: String, children: Children) ->
 		<button
 			type="button"
 			class=class
-			data-slot="drawer-close"
+			data-slot=Slot::DrawerClose.as_str()
 			on:click=move |_| ctx.open.set(false)
 		>
 			{children()}
@@ -152,7 +154,7 @@ pub fn DrawerClose(#[prop(optional, into)] class: String, children: Children) ->
 #[component]
 pub fn DrawerHeader(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class=cn!(DRAWER_HEADER, class) data-slot="drawer-header">
+		<div class=cn!(DRAWER_HEADER, class) data-slot=Slot::DrawerHeader.as_str()>
 			{children()}
 		</div>
 	}
@@ -161,7 +163,7 @@ pub fn DrawerHeader(#[prop(optional, into)] class: String, children: Children) -
 #[component]
 pub fn DrawerFooter(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class=cn!(DRAWER_FOOTER, class) data-slot="drawer-footer">
+		<div class=cn!(DRAWER_FOOTER, class) data-slot=Slot::DrawerFooter.as_str()>
 			{children()}
 		</div>
 	}
@@ -170,7 +172,7 @@ pub fn DrawerFooter(#[prop(optional, into)] class: String, children: Children) -
 #[component]
 pub fn DrawerTitle(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class=cn!(DRAWER_TITLE, class) data-slot="drawer-title">
+		<div class=cn!(DRAWER_TITLE, class) data-slot=Slot::DrawerTitle.as_str()>
 			{children()}
 		</div>
 	}
@@ -179,7 +181,7 @@ pub fn DrawerTitle(#[prop(optional, into)] class: String, children: Children) ->
 #[component]
 pub fn DrawerDescription(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class=cn!(DRAWER_DESCRIPTION, class) data-slot="drawer-description">
+		<div class=cn!(DRAWER_DESCRIPTION, class) data-slot=Slot::DrawerDescription.as_str()>
 			{children()}
 		</div>
 	}

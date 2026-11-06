@@ -3,14 +3,19 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{ButtonVariant, Size, button_classes, primitives::icon_shapes},
+	ui::uikit::leptos::{ButtonVariant, Size, Slot, button_classes, primitives::icon_shapes},
 };
 
 #[component]
 pub fn Pagination(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(PAGINATION_ROOT, class);
 	view! {
-		<nav role="navigation" aria-label=copy::PAGINATION data-slot="pagination" class=cls>
+		<nav
+			role="navigation"
+			aria-label=copy::PAGINATION
+			data-slot=Slot::Pagination.as_str()
+			class=cls
+		>
 			{children()}
 		</nav>
 	}
@@ -20,7 +25,7 @@ pub fn Pagination(#[prop(optional, into)] class: String, children: Children) -> 
 pub fn PaginationContent(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(PAGINATION_CONTENT, class);
 	view! {
-		<ul data-slot="pagination-content" class=cls>
+		<ul data-slot=Slot::PaginationContent.as_str() class=cls>
 			{children()}
 		</ul>
 	}
@@ -28,7 +33,7 @@ pub fn PaginationContent(#[prop(optional, into)] class: String, children: Childr
 
 #[component]
 pub fn PaginationItem(children: Children) -> impl IntoView {
-	view! { <li data-slot="pagination-item">{children()}</li> }
+	view! { <li data-slot=Slot::PaginationItem.as_str()>{children()}</li> }
 }
 
 /// `href` is optional but wanted: an `<a>` without one is neither focusable nor
@@ -101,7 +106,7 @@ pub fn PaginationNext(
 pub fn PaginationEllipsis(#[prop(optional, into)] class: String) -> impl IntoView {
 	let cls = cn!(PAGINATION_ELLIPSIS, class);
 	view! {
-		<span aria-hidden="true" data-slot="pagination-ellipsis" class=cls>
+		<span aria-hidden="true" data-slot=Slot::PaginationEllipsis.as_str() class=cls>
 			<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 				{icon_shapes(Icon::Ellipsis)}
 			</svg>
@@ -131,7 +136,7 @@ fn link(
 		<a
 			aria-current=move || is_active.get().then_some("page")
 			aria-label=aria_label
-			data-slot="pagination-link"
+			data-slot=Slot::PaginationLink.as_str()
 			data-active=move || is_active.get().to_string()
 			class=cls
 			href=href

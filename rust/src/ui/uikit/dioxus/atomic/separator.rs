@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{Orientation, SEPARATOR_BASE, separator_orientation_class},
+	ui::uikit::dioxus::{Orientation, SEPARATOR_BASE, Slot, separator_orientation_class},
 };
 
 #[component]
@@ -11,7 +11,7 @@ pub fn Separator(#[props(default)] orientation: Orientation, #[props(default)] c
 	rsx! {
 		div {
 			role: "separator",
-			"data-slot": "separator",
+			"data-slot": Slot::Separator.as_str(),
 			"data-orientation": orientation.as_ref(),
 			class: cls,
 		}

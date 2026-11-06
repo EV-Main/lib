@@ -4,7 +4,7 @@ use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		SETTINGS_LAYOUT, SETTINGS_MAIN, SETTINGS_NAV, SETTINGS_ROW_INLINE, SETTINGS_SECTION_ACTION, SETTINGS_SECTION_BASE, SETTINGS_SECTION_BODY, SETTINGS_SECTION_BODY_FLUSH,
-		SETTINGS_SECTION_BODY_PADDED, SETTINGS_SECTION_DESCRIPTION, SETTINGS_SECTION_HEADER, SETTINGS_SECTION_HEADER_FLUSH, SETTINGS_SECTION_HEADING, SETTINGS_SECTION_TITLE, Tone,
+		SETTINGS_SECTION_BODY_PADDED, SETTINGS_SECTION_DESCRIPTION, SETTINGS_SECTION_HEADER, SETTINGS_SECTION_HEADER_FLUSH, SETTINGS_SECTION_HEADING, SETTINGS_SECTION_TITLE, Slot, Tone,
 		form_row::FormRowFrame,
 		primitives::{has_content, use_stable_id},
 	},
@@ -17,9 +17,9 @@ use crate::{
 pub fn SettingsLayout(nav: Element, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(SETTINGS_LAYOUT, class);
 	rsx! {
-		div { class: cls, "data-slot": "settings-layout",
-			div { class: SETTINGS_NAV, "data-slot": "settings-nav", {nav} }
-			div { class: SETTINGS_MAIN, "data-slot": "settings-main", {children} }
+		div { class: cls, "data-slot": Slot::SettingsLayout.as_str(),
+			div { class: SETTINGS_NAV, "data-slot": Slot::SettingsNav.as_str(), {nav} }
+			div { class: SETTINGS_MAIN, "data-slot": Slot::SettingsMain.as_str(), {children} }
 		}
 	}
 }
@@ -43,7 +43,7 @@ pub fn SettingsSection(
 	let header = cn!(SETTINGS_SECTION_HEADER, if flush { SETTINGS_SECTION_HEADER_FLUSH } else { "" });
 	let body = cn!(SETTINGS_SECTION_BODY, if flush { SETTINGS_SECTION_BODY_FLUSH } else { SETTINGS_SECTION_BODY_PADDED });
 	rsx! {
-		section { class: cls, "data-slot": "settings-section", "data-tone": tone.as_ref(), "aria-labelledby": heading_id.clone(),
+		section { class: cls, "data-slot": Slot::SettingsSection.as_str(), "data-tone": tone.as_ref(), "aria-labelledby": heading_id.clone(),
 			header { class: header,
 				div { class: SETTINGS_SECTION_HEADING,
 					h3 { id: heading_id, class: SETTINGS_SECTION_TITLE, {title} }

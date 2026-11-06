@@ -8,7 +8,7 @@ use crate::{
 		dioxus::{
 			ButtonVariant, SIDEBAR_CONTENT, SIDEBAR_FLAT, SIDEBAR_FOOTER, SIDEBAR_GROUP, SIDEBAR_GROUP_CONTENT, SIDEBAR_GROUP_LABEL, SIDEBAR_HEADER, SIDEBAR_INNER, SIDEBAR_INSET,
 			SIDEBAR_MENU, SIDEBAR_MENU_BUTTON_BASE, SIDEBAR_MENU_ITEM, SIDEBAR_RAIL, SIDEBAR_SEPARATOR, SIDEBAR_TRIGGER, SIDEBAR_WRAPPER, SidebarCollapsible, SidebarSide, SidebarVariant,
-			Size,
+			Size, Slot,
 			primitives::{Controllable, use_controllable},
 			sidebar_menu_button_size_class,
 		},
@@ -59,7 +59,7 @@ pub fn SidebarProvider(
 	let cls = cn!(SIDEBAR_WRAPPER, class);
 	rsx! {
 		div {
-			"data-slot": "sidebar-wrapper",
+			"data-slot": Slot::SidebarWrapper.as_str(),
 			style: sidebar_style(),
 			class: cls,
 			{children}
@@ -80,7 +80,7 @@ pub fn Sidebar(
 	if collapsible == SidebarCollapsible::None {
 		let cls = cn!(SIDEBAR_FLAT, class);
 		return rsx! {
-			div { class: cls, "data-slot": "sidebar", {children} }
+			div { class: cls, "data-slot": Slot::Sidebar.as_str(), {children} }
 		};
 	}
 
@@ -94,8 +94,8 @@ pub fn Sidebar(
 			"data-collapsible": data_collapsible,
 			"data-variant": variant.as_ref(),
 			"data-side": side.as_ref(),
-			"data-slot": "sidebar",
-			div { class: inner, "data-slot": "sidebar-inner", {children} }
+			"data-slot": Slot::Sidebar.as_str(),
+			div { class: inner, "data-slot": Slot::SidebarInner.as_str(), {children} }
 		}
 	}
 }
@@ -108,7 +108,7 @@ pub fn SidebarTrigger(#[props(default)] class: String, children: Element) -> Ele
 		button {
 			r#type: "button",
 			"data-sidebar": "trigger",
-			"data-slot": "sidebar-trigger",
+			"data-slot": Slot::SidebarTrigger.as_str(),
 			"aria-label": copy::SIDEBAR_TOGGLE,
 			class: cls,
 			onclick: move |_| ctx.toggle_sidebar(),
@@ -126,7 +126,7 @@ pub fn SidebarRail(#[props(default)] class: String) -> Element {
 		button {
 			r#type: "button",
 			"data-sidebar": "rail",
-			"data-slot": "sidebar-rail",
+			"data-slot": Slot::SidebarRail.as_str(),
 			"aria-label": copy::SIDEBAR_TOGGLE,
 			tabindex: "-1",
 			title: copy::SIDEBAR_TOGGLE,
@@ -140,7 +140,7 @@ pub fn SidebarRail(#[props(default)] class: String) -> Element {
 pub fn SidebarInset(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(SIDEBAR_INSET, class);
 	rsx! {
-		main { class: cls, "data-slot": "sidebar-inset", {children} }
+		main { class: cls, "data-slot": Slot::SidebarInset.as_str(), {children} }
 	}
 }
 
@@ -148,7 +148,7 @@ pub fn SidebarInset(#[props(default)] class: String, children: Element) -> Eleme
 pub fn SidebarHeader(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(SIDEBAR_HEADER, class);
 	rsx! {
-		div { class: cls, "data-slot": "sidebar-header", "data-sidebar": "header", {children} }
+		div { class: cls, "data-slot": Slot::SidebarHeader.as_str(), "data-sidebar": "header", {children} }
 	}
 }
 
@@ -156,7 +156,7 @@ pub fn SidebarHeader(#[props(default)] class: String, children: Element) -> Elem
 pub fn SidebarFooter(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(SIDEBAR_FOOTER, class);
 	rsx! {
-		div { class: cls, "data-slot": "sidebar-footer", "data-sidebar": "footer", {children} }
+		div { class: cls, "data-slot": Slot::SidebarFooter.as_str(), "data-sidebar": "footer", {children} }
 	}
 }
 
@@ -164,7 +164,7 @@ pub fn SidebarFooter(#[props(default)] class: String, children: Element) -> Elem
 pub fn SidebarSeparator(#[props(default)] class: String) -> Element {
 	let cls = cn!(SIDEBAR_SEPARATOR, class);
 	rsx! {
-		div { role: "separator", class: cls, "data-slot": "sidebar-separator", "data-sidebar": "separator" }
+		div { role: "separator", class: cls, "data-slot": Slot::SidebarSeparator.as_str(), "data-sidebar": "separator" }
 	}
 }
 
@@ -172,7 +172,7 @@ pub fn SidebarSeparator(#[props(default)] class: String) -> Element {
 pub fn SidebarContent(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(SIDEBAR_CONTENT, class);
 	rsx! {
-		div { class: cls, "data-slot": "sidebar-content", "data-sidebar": "content", {children} }
+		div { class: cls, "data-slot": Slot::SidebarContent.as_str(), "data-sidebar": "content", {children} }
 	}
 }
 
@@ -180,7 +180,7 @@ pub fn SidebarContent(#[props(default)] class: String, children: Element) -> Ele
 pub fn SidebarGroup(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(SIDEBAR_GROUP, class);
 	rsx! {
-		div { class: cls, "data-slot": "sidebar-group", "data-sidebar": "group", {children} }
+		div { class: cls, "data-slot": Slot::SidebarGroup.as_str(), "data-sidebar": "group", {children} }
 	}
 }
 
@@ -188,7 +188,7 @@ pub fn SidebarGroup(#[props(default)] class: String, children: Element) -> Eleme
 pub fn SidebarGroupLabel(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(SIDEBAR_GROUP_LABEL, class);
 	rsx! {
-		div { class: cls, "data-slot": "sidebar-group-label", "data-sidebar": "group-label", {children} }
+		div { class: cls, "data-slot": Slot::SidebarGroupLabel.as_str(), "data-sidebar": "group-label", {children} }
 	}
 }
 
@@ -196,7 +196,7 @@ pub fn SidebarGroupLabel(#[props(default)] class: String, children: Element) -> 
 pub fn SidebarGroupContent(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(SIDEBAR_GROUP_CONTENT, class);
 	rsx! {
-		div { class: cls, "data-slot": "sidebar-group-content", "data-sidebar": "group-content", {children} }
+		div { class: cls, "data-slot": Slot::SidebarGroupContent.as_str(), "data-sidebar": "group-content", {children} }
 	}
 }
 
@@ -204,7 +204,7 @@ pub fn SidebarGroupContent(#[props(default)] class: String, children: Element) -
 pub fn SidebarMenu(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(SIDEBAR_MENU, class);
 	rsx! {
-		ul { class: cls, "data-slot": "sidebar-menu", "data-sidebar": "menu", {children} }
+		ul { class: cls, "data-slot": Slot::SidebarMenu.as_str(), "data-sidebar": "menu", {children} }
 	}
 }
 
@@ -212,7 +212,7 @@ pub fn SidebarMenu(#[props(default)] class: String, children: Element) -> Elemen
 pub fn SidebarMenuItem(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(SIDEBAR_MENU_ITEM, class);
 	rsx! {
-		li { class: cls, "data-slot": "sidebar-menu-item", "data-sidebar": "menu-item", {children} }
+		li { class: cls, "data-slot": Slot::SidebarMenuItem.as_str(), "data-sidebar": "menu-item", {children} }
 	}
 }
 
@@ -234,7 +234,7 @@ pub fn SidebarMenuButton(
 	rsx! {
 		button {
 			r#type: "button",
-			"data-slot": "sidebar-menu-button",
+			"data-slot": Slot::SidebarMenuButton.as_str(),
 			"data-sidebar": "menu-button",
 			"data-size": size.as_ref(),
 			"data-active": is_active,

@@ -59,42 +59,15 @@ absolute right-2 flex size-3.5 items-center justify-center
 absolute right-4 top-4
 absolute size-8 rounded-full
 absolute top-full left-0 isolate z-50 flex justify-center
-accordion-content
-accordion-header
-accordion-item
-accordion-trigger
-account-list
-account-list-item
-account-list-item-actions
-account-list-item-badges
-account-list-item-check
 account-list-item-check\
-account-list-item-figure
-account-list-item-radio
-account-list-item-text
 account-settings-description
 account-settings-dialog-footer
-account-settings-dialog-heading
-account-settings-dialog-pane
-account-settings-dialog-sidebar
 account-settings-title
 after-a:none
 after-a:{next}
 after-b:c after-c:b
 after-b:{show(\
-alert-description
-alert-dialog
-alert-dialog-action
-alert-dialog-cancel
-alert-dialog-content
-alert-dialog-description
-alert-dialog-footer
-alert-dialog-header
-alert-dialog-overlay
-alert-dialog-title
-alert-dialog-trigger
 alert-dialog-trigger\
-alert-title
 align-middle
 animate-caret-blink bg-ink h-4 w-px duration-1000
 animate-pulse
@@ -151,19 +124,10 @@ aria-valuenow=100
 aria-valuenow=25
 aria-valuenow=60
 aria-valuenow=\
-aside-body
-aside-footer
-aside-header
-aside-panel
-aside-panel-narrow
-aside-panel-wide
-aside-rail
 aspect-square
 aspect-square px-0
 aspect-square size-full
-avatar-fallback
 avatar-fallback\
-avatar-image
 background-color:currentColor
 basis-full
 bg-accent-debug text-on-accent-debug hover:bg-accent-debug/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
@@ -282,32 +246,8 @@ border-tint-error-edge
 bottom-4 left-1/2 -translate-x-1/2
 bottom-4 left-4
 bottom-4 right-4
-breadcrumb-ellipsis
-breadcrumb-item
-breadcrumb-link
-breadcrumb-list
-breadcrumb-page
-breadcrumb-separator
-button-group
-button-group-separator
 calc(var(--control-h-xs)_-_var(--control-step))
 calc(var(--spacing)*5)
-calendar-caption
-calendar-day
-card-action
-card-content
-card-description
-card-footer
-card-header
-card-title
-carousel-content
-carousel-item
-chat-attachment
-chat-bubble
-chat-composer
-chat-marker
-chat-message
-chat-typing
 checkbox-indicator
 closed:0
 closed:1
@@ -319,44 +259,17 @@ col-span-2 lg:col-span-2
 col-span-2 lg:col-span-3
 col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight
 col-start-2 row-span-2 row-start-1 self-start justify-self-end
-collapsible-content
-collapsible-trigger
 command-dialog
 command-empty
-command-group
-command-group-heading
-command-input
-command-input-wrapper
 command-item
 command-item-{id}
 command-list
-command-palette-hints
 command-palette-title
-command-separator
-command-shortcut
-confirm-dialog-cancel
-confirm-dialog-confirm
 confirm-dialog-confirm\
 confirm-dialog-description
 confirm-dialog-description-
-confirm-dialog-error
-confirm-dialog-icon
 confirm-dialog-title
 contents md:hidden
-context-menu
-context-menu-checkbox-item
-context-menu-content
-context-menu-group
-context-menu-item
-context-menu-label
-context-menu-radio-group
-context-menu-radio-item
-context-menu-separator
-context-menu-shortcut
-context-menu-sub
-context-menu-sub-content
-context-menu-sub-trigger
-context-menu-trigger
 control-h-md
 control-h-touch
 cursor-pointer
@@ -458,61 +371,10 @@ data-visible=\
 data-y-position
 data-y-position=\
 data:image/svg+xml
-date-time-picker
-date-time-picker-clear
-date-time-picker-close
-date-time-picker-content
 date-time-picker-hours
-date-time-picker-minutes
-date-time-picker-time
-date-time-picker-trigger
-dialog-close
-dialog-content
-dialog-description
-dialog-footer
-dialog-header
-dialog-overlay
-dialog-title
-dialog-trigger
-drawer-body
-drawer-close
 drawer-content
-drawer-description
-drawer-footer
-drawer-handle
-drawer-header
-drawer-overlay
-drawer-title
-drawer-trigger
-dropdown-menu
-dropdown-menu-checkbox-item
-dropdown-menu-content
-dropdown-menu-group
-dropdown-menu-item
-dropdown-menu-label
-dropdown-menu-radio-group
-dropdown-menu-radio-item
-dropdown-menu-separator
-dropdown-menu-shortcut
-dropdown-menu-sub
-dropdown-menu-sub-content
-dropdown-menu-sub-trigger
-dropdown-menu-trigger
-empty-content
-empty-description
-empty-header
-empty-icon
-empty-title
 ev-toast-life
-field-content
-field-description
-field-error
-field-group
-field-label
-field-legend
-field-separator
 field-separator-content
-field-set
 field-sizing-content
 file:text-ink placeholder:text-ink-soft selection:bg-primary selection:text-on-primary border-input h-9 w-full min-w-0 rounded-control border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error
 fill-primary-ink
@@ -660,14 +522,9 @@ font-serif text-h1 font-light text-ink
 font-serif text-h2 font-light text-ink
 font-serif text-h2 font-light text-ink\
 form-control
-form-description
 form-item
 form-item-
-form-message
 form-message\
-form-row
-form-row-control
-form-row-label
 gap-1 px-2 has-[>svg]:px-1.5
 gap-1 px-2.5 sm:pl-2.5
 gap-1 px-2.5 sm:pr-2.5
@@ -726,9 +583,6 @@ h-full bg-primary
 h-full w-2.5 border-l border-l-transparent
 h-px flex-1 bg-border
 has-data-[slot=card-action]:grid-cols-[1fr_auto]
-header-balance
-header-balance-value
-header-search
 hidden md:contents
 hidden md:flex
 hidden sm:block
@@ -736,8 +590,6 @@ hidden text-caption text-ink-soft sm:inline
 hint-body
 hits:0
 hits:{hits}
-hover-card-content
-hover-card-trigger
 hover:after:bg-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex
 hover:bg-card
 hover:bg-hover
@@ -748,12 +600,9 @@ hover:text-ink transition-colors
 hover:underline
 http://www.w3.org/2000/svg
 https://example.com/commit/abc
-icon-button
 info-tip
 info-tip-
-info-tip-content
 info-tip-content\
-info-tip-trigger
 info-tip-trigger\
 inline-block
 inline-flex
@@ -773,33 +622,13 @@ inline-flex size-6 items-center justify-center rounded-control text-ink-soft out
 inline-flex size-6 shrink-0 items-center justify-center rounded-control text-ink-soft outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring
 inline-flex size-7 items-center justify-center rounded-control hover:bg-hover hover:text-ink
 inline-start
-input-group
-input-group-addon
-input-group-control
-input-otp
-input-otp-group
-input-otp-separator
-input-otp-slot
 inset-x-0 bottom-0 mt-24 max-h-[80vh] flex-col rounded-t-panel border-b-0
 inset-x-0 top-0 mb-24 max-h-[80vh] flex-col rounded-b-panel border-t-0
 inset-y-0 left-0 w-3/4 flex-row border-r sm:max-w-sm
 inset-y-0 right-0 w-3/4 flex-row border-l sm:max-w-sm
 invisible
-item-actions
-item-content
-item-description
-item-footer
-item-group
-item-header
-item-media
-item-title
 justify-between
 justify-end
-kbd-group
-key-value
-key-value-copy
-key-value-label
-key-value-value
 last:rounded-r-control
 left-0
 left-1/2
@@ -830,20 +659,6 @@ md:text-base
 md:text-sm
 menu-button
 menu-item
-menubar-checkbox-item
-menubar-content
-menubar-group
-menubar-item
-menubar-label
-menubar-menu
-menubar-radio-group
-menubar-radio-item
-menubar-separator
-menubar-shortcut
-menubar-sub
-menubar-sub-content
-menubar-sub-trigger
-menubar-trigger
 min-h-0 flex-1 flex-col gap-0 md:flex-row
 min-h-0 flex-1 overflow-y-auto
 min-h-14
@@ -879,14 +694,6 @@ mx-auto flex w-full max-w-352 flex-col gap-6 px-4 py-8 lg:flex-row lg:gap-8
 mx-auto mt-5 max-w-md text-sm leading-relaxed text-ink/60 sm:text-base
 mx-auto w-full max-w-[var(--page-max,90rem)] px-[var(--page-px,1rem)]
 my-0
-navigation-menu
-navigation-menu-content
-navigation-menu-indicator
-navigation-menu-item
-navigation-menu-link
-navigation-menu-list
-navigation-menu-trigger
-navigation-menu-viewport
 notification-dot
 object-cover
 one-time-code
@@ -911,10 +718,6 @@ p-3 w-fit
 p-4
 p-4 gap-4
 p-6
-pagination-content
-pagination-ellipsis
-pagination-item
-pagination-link
 panel-one
 panel-two
 pb-3
@@ -938,15 +741,8 @@ pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-backgro
 pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-background/45 via-background/20 to-transparent
 pointer-events-none absolute left-2 flex size-3.5 items-center justify-center
 pointer-events-none fixed z-100 w-[calc(100%-2rem)] max-w-sm
-popover-anchor
-popover-content
-popover-form
-popover-form-actions
-popover-form-fields
 popover-form-title
-popover-trigger
 profile-body
-progress-indicator
 pt-0 pb-4
 pt-4
 px-0
@@ -977,9 +773,7 @@ py-6 text-center text-sm
 py-[var(--band-py)]
 py-[var(--band-py-tight)]
 py-[var(--table-dense-py,var(--table-py,calc(var(--spacing)*2)))]
-radio-group
 radio-group-indicator
-radio-group-item
 relative
 relative -my-2 h-5 text-sm group-data-[variant=outline]/field-group:-mb-2
 relative flex items-center gap-2 has-disabled:opacity-50
@@ -1004,55 +798,14 @@ rounded-control
 rounded-full
 rounded-panel
 row-{id}
-scroll-area
-scroll-area-scrollbar
-scroll-area-thumb
-scroll-area-viewport
-section-descriptor
-section-descriptor-body
-section-descriptor-title
-section-head
-section-label
 select-content
-select-group
-select-item
-select-label
 select-none
-select-separator
-select-trigger
-select-value
-settings-layout
-settings-main
-settings-nav
 settings-section
-sheet-close
-sheet-content
-sheet-description
-sheet-footer
-sheet-header
-sheet-overlay
-sheet-title
-sheet-trigger
 shrink-0
 shrink-0 font-serif text-figure-m font-light tabular-nums text-ink
 shrink-0 lg:w-64
 shrink-0 text-caption
 shrink-0 text-caption text-ink-soft
-sidebar-content
-sidebar-footer
-sidebar-group
-sidebar-group-content
-sidebar-group-label
-sidebar-header
-sidebar-inner
-sidebar-inset
-sidebar-menu
-sidebar-menu-button
-sidebar-menu-item
-sidebar-rail
-sidebar-separator
-sidebar-trigger
-sidebar-wrapper
 size-1.5 rounded-full
 size-1.5 rounded-full bg-current
 size-1.5 shrink-0 rounded-full
@@ -1080,36 +833,15 @@ size-8 p-0 select-none
 size-auto w-full aspect-square font-normal leading-none tabular-nums
 size-full
 slide-in-from-left
-slider-range
-slider-thumb
-slider-track
 sm:max-w-105
-smart-header
 smart-header-context
-smart-header-palette
 smart-header-toolbar
 space-y-3
 space-y-4 text-xs text-ink/70 font-light leading-relaxed
 sr-only
-status-dot
-status-item
 stroke-linecap
 stroke-linejoin
 stroke-width
-switch-thumb
-system-banner
-table-body
-table-caption
-table-card
-table-cell
-table-container
-table-footer
-table-head
-table-header
-table-row
-tabs-content
-tabs-list
-tabs-trigger
 tabular-nums
 tabular-nums text-ink
 text-
@@ -1176,10 +908,6 @@ text-sm sm:text-xs font-light leading-relaxed text-ink/70 mb-4
 text-start
 text-xs font-light text-ink/70 hover:text-primary-ink transition-colors
 text-xs font-semibold uppercase tracking-widest
-toast-close
-toggle-group
-toggle-group-item
-tooltip-content
 tooltip-trigger
 top-1/2
 top-1/2 -left-12 -translate-y-1/2
@@ -1189,9 +917,6 @@ top-1/6 max-w-[calc(100%-2rem)] translate-y-0 gap-0 overflow-hidden p-0 sm:max-w
 top-4 left-1/2 -translate-x-1/2
 top-4 left-4
 top-4 right-4
-top-bar
-top-bar-end
-top-bar-start
 top-left
 tr:hover]:bg-transparent
 tracking-widest
@@ -1224,7 +949,3 @@ w-full gap-0 border-border-strong bg-card p-0 sm:max-w-105 [&>[data-slot=sheet-c
 w-full px-[var(--page-px)]
 w-full text-sm
 whitespace-pre-wrap
-workspace-tab
-workspace-tab-close
-workspace-tab-trigger
-workspace-tabs

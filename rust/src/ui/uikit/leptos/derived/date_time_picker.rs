@@ -9,7 +9,7 @@ use crate::{
 		core::{self as uikit, CalendarDate},
 		leptos::{
 			ButtonVariant, DATE_TIME_PICKER_CLEAR, DATE_TIME_PICKER_CONTENT, DATE_TIME_PICKER_TIME, DATE_TIME_PICKER_TIME_INPUT, DATE_TIME_PICKER_TIME_SEPARATOR, DATE_TIME_PICKER_TRIGGER,
-			INPUT_BASE, POPOVER_CONTENT, Size,
+			INPUT_BASE, POPOVER_CONTENT, Size, Slot,
 			button::button_classes,
 			calendar::Calendar,
 			primitives::{icon_shapes, use_controllable},
@@ -136,7 +136,7 @@ pub fn DateTimePicker(
 					class=content_class.clone()
 					role="dialog"
 					aria-label=labels.dialog.clone()
-					data-slot="date-time-picker-content"
+					data-slot=Slot::DateTimePickerContent.as_str()
 					data-state="open"
 					data-side="bottom"
 					data-align="start"
@@ -153,12 +153,12 @@ pub fn DateTimePicker(
 						previous_month_label=labels.previous_month.clone()
 						next_month_label=labels.next_month.clone()
 					/>
-					<div class=DATE_TIME_PICKER_TIME data-slot="date-time-picker-time">
+					<div class=DATE_TIME_PICKER_TIME data-slot=Slot::DateTimePickerTime.as_str()>
 						<input
 							type="text"
 							inputmode="numeric"
 							class=time_input_class.clone()
-							data-slot="date-time-picker-hours"
+							data-slot=Slot::DateTimePickerHours.as_str()
 							aria-label=labels.hours.clone()
 							value=hours
 							prop:value=move || picker.get().time_fields().0
@@ -173,7 +173,7 @@ pub fn DateTimePicker(
 							type="text"
 							inputmode="numeric"
 							class=time_input_class.clone()
-							data-slot="date-time-picker-minutes"
+							data-slot=Slot::DateTimePickerMinutes.as_str()
 							aria-label=labels.minutes.clone()
 							value=minutes
 							prop:value=move || picker.get().time_fields().1
@@ -184,7 +184,7 @@ pub fn DateTimePicker(
 						<button
 							type="button"
 							class=clear_class.clone()
-							data-slot="date-time-picker-clear"
+							data-slot=Slot::DateTimePickerClear.as_str()
 							disabled=disabled
 							on:click=move |_| {
 								emit(None);
@@ -196,7 +196,7 @@ pub fn DateTimePicker(
 						<button
 							type="button"
 							class=close_class.clone()
-							data-slot="date-time-picker-close"
+							data-slot=Slot::DateTimePickerClose.as_str()
 							aria-label=labels.close.clone()
 							disabled=disabled
 							on:click=move |_| open.set(false)
@@ -213,7 +213,7 @@ pub fn DateTimePicker(
 	view! {
 		<div
 			class="relative"
-			data-slot="date-time-picker"
+			data-slot=Slot::DateTimePicker.as_str()
 			on:keydown=move |e| {
 				if e.key() == "Escape" {
 					open.set(false);
@@ -224,7 +224,7 @@ pub fn DateTimePicker(
 				type="button"
 				id=id
 				class=trigger_class
-				data-slot="date-time-picker-trigger"
+				data-slot=Slot::DateTimePickerTrigger.as_str()
 				data-placeholder=move || value.get().is_none().then_some("true")
 				aria-haspopup="dialog"
 				aria-expanded=move || if open.get() { "true" } else { "false" }

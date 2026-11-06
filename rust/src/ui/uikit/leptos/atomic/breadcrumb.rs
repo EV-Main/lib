@@ -3,13 +3,13 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{BREADCRUMB_ELLIPSIS, BREADCRUMB_ITEM, BREADCRUMB_LINK, BREADCRUMB_LIST, BREADCRUMB_PAGE, BREADCRUMB_SEPARATOR, primitives::icon_shapes},
+	ui::uikit::leptos::{BREADCRUMB_ELLIPSIS, BREADCRUMB_ITEM, BREADCRUMB_LINK, BREADCRUMB_LIST, BREADCRUMB_PAGE, BREADCRUMB_SEPARATOR, Slot, primitives::icon_shapes},
 };
 
 #[component]
 pub fn Breadcrumb(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<nav class=class aria-label=copy::BREADCRUMB data-slot="breadcrumb">
+		<nav class=class aria-label=copy::BREADCRUMB data-slot=Slot::Breadcrumb.as_str()>
 			{children()}
 		</nav>
 	}
@@ -19,7 +19,7 @@ pub fn Breadcrumb(#[prop(optional, into)] class: String, children: Children) -> 
 pub fn BreadcrumbList(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(BREADCRUMB_LIST, class);
 	view! {
-		<ol class=cls data-slot="breadcrumb-list">
+		<ol class=cls data-slot=Slot::BreadcrumbList.as_str()>
 			{children()}
 		</ol>
 	}
@@ -29,7 +29,7 @@ pub fn BreadcrumbList(#[prop(optional, into)] class: String, children: Children)
 pub fn BreadcrumbItem(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(BREADCRUMB_ITEM, class);
 	view! {
-		<li class=cls data-slot="breadcrumb-item">
+		<li class=cls data-slot=Slot::BreadcrumbItem.as_str()>
 			{children()}
 		</li>
 	}
@@ -49,7 +49,7 @@ pub fn BreadcrumbLink(
 	view! {
 		<a
 			class=cls
-			data-slot="breadcrumb-link"
+			data-slot=Slot::BreadcrumbLink.as_str()
 			href=href
 			on:click=move |e| {
 				if let Some(h) = on_click {
@@ -68,7 +68,7 @@ pub fn BreadcrumbPage(#[prop(optional, into)] class: String, children: Children)
 	view! {
 		<span
 			class=cls
-			data-slot="breadcrumb-page"
+			data-slot=Slot::BreadcrumbPage.as_str()
 			role="link"
 			aria-disabled="true"
 			aria-current="page"
@@ -82,7 +82,12 @@ pub fn BreadcrumbPage(#[prop(optional, into)] class: String, children: Children)
 pub fn BreadcrumbSeparator(#[prop(optional, into)] class: String, #[prop(optional)] children: Option<Children>) -> impl IntoView {
 	let cls = cn!(BREADCRUMB_SEPARATOR, class);
 	view! {
-		<li class=cls data-slot="breadcrumb-separator" role="presentation" aria-hidden="true">
+		<li
+			class=cls
+			data-slot=Slot::BreadcrumbSeparator.as_str()
+			role="presentation"
+			aria-hidden="true"
+		>
 			{match children {
 				Some(children) => children(),
 				None => {
@@ -102,7 +107,12 @@ pub fn BreadcrumbSeparator(#[prop(optional, into)] class: String, #[prop(optiona
 pub fn BreadcrumbEllipsis(#[prop(optional, into)] class: String) -> impl IntoView {
 	let cls = cn!(BREADCRUMB_ELLIPSIS, class);
 	view! {
-		<span class=cls data-slot="breadcrumb-ellipsis" role="presentation" aria-hidden="true">
+		<span
+			class=cls
+			data-slot=Slot::BreadcrumbEllipsis.as_str()
+			role="presentation"
+			aria-hidden="true"
+		>
 			<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 				{icon_shapes(Icon::Ellipsis)}
 			</svg>

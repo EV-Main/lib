@@ -4,7 +4,7 @@ use ev_lib_classes::Icon;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
-		CHECKBOX_BASE, CHECKBOX_INDICATOR,
+		CHECKBOX_BASE, CHECKBOX_INDICATOR, Slot,
 		primitives::{icon_shapes, use_controllable},
 	},
 };
@@ -26,7 +26,7 @@ pub fn Checkbox(
 			r#type: "button",
 			role: "checkbox",
 			class: cls,
-			"data-slot": "checkbox",
+			"data-slot": Slot::Checkbox.as_str(),
 			"data-state": data_state,
 			"aria-checked": on,
 			disabled,
@@ -34,7 +34,7 @@ pub fn Checkbox(
 			if on {
 				span {
 					class: CHECKBOX_INDICATOR,
-					"data-slot": "checkbox-indicator",
+					"data-slot": Slot::CheckboxIndicator.as_str(),
 					svg {
 						xmlns: "http://www.w3.org/2000/svg",
 						view_box: "0 0 24 24",

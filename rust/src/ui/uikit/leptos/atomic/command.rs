@@ -12,7 +12,7 @@ use crate::{
 		core::{self as uikit, CommandKey, Row},
 		leptos::{
 			COMMAND_DIALOG_COMMAND, COMMAND_DIALOG_CONTENT, COMMAND_DIALOG_OVERLAY, COMMAND_EMPTY, COMMAND_GROUP, COMMAND_INPUT, COMMAND_INPUT_WRAPPER, COMMAND_ITEM, COMMAND_LIST,
-			COMMAND_ROOT, COMMAND_SEPARATOR, COMMAND_SHORTCUT,
+			COMMAND_ROOT, COMMAND_SEPARATOR, COMMAND_SHORTCUT, Slot,
 			primitives::{Controllable, icon_shapes, stable_id, use_controllable, use_stable_id},
 		},
 	},
@@ -61,7 +61,7 @@ pub fn Command(
 	// A component has no owner of its own: unscoped, the context would land in
 	// the parent's, where a sibling Command overwrites it.
 	view! {
-		<div class=cls data-slot="command">
+		<div class=cls data-slot=Slot::Command.as_str()>
 			<Provider value=ctx>{children()}</Provider>
 		</div>
 	}
@@ -91,7 +91,7 @@ pub fn CommandDialog(
 					aria-modal="true"
 					aria-labelledby=aria_labelledby.clone()
 					class=cls.clone()
-					data-slot="command-dialog"
+					data-slot=Slot::CommandDialog.as_str()
 					on:keydown=move |e| {
 						if e.key() == "Escape" {
 							open.set(false);
@@ -118,7 +118,7 @@ pub fn CommandInput(
 	let ctx = expect_context::<CommandCtx>();
 	let cls = cn!(COMMAND_INPUT, class);
 	view! {
-		<div class=COMMAND_INPUT_WRAPPER data-slot="command-input-wrapper">
+		<div class=COMMAND_INPUT_WRAPPER data-slot=Slot::CommandInputWrapper.as_str()>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="24"
@@ -140,7 +140,7 @@ pub fn CommandInput(
 				type="text"
 				role="combobox"
 				class=cls
-				data-slot="command-input"
+				data-slot=Slot::CommandInput.as_str()
 				aria-autocomplete="list"
 				aria-expanded="true"
 				aria-controls=ctx.list_id
@@ -165,7 +165,7 @@ pub fn CommandList(#[prop(optional, into)] class: String, children: Children) ->
 	#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
 	list.on_load(move |el| relayout_on_mutation(&el, ctx.layout));
 	view! {
-		<div role="listbox" id=ctx.list_id class=cls data-slot="command-list" node_ref=list>
+		<div role="listbox" id=ctx.list_id class=cls data-slot=Slot::CommandList.as_str() node_ref=list>
 			{children()}
 		</div>
 	}
@@ -184,7 +184,7 @@ pub fn CommandEmpty(#[prop(optional, into)] class: String, children: ChildrenFn)
 	move || {
 		shows.get().then(|| {
 			view! {
-				<div class=cls.clone() data-slot="command-empty">
+				<div class=cls.clone() data-slot=Slot::CommandEmpty.as_str()>
 					{children()}
 				</div>
 			}
@@ -198,9 +198,9 @@ pub fn CommandGroup(#[prop(optional, into)] heading: String, #[prop(optional, in
 	let group = CommandGroupId(NEXT.fetch_add(1, Ordering::Relaxed));
 	let cls = cn!(COMMAND_GROUP, class);
 	view! {
-		<div role="group" class=cls data-slot="command-group">
+		<div role="group" class=cls data-slot=Slot::CommandGroup.as_str()>
 			{(!heading.is_empty())
-				.then(|| view! { <div data-slot="command-group-heading">{heading}</div> })}
+				.then(|| view! { <div data-slot=Slot::CommandGroupHeading.as_str()>{heading}</div> })}
 			<Provider value=group>{children()}</Provider>
 		</div>
 	}
@@ -265,7 +265,7 @@ pub fn CommandItem(
 					role="option"
 					id=dom_id.clone()
 					class=cls.clone()
-					data-slot="command-item"
+					data-slot=Slot::CommandItem.as_str()
 					style=format!("order: {rank}")
 					data-disabled=move || if disabled.get() { "true" } else { "false" }
 					data-selected=move || if selected.get() { "true" } else { "false" }
@@ -293,14 +293,14 @@ pub fn CommandItem(
 #[component]
 pub fn CommandSeparator(#[prop(optional, into)] class: String) -> impl IntoView {
 	let cls = cn!(COMMAND_SEPARATOR, class);
-	view! { <div class=cls data-slot="command-separator"></div> }
+	view! { <div class=cls data-slot=Slot::CommandSeparator.as_str()></div> }
 }
 
 #[component]
 pub fn CommandShortcut(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(COMMAND_SHORTCUT, class);
 	view! {
-		<span class=cls data-slot="command-shortcut">
+		<span class=cls data-slot=Slot::CommandShortcut.as_str()>
 			{children()}
 		</span>
 	}

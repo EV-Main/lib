@@ -5,7 +5,7 @@ use crate::{
 	ui::uikit::{
 		core::popover_placement,
 		dioxus::{
-			POPOVER_CONTENT,
+			POPOVER_CONTENT, Slot,
 			primitives::{Controllable, DismissableLayer, Side, use_controllable, use_dismissable_layer},
 		},
 	},
@@ -41,7 +41,7 @@ pub fn PopoverTrigger(#[props(default)] class: String, aria_label: Option<String
 		button {
 			r#type: "button",
 			class,
-			"data-slot": "popover-trigger",
+			"data-slot": Slot::PopoverTrigger.as_str(),
 			"aria-label": aria_label,
 			"aria-expanded": if open { "true" } else { "false" },
 			onclick: move |_| ctx.open.set(!ctx.open.get()),
@@ -55,7 +55,7 @@ pub fn PopoverTrigger(#[props(default)] class: String, aria_label: Option<String
 #[component]
 pub fn PopoverAnchor(#[props(default)] class: String, children: Element) -> Element {
 	rsx! {
-		div { class, "data-slot": "popover-anchor", {children} }
+		div { class, "data-slot": Slot::PopoverAnchor.as_str(), {children} }
 	}
 }
 
@@ -90,7 +90,7 @@ pub fn PopoverContent(
 			role,
 			"aria-labelledby": aria_labelledby,
 			class: cls,
-			"data-slot": "popover-content",
+			"data-slot": Slot::PopoverContent.as_str(),
 			"data-state": "open",
 			"data-side": side.as_ref(),
 			"data-align": align,

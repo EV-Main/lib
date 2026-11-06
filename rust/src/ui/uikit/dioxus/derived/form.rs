@@ -17,7 +17,7 @@ use crate::{
 	cn,
 	ui::uikit::{
 		core::FormItemContext,
-		dioxus::{FORM_DESCRIPTION, FORM_ITEM, FORM_LABEL, FORM_MESSAGE, label::Label, primitives::use_stable_id},
+		dioxus::{FORM_DESCRIPTION, FORM_ITEM, FORM_LABEL, FORM_MESSAGE, Slot, label::Label, primitives::use_stable_id},
 	},
 };
 
@@ -26,7 +26,7 @@ use crate::{
 #[component]
 pub fn Form(#[props(default)] class: String, children: Element) -> Element {
 	rsx! {
-		form { class, "data-slot": "form", {children} }
+		form { class, "data-slot": Slot::Form.as_str(), {children} }
 	}
 }
 /// Provides an id via context so the label/control/description/message
@@ -38,7 +38,7 @@ pub fn FormItem(#[props(default)] class: String, children: Element) -> Element {
 	use_context_provider(|| FormItemContext { id });
 	let cls = cn!(FORM_ITEM, class);
 	rsx! {
-		div { class: cls, "data-slot": "form-item", {children} }
+		div { class: cls, "data-slot": Slot::FormItem.as_str(), {children} }
 	}
 }
 /// Wraps [`Label`], pointing `for` at the control id. Unlike the TS port — where
@@ -76,7 +76,7 @@ pub fn FormControl(#[props(default)] error: bool, children: Element) -> Element 
 	}
 	use_context_provider(|| current);
 	rsx! {
-		div { "data-slot": "form-control", {children} }
+		div { "data-slot": Slot::FormControl.as_str(), {children} }
 	}
 }
 /// Muted helper copy, carrying the description id the control points at.
@@ -85,7 +85,7 @@ pub fn FormDescription(#[props(default)] class: String, children: Element) -> El
 	let ctx = use_context::<FormItemContext>();
 	let cls = cn!(FORM_DESCRIPTION, class);
 	rsx! {
-		p { class: cls, "data-slot": "form-description", id: ctx.form_description_id(), {children} }
+		p { class: cls, "data-slot": Slot::FormDescription.as_str(), id: ctx.form_description_id(), {children} }
 	}
 }
 /// Error/validation text. Renders only while `error`, the same flag the
@@ -100,7 +100,7 @@ pub fn FormMessage(#[props(default)] error: bool, #[props(default)] class: Strin
 	}
 	let cls = cn!(FORM_MESSAGE, class);
 	rsx! {
-		p { class: cls, "data-slot": "form-message", id: ctx.form_message_id(), {children} }
+		p { class: cls, "data-slot": Slot::FormMessage.as_str(), id: ctx.form_message_id(), {children} }
 	}
 }
 

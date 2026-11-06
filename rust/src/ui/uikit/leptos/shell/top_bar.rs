@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{TOP_BAR_BASE, TOP_BAR_END, TOP_BAR_START},
+	ui::uikit::leptos::{Slot, TOP_BAR_BASE, TOP_BAR_END, TOP_BAR_START},
 };
 
 /// The wide screen's utility bar over the content column: who and where, never
@@ -19,11 +19,11 @@ pub fn TopBar(
 ) -> impl IntoView {
 	let cls = cn!(TOP_BAR_BASE, class);
 	view! {
-		<header class=cls data-slot="top-bar">
-			<div class=TOP_BAR_START data-slot="top-bar-start">
+		<header class=cls data-slot=Slot::TopBar.as_str()>
+			<div class=TOP_BAR_START data-slot=Slot::TopBarStart.as_str()>
 				{start.map(|s| s.run())}
 			</div>
-			<div class=TOP_BAR_END data-slot="top-bar-end">
+			<div class=TOP_BAR_END data-slot=Slot::TopBarEnd.as_str()>
 				{end.map(|e| e.run())}
 			</div>
 		</header>

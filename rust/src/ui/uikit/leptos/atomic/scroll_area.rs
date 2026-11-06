@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{SCROLL_AREA_THUMB, SCROLL_AREA_VIEWPORT, SCROLLBAR_BASE, ScrollBarOrientation},
+	ui::uikit::leptos::{SCROLL_AREA_THUMB, SCROLL_AREA_VIEWPORT, SCROLLBAR_BASE, ScrollBarOrientation, Slot},
 };
 
 // Native `overflow` scrolling; `ScrollBar` is static decoration kept for class parity.
@@ -11,8 +11,8 @@ use crate::{
 pub fn ScrollArea(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!("relative", class);
 	view! {
-		<div class=cls data-slot="scroll-area">
-			<div data-slot="scroll-area-viewport" class=SCROLL_AREA_VIEWPORT>
+		<div class=cls data-slot=Slot::ScrollArea.as_str()>
+			<div data-slot=Slot::ScrollAreaViewport.as_str() class=SCROLL_AREA_VIEWPORT>
 				{children()}
 			</div>
 			<ScrollBar />
@@ -25,11 +25,11 @@ pub fn ScrollBar(#[prop(optional)] orientation: ScrollBarOrientation, #[prop(opt
 	let cls = cn!(SCROLLBAR_BASE, orientation.as_class(), class);
 	view! {
 		<div
-			data-slot="scroll-area-scrollbar"
+			data-slot=Slot::ScrollAreaScrollbar.as_str()
 			data-orientation=orientation.as_ref().to_owned()
 			class=cls
 		>
-			<div data-slot="scroll-area-thumb" class=SCROLL_AREA_THUMB></div>
+			<div data-slot=Slot::ScrollAreaThumb.as_str() class=SCROLL_AREA_THUMB></div>
 		</div>
 	}
 }

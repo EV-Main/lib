@@ -6,7 +6,7 @@ use crate::{
 	cn,
 	ui::uikit::leptos::{
 		SYSTEM_BANNER_ACTION, SYSTEM_BANNER_BASE, SYSTEM_BANNER_BODY_AFTER_TITLE, SYSTEM_BANNER_DISMISS, SYSTEM_BANNER_GLYPH, SYSTEM_BANNER_ICON, SYSTEM_BANNER_MESSAGE, SYSTEM_BANNER_TITLE,
-		Tone, primitives::icon_shapes,
+		Slot, Tone, primitives::icon_shapes,
 	},
 };
 
@@ -45,7 +45,12 @@ pub fn SystemBanner(
 	let body_cls = title.as_ref().map(|_| SYSTEM_BANNER_BODY_AFTER_TITLE);
 	let dismiss_label = labels.dismiss;
 	view! {
-		<div class=cls data-slot="system-banner" data-tone=tone.as_ref().to_owned() role="status">
+		<div
+			class=cls
+			data-slot=Slot::SystemBanner.as_str()
+			data-tone=tone.as_ref().to_owned()
+			role="status"
+		>
 			{glyph.map(|g| view! { <span class=SYSTEM_BANNER_ICON>{g}</span> })}
 			<div class=SYSTEM_BANNER_MESSAGE>
 				{title

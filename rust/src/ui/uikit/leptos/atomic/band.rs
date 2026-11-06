@@ -9,7 +9,7 @@ use tailwind_fuse::AsTailwindClass;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{CHECK, DISPLAY_BASE, EYEBROW, LEDE, PROSE, Polarity, SECTION_BASE, SECTION_HEAD, SECTION_PY, SECTION_PY_TIGHT, STAT, STAT_FIGURE, STAT_LABEL, Surface},
+	ui::uikit::leptos::{CHECK, DISPLAY_BASE, EYEBROW, LEDE, PROSE, Polarity, SECTION_BASE, SECTION_HEAD, SECTION_PY, SECTION_PY_TIGHT, STAT, STAT_FIGURE, STAT_LABEL, Slot, Surface},
 };
 
 /// A full-bleed horizontal band. `polarity` sets the token scope on the element,
@@ -35,7 +35,7 @@ pub fn Section(
 	);
 	let cls = cn!(base, class);
 	view! {
-		<section id=id class=cls data-slot="section">
+		<section id=id class=cls data-slot=Slot::Section.as_str()>
 			{children()}
 		</section>
 	}
@@ -46,7 +46,7 @@ pub fn Section(
 pub fn Eyebrow(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(EYEBROW, class);
 	view! {
-		<p class=cls data-slot="eyebrow">
+		<p class=cls data-slot=Slot::Eyebrow.as_str()>
 			{children()}
 		</p>
 	}
@@ -57,7 +57,7 @@ pub fn Eyebrow(#[prop(optional, into)] class: String, children: Children) -> imp
 pub fn Display(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(DISPLAY_BASE, class);
 	view! {
-		<h2 class=cls data-slot="display">
+		<h2 class=cls data-slot=Slot::Display.as_str()>
 			{children()}
 		</h2>
 	}
@@ -68,7 +68,7 @@ pub fn Display(#[prop(optional, into)] class: String, children: Children) -> imp
 pub fn SectionHead(#[prop(into)] eyebrow: String, #[prop(into)] title: String, #[prop(optional, into)] lede: Option<String>, #[prop(optional, into)] class: String) -> impl IntoView {
 	let cls = cn!(SECTION_HEAD, class);
 	view! {
-		<div class=cls data-slot="section-head">
+		<div class=cls data-slot=Slot::SectionHead.as_str()>
 			<Eyebrow>{eyebrow}</Eyebrow>
 			<Display>{title}</Display>
 			{lede.map(|lede| view! { <p class=LEDE>{lede}</p> })}
@@ -81,7 +81,7 @@ pub fn SectionHead(#[prop(into)] eyebrow: String, #[prop(into)] title: String, #
 pub fn Prose(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(PROSE, class);
 	view! {
-		<p class=cls data-slot="prose">
+		<p class=cls data-slot=Slot::Prose.as_str()>
 			{children()}
 		</p>
 	}
@@ -92,7 +92,7 @@ pub fn Prose(#[prop(optional, into)] class: String, children: Children) -> impl 
 pub fn Stat(#[prop(into)] figure: String, #[prop(into)] label: String, #[prop(optional, into)] class: String) -> impl IntoView {
 	let cls = cn!(STAT, class);
 	view! {
-		<span class=cls data-slot="stat">
+		<span class=cls data-slot=Slot::Stat.as_str()>
 			<span class=STAT_FIGURE>{figure}</span>
 			<span class=STAT_LABEL>{label}</span>
 		</span>
@@ -105,7 +105,7 @@ pub fn Stat(#[prop(into)] figure: String, #[prop(into)] label: String, #[prop(op
 pub fn Check(#[prop(optional, into)] class: String) -> impl IntoView {
 	let cls = cn!(CHECK, class);
 	view! {
-		<span class=cls data-slot="check" aria-hidden="true">
+		<span class=cls data-slot=Slot::Check.as_str() aria-hidden="true">
 			"✓"
 		</span>
 	}

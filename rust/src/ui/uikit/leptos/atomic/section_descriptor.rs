@@ -3,7 +3,7 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{FIELD_DESCRIPTION, FIELD_TITLE, primitives::icon_shapes},
+	ui::uikit::leptos::{FIELD_DESCRIPTION, FIELD_TITLE, Slot, primitives::icon_shapes},
 };
 
 #[component]
@@ -23,15 +23,15 @@ pub fn SectionDescriptor(
 		view! {
 			<details
 				class=cls
-				data-slot="section-descriptor"
+				data-slot=Slot::SectionDescriptor.as_str()
 				data-collapsible="true"
 				open=default_open.then_some("true")
 			>
-				<summary class=summary_cls data-slot="section-descriptor-title">
+				<summary class=summary_cls data-slot=Slot::SectionDescriptorTitle.as_str()>
 					{glyph}
 					<span>{title}</span>
 				</summary>
-				<p class=body_cls data-slot="section-descriptor-body">
+				<p class=body_cls data-slot=Slot::SectionDescriptorBody.as_str()>
 					{children()}
 				</p>
 			</details>
@@ -39,12 +39,12 @@ pub fn SectionDescriptor(
 		.into_any()
 	} else {
 		view! {
-			<section class=cls data-slot="section-descriptor">
-				<div class=FIELD_TITLE data-slot="section-descriptor-title">
+			<section class=cls data-slot=Slot::SectionDescriptor.as_str()>
+				<div class=FIELD_TITLE data-slot=Slot::SectionDescriptorTitle.as_str()>
 					{glyph}
 					<span>{title}</span>
 				</div>
-				<p class=FIELD_DESCRIPTION data-slot="section-descriptor-body">
+				<p class=FIELD_DESCRIPTION data-slot=Slot::SectionDescriptorBody.as_str()>
 					{children()}
 				</p>
 			</section>

@@ -17,7 +17,7 @@ use crate::{
 	ui::uikit::{
 		core::{ToastQueue, ToastState, ToastView, toaster_style, y_position},
 		leptos::{
-			TOAST_BASE, TOAST_CLOSE, TOAST_CONTENT, TOAST_TITLE, TOASTER_BASE, ToastPosition, Tone,
+			Slot, TOAST_BASE, TOAST_CLOSE, TOAST_CONTENT, TOAST_TITLE, TOASTER_BASE, ToastPosition, Tone,
 			primitives::{icon_shapes, is_transform_transition},
 		},
 	},
@@ -105,7 +105,7 @@ pub fn Toaster(#[prop(optional)] position: ToastPosition, #[prop(optional, into)
 	view! {
 		<ol
 			class=cls
-			data-slot="toaster"
+			data-slot=Slot::Toaster.as_str()
 			data-position=position.as_ref().to_owned()
 			data-y-position=y_position(position)
 			data-stack=""
@@ -147,7 +147,7 @@ fn ToastItem(toast: ToastView) -> impl IntoView {
 			node_ref=node
 			role="status"
 			aria-live="polite"
-			data-slot="toast"
+			data-slot=Slot::Toast.as_str()
 			data-tone=toast.tone.as_ref().to_owned()
 			data-state=move || view.with(|t| t.state.as_str())
 			data-front=flag(|t| t.front)
@@ -174,7 +174,7 @@ fn ToastItem(toast: ToastView) -> impl IntoView {
 			<button
 				type="button"
 				aria-label=copy::CLOSE
-				data-slot="toast-close"
+				data-slot=Slot::ToastClose.as_str()
 				class=TOAST_CLOSE
 				on:click=move |_| handle.dismiss(id)
 			>

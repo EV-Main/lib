@@ -12,7 +12,7 @@ use crate::{
 	ui::uikit::{
 		core::{self as uikit, SelectKey, SelectOption},
 		dioxus::{
-			SELECT_CONTENT_BOUNDS, SELECT_CONTENT_SURFACE, SELECT_ITEM, SELECT_LABEL, SELECT_LIST, SELECT_SEPARATOR, SELECT_TRIGGER_BASE, Size,
+			SELECT_CONTENT_BOUNDS, SELECT_CONTENT_SURFACE, SELECT_ITEM, SELECT_LABEL, SELECT_LIST, SELECT_SEPARATOR, SELECT_TRIGGER_BASE, Size, Slot,
 			primitives::{Controllable, DismissReason, icon_shapes, use_controllable, use_dismissable_layer, use_stable_id},
 			select_trigger_size_class,
 		},
@@ -55,7 +55,7 @@ pub fn Select(
 	});
 	let cls = cn!("relative", class);
 	rsx! {
-		div { class: cls, "data-slot": "select", {children} }
+		div { class: cls, "data-slot": Slot::Select.as_str(), {children} }
 	}
 }
 #[component]
@@ -70,7 +70,7 @@ pub fn SelectTrigger(#[props(default)] size: Size, #[props(default)] class: Stri
 			r#type: "button",
 			role: "combobox",
 			class: cls,
-			"data-slot": "select-trigger",
+			"data-slot": Slot::SelectTrigger.as_str(),
 			"data-size": size.as_ref(),
 			"data-state": data_state,
 			"aria-haspopup": "listbox",
@@ -114,7 +114,7 @@ pub fn SelectValue(#[props(default)] placeholder: String, #[props(default)] clas
 	rsx! {
 		span {
 			class,
-			"data-slot": "select-value",
+			"data-slot": Slot::SelectValue.as_str(),
 			"data-placeholder": if is_empty { Some("true") } else { None },
 			{label}
 		}
@@ -148,7 +148,7 @@ pub fn SelectContent(#[props(default)] class: String, children: Element) -> Elem
 			role: "listbox",
 			id: ctx.content_id.read().clone(),
 			class: cls,
-			"data-slot": "select-content",
+			"data-slot": Slot::SelectContent.as_str(),
 			"data-state": "open",
 			tabindex: "-1",
 			onkeydown: move |e| {
@@ -205,7 +205,7 @@ pub fn SelectItem(
 		div {
 			role: "option",
 			class: cls,
-			"data-slot": "select-item",
+			"data-slot": Slot::SelectItem.as_str(),
 			"aria-selected": if selected { "true" } else { "false" },
 			"data-reset": reset.then_some(""),
 			"aria-disabled": disabled.then_some("true"),
@@ -239,21 +239,21 @@ pub fn SelectItem(
 #[component]
 pub fn SelectGroup(#[props(default)] class: String, children: Element) -> Element {
 	rsx! {
-		div { role: "group", class, "data-slot": "select-group", {children} }
+		div { role: "group", class, "data-slot": Slot::SelectGroup.as_str(), {children} }
 	}
 }
 #[component]
 pub fn SelectLabel(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(SELECT_LABEL, class);
 	rsx! {
-		div { class: cls, "data-slot": "select-label", {children} }
+		div { class: cls, "data-slot": Slot::SelectLabel.as_str(), {children} }
 	}
 }
 #[component]
 pub fn SelectSeparator(#[props(default)] class: String) -> Element {
 	let cls = cn!(SELECT_SEPARATOR, class);
 	rsx! {
-		div { class: cls, "data-slot": "select-separator" }
+		div { class: cls, "data-slot": Slot::SelectSeparator.as_str() }
 	}
 }
 #[derive(Clone, Copy)]

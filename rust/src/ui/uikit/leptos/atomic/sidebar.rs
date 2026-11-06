@@ -8,7 +8,7 @@ use crate::{
 		leptos::{
 			ButtonVariant, SIDEBAR_CONTENT, SIDEBAR_FLAT, SIDEBAR_FOOTER, SIDEBAR_GROUP, SIDEBAR_GROUP_CONTENT, SIDEBAR_GROUP_LABEL, SIDEBAR_HEADER, SIDEBAR_INNER, SIDEBAR_INSET,
 			SIDEBAR_MENU, SIDEBAR_MENU_BUTTON_BASE, SIDEBAR_MENU_ITEM, SIDEBAR_RAIL, SIDEBAR_SEPARATOR, SIDEBAR_TRIGGER, SIDEBAR_WRAPPER, SidebarCollapsible, SidebarSide, SidebarVariant,
-			Size,
+			Size, Slot,
 			primitives::{Controllable, use_controllable},
 			sidebar_menu_button_size_class,
 		},
@@ -56,7 +56,7 @@ pub fn SidebarProvider(
 	let open = use_controllable(open, default_open, on_open_change);
 	let cls = cn!(SIDEBAR_WRAPPER, class);
 	view! {
-		<div data-slot="sidebar-wrapper" style=sidebar_style() class=cls>
+		<div data-slot=Slot::SidebarWrapper.as_str() style=sidebar_style() class=cls>
 			<Provider value=SidebarContext { open }>{children()}</Provider>
 		</div>
 	}
@@ -74,7 +74,7 @@ pub fn Sidebar(
 	if collapsible == SidebarCollapsible::None {
 		let cls = cn!(SIDEBAR_FLAT, class);
 		return view! {
-			<div class=cls data-slot="sidebar">
+			<div class=cls data-slot=Slot::Sidebar.as_str()>
 				{children()}
 			</div>
 		}
@@ -88,9 +88,9 @@ pub fn Sidebar(
 			data-collapsible=move || sidebar_collapsible_data(collapsible, ctx.open()).to_owned()
 			data-variant=variant.as_ref().to_owned()
 			data-side=side.as_ref().to_owned()
-			data-slot="sidebar"
+			data-slot=Slot::Sidebar.as_str()
 		>
-			<div class=inner data-slot="sidebar-inner">
+			<div class=inner data-slot=Slot::SidebarInner.as_str()>
 				{children()}
 			</div>
 		</div>
@@ -106,7 +106,7 @@ pub fn SidebarTrigger(#[prop(optional, into)] class: String, #[prop(optional)] c
 		<button
 			type="button"
 			data-sidebar="trigger"
-			data-slot="sidebar-trigger"
+			data-slot=Slot::SidebarTrigger.as_str()
 			aria-label=copy::SIDEBAR_TOGGLE
 			class=cls
 			on:click=move |_| ctx.toggle_sidebar()
@@ -125,7 +125,7 @@ pub fn SidebarRail(#[prop(optional, into)] class: String) -> impl IntoView {
 		<button
 			type="button"
 			data-sidebar="rail"
-			data-slot="sidebar-rail"
+			data-slot=Slot::SidebarRail.as_str()
 			aria-label=copy::SIDEBAR_TOGGLE
 			tabindex="-1"
 			title=copy::SIDEBAR_TOGGLE
@@ -139,7 +139,7 @@ pub fn SidebarRail(#[prop(optional, into)] class: String) -> impl IntoView {
 pub fn SidebarInset(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(SIDEBAR_INSET, class);
 	view! {
-		<main class=cls data-slot="sidebar-inset">
+		<main class=cls data-slot=Slot::SidebarInset.as_str()>
 			{children()}
 		</main>
 	}
@@ -149,7 +149,7 @@ pub fn SidebarInset(#[prop(optional, into)] class: String, children: Children) -
 pub fn SidebarHeader(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(SIDEBAR_HEADER, class);
 	view! {
-		<div class=cls data-slot="sidebar-header" data-sidebar="header">
+		<div class=cls data-slot=Slot::SidebarHeader.as_str() data-sidebar="header">
 			{children()}
 		</div>
 	}
@@ -159,7 +159,7 @@ pub fn SidebarHeader(#[prop(optional, into)] class: String, children: Children) 
 pub fn SidebarFooter(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(SIDEBAR_FOOTER, class);
 	view! {
-		<div class=cls data-slot="sidebar-footer" data-sidebar="footer">
+		<div class=cls data-slot=Slot::SidebarFooter.as_str() data-sidebar="footer">
 			{children()}
 		</div>
 	}
@@ -169,7 +169,12 @@ pub fn SidebarFooter(#[prop(optional, into)] class: String, children: Children) 
 pub fn SidebarSeparator(#[prop(optional, into)] class: String) -> impl IntoView {
 	let cls = cn!(SIDEBAR_SEPARATOR, class);
 	view! {
-		<div role="separator" class=cls data-slot="sidebar-separator" data-sidebar="separator"></div>
+		<div
+			role="separator"
+			class=cls
+			data-slot=Slot::SidebarSeparator.as_str()
+			data-sidebar="separator"
+		></div>
 	}
 }
 
@@ -177,7 +182,7 @@ pub fn SidebarSeparator(#[prop(optional, into)] class: String) -> impl IntoView 
 pub fn SidebarContent(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(SIDEBAR_CONTENT, class);
 	view! {
-		<div class=cls data-slot="sidebar-content" data-sidebar="content">
+		<div class=cls data-slot=Slot::SidebarContent.as_str() data-sidebar="content">
 			{children()}
 		</div>
 	}
@@ -187,7 +192,7 @@ pub fn SidebarContent(#[prop(optional, into)] class: String, children: Children)
 pub fn SidebarGroup(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(SIDEBAR_GROUP, class);
 	view! {
-		<div class=cls data-slot="sidebar-group" data-sidebar="group">
+		<div class=cls data-slot=Slot::SidebarGroup.as_str() data-sidebar="group">
 			{children()}
 		</div>
 	}
@@ -197,7 +202,7 @@ pub fn SidebarGroup(#[prop(optional, into)] class: String, children: Children) -
 pub fn SidebarGroupLabel(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(SIDEBAR_GROUP_LABEL, class);
 	view! {
-		<div class=cls data-slot="sidebar-group-label" data-sidebar="group-label">
+		<div class=cls data-slot=Slot::SidebarGroupLabel.as_str() data-sidebar="group-label">
 			{children()}
 		</div>
 	}
@@ -207,7 +212,7 @@ pub fn SidebarGroupLabel(#[prop(optional, into)] class: String, children: Childr
 pub fn SidebarGroupContent(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(SIDEBAR_GROUP_CONTENT, class);
 	view! {
-		<div class=cls data-slot="sidebar-group-content" data-sidebar="group-content">
+		<div class=cls data-slot=Slot::SidebarGroupContent.as_str() data-sidebar="group-content">
 			{children()}
 		</div>
 	}
@@ -217,7 +222,7 @@ pub fn SidebarGroupContent(#[prop(optional, into)] class: String, children: Chil
 pub fn SidebarMenu(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(SIDEBAR_MENU, class);
 	view! {
-		<ul class=cls data-slot="sidebar-menu" data-sidebar="menu">
+		<ul class=cls data-slot=Slot::SidebarMenu.as_str() data-sidebar="menu">
 			{children()}
 		</ul>
 	}
@@ -227,7 +232,7 @@ pub fn SidebarMenu(#[prop(optional, into)] class: String, children: Children) ->
 pub fn SidebarMenuItem(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(SIDEBAR_MENU_ITEM, class);
 	view! {
-		<li class=cls data-slot="sidebar-menu-item" data-sidebar="menu-item">
+		<li class=cls data-slot=Slot::SidebarMenuItem.as_str() data-sidebar="menu-item">
 			{children()}
 		</li>
 	}
@@ -251,7 +256,7 @@ pub fn SidebarMenuButton(
 	view! {
 		<button
 			type="button"
-			data-slot="sidebar-menu-button"
+			data-slot=Slot::SidebarMenuButton.as_str()
 			data-sidebar="menu-button"
 			data-size=size.as_ref().to_owned()
 			data-active=move || is_active.get().to_string()

@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 
 pub use crate::ui::uikit::core::button_classes;
-use crate::ui::uikit::dioxus::{Accent, ButtonVariant, Size};
+use crate::ui::uikit::dioxus::{Accent, ButtonVariant, Size, Slot};
 
 /// With `href` this is an `<a>` wearing the button's classes — a link that looks
 /// like a call to action is still a link, and the kit has no `asChild` slot to
@@ -29,7 +29,7 @@ pub fn Button(
 		return rsx! {
 			a {
 				class: cls,
-				"data-slot": "button",
+				"data-slot": Slot::Button.as_str(),
 				href,
 				title,
 				onclick: move |e| { if let Some(h) = onclick { h.call(e); } },
@@ -40,7 +40,7 @@ pub fn Button(
 	rsx! {
 		button {
 			class: cls,
-			"data-slot": "button",
+			"data-slot": Slot::Button.as_str(),
 			r#type,
 			title,
 			disabled,

@@ -6,7 +6,7 @@ use crate::{
 	ui::uikit::{
 		core::toggled,
 		dioxus::{
-			ACCORDION_CONTENT, ACCORDION_CONTENT_INNER, ACCORDION_HEADER, ACCORDION_ITEM, ACCORDION_TRIGGER, AccordionType,
+			ACCORDION_CONTENT, ACCORDION_CONTENT_INNER, ACCORDION_HEADER, ACCORDION_ITEM, ACCORDION_TRIGGER, AccordionType, Slot,
 			primitives::{Controllable, icon_shapes, use_controllable},
 		},
 	},
@@ -25,7 +25,7 @@ pub fn Accordion(
 	let open = use_controllable(value, default_value, on_value_change);
 	use_context_provider(|| AccordionCtx { open, kind: r#type, collapsible });
 	rsx! {
-		div { class, "data-slot": "accordion", {children} }
+		div { class, "data-slot": Slot::Accordion.as_str(), {children} }
 	}
 }
 #[component]
@@ -33,7 +33,7 @@ pub fn AccordionItem(value: String, #[props(default)] class: String, children: E
 	use_context_provider(|| ItemCtx { value: value.clone() });
 	let cls = cn!(ACCORDION_ITEM, class);
 	rsx! {
-		div { class: cls, "data-slot": "accordion-item", {children} }
+		div { class: cls, "data-slot": Slot::AccordionItem.as_str(), {children} }
 	}
 }
 #[component]
@@ -46,11 +46,11 @@ pub fn AccordionTrigger(#[props(default)] class: String, children: Element) -> E
 	let aria_expanded = if open { "true" } else { "false" };
 	let cls = cn!(ACCORDION_TRIGGER, class);
 	rsx! {
-		h3 { class: ACCORDION_HEADER, "data-slot": "accordion-header",
+		h3 { class: ACCORDION_HEADER, "data-slot": Slot::AccordionHeader.as_str(),
 			button {
 				r#type: "button",
 				class: cls,
-				"data-slot": "accordion-trigger",
+				"data-slot": Slot::AccordionTrigger.as_str(),
 				"data-state": data_state,
 				"aria-expanded": aria_expanded,
 				onclick: move |_| ctx.toggle(&value),
@@ -81,7 +81,7 @@ pub fn AccordionContent(#[props(default)] class: String, children: Element) -> E
 	}
 	let inner = cn!(ACCORDION_CONTENT_INNER, class);
 	rsx! {
-		div { class: ACCORDION_CONTENT, "data-slot": "accordion-content", "data-state": "open",
+		div { class: ACCORDION_CONTENT, "data-slot": Slot::AccordionContent.as_str(), "data-state": "open",
 			div { class: inner, {children} }
 		}
 	}

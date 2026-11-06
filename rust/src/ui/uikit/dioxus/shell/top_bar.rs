@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{TOP_BAR_BASE, TOP_BAR_END, TOP_BAR_START},
+	ui::uikit::dioxus::{Slot, TOP_BAR_BASE, TOP_BAR_END, TOP_BAR_START},
 };
 
 /// The wide screen's utility bar over the content column: who and where, never
@@ -17,9 +17,9 @@ pub fn TopBar(
 ) -> Element {
 	let cls = cn!(TOP_BAR_BASE, class);
 	rsx! {
-		header { class: cls, "data-slot": "top-bar",
-			div { class: TOP_BAR_START, "data-slot": "top-bar-start", {start} }
-			div { class: TOP_BAR_END, "data-slot": "top-bar-end", {end} }
+		header { class: cls, "data-slot": Slot::TopBar.as_str(),
+			div { class: TOP_BAR_START, "data-slot": Slot::TopBarStart.as_str(), {start} }
+			div { class: TOP_BAR_END, "data-slot": Slot::TopBarEnd.as_str(), {end} }
 		}
 	}
 }

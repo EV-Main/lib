@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{FORM_ROW_BASE, FORM_ROW_CONTROL, FORM_ROW_DESCRIPTION, FORM_ROW_DIVIDER, FORM_ROW_HINT, FORM_ROW_LABEL, FORM_ROW_LABEL_COLUMN},
+	ui::uikit::leptos::{FORM_ROW_BASE, FORM_ROW_CONTROL, FORM_ROW_DESCRIPTION, FORM_ROW_DIVIDER, FORM_ROW_HINT, FORM_ROW_LABEL, FORM_ROW_LABEL_COLUMN, Slot},
 };
 
 /// Label on the left, the value or its control on the right; they stack on a
@@ -47,11 +47,11 @@ pub(crate) fn FormRowFrame(
 	view! {
 		<div
 			class=cls
-			data-slot="form-row"
+			data-slot=Slot::FormRow.as_str()
 			data-divider=divider.to_string()
 			data-inline=inline.map(|on| on.to_string())
 		>
-			<div class=FORM_ROW_LABEL_COLUMN data-slot="form-row-label">
+			<div class=FORM_ROW_LABEL_COLUMN data-slot=Slot::FormRowLabel.as_str()>
 				{match r#for {
 					Some(id) => {
 						view! {
@@ -65,7 +65,7 @@ pub(crate) fn FormRowFrame(
 				}}
 				{description.map(|d| view! { <span class=FORM_ROW_DESCRIPTION>{d.run()}</span> })}
 			</div>
-			<div class=FORM_ROW_CONTROL data-slot="form-row-control">
+			<div class=FORM_ROW_CONTROL data-slot=Slot::FormRowControl.as_str()>
 				{children()}
 				{hint.map(|h| view! { <span class=FORM_ROW_HINT>{h.run()}</span> })}
 			</div>

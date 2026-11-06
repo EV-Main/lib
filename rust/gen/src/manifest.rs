@@ -12,6 +12,7 @@ pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 	vec![
 		("size", vec![table::<Size>("sizeClasses", "Size")]),
 		("tone", vec![table::<Tone>("toneClasses", "Tone")]),
+		("slot", vec![union::<Slot>("DATA_SLOTS", "DataSlot")]),
 		("icons", vec![union::<Icon>("ICON_NAMES", "IconName"), icons()]),
 		("footer", vec![Ts::types::<(FooterLinkGroup, FooterLink, FooterOffice)>()]),
 		("popover-form", vec![labels::<PopoverFormLabels>("POPOVER_FORM_LABELS")]),

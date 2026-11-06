@@ -16,7 +16,7 @@ use crate::{
 	ui::uikit::{
 		core::Presence,
 		dioxus::{
-			DRAWER_BODY, DRAWER_CONTENT_BASE, DRAWER_DESCRIPTION, DRAWER_FOOTER, DRAWER_HANDLE, DRAWER_HEADER, DRAWER_OVERLAY, DRAWER_TITLE, DrawerDirection,
+			DRAWER_BODY, DRAWER_CONTENT_BASE, DRAWER_DESCRIPTION, DRAWER_FOOTER, DRAWER_HANDLE, DRAWER_HEADER, DRAWER_OVERLAY, DRAWER_TITLE, DrawerDirection, Slot,
 			primitives::{Controllable, is_transform_transition, use_controllable},
 		},
 	},
@@ -36,7 +36,7 @@ pub fn Drawer(
 	let open = use_controllable(open, default_open, on_open_change);
 	use_context_provider(|| DrawerCtx { open, direction });
 	rsx! {
-		div { "data-slot": "drawer", {children} }
+		div { "data-slot": Slot::Drawer.as_str(), {children} }
 	}
 }
 #[component]
@@ -46,7 +46,7 @@ pub fn DrawerTrigger(#[props(default)] class: String, children: Element) -> Elem
 		button {
 			r#type: "button",
 			class,
-			"data-slot": "drawer-trigger",
+			"data-slot": Slot::DrawerTrigger.as_str(),
 			onclick: move |_| ctx.open.set(true),
 			{children}
 		}
@@ -65,7 +65,7 @@ pub fn DrawerOverlay(#[props(default)] class: String) -> Element {
 	rsx! {
 		div {
 			class: cls,
-			"data-slot": "drawer-overlay",
+			"data-slot": Slot::DrawerOverlay.as_str(),
 			"data-state": "open",
 			onclick: move |_| ctx.open.set(false),
 		}
@@ -98,7 +98,7 @@ pub fn DrawerContent(#[props(default)] class: String, aria_label: Option<String>
 	rsx! {
 		div {
 			class: DRAWER_OVERLAY,
-			"data-slot": "drawer-overlay",
+			"data-slot": Slot::DrawerOverlay.as_str(),
 			"data-state": state,
 			onclick: move |_| ctx.open.set(false),
 		}
@@ -107,7 +107,7 @@ pub fn DrawerContent(#[props(default)] class: String, aria_label: Option<String>
 			"aria-modal": "true",
 			"aria-label": aria_label,
 			class: cls,
-			"data-slot": "drawer-content",
+			"data-slot": Slot::DrawerContent.as_str(),
 			"data-state": state,
 			"data-vaul-drawer-direction": direction.as_ref(),
 			onkeydown: move |e| {
@@ -122,9 +122,9 @@ pub fn DrawerContent(#[props(default)] class: String, aria_label: Option<String>
 				}
 			},
 			if direction == DrawerDirection::Bottom {
-				div { class: DRAWER_HANDLE, "data-slot": "drawer-handle" }
+				div { class: DRAWER_HANDLE, "data-slot": Slot::DrawerHandle.as_str() }
 			}
-			div { class: DRAWER_BODY, "data-slot": "drawer-body", {children} }
+			div { class: DRAWER_BODY, "data-slot": Slot::DrawerBody.as_str(), {children} }
 		}
 	}
 }
@@ -135,7 +135,7 @@ pub fn DrawerClose(#[props(default)] class: String, children: Element) -> Elemen
 		button {
 			r#type: "button",
 			class,
-			"data-slot": "drawer-close",
+			"data-slot": Slot::DrawerClose.as_str(),
 			onclick: move |_| ctx.open.set(false),
 			{children}
 		}
@@ -145,28 +145,28 @@ pub fn DrawerClose(#[props(default)] class: String, children: Element) -> Elemen
 pub fn DrawerHeader(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(DRAWER_HEADER, class);
 	rsx! {
-		div { class: cls, "data-slot": "drawer-header", {children} }
+		div { class: cls, "data-slot": Slot::DrawerHeader.as_str(), {children} }
 	}
 }
 #[component]
 pub fn DrawerFooter(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(DRAWER_FOOTER, class);
 	rsx! {
-		div { class: cls, "data-slot": "drawer-footer", {children} }
+		div { class: cls, "data-slot": Slot::DrawerFooter.as_str(), {children} }
 	}
 }
 #[component]
 pub fn DrawerTitle(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(DRAWER_TITLE, class);
 	rsx! {
-		div { class: cls, "data-slot": "drawer-title", {children} }
+		div { class: cls, "data-slot": Slot::DrawerTitle.as_str(), {children} }
 	}
 }
 #[component]
 pub fn DrawerDescription(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(DRAWER_DESCRIPTION, class);
 	rsx! {
-		div { class: cls, "data-slot": "drawer-description", {children} }
+		div { class: cls, "data-slot": Slot::DrawerDescription.as_str(), {children} }
 	}
 }
 #[derive(Clone, Copy)]

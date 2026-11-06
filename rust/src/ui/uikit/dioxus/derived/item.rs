@@ -4,14 +4,14 @@ use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		ITEM_ACTIONS, ITEM_BASE, ITEM_CONTENT, ITEM_DESCRIPTION, ITEM_FOOTER, ITEM_GROUP, ITEM_HEADER, ITEM_MEDIA_BASE, ITEM_SEPARATOR, ITEM_TITLE, ItemMediaVariant, ItemSize, ItemVariant,
-		Orientation, separator::Separator,
+		Orientation, Slot, separator::Separator,
 	},
 };
 #[component]
 pub fn ItemGroup(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(ITEM_GROUP, class);
 	rsx! {
-		div { role: "list", class: cls, "data-slot": "item-group", {children} }
+		div { role: "list", class: cls, "data-slot": Slot::ItemGroup.as_str(), {children} }
 	}
 }
 
@@ -29,7 +29,7 @@ pub fn Item(#[props(default)] variant: ItemVariant, #[props(default)] size: Item
 	rsx! {
 		div {
 			class: cls,
-			"data-slot": "item",
+			"data-slot": Slot::Item.as_str(),
 			"data-variant": variant.as_ref(),
 			"data-size": size.as_ref(),
 			{children}
@@ -42,7 +42,7 @@ pub fn ItemMedia(#[props(default)] variant: ItemMediaVariant, #[props(default)] 
 	rsx! {
 		div {
 			class: cls,
-			"data-slot": "item-media",
+			"data-slot": Slot::ItemMedia.as_str(),
 			"data-variant": variant.as_ref(),
 			{children}
 		}
@@ -52,42 +52,42 @@ pub fn ItemMedia(#[props(default)] variant: ItemMediaVariant, #[props(default)] 
 pub fn ItemContent(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(ITEM_CONTENT, class);
 	rsx! {
-		div { class: cls, "data-slot": "item-content", {children} }
+		div { class: cls, "data-slot": Slot::ItemContent.as_str(), {children} }
 	}
 }
 #[component]
 pub fn ItemTitle(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(ITEM_TITLE, class);
 	rsx! {
-		div { class: cls, "data-slot": "item-title", {children} }
+		div { class: cls, "data-slot": Slot::ItemTitle.as_str(), {children} }
 	}
 }
 #[component]
 pub fn ItemDescription(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(ITEM_DESCRIPTION, class);
 	rsx! {
-		p { class: cls, "data-slot": "item-description", {children} }
+		p { class: cls, "data-slot": Slot::ItemDescription.as_str(), {children} }
 	}
 }
 #[component]
 pub fn ItemActions(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(ITEM_ACTIONS, class);
 	rsx! {
-		div { class: cls, "data-slot": "item-actions", {children} }
+		div { class: cls, "data-slot": Slot::ItemActions.as_str(), {children} }
 	}
 }
 #[component]
 pub fn ItemHeader(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(ITEM_HEADER, class);
 	rsx! {
-		div { class: cls, "data-slot": "item-header", {children} }
+		div { class: cls, "data-slot": Slot::ItemHeader.as_str(), {children} }
 	}
 }
 #[component]
 pub fn ItemFooter(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(ITEM_FOOTER, class);
 	rsx! {
-		div { class: cls, "data-slot": "item-footer", {children} }
+		div { class: cls, "data-slot": Slot::ItemFooter.as_str(), {children} }
 	}
 }
 #[cfg(test)]

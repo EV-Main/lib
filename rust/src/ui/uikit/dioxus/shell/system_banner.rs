@@ -6,7 +6,7 @@ use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		SYSTEM_BANNER_ACTION, SYSTEM_BANNER_BASE, SYSTEM_BANNER_BODY_AFTER_TITLE, SYSTEM_BANNER_DISMISS, SYSTEM_BANNER_GLYPH, SYSTEM_BANNER_ICON, SYSTEM_BANNER_MESSAGE, SYSTEM_BANNER_TITLE,
-		Tone,
+		Slot, Tone,
 		primitives::{has_content, icon_shapes},
 	},
 };
@@ -42,7 +42,7 @@ pub fn SystemBanner(
 	let body_cls = title.as_ref().map(|_| SYSTEM_BANNER_BODY_AFTER_TITLE);
 	let dismiss_label = labels.dismiss;
 	rsx! {
-		div { class: cls, "data-slot": "system-banner", "data-tone": tone.as_ref(), role: "status",
+		div { class: cls, "data-slot": Slot::SystemBanner.as_str(), "data-tone": tone.as_ref(), role: "status",
 			if has_content(&glyph) {
 				span { class: SYSTEM_BANNER_ICON, {glyph} }
 			}

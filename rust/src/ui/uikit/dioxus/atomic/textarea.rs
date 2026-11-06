@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{FormControlContext, Size, TEXTAREA_BASE, textarea_size_class},
+	ui::uikit::dioxus::{FormControlContext, Size, Slot, TEXTAREA_BASE, textarea_size_class},
 };
 
 /// Picks up the id and `aria-*` of an enclosing
@@ -33,7 +33,7 @@ pub fn Textarea(
 	rsx! {
 		textarea {
 			class: cls,
-			"data-slot": "textarea",
+			"data-slot": Slot::Textarea.as_str(),
 			"data-size": size.as_ref(),
 			id: form.as_ref().map(|f| f.id.clone()),
 			"aria-describedby": form.as_ref().map(|f| f.described_by.clone()),

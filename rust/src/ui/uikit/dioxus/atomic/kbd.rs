@@ -2,14 +2,14 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{KBD_BASE, KBD_GROUP_BASE},
+	ui::uikit::dioxus::{KBD_BASE, KBD_GROUP_BASE, Slot},
 };
 
 #[component]
 pub fn Kbd(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(KBD_BASE, class);
 	rsx! {
-		kbd { class: cls, "data-slot": "kbd", {children} }
+		kbd { class: cls, "data-slot": Slot::Kbd.as_str(), {children} }
 	}
 }
 
@@ -17,7 +17,7 @@ pub fn Kbd(#[props(default)] class: String, children: Element) -> Element {
 pub fn KbdGroup(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(KBD_GROUP_BASE, class);
 	rsx! {
-		kbd { class: cls, "data-slot": "kbd-group", {children} }
+		kbd { class: cls, "data-slot": Slot::KbdGroup.as_str(), {children} }
 	}
 }
 

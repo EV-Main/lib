@@ -6,7 +6,7 @@ use crate::{
 	ui::uikit::{
 		core::toggled,
 		dioxus::{
-			Size, ToggleGroupType, ToggleVariant,
+			Size, Slot, ToggleGroupType, ToggleVariant,
 			primitives::{Controllable, use_controllable},
 			toggle_classes,
 		},
@@ -45,7 +45,7 @@ pub fn ToggleGroup(
 	rsx! {
 		div {
 			class: cls,
-			"data-slot": "toggle-group",
+			"data-slot": Slot::ToggleGroup.as_str(),
 			"data-variant": variant.as_ref(),
 			"data-size": size.as_ref(),
 			{children}
@@ -92,7 +92,7 @@ pub fn ToggleGroupItem(
 		button {
 			r#type: "button",
 			class: cls,
-			"data-slot": "toggle-group-item",
+			"data-slot": Slot::ToggleGroupItem.as_str(),
 			"data-variant": variant.as_ref(),
 			"data-size": size.as_ref(),
 			"data-state": if on { "on" } else { "off" },

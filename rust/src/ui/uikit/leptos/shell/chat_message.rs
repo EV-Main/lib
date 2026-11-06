@@ -9,7 +9,7 @@ use crate::{
 		CHAT_ATTACHMENT_ROW, CHAT_BUBBLE_BASE, CHAT_MARKER_DOT, CHAT_MARKER_RULE, CHAT_MARKER_SEPARATOR, CHAT_MARKER_SEPARATOR_LABEL, CHAT_MARKER_STATUS, CHAT_MARKER_TOOL,
 		CHAT_MARKER_TOOL_BODY, CHAT_MARKER_TOOL_BORDER, CHAT_MARKER_TOOL_CHECK, CHAT_MARKER_TOOL_DETAIL, CHAT_MARKER_TOOL_ERROR_BORDER, CHAT_MARKER_TOOL_ICON, CHAT_MARKER_TOOL_META,
 		CHAT_MARKER_TOOL_TITLE, CHAT_MESSAGE_AVATAR, CHAT_MESSAGE_AVATAR_TILE, CHAT_MESSAGE_BASE, CHAT_MESSAGE_BODY, CHAT_MESSAGE_BODY_ASSISTANT, CHAT_MESSAGE_BODY_USER,
-		CHAT_MESSAGE_HEADER, CHAT_MESSAGE_NAME, CHAT_MESSAGE_TIME, CHAT_MESSAGE_USER, ChatBubbleVariant, ChatStatusState, ChatToolState, IconButton, Size, icon_button::Glyph,
+		CHAT_MESSAGE_HEADER, CHAT_MESSAGE_NAME, CHAT_MESSAGE_TIME, CHAT_MESSAGE_USER, ChatBubbleVariant, ChatStatusState, ChatToolState, IconButton, Size, Slot, icon_button::Glyph,
 		primitives::icon_shapes,
 	},
 };
@@ -28,7 +28,7 @@ pub fn ChatBubble(#[prop(optional)] variant: ChatBubbleVariant, #[prop(optional,
 	view! {
 		<div
 			class=cls
-			data-slot="chat-bubble"
+			data-slot=Slot::ChatBubble.as_str()
 			data-variant=variant.as_ref().to_owned()
 			data-streaming=move || streaming.get().then_some("")
 			data-caret=move || caret.get().then_some("")
@@ -59,7 +59,12 @@ pub fn ChatMessage(
 	let body = cn!(CHAT_MESSAGE_BODY, if user { CHAT_MESSAGE_BODY_USER } else { CHAT_MESSAGE_BODY_ASSISTANT });
 	let header = !compact && (name.is_some() || time.is_some());
 	view! {
-		<div class=cls data-slot="chat-message" data-role=role.as_ref().to_owned() data-enter="rise">
+		<div
+			class=cls
+			data-slot=Slot::ChatMessage.as_str()
+			data-role=role.as_ref().to_owned()
+			data-enter="rise"
+		>
 			{(!user && !compact)
 				.then(|| {
 					view! {
@@ -123,7 +128,11 @@ pub fn ChatMarker(kind: ChatMarkerKind, #[prop(optional, into)] class: String, #
 	let children = move || children.map(|c| c());
 	match kind {
 		ChatMarkerKind::Separator => view! {
-			<div class=cn!(CHAT_MARKER_SEPARATOR, class) data-slot="chat-marker" data-type="separator">
+			<div
+				class=cn!(CHAT_MARKER_SEPARATOR, class)
+				data-slot=Slot::ChatMarker.as_str()
+				data-type="separator"
+			>
 				<span class=CHAT_MARKER_RULE></span>
 				<span class=CHAT_MARKER_SEPARATOR_LABEL>{children()}</span>
 				<span class=CHAT_MARKER_RULE></span>
@@ -135,7 +144,7 @@ pub fn ChatMarker(kind: ChatMarkerKind, #[prop(optional, into)] class: String, #
 			view! {
 				<div
 					class=cn!(CHAT_MARKER_STATUS, class)
-					data-slot="chat-marker"
+					data-slot=Slot::ChatMarker.as_str()
 					data-type="status"
 					data-state=state.as_ref().to_owned()
 					role=running.then_some("status")
@@ -153,7 +162,7 @@ pub fn ChatMarker(kind: ChatMarkerKind, #[prop(optional, into)] class: String, #
 			view! {
 				<div
 					class=cls
-					data-slot="chat-marker"
+					data-slot=Slot::ChatMarker.as_str()
 					data-type="tool"
 					data-state=state.as_ref().to_owned()
 				>
@@ -205,7 +214,7 @@ pub fn ChatAttachment(
 	view! {
 		<div
 			class=cn!(CHAT_ATTACHMENT_BASE, class)
-			data-slot="chat-attachment"
+			data-slot=Slot::ChatAttachment.as_str()
 			data-type=r#type.as_ref().to_owned()
 			data-state=state.as_ref().to_owned()
 		>

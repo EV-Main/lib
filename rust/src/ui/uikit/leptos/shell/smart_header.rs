@@ -3,7 +3,7 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{SMART_HEADER_BAR, SMART_HEADER_BASE, SMART_HEADER_CONTEXT, SMART_HEADER_TOOLBAR, TopBar},
+	ui::uikit::leptos::{SMART_HEADER_BAR, SMART_HEADER_BASE, SMART_HEADER_CONTEXT, SMART_HEADER_TOOLBAR, Slot, TopBar},
 };
 
 /// A page header that adapts to scroll and alerts. Mirrors the TS
@@ -53,13 +53,13 @@ pub fn SmartHeader(
 		}
 	};
 	view! {
-		<div class=cls data-slot="smart-header" data-state=state.as_ref().to_owned()>
+		<div class=cls data-slot=Slot::SmartHeader.as_str() data-state=state.as_ref().to_owned()>
 			{banner.map(|b| b.run())}
 			<TopBar class=SMART_HEADER_BAR start=bar_start end=move || end.as_ref().map(ViewFn::run) />
 			{toolbar
 				.map(|t| {
 					view! {
-						<div class=SMART_HEADER_TOOLBAR data-slot="smart-header-toolbar">
+						<div class=SMART_HEADER_TOOLBAR data-slot=Slot::SmartHeaderToolbar.as_str()>
 							{t.run()}
 						</div>
 					}
@@ -67,12 +67,12 @@ pub fn SmartHeader(
 			{context
 				.map(|c| {
 					view! {
-						<div class=SMART_HEADER_CONTEXT data-slot="smart-header-context">
+						<div class=SMART_HEADER_CONTEXT data-slot=Slot::SmartHeaderContext.as_str()>
 							{c.run()}
 						</div>
 					}
 				})}
-			{palette.map(|p| view! { <div data-slot="smart-header-palette">{p.run()}</div> })}
+			{palette.map(|p| view! { <div data-slot=Slot::SmartHeaderPalette.as_str()>{p.run()}</div> })}
 		</div>
 	}
 }

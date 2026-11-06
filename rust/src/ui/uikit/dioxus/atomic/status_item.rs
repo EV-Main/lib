@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{STATUS_DOT_BASE, STATUS_ITEM_BASE, STATUS_ITEM_VALUE, StatusTone},
+	ui::uikit::dioxus::{STATUS_DOT_BASE, STATUS_ITEM_BASE, STATUS_ITEM_VALUE, Slot, StatusTone},
 };
 
 /// The dot alone. Mirrors the TS `StatusDot`. It is hidden from assistive tech,
@@ -11,7 +11,7 @@ use crate::{
 pub fn StatusDot(#[props(default)] tone: StatusTone, #[props(default)] class: String) -> Element {
 	let cls = cn!(STATUS_DOT_BASE, tone.as_class(), class);
 	rsx! {
-		span { class: cls, "data-slot": "status-dot", "data-tone": tone.as_ref(), "aria-hidden": "true" }
+		span { class: cls, "data-slot": Slot::StatusDot.as_str(), "data-tone": tone.as_ref(), "aria-hidden": "true" }
 	}
 }
 
@@ -21,7 +21,7 @@ pub fn StatusDot(#[props(default)] tone: StatusTone, #[props(default)] class: St
 pub fn StatusItem(#[props(default)] tone: StatusTone, value: Option<Element>, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(STATUS_ITEM_BASE, class);
 	rsx! {
-		span { class: cls, "data-slot": "status-item", "data-tone": tone.as_ref(),
+		span { class: cls, "data-slot": Slot::StatusItem.as_str(), "data-tone": tone.as_ref(),
 			StatusDot { tone }
 			span { {children} }
 			if let Some(value) = value {

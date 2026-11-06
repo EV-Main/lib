@@ -10,7 +10,7 @@ use crate::{
 	ui::uikit::{
 		core::{self as uikit, SelectKey, SelectOption},
 		leptos::{
-			SELECT_CONTENT_BOUNDS, SELECT_CONTENT_SURFACE, SELECT_ITEM, SELECT_LABEL, SELECT_LIST, SELECT_SEPARATOR, SELECT_TRIGGER_BASE, Size,
+			SELECT_CONTENT_BOUNDS, SELECT_CONTENT_SURFACE, SELECT_ITEM, SELECT_LABEL, SELECT_LIST, SELECT_SEPARATOR, SELECT_TRIGGER_BASE, Size, Slot,
 			primitives::{Controllable, DismissReason, icon_shapes, use_controllable, use_dismissable_layer, use_stable_id},
 			select_trigger_size_class,
 		},
@@ -44,7 +44,7 @@ pub fn Select(
 	};
 	view! {
 		<Provider value=provided>
-			<div class=cn!("relative", class) data-slot="select">
+			<div class=cn!("relative", class) data-slot=Slot::Select.as_str()>
 				{children()}
 			</div>
 		</Provider>
@@ -61,7 +61,7 @@ pub fn SelectTrigger(#[prop(optional)] size: Size, #[prop(optional, into)] class
 			type="button"
 			role="combobox"
 			class=cls
-			data-slot="select-trigger"
+			data-slot=Slot::SelectTrigger.as_str()
 			data-size=size.as_ref().to_owned()
 			data-state=move || if ctx.open.get() { "open" } else { "closed" }
 			aria-haspopup="listbox"
@@ -102,7 +102,7 @@ pub fn SelectValue(#[prop(optional, into)] placeholder: String, #[prop(optional,
 	view! {
 		<span
 			class=class
-			data-slot="select-value"
+			data-slot=Slot::SelectValue.as_str()
 			data-placeholder=move || empty.get().then_some("true")
 		>
 			{move || if empty.get() { placeholder.clone() } else { ctx.value.get() }}
@@ -132,7 +132,7 @@ pub fn SelectContent(#[prop(optional, into)] class: String, children: ChildrenFn
 				role="listbox"
 				id=ctx.content_id
 				class=cls.clone()
-				data-slot="select-content"
+				data-slot=Slot::SelectContent.as_str()
 				data-state="open"
 				tabindex="-1"
 				on:keydown=move |e| {
@@ -196,7 +196,7 @@ pub fn SelectItem(
 		<div
 			role="option"
 			class=cn!(SELECT_ITEM, class)
-			data-slot="select-item"
+			data-slot=Slot::SelectItem.as_str()
 			aria-selected=move || selected.get().to_string()
 			data-reset=move || reset.get().then_some("")
 			aria-disabled=move || disabled.get().then_some("true")
@@ -247,7 +247,7 @@ pub fn SelectItem(
 #[component]
 pub fn SelectGroup(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div role="group" class=class data-slot="select-group">
+		<div role="group" class=class data-slot=Slot::SelectGroup.as_str()>
 			{children()}
 		</div>
 	}
@@ -256,7 +256,7 @@ pub fn SelectGroup(#[prop(optional, into)] class: String, children: Children) ->
 #[component]
 pub fn SelectLabel(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class=cn!(SELECT_LABEL, class) data-slot="select-label">
+		<div class=cn!(SELECT_LABEL, class) data-slot=Slot::SelectLabel.as_str()>
 			{children()}
 		</div>
 	}
@@ -264,7 +264,7 @@ pub fn SelectLabel(#[prop(optional, into)] class: String, children: Children) ->
 
 #[component]
 pub fn SelectSeparator(#[prop(optional, into)] class: String) -> impl IntoView {
-	view! { <div class=cn!(SELECT_SEPARATOR, class) data-slot="select-separator"></div> }
+	view! { <div class=cn!(SELECT_SEPARATOR, class) data-slot=Slot::SelectSeparator.as_str()></div> }
 }
 
 #[derive(Clone, Copy)]

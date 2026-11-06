@@ -3,7 +3,7 @@ use ev_lib_classes::copy;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{CHAT_TYPING_BASE, CHAT_TYPING_DOT, CHAT_TYPING_STILL},
+	ui::uikit::dioxus::{CHAT_TYPING_BASE, CHAT_TYPING_DOT, CHAT_TYPING_STILL, Slot},
 };
 
 /// The wait before the first token: three dots whose opacity ripples. Mirrors
@@ -15,7 +15,7 @@ use crate::{
 #[component]
 pub fn ChatTyping(#[props(default = copy::CHAT_TYPING.to_owned())] label: String, #[props(default)] class: String) -> Element {
 	rsx! {
-		span { role: "status", "aria-label": label, "data-slot": "chat-typing", class: cn!(CHAT_TYPING_BASE, class),
+		span { role: "status", "aria-label": label, "data-slot": Slot::ChatTyping.as_str(), class: cn!(CHAT_TYPING_BASE, class),
 			for _ in 0..3 {
 				span { "aria-hidden": "true", "data-dot": "", class: CHAT_TYPING_DOT }
 			}

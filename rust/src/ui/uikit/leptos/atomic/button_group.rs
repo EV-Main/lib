@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{BUTTON_GROUP_BASE, BUTTON_GROUP_SEPARATOR_BASE, BUTTON_GROUP_TEXT_BASE, ButtonGroupOrientation},
+	ui::uikit::leptos::{BUTTON_GROUP_BASE, BUTTON_GROUP_SEPARATOR_BASE, BUTTON_GROUP_TEXT_BASE, ButtonGroupOrientation, Slot},
 };
 
 #[component]
@@ -11,7 +11,7 @@ pub fn ButtonGroup(#[prop(optional)] orientation: ButtonGroupOrientation, #[prop
 	view! {
 		<div
 			role="group"
-			data-slot="button-group"
+			data-slot=Slot::ButtonGroup.as_str()
 			data-orientation=orientation.as_ref().to_owned()
 			class=cls
 		>
@@ -31,7 +31,7 @@ pub fn ButtonGroupSeparator(#[prop(optional, into)] class: String) -> impl IntoV
 	let cls = cn!(BUTTON_GROUP_SEPARATOR_BASE, class);
 	view! {
 		<div
-			data-slot="button-group-separator"
+			data-slot=Slot::ButtonGroupSeparator.as_str()
 			data-orientation="vertical"
 			role="separator"
 			class=cls

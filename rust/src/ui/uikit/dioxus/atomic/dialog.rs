@@ -4,7 +4,7 @@ use ev_lib_classes::{Icon, copy};
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
-		DIALOG_CLOSE, DIALOG_CONTENT, DIALOG_DESCRIPTION, DIALOG_FOOTER, DIALOG_HEADER, DIALOG_OVERLAY, DIALOG_TITLE,
+		DIALOG_CLOSE, DIALOG_CONTENT, DIALOG_DESCRIPTION, DIALOG_FOOTER, DIALOG_HEADER, DIALOG_OVERLAY, DIALOG_TITLE, Slot,
 		primitives::{Controllable, DismissableLayer, icon_shapes, use_controllable, use_dismissable_layer},
 	},
 };
@@ -15,7 +15,7 @@ pub fn Dialog(open: Option<bool>, #[props(default)] default_open: bool, on_open_
 	let layer = use_dismissable_layer(state.get(), move |_| state.set(false));
 	use_context_provider(|| DialogCtx { open: state, layer });
 	rsx! {
-		div { "data-slot": "dialog", {children} }
+		div { "data-slot": Slot::Dialog.as_str(), {children} }
 	}
 }
 #[component]
@@ -25,7 +25,7 @@ pub fn DialogTrigger(#[props(default)] class: String, children: Element) -> Elem
 		button {
 			r#type: "button",
 			class,
-			"data-slot": "dialog-trigger",
+			"data-slot": Slot::DialogTrigger.as_str(),
 			"aria-expanded": if ctx.open.get() { "true" } else { "false" },
 			onclick: move |_| ctx.open.set(true),
 			{children}
@@ -63,7 +63,7 @@ pub fn DialogContent(
 		// dep-light: native focus order, no trap/portal — see README Limitations
 		div {
 			class: DIALOG_OVERLAY,
-			"data-slot": "dialog-overlay",
+			"data-slot": Slot::DialogOverlay.as_str(),
 			"data-state": "open",
 			onclick: move |_| overlay_layer.on_outside(),
 		}
@@ -73,7 +73,7 @@ pub fn DialogContent(
 			"aria-labelledby": aria_labelledby,
 			"aria-describedby": aria_describedby,
 			class: cls,
-			"data-slot": "dialog-content",
+			"data-slot": Slot::DialogContent.as_str(),
 			"data-state": "open",
 			tabindex: "-1",
 			onclick: move |e| e.stop_propagation(),
@@ -85,7 +85,7 @@ pub fn DialogContent(
 				button {
 					r#type: "button",
 					class: DIALOG_CLOSE,
-					"data-slot": "dialog-close",
+					"data-slot": Slot::DialogClose.as_str(),
 					onclick: move |_| ctx.open.set(false),
 					svg {
 						xmlns: "http://www.w3.org/2000/svg",
@@ -112,7 +112,7 @@ pub fn DialogClose(#[props(default)] class: String, children: Element) -> Elemen
 		button {
 			r#type: "button",
 			class,
-			"data-slot": "dialog-close",
+			"data-slot": Slot::DialogClose.as_str(),
 			onclick: move |_| ctx.open.set(false),
 			{children}
 		}
@@ -122,28 +122,28 @@ pub fn DialogClose(#[props(default)] class: String, children: Element) -> Elemen
 pub fn DialogHeader(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(DIALOG_HEADER, class);
 	rsx! {
-		div { class: cls, "data-slot": "dialog-header", {children} }
+		div { class: cls, "data-slot": Slot::DialogHeader.as_str(), {children} }
 	}
 }
 #[component]
 pub fn DialogFooter(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(DIALOG_FOOTER, class);
 	rsx! {
-		div { class: cls, "data-slot": "dialog-footer", {children} }
+		div { class: cls, "data-slot": Slot::DialogFooter.as_str(), {children} }
 	}
 }
 #[component]
 pub fn DialogTitle(id: Option<String>, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(DIALOG_TITLE, class);
 	rsx! {
-		h2 { id, class: cls, "data-slot": "dialog-title", {children} }
+		h2 { id, class: cls, "data-slot": Slot::DialogTitle.as_str(), {children} }
 	}
 }
 #[component]
 pub fn DialogDescription(id: Option<String>, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(DIALOG_DESCRIPTION, class);
 	rsx! {
-		p { id, class: cls, "data-slot": "dialog-description", {children} }
+		p { id, class: cls, "data-slot": Slot::DialogDescription.as_str(), {children} }
 	}
 }
 #[derive(Clone)]

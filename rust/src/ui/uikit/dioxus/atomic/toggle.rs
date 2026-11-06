@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-use crate::ui::uikit::dioxus::{Size, ToggleVariant, primitives::use_controllable, toggle_classes};
+use crate::ui::uikit::dioxus::{Size, Slot, ToggleVariant, primitives::use_controllable, toggle_classes};
 
 #[component]
 pub fn Toggle(
@@ -20,7 +20,7 @@ pub fn Toggle(
 		button {
 			r#type: "button",
 			class: cls,
-			"data-slot": "toggle",
+			"data-slot": Slot::Toggle.as_str(),
 			"data-state": if on { "on" } else { "off" },
 			"aria-pressed": on,
 			disabled,

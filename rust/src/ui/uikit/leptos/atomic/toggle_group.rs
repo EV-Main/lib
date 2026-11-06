@@ -6,7 +6,7 @@ use crate::{
 	ui::uikit::{
 		core::toggled,
 		leptos::{
-			Size, ToggleGroupType, ToggleVariant,
+			Size, Slot, ToggleGroupType, ToggleVariant,
 			primitives::{Controllable, use_controllable},
 			toggle_classes,
 		},
@@ -42,7 +42,7 @@ pub fn ToggleGroup(
 	view! {
 		<div
 			class=cls
-			data-slot="toggle-group"
+			data-slot=Slot::ToggleGroup.as_str()
 			data-variant=variant.as_ref().to_owned()
 			data-size=size.as_ref().to_owned()
 		>
@@ -91,7 +91,7 @@ pub fn ToggleGroupItem(
 		<button
 			type="button"
 			class=cls
-			data-slot="toggle-group-item"
+			data-slot=Slot::ToggleGroupItem.as_str()
 			data-variant=variant.as_ref().to_owned()
 			data-size=size.as_ref().to_owned()
 			data-state=move || if driver.is_on() { "on" } else { "off" }

@@ -3,7 +3,7 @@ use leptos::{context::Provider, prelude::*};
 use crate::{
 	cn,
 	ui::uikit::leptos::{
-		Orientation, TABS_CONTENT, TABS_LIST, TABS_ROOT, TABS_TRIGGER,
+		Orientation, Slot, TABS_CONTENT, TABS_LIST, TABS_ROOT, TABS_TRIGGER,
 		primitives::{Controllable, RovingFocus, use_controllable, use_roving_focus, use_roving_item},
 	},
 };
@@ -20,7 +20,7 @@ pub fn Tabs(
 	let value = use_controllable(value, default_value, on_value_change);
 	let cls = cn!(TABS_ROOT, class);
 	view! {
-		<div class=cls data-slot="tabs" data-orientation=orientation.as_ref().to_owned()>
+		<div class=cls data-slot=Slot::Tabs.as_str() data-orientation=orientation.as_ref().to_owned()>
 			<Provider value=TabsCtx { value, orientation }>{children()}</Provider>
 		</div>
 	}
@@ -37,7 +37,7 @@ pub fn TabsList(#[prop(optional, into)] class: String, children: Children) -> im
 		<div
 			role="tablist"
 			class=cls
-			data-slot="tabs-list"
+			data-slot=Slot::TabsList.as_str()
 			aria-orientation=ctx.orientation.as_ref().to_owned()
 			// Automatic activation, the ARIA pattern for panels that render
 			// instantly: arrowing to a tab selects it as well as focusing it,
@@ -69,7 +69,7 @@ pub fn TabsTrigger(#[prop(into)] value: String, #[prop(optional, into)] class: S
 			type="button"
 			role="tab"
 			class=cls
-			data-slot="tabs-trigger"
+			data-slot=Slot::TabsTrigger.as_str()
 			data-state=move || if selected.get() { "active" } else { "inactive" }
 			aria-selected=move || selected.get().to_string()
 			tabindex=move || {
@@ -90,7 +90,12 @@ pub fn TabsContent(#[prop(into)] value: String, #[prop(optional, into)] class: S
 	move || {
 		(ctx.value.get() == value).then(|| {
 			view! {
-				<div role="tabpanel" class=cls.clone() data-slot="tabs-content" data-state="active">
+				<div
+					role="tabpanel"
+					class=cls.clone()
+					data-slot=Slot::TabsContent.as_str()
+					data-state="active"
+				>
 					{children()}
 				</div>
 			}

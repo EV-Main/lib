@@ -6,7 +6,7 @@ use crate::{
 	ui::uikit::{
 		core::sheet_side_class,
 		dioxus::{
-			SHEET_CLOSE, SHEET_CONTENT, SHEET_DESCRIPTION, SHEET_FOOTER, SHEET_HEADER, SHEET_OVERLAY, SHEET_TITLE,
+			SHEET_CLOSE, SHEET_CONTENT, SHEET_DESCRIPTION, SHEET_FOOTER, SHEET_HEADER, SHEET_OVERLAY, SHEET_TITLE, Slot,
 			primitives::{Controllable, Side, icon_shapes, use_controllable},
 		},
 	},
@@ -17,7 +17,7 @@ pub fn Sheet(open: Option<bool>, #[props(default)] default_open: bool, on_open_c
 	let state = use_controllable(open, default_open, on_open_change);
 	use_context_provider(|| SheetCtx { open: state });
 	rsx! {
-		div { "data-slot": "sheet", {children} }
+		div { "data-slot": Slot::Sheet.as_str(), {children} }
 	}
 }
 #[component]
@@ -27,7 +27,7 @@ pub fn SheetTrigger(#[props(default)] class: String, children: Element) -> Eleme
 		button {
 			r#type: "button",
 			class,
-			"data-slot": "sheet-trigger",
+			"data-slot": Slot::SheetTrigger.as_str(),
 			"aria-expanded": if ctx.open.get() { "true" } else { "false" },
 			onclick: move |_| ctx.open.set(true),
 			{children}
@@ -47,7 +47,7 @@ pub fn SheetContent(#[props(default = Side::Right)] side: Side, #[props(default)
 		// dep-light: native focus order, no trap/portal — see README Limitations
 		div {
 			class: SHEET_OVERLAY,
-			"data-slot": "sheet-overlay",
+			"data-slot": Slot::SheetOverlay.as_str(),
 			"data-state": "open",
 			onclick: move |_| ctx.open.set(false),
 		}
@@ -56,7 +56,7 @@ pub fn SheetContent(#[props(default = Side::Right)] side: Side, #[props(default)
 			"aria-modal": "true",
 			"aria-label": aria_label,
 			class: cls,
-			"data-slot": "sheet-content",
+			"data-slot": Slot::SheetContent.as_str(),
 			"data-state": "open",
 			tabindex: "-1",
 			onclick: move |e| e.stop_propagation(),
@@ -65,7 +65,7 @@ pub fn SheetContent(#[props(default = Side::Right)] side: Side, #[props(default)
 			button {
 				r#type: "button",
 				class: SHEET_CLOSE,
-				"data-slot": "sheet-close",
+				"data-slot": Slot::SheetClose.as_str(),
 				onclick: move |_| ctx.open.set(false),
 				svg {
 					xmlns: "http://www.w3.org/2000/svg",
@@ -92,7 +92,7 @@ pub fn SheetClose(#[props(default)] class: String, children: Element) -> Element
 		button {
 			r#type: "button",
 			class,
-			"data-slot": "sheet-close",
+			"data-slot": Slot::SheetClose.as_str(),
 			onclick: move |_| ctx.open.set(false),
 			{children}
 		}
@@ -102,28 +102,28 @@ pub fn SheetClose(#[props(default)] class: String, children: Element) -> Element
 pub fn SheetHeader(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(SHEET_HEADER, class);
 	rsx! {
-		div { class: cls, "data-slot": "sheet-header", {children} }
+		div { class: cls, "data-slot": Slot::SheetHeader.as_str(), {children} }
 	}
 }
 #[component]
 pub fn SheetFooter(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(SHEET_FOOTER, class);
 	rsx! {
-		div { class: cls, "data-slot": "sheet-footer", {children} }
+		div { class: cls, "data-slot": Slot::SheetFooter.as_str(), {children} }
 	}
 }
 #[component]
 pub fn SheetTitle(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(SHEET_TITLE, class);
 	rsx! {
-		h2 { class: cls, "data-slot": "sheet-title", {children} }
+		h2 { class: cls, "data-slot": Slot::SheetTitle.as_str(), {children} }
 	}
 }
 #[component]
 pub fn SheetDescription(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(SHEET_DESCRIPTION, class);
 	rsx! {
-		p { class: cls, "data-slot": "sheet-description", {children} }
+		p { class: cls, "data-slot": Slot::SheetDescription.as_str(), {children} }
 	}
 }
 #[derive(Clone, Copy)]
