@@ -10,7 +10,7 @@
 //! - `pick_variant_for(exp, key, subject)` draws from `hash_rng("{key}:{subject}")`.
 //!
 //! Changing any of this reshuffles every subject's bucket and breaks parity with
-//! TS, so the test vectors below pin it.
+//! TS, so `tests/fixtures/experiments/hash.json` pins it.
 //!
 //! Everything here is allocation-free: FNV-1a is a streaming hash, so the seed
 //! strings above are fed piecewise instead of being `format!`-ed.
@@ -144,27 +144,6 @@ mod tests {
 	use super::*;
 
 	#[test]
-	fn fnv1a32_matches_reference_vectors() {
-		assert_eq!(fnv1a32(b""), 0x811c_9dc5);
-		assert_eq!(fnv1a32(b"a"), 0xe40c_292c);
-		assert_eq!(fnv1a32(b"foobar"), 0xbf9c_f968);
-	}
-
-	#[test]
-	fn hash_to_unit_is_fnv_over_two_pow_32() {
-		for seed in ["", "a", "foobar", "exp:loc-1", "héllo"] {
-			assert_eq!(hash_to_unit(seed), f64::from(fnv1a32(seed.as_bytes())) / U32_RANGE, "seed={seed}");
-		}
-		assert_eq!(hash_to_unit(""), f64::from(0x811c_9dc5_u32) / U32_RANGE);
-	}
-
-	#[test]
-	fn hash_to_unit_hashes_utf8_bytes() {
-		// "é" is two UTF-8 bytes (0xC3 0xA9); hashing chars or UTF-16 units would differ.
-		assert_eq!(hash_to_unit("héllo"), f64::from(fnv1a32(&[b'h', 0xc3, 0xa9, b'l', b'l', b'o'])) / U32_RANGE);
-	}
-
-	#[test]
 	fn hash_to_unit_stays_below_one() {
 		// fnv1a32 can reach u32::MAX; dividing by 2^32 (not u32::MAX) keeps it < 1.
 		assert!(f64::from(u32::MAX) / U32_RANGE < 1.0);
@@ -218,27 +197,4 @@ mod tests {
 		assert_eq!(pick_variant_for(&exp, "hero", "loc-1"), "");
 	}
 
-	#[test]
-	fn pick_variant_for_with_holdout_matches_ts_parity_vector() {
-		// Same config and literals as the TS `pickVariantFor` holdout test: loc-1
-		// (u ≈ 0.063) exercises the holdout branch, loc-4 (u ≈ 0.348) the rescale —
-		// without the holdout it would land on "b".
-		let exp = Experiment::new(["a", "b", "c"]).with_holdout(0.25);
-		for (subject, expected) in [("loc-1", "a"), ("loc-2", "c"), ("loc-3", "a"), ("loc-4", "a"), ("loc-5", "c"), ("loc-6", "b")] {
-			assert_eq!(pick_variant_for(&exp, "hero", subject), expected, "subject={subject}");
-		}
-		assert_eq!(pick_variant_for(&Experiment::new(["a", "b", "c"]), "hero", "loc-4"), "b");
-	}
-
-	#[test]
-	fn hash_to_unit_matches_ts_parity_vectors() {
-		// The same literals are asserted by the TS `hashToUnit` tests; a drift on
-		// either side breaks the per-subject split across the two stacks.
-		assert_eq!(fnv1a32("exp:loc-1".as_bytes()), 0xb8cc_48a2);
-		assert_eq!(hash_to_unit("exp:loc-1"), 0.7218671222217381);
-		assert_eq!(fnv1a32("exp:loc-2".as_bytes()), 0xb7cc_470f);
-		assert_eq!(hash_to_unit("exp:loc-2"), 0.7179607783909887);
-		assert_eq!(fnv1a32("héllo".as_bytes()), 0x4aa4_8540);
-		assert_eq!(hash_to_unit("héllo"), 0.2915728837251663);
-	}
 }
