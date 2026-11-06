@@ -8,7 +8,7 @@ export const ACCOUNT_SETTINGS_DIALOG_SIDEBAR = "flex max-h-44 shrink-0 flex-col 
 
 export const ACCOUNT_SETTINGS_DIALOG_LIST = "h-auto w-full flex-1 flex-col items-stretch justify-start gap-0.5 bg-transparent p-0";
 
-export const ACCOUNT_SETTINGS_DIALOG_ENTRY = "h-8 w-full flex-none justify-start gap-2.5 rounded-row border-0 px-2.5 text-body font-normal text-ink-mid shadow-none data-[state=active]:bg-active data-[state=active]:text-ink data-[state=active]:shadow-none hover:bg-hover [&_svg]:text-ink-soft";
+export const ACCOUNT_SETTINGS_DIALOG_ENTRY = "h-8 w-full flex-none justify-start gap-2.5 rounded-row border-0 px-2.5 text-body font-normal text-ink-mid shadow-none data-[state=active]:bg-selected data-[state=active]:text-ink data-[state=active]:shadow-none hover:bg-hover [&_svg]:text-ink-soft";
 
 export const ACCOUNT_SETTINGS_DIALOG_FOOTER = "flex items-center gap-1 border-t border-border-subtle pt-2";
 

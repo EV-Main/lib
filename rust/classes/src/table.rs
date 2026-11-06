@@ -15,8 +15,8 @@ pub const TABLE: &str = "w-full caption-bottom text-sm";
 pub const TABLE_CARD: &str = "bg-card text-ink overflow-hidden rounded-panel border border-border shadow-sm";
 pub const TABLE_HEADER: &str = "[&_tr]:border-b";
 pub const TABLE_BODY: &str = "[&_tr:last-child]:border-0";
-pub const TABLE_FOOTER: &str = "bg-muted/50 border-t border-border font-medium [&>tr]:last:border-b-0";
-pub const TABLE_ROW: &str = "hover:bg-muted/50 data-[state=selected]:bg-muted border-b border-border transition-colors";
+pub const TABLE_FOOTER: &str = "bg-muted border-t border-border font-medium [&>tr]:last:border-b-0";
+pub const TABLE_ROW: &str = "hover:bg-hover data-[state=selected]:bg-selected border-b border-border transition-colors";
 // The typography properties have no fallback on purpose: an undefined custom
 // property makes the declaration compute to `unset`, and font-size,
 // letter-spacing and text-transform all inherit — so outside a `card` table the

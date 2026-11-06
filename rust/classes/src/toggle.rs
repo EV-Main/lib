@@ -9,7 +9,7 @@ use crate::{Size, focus::filled_focus_ring};
 /// [`FILLED_FOCUS_RING`](crate::FILLED_FOCUS_RING).
 pub const TOGGLE_BASE: &str = concat!(
 	"inline-flex h-(--control-box) min-w-(--control-box) items-center justify-center gap-2 rounded-control font-medium \
-	 hover:bg-muted hover:text-ink-soft disabled:pointer-events-none disabled:opacity-50 \
+	 hover:bg-hover hover:text-ink disabled:pointer-events-none disabled:opacity-50 \
 	 data-[state=on]:bg-primary data-[state=on]:text-on-primary [&_svg]:pointer-events-none \
 	 [&_svg:not([class*='size-'])]:size-[calc(1em+2px)] [&_svg]:shrink-0 focus-visible:border-ring outline-none \
 	 transition-[color,box-shadow] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error \
