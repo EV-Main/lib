@@ -90,7 +90,6 @@ pub fn manifest() -> Vec<(&'static str, Vec<Ts>)> {
 pub fn shared() -> Vec<(&'static str, &'static str, Vec<Ts>)> {
 	vec![
 		("i18n", "locales", locales()),
-		("types", "e164", e164()),
 		("experiments", "contract", experiments()),
 		("settings", "contract", settings()),
 		("analytics", "host", analytics()),
@@ -2374,40 +2373,6 @@ fn locales() -> Vec<Ts> {
 		},
 	]
 }
-
-fn e164() -> Vec<Ts> {
-	use ev_lib::types::{COUNTRY_CODES, PhoneNumber, PhoneNumberError};
-	vec![
-		Ts::Union {
-			name: "PHONE_NUMBER_ERROR_CODES",
-			ty: "PhoneNumberErrorCode",
-			items: [
-				PhoneNumberError::Empty,
-				PhoneNumberError::NoPlusPrefix,
-				PhoneNumberError::NonDigitChars,
-				PhoneNumberError::TooShort { actual: 0 },
-				PhoneNumberError::TooLong { actual: 0 },
-				PhoneNumberError::InvalidCountryCode,
-			]
-			.iter()
-			.map(PhoneNumberError::code)
-			.collect(),
-		},
-		Ts::Value {
-			name: "COUNTRY_CODES",
-			value: COUNTRY_CODES.iter().copied().collect(),
-		},
-		Ts::Value {
-			name: "MIN_DIGITS",
-			value: PhoneNumber::MIN_DIGITS.into(),
-		},
-		Ts::Value {
-			name: "MAX_DIGITS",
-			value: PhoneNumber::MAX_DIGITS.into(),
-		},
-	]
-}
-
 fn experiments() -> Vec<Ts> {
 	use ev_lib::experiments::{COOKIE_MAX_AGE_SECS, COOKIE_PREFIX, FNV_OFFSET_BASIS, FNV_PRIME};
 	vec![

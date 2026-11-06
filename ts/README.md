@@ -6,7 +6,6 @@ own `package.json`, built ESM-only with `tsup` and tested with `vitest`.
 ```
 ts/
 ├── architecture/      port of the `architecture` Cargo feature (DDD kernel)
-├── types/             shared domain TypeObjects (PhoneNumber, Email, …) with validation
 ├── uikit/             port of the `uikit` Cargo feature (dep-light React UI kit)
 ├── analytics/         port of the `analytics` Cargo feature (PostHog product analytics)
 ├── error-monitoring/  port of the `error_monitoring` Cargo feature (Sentry error monitoring)
@@ -46,7 +45,6 @@ hand-written for one of three reasons:
                      primitives/ (portal, floating, focus-scope)            B C
                      palette/ (brand palette tool)                          C
  architecture  0.3k  kernel ports + combinators                             A  README mapping table
- types         0.9k  phone / email validation                               D  contract tests
  settings      0.7k  createSettings, redaction                              A
                      validators                                             D  contract vectors
  i18n          3.0k  format, policy                                         A
@@ -64,6 +62,3 @@ hand-written for one of three reasons:
  marketing     1.8k  motion, form harness, react                            C
 ```
 
-Known data still copied by hand:
-
-- Email error codes: Rust has `EmailError::code()`, TS email validation has no codes.

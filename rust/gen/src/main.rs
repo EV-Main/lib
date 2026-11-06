@@ -4,7 +4,7 @@
 //! ```text
 //!   rust/classes/src/*.rs  ─┐                    ┌─▶ ts/uikit/src/generated/*.ts
 //!   (the class tables)      │                    │
-//!   ev_lib::{i18n,types}    │                    ├─▶ ts/{i18n,types}/src/generated/*.ts
+//!   ev_lib libraries        │                    ├─▶ ts/<pkg>/src/generated/*.ts
 //!   (the shared registries) ├─ ev_lib_gen ───────┤
 //!   theme.css · ev.css      │                    ├─▶ rust/classes/uikit-classes.txt
 //!   tokens.css · motion.css─┘                    ├─▶ rust/classes/css/*.css

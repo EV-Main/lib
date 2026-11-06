@@ -129,7 +129,7 @@ settings_drift = ["settings", "dep:tokio", "tokio?/time", "dep:tracing"]
 ts_gen = ["dep:serde_json", "dep:ts-rs"]
 
 # Shared domain TypeObjects — PhoneNumber, Email, … — with validation.
-# Zero runtime deps, wasm-safe (mirrors `@evinvest/types`).
+# Zero runtime deps, wasm-safe.
 types = []
 
 # Producer SDK for landing-host microfrontends (see `mfe.rs` + the `mfe!` macro).

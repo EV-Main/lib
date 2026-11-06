@@ -1,4 +1,4 @@
-//! `types` — shared domain TypeObjects (mirrors `@evinvest/types`).
+//! `types` — shared domain TypeObjects.
 //!
 //! Zero runtime deps, wasm-safe, no I/O. Each type is a branded newtype with a
 //! validating constructor and formatting/display methods.
@@ -20,10 +20,8 @@ use core::fmt;
 
 // ── Branded ────────────────────────────────────────────────────────────────────
 
-/// Every ITU-T country code (zones 1–9), 1–3 digits. Public because it is the
-/// source `ev_lib_gen` writes `@evinvest/types`' copy from — the TS port used to
-/// hand-maintain the same list.
-pub const COUNTRY_CODES: &[&str] = &[
+/// Every ITU-T country code (zones 1–9), 1–3 digits.
+const COUNTRY_CODES: &[&str] = &[
 	// Zone 1 — North American Numbering Plan
 	"1", // Zone 2 — Africa
 	"20", "211", "212", "213", "216", "218", "220", "221", "222", "223", "224", "225", "226", "227", "228", "229", "230", "231", "232", "233", "234", "235", "236", "237", "238", "239",

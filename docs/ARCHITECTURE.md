@@ -51,7 +51,7 @@ ev_lib = { version = "0.31", default-features = false, features = ["architecture
                ▼                    ▼                       ▼     ts: analytics, experiments,
                                                                       settings, error-monitoring
            ┌──────────────────────────────────────────────────┐
-           │ kernel   architecture · i18n · types   (I/O-free)│   ts: architecture, i18n, types
+           │ kernel   architecture · i18n · types   (I/O-free)│   ts: architecture, i18n
            └──────────────────────────────────────────────────┘
  codegen   ts_gen — build-time only, reached by no scope
 ```
@@ -114,7 +114,7 @@ so the grouping is internal. Inside the crate, paths name the scope
                  ▼
 ┌─ crate ev_lib_gen (`nix run .#gen`, re-run by pre-commit hook) ──┐
 │  manifest(): uikit class tables ─▶ ts/uikit/src/generated/*.ts   │
-│  shared():   i18n/locales, types/e164, experiments/contract,     │
+│  shared():   i18n/locales, experiments/contract,                │
 │              settings/contract, analytics/host                   │
 │              ─▶ ts/<pkg>/src/generated/*.ts                      │
 │  css:        tokens/theme/ev ─▶ rust/classes/css + ts/uikit/styles
