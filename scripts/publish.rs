@@ -455,6 +455,10 @@ fn main() -> ExitCode {
 		if name == "@evinvest/uikit" {
 			paths.extend(["tokens.css", "theme.css", "ev.css"]);
 		}
+		// Brands pin `lib.mkLanding` by kitstart's tag, so it ships with kitstart.
+		if name == KITSTART {
+			paths.push("nix");
+		}
 		if selected(&name) && changed(&name, &paths) {
 			impacted.push((dir, name));
 		}

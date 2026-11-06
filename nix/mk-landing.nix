@@ -299,7 +299,7 @@ let
     runtimeInputs = [ nodejs pkgs.git pkgs.coreutils pkgs.jq pkgs.playwright-test ];
     text = ''
       cd "$(git rev-parse --show-toplevel)"
-      ${ensureDeps}
+      { ${ensureDeps} } >&2 # stdout is `frames`' JSON
       ${linkPlaywright}
       ${exportPlaywright}
       case "''${1:-}" in
