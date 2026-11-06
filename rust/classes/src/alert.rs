@@ -1,7 +1,7 @@
-/// Wears its [`Tone`](crate::Tone) whole, the fill as a layer over the card; the
+/// Wears its [`Tone`](crate::Tone)'s wash as a layer over the card, its edge and ink; the
 /// icon and title take the ink, the description stays `ink-mid`.
 pub const ALERT_BASE: &str = "relative w-full rounded-panel border border-(color:--tone-edge) bg-card \
-                              bg-[image:linear-gradient(var(--tone-fill),var(--tone-fill))] px-4 py-3 text-sm text-(color:--tone-ink) grid \
+                              bg-[image:linear-gradient(var(--tone-wash),var(--tone-wash))] px-4 py-3 text-sm text-(color:--tone-ink) grid \
                               has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] grid-cols-[0_1fr] \
                               has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 \
                               [&>svg]:text-current";

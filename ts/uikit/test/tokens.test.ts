@@ -416,6 +416,12 @@ describe.each(scopes)("palette $label", (scope) => {
         expect(contrast(paint(ink, scope, fill), fill)).toBeGreaterThanOrEqual(floor);
       }
     });
+
+    // an area (banner, alert) washes the card it is laid on
+    it.each(tones)("the %s label reads on its wash over the card", (tone, ink, floor) => {
+      const wash = paint(`tint-${tone}-wash`, scope, t("card"));
+      expect(contrast(paint(ink, scope, wash), wash)).toBeGreaterThanOrEqual(floor);
+    });
   });
 
   describe("scrim", () => {
@@ -531,20 +537,28 @@ describe("the contract half of the sheet", () => {
       "selected",
       "tint-debug-edge",
       "tint-debug-fill",
+      "tint-debug-wash",
       "tint-error-edge",
       "tint-error-fill",
+      "tint-error-wash",
       "tint-info-edge",
       "tint-info-fill",
+      "tint-info-wash",
       "tint-neutral-edge",
       "tint-neutral-fill",
+      "tint-neutral-wash",
       "tint-positive-edge",
       "tint-positive-fill",
+      "tint-positive-wash",
       "tint-primary-edge",
       "tint-primary-fill",
+      "tint-primary-wash",
       "tint-trace-edge",
       "tint-trace-fill",
+      "tint-trace-wash",
       "tint-warn-edge",
       "tint-warn-fill",
+      "tint-warn-wash",
     ]);
   });
 

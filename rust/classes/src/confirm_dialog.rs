@@ -2,8 +2,9 @@ pub const CONFIRM_DIALOG_CONTENT: &str = "max-w-105 gap-4 p-5";
 
 pub const CONFIRM_DIALOG_HEADER: &str = "flex-row gap-3 text-left";
 
-/// The glyph tile wears the dialog's [`Tone`](crate::Tone): its fill and ink.
-pub const CONFIRM_DIALOG_ICON: &str = "flex size-8 shrink-0 items-center justify-center rounded-control bg-(color:--tone-fill) text-(color:--tone-ink)";
+/// The glyph tile wears the dialog's [`Tone`](crate::Tone): its wash over the well, and its ink.
+pub const CONFIRM_DIALOG_ICON: &str =
+	"flex size-8 shrink-0 items-center justify-center rounded-control bg-muted bg-[image:linear-gradient(var(--tone-wash),var(--tone-wash))] text-(color:--tone-ink)";
 
 pub const CONFIRM_DIALOG_TEXT: &str = "flex min-w-0 flex-col gap-1";
 

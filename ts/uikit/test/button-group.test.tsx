@@ -30,7 +30,7 @@ describe("ButtonGroup", () => {
         <ButtonGroupSeparator />
       </ButtonGroup>,
     );
-    expect(getByText("ms")).toHaveClass("border-input");
+    expect(getByText("ms")).toHaveClass("bg-muted");
     expect(
       container.querySelector("[data-slot='button-group-separator']"),
     ).not.toBeNull();

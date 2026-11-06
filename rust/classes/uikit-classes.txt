@@ -42,12 +42,12 @@ PlayfairDisplay-Italic.ttf
 [--table-px:calc(var(--spacing)*5)] [--table-py:calc(var(--spacing)*3)] [--table-head-ink:var(--ink-soft)] [--table-head-text:var(--text-xs)] [--table-head-tracking:var(--tracking-wide)] [--table-head-case:uppercase] [&>thead>tr:hover]:bg-transparent
 [--table-px:initial]
 [--table-px:initial] [--table-py:initial] [--table-head-ink:initial] [--table-head-text:initial] [--table-head-tracking:initial] [--table-head-case:initial]
-[--tone-fill:var(--tint-error-fill)] [--tone-edge:var(--tint-error-edge)] [--tone-ink:var(--accent-error)]
-[--tone-fill:var(--tint-info-fill)] [--tone-edge:var(--tint-info-edge)] [--tone-ink:var(--accent-info-ink)]
-[--tone-fill:var(--tint-neutral-fill)] [--tone-edge:var(--tint-neutral-edge)] [--tone-ink:var(--ink)]
-[--tone-fill:var(--tint-positive-fill)] [--tone-edge:var(--tint-positive-edge)] [--tone-ink:var(--positive-ink)]
-[--tone-fill:var(--tint-primary-fill)] [--tone-edge:var(--tint-primary-edge)] [--tone-ink:var(--primary-ink)]
-[--tone-fill:var(--tint-warn-fill)] [--tone-edge:var(--tint-warn-edge)] [--tone-ink:var(--accent-warn)]
+[--tone-fill:var(--tint-error-fill)] [--tone-edge:var(--tint-error-edge)] [--tone-wash:var(--tint-error-wash)] [--tone-ink:var(--accent-error)]
+[--tone-fill:var(--tint-info-fill)] [--tone-edge:var(--tint-info-edge)] [--tone-wash:var(--tint-info-wash)] [--tone-ink:var(--accent-info-ink)]
+[--tone-fill:var(--tint-neutral-fill)] [--tone-edge:var(--tint-neutral-edge)] [--tone-wash:var(--tint-neutral-wash)] [--tone-ink:var(--ink)]
+[--tone-fill:var(--tint-positive-fill)] [--tone-edge:var(--tint-positive-edge)] [--tone-wash:var(--tint-positive-wash)] [--tone-ink:var(--positive-ink)]
+[--tone-fill:var(--tint-primary-fill)] [--tone-edge:var(--tint-primary-edge)] [--tone-wash:var(--tint-primary-wash)] [--tone-ink:var(--primary-ink)]
+[--tone-fill:var(--tint-warn-fill)] [--tone-edge:var(--tint-warn-edge)] [--tone-wash:var(--tint-warn-wash)] [--tone-ink:var(--accent-warn)]
 [.border-t]:pt-4
 [overflow-wrap:anywhere]
 absolute inset-0 h-full w-full opacity-0 disabled:cursor-not-allowed
@@ -173,7 +173,9 @@ bg-accent-warn text-on-accent-warn hover:bg-accent-warn/90 focus-visible:ring-0 
 bg-active
 bg-active text-ink hover:bg-active
 bg-background
+bg-background border-border data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=closed]:fill-mode-forwards outline-hidden
 bg-background border-t border-ink/10 py-16
+bg-background fixed z-50 flex h-auto border border-border
 bg-background flex h-9 items-center gap-1 rounded-panel border border-border p-1 shadow-xs
 bg-background relative flex w-full flex-1 flex-col md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-panel md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2
 bg-background text-ink
@@ -193,6 +195,7 @@ bg-card text-ink flex flex-col gap-4 rounded-panel border border-border py-4 sha
 bg-card text-ink flex h-full w-(--sidebar-width) flex-col
 bg-card text-ink overflow-hidden rounded-panel border border-border shadow-sm
 bg-hover
+bg-hover animate-pulse rounded-control
 bg-hover text-ink rounded-control
 bg-ink text-background animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-fit rounded-panel px-3 py-1.5 text-xs text-balance
 bg-ink-soft
@@ -200,17 +203,15 @@ bg-ink-soft/50
 bg-ink/14 relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5
 bg-input relative !m-0 self-stretch shrink-0 data-[orientation=vertical]:h-auto
 bg-muted
-bg-muted animate-pulse rounded-control
 bg-muted border-t border-border font-medium [&>tr]:last:border-b-0
+bg-muted flex items-center gap-2 rounded-control border border-border px-4 text-body font-medium [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4
 bg-muted flex size-full items-center justify-center rounded-full
 bg-muted mx-auto mt-4 h-2 w-[100px] shrink-0 rounded-full
 bg-muted text-ink
 bg-muted text-ink flex size-10 shrink-0 items-center justify-center rounded-control [&_svg:not([class*='size-'])]:size-6
 bg-muted text-ink-soft inline-flex h-9 w-fit items-center justify-center rounded-panel p-[3px]
 bg-muted text-ink-soft pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-control px-1 font-sans text-xs font-medium select-none [&_svg:not([class*='size-'])]:size-3 [[data-slot=tooltip-content]_&]:bg-background/20 [[data-slot=tooltip-content]_&]:text-background
-bg-popover border-border data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=closed]:fill-mode-forwards outline-hidden
 bg-popover data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-panel border border-border p-6 shadow-lg duration-200 data-[state=closed]:fill-mode-forwards outline-hidden sm:max-w-lg
-bg-popover fixed z-50 flex h-auto border border-border
 bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 absolute z-50 min-w-[8rem] overflow-hidden rounded-panel border border-border p-1 shadow-lg
 bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-(--radix-context-menu-content-transform-origin) overflow-hidden rounded-panel border border-border p-1 shadow-lg
 bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-(--radix-context-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-panel border border-border p-1 shadow-md
@@ -233,7 +234,6 @@ bg-primary-ink/20 relative h-2 w-full overflow-hidden rounded-full
 bg-secondary
 bg-secondary text-on-secondary hover:bg-[image:linear-gradient(var(--hover),var(--hover))] focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 bg-transparent
-bg-transparent flex items-center gap-2 rounded-control border border-input px-4 text-body font-medium [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4
 body-a
 border border-accent-debug/40 text-accent-debug hover:bg-accent-debug/(--tint-hover)
 border border-accent-error/40 text-accent-error hover:bg-accent-error/(--tint-hover)
@@ -254,11 +254,11 @@ border-border
 border-border-strong
 border-border-subtle
 border-border-subtle bg-card text-ink hover:bg-card
+border-border-subtle bg-muted hover:bg-hover
 border-border\
 border-dashed
 border-input
 border-input [&_[data-placeholder]]:text-ink-soft [&_svg:not([class*='text-'])]:text-ink-soft focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error flex w-fit items-center justify-between gap-2 rounded-control border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
-border-input bg-transparent hover:bg-hover
 border-input bg-transparent shadow-xs w-full justify-start gap-2 text-left font-normal data-[placeholder]:text-ink-soft [&>svg]:text-ink-soft
 border-input placeholder:text-ink-soft focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error flex field-sizing-content min-h-16 w-full rounded-control border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm
 border-input text-ink h-7 w-full min-w-0 appearance-none rounded-control border bg-transparent py-0 pr-9 pl-2 text-base pointer-fine:text-body transition-colors outline-none disabled:pointer-events-none disabled:cursor-not-allowed focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error has-[option[value='']:checked]:text-ink-soft [&_option]:bg-popover [&_option]:text-ink [&_optgroup]:bg-popover [&_optgroup]:text-ink-soft [color-scheme:var(--scheme,normal)]
@@ -533,7 +533,7 @@ flex flex-col gap-2.5
 flex flex-col gap-2.5 px-0 py-1.5
 flex flex-col gap-5
 flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3
-flex flex-col rounded-panel border border-(color:--tone-edge) bg-card bg-[image:linear-gradient(var(--tone-fill),var(--tone-fill))]
+flex flex-col rounded-panel border border-(color:--tone-edge) bg-card bg-[image:linear-gradient(var(--tone-wash),var(--tone-wash))]
 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end
 flex flex-wrap gap-2
 flex gap-3
@@ -541,7 +541,7 @@ flex h-11 items-center gap-3 border-t border-border py-0 pl-2 pr-3
 flex h-11 shrink-0 items-center gap-1.5 border-b border-border bg-card pl-3 pr-2
 flex h-14 items-center gap-3 border-b border-border bg-background px-8
 flex h-6.5 items-center gap-4 border-t border-border bg-background px-3 text-caption text-ink-soft
-flex h-8 w-55 items-center gap-2 rounded-control border border-input bg-transparent pl-2.5 pr-1.5 text-left text-body text-ink-mid outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring
+flex h-8 w-55 items-center gap-2 rounded-control border border-border bg-muted pl-2.5 pr-1.5 text-left text-body text-ink-mid outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring
 flex h-9 items-center gap-2 border-b border-border px-3 has-[[aria-invalid=true]]:border-accent-error
 flex h-full w-95 shrink-0 flex-col bg-card
 flex items-baseline gap-2
@@ -562,7 +562,7 @@ flex items-center gap-[7px] whitespace-nowrap
 flex items-center justify-between gap-1 w-full px-1
 flex items-center justify-center text-current transition-none
 flex items-center px-4 [.border-t]:pt-4
-flex items-start gap-2.5 rounded-panel border border-(color:--tone-edge) bg-(color:--tone-fill) px-4 py-2.5 text-sm text-(color:--tone-ink)
+flex items-start gap-2.5 rounded-panel border border-(color:--tone-edge) bg-card bg-[image:linear-gradient(var(--tone-wash),var(--tone-wash))] px-4 py-2.5 text-sm text-(color:--tone-ink)
 flex items-start justify-between gap-4 p-4
 flex justify-end gap-1.5
 flex max-h-44 shrink-0 flex-col gap-2 overflow-y-auto border-b border-border-subtle bg-card p-2 md:max-h-none md:w-60 md:border-b-0 md:border-r
@@ -593,7 +593,7 @@ flex shrink-0 items-center justify-end gap-2 border-t border-border bg-card px-4
 flex size-4 shrink-0 text-primary-ink
 flex size-7 items-center justify-center
 flex size-7 items-center justify-center rounded-control border border-border bg-card text-ink-mid
-flex size-8 shrink-0 items-center justify-center rounded-control bg-(color:--tone-fill) text-(color:--tone-ink)
+flex size-8 shrink-0 items-center justify-center rounded-control bg-muted bg-[image:linear-gradient(var(--tone-wash),var(--tone-wash))] text-(color:--tone-ink)
 flex size-9 shrink-0 items-center justify-center rounded-control border border-border-subtle bg-muted text-ink-mid
 flex touch-none p-px transition-colors select-none
 flex transition-transform
@@ -745,7 +745,7 @@ inline-flex h-5 items-center gap-1.5 px-2 text-caption text-ink-mid
 inline-flex h-5 items-center justify-center rounded-chip border px-1.5 text-caption border-(color:--tone-edge) bg-(color:--tone-fill) text-(color:--tone-ink) font-medium w-fit whitespace-nowrap shrink-0 gap-1 overflow-hidden [&>svg]:size-3 [&>svg]:pointer-events-none transition-colors outline-none [a&]:hover:bg-[image:linear-gradient(var(--hover),var(--hover))] aria-invalid:border-accent-error focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 inline-flex h-6 items-center gap-1 text-ink-soft
 inline-flex h-6.5 items-center gap-1 rounded-chip border border-border py-1 pl-2 pr-1.5 text-body-s text-ink-mid outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring
-inline-flex h-8 items-center gap-2 rounded-control border border-input bg-transparent pl-2.5 pr-2 text-body-s
+inline-flex h-8 items-center gap-2 rounded-control border border-border bg-secondary pl-2.5 pr-2 text-body-s
 inline-flex h-full min-w-0 items-center gap-2 rounded-[inherit] pl-2 outline-none
 inline-flex items-center gap-1
 inline-flex items-center gap-1.5
@@ -969,7 +969,7 @@ relative flex w-full touch-none items-center select-none data-[disabled]:opacity
 relative size-9 shrink-0 p-0 select-none
 relative size-9 shrink-0 p-0 text-center select-none
 relative w-full overflow-x-auto
-relative w-full rounded-panel border border-(color:--tone-edge) bg-card bg-[image:linear-gradient(var(--tone-fill),var(--tone-fill))] px-4 py-3 text-sm text-(color:--tone-ink) grid has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current
+relative w-full rounded-panel border border-(color:--tone-edge) bg-card bg-[image:linear-gradient(var(--tone-wash),var(--tone-wash))] px-4 py-3 text-sm text-(color:--tone-ink) grid has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current
 reported:false
 reported:{reported}
 right-0
@@ -1193,7 +1193,7 @@ w-80 p-1
 w-auto p-0
 w-full border-collapse mt-4
 w-full caption-bottom text-sm
-w-full gap-0 border-border-strong bg-popover p-0 sm:max-w-105 [&>[data-slot=sheet-close]]:hidden
+w-full gap-0 border-border-strong bg-card p-0 sm:max-w-105 [&>[data-slot=sheet-close]]:hidden
 w-full px-[var(--page-px)]
 w-full text-sm
 whitespace-pre-wrap

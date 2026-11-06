@@ -1,5 +1,5 @@
-/// Wears its [`Tone`](crate::Tone) whole: fill, edge and ink.
-pub const SYSTEM_BANNER_BASE: &str = "flex items-start gap-2.5 rounded-panel border border-(color:--tone-edge) bg-(color:--tone-fill) px-4 py-2.5 text-sm text-(color:--tone-ink)";
+/// Wears its [`Tone`](crate::Tone)'s wash as a layer over the card, its edge and ink.
+pub const SYSTEM_BANNER_BASE: &str = "flex items-start gap-2.5 rounded-panel border border-(color:--tone-edge) bg-card bg-[image:linear-gradient(var(--tone-wash),var(--tone-wash))] px-4 py-2.5 text-sm text-(color:--tone-ink)";
 
 pub const SYSTEM_BANNER_ICON: &str = "mt-0.5 flex shrink-0";
 
