@@ -1,0 +1,11 @@
+{
+  "_": "The PostHog /capture/ body both ev_lib::analytics::capture_body (serialized by serde_json) and @evinvest/analytics captureBody produce, byte for byte. [api_key, distinct_id, event, props, body]. Integral numbers are integer props (Rust PropValue::Int); {\"f64\": s} is a non-finite float JSON cannot spell.",
+  "capture": [
+    [ "phc_test", "anon-1", "app_booted", {}, "{\"api_key\":\"phc_test\",\"distinct_id\":\"anon-1\",\"event\":\"app_booted\",\"properties\":{\"$lib\":\"ev-analytics\"}}" ],
+    [ "phc_test", "anon-42", "contact_intent_click", { "9": 2, "10": 1, "location_id": "warsaw", "channel": "phone", "brand_id": "aquafix", "count": 3, "ratio": 1.5, "tiny": 0.0000015, "small": 0.00001, "wee": 1.5e-7, "neg": -12345.678, "nan": { "f64": "NaN" }, "urgent": true, "$lib": "user" }, "{\"api_key\":\"phc_test\",\"distinct_id\":\"anon-42\",\"event\":\"contact_intent_click\",\"properties\":{\"$lib\":\"ev-analytics\",\"10\":1,\"9\":2,\"brand_id\":\"aquafix\",\"channel\":\"phone\",\"count\":3,\"location_id\":\"warsaw\",\"nan\":null,\"neg\":-12345.678,\"ratio\":1.5,\"small\":0.00001,\"tiny\":1.5e-6,\"urgent\":true,\"wee\":1.5e-7}}" ],
+    [ "phc_\"k\"", "id\"with\\quotes", "weird\"name\n\t\u0001", { "k": "a\"b\\c\nd/é€😀\u007f " }, "{\"api_key\":\"phc_\\\"k\\\"\",\"distinct_id\":\"id\\\"with\\\\quotes\",\"event\":\"weird\\\"name\\n\\t\\u0001\",\"properties\":{\"$lib\":\"ev-analytics\",\"k\":\"a\\\"b\\\\c\\nd/é€😀\u007f \"}}" ],
+    [ "k", "d", "e", { "flag": true, "count": 7, "ratio": 1.5, "label": "tier_a" }, "{\"api_key\":\"k\",\"distinct_id\":\"d\",\"event\":\"e\",\"properties\":{\"$lib\":\"ev-analytics\",\"count\":7,\"flag\":true,\"label\":\"tier_a\",\"ratio\":1.5}}" ],
+    [ "k", "d", "e", { "zebra": 1, "alpha": 2, "mango": 3 }, "{\"api_key\":\"k\",\"distinct_id\":\"d\",\"event\":\"e\",\"properties\":{\"$lib\":\"ev-analytics\",\"alpha\":2,\"mango\":3,\"zebra\":1}}" ],
+    [ "k", "d", "e", { "nan": { "f64": "NaN" }, "inf": { "f64": "Infinity" }, "neg_inf": { "f64": "-Infinity" }, "ok": 2.5 }, "{\"api_key\":\"k\",\"distinct_id\":\"d\",\"event\":\"e\",\"properties\":{\"$lib\":\"ev-analytics\",\"inf\":null,\"nan\":null,\"neg_inf\":null,\"ok\":2.5}}" ]
+  ]
+}

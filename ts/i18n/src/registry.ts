@@ -127,8 +127,9 @@ export interface LocaleRegistry<L extends string> {
  * The locale type is the literal union of `locales`, so a registry for
  * `["fr", "en"]` rejects `localePath("de", …)` at compile time.
  *
- * @throws If `default` is not one of `locales`, or a locale is listed twice —
- *   both would make the URL contract ambiguous, so they fail at startup rather
+ * @throws If `default` is not one of `locales`, a locale is listed twice, or an
+ *   `hreflang` tag names an unlisted locale, collides or claims `x-default` —
+ *   each would make the URL contract ambiguous, so they fail at startup rather
  *   than on the first request that hits them.
  *
  * @example
@@ -157,6 +158,10 @@ export function createLocaleRegistry<const Locales extends LocaleList>(
   }
   if (new Set(locales).size !== locales.length) {
     throw new Error(`locales listed more than once: [${locales.join(", ")}]`);
+  }
+  const stray = Object.keys(hreflangTags ?? {}).filter(l => !(locales as readonly string[]).includes(l));
+  if (stray.length > 0) {
+    throw new Error(`hreflang given for [${stray.join(", ")}], which are not in [${locales.join(", ")}]`);
   }
   // Checked on the effective tags, bare-code fallbacks included: two locales
   // advertised under one tag collapse into one `alternates.languages` key and a

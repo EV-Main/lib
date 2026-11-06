@@ -13,7 +13,6 @@ Rust crate and its TypeScript mirror at once.
 | ---------------------------- | ---------------------- | ------- |
 | `ev_lib` (Rust crate)        | `rust/`                | 0.6.6   |
 | `@evinvest/uikit`            | `ts/uikit/`            | 0.8.0   |
-| `@evinvest/types`            | `ts/types/`            | 0.2.0   |
 | `@evinvest/settings`         | `ts/settings/`         | 0.2.0   |
 | `@evinvest/analytics`        | `ts/analytics/`        | 0.1.2   |
 | `@evinvest/architecture`     | `ts/architecture/`     | 0.1.0   |
@@ -24,6 +23,8 @@ Rust crate and its TypeScript mirror at once.
 
 ### Breaking
 
+- **`@evinvest/types` removed**: no consumer imported it. `ev_lib::types`
+  stays; `COUNTRY_CODES` is private again.
 - **`kitstart` moved to `EV-Service-Arb/sites_tools`** (`ev_lib` feature
   `kitstart`, `@evinvest/kitstart`, `lib.mkLanding`): the npm name is kept and
   now publishes from there.

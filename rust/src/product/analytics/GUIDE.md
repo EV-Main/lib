@@ -169,7 +169,8 @@ The timestamp is left to PostHog's receive time.
 ## Testing
 
 - **The event model and payload are pure** — assert against `Event` and
-  `capture_body` directly, no client or server needed (the tests in `event.rs`).
+  `capture_body` directly, no client or server needed
+  (`tests/fixtures/analytics/beacon.json`, which `@evinvest/analytics` runs too).
 - **`Analytics` no-ops without a key**, so unit tests don't need a PostHog
   endpoint:
 

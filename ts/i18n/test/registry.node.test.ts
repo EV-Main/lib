@@ -7,8 +7,17 @@ import { describe, expect, it } from "vitest";
 import {
   createLocaleRegistry,
   defaultLocaleRegistry,
+  hreflangOf,
+  isLocale,
   languageAlternates,
+  localeAlternates,
+  localePath,
   LOCALES,
+  negotiate,
+  splitLocalePath,
+  type LocaleList,
+  type LocaleRegistry,
+  type LocaleRegistryConfig,
 } from "../src/index";
 import { translatedLocales, writeCatalogues } from "../src/extract/index";
 import { createNextI18n } from "../src/next/index";
@@ -25,6 +34,81 @@ const fr = createLocaleRegistry({
 });
 
 const SITE = "https://plombier.example";
+
+// Shared with ev_lib::i18n (rust/tests/i18n.rs).
+type Config = LocaleRegistryConfig<LocaleList>;
+const VECTORS = JSON.parse(readFileSync(join(import.meta.dirname, "../../../tests/fixtures/i18n/registry.json"), "utf8")) as {
+  registries: Record<string, Config>;
+  isLocale: [string, string, boolean][];
+  localePath: [string, string, string, string][];
+  splitLocalePath: [string, string, string, string][];
+  roundTrip: [string, string[]][];
+  localeAlternates: [string, string, string[] | null, [string, string][]][];
+  hreflangOf: [string, string, string][];
+  languageAlternates: [string, string, string, [string, string][]][];
+  negotiate: [string, string | null, string[] | null, string][];
+  invalid: [Config, string, string | null][];
+};
+
+// `ev` runs the free functions, which are the generated registry.
+const generated = {
+  locales: LOCALES,
+  isLocale,
+  localePath,
+  splitLocalePath,
+  localeAlternates,
+  hreflangOf,
+  languageAlternates,
+  negotiate,
+} as unknown as LocaleRegistry<string>;
+const registry = (name: string): LocaleRegistry<string> => {
+  if (name === "ev") return generated;
+  const config = VECTORS.registries[name];
+  if (config === undefined) throw new Error(`no registry ${name}`);
+  return createLocaleRegistry(config);
+};
+const subset = (locales: string[] | null) => locales ?? undefined;
+
+describe("shared vectors", () => {
+  it.each(VECTORS.isLocale)("%s: isLocale(%j) is %s", (name, value, expected) => {
+    expect(registry(name).isLocale(value)).toBe(expected);
+  });
+
+  it.each(VECTORS.localePath)("%s serves %s at %j as %s", (name, locale, path, expected) => {
+    expect(registry(name).localePath(locale, path)).toBe(expected);
+  });
+
+  it.each(VECTORS.splitLocalePath)("%s splits %j into %s %s", (name, pathname, locale, path) => {
+    expect(registry(name).splitLocalePath(pathname)).toEqual({ locale, path });
+  });
+
+  it.each(VECTORS.roundTrip)("%s: splitLocalePath inverts localePath on %j", (name, paths) => {
+    const r = registry(name);
+    for (const locale of r.locales) {
+      for (const path of paths) expect(r.splitLocalePath(r.localePath(locale, path))).toEqual({ locale, path });
+    }
+  });
+
+  it.each(VECTORS.localeAlternates)("%s: alternates of %s over %j", (name, path, locales, expected) => {
+    expect(Object.entries(registry(name).localeAlternates(path, subset(locales)))).toEqual(expected);
+  });
+
+  it.each(VECTORS.hreflangOf)("%s advertises %s as %s", (name, locale, tag) => {
+    expect(registry(name).hreflangOf(locale)).toBe(tag);
+  });
+
+  it.each(VECTORS.languageAlternates)("%s: language alternates of %s on %s", (name, path, site, expected) => {
+    expect(Object.entries(registry(name).languageAlternates(path, site))).toEqual(expected);
+  });
+
+  it.each(VECTORS.negotiate)("%s negotiates %j over %j to %s", (name, header, locales, expected) => {
+    expect(registry(name).negotiate(header, subset(locales))).toBe(expected);
+  });
+
+  it.each(VECTORS.invalid)("refuses %j (%s)", config => {
+    expect(() => createLocaleRegistry(config)).toThrow();
+  });
+});
 
 describe("createLocaleRegistry — types", () => {
   it("narrows the locale type to the literal union of `locales`", () => {
@@ -45,89 +129,13 @@ describe("createLocaleRegistry — types", () => {
     ).toThrow(/not in \[fr, en\]/);
   });
 
-  it("rejects a duplicated locale", () => {
-    expect(() =>
-      createLocaleRegistry({
-        locales: ["fr", "fr"],
-        labels: { fr: "Français" },
-        default: "fr",
-      }),
-    ).toThrow(/more than once/);
-  });
-
   it("keeps its members bound when destructured", () => {
     const { localePath } = fr;
     expect(localePath("en", "/a")).toBe("/en/a");
   });
 });
 
-describe("prefixDefaultLocale: true — paths", () => {
-  it("prefixes the default locale too", () => {
-    expect(fr.localePath("fr", "/contact")).toBe("/fr/contact");
-    expect(fr.localePath("en", "/contact")).toBe("/en/contact");
-  });
-
-  it("keeps one canonical root shape per locale", () => {
-    expect(fr.localePath("fr", "/")).toBe("/fr");
-    expect(fr.localePath("en", "/")).toBe("/en");
-  });
-
-  it("normalises a relative path", () => {
-    expect(fr.localePath("fr", "contact")).toBe("/fr/contact");
-  });
-
-  it("builds root-relative alternates keyed by locale", () => {
-    expect(fr.localeAlternates("/contact")).toEqual({ fr: "/fr/contact", en: "/en/contact" });
-  });
-});
-
-describe("prefixDefaultLocale: true — parsing", () => {
-  it("reads the default locale's prefix as a prefix", () => {
-    expect(fr.splitLocalePath("/fr/contact")).toEqual({ locale: "fr", path: "/contact" });
-    expect(fr.splitLocalePath("/fr")).toEqual({ locale: "fr", path: "/" });
-    expect(fr.splitLocalePath("/fr/")).toEqual({ locale: "fr", path: "/" });
-  });
-
-  it("reads the other locales", () => {
-    expect(fr.splitLocalePath("/en/services/fuite")).toEqual({
-      locale: "en",
-      path: "/services/fuite",
-    });
-  });
-
-  it("round-trips every locale through localePath", () => {
-    for (const locale of fr.locales) {
-      for (const path of ["/", "/contact", "/a/b"]) {
-        expect(fr.splitLocalePath(fr.localePath(locale, path))).toEqual({ locale, path });
-      }
-    }
-  });
-
-  it("falls back to the default for an unprefixed or foreign path, never throwing", () => {
-    expect(fr.splitLocalePath("/contact")).toEqual({ locale: "fr", path: "/contact" });
-    expect(fr.splitLocalePath("/de/contact")).toEqual({ locale: "fr", path: "/de/contact" });
-    expect(fr.splitLocalePath("")).toEqual({ locale: "fr", path: "/" });
-  });
-});
-
 describe("hreflang", () => {
-  it("advertises the mapped regional tag, and the bare code otherwise", () => {
-    expect(fr.hreflangOf("fr")).toBe("fr-FR");
-    expect(fr.hreflangOf("en")).toBe("en");
-  });
-
-  it("builds alternates.languages keyed by hreflang, with x-default on the default locale", () => {
-    expect(fr.languageAlternates("/contact", SITE)).toEqual({
-      "fr-FR": "https://plombier.example/fr/contact",
-      en: "https://plombier.example/en/contact",
-      "x-default": "https://plombier.example/fr/contact",
-    });
-  });
-
-  it("tolerates a trailing slash on the origin", () => {
-    expect(fr.languageAlternates("/", `${SITE}/`)["x-default"]).toBe("https://plombier.example/fr");
-  });
-
   it("omits x-default for a subset that does not advertise the default", () => {
     expect(fr.languageAlternates("/", SITE, ["en"])).toEqual({ en: "https://plombier.example/en" });
     expect(fr.languageAlternates("/", SITE, ["fr"])).toEqual({
@@ -135,42 +143,9 @@ describe("hreflang", () => {
       "x-default": "https://plombier.example/fr",
     });
   });
-
-  it("rejects hreflang tags that collide or claim x-default", () => {
-    const labels = { fr: "Français", en: "English" };
-    expect(() =>
-      createLocaleRegistry({ locales: ["fr", "en"], labels, default: "fr", hreflang: { fr: "fr-FR", en: "FR-fr" } }),
-    ).toThrow(/collide/);
-    expect(() =>
-      createLocaleRegistry({ locales: ["fr", "en"], labels, default: "fr", hreflang: { en: "fr" } }),
-    ).toThrow(/collide/);
-    expect(() =>
-      createLocaleRegistry({ locales: ["fr", "en"], labels, default: "fr", hreflang: { en: "x-default" } }),
-    ).toThrow(/reserved/);
-  });
-
-  it("supports two regions of one language as distinct locales", () => {
-    const be = createLocaleRegistry({
-      locales: ["fr", "nl"],
-      labels: { fr: "Français", nl: "Nederlands" },
-      default: "fr",
-      hreflang: { fr: "fr-BE", nl: "nl-BE" },
-    });
-    expect(be.languageAlternates("/", SITE)).toEqual({
-      "fr-BE": "https://plombier.example/",
-      "nl-BE": "https://plombier.example/nl",
-      "x-default": "https://plombier.example/",
-    });
-  });
 });
 
-describe("negotiation and translation follow the registry's default", () => {
-  it("falls back to the registry default", () => {
-    expect(fr.negotiate("ja")).toBe("fr");
-    expect(fr.negotiate("en-GB,en;q=0.9")).toBe("en");
-    expect(fr.negotiate("fr-BE")).toBe("fr");
-  });
-
+describe("translation follows the registry's default", () => {
   it("treats the default locale as the authored source", () => {
     const t = fr.translator({ "cta": "IGNORED" }, "fr");
     expect(t("cta", "Appelez-nous")).toBe("Appelez-nous");
@@ -188,14 +163,6 @@ describe("the generated registry is the default instance", () => {
   it("is what the free functions delegate to", () => {
     expect(defaultLocaleRegistry.locales).toEqual(LOCALES);
     expect(defaultLocaleRegistry.prefixDefaultLocale).toBe(false);
-    expect(languageAlternates("/team", "https://evinvest.ltd")).toEqual({
-      en: "https://evinvest.ltd/team",
-      ru: "https://evinvest.ltd/ru/team",
-      vi: "https://evinvest.ltd/vi/team",
-      fr: "https://evinvest.ltd/fr/team",
-      de: "https://evinvest.ltd/de/team",
-      "x-default": "https://evinvest.ltd/team",
-    });
   });
 });
 

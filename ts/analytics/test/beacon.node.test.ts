@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   captureBody,
@@ -7,56 +10,20 @@ import {
   type PostHogLike,
 } from "../src/index";
 
-// Golden output of `serde_json::to_string(&ev_lib::analytics::capture_body(..))`,
-// printed by a throwaway binary against `rust/src/product/analytics/event.rs` @ 9cd7c07.
-// Regenerate from Rust if either side changes — never edit by hand.
-const GOLDEN_BARE =
-  '{"api_key":"phc_test","distinct_id":"anon-1","event":"app_booted","properties":{"$lib":"ev-analytics"}}';
+// Shared with ev_lib::analytics (rust/tests/analytics.rs).
+const VECTORS = JSON.parse(readFileSync(join(import.meta.dirname, "../../../tests/fixtures/analytics/beacon.json"), "utf8")) as {
+  capture: [string, string, string, Record<string, unknown>, string][];
+};
 
-const GOLDEN_PROPS =
-  '{"api_key":"phc_test","distinct_id":"anon-42","event":"contact_intent_click","properties":' +
-  '{"$lib":"ev-analytics","10":1,"9":2,"brand_id":"aquafix","channel":"phone","count":3,' +
-  '"location_id":"warsaw","nan":null,"neg":-12345.678,"ratio":1.5,"small":0.00001,' +
-  '"tiny":1.5e-6,"urgent":true,"wee":1.5e-7}}';
+const prop = (value: unknown): unknown =>
+  typeof value === "object" && value !== null && "f64" in value ? Number(value.f64) : value;
 
-const GOLDEN_ESCAPES =
-  String.raw`{"api_key":"phc_\"k\"","distinct_id":"id\"with\\quotes","event":"weird\"name\n\t\u0001","properties":{"$lib":"ev-analytics","k":"a\"b\\c\nd/é€😀` +
-  "\u007f " +
-  String.raw`"}}`;
+const BARE = captureBody("phc_test", "anon-1", "app_booted");
 
 describe("captureBody — byte parity with ev_lib::analytics::capture_body", () => {
-  it("matches an event without properties", () => {
-    expect(captureBody("phc_test", "anon-1", "app_booted")).toBe(GOLDEN_BARE);
-  });
-
-  it("matches key order, number formatting, NaN and the $lib override", () => {
-    const body = captureBody("phc_test", "anon-42", "contact_intent_click", {
-      location_id: "warsaw",
-      channel: "phone",
-      brand_id: "aquafix",
-      count: 3,
-      ratio: 1.5,
-      tiny: 0.0000015,
-      small: 0.00001,
-      wee: 1.5e-7,
-      neg: -12345.678,
-      nan: Number.NaN,
-      urgent: true,
-      "10": 1,
-      "9": 2,
-      $lib: "user",
-    });
-    expect(body).toBe(GOLDEN_PROPS);
-  });
-
-  it("matches string escaping, including characters JSON leaves raw", () => {
-    const body = captureBody(
-      'phc_"k"',
-      'id"with\\quotes',
-      'weird"name\n\t\u0001',
-      { k: 'a"b\\c\nd/é€😀\u007f ' },
-    );
-    expect(body).toBe(GOLDEN_ESCAPES);
+  it.each(VECTORS.capture)("%j sends %j as %j with %j", (apiKey, distinctId, event, props, body) => {
+    const decoded = Object.fromEntries(Object.entries(props).map(([key, value]) => [key, prop(value)]));
+    expect(captureBody(apiKey, distinctId, event, decoded)).toBe(body);
   });
 
   it("skips values Rust's PropValue cannot express", () => {
@@ -98,7 +65,7 @@ describe("createBeaconSink", () => {
     expect(sendBeacon).toHaveBeenCalledTimes(1);
     expect(sendBeacon).toHaveBeenCalledWith(
       "https://eu.i.posthog.com/capture/",
-      GOLDEN_BARE,
+      BARE,
     );
     expect(fetchMock).not.toHaveBeenCalled();
   });
@@ -125,7 +92,7 @@ describe("createBeaconSink", () => {
     sink.capture("app_booted");
     expect(fetchMock).toHaveBeenCalledWith("https://us.i.posthog.com/capture/", {
       method: "POST",
-      body: GOLDEN_BARE,
+      body: BARE,
       keepalive: true,
     });
   });

@@ -135,8 +135,8 @@ const sink = createBeaconSink({
 falling back to `fetch(..., { keepalive: true })` when the beacon is missing or
 refused, and never throws. The body is `text/plain` (no CORS preflight) and is
 **byte-identical** to `serde_json::to_string(&ev_lib::analytics::capture_body(..))`
-— `captureBody(key, distinctId, event, props)` builds it, and a golden test
-pins it to the Rust output. The `distinct_id` is a random id held in memory
+— `captureBody(key, distinctId, event, props)` builds it, and both suites run
+the vectors in `tests/fixtures/analytics/beacon.json`. The `distinct_id` is a random id held in memory
 (cookieless by construction); pass `distinctId` to override it. No key → no
 network call.
 

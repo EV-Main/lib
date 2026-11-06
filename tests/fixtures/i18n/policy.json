@@ -1,0 +1,174 @@
+{
+  "_": "The translation-policy contract both @evinvest/i18n/policy and ev_lib::i18n::policy run. Catalogue keys are in byte order: Rust keeps catalogues sorted, TS in insertion order. resolve: one resolveCatalogue call, rejected as [key, reason, detail]; audit: [locale, source, translated] per resolved catalogue → the CI report; available: [locale, [name, locales][], policy, names shown].",
+  "resolve": [
+    {
+      "locale": "en",
+      "source": { "a": "A" },
+      "translated": {},
+      "messages": { "a": "A" },
+      "rejected": [],
+      "missing": [],
+      "coverage": 1
+    },
+    {
+      "locale": "ru",
+      "source": { "hero": "Coastal Vietnam" },
+      "translated": { "hero": { "en": "Coastal Vietnam", "t": "Прибрежный Вьетнам" } },
+      "messages": { "hero": "Прибрежный Вьетнам" },
+      "rejected": [],
+      "missing": [],
+      "coverage": 1
+    },
+    {
+      "locale": "ru",
+      "source": { "hero": "Coastal Vietnam, today" },
+      "translated": { "hero": { "en": "Coastal Vietnam", "t": "Прибрежный Вьетнам" } },
+      "messages": { "hero": "Coastal Vietnam, today" },
+      "rejected": [["hero", "source-drift", "translated from \"Coastal Vietnam\", source is now \"Coastal Vietnam, today\""]],
+      "missing": [],
+      "coverage": 0
+    },
+    {
+      "locale": "ru",
+      "source": { "a": "A" },
+      "translated": { "a": { "en": "A", "t": "А" }, "stray": { "en": "Gone", "t": "Ушло" } },
+      "messages": { "a": "А" },
+      "rejected": [["stray", "orphan-key", "not defined in en — only the canonical locale introduces keys"]],
+      "missing": [],
+      "coverage": 1
+    },
+    {
+      "locale": "ru",
+      "source": { "a": "A", "b": "B" },
+      "translated": { "a": { "en": "A", "t": "А" } },
+      "messages": { "a": "А", "b": "B" },
+      "rejected": [],
+      "missing": ["b"],
+      "coverage": 0.5
+    },
+    {
+      "locale": "ru",
+      "source": { "a": "A" },
+      "translated": { "a": { "en": "A", "t": "   " } },
+      "messages": { "a": "A" },
+      "rejected": [["a", "empty", "translation is blank"]],
+      "missing": [],
+      "coverage": 0
+    },
+    {
+      "locale": "ru",
+      "source": { "greet": "Hello, {name}" },
+      "translated": { "greet": { "en": "Hello, {name}", "t": "Здравствуйте" } },
+      "messages": { "greet": "Hello, {name}" },
+      "rejected": [["greet", "placeholder-mismatch", "source interpolates {name}, translation does not"]],
+      "missing": [],
+      "coverage": 0
+    },
+    {
+      "locale": "ru",
+      "source": { "greet": "Hello, {name}" },
+      "translated": { "greet": { "en": "Hello, {name}", "t": "Здравствуйте, {name} {имя}" } },
+      "messages": { "greet": "Hello, {name}" },
+      "rejected": [["greet", "placeholder-mismatch", "translation interpolates {имя}, which the source does not provide"]],
+      "missing": [],
+      "coverage": 0
+    },
+    {
+      "locale": "ru",
+      "source": { "n": "{n, plural, one {# lot} other {# lots}}" },
+      "translated": { "n": { "en": "{n, plural, one {# lot} other {# lots}}", "t": "{n} участков" } },
+      "messages": { "n": "{n, plural, one {# lot} other {# lots}}" },
+      "rejected": [["n", "argument-type-mismatch", "{n} is a plural in en and a value here"]],
+      "missing": [],
+      "coverage": 0
+    },
+    {
+      "locale": "ru",
+      "source": { "n": "{n, plural, one {# lot} other {# lots}}" },
+      "translated": { "n": { "en": "{n, plural, one {# lot} other {# lots}}", "t": "{n, plural, one {# участок} other {# участка}}" } },
+      "messages": { "n": "{n, plural, one {# lot} other {# lots}}" },
+      "rejected": [["n", "plural-category-missing", "{n} needs few, many in ru"]],
+      "missing": [],
+      "coverage": 0
+    },
+    {
+      "locale": "ru",
+      "source": { "n": "{n, plural, one {# lot} other {# lots}}" },
+      "translated": { "n": { "en": "{n, plural, one {# lot} other {# lots}}", "t": "{n, plural, one {# участок} few {# участка}}" } },
+      "messages": { "n": "{n, plural, one {# lot} other {# lots}}" },
+      "rejected": [["n", "plural-category-missing", "{n} needs many, other in ru"]],
+      "missing": [],
+      "coverage": 0
+    },
+    {
+      "locale": "ru",
+      "source": { "n": "{n, plural, one {# lot} other {# lots}}" },
+      "translated": { "n": { "en": "{n, plural, one {# lot} other {# lots}}", "t": "{n, plural, other {# участков}}" } },
+      "messages": { "n": "{n, plural, one {# lot} other {# lots}}" },
+      "rejected": [["n", "plural-category-missing", "{n} needs few, many, one in ru"]],
+      "missing": [],
+      "coverage": 0
+    },
+    {
+      "locale": "ru",
+      "source": { "n": "{n, plural, one {# lot} other {# lots}}" },
+      "translated": { "n": { "en": "{n, plural, one {# lot} other {# lots}}", "t": "{n, plural, one {# участок} few {# участка} many {# участков} other {# участка}}" } },
+      "messages": { "n": "{n, plural, one {# участок} few {# участка} many {# участков} other {# участка}}" },
+      "rejected": [],
+      "missing": [],
+      "coverage": 1
+    },
+    {
+      "locale": "vi",
+      "source": { "n": "{n, plural, one {# lot} other {# lots}}" },
+      "translated": { "n": { "en": "{n, plural, one {# lot} other {# lots}}", "t": "{n, plural, other {# lô đất}}" } },
+      "messages": { "n": "{n, plural, other {# lô đất}}" },
+      "rejected": [],
+      "missing": [],
+      "coverage": 1
+    },
+    {
+      "locale": "ru",
+      "source": { "a": "use '{braces}' literally", "b": "a '{' brace" },
+      "translated": { "a": { "en": "use '{braces}' literally", "t": "используйте '{braces}' буквально" }, "b": { "en": "a '{' brace", "t": "скобка '{'" } },
+      "messages": { "a": "используйте '{braces}' буквально", "b": "скобка '{'" },
+      "rejected": [],
+      "missing": [],
+      "coverage": 1
+    }
+  ],
+  "audit": [
+    {
+      "catalogues": [["ru", { "hero": "New" }, { "hero": { "en": "Old", "t": "Старое" } }]],
+      "floor": 1,
+      "ok": false,
+      "report": "FAIL ru  0% coverage\n       hero  [source-drift] translated from \"Old\", source is now \"New\""
+    },
+    {
+      "catalogues": [["ru", { "hero": "New" }, { "hero": { "en": "New", "t": "Новое" } }]],
+      "floor": 1,
+      "ok": true,
+      "report": "ok   ru  100% coverage"
+    },
+    {
+      "catalogues": [["ru", { "a": "A", "b": "B" }, { "a": { "en": "A", "t": "А" } }]],
+      "floor": 0.5,
+      "ok": true,
+      "report": "ok   ru  50% coverage\n       untranslated (1): b"
+    },
+    {
+      "catalogues": [
+        ["ru", { "a": "x", "b": "x", "c": "x", "d": "x", "e": "x", "f": "x", "g": "x", "h": "x", "i": "x", "j": "x", "k": "x", "l": "x" }, {}],
+        ["vi", { "a": "x" }, { "a": { "en": "x", "t": "y" } }]
+      ],
+      "floor": 1,
+      "ok": false,
+      "report": "FAIL ru  0% coverage\n       untranslated (12): a, b, c, d, e, f, g, h, i, j\n       …and 2 more\nok   vi  100% coverage"
+    }
+  ],
+  "available": [
+    ["ru", [["a", ["en", "ru"]], ["b", ["en"]]], "hide", ["a"]],
+    ["ru", [["a", ["en", "ru"]], ["b", ["en"]]], "fallback", ["a", "b"]],
+    ["en", [["a", ["en", "ru"]], ["b", ["en"]]], "hide", ["a", "b"]]
+  ]
+}

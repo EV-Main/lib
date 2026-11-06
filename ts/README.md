@@ -6,7 +6,6 @@ own `package.json`, built ESM-only with `tsup` and tested with `vitest`.
 ```
 ts/
 ├── architecture/      port of the `architecture` Cargo feature (DDD kernel)
-├── types/             shared domain TypeObjects (PhoneNumber, Email, …) with validation
 ├── uikit/             port of the `uikit` Cargo feature (dep-light React UI kit)
 ├── analytics/         port of the `analytics` Cargo feature (PostHog product analytics)
 ├── error-monitoring/  port of the `error_monitoring` Cargo feature (Sentry error monitoring)
@@ -46,10 +45,9 @@ hand-written for one of three reasons:
                      primitives/ (portal, floating, focus-scope)            B C
                      palette/ (brand palette tool)                          C
  architecture  0.3k  kernel ports + combinators                             A  README mapping table
- types         0.9k  phone / email validation                               D  contract tests
  settings      0.7k  createSettings, redaction                              A
                      validators                                             D  contract vectors
- i18n          3.0k  format, policy                                         A
+ i18n          3.0k  format, policy, registry/URL                           D  fixtures/i18n
                      extract CLI, react, next                               B
                      custom registry                                        C
  experiments   1.2k  bucketing                                              A
@@ -58,12 +56,10 @@ hand-written for one of three reasons:
                      react, next                                            B
  mfe           0.9k  manifest, events, host attributes, loader             A
                      RemoteElement                                          B
- analytics     1.4k  sink / beacon / consent                                A
+ analytics     1.4k  beacon body (captureBody)                              D  fixtures/analytics
+                     sink / consent                                         A
                      posthog, react, next                                   B
  error-monitoring 0.6k  Sentry / React / Next wiring                        B
  marketing     1.8k  motion, form harness, react                            C
 ```
 
-Known data still copied by hand:
-
-- Email error codes: Rust has `EmailError::code()`, TS email validation has no codes.

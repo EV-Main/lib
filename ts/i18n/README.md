@@ -196,9 +196,9 @@ const { messages, coverage } = policy.resolveCatalogue("en", fr, enCatalogue);
 policy.availableIn("en", posts, p => p.locales);    // "fr" always sees everything
 ```
 
-A custom registry has **no Rust twin**. `ev_lib::i18n` mirrors only the
-generated five; its plural rules are transcribed per locale by hand, so a
-surface on its own locale set is TS-only.
+`ev_lib::i18n::LocaleRegistry` is the Rust twin of a custom registry's URL
+contract and negotiation. The formatter and policy stay bound to the generated
+five there, their plural rules transcribed per locale by hand.
 
 ## Wiring a Next.js app
 
@@ -595,7 +595,7 @@ reader who deliberately chose English should not be bounced out of it.
 contract, the same formatter, the same policy, and the same `(key, en)` call
 shape via the `t!` macro. It reads the *same* `messages/<locale>/common.json`
 files, so a catalogue is portable between the two halves and neither can drift
-alone. Its extractor is the linker rather than a parser — a `t!` site that
+alone: both suites run the vectors in `tests/fixtures/i18n/`. Its extractor is the linker rather than a parser — a `t!` site that
 compiles is registered — which is why the Rust half needs no equivalent of the
 bins above.
 

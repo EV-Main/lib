@@ -30,7 +30,7 @@
 //!   `settings!` macro reads env vars into a validated struct with aggregate
 //!   error reporting and secret redaction. Zero deps; sops stays at the shell/CI
 //!   boundary. See [`settings`](mod@settings).
-//! - **`types`** — shared domain TypeObjects (mirrors `@evinvest/types`):
+//! - **`types`** — shared domain TypeObjects:
 //!   [`PhoneNumber`](types::PhoneNumber) with E.164 validation and formatting, plus
 //!   the generic [`Branded<T, B>`](types::Branded) newtype for future types (Email,
 //!   Currency, …). Zero deps, wasm-safe. See [`types`](mod@types).
