@@ -64,6 +64,9 @@
   # an idle pod creeps to (devops#74). The page cache lives on disk, off the
   # heap; the floor is the OG render, which dies at 48.
   maxOldSpaceMiB ? 56
+, # The fileKey of the Figma file `apps.figma` renders into; null until the
+  # first render creates it.
+  figmaFile ? null
 ,
 }:
 let
@@ -289,6 +292,35 @@ let
     '';
   };
 
+  # The `@figma` frames (kitstart's `defineFigmaSuite`): `frames` lists their
+  # keys; with `FIGMA_CAPTURES` set, the requested ones are captured.
+  runFigma = pkgs.writeShellApplication {
+    name = "${pname}-figma";
+    runtimeInputs = [ nodejs pkgs.git pkgs.coreutils pkgs.jq pkgs.playwright-test ];
+    text = ''
+      cd "$(git rev-parse --show-toplevel)"
+      { ${ensureDeps} } >&2 # stdout is `frames`' JSON
+      ${linkPlaywright}
+      ${exportPlaywright}
+      case "''${1:-}" in
+        frames)
+          playwright test -c ${lib.escapeShellArg e2eConfig} --grep @figma --list --reporter=json \
+            | jq --argjson file ${lib.escapeShellArg (builtins.toJSON figmaFile)} \
+              '{ file: $file, frames: [.. | objects | select(.title? == "@figma" and has("specs")) | .specs[] | .title as $page | .tests[] | "\(.projectName) \($page)"] }'
+          ;;
+        "")
+          : "''${FIGMA_CAPTURES:?a JSON object of captureId and endpoint per frame, keyed as frames lists them}"
+          npm run -s build >/dev/null
+          playwright test -c ${lib.escapeShellArg e2eConfig} --grep @figma
+          ;;
+        *)
+          echo "usage: nix run .#figma [-- frames]" >&2
+          exit 1
+          ;;
+      esac
+    '';
+  };
+
   quoteFields = lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "${n}=${v}") (smoke.quote or { }));
   containerSmoke = pkgs.writeShellApplication {
     name = "${pname}-container-smoke";
@@ -319,6 +351,7 @@ let
         nix run .#dev              next dev on ${sitePort}
         nix run .#test             tsc, lint, vitest, build, size, playwright
         nix run .#accept-test      accept screenshot baselines (Linux only); `-- <name>` for a subset
+        nix run .#figma            build, then the pages FIGMA_CAPTURES asks for into Figma; `-- frames` lists them
         nix run .#size             build, then the first-load JS budget   [the one hard gate]
         nix run .#container-smoke  boot the image and hold it to its contract (Linux + docker)
         nix build                  the standalone server
@@ -354,6 +387,7 @@ assert addressesOk;
     dev = app "${pname}-dev" runDev;
     test = app "${pname}-test" runTest;
     accept-test = app "${pname}-accept-test" runAcceptTest;
+    figma = app "${pname}-figma" runFigma;
     size = app "${pname}-size" runSize;
     container-smoke = app "${pname}-container-smoke" containerSmoke;
   };

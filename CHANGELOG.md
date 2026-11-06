@@ -56,38 +56,16 @@ Rust crate and its TypeScript mirror at once.
   `accent-error-ink` is refused; drop the key, and lighten `accent-error` if it
   misses 3:1 on its planes. Light's `accent-warn` is `#a77f12` (was Figma's
   `#d8a523`, 1.89:1 on the page).
-### Changed
-
-- **Connected landings: sites_panel by derived address, and `/.well-known/sa-site`**
-  (`@evinvest/kitstart`, minor, breaking).
-  - `SITES_PANEL_INTERNAL_URL` replaces `LOCATIONS_API_URL`, and the kit
-    composes `/brands/<site.brand.id>/…` itself. `parseServerEnv` throws, naming
-    the replacement, when `LOCATIONS_API_URL` is set; `ServerEnv.locationsApiUrl`
-    is gone.
-  - `createPlaceSource(site, options?)`, `createPricingSource(site, options?)`
-    and `createExperimentsSource(site, options?)` drop `baseUrl` and read the
-    address themselves; `createExperimentsSource` now takes `site`.
-  - `siteReportRoute(site)` (`/next`): each source's state now (`unset`,
-    `live`, `empty`, `withdrawn`, `down` with a `detail`), kitstart's version and
-    `checked_at`, probed `no-store` and kept 30 s; `Cache-Control: no-store`.
-    `/.well-known/sa-site` joins `NON_PAGE_ROUTES` (`ev_lib` `kitstart` too).
-  - `describeLandingContract` requires `root` and fails a landing that does not
-    mount `/health` and `/.well-known/sa-site`; `servedPaths` lists nested route
-    folders (`/quote/booking`, `/.well-known/sa-site`).
-  - `lib.mkLanding` takes a required `connected`: `true` adds
-    `consumes = { SITES_PANEL_INTERNAL_URL = "sites_panel.internal"; LEAD_WEBHOOK_URL = "panel.ingest"; }`
-    to the container contract. Evaluation fails when `prodEnv` sets either, or
-    `LOCATIONS_API_URL`. `container-smoke` holds the image to the self-report.
-  - `exports["./package.json"]`: the report reads the kit's version from it.
-
-### Removed
-
-- **`@evinvest/mfe` host mode drops `data-profile-href` and `data-manage-href`**
-  (breaking, 0.2.0). The account chip's profile row is always the platform's
-  account page, and "Manage account" is gone, so no element reads them any more.
 
 ### Added
 
+- **A landing's pages into Figma from its e2e harness** (`@evinvest/kitstart`
+  0.24, mkLanding). `defineFigmaSuite` (which `defineSectionSuite` calls) adds
+  one `@figma <page>` test per page of the section list and Playwright project;
+  `apps.figma` lists their keys (`-- frames`, with the new `figmaFile`) or builds
+  and captures the ones `FIGMA_CAPTURES` names, through Figma's
+  `generate_figma_design`. Changes under `nix/` now release with kitstart, whose
+  tag pins them.
 - **Collapsible nav sections** (`@evinvest/uikit`, minor). `ShellNav` and
   `SectionNav` groups take `collapsible`, `defaultOpen`, `open` /
   `onOpenChange` and a landing `href`; both navs take a `collapsible` prop for
@@ -180,96 +158,6 @@ Rust crate and its TypeScript mirror at once.
   and `@evinvest/uikit`): the chosen option is tinted `accent-info`; a
   `reset_value` / `resetValue` marks its option `data-reset`, tinted
   `accent-trace` unless it is the chosen one.
-
-### Removed
-
-- **`Chart*` and `Resizable*`** (`ev_lib` + `@evinvest/uikit`, and their class
-  constants): no consumer used them. The `chart-1 … chart-5` palette tokens stay.
-- **Badge `Secondary`, `Destructive`, `Outline`, `Success`** (`ev_lib` `uikit`
-  and `@evinvest/uikit`): see *Breaking* for what replaces them.
-
-### Changed
-
-- **Restyled** (`ev_lib` `uikit` and `@evinvest/uikit`): a flat `Card` (6 px
-  radius, 16 px padding), `Badge` chips painted by the `chip-*` tokens, a 28 px
-  raised `NativeSelect`, toasts edged in their tone, and the `scrim` token
-  behind every modal. The `Button` `outline` face is raised (`secondary` fill
-  and a hairline), `primary` hovers to `primary-hover`, `destructive` wears the theme's `button-danger-*` face (an
-  outline in Dark and Light, a fill in Oldschool), and a disabled button is
-  40 % opaque. `SystemBanner` takes `neutral` and `primary` tones and an
-  `action`; `info` draws its icon in `accent-info-ink`. The `Select` trigger,
-  list and `NativeSelect` classes now live in the class tables instead of the
-  components.
-- **Positive and info text use the `-ink` tokens** (`ev_lib` `uikit` and
-  `@evinvest/uikit`): the outline accent faces, status pages and chips read in
-  `positive-ink` and `accent-info-ink`, which clear AA on a light plane where
-  the fill does not. Warn and error text stays in `accent-warn` and
-  `accent-error`, as in 0.30.
-- **The `uikit` feature is now `uikit_dioxus`, and `ev_lib::uikit` is
-  `ev_lib::uikit_dioxus`** (`ev_lib`, breaking → minor). The kit's behaviour
-  moved into a crate-private, framework-free core that both Rust ports drive;
-  the Dioxus components keep their behaviour. Swap the feature name and the
-  module path. Interface changes the split forced, mirrored in the Leptos port
-  and listed in `ts/uikit/README.md`'s Rust↔TS table: Select options name
-  their label explicitly instead of the kit reading it off the children;
-  `FieldSeparator` renders its copy only with `content: true`, and
-  `FormMessage` only while `error: true` (the flag `FormControl` takes), instead
-  of inspecting the children. `FormItemContext`, `Toast` and `ToastState` are no
-  longer public, nor is `CalendarDate::today()`: the kit's core is clock-free,
-  so an SSR page computes its own `today`. `CommandInput` gains `invalid`, and `CommandDialog` now applies
-  its `class` to the dialog.
-
-- **`Field` no longer imports the controls it labels** (`@evinvest/uikit`):
-  `Input`, `Textarea`, `NativeSelect`, `Checkbox`, `Switch`, `SelectTrigger`
-  and `Field` mark themselves in their own modules, and `FieldLabel` checks the
-  mark instead of comparing against a set of imported components. A page with
-  a `Field` but no `Select` no longer ships `Select` and its floating, portal,
-  focus-scope and listbox code — 5–6 KB gz off the cabinet's public token
-  pages. Labelling, ids and `aria-*` wiring are unchanged.
-
-- **`Command` matches like fzf** (`ev_lib` `uikit` and `@evinvest/uikit`): the
-  default filter is a case-insensitive subsequence match per space-separated
-  term, ranked by word starts, runs and gaps (fzf v1), instead of a substring
-  match. `CommandList` is a flex column and `CommandGroup` a `grid`, and rows carry their rank
-  as CSS `order`, so the best match is on top and the arrows walk that order;
-  a group's heading stays first. `shouldFilter={false}` is unchanged.
-
-### Fixed
-
-- **`cn!` merges the `(--var)` shorthand like `tailwind-merge`** (`ev_lib`
-  `uikit`): `rounded-(--control-radius)` replaces `rounded-full` instead of
-  sitting beside it.
-- **`PopoverContent` honours `align`** (`ev_lib` `uikit`): `start` and `end` pin
-  the panel to the trigger's left or right edge. It always centred before, and a
-  wide panel under a trigger at the edge of its container ran off the screen.
-- **`PopoverForm` and `ConfirmDialog` triggers have a face** (`ev_lib` `uikit`):
-  the trigger rendered as bare text, because Rust has no `asChild` for the
-  `Button` the TS caller passes. It now wears the outline button face, and
-  `trigger_class` fuses over it.
-- **`CommandDialog` applies its `class`** (`ev_lib` `uikit`): the prop was
-  declared and never merged onto the dialog box.
-- **A popover opened together with its dialog sits above it** (`@evinvest/uikit`):
-  when both mount in one commit, the child layer is lifted over its parent,
-  keeps focus (Escape closes the popover first), and is placed from the
-  dialog's settled position rather than mid zoom-in.
-- **Nested modals share one scrim** (`@evinvest/uikit`): only the lowest open
-  modal draws an opaque scrim; Dialog, AlertDialog, Sheet, Drawer and
-  CommandDialog over another modal keep their own backdrop click and Escape
-  but add no darkness, and closing the top one does not flash the scrim.
-- **Command list scrolls** (`@evinvest/uikit`, `ev_lib` `uikit`): groups no
-  longer shrink to fit the list height and clip their items.
-- **NavigationMenu content opens below its trigger on a panel**
-  (`@evinvest/uikit`, `ev_lib` `uikit`), not over the trigger without a surface.
-- **`uikit_leptos` `ContextMenu` builds under `web_sys_unstable_apis`**
-  (`ev_lib`, patch): web-sys's `MouseEvent::client_x` is `f64` there and
-  `i32` otherwise; the pointer position now takes either.
-- **Dropdown, context and menubar items are clickable again** (`ev_lib` `uikit`):
-  they rendered `data-disabled="false"` and `data-inset="false"`, which the
-  classes' `data-[disabled]` / `data-[inset]` match on presence, so every item
-  was `pointer-events-none opacity-50` and indented. Both are now absent unless set.
-
-### Added
-
 - **`I18nScope`** (`@evinvest/i18n/react`, 0.10.0): a nested scope lays its
   `messages` over the enclosing provider's (`{ ...parent, ...own }`) and
   inherits the locale, so a layout's provider can carry only the shell's keys
@@ -448,9 +336,285 @@ Rust crate and its TypeScript mirror at once.
   select, starting on `value`; a pick made there before hydration is reported
   through `onValueChange`. Switching between controlled and uncontrolled warns
   once in development and keeps the last value. `defaultValue` is unchanged.
+- **`applyOverrides`** (`@evinvest/experiments`): lays an operator's
+  `{ enabled?, weights?, holdout? }` per key over the config in code, so a
+  landing's proxy can take weights and the kill switch from the Service-Arb
+  panel without a deploy. Each field is checked against the code on its own
+  (weights of the declared length, `>= 0`, sum `> 0`; holdout in `[0, 1)`;
+  enabled a boolean) and dropped when invalid; unknown keys are ignored and
+  variants never come from outside the code. TS-only for now.
+- **Experiments from the Service-Arb panel** (`@evinvest/kitstart/server`).
+  `createExperimentsSource` reads `GET <base>/experiments` for the proxy:
+  the first call waits (1.5 s timeout), later ones answer from memory with a
+  30 s TTL and stale-while-revalidate; a failure keeps the last good answer
+  (`{}`, the config in code, before the first one). `declareExperiments` queues `experiments.declared@1` in the lead
+  webhook's outbox at start (signed and retried like a lead, never throwing),
+  leaving out and logging an experiment the panel would refuse.
+- **`analytics_id` on a lead** (`@evinvest/kitstart`). `AnalyticsBoundary`
+  now holds one beacon `distinct_id` per page (in memory) and `LeadCapture`'s
+  script posts it; `quoteRoute` passes it, checked against
+  `[A-Za-z0-9._:-]{1,128}`, to the webhook as `ctx.analyticsId` for the
+  brand's `lead.created` body. Optional both ways: an older page posts none.
+- **`classNames.estimateGrid` on `LeadCapture`** (`@evinvest/kitstart/react`):
+  the grid of an estimate input's answer tiles, so a brand sets its own column
+  count (`"grid-cols-3 sm:grid-cols-4"` for a shorter card). Without it the
+  grid stays two columns, three from `sm`; the tile keeps its 44 px minimum.
+- **`i18n::t!`** (Rust): `$key` and `$en` are `literal` fragments, so the
+  compiler is the literal-ness gate the TypeScript extractor has to enforce by
+  hand. Natively each site also registers its pair with `i18n::catalogue()`, so
+  **extraction is linking, not parsing** — a site that compiles is in the
+  catalogue whether or not it ever renders. A recording `Translator` driven by
+  one SSR pass would silently drop every string behind a branch that did not
+  run, which is the failure class this exists to catch. One new dependency,
+  `inventory`, declared native-only so a shipped wasm bundle stays zero-dep. The
+  ceiling it buys: copy must live in natively-compilable code — which the
+  component-MFE snapshot contract already required of a producer.
+- **`localeOfElement` / `mfe::host_locale`**: the locale a DOM subtree is
+  written in, via `closest("[lang]")`. This is how an element remote learns its
+  language, and the reason it is read from the DOM rather than taken as a prop
+  is mechanical: a host mounts the element before it applies attributes, so
+  anything pushed in reads as absent at `connectedCallback` time. Previously
+  each host solved this privately — or, in the second case, forgot to.
+- **`evinvest-i18n-extract` / `evinvest-i18n-check`**: the extractor, moved out
+  of site_conductor and generalised over `--root` / `--exclude` / `--messages`.
+  `--exclude` names what is *not* source, because a list of source directories
+  is a hole that opens the day someone adds a slice, and an unscanned call site
+  produces no error — just English forever in five locales. Both refuse a `t()`
+  whose key or English is not a literal. `typescript` is an optional peer
+  dependency: needed to run the extractor, never to render a string.
+
+- **`settings` — deployment-profile guards (both ports)**: `#[required_in("production")]`
+  (Rust) / `requiredIn(v, 'production')` (TS) turns an optional or defaulted
+  setting back into a boot failure in the named profiles. The setting that hurts
+  is not the missing required one — that already stops the boot — but the
+  optional whose absence is a *silent* no-op: no `SMTP_HOST` means mail is logged
+  instead of sent, no `SENTRY_DSN` means the alerts never arrive. On a defaulted
+  field the dev-shaped default stops applying there, so the value must be
+  explicit. The profile is the canonical `APP_ENV` read from the same source
+  (unset ⇒ `development`, so an unconfigured environment is never mistaken for
+  production); TS additionally takes a `profile` override for Next.js, where
+  `NODE_ENV` already owns that name. Refused at compile time (Rust) / declaration
+  time (TS) on a setting that is already required everywhere.
+- **`settings` — `required_var_names(profile)`** (Rust): the deploy-time
+  checklist, so a preflight can diff a Secret's keys against what the image
+  actually needs instead of discovering the gap as a CrashLoopBackOff.
+- **`settings` — `or_exit` / `orExit`**: fail a boot with `EX_CONFIG` (78)
+  instead of a nondescript 1, so "the config is wrong, a restart cannot help" is
+  distinguishable from the dependency blip a restart does fix.
+- **`settings::drift`** (Rust): detects that the source a process was configured
+  from has moved on without it. Polling `std::env` is useless by construction —
+  it is fixed at `exec`, and a runtime that injected values through `envFrom`
+  never revisits them — so the watcher takes an **injected** source, to be
+  pointed at something that does move (a Secret mounted as files, a rendered
+  dotenv). The baseline is boot, not the previous poll, so a stale process keeps
+  reporting until it is replaced. It only detects: nothing is applied in place,
+  because a process that reconfigures itself erases the gitops env edit that was
+  the audit trail. Snapshots hold hashes and a change is a name plus a verb, so
+  the whole path is safe to log.
+
+- **`error_monitoring::Config.service`** (Rust, native): names the service on
+  every event and transaction as a `service` tag. A Sentry project is a DSN, so
+  sibling services commonly share one and were separable only by hostname in the
+  issue list. Set from the same value as `OTEL_SERVICE_NAME` so an issue, a trace
+  and a log line agree. It is a scope tag rather than a `before_send` hook
+  because `before_send` never sees transactions, which need the name just as
+  much. **Breaking:** `Config` gains a public field, so struct literals must add
+  `service` (`None` keeps the old behaviour).
+- **`uikit` — `terminal`** (both ports; the class tables are generated from
+  Rust): a trading terminal over an investment product's shares — ticker,
+  chart slot | order book | order form, open orders — the way a spot exchange
+  lays it out. `Terminal` is a viewport-bound grid from `lg` (a phone stacks
+  the panes) that places each `TerminalPane` by `TerminalArea`, so the desktop
+  layout does not depend on DOM order. `OrderBook` rows carry a depth bar
+  behind the figures and colour the price by `BookSide` (bids positive, asks
+  loud); `TradesTapeRow` reads the same enum; `OrderFormSubmit` fills by
+  `OrderSide`. The chart is a sized `relative` slot and nothing more — the
+  plotting engine stays the consumer's (React hands the element out through a
+  `ref`, Dioxus through an `id`) — and the open-orders pane reuses `Table` and
+  `Tabs`, contributing only `OpenOrdersEmpty`. Same `data-slot` / `data-area` /
+  `data-side` attributes on both sides, so one stylesheet or test selector
+  reads either port.
+
+### Changed
+
+- **Connected landings: sites_panel by derived address, and `/.well-known/sa-site`**
+  (`@evinvest/kitstart`, minor, breaking).
+  - `SITES_PANEL_INTERNAL_URL` replaces `LOCATIONS_API_URL`, and the kit
+    composes `/brands/<site.brand.id>/…` itself. `parseServerEnv` throws, naming
+    the replacement, when `LOCATIONS_API_URL` is set; `ServerEnv.locationsApiUrl`
+    is gone.
+  - `createPlaceSource(site, options?)`, `createPricingSource(site, options?)`
+    and `createExperimentsSource(site, options?)` drop `baseUrl` and read the
+    address themselves; `createExperimentsSource` now takes `site`.
+  - `siteReportRoute(site)` (`/next`): each source's state now (`unset`,
+    `live`, `empty`, `withdrawn`, `down` with a `detail`), kitstart's version and
+    `checked_at`, probed `no-store` and kept 30 s; `Cache-Control: no-store`.
+    `/.well-known/sa-site` joins `NON_PAGE_ROUTES` (`ev_lib` `kitstart` too).
+  - `describeLandingContract` requires `root` and fails a landing that does not
+    mount `/health` and `/.well-known/sa-site`; `servedPaths` lists nested route
+    folders (`/quote/booking`, `/.well-known/sa-site`).
+  - `lib.mkLanding` takes a required `connected`: `true` adds
+    `consumes = { SITES_PANEL_INTERNAL_URL = "sites_panel.internal"; LEAD_WEBHOOK_URL = "panel.ingest"; }`
+    to the container contract. Evaluation fails when `prodEnv` sets either, or
+    `LOCATIONS_API_URL`. `container-smoke` holds the image to the self-report.
+  - `exports["./package.json"]`: the report reads the kit's version from it.
+- **Restyled** (`ev_lib` `uikit` and `@evinvest/uikit`): a flat `Card` (6 px
+  radius, 16 px padding), `Badge` chips painted by the `chip-*` tokens, a 28 px
+  raised `NativeSelect`, toasts edged in their tone, and the `scrim` token
+  behind every modal. The `Button` `outline` face is raised (`secondary` fill
+  and a hairline), `primary` hovers to `primary-hover`, `destructive` wears the theme's `button-danger-*` face (an
+  outline in Dark and Light, a fill in Oldschool), and a disabled button is
+  40 % opaque. `SystemBanner` takes `neutral` and `primary` tones and an
+  `action`; `info` draws its icon in `accent-info-ink`. The `Select` trigger,
+  list and `NativeSelect` classes now live in the class tables instead of the
+  components.
+- **Positive and info text use the `-ink` tokens** (`ev_lib` `uikit` and
+  `@evinvest/uikit`): the outline accent faces, status pages and chips read in
+  `positive-ink` and `accent-info-ink`, which clear AA on a light plane where
+  the fill does not. Warn and error text stays in `accent-warn` and
+  `accent-error`, as in 0.30.
+- **The `uikit` feature is now `uikit_dioxus`, and `ev_lib::uikit` is
+  `ev_lib::uikit_dioxus`** (`ev_lib`, breaking → minor). The kit's behaviour
+  moved into a crate-private, framework-free core that both Rust ports drive;
+  the Dioxus components keep their behaviour. Swap the feature name and the
+  module path. Interface changes the split forced, mirrored in the Leptos port
+  and listed in `ts/uikit/README.md`'s Rust↔TS table: Select options name
+  their label explicitly instead of the kit reading it off the children;
+  `FieldSeparator` renders its copy only with `content: true`, and
+  `FormMessage` only while `error: true` (the flag `FormControl` takes), instead
+  of inspecting the children. `FormItemContext`, `Toast` and `ToastState` are no
+  longer public, nor is `CalendarDate::today()`: the kit's core is clock-free,
+  so an SSR page computes its own `today`. `CommandInput` gains `invalid`, and `CommandDialog` now applies
+  its `class` to the dialog.
+
+- **`Field` no longer imports the controls it labels** (`@evinvest/uikit`):
+  `Input`, `Textarea`, `NativeSelect`, `Checkbox`, `Switch`, `SelectTrigger`
+  and `Field` mark themselves in their own modules, and `FieldLabel` checks the
+  mark instead of comparing against a set of imported components. A page with
+  a `Field` but no `Select` no longer ships `Select` and its floating, portal,
+  focus-scope and listbox code — 5–6 KB gz off the cabinet's public token
+  pages. Labelling, ids and `aria-*` wiring are unchanged.
+
+- **`Command` matches like fzf** (`ev_lib` `uikit` and `@evinvest/uikit`): the
+  default filter is a case-insensitive subsequence match per space-separated
+  term, ranked by word starts, runs and gaps (fzf v1), instead of a substring
+  match. `CommandList` is a flex column and `CommandGroup` a `grid`, and rows carry their rank
+  as CSS `order`, so the best match is on top and the arrows walk that order;
+  a group's heading stays first. `shouldFilter={false}` is unchanged.
+- **`AbSwitcherPanel` shows an unassigned experiment as off**
+  (`@evinvest/kitstart/react`): no `ab_<key>` cookie (or no entry in
+  `current`) now reads `not running` by default (`text.unassigned`, was
+  `not assigned`) and its variant buttons are disabled — the menu mounts on a
+  place's page, where the proxy assigns every running experiment and would
+  refuse a force for one that is not. `–` on the chip as before. A test
+  listed in the QA-only cookie `<qaCookie>_off` — the brand proxy's list of
+  paused tests, whose assignment cookies stay — reads the same (`abRunning`).
+
+- **`experiments` — weights are equal unless overridden** (**Breaking**, both
+  ports; #16; a major for `@evinvest/experiments`). Weights are no longer
+  declared in code: every variant gets an equal share. `weights` is gone from
+  the TS `ExperimentSpec` (`satisfies ExperimentConfig` rejects it) and from
+  the Rust `Experiment`; `Experiment::new(variants, weights)` is now
+  `Experiment::new(variants)`, and `Experiment::uniform` is removed — use
+  `Experiment::new`. Manual weights come only from an operator override in the
+  panel: `applyOverrides` lays them over the config under a package-private
+  key, and `pickVariant` reads only that — a `weights` field left in a config
+  (one without `satisfies`) is ignored and not carried over — falling back to
+  equal shares; Rust has no override path. kitstart's `DeclaredExperiment` drops
+  `weights` and `experiments.declared@1` sends one each per variant — the
+  panel contract is unchanged. Migration: delete `weights` from every
+  experiment config; a split that was not equal is set in the panel.
+  Equal-weight picks are unchanged, so existing cookies and hashed subjects
+  keep their arms.
+
+- **`settings` — drift watching is a generated method** (**Breaking**, Rust).
+  The new native-only `settings_drift` feature makes every `settings!` struct
+  generate `watch_drift() -> Infallible`: it polls the Secret mounted at
+  `$SETTINGS_DRIFT_MOUNT` every 5 min and `tracing::warn!`s each var that moved
+  since the watch started. Race it against the main future in a `select!`.
+  `settings::drift::{Watcher, Snapshot, VarChange, ChangeKind}` are gone from
+  the public API; delete the per-service `config_drift.rs` that drove them.
+  Plain `settings` stays zero-dep.
+
+- **`uikit` — `--primary` is a fill, `--primary-ink` is the ink** (**Breaking**,
+  both ports; #119). `--primary` is now the fill teal `#128377` under a white
+  `--on-primary` (4.63:1; ≥ 3:1 against `background`, `secondary`, `card` and
+  `popover`), and the readable teal `#2a9d8f` moves to a **new, required**
+  `--primary-ink` — a consumer sheet that does not define it renders every
+  link, eyebrow, radio dot and focus ring transparent. `--ring` is now the ink.
+  Inside the kit the split is already applied: `Button` `Link`, the eyebrow,
+  description links, the radio dot, the checked `Field` outline, the `Slider`
+  range and thumb border and the `Progress` indicator (on a `bg-primary-ink/20`
+  track) are the ink; `bg-primary text-on-primary`, a checked `Checkbox` /
+  `Switch` and the `Primary` band are the fill, and an eyebrow inside a
+  `Primary` band wears `on-primary`. Migration for a consumer's own classes:
+  `text-primary` → `text-primary-ink`; `border-primary` used as an outline →
+  `border-primary-ink`; a chip `bg-primary/N text-primary` keeps its tint and
+  takes `text-primary-ink`; leave `bg-primary text-on-primary` alone. See
+  `docs/spec/accents.md`.
+- **`i18n` — English is written where it renders** (breaking, both ports;
+  `@evinvest/i18n` 0.7.0, `ev_lib` 0.13.0). `t` takes the key *and* the English
+  sentence — `t("hero.title", "Invest in …")` / `t!(tr, "hero.title", "Invest
+  in …")` — and `messages/en/common.json` is generated back out of the code. The
+  contract was already running in site_conductor, as ~90 lines of app-local
+  code that had to fork `@evinvest/i18n/react` because the package's `Translate`
+  could not express it; this moves it to the one place both apps and both
+  languages read from. A key a translated catalogue lacks now renders the
+  sentence the call site asked for, not the raw key: **this reverses a
+  documented decision**, and reverses it because its premise is gone. Rendering
+  a dotted key was defensible while the catalogue was the only place the English
+  lived. `Translator::has` went with it — its only purpose was branching around
+  that placeholder. For `en` the catalogue is not consulted at all.
+- **`mfe!` — `messages:` is a required arm** (breaking, `ev_lib` 0.13.0). A
+  producer declares a `fn(Locale) -> Messages`; the macro resolves the host's
+  locale at mount and provides a `Translator` as context above the root. Not
+  optional: a producer with no copy passes an empty catalogue as one deliberate,
+  reviewable line, and a producer *with* copy cannot forget the locale — which
+  is exactly what the second element remote did. `mfe` now implies `i18n`.
+
+### Removed
+
+- **`@evinvest/mfe` host mode drops `data-profile-href` and `data-manage-href`**
+  (breaking, 0.2.0). The account chip's profile row is always the platform's
+  account page, and "Manage account" is gone, so no element reads them any more.
+- **`Chart*` and `Resizable*`** (`ev_lib` + `@evinvest/uikit`, and their class
+  constants): no consumer used them. The `chart-1 … chart-5` palette tokens stay.
+- **Badge `Secondary`, `Destructive`, `Outline`, `Success`** (`ev_lib` `uikit`
+  and `@evinvest/uikit`): see *Breaking* for what replaces them.
 
 ### Fixed
 
+- **`cn!` merges the `(--var)` shorthand like `tailwind-merge`** (`ev_lib`
+  `uikit`): `rounded-(--control-radius)` replaces `rounded-full` instead of
+  sitting beside it.
+- **`PopoverContent` honours `align`** (`ev_lib` `uikit`): `start` and `end` pin
+  the panel to the trigger's left or right edge. It always centred before, and a
+  wide panel under a trigger at the edge of its container ran off the screen.
+- **`PopoverForm` and `ConfirmDialog` triggers have a face** (`ev_lib` `uikit`):
+  the trigger rendered as bare text, because Rust has no `asChild` for the
+  `Button` the TS caller passes. It now wears the outline button face, and
+  `trigger_class` fuses over it.
+- **`CommandDialog` applies its `class`** (`ev_lib` `uikit`): the prop was
+  declared and never merged onto the dialog box.
+- **A popover opened together with its dialog sits above it** (`@evinvest/uikit`):
+  when both mount in one commit, the child layer is lifted over its parent,
+  keeps focus (Escape closes the popover first), and is placed from the
+  dialog's settled position rather than mid zoom-in.
+- **Nested modals share one scrim** (`@evinvest/uikit`): only the lowest open
+  modal draws an opaque scrim; Dialog, AlertDialog, Sheet, Drawer and
+  CommandDialog over another modal keep their own backdrop click and Escape
+  but add no darkness, and closing the top one does not flash the scrim.
+- **Command list scrolls** (`@evinvest/uikit`, `ev_lib` `uikit`): groups no
+  longer shrink to fit the list height and clip their items.
+- **NavigationMenu content opens below its trigger on a panel**
+  (`@evinvest/uikit`, `ev_lib` `uikit`), not over the trigger without a surface.
+- **`uikit_leptos` `ContextMenu` builds under `web_sys_unstable_apis`**
+  (`ev_lib`, patch): web-sys's `MouseEvent::client_x` is `f64` there and
+  `i32` otherwise; the pointer position now takes either.
+- **Dropdown, context and menubar items are clickable again** (`ev_lib` `uikit`):
+  they rendered `data-disabled="false"` and `data-inset="false"`, which the
+  classes' `data-[disabled]` / `data-[inset]` match on presence, so every item
+  was `pointer-events-none opacity-50` and indented. Both are now absent unless set.
 - **`Dialog` closes once and is named by its title** (`@evinvest/uikit`, #249,
   patch). One press on the overlay of a `Dialog`, `Sheet` or `AlertDialog`
   called `onOpenChange(false)` twice — once from the dismissable layer's
@@ -638,183 +802,6 @@ Rust crate and its TypeScript mirror at once.
   its own, always renders six 36px-cell weeks (the popover never changes size
   with the month or the locale's weekday labels), and the `DateTimePicker`
   grows a close button (`labels.close`) beside Clear, both ports.
-
-### Changed
-
-- **`AbSwitcherPanel` shows an unassigned experiment as off**
-  (`@evinvest/kitstart/react`): no `ab_<key>` cookie (or no entry in
-  `current`) now reads `not running` by default (`text.unassigned`, was
-  `not assigned`) and its variant buttons are disabled — the menu mounts on a
-  place's page, where the proxy assigns every running experiment and would
-  refuse a force for one that is not. `–` on the chip as before. A test
-  listed in the QA-only cookie `<qaCookie>_off` — the brand proxy's list of
-  paused tests, whose assignment cookies stay — reads the same (`abRunning`).
-
-- **`experiments` — weights are equal unless overridden** (**Breaking**, both
-  ports; #16; a major for `@evinvest/experiments`). Weights are no longer
-  declared in code: every variant gets an equal share. `weights` is gone from
-  the TS `ExperimentSpec` (`satisfies ExperimentConfig` rejects it) and from
-  the Rust `Experiment`; `Experiment::new(variants, weights)` is now
-  `Experiment::new(variants)`, and `Experiment::uniform` is removed — use
-  `Experiment::new`. Manual weights come only from an operator override in the
-  panel: `applyOverrides` lays them over the config under a package-private
-  key, and `pickVariant` reads only that — a `weights` field left in a config
-  (one without `satisfies`) is ignored and not carried over — falling back to
-  equal shares; Rust has no override path. kitstart's `DeclaredExperiment` drops
-  `weights` and `experiments.declared@1` sends one each per variant — the
-  panel contract is unchanged. Migration: delete `weights` from every
-  experiment config; a split that was not equal is set in the panel.
-  Equal-weight picks are unchanged, so existing cookies and hashed subjects
-  keep their arms.
-
-- **`settings` — drift watching is a generated method** (**Breaking**, Rust).
-  The new native-only `settings_drift` feature makes every `settings!` struct
-  generate `watch_drift() -> Infallible`: it polls the Secret mounted at
-  `$SETTINGS_DRIFT_MOUNT` every 5 min and `tracing::warn!`s each var that moved
-  since the watch started. Race it against the main future in a `select!`.
-  `settings::drift::{Watcher, Snapshot, VarChange, ChangeKind}` are gone from
-  the public API; delete the per-service `config_drift.rs` that drove them.
-  Plain `settings` stays zero-dep.
-
-- **`uikit` — `--primary` is a fill, `--primary-ink` is the ink** (**Breaking**,
-  both ports; #119). `--primary` is now the fill teal `#128377` under a white
-  `--on-primary` (4.63:1; ≥ 3:1 against `background`, `secondary`, `card` and
-  `popover`), and the readable teal `#2a9d8f` moves to a **new, required**
-  `--primary-ink` — a consumer sheet that does not define it renders every
-  link, eyebrow, radio dot and focus ring transparent. `--ring` is now the ink.
-  Inside the kit the split is already applied: `Button` `Link`, the eyebrow,
-  description links, the radio dot, the checked `Field` outline, the `Slider`
-  range and thumb border and the `Progress` indicator (on a `bg-primary-ink/20`
-  track) are the ink; `bg-primary text-on-primary`, a checked `Checkbox` /
-  `Switch` and the `Primary` band are the fill, and an eyebrow inside a
-  `Primary` band wears `on-primary`. Migration for a consumer's own classes:
-  `text-primary` → `text-primary-ink`; `border-primary` used as an outline →
-  `border-primary-ink`; a chip `bg-primary/N text-primary` keeps its tint and
-  takes `text-primary-ink`; leave `bg-primary text-on-primary` alone. See
-  `docs/spec/accents.md`.
-- **`i18n` — English is written where it renders** (breaking, both ports;
-  `@evinvest/i18n` 0.7.0, `ev_lib` 0.13.0). `t` takes the key *and* the English
-  sentence — `t("hero.title", "Invest in …")` / `t!(tr, "hero.title", "Invest
-  in …")` — and `messages/en/common.json` is generated back out of the code. The
-  contract was already running in site_conductor, as ~90 lines of app-local
-  code that had to fork `@evinvest/i18n/react` because the package's `Translate`
-  could not express it; this moves it to the one place both apps and both
-  languages read from. A key a translated catalogue lacks now renders the
-  sentence the call site asked for, not the raw key: **this reverses a
-  documented decision**, and reverses it because its premise is gone. Rendering
-  a dotted key was defensible while the catalogue was the only place the English
-  lived. `Translator::has` went with it — its only purpose was branching around
-  that placeholder. For `en` the catalogue is not consulted at all.
-- **`mfe!` — `messages:` is a required arm** (breaking, `ev_lib` 0.13.0). A
-  producer declares a `fn(Locale) -> Messages`; the macro resolves the host's
-  locale at mount and provides a `Translator` as context above the root. Not
-  optional: a producer with no copy passes an empty catalogue as one deliberate,
-  reviewable line, and a producer *with* copy cannot forget the locale — which
-  is exactly what the second element remote did. `mfe` now implies `i18n`.
-
-### Added
-
-- **`applyOverrides`** (`@evinvest/experiments`): lays an operator's
-  `{ enabled?, weights?, holdout? }` per key over the config in code, so a
-  landing's proxy can take weights and the kill switch from the Service-Arb
-  panel without a deploy. Each field is checked against the code on its own
-  (weights of the declared length, `>= 0`, sum `> 0`; holdout in `[0, 1)`;
-  enabled a boolean) and dropped when invalid; unknown keys are ignored and
-  variants never come from outside the code. TS-only for now.
-- **Experiments from the Service-Arb panel** (`@evinvest/kitstart/server`).
-  `createExperimentsSource` reads `GET <base>/experiments` for the proxy:
-  the first call waits (1.5 s timeout), later ones answer from memory with a
-  30 s TTL and stale-while-revalidate; a failure keeps the last good answer
-  (`{}`, the config in code, before the first one). `declareExperiments` queues `experiments.declared@1` in the lead
-  webhook's outbox at start (signed and retried like a lead, never throwing),
-  leaving out and logging an experiment the panel would refuse.
-- **`analytics_id` on a lead** (`@evinvest/kitstart`). `AnalyticsBoundary`
-  now holds one beacon `distinct_id` per page (in memory) and `LeadCapture`'s
-  script posts it; `quoteRoute` passes it, checked against
-  `[A-Za-z0-9._:-]{1,128}`, to the webhook as `ctx.analyticsId` for the
-  brand's `lead.created` body. Optional both ways: an older page posts none.
-- **`classNames.estimateGrid` on `LeadCapture`** (`@evinvest/kitstart/react`):
-  the grid of an estimate input's answer tiles, so a brand sets its own column
-  count (`"grid-cols-3 sm:grid-cols-4"` for a shorter card). Without it the
-  grid stays two columns, three from `sm`; the tile keeps its 44 px minimum.
-- **`i18n::t!`** (Rust): `$key` and `$en` are `literal` fragments, so the
-  compiler is the literal-ness gate the TypeScript extractor has to enforce by
-  hand. Natively each site also registers its pair with `i18n::catalogue()`, so
-  **extraction is linking, not parsing** — a site that compiles is in the
-  catalogue whether or not it ever renders. A recording `Translator` driven by
-  one SSR pass would silently drop every string behind a branch that did not
-  run, which is the failure class this exists to catch. One new dependency,
-  `inventory`, declared native-only so a shipped wasm bundle stays zero-dep. The
-  ceiling it buys: copy must live in natively-compilable code — which the
-  component-MFE snapshot contract already required of a producer.
-- **`localeOfElement` / `mfe::host_locale`**: the locale a DOM subtree is
-  written in, via `closest("[lang]")`. This is how an element remote learns its
-  language, and the reason it is read from the DOM rather than taken as a prop
-  is mechanical: a host mounts the element before it applies attributes, so
-  anything pushed in reads as absent at `connectedCallback` time. Previously
-  each host solved this privately — or, in the second case, forgot to.
-- **`evinvest-i18n-extract` / `evinvest-i18n-check`**: the extractor, moved out
-  of site_conductor and generalised over `--root` / `--exclude` / `--messages`.
-  `--exclude` names what is *not* source, because a list of source directories
-  is a hole that opens the day someone adds a slice, and an unscanned call site
-  produces no error — just English forever in five locales. Both refuse a `t()`
-  whose key or English is not a literal. `typescript` is an optional peer
-  dependency: needed to run the extractor, never to render a string.
-
-- **`settings` — deployment-profile guards (both ports)**: `#[required_in("production")]`
-  (Rust) / `requiredIn(v, 'production')` (TS) turns an optional or defaulted
-  setting back into a boot failure in the named profiles. The setting that hurts
-  is not the missing required one — that already stops the boot — but the
-  optional whose absence is a *silent* no-op: no `SMTP_HOST` means mail is logged
-  instead of sent, no `SENTRY_DSN` means the alerts never arrive. On a defaulted
-  field the dev-shaped default stops applying there, so the value must be
-  explicit. The profile is the canonical `APP_ENV` read from the same source
-  (unset ⇒ `development`, so an unconfigured environment is never mistaken for
-  production); TS additionally takes a `profile` override for Next.js, where
-  `NODE_ENV` already owns that name. Refused at compile time (Rust) / declaration
-  time (TS) on a setting that is already required everywhere.
-- **`settings` — `required_var_names(profile)`** (Rust): the deploy-time
-  checklist, so a preflight can diff a Secret's keys against what the image
-  actually needs instead of discovering the gap as a CrashLoopBackOff.
-- **`settings` — `or_exit` / `orExit`**: fail a boot with `EX_CONFIG` (78)
-  instead of a nondescript 1, so "the config is wrong, a restart cannot help" is
-  distinguishable from the dependency blip a restart does fix.
-- **`settings::drift`** (Rust): detects that the source a process was configured
-  from has moved on without it. Polling `std::env` is useless by construction —
-  it is fixed at `exec`, and a runtime that injected values through `envFrom`
-  never revisits them — so the watcher takes an **injected** source, to be
-  pointed at something that does move (a Secret mounted as files, a rendered
-  dotenv). The baseline is boot, not the previous poll, so a stale process keeps
-  reporting until it is replaced. It only detects: nothing is applied in place,
-  because a process that reconfigures itself erases the gitops env edit that was
-  the audit trail. Snapshots hold hashes and a change is a name plus a verb, so
-  the whole path is safe to log.
-
-- **`error_monitoring::Config.service`** (Rust, native): names the service on
-  every event and transaction as a `service` tag. A Sentry project is a DSN, so
-  sibling services commonly share one and were separable only by hostname in the
-  issue list. Set from the same value as `OTEL_SERVICE_NAME` so an issue, a trace
-  and a log line agree. It is a scope tag rather than a `before_send` hook
-  because `before_send` never sees transactions, which need the name just as
-  much. **Breaking:** `Config` gains a public field, so struct literals must add
-  `service` (`None` keeps the old behaviour).
-- **`uikit` — `terminal`** (both ports; the class tables are generated from
-  Rust): a trading terminal over an investment product's shares — ticker,
-  chart slot | order book | order form, open orders — the way a spot exchange
-  lays it out. `Terminal` is a viewport-bound grid from `lg` (a phone stacks
-  the panes) that places each `TerminalPane` by `TerminalArea`, so the desktop
-  layout does not depend on DOM order. `OrderBook` rows carry a depth bar
-  behind the figures and colour the price by `BookSide` (bids positive, asks
-  loud); `TradesTapeRow` reads the same enum; `OrderFormSubmit` fills by
-  `OrderSide`. The chart is a sized `relative` slot and nothing more — the
-  plotting engine stays the consumer's (React hands the element out through a
-  `ref`, Dioxus through an `id`) — and the open-orders pane reuses `Table` and
-  `Tabs`, contributing only `OpenOrdersEmpty`. Same `data-slot` / `data-area` /
-  `data-side` attributes on both sides, so one stylesheet or test selector
-  reads either port.
-
-### Fixed
-
 - `error_monitoring` (Rust, native): a malformed or empty `Config.dsn` now
   disables reporting instead of panicking at boot, matching the wasm and TS
   ports' documented no-op contract — a monitoring typo no longer crash-loops

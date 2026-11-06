@@ -20,7 +20,7 @@ stays in the brand.
 | `@evinvest/kitstart/next/config` | `next.config.ts`, `vitest.config.ts` | `withLanding`, `buildEnv` and the `assets/` readers |
 | `@evinvest/kitstart/react` | either side | `LangSwitch`, `CallBar`, `StatusScreen`, `PlaceDirectory`, `AreaChips`, `Coverage`, `MapFacade` (client), `QuoteFormShell`, `FormSelect` (client) with `loadLazyParts` for tests, `LeadCapture` (client), `LeadBooking` (client) and its adapters, `Faq`, `AnalyticsBoundary` (client), plus the kit and marketing pieces a landing composes with |
 | `@evinvest/kitstart/testing` | a brand's vitest | `describeLandingContract(site, { root, globalsCss, proxySource, text })` (`root` required: it holds the mounted `/health` and `/.well-known/sa-site`), `describeLeadStoreContract(name, harness)`, `storefrontPlace`, `serviceAreaPlace`, `testLead` |
-| `@evinvest/kitstart/testing/e2e` | a brand's Playwright | `defineSectionSuite(sections)`, `settle(page, selector)`, `BREAKPOINTS` |
+| `@evinvest/kitstart/testing/e2e` | a brand's Playwright | `defineSectionSuite(sections)` (baselines, and the `@figma` frames), `defineFigmaSuite(sections)`, `settle(page, selector)`, `BREAKPOINTS` |
 | bin `kitstart-size` | plain node | `kitstart-size [<build root>] [--route …] [--budget …]`: first-load JS of a place page against the target in `tests/bundle_budget.txt` (passes with a warning up to its tolerance, 20 % by default — see [The bundle budget](#the-bundle-budget)); fails closed |
 
 `vitest` and `@playwright/test` are not peers at all: they are the brand's
@@ -45,7 +45,7 @@ brand's `flake.nix` is its own config plus one call — `template/flake.nix` is
 the whole of one:
 
 ```nix
-inputs.ev.url = "github:EV-invest/lib?ref=@evinvest/kitstart-v0.23.0"; # the version in package-lock.json
+inputs.ev.url = "github:EV-invest/lib?ref=@evinvest/kitstart-v0.24.1"; # the version in package-lock.json
 inputs.ev.inputs.v_flakes.follows = "v_flakes";
 
 landing = ev.lib.mkLanding {
@@ -63,9 +63,10 @@ landing = ev.lib.mkLanding {
   e2eConfig ? "tests/e2e",
   packageSourceOverrides ? { },                   # lock key → `file:`/vendored tarball
   maxOldSpaceMiB ? 56,                            # V8 old-space cap; the OG render dies at 48
+  figmaFile ? null,                               # the Figma file `apps.figma` renders into
 };
 # → { site, bundleBudget, packages.{default,site,container}, containers,
-#     checks.{site,bundle-budget}, apps.{default,help,dev,test,accept-test,size,container-smoke},
+#     checks.{site,bundle-budget}, apps.{default,help,dev,test,accept-test,figma,size,container-smoke},
 #     devShell }
 ```
 
@@ -111,6 +112,14 @@ tolerance is a deliberate commit, with a reason, as raising the budget was.
 - `apps.test` (tsc — the app, then `e2eConfig` as its own project with its own
   `tsconfig.json` — lint, vitest, build, size, Playwright on the flake's
   pinned browsers), `accept-test` (Linux only), `size`, `dev`, `help`.
+- `apps.figma`: the pages of the `@figma` suite (`defineFigmaSuite`, which
+  `defineSectionSuite` calls) into Figma, as editable auto-layout frames —
+  one per page and Playwright project, rendered exactly as the baselines are.
+  `-- frames` prints `{ file, frames }`: `figmaFile` and every frame's key,
+  `<project> <page>`. Without an argument it builds and captures the frames
+  `FIGMA_CAPTURES` names, a JSON object of `{ captureId, endpoint }` per key
+  from Figma's `generate_figma_design`. The agent side of the loop is the
+  `figma-render` skill.
 - `apps.container-smoke`: boots the image with a host port docker picks
   (`-p 127.0.0.1::<port>`: landing ports sit in Linux's ephemeral range), checks
   `/health`, the 302, the page, the OG card, `/.well-known/sa-site` (every
