@@ -248,9 +248,10 @@
   --button-danger-border: #f05b52;
   --button-danger-ink: #070d18;
 
-  /* tints are pills with no edge: the neutral one is the hover plane alone */
+  /* tints are pills with no edge; the neutral one is the hover plane */
   --tint-fill: 18%;
   --tint-edge: 0%;
+  --tint-neutral-fill: var(--hover);
   --tint-neutral-edge: transparent;
   /* Figma tints the accent chip 16 %, which leaves its teal label at 4.03:1 on
    * the card; 8 % holds 4.56:1 */

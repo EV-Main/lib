@@ -2,8 +2,9 @@ use tailwind_fuse::{AsTailwindClass, TwVariant};
 
 /// Base shared by every toast. The TS mirror appends its swipe-only utilities
 /// (`touch-pan-y select-none`) on top — that styling is behaviour-specific and
-/// stays in the React component (the Rust kit has no swipe-to-dismiss).
-pub const TOAST_BASE: &str = "pointer-events-auto flex w-full items-start gap-3 rounded-panel border p-3 text-body shadow-elevated";
+/// stays in the React component (the Rust kit has no swipe-to-dismiss). Its
+/// [`Tone`](crate::Tone) shows only in the edge.
+pub const TOAST_BASE: &str = "pointer-events-auto flex w-full items-start gap-3 rounded-panel border border-(color:--tone-edge) bg-popover p-3 text-body text-ink shadow-elevated";
 
 pub const TOAST_CLOSE: &str = "text-ink/50 hover:text-ink shrink-0 transition-colors";
 
@@ -13,21 +14,6 @@ pub const TOAST_TITLE: &str = "font-medium";
 
 /// Pinned stack container base; the per-position offsets ride on [`ToastPosition`].
 pub const TOASTER_BASE: &str = "pointer-events-none fixed z-100 w-[calc(100%-2rem)] max-w-sm";
-
-#[derive(PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
-#[strum(serialize_all = "kebab-case")]
-pub enum ToastVariant {
-	#[tw(default, class = "bg-popover text-ink border-border")]
-	Neutral,
-	#[tw(class = "bg-popover text-ink border-tint-positive-edge")]
-	Positive,
-	#[tw(class = "bg-popover text-ink border-tint-info-edge")]
-	Info,
-	#[tw(class = "bg-popover text-ink border-tint-warn-edge")]
-	Warn,
-	#[tw(class = "bg-popover text-ink border-tint-error-edge")]
-	Error,
-}
 
 #[derive(PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
 #[strum(serialize_all = "kebab-case")]

@@ -399,7 +399,7 @@ describe.each(scopes)("palette $label", (scope) => {
   // decoration. warn and error owe 3:1, the rest AA.
   describe("tints", () => {
     const tones = [
-      ["neutral", "ink-mid", 4.5],
+      ["neutral", "ink", 4.5],
       ["primary", "primary-ink", 4.5],
       ["positive", "positive-ink", 4.5],
       ["info", "accent-info-ink", 4.5],

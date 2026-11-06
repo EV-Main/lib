@@ -101,7 +101,7 @@ function SecurityTab() {
           {SESSIONS.map((s, i) => (
             <SettingsRow key={s.id} label={s.name} hint={s.note} divider={i < SESSIONS.length - 1} inline>
               {s.current ? (
-                <Badge variant="positive">Current</Badge>
+                <Badge tone="positive">Current</Badge>
               ) : (
                 <Button size="sm" variant="destructive">
                   Sign out
@@ -205,7 +205,7 @@ export function ConfirmVariants() {
       />
       <ConfirmDialog
         trigger={<Button size="xs" variant="destructive">Danger · slow confirm</Button>}
-        tone="danger"
+        tone="error"
         title="Delete workspace?"
         description="This permanently removes the workspace, its layouts and saved drawings. This action cannot be undone."
         confirmLabel="Delete workspace"
@@ -223,7 +223,7 @@ export function ConfirmVariants() {
       />
       <ConfirmDialog
         trigger={<Button size="xs" variant="destructive">Danger · rejects</Button>}
-        tone="danger"
+        tone="error"
         title="Delete workspace?"
         description="A rejection keeps the dialog open and shows why."
         confirmLabel="Delete workspace"

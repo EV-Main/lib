@@ -912,7 +912,7 @@
   /* a tone worn as a tint (Badge, Toast, SystemBanner, Alert): its fill and edge
    * are the tone's ink at --tint-fill and --tint-edge, so the edge and the label
    * are one hue. warn and error are their own ink (docs/spec/accents.md). */
-  --tint-neutral-fill: var(--hover);
+  --tint-neutral-fill: color-mix(in srgb, var(--ink) var(--tint-fill), transparent);
   --tint-neutral-edge: var(--border);
   --tint-primary-fill: color-mix(in srgb, var(--primary-ink) var(--tint-fill), transparent);
   --tint-primary-edge: color-mix(in srgb, var(--primary-ink) var(--tint-edge), transparent);
@@ -1287,9 +1287,10 @@
   --button-danger-border: #f05b52;
   --button-danger-ink: #070d18;
 
-  /* tints are pills with no edge: the neutral one is the hover plane alone */
+  /* tints are pills with no edge; the neutral one is the hover plane */
   --tint-fill: 18%;
   --tint-edge: 0%;
+  --tint-neutral-fill: var(--hover);
   --tint-neutral-edge: transparent;
   /* Figma tints the accent chip 16 %, which leaves its teal label at 4.03:1 on
    * the card; 8 % holds 4.56:1 */

@@ -78,13 +78,13 @@ describe("Toaster", () => {
     expect(first).toHaveAttribute("data-visible", "false");
   });
 
-  it("pins the variant via the helper methods", () => {
+  it("pins the tone via the helper methods", () => {
     const { getByText } = render(<Toaster />);
     act(() => {
       toast.positive("Done", { duration: Infinity });
     });
     const item = getByText("Done").closest('[data-slot="toast"]')!;
-    expect(item).toHaveAttribute("data-variant", "positive");
+    expect(item).toHaveAttribute("data-tone", "positive");
   });
 
   it("slides out on the close button, then unmounts on transitionend", () => {

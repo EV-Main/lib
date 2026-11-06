@@ -1,10 +1,10 @@
-import { Button, toast, type ToastVariant } from "@evinvest/uikit";
+import { Button, toast, type Tone } from "@evinvest/uikit";
 import { TOAST_POSITIONS, setToastPosition, useToastPosition } from "../../gallery/toast-position";
 import { Block, PageRoot, Specimen } from "../../gallery/ui";
 
-const TONES: readonly ToastVariant[] = ["neutral", "positive", "info", "warn", "error"];
+const TONES: readonly Exclude<Tone, "primary">[] = ["neutral", "positive", "info", "warn", "error"];
 
-function fire(variant: ToastVariant): void {
+function fire(variant: Exclude<Tone, "primary">): void {
   const title = `${variant[0]?.toUpperCase() ?? ""}${variant.slice(1)} toast`;
   // single line, to match the Dioxus port (Rust toasts have no description)
   if (variant === "neutral") toast(title);

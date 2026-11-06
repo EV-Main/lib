@@ -8,7 +8,7 @@ use crate::{
 		leptos::{
 			AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, ButtonVariant, CONFIRM_DIALOG_CONTENT,
 			CONFIRM_DIALOG_DESCRIPTION, CONFIRM_DIALOG_ERROR, CONFIRM_DIALOG_FOOTER, CONFIRM_DIALOG_HEADER, CONFIRM_DIALOG_ICON, CONFIRM_DIALOG_PENDING, CONFIRM_DIALOG_SPINNER,
-			CONFIRM_DIALOG_TEXT, CONFIRM_DIALOG_TITLE, ConfirmDialogTone, Size, Spinner, button_classes,
+			CONFIRM_DIALOG_TEXT, CONFIRM_DIALOG_TITLE, Size, Spinner, Tone, button_classes,
 			icon_button::Glyph,
 			primitives::{use_controllable, use_stable_id},
 		},
@@ -52,7 +52,7 @@ pub fn ConfirmDialog(
 	#[prop(into)]
 	title: ViewFn,
 	#[prop(optional, into)] description: Option<ViewFn>,
-	#[prop(optional)] tone: ConfirmDialogTone,
+	#[prop(optional)] tone: Tone,
 	#[prop(into)] confirm_label: ViewFn,
 	on_confirm: Callback<()>,
 	#[prop(optional, into)] pending: Signal<bool>,
@@ -112,20 +112,19 @@ pub fn ConfirmDialog(
 		})
 	};
 	let busy = move || pending.get().to_string();
-	let danger = tone == ConfirmDialogTone::Danger;
+	let danger = tone == Tone::Error;
 	let confirm_variant = if danger { ButtonVariant::Destructive } else { ButtonVariant::Primary };
 	let cancel_cls = button_classes(&ButtonVariant::Ghost, Size::Xs, false, None, CONFIRM_DIALOG_PENDING);
 	let confirm_cls = button_classes(&confirm_variant, Size::Xs, false, None, CONFIRM_DIALOG_PENDING);
-	let icon_cls = cn!(CONFIRM_DIALOG_ICON, tone.as_class());
 	let cancel_label = labels.cancel.unwrap_or_else(|| String::from("Cancel"));
-	let cls = cn!(CONFIRM_DIALOG_CONTENT, class);
+	let cls = cn!(CONFIRM_DIALOG_CONTENT, tone.as_class(), class);
 	let trigger_cls = button_classes(&ButtonVariant::Outline, Size::Xs, false, None, &trigger_class);
 	let labelled_by = title_id.clone();
 	// Run on every opening, so it clones what the inner parts take by value.
 	let body = move || {
 		let (icon, title, description, confirm_label) = (icon.clone(), title.clone(), description.clone(), confirm_label.clone());
 		let (title_id, description_id, cancel_label, shown_error) = (title_id.clone(), description_id.clone(), cancel_label.clone(), shown_error.clone());
-		let (icon_cls, cancel_cls, confirm_cls) = (icon_cls.clone(), cancel_cls.clone(), confirm_cls.clone());
+		let (cancel_cls, confirm_cls) = (cancel_cls.clone(), confirm_cls.clone());
 		let glyph = match icon {
 			Some(icon) => icon.run(),
 			None => view! {
@@ -138,7 +137,11 @@ pub fn ConfirmDialog(
 		};
 		view! {
 			<AlertDialogHeader class=CONFIRM_DIALOG_HEADER>
-				<span class=icon_cls data-slot="confirm-dialog-icon" data-tone=tone.as_ref().to_owned()>
+				<span
+					class=CONFIRM_DIALOG_ICON
+					data-slot="confirm-dialog-icon"
+					data-tone=tone.as_ref().to_owned()
+				>
 					{glyph}
 				</span>
 				<div class=CONFIRM_DIALOG_TEXT>

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { HeaderBalance, HeaderSearch, NotificationBell } from "../src/components/shell/header-controls";
+import { toneClasses } from "../src/generated/tone";
 
 describe("HeaderBalance", () => {
   it("shows a skeleton while loading, then reveals the figure", () => {
@@ -21,9 +22,9 @@ describe("HeaderBalance", () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  it("colours the figure for the warn tone", () => {
-    render(<HeaderBalance value="$0.00" tone="warn" />);
-    expect(screen.getByText("$0.00")).toHaveClass("text-accent-warn");
+  it("fuses the tone onto the root", () => {
+    const { container } = render(<HeaderBalance value="$0.00" tone="warn" />);
+    expect(container.querySelector('[data-slot="header-balance"]')).toHaveClass(toneClasses.warn);
   });
 
   it("formats a numeric amount as USD by default and speaks it once", () => {
@@ -31,9 +32,9 @@ describe("HeaderBalance", () => {
     expect(container.querySelector('[data-slot="animated-number-text"]')).toHaveTextContent("$1,234.50");
   });
 
-  it("keeps the figure's colour class on the animated amount", () => {
+  it("keeps the tone on an ancestor of the animated amount", () => {
     const { container } = render(<HeaderBalance amount={3} tone="warn" />);
-    expect(container.querySelector(".text-accent-warn")).toContainElement(
+    expect(container.querySelector(`[data-slot="header-balance"]`)).toContainElement(
       container.querySelector('[data-slot="animated-number"]'),
     );
   });

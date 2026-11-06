@@ -13,9 +13,8 @@ import {
   CONFIRM_DIALOG_SPINNER,
   CONFIRM_DIALOG_TEXT,
   CONFIRM_DIALOG_TITLE,
-  confirmDialogIconToneClasses,
-  type ConfirmDialogTone,
 } from "../../generated/confirm-dialog";
+import { toneClasses, type Tone } from "../../generated/tone";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import {
   AlertDialog,
@@ -29,8 +28,6 @@ import {
 import { buttonVariants } from "../atomic/button";
 import { Spinner } from "../atomic/spinner";
 import { UiIcon } from "../../icons/ui-icons";
-
-export type { ConfirmDialogTone };
 
 export interface ConfirmDialogLabels {
   cancel?: string;
@@ -46,7 +43,7 @@ export interface ConfirmDialogProps {
   trigger?: React.ReactNode;
   title: React.ReactNode;
   description?: React.ReactNode;
-  tone?: ConfirmDialogTone;
+  tone?: Tone;
   confirmLabel: React.ReactNode;
   /**
    * Resolve to close the dialog. While a returned promise is pending both
@@ -67,7 +64,7 @@ export function ConfirmDialog({
   trigger,
   title,
   description,
-  tone = "default",
+  tone = "neutral",
   confirmLabel,
   onConfirm,
   icon,
@@ -81,7 +78,7 @@ export function ConfirmDialog({
   });
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-  const danger = tone === "danger";
+  const danger = tone === "error";
   // A controlled parent can reopen the dialog without going through `change`.
   React.useEffect(() => {
     if (isOpen) setError(null);
@@ -110,11 +107,9 @@ export function ConfirmDialog({
   return (
     <AlertDialog open={isOpen} onOpenChange={change}>
       {trigger != null && <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>}
-      <AlertDialogContent className={cn(CONFIRM_DIALOG_CONTENT, className)}>
+      <AlertDialogContent className={cn(CONFIRM_DIALOG_CONTENT, toneClasses[tone], className)}>
         <AlertDialogHeader className={CONFIRM_DIALOG_HEADER}>
-          <span
-            className={cn(CONFIRM_DIALOG_ICON, confirmDialogIconToneClasses[tone])}
-          >
+          <span className={CONFIRM_DIALOG_ICON}>
             {icon ?? <UiIcon name="alert" />}
           </span>
           <div className={CONFIRM_DIALOG_TEXT}>

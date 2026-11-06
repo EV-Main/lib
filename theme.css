@@ -200,7 +200,7 @@
   /* a tone worn as a tint (Badge, Toast, SystemBanner, Alert): its fill and edge
    * are the tone's ink at --tint-fill and --tint-edge, so the edge and the label
    * are one hue. warn and error are their own ink (docs/spec/accents.md). */
-  --tint-neutral-fill: var(--hover);
+  --tint-neutral-fill: color-mix(in srgb, var(--ink) var(--tint-fill), transparent);
   --tint-neutral-edge: var(--border);
   --tint-primary-fill: color-mix(in srgb, var(--primary-ink) var(--tint-fill), transparent);
   --tint-primary-edge: color-mix(in srgb, var(--primary-ink) var(--tint-edge), transparent);

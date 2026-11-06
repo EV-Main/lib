@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { SettingsLayout, SettingsSection, SettingsRow } from "../src/components/derived/settings";
+import { toneClasses } from "../src/generated/tone";
 import { SectionNav } from "../src/components/shell/section-nav";
 
 describe("Settings", () => {
@@ -29,8 +30,8 @@ describe("Settings", () => {
   });
 
   it("marks the danger zone with the error edge", () => {
-    render(<SettingsSection title="Delete account" tone="danger" />);
-    expect(screen.getByRole("region", { name: "Delete account" })).toHaveClass("border-accent-error");
+    render(<SettingsSection title="Delete account" tone="error" />);
+    expect(screen.getByRole("region", { name: "Delete account" })).toHaveClass(toneClasses.error);
   });
 
   it("lays settings rows out like form rows, inline for toggles", () => {

@@ -10,15 +10,9 @@ export const HEADER_BALANCE_SETTLED = "inline-flex";
 
 export const HEADER_BALANCE_SKELETON = "h-3 w-12";
 
-export const HEADER_BALANCE_FIGURE = "font-medium tabular-nums";
+export const HEADER_BALANCE_FIGURE = "font-medium tabular-nums text-(color:--tone-ink)";
 
 export const HEADER_BALANCE_CHEVRON = "size-4 text-ink-soft";
-
-export const headerBalanceToneClasses = {
-  "default": "text-ink",
-  "warn": "text-accent-warn",
-} as const;
-export type HeaderBalanceTone = keyof typeof headerBalanceToneClasses;
 
 export const NOTIFICATION_BELL_TRIGGER = "relative";
 

@@ -51,7 +51,7 @@ function BrandScope({ brand, polarity }: { brand: string; polarity: Polarity }) 
           <div className="flex items-center gap-3">
             <Logo className="h-8 w-auto text-primary-ink" />
             <span className="font-semibold">{brand}</span>
-            <Badge variant="neutral">{polarity}</Badge>
+            <Badge tone="neutral">{polarity}</Badge>
           </div>
           <BrandCard id={`${brand}-${polarity}`} brand={brand} />
           <LeadForm />
