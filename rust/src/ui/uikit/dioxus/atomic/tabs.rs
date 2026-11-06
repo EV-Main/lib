@@ -3,7 +3,7 @@ use dioxus::prelude::*;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
-		TABS_CONTENT, TABS_LIST, TABS_ROOT, TABS_TRIGGER, TabsOrientation,
+		Orientation, TABS_CONTENT, TABS_LIST, TABS_ROOT, TABS_TRIGGER,
 		primitives::{Controllable, RovingFocus, use_controllable, use_roving_focus, use_roving_item},
 	},
 };
@@ -13,7 +13,7 @@ pub fn Tabs(
 	value: Option<String>,
 	#[props(default)] default_value: String,
 	on_value_change: Option<EventHandler<String>>,
-	#[props(default)] orientation: TabsOrientation,
+	#[props(default)] orientation: Orientation,
 	#[props(default)] class: String,
 	children: Element,
 ) -> Element {
@@ -91,7 +91,7 @@ pub fn TabsContent(value: String, #[props(default)] class: String, children: Ele
 #[derive(Clone, Copy)]
 struct TabsCtx {
 	value: Controllable<String>,
-	orientation: TabsOrientation,
+	orientation: Orientation,
 }
 
 #[cfg(test)]
@@ -214,7 +214,7 @@ mod tests {
 	fn vertical_tablist_walks_with_arrow_down() {
 		fn app() -> Element {
 			rsx! {
-				Tabs { orientation: TabsOrientation::Vertical, default_value: "one".to_string(),
+				Tabs { orientation: Orientation::Vertical, default_value: "one".to_string(),
 					TabsList {
 						TabsTrigger { value: "one", "One" }
 						TabsTrigger { value: "two", "Two" }
@@ -232,7 +232,7 @@ mod tests {
 	fn list_carries_orientation() {
 		fn app() -> Element {
 			rsx! {
-				Tabs { orientation: TabsOrientation::Vertical, default_value: "one".to_string(),
+				Tabs { orientation: Orientation::Vertical, default_value: "one".to_string(),
 					TabsList {
 						TabsTrigger { value: "one", "One" }
 					}

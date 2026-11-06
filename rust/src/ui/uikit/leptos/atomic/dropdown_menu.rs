@@ -1,6 +1,6 @@
+pub use ev_lib_classes::MenuItemVariant;
 use leptos::{context::Provider, prelude::*};
 
-pub use crate::ui::uikit::core::DropdownMenuItemVariant;
 use crate::{
 	cn,
 	ui::uikit::leptos::{
@@ -88,7 +88,7 @@ pub fn DropdownMenuGroup(#[prop(optional, into)] class: String, children: Childr
 
 #[component]
 pub fn DropdownMenuItem(
-	#[prop(optional)] variant: DropdownMenuItemVariant,
+	#[prop(optional)] variant: MenuItemVariant,
 	#[prop(optional)] inset: bool,
 	#[prop(optional, into)] disabled: Signal<bool>,
 	#[prop(optional)] on_click: Option<Callback<leptos::ev::MouseEvent>>,

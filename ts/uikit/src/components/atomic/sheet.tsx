@@ -22,6 +22,7 @@ import {
   SHEET_SIDE_TOP,
   SHEET_TITLE,
 } from "../../generated/sheet";
+import type { Side } from "../../generated/primitives";
 
 interface SheetContextValue {
   open: boolean;
@@ -122,7 +123,7 @@ const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 export interface SheetContentProps extends React.ComponentProps<"div"> {
-  side?: "top" | "right" | "bottom" | "left";
+  side?: Side;
   /**
    * Where focus lands on open. Default `container`: a sheet is a panel of
    * content, and its first Tab stop is as likely an action as a field — the

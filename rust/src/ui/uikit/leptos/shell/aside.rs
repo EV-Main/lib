@@ -1,6 +1,7 @@
+pub use ev_lib_classes::AsidePanelMode;
 use leptos::prelude::*;
 
-pub use crate::ui::uikit::core::{AsideCollapse, AsideHeaderLabels, AsidePanelMode};
+pub use crate::ui::uikit::core::{AsideCollapse, AsideHeaderLabels};
 use crate::{
 	cn,
 	ui::uikit::leptos::{

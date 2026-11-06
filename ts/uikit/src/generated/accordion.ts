@@ -9,3 +9,8 @@ export const ACCORDION_TRIGGER = "focus-visible:border-ring focus-visible:ring-r
 export const ACCORDION_CONTENT = "data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm";
 
 export const ACCORDION_CONTENT_INNER = "pt-0 pb-4";
+
+export const ACCORDION_CHEVRON = "text-ink-soft pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200";
+
+export const ACCORDION_TYPES = ["single", "multiple"] as const;
+export type AccordionType = (typeof ACCORDION_TYPES)[number];

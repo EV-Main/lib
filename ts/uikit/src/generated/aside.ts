@@ -33,3 +33,6 @@ export const asidePanelSideClasses = {
   "right": "border-l border-border",
 } as const;
 export type AsidePanelSide = keyof typeof asidePanelSideClasses;
+
+export const ASIDE_PANEL_MODES = ["docked", "overlay"] as const;
+export type AsidePanelMode = (typeof ASIDE_PANEL_MODES)[number];

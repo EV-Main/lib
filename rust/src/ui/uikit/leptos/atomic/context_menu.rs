@@ -1,6 +1,6 @@
+pub use ev_lib_classes::MenuItemVariant;
 use leptos::{context::Provider, prelude::*};
 
-pub use crate::ui::uikit::core::ContextMenuItemVariant;
 use crate::{
 	cn,
 	ui::uikit::leptos::{
@@ -89,7 +89,7 @@ pub fn ContextMenuGroup(#[prop(optional, into)] class: String, children: Childre
 
 #[component]
 pub fn ContextMenuItem(
-	#[prop(optional)] variant: ContextMenuItemVariant,
+	#[prop(optional)] variant: MenuItemVariant,
 	#[prop(optional)] inset: bool,
 	#[prop(optional, into)] disabled: Signal<bool>,
 	#[prop(optional)] on_click: Option<Callback<leptos::ev::MouseEvent>>,

@@ -32,6 +32,15 @@ export const SIDEBAR_MENU = "flex w-full min-w-0 flex-col gap-1";
 
 export const SIDEBAR_MENU_ITEM = "group/menu-item relative";
 
+export const SIDEBAR_SIDES = ["left", "right"] as const;
+export type SidebarSide = (typeof SIDEBAR_SIDES)[number];
+
+export const SIDEBAR_VARIANTS = ["sidebar", "floating", "inset"] as const;
+export type SidebarVariant = (typeof SIDEBAR_VARIANTS)[number];
+
+export const SIDEBAR_COLLAPSIBLES = ["offcanvas", "icon", "none"] as const;
+export type SidebarCollapsible = (typeof SIDEBAR_COLLAPSIBLES)[number];
+
 export const sidebarMenuButtonSizeClasses = {
   "xs": "h-7 text-xs",
   "sm": "h-8 text-sm",

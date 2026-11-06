@@ -11,6 +11,7 @@ import { mergeRefs } from "../../primitives/merge-refs";
 import { Portal } from "../../primitives/portal";
 import { Slot } from "../../primitives/slot";
 import { POPOVER_CONTENT } from "../../generated/popover";
+import type { Side } from "../../generated/primitives";
 
 /**
  * `InfoTip` — the ⓘ-beside-a-label *toggletip*. It reuses the popover machinery
@@ -152,7 +153,7 @@ export function InfoTipTrigger({
 }
 
 export interface InfoTipContentProps extends React.ComponentProps<"div"> {
-  side?: "top" | "right" | "bottom" | "left";
+  side?: Side;
   align?: "start" | "center" | "end";
   sideOffset?: number;
 }

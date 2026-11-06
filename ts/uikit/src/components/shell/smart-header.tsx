@@ -7,8 +7,9 @@ import {
   SMART_HEADER_TOOLBAR,
 } from "../../generated/smart-header";
 import { TopBar } from "./top-bar";
+import type { SmartHeaderState } from "../../generated/smart-header";
 
-export type SmartHeaderState = "default" | "collapsed" | "banner" | "search";
+export type { SmartHeaderState };
 
 export interface SmartHeaderProps extends Omit<React.ComponentProps<"div">, "children"> {
   /**

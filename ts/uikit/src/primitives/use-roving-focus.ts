@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import type { RovingOrientation } from "../generated/primitives";
 
 /**
  * Arrow-key roving focus over a set of items — the dep-light core of menus,
@@ -17,7 +18,7 @@ import * as React from "react";
  */
 export function useRovingFocus(opts: {
   count: number | (() => number);
-  orientation?: "horizontal" | "vertical" | "both";
+  orientation?: RovingOrientation;
   loop?: boolean;
   initial?: number;
 }): {

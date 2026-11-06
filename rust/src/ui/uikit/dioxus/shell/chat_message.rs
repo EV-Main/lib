@@ -1,8 +1,8 @@
 use std::{cell::Cell, rc::Rc};
 
 use dioxus::prelude::*;
+pub use ev_lib_classes::{ChatAttachmentState, ChatAttachmentType, ChatMessageRole};
 
-pub use crate::ui::uikit::core::{ChatAttachmentState, ChatAttachmentType, ChatMessageRole};
 use crate::{
 	cn,
 	ui::uikit::dioxus::{

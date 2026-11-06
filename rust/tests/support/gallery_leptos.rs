@@ -1004,7 +1004,7 @@ fn d_dropdown_menu() -> AnyView {
 				<DropdownMenuSeparator />
 				<DropdownMenuItem>"Profile"</DropdownMenuItem>
 				<DropdownMenuItem>"Settings"</DropdownMenuItem>
-				<DropdownMenuItem variant=DropdownMenuItemVariant::Destructive>"Delete"</DropdownMenuItem>
+				<DropdownMenuItem variant=MenuItemVariant::Destructive>"Delete"</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	}
@@ -1023,7 +1023,7 @@ fn d_context_menu() -> AnyView {
 				<ContextMenuItem>"Back"</ContextMenuItem>
 				<ContextMenuItem>"Forward"</ContextMenuItem>
 				<ContextMenuSeparator />
-				<ContextMenuItem variant=ContextMenuItemVariant::Destructive>"Delete"</ContextMenuItem>
+				<ContextMenuItem variant=MenuItemVariant::Destructive>"Delete"</ContextMenuItem>
 			</ContextMenuContent>
 		</ContextMenu>
 	}
@@ -1039,7 +1039,7 @@ fn d_menubar() -> AnyView {
 					<MenubarItem>"New"</MenubarItem>
 					<MenubarItem>"Open"</MenubarItem>
 					<MenubarSeparator />
-					<MenubarItem variant=MenubarItemVariant::Destructive>"Quit"</MenubarItem>
+					<MenubarItem variant=MenuItemVariant::Destructive>"Quit"</MenubarItem>
 				</MenubarContent>
 			</MenubarMenu>
 		</Menubar>
@@ -1384,7 +1384,7 @@ fn p_tabs_siblings() -> AnyView {
 			</TabsList>
 			<TabsContent value="one">"Panel one"</TabsContent>
 		</Tabs>
-		<Tabs default_value="two" orientation=TabsOrientation::Vertical>
+		<Tabs default_value="two" orientation=Orientation::Vertical>
 			<TabsList>
 				<TabsTrigger value="one">"One"</TabsTrigger>
 				<TabsTrigger value="two">"Two"</TabsTrigger>
@@ -1428,7 +1428,7 @@ fn p_carousel_siblings() -> AnyView {
 			</CarouselContent>
 			<CarouselNext />
 		</Carousel>
-		<Carousel orientation=CarouselOrientation::Vertical>
+		<Carousel orientation=Orientation::Vertical>
 			<CarouselContent>
 				<CarouselItem>"1"</CarouselItem>
 			</CarouselContent>

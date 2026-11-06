@@ -81,6 +81,7 @@ pub use dialog::*;
 pub use drawer::{Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerTitle, DrawerTrigger, *};
 pub use dropdown_menu::*;
 pub use empty::{Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle};
+pub use ev_lib_classes::{AccordionType, SidebarCollapsible, SidebarSide, SidebarVariant, ToggleGroupType};
 pub use field::{Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldLegendVariant, FieldSeparator, FieldSet, FieldTitle};
 pub use fonts::Fonts;
 // Site chrome — the footer grid and the 404/403/500 status pages. Both take
@@ -136,8 +137,6 @@ pub use tooltip::*;
 pub use top_bar::TopBar;
 pub use workspace_tabs::{WorkspaceTab, WorkspaceTabs};
 
-pub use crate::ui::uikit::core::{
-	AccordionType, CarouselOrientation, FormControlContext, SidebarCollapsible, SidebarSide, SidebarVariant, SliderOrientation, TabsOrientation, ToggleGroupType, toggle_classes,
-};
+pub use crate::ui::uikit::core::{FormControlContext, toggle_classes};
 #[cfg(all(target_arch = "wasm32", feature = "wasm"))]
 pub use crate::ui::uikit::host::write_clipboard;

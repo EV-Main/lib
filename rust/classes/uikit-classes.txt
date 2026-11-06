@@ -686,6 +686,7 @@ group/item-group flex flex-col
 group/menu-item relative
 group/navigation-menu relative flex max-w-max flex-1 items-center justify-center
 group/sidebar-wrapper has-data-[variant=inset]:bg-secondary flex min-h-svh w-full
+group/toggle-group flex w-fit items-center rounded-md data-[variant=outline]:shadow-xs
 h-0.5 bg-border-subtle
 h-10
 h-10 aspect-square
@@ -798,7 +799,6 @@ item-title
 justify-between
 justify-end
 kbd-group
-kebab-case
 key-value
 key-value-copy
 key-value-label

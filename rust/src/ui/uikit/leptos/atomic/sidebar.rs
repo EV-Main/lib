@@ -3,7 +3,7 @@ use leptos::{context::Provider, prelude::*};
 use crate::{
 	cn,
 	ui::uikit::{
-		core::{SIDEBAR_STYLE, sidebar_state},
+		core::{SIDEBAR_STYLE, sidebar_collapsible_data, sidebar_state},
 		leptos::{
 			ButtonVariant, SIDEBAR_CONTENT, SIDEBAR_FLAT, SIDEBAR_FOOTER, SIDEBAR_GROUP, SIDEBAR_GROUP_CONTENT, SIDEBAR_GROUP_LABEL, SIDEBAR_HEADER, SIDEBAR_INNER, SIDEBAR_INSET,
 			SIDEBAR_MENU, SIDEBAR_MENU_BUTTON_BASE, SIDEBAR_MENU_ITEM, SIDEBAR_RAIL, SIDEBAR_SEPARATOR, SIDEBAR_TRIGGER, SIDEBAR_WRAPPER, SidebarCollapsible, SidebarSide, SidebarVariant,
@@ -84,7 +84,7 @@ pub fn Sidebar(
 		<div
 			class="group peer text-ink hidden md:block"
 			data-state=move || ctx.state()
-			data-collapsible=move || collapsible.data(ctx.open()).to_owned()
+			data-collapsible=move || sidebar_collapsible_data(collapsible, ctx.open()).to_owned()
 			data-variant=variant.as_ref().to_owned()
 			data-side=side.as_ref().to_owned()
 			data-slot="sidebar"

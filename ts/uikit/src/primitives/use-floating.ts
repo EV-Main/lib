@@ -1,8 +1,9 @@
 "use client";
 
 import * as React from "react";
+import type { Side } from "../generated/primitives";
 
-export type Side = "top" | "right" | "bottom" | "left";
+export type { Side };
 export type Align = "start" | "center" | "end";
 
 export interface FloatingResult {

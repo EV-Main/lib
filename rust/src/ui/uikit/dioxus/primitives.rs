@@ -20,8 +20,9 @@ use dioxus::{
 	dioxus_core::{DynamicNode, TemplateNode, provide_root_context},
 	prelude::*,
 };
+pub use ev_lib_classes::{RovingOrientation, Side};
 
-pub use crate::ui::uikit::core::{DismissReason, RovingOrientation, Side};
+pub use crate::ui::uikit::core::DismissReason;
 use crate::ui::uikit::core::{KeyInput, LayerStack, Placement, Roving};
 
 type DismissFn = Rc<dyn Fn(DismissReason)>;

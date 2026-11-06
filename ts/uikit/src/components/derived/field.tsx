@@ -22,6 +22,7 @@ import {
   fieldOrientation,
   type FieldOrientation,
 } from "../../generated/field";
+import type { FieldLegendVariant } from "../../generated/field";
 
 export type { FieldOrientation };
 
@@ -39,7 +40,7 @@ export function FieldLegend({
   className,
   variant = "legend",
   ...props
-}: React.ComponentProps<"legend"> & { variant?: "legend" | "label" }) {
+}: React.ComponentProps<"legend"> & { variant?: FieldLegendVariant }) {
   return (
     <legend
       data-slot="field-legend"

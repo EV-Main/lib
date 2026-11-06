@@ -1,6 +1,6 @@
+pub use ev_lib_classes::{ChatAttachmentState, ChatAttachmentType, ChatMessageRole};
 use leptos::prelude::*;
 
-pub use crate::ui::uikit::core::{ChatAttachmentState, ChatAttachmentType, ChatMessageRole};
 use crate::{
 	cn,
 	ui::uikit::leptos::{

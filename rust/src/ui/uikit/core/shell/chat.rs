@@ -3,34 +3,6 @@ use crate::ui::uikit::core::KeyInput;
 /// The `keyCode` every browser reports for a key that an IME takes.
 const IME_KEY_CODE: u32 = 229;
 
-/// Who spoke a `ChatMessage`. Rust only: the TS `role` is an inline union.
-#[derive(Clone, Copy, Debug, PartialEq, strum::AsRefStr)]
-#[strum(serialize_all = "kebab-case")]
-pub enum ChatMessageRole {
-	Assistant,
-	User,
-}
-
-/// What a `ChatAttachment` holds; it picks the glyph. Rust only: the TS
-/// `type` is an inline union.
-#[derive(Clone, Copy, Debug, Default, PartialEq, strum::AsRefStr)]
-#[strum(serialize_all = "kebab-case")]
-pub enum ChatAttachmentType {
-	#[default]
-	File,
-	Image,
-}
-
-/// Whether a `ChatAttachment` is still uploading. Rust only, like
-/// [`ChatAttachmentType`].
-#[derive(Clone, Copy, Debug, Default, PartialEq, strum::AsRefStr)]
-#[strum(serialize_all = "kebab-case")]
-pub enum ChatAttachmentState {
-	#[default]
-	Ready,
-	Uploading,
-}
-
 /// One choice of a `ModelChip`. Mirrors the TS `ModelOption`.
 #[derive(Clone, Debug, PartialEq)]
 pub struct ModelOption {

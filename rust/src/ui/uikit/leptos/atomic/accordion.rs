@@ -1,9 +1,10 @@
+use ev_lib_classes::ACCORDION_CHEVRON;
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
 	ui::uikit::{
-		core::{ACCORDION_CHEVRON, toggled},
+		core::toggled,
 		leptos::{
 			ACCORDION_CONTENT, ACCORDION_CONTENT_INNER, ACCORDION_HEADER, ACCORDION_ITEM, ACCORDION_TRIGGER, AccordionType,
 			primitives::{Controllable, use_controllable},

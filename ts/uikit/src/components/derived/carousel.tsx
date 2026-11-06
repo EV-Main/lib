@@ -20,11 +20,11 @@ import {
   CAROUSEL_PREVIOUS_HORIZONTAL,
   CAROUSEL_PREVIOUS_VERTICAL,
 } from "../../generated/carousel";
+import type { Orientation } from "../../generated/orientation";
 
-type CarouselOrientation = "horizontal" | "vertical";
 
 type CarouselContextProps = {
-  orientation: CarouselOrientation;
+  orientation: Orientation;
   index: number;
   count: number;
   setCount: (count: number) => void;
@@ -45,7 +45,7 @@ function useCarousel() {
 }
 
 export interface CarouselProps extends React.ComponentProps<"div"> {
-  orientation?: CarouselOrientation;
+  orientation?: Orientation;
   index?: number;
   defaultIndex?: number;
   onIndexChange?: (index: number) => void;

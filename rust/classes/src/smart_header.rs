@@ -7,3 +7,18 @@ pub const SMART_HEADER_TOOLBAR: &str = "flex h-11 items-center gap-3 border-t bo
 
 /// On the page fill, not the card: the line belongs to the page under the header.
 pub const SMART_HEADER_CONTEXT: &str = "flex h-6.5 items-center gap-4 border-t border-border bg-background px-3 text-caption text-ink-soft";
+
+/// Which rows a `SmartHeader` shows around its bar.
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::IntoStaticStr, strum::EnumIter)]
+#[strum(serialize_all = "kebab-case")]
+pub enum SmartHeaderState {
+	/// The bar, the toolbar and the context line.
+	#[default]
+	Default,
+	/// The toolbar folds into the bar as `collapsed`.
+	Collapsed,
+	/// A banner row above the bar.
+	Banner,
+	/// The bar with the `palette` under it.
+	Search,
+}

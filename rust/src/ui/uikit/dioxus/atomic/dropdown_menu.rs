@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
+pub use ev_lib_classes::MenuItemVariant;
 
-pub use crate::ui::uikit::core::DropdownMenuItemVariant;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
@@ -77,7 +77,7 @@ pub fn DropdownMenuGroup(#[props(default)] class: String, children: Element) -> 
 }
 #[component]
 pub fn DropdownMenuItem(
-	#[props(default)] variant: DropdownMenuItemVariant,
+	#[props(default)] variant: MenuItemVariant,
 	#[props(default)] inset: bool,
 	#[props(default)] disabled: bool,
 	onclick: Option<EventHandler<MouseEvent>>,

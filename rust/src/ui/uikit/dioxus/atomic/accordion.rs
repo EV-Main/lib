@@ -1,9 +1,10 @@
 use dioxus::prelude::*;
+use ev_lib_classes::ACCORDION_CHEVRON;
 
 use crate::{
 	cn,
 	ui::uikit::{
-		core::{ACCORDION_CHEVRON, toggled},
+		core::toggled,
 		dioxus::{
 			ACCORDION_CONTENT, ACCORDION_CONTENT_INNER, ACCORDION_HEADER, ACCORDION_ITEM, ACCORDION_TRIGGER, AccordionType,
 			primitives::{Controllable, use_controllable},

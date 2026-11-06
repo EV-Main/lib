@@ -20,6 +20,7 @@ import {
   CONTEXT_MENU_SUB_CONTENT,
   CONTEXT_MENU_SUB_TRIGGER,
 } from "../../generated/context-menu";
+import type { MenuItemVariant } from "../../generated/menu";
 
 interface ContextMenuContextValue {
   open: boolean;
@@ -144,7 +145,7 @@ export function ContextMenuContent({ className, children, ...props }: React.Comp
 
 export interface ContextMenuItemProps extends React.ComponentProps<"div"> {
   inset?: boolean;
-  variant?: "neutral" | "destructive";
+  variant?: MenuItemVariant;
   disabled?: boolean;
 }
 

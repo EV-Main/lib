@@ -13,5 +13,4 @@ pub(super) mod sheet;
 pub(super) mod sidebar;
 pub(super) mod slider;
 pub(super) mod sonner;
-pub(super) mod tabs;
 pub(super) mod toggle;

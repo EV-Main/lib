@@ -47,3 +47,12 @@ pub enum FieldOrientation {
 	              @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px")]
 	Responsive,
 }
+
+/// Whether a `FieldLegend` reads as a fieldset legend or as a field label.
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::IntoStaticStr, strum::EnumIter)]
+#[strum(serialize_all = "kebab-case")]
+pub enum FieldLegendVariant {
+	#[default]
+	Legend,
+	Label,
+}

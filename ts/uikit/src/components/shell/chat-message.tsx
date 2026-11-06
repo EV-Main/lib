@@ -44,6 +44,7 @@ import type { ChatBubbleVariant, ChatStatusState, ChatToolState } from "../../ge
 import { ChatStreamText } from "./chat-stream-text";
 import { IconButton } from "../derived/icon-button";
 import { UiIcon } from "../../icons/ui-icons";
+import type { ChatAttachmentState, ChatAttachmentType, ChatMessageRole } from "../../generated/chat-message";
 
 export type { ChatBubbleVariant };
 
@@ -77,7 +78,7 @@ export function ChatBubble({ variant = "assistant", streaming = false, className
 }
 
 export interface ChatMessageProps extends Omit<React.ComponentProps<"div">, "role"> {
-  role: "assistant" | "user";
+  role: ChatMessageRole;
   /** "Assistant", "You". */
   name?: React.ReactNode;
   /** Already formatted: "13:04". */
@@ -196,8 +197,8 @@ export function ChatMarker(allProps: ChatMarkerProps) {
 }
 
 export interface ChatAttachmentProps extends Omit<React.ComponentProps<"div">, "children"> {
-  type?: "file" | "image";
-  state?: "ready" | "uploading";
+  type?: ChatAttachmentType;
+  state?: ChatAttachmentState;
   name: string;
   /** "PDF · 1.2 MB"; while uploading, defaults to the percentage. */
   meta?: React.ReactNode;

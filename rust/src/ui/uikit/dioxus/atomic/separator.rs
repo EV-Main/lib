@@ -2,12 +2,12 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{Orientation, SEPARATOR_BASE},
+	ui::uikit::dioxus::{Orientation, SEPARATOR_BASE, separator_orientation_class},
 };
 
 #[component]
 pub fn Separator(#[props(default)] orientation: Orientation, #[props(default)] class: String) -> Element {
-	let cls = cn!(SEPARATOR_BASE, orientation.as_class(), class);
+	let cls = cn!(SEPARATOR_BASE, separator_orientation_class(orientation), class);
 	rsx! {
 		div {
 			role: "separator",

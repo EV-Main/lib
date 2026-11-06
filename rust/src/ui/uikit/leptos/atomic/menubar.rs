@@ -1,6 +1,6 @@
+pub use ev_lib_classes::MenuItemVariant;
 use leptos::{context::Provider, prelude::*};
 
-pub use crate::ui::uikit::core::MenubarItemVariant;
 use crate::{
 	cn,
 	ui::uikit::leptos::{
@@ -95,7 +95,7 @@ pub fn MenubarGroup(#[prop(optional, into)] class: String, children: Children) -
 #[component]
 pub fn MenubarItem(
 	#[prop(optional)] inset: bool,
-	#[prop(optional)] variant: MenubarItemVariant,
+	#[prop(optional)] variant: MenuItemVariant,
 	#[prop(optional, into)] class: String,
 	#[prop(optional)] on_click: Option<Callback<leptos::ev::MouseEvent>>,
 	children: Children,

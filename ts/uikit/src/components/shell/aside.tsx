@@ -20,6 +20,7 @@ import { Drawer, DrawerContent } from "../atomic/drawer";
 import { IconButton } from "../derived/icon-button";
 import { Sheet, SheetContent } from "../atomic/sheet";
 import { UiIcon } from "../../icons/ui-icons";
+import type { AsidePanelMode } from "../../generated/aside";
 
 export interface AsideHeaderLabels {
   back?: string;
@@ -130,7 +131,7 @@ function useAtLeast(query: string): boolean {
   );
 }
 
-export type AsidePanelMode = "docked" | "overlay";
+export type { AsidePanelMode };
 
 export interface AsidePanelProps extends Omit<React.ComponentProps<"aside">, "title"> {
   /** Names the panel. */

@@ -85,3 +85,12 @@ export const chatToolMetaClasses = {
   "error": "text-accent-error",
 } as const;
 export type ChatToolState = keyof typeof chatToolMetaClasses;
+
+export const CHAT_MESSAGE_ROLES = ["assistant", "user"] as const;
+export type ChatMessageRole = (typeof CHAT_MESSAGE_ROLES)[number];
+
+export const CHAT_ATTACHMENT_TYPES = ["file", "image"] as const;
+export type ChatAttachmentType = (typeof CHAT_ATTACHMENT_TYPES)[number];
+
+export const CHAT_ATTACHMENT_STATES = ["ready", "uploading"] as const;
+export type ChatAttachmentState = (typeof CHAT_ATTACHMENT_STATES)[number];

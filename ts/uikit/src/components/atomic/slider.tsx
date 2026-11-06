@@ -4,8 +4,8 @@ import * as React from "react";
 import { cn } from "../../lib/cn";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { SLIDER_RANGE, SLIDER_ROOT, SLIDER_THUMB, SLIDER_TRACK } from "../../generated/slider";
+import type { Orientation } from "../../generated/orientation";
 
-type Orientation = "horizontal" | "vertical";
 
 function clampStep(value: number, min: number, max: number, step: number): number {
   const clamped = Math.min(max, Math.max(min, value));

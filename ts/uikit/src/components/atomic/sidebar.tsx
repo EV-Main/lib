@@ -25,6 +25,7 @@ import {
   type SidebarMenuButtonSize,
 } from "../../generated/sidebar";
 import { buttonVariantClasses, type ButtonVariant } from "../../generated/button";
+import type { SidebarCollapsible, SidebarSide, SidebarVariant } from "../../generated/sidebar";
 
 export type { SidebarMenuButtonSize };
 
@@ -100,9 +101,9 @@ export function SidebarProvider({
 }
 
 export interface SidebarProps extends React.ComponentProps<"div"> {
-  side?: "left" | "right";
-  variant?: "sidebar" | "floating" | "inset";
-  collapsible?: "offcanvas" | "icon" | "none";
+  side?: SidebarSide;
+  variant?: SidebarVariant;
+  collapsible?: SidebarCollapsible;
 }
 
 export function Sidebar({

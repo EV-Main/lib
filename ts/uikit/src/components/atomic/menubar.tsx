@@ -24,6 +24,7 @@ import {
   MENUBAR_SUB_TRIGGER,
   MENUBAR_TRIGGER,
 } from "../../generated/menubar";
+import type { MenuItemVariant } from "../../generated/menu";
 
 interface MenuCtx {
   open: boolean;
@@ -166,7 +167,7 @@ export function MenubarItem({
   ...props
 }: React.ComponentProps<"div"> & {
   inset?: boolean;
-  variant?: "neutral" | "destructive";
+  variant?: MenuItemVariant;
 }) {
   return (
     <div

@@ -1,6 +1,4 @@
-use ev_lib_classes::{SHEET_SIDE_BOTTOM, SHEET_SIDE_LEFT, SHEET_SIDE_RIGHT, SHEET_SIDE_TOP};
-
-use crate::ui::uikit::core::Side;
+use ev_lib_classes::{SHEET_SIDE_BOTTOM, SHEET_SIDE_LEFT, SHEET_SIDE_RIGHT, SHEET_SIDE_TOP, Side};
 
 /// Per-side slide-in/positioning classes, canonical with the TS `sheetSideClasses`.
 pub(crate) fn sheet_side_class(side: Side) -> &'static str {

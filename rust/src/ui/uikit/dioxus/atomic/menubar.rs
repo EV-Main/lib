@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
+pub use ev_lib_classes::MenuItemVariant;
 
-pub use crate::ui::uikit::core::MenubarItemVariant;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
@@ -81,7 +81,7 @@ pub fn MenubarGroup(#[props(default)] class: String, children: Element) -> Eleme
 #[component]
 pub fn MenubarItem(
 	#[props(default)] inset: bool,
-	#[props(default)] variant: MenubarItemVariant,
+	#[props(default)] variant: MenuItemVariant,
 	#[props(default)] class: String,
 	onclick: Option<EventHandler<MouseEvent>>,
 	children: Element,

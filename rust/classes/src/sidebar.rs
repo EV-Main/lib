@@ -48,3 +48,29 @@ pub fn sidebar_menu_button_size_class(size: crate::Size) -> &'static str {
 		crate::Size::Lg | crate::Size::Touch | crate::Size::Xl => "h-12 text-sm group-data-[collapsible=icon]:p-0!",
 	}
 }
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::IntoStaticStr, strum::EnumIter)]
+#[strum(serialize_all = "kebab-case")]
+pub enum SidebarSide {
+	#[default]
+	Left,
+	Right,
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::IntoStaticStr, strum::EnumIter)]
+#[strum(serialize_all = "kebab-case")]
+pub enum SidebarVariant {
+	#[default]
+	Sidebar,
+	Floating,
+	Inset,
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::IntoStaticStr, strum::EnumIter)]
+#[strum(serialize_all = "kebab-case")]
+pub enum SidebarCollapsible {
+	#[default]
+	Offcanvas,
+	Icon,
+	None,
+}

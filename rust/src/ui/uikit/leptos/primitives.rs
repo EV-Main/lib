@@ -10,9 +10,10 @@ use std::{
 	},
 };
 
+pub use ev_lib_classes::{RovingOrientation, Side};
 use leptos::{prelude::*, reactive::owner::Owner};
 
-pub use crate::ui::uikit::core::{DismissReason, RovingOrientation, Side};
+pub use crate::ui::uikit::core::DismissReason;
 use crate::ui::uikit::core::{KeyInput, LayerStack, Roving};
 
 impl From<&leptos::ev::KeyboardEvent> for KeyInput {

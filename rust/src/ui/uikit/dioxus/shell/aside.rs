@@ -1,6 +1,7 @@
 use dioxus::prelude::*;
+pub use ev_lib_classes::AsidePanelMode;
 
-pub use crate::ui::uikit::core::{AsideCollapse, AsideHeaderLabels, AsidePanelMode};
+pub use crate::ui::uikit::core::{AsideCollapse, AsideHeaderLabels};
 use crate::{
 	cn,
 	ui::uikit::dioxus::{

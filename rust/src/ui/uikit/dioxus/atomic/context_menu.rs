@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
+pub use ev_lib_classes::MenuItemVariant;
 
-pub use crate::ui::uikit::core::ContextMenuItemVariant;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
@@ -76,7 +76,7 @@ pub fn ContextMenuGroup(#[props(default)] class: String, children: Element) -> E
 }
 #[component]
 pub fn ContextMenuItem(
-	#[props(default)] variant: ContextMenuItemVariant,
+	#[props(default)] variant: MenuItemVariant,
 	#[props(default)] inset: bool,
 	#[props(default)] disabled: bool,
 	onclick: Option<EventHandler<MouseEvent>>,

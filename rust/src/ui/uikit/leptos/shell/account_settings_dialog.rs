@@ -6,7 +6,7 @@ use crate::{
 	ui::uikit::leptos::{
 		ACCOUNT_SETTINGS_DIALOG_CLOSE, ACCOUNT_SETTINGS_DIALOG_CONTENT, ACCOUNT_SETTINGS_DIALOG_DESCRIPTION, ACCOUNT_SETTINGS_DIALOG_ENTRY, ACCOUNT_SETTINGS_DIALOG_FOOTER,
 		ACCOUNT_SETTINGS_DIALOG_HEADING, ACCOUNT_SETTINGS_DIALOG_LIST, ACCOUNT_SETTINGS_DIALOG_PANE, ACCOUNT_SETTINGS_DIALOG_PANEL, ACCOUNT_SETTINGS_DIALOG_SIDEBAR,
-		ACCOUNT_SETTINGS_DIALOG_TABS, ACCOUNT_SETTINGS_DIALOG_TITLE, Dialog, DialogContent, DialogDescription, DialogTitle, IconButton, Tabs, TabsContent, TabsList, TabsOrientation,
+		ACCOUNT_SETTINGS_DIALOG_TABS, ACCOUNT_SETTINGS_DIALOG_TITLE, Dialog, DialogContent, DialogDescription, DialogTitle, IconButton, Orientation, Tabs, TabsContent, TabsList,
 		TabsTrigger,
 		icon_button::Glyph,
 		primitives::{use_controllable, use_stable_id},
@@ -78,7 +78,7 @@ pub fn AccountSettingsDialog(
 		let (title_id, description_id, default_value) = (title_id.clone(), description_id.clone(), default_value.clone());
 		view! {
 			<Tabs
-				orientation=TabsOrientation::Vertical
+				orientation=Orientation::Vertical
 				value=value
 				default_value=default_value
 				on_value_change=Callback::new(move |v| {

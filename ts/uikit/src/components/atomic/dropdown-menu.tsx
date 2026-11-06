@@ -22,6 +22,7 @@ import {
   DROPDOWN_MENU_SUB_CONTENT,
   DROPDOWN_MENU_SUB_TRIGGER,
 } from "../../generated/dropdown-menu";
+import type { MenuItemVariant } from "../../generated/menu";
 
 interface DropdownMenuContextValue {
   open: boolean;
@@ -186,7 +187,7 @@ export interface DropdownMenuItemProps extends React.ComponentProps<"div"> {
   /** Render the child (a link) as the item. */
   asChild?: boolean;
   inset?: boolean;
-  variant?: "neutral" | "destructive";
+  variant?: MenuItemVariant;
   disabled?: boolean;
 }
 

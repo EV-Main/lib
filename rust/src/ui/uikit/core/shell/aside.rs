@@ -7,16 +7,6 @@ pub struct AsideHeaderLabels {
 	pub close: Option<String>,
 }
 
-/// How an `AsidePanel` takes its place. Mirrors the TS `AsidePanelMode`.
-#[derive(Clone, Copy, Debug, Default, PartialEq)]
-pub enum AsidePanelMode {
-	/// Sits in the layout and takes room from the content.
-	#[default]
-	Docked,
-	/// Floats over a scrim on a `Sheet`.
-	Overlay,
-}
-
 /// Where an `AsidePanel` gives up its wide form for a bottom `Drawer`.
 /// The TS `collapseBelow` takes `"md" | false`.
 #[derive(Clone, Copy, Debug, Default, PartialEq)]

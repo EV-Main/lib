@@ -5,13 +5,13 @@ import { cn } from "../../lib/cn";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useRovingFocus } from "../../primitives/use-roving-focus";
 import { TABS_ROOT, TABS_LIST, TABS_TRIGGER, TABS_CONTENT } from "../../generated/tabs";
+import type { Orientation } from "../../generated/orientation";
 
-type TabsOrientation = "horizontal" | "vertical";
 
 interface TabsContextValue {
   value: string;
   setValue: (next: string) => void;
-  orientation: TabsOrientation;
+  orientation: Orientation;
 }
 
 const TabsContext = React.createContext<TabsContextValue | null>(null);
@@ -27,7 +27,7 @@ export interface TabsProps
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
-  orientation?: TabsOrientation;
+  orientation?: Orientation;
 }
 
 export function Tabs({

@@ -10,8 +10,8 @@ import {
   ACCORDION_ITEM,
   ACCORDION_TRIGGER,
 } from "../../generated/accordion";
+import type { AccordionType } from "../../generated/accordion";
 
-type AccordionType = "single" | "multiple";
 
 interface AccordionContextValue {
   isOpen: (value: string) => boolean;

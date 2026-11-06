@@ -48,3 +48,14 @@ pub enum AsidePanelSide {
 	#[tw(default, class = "border-l border-border")]
 	Right,
 }
+
+/// How an `AsidePanel` takes its place.
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::IntoStaticStr, strum::EnumIter)]
+#[strum(serialize_all = "kebab-case")]
+pub enum AsidePanelMode {
+	/// Sits in the layout and takes room from the content.
+	#[default]
+	Docked,
+	/// Floats over a scrim on a `Sheet`.
+	Overlay,
+}

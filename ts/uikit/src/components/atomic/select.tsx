@@ -24,6 +24,7 @@ import { markLabelable } from "../../primitives/labelable";
 import { useFieldControlId } from "./field-context";
 import { SelectChevron } from "../../icons/select-chevron";
 import { landOnChosen, tabFromTrigger, useListboxKeys } from "./select-listbox";
+import type { Side } from "../../generated/primitives";
 
 export type { SelectTriggerSize };
 
@@ -245,7 +246,7 @@ export function SelectValue({ className, placeholder, children, ...props }: Sele
 }
 
 export interface SelectContentProps extends React.ComponentProps<"div"> {
-  side?: "top" | "right" | "bottom" | "left";
+  side?: Side;
   align?: "start" | "center" | "end";
   sideOffset?: number;
 }
