@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{ICON_BUTTON_BASE, ICON_BUTTON_PRESSED, IconButtonVariant, Size, Tooltip, TooltipContent, button_classes, icon_button_size_class, tooltip::TooltipCtx},
+	ui::uikit::dioxus::{ICON_BUTTON_BASE, ICON_BUTTON_PRESSED, IconButtonVariant, Size, Slot, Tooltip, TooltipContent, button_classes, icon_button_size_class, tooltip::TooltipCtx},
 };
 
 /// A square button holding one glyph. Mirrors the TS `IconButton`.
@@ -74,7 +74,7 @@ fn IconButtonFace(
 		button {
 			r#type,
 			class: cls,
-			"data-slot": "icon-button",
+			"data-slot": Slot::IconButton.as_str(),
 			"data-variant": variant.as_ref(),
 			"aria-label": aria_label,
 			"aria-pressed": pressed,

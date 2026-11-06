@@ -3,7 +3,7 @@ use leptos::prelude::*;
 use crate::{
 	cn,
 	ui::uikit::leptos::{
-		TABLE, TABLE_BODY, TABLE_CAPTION, TABLE_CARD, TABLE_CELL, TABLE_CONTAINER, TABLE_FOOTER, TABLE_HEAD, TABLE_HEADER, TABLE_ROW, TableAlign, TableDensity, TableVariant,
+		Slot, TABLE, TABLE_BODY, TABLE_CAPTION, TABLE_CARD, TABLE_CELL, TABLE_CONTAINER, TABLE_FOOTER, TABLE_HEAD, TABLE_HEADER, TABLE_ROW, TableAlign, TableDensity, TableVariant,
 	},
 };
 
@@ -13,10 +13,10 @@ use crate::{
 pub fn Table(#[prop(optional)] variant: TableVariant, #[prop(optional)] density: TableDensity, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(TABLE, variant.as_class(), density.as_class(), class);
 	view! {
-		<div class=TABLE_CONTAINER data-slot="table-container">
+		<div class=TABLE_CONTAINER data-slot=Slot::TableContainer.as_str()>
 			<table
 				class=cls
-				data-slot="table"
+				data-slot=Slot::Table.as_str()
 				data-variant=variant.as_ref().to_owned()
 				data-density=density.as_ref().to_owned()
 			>
@@ -31,7 +31,7 @@ pub fn Table(#[prop(optional)] variant: TableVariant, #[prop(optional)] density:
 pub fn TableCard(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(TABLE_CARD, class);
 	view! {
-		<div class=cls data-slot="table-card">
+		<div class=cls data-slot=Slot::TableCard.as_str()>
 			{children()}
 		</div>
 	}
@@ -41,7 +41,7 @@ pub fn TableCard(#[prop(optional, into)] class: String, children: Children) -> i
 pub fn TableHeader(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(TABLE_HEADER, class);
 	view! {
-		<thead class=cls data-slot="table-header">
+		<thead class=cls data-slot=Slot::TableHeader.as_str()>
 			{children()}
 		</thead>
 	}
@@ -51,7 +51,7 @@ pub fn TableHeader(#[prop(optional, into)] class: String, children: Children) ->
 pub fn TableBody(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(TABLE_BODY, class);
 	view! {
-		<tbody class=cls data-slot="table-body">
+		<tbody class=cls data-slot=Slot::TableBody.as_str()>
 			{children()}
 		</tbody>
 	}
@@ -61,7 +61,7 @@ pub fn TableBody(#[prop(optional, into)] class: String, children: Children) -> i
 pub fn TableFooter(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(TABLE_FOOTER, class);
 	view! {
-		<tfoot class=cls data-slot="table-footer">
+		<tfoot class=cls data-slot=Slot::TableFooter.as_str()>
 			{children()}
 		</tfoot>
 	}
@@ -71,7 +71,7 @@ pub fn TableFooter(#[prop(optional, into)] class: String, children: Children) ->
 pub fn TableRow(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(TABLE_ROW, class);
 	view! {
-		<tr class=cls data-slot="table-row">
+		<tr class=cls data-slot=Slot::TableRow.as_str()>
 			{children()}
 		</tr>
 	}
@@ -81,7 +81,7 @@ pub fn TableRow(#[prop(optional, into)] class: String, children: Children) -> im
 pub fn TableHead(#[prop(optional)] align: TableAlign, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(TABLE_HEAD, align.as_class(), class);
 	view! {
-		<th class=cls data-slot="table-head">
+		<th class=cls data-slot=Slot::TableHead.as_str()>
 			{children()}
 		</th>
 	}
@@ -91,7 +91,7 @@ pub fn TableHead(#[prop(optional)] align: TableAlign, #[prop(optional, into)] cl
 pub fn TableCell(#[prop(optional)] align: TableAlign, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(TABLE_CELL, align.as_class(), class);
 	view! {
-		<td class=cls data-slot="table-cell">
+		<td class=cls data-slot=Slot::TableCell.as_str()>
 			{children()}
 		</td>
 	}
@@ -101,7 +101,7 @@ pub fn TableCell(#[prop(optional)] align: TableAlign, #[prop(optional, into)] cl
 pub fn TableCaption(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(TABLE_CAPTION, class);
 	view! {
-		<caption class=cls data-slot="table-caption">
+		<caption class=cls data-slot=Slot::TableCaption.as_str()>
 			{children()}
 		</caption>
 	}

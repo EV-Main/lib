@@ -4,7 +4,7 @@ use leptos::{context::Provider, prelude::*};
 use crate::{
 	cn,
 	ui::uikit::leptos::{
-		RADIO_GROUP_ITEM, RADIO_GROUP_ROOT,
+		RADIO_GROUP_ITEM, RADIO_GROUP_ROOT, Slot,
 		primitives::{Controllable, RovingFocus, RovingOrientation, icon_shapes, use_controllable, use_roving_focus, use_roving_item},
 	},
 };
@@ -23,7 +23,7 @@ pub fn RadioGroup(
 	view! {
 		<div
 			class=cls
-			data-slot="radio-group"
+			data-slot=Slot::RadioGroup.as_str()
 			role="radiogroup"
 			// The arrows both move and check, as native radios do — which is
 			// what the `role="radio"` contract promises ("1 of 3, use arrow
@@ -61,7 +61,7 @@ pub fn RadioGroupItem(
 		<button
 			type="button"
 			class=cls
-			data-slot="radio-group-item"
+			data-slot=Slot::RadioGroupItem.as_str()
 			data-state=move || if checked.get() { "checked" } else { "unchecked" }
 			role="radio"
 			aria-checked=move || checked.get().to_string()
@@ -77,7 +77,7 @@ pub fn RadioGroupItem(
 					.get()
 					.then(|| {
 						view! {
-							<span data-slot="radio-group-indicator" class=RADIO_GROUP_INDICATOR>
+							<span data-slot=Slot::RadioGroupIndicator.as_str() class=RADIO_GROUP_INDICATOR>
 								<svg class=RADIO_GROUP_DOT viewBox="0 0 24 24">
 									{icon_shapes(Icon::Dot)}
 								</svg>

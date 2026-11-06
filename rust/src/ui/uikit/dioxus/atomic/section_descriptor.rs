@@ -3,7 +3,7 @@ use ev_lib_classes::{Icon, SECTION_DESCRIPTOR, SECTION_DESCRIPTOR_SUMMARY};
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{FIELD_DESCRIPTION, FIELD_TITLE, primitives::icon_shapes},
+	ui::uikit::dioxus::{FIELD_DESCRIPTION, FIELD_TITLE, Slot, primitives::icon_shapes},
 };
 
 #[component]
@@ -22,28 +22,28 @@ pub fn SectionDescriptor(
 		rsx! {
 			details {
 				class: cls,
-				"data-slot": "section-descriptor",
+				"data-slot": Slot::SectionDescriptor.as_str(),
 				"data-collapsible": "true",
 				open: default_open.then_some("true"),
-				summary { class: summary_cls, "data-slot": "section-descriptor-title",
+				summary { class: summary_cls, "data-slot": Slot::SectionDescriptorTitle.as_str(),
 					if icon {
 						{info_glyph()}
 					}
 					span { {title} }
 				}
-				p { class: body_cls, "data-slot": "section-descriptor-body", {children} }
+				p { class: body_cls, "data-slot": Slot::SectionDescriptorBody.as_str(), {children} }
 			}
 		}
 	} else {
 		rsx! {
-			section { class: cls, "data-slot": "section-descriptor",
-				div { class: FIELD_TITLE, "data-slot": "section-descriptor-title",
+			section { class: cls, "data-slot": Slot::SectionDescriptor.as_str(),
+				div { class: FIELD_TITLE, "data-slot": Slot::SectionDescriptorTitle.as_str(),
 					if icon {
 						{info_glyph()}
 					}
 					span { {title} }
 				}
-				p { class: FIELD_DESCRIPTION, "data-slot": "section-descriptor-body", {children} }
+				p { class: FIELD_DESCRIPTION, "data-slot": Slot::SectionDescriptorBody.as_str(), {children} }
 			}
 		}
 	}

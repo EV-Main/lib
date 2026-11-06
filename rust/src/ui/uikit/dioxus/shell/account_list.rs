@@ -8,7 +8,7 @@ use crate::{
 	ui::uikit::dioxus::{
 		ACCOUNT_LIST_BASE, ACCOUNT_LIST_ITEM_ACTIONS, ACCOUNT_LIST_ITEM_AVATAR, ACCOUNT_LIST_ITEM_AVATAR_FALLBACK, ACCOUNT_LIST_ITEM_BADGES, ACCOUNT_LIST_ITEM_BASE, ACCOUNT_LIST_ITEM_CHECK,
 		ACCOUNT_LIST_ITEM_CHECK_HIDDEN, ACCOUNT_LIST_ITEM_CHECKED, ACCOUNT_LIST_ITEM_DISABLED, ACCOUNT_LIST_ITEM_FIGURE, ACCOUNT_LIST_ITEM_HANDLE, ACCOUNT_LIST_ITEM_NAME,
-		ACCOUNT_LIST_ITEM_RADIO, ACCOUNT_LIST_ITEM_TEXT, ACCOUNT_LIST_ITEM_UNCHECKED, Avatar, AvatarFallback,
+		ACCOUNT_LIST_ITEM_RADIO, ACCOUNT_LIST_ITEM_TEXT, ACCOUNT_LIST_ITEM_UNCHECKED, Avatar, AvatarFallback, Slot,
 		primitives::{Controllable, RovingFocus, RovingOrientation, icon_shapes, use_controllable, use_roving_focus, use_roving_item},
 	},
 };
@@ -38,7 +38,7 @@ pub fn AccountList(
 	use_context_provider(|| AccountListCtx { value, roving, disabled });
 	let cls = cn!(ACCOUNT_LIST_BASE, class);
 	rsx! {
-		div { role: "radiogroup", "aria-label": aria_label, "data-slot": "account-list", class: cls, {children} }
+		div { role: "radiogroup", "aria-label": aria_label, "data-slot": Slot::AccountList.as_str(), class: cls, {children} }
 	}
 }
 
@@ -93,11 +93,11 @@ pub fn AccountListItem(
 	let click_value = value.clone();
 	let skip = ctx.disabled.clone();
 	rsx! {
-		div { "data-slot": "account-list-item", "data-state": if checked { "checked" } else { "unchecked" }, class: cls,
+		div { "data-slot": Slot::AccountListItem.as_str(), "data-state": if checked { "checked" } else { "unchecked" }, class: cls,
 			button {
 				r#type: "button",
 				role: "radio",
-				"data-slot": "account-list-item-radio",
+				"data-slot": Slot::AccountListItemRadio.as_str(),
 				"aria-checked": if checked { "true" } else { "false" },
 				disabled,
 				tabindex: if tab_stop { "0" } else { "-1" },
@@ -125,19 +125,19 @@ pub fn AccountListItem(
 					}
 				},
 				{avatar}
-				span { "data-slot": "account-list-item-text", class: ACCOUNT_LIST_ITEM_TEXT,
+				span { "data-slot": Slot::AccountListItemText.as_str(), class: ACCOUNT_LIST_ITEM_TEXT,
 					span { class: ACCOUNT_LIST_ITEM_NAME, {name} }
 					if let Some(handle) = handle {
 						span { class: ACCOUNT_LIST_ITEM_HANDLE, {handle} }
 					}
 				}
 				if let Some(badges) = badges {
-					span { "data-slot": "account-list-item-badges", class: ACCOUNT_LIST_ITEM_BADGES, {badges} }
+					span { "data-slot": Slot::AccountListItemBadges.as_str(), class: ACCOUNT_LIST_ITEM_BADGES, {badges} }
 				}
 				if let Some(figure) = figure {
-					span { "data-slot": "account-list-item-figure", class: ACCOUNT_LIST_ITEM_FIGURE, {figure} }
+					span { "data-slot": Slot::AccountListItemFigure.as_str(), class: ACCOUNT_LIST_ITEM_FIGURE, {figure} }
 				}
-				span { "data-slot": "account-list-item-check", class: check_cls, "aria-hidden": "true",
+				span { "data-slot": Slot::AccountListItemCheck.as_str(), class: check_cls, "aria-hidden": "true",
 					svg {
 						class: "size-4",
 						view_box: "0 0 24 24",
@@ -152,7 +152,7 @@ pub fn AccountListItem(
 				}
 			}
 			if let Some(actions) = actions {
-				div { "data-slot": "account-list-item-actions", class: ACCOUNT_LIST_ITEM_ACTIONS, {actions} }
+				div { "data-slot": Slot::AccountListItemActions.as_str(), class: ACCOUNT_LIST_ITEM_ACTIONS, {actions} }
 			}
 		}
 	}

@@ -4,7 +4,7 @@ use ev_lib_classes::{Icon, copy};
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
-		WORKSPACE_TAB_BASE, WORKSPACE_TAB_CLOSE, WORKSPACE_TAB_LABEL, WORKSPACE_TAB_SELECTED, WORKSPACE_TAB_SPACER, WORKSPACE_TAB_TRIGGER, WORKSPACE_TABS_BASE,
+		Slot, WORKSPACE_TAB_BASE, WORKSPACE_TAB_CLOSE, WORKSPACE_TAB_LABEL, WORKSPACE_TAB_SELECTED, WORKSPACE_TAB_SPACER, WORKSPACE_TAB_TRIGGER, WORKSPACE_TABS_BASE,
 		primitives::{Controllable, RovingFocus, RovingOrientation, icon_shapes, use_controllable, use_roving_focus, use_roving_item},
 	},
 };
@@ -31,7 +31,7 @@ pub fn WorkspaceTabs(
 	use_context_provider(|| WorkspaceTabsCtx { value, roving });
 	let cls = cn!(WORKSPACE_TABS_BASE, class);
 	rsx! {
-		div { role: "tablist", "aria-orientation": "horizontal", "data-slot": "workspace-tabs", class: cls, {children} }
+		div { role: "tablist", "aria-orientation": "horizontal", "data-slot": Slot::WorkspaceTabs.as_str(), class: cls, {children} }
 	}
 }
 
@@ -60,11 +60,11 @@ pub fn WorkspaceTab(
 	let glyph = icon.unwrap_or_else(|| rsx! { LayersIcon {} });
 	let on_click_value = value.clone();
 	rsx! {
-		div { "data-slot": "workspace-tab", "data-state": if selected { "active" } else { "inactive" }, class: cls,
+		div { "data-slot": Slot::WorkspaceTab.as_str(), "data-state": if selected { "active" } else { "inactive" }, class: cls,
 			button {
 				r#type: "button",
 				role: "tab",
-				"data-slot": "workspace-tab-trigger",
+				"data-slot": Slot::WorkspaceTabTrigger.as_str(),
 				"aria-selected": if selected { "true" } else { "false" },
 				tabindex: if tab_stop { "0" } else { "-1" },
 				class: WORKSPACE_TAB_TRIGGER,
@@ -91,7 +91,7 @@ pub fn WorkspaceTab(
 			if let Some(close) = on_close {
 				button {
 					r#type: "button",
-					"data-slot": "workspace-tab-close",
+					"data-slot": Slot::WorkspaceTabClose.as_str(),
 					"aria-label": close_label,
 					tabindex: "-1",
 					class: WORKSPACE_TAB_CLOSE,

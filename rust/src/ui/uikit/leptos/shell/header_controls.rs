@@ -6,10 +6,10 @@ use crate::{
 	cn,
 	ui::uikit::leptos::{
 		HEADER_BALANCE_BASE, HEADER_BALANCE_CHEVRON, HEADER_BALANCE_FIGURE, HEADER_BALANCE_INTERACTIVE, HEADER_BALANCE_LABEL, HEADER_BALANCE_SKELETON, HEADER_SEARCH_BASE,
-		HEADER_SEARCH_PLACEHOLDER, ICON_BUTTON_BASE, IconButtonVariant, Kbd, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER,
-		NOTIFICATION_BELL_ITEM, NOTIFICATION_BELL_ITEM_BODY, NOTIFICATION_BELL_ITEM_DESCRIPTION, NOTIFICATION_BELL_ITEM_DOT, NOTIFICATION_BELL_ITEM_DOT_READ,
-		NOTIFICATION_BELL_ITEM_DOT_UNREAD, NOTIFICATION_BELL_ITEM_TIME, NOTIFICATION_BELL_ITEM_TITLE, NOTIFICATION_BELL_ITEM_TITLE_UNREAD, NOTIFICATION_BELL_LIST, NOTIFICATION_BELL_TRIGGER,
-		NOTIFICATION_DOT, Popover, PopoverContent, PopoverTrigger, Size, Skeleton, Tone, button_classes, icon_button::Glyph, icon_button_size_class, primitives::icon_shapes,
+		HEADER_SEARCH_PLACEHOLDER, ICON_BUTTON_BASE, IconButtonVariant, Kbd, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER, NOTIFICATION_BELL_ITEM,
+		NOTIFICATION_BELL_ITEM_BODY, NOTIFICATION_BELL_ITEM_DESCRIPTION, NOTIFICATION_BELL_ITEM_DOT, NOTIFICATION_BELL_ITEM_DOT_READ, NOTIFICATION_BELL_ITEM_DOT_UNREAD,
+		NOTIFICATION_BELL_ITEM_TIME, NOTIFICATION_BELL_ITEM_TITLE, NOTIFICATION_BELL_ITEM_TITLE_UNREAD, NOTIFICATION_BELL_LIST, NOTIFICATION_BELL_TRIGGER, NOTIFICATION_DOT, Popover,
+		PopoverContent, PopoverTrigger, Size, Skeleton, Slot, Tone, button_classes, icon_button::Glyph, icon_button_size_class, primitives::icon_shapes,
 	},
 };
 
@@ -61,7 +61,7 @@ pub fn HeaderBalance(
 				view! { <Skeleton class=HEADER_BALANCE_SKELETON /> }.into_any()
 			} else {
 				view! {
-					<span class=HEADER_BALANCE_FIGURE data-slot="header-balance-value">
+					<span class=HEADER_BALANCE_FIGURE data-slot=Slot::HeaderBalanceValue.as_str()>
 						{value.get()}
 					</span>
 				}
@@ -71,7 +71,7 @@ pub fn HeaderBalance(
 	};
 	let Some(on_click) = on_click else {
 		return view! {
-			<div class=cls data-slot="header-balance" aria-label=aria_label>
+			<div class=cls data-slot=Slot::HeaderBalance.as_str() aria-label=aria_label>
 				{body}
 			</div>
 		}
@@ -81,7 +81,7 @@ pub fn HeaderBalance(
 		<button
 			type="button"
 			class=cls
-			data-slot="header-balance"
+			data-slot=Slot::HeaderBalance.as_str()
 			aria-label=aria_label
 			disabled=disabled
 			on:click=move |e| on_click.run(e)
@@ -158,7 +158,11 @@ pub fn NotificationBell(
 					(unread.get() > 0)
 						.then(|| {
 							view! {
-								<span class=NOTIFICATION_DOT data-slot="notification-dot" aria-hidden="true"></span>
+								<span
+									class=NOTIFICATION_DOT
+									data-slot=Slot::NotificationDot.as_str()
+									aria-hidden="true"
+								></span>
 							}
 						})
 				}}
@@ -217,7 +221,7 @@ pub fn HeaderSearch(
 		<button
 			type="button"
 			class=cls
-			data-slot="header-search"
+			data-slot=Slot::HeaderSearch.as_str()
 			on:click=move |e| {
 				if let Some(h) = on_click {
 					h.run(e);
@@ -250,7 +254,7 @@ fn NotificationRow(notification: HeaderNotification, on_select: Option<Callback<
 			<button
 				type="button"
 				class=NOTIFICATION_BELL_ITEM
-				data-slot="notification"
+				data-slot=Slot::Notification.as_str()
 				on:click=move |_| {
 					if let Some(h) = on_select {
 						h.run(id.clone());

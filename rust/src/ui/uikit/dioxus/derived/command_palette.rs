@@ -1,11 +1,11 @@
 use dioxus::prelude::*;
-
 pub use ev_lib_classes::CommandPaletteLabels;
+
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		COMMAND_PALETTE_CONTENT, COMMAND_PALETTE_HINT, COMMAND_PALETTE_HINTS, COMMAND_PALETTE_LABEL, COMMAND_PALETTE_LIST, COMMAND_PALETTE_TITLE, CommandDialog, CommandEmpty, CommandGroup,
-		CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut, DialogTitle, Kbd,
+		CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut, DialogTitle, Kbd, Slot,
 		primitives::{use_controllable, use_stable_id},
 	},
 };
@@ -94,7 +94,7 @@ pub fn CommandPalette(
 					}
 				}
 			}
-			div { "data-slot": "command-palette-hints", class: COMMAND_PALETTE_HINTS,
+			div { "data-slot": Slot::CommandPaletteHints.as_str(), class: COMMAND_PALETTE_HINTS,
 				span { class: COMMAND_PALETTE_HINT,
 					Kbd { "↑↓" }
 					{navigate}

@@ -5,7 +5,7 @@ use crate::{
 	ui::uikit::{
 		core::popover_placement,
 		leptos::{
-			POPOVER_CONTENT,
+			POPOVER_CONTENT, Slot,
 			primitives::{Controllable, DismissableLayer, Side, use_controllable, use_dismissable_layer},
 		},
 	},
@@ -45,7 +45,7 @@ pub fn PopoverTrigger(#[prop(optional, into)] class: String, #[prop(optional, in
 		<button
 			type="button"
 			class=class
-			data-slot="popover-trigger"
+			data-slot=Slot::PopoverTrigger.as_str()
 			aria-label=move || aria_label.get()
 			aria-expanded=move || ctx.open.get().to_string()
 			on:click=move |_| ctx.open.set(!ctx.open.get_untracked())
@@ -60,7 +60,7 @@ pub fn PopoverTrigger(#[prop(optional, into)] class: String, #[prop(optional, in
 #[component]
 pub fn PopoverAnchor(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class=class data-slot="popover-anchor">
+		<div class=class data-slot=Slot::PopoverAnchor.as_str()>
 			{children()}
 		</div>
 	}
@@ -93,7 +93,7 @@ pub fn PopoverContent(
 					role=role.clone()
 					aria-labelledby=aria_labelledby.clone()
 					class=cls.clone()
-					data-slot="popover-content"
+					data-slot=Slot::PopoverContent.as_str()
 					data-state="open"
 					data-side=side.as_ref().to_owned()
 					data-align=align.clone()

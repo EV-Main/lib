@@ -40,7 +40,6 @@ export function ItemSeparator({
 }: React.ComponentProps<typeof Separator>) {
   return (
     <Separator
-      data-slot="item-separator"
       orientation="horizontal"
       className={cn(ITEM_SEPARATOR, className)}
       {...props}

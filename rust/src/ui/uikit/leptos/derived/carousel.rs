@@ -10,7 +10,7 @@ use crate::{
 		leptos::{
 			Button, ButtonVariant, CAROUSEL_CONTENT_TRACK, CAROUSEL_CONTENT_TRACK_HORIZONTAL, CAROUSEL_CONTENT_TRACK_VERTICAL, CAROUSEL_CONTENT_VIEWPORT, CAROUSEL_EDGE_FADE_NEXT,
 			CAROUSEL_EDGE_FADE_PREV, CAROUSEL_ITEM, CAROUSEL_ITEM_HORIZONTAL, CAROUSEL_ITEM_VERTICAL, CAROUSEL_NAV, CAROUSEL_NEXT_HORIZONTAL, CAROUSEL_NEXT_VERTICAL,
-			CAROUSEL_PREVIOUS_HORIZONTAL, CAROUSEL_PREVIOUS_VERTICAL, Orientation, Size,
+			CAROUSEL_PREVIOUS_HORIZONTAL, CAROUSEL_PREVIOUS_VERTICAL, Orientation, Size, Slot,
 			primitives::{Controllable, icon_shapes, use_controllable},
 		},
 	},
@@ -38,7 +38,7 @@ pub fn Carousel(
 			role="region"
 			aria-roledescription="carousel"
 			tabindex="0"
-			data-slot="carousel"
+			data-slot=Slot::Carousel.as_str()
 			on:keydown=move |e| {
 				if let Some(to) = ctx.slides.with_untracked(|s| s.key(&(&e).into(), index.get_untracked()))
 				{
@@ -64,7 +64,7 @@ pub fn CarouselContent(#[prop(optional, into)] class: String, children: Children
 	};
 	let cls = cn!(CAROUSEL_CONTENT_TRACK, track, class);
 	view! {
-		<div class=CAROUSEL_CONTENT_VIEWPORT data-slot="carousel-content">
+		<div class=CAROUSEL_CONTENT_VIEWPORT data-slot=Slot::CarouselContent.as_str()>
 			<div
 				class=cls
 				style=move || {
@@ -91,7 +91,7 @@ pub fn CarouselItem(#[prop(optional, into)] class: String, children: Children) -
 	};
 	let cls = cn!(CAROUSEL_ITEM, pad, class);
 	view! {
-		<div role="group" aria-roledescription="slide" data-slot="carousel-item" class=cls>
+		<div role="group" aria-roledescription="slide" data-slot=Slot::CarouselItem.as_str() class=cls>
 			{children()}
 		</div>
 	}

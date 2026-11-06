@@ -1,6 +1,9 @@
 use dioxus::prelude::*;
 
-use crate::{cn, ui::uikit::dioxus::CONTAINER_BASE};
+use crate::{
+	cn,
+	ui::uikit::dioxus::{CONTAINER_BASE, Slot},
+};
 
 /// Page-width wrapper: centres content, caps it at `--page-max` and applies the
 /// responsive `--page-px` gutter (tighter on mobile, roomier ≥ sm). Standardises
@@ -10,7 +13,7 @@ use crate::{cn, ui::uikit::dioxus::CONTAINER_BASE};
 pub fn Container(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(CONTAINER_BASE, class);
 	rsx! {
-		div { class: cls, "data-slot": "container", {children} }
+		div { class: cls, "data-slot": Slot::Container.as_str(), {children} }
 	}
 }
 

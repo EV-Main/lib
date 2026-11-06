@@ -2,14 +2,14 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{CARD, CARD_ACTION, CARD_CONTENT, CARD_DESCRIPTION, CARD_FOOTER, CARD_HEADER, CARD_TITLE},
+	ui::uikit::dioxus::{CARD, CARD_ACTION, CARD_CONTENT, CARD_DESCRIPTION, CARD_FOOTER, CARD_HEADER, CARD_TITLE, Slot},
 };
 
 #[component]
 pub fn Card(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(CARD, class);
 	rsx! {
-		div { class: cls, "data-slot": "card", {children} }
+		div { class: cls, "data-slot": Slot::Card.as_str(), {children} }
 	}
 }
 
@@ -17,7 +17,7 @@ pub fn Card(#[props(default)] class: String, children: Element) -> Element {
 pub fn CardHeader(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(CARD_HEADER, class);
 	rsx! {
-		div { class: cls, "data-slot": "card-header", {children} }
+		div { class: cls, "data-slot": Slot::CardHeader.as_str(), {children} }
 	}
 }
 
@@ -25,7 +25,7 @@ pub fn CardHeader(#[props(default)] class: String, children: Element) -> Element
 pub fn CardTitle(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(CARD_TITLE, class);
 	rsx! {
-		div { class: cls, "data-slot": "card-title", {children} }
+		div { class: cls, "data-slot": Slot::CardTitle.as_str(), {children} }
 	}
 }
 
@@ -33,7 +33,7 @@ pub fn CardTitle(#[props(default)] class: String, children: Element) -> Element 
 pub fn CardDescription(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(CARD_DESCRIPTION, class);
 	rsx! {
-		div { class: cls, "data-slot": "card-description", {children} }
+		div { class: cls, "data-slot": Slot::CardDescription.as_str(), {children} }
 	}
 }
 
@@ -41,7 +41,7 @@ pub fn CardDescription(#[props(default)] class: String, children: Element) -> El
 pub fn CardAction(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(CARD_ACTION, class);
 	rsx! {
-		div { class: cls, "data-slot": "card-action", {children} }
+		div { class: cls, "data-slot": Slot::CardAction.as_str(), {children} }
 	}
 }
 
@@ -49,7 +49,7 @@ pub fn CardAction(#[props(default)] class: String, children: Element) -> Element
 pub fn CardContent(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(CARD_CONTENT, class);
 	rsx! {
-		div { class: cls, "data-slot": "card-content", {children} }
+		div { class: cls, "data-slot": Slot::CardContent.as_str(), {children} }
 	}
 }
 
@@ -57,7 +57,7 @@ pub fn CardContent(#[props(default)] class: String, children: Element) -> Elemen
 pub fn CardFooter(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(CARD_FOOTER, class);
 	rsx! {
-		div { class: cls, "data-slot": "card-footer", {children} }
+		div { class: cls, "data-slot": Slot::CardFooter.as_str(), {children} }
 	}
 }
 

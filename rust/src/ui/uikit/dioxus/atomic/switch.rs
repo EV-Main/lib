@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{SWITCH_BASE, SWITCH_THUMB, primitives::use_controllable},
+	ui::uikit::dioxus::{SWITCH_BASE, SWITCH_THUMB, Slot, primitives::use_controllable},
 };
 
 #[component]
@@ -22,14 +22,14 @@ pub fn Switch(
 			r#type: "button",
 			role: "switch",
 			class: cls,
-			"data-slot": "switch",
+			"data-slot": Slot::Switch.as_str(),
 			"data-state": data_state,
 			"aria-checked": on,
 			disabled,
 			onclick: move |_| state.set(!on),
 			span {
 				class: SWITCH_THUMB,
-				"data-slot": "switch-thumb",
+				"data-slot": Slot::SwitchThumb.as_str(),
 				"data-state": data_state,
 			}
 		}

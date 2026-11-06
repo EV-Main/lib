@@ -2,14 +2,14 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{AVATAR, AVATAR_FALLBACK, AVATAR_IMAGE},
+	ui::uikit::dioxus::{AVATAR, AVATAR_FALLBACK, AVATAR_IMAGE, Slot},
 };
 
 #[component]
 pub fn Avatar(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(AVATAR, class);
 	rsx! {
-		div { class: cls, "data-slot": "avatar", {children} }
+		div { class: cls, "data-slot": Slot::Avatar.as_str(), {children} }
 	}
 }
 
@@ -23,7 +23,7 @@ pub fn AvatarImage(#[props(default)] class: String, #[props(default)] src: Strin
 	rsx! {
 		img {
 			class: cls,
-			"data-slot": "avatar-image",
+			"data-slot": Slot::AvatarImage.as_str(),
 			src,
 			alt,
 			onerror: move |_| errored.set(true),
@@ -35,7 +35,7 @@ pub fn AvatarImage(#[props(default)] class: String, #[props(default)] src: Strin
 pub fn AvatarFallback(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(AVATAR_FALLBACK, class);
 	rsx! {
-		div { class: cls, "data-slot": "avatar-fallback", {children} }
+		div { class: cls, "data-slot": Slot::AvatarFallback.as_str(), {children} }
 	}
 }
 

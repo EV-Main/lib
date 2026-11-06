@@ -2,13 +2,13 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{EMPTY, EMPTY_CONTENT, EMPTY_DESCRIPTION, EMPTY_HEADER, EMPTY_MEDIA_BASE, EMPTY_TITLE, EmptyMediaVariant},
+	ui::uikit::dioxus::{EMPTY, EMPTY_CONTENT, EMPTY_DESCRIPTION, EMPTY_HEADER, EMPTY_MEDIA_BASE, EMPTY_TITLE, EmptyMediaVariant, Slot},
 };
 #[component]
 pub fn Empty(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(EMPTY, class);
 	rsx! {
-		div { class: cls, "data-slot": "empty", {children} }
+		div { class: cls, "data-slot": Slot::Empty.as_str(), {children} }
 	}
 }
 
@@ -16,7 +16,7 @@ pub fn Empty(#[props(default)] class: String, children: Element) -> Element {
 pub fn EmptyHeader(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(EMPTY_HEADER, class);
 	rsx! {
-		div { class: cls, "data-slot": "empty-header", {children} }
+		div { class: cls, "data-slot": Slot::EmptyHeader.as_str(), {children} }
 	}
 }
 
@@ -26,7 +26,7 @@ pub fn EmptyMedia(#[props(default)] variant: EmptyMediaVariant, #[props(default)
 	rsx! {
 		div {
 			class: cls,
-			"data-slot": "empty-icon",
+			"data-slot": Slot::EmptyIcon.as_str(),
 			"data-variant": variant.as_ref(),
 			{children}
 		}
@@ -37,7 +37,7 @@ pub fn EmptyMedia(#[props(default)] variant: EmptyMediaVariant, #[props(default)
 pub fn EmptyTitle(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(EMPTY_TITLE, class);
 	rsx! {
-		div { class: cls, "data-slot": "empty-title", {children} }
+		div { class: cls, "data-slot": Slot::EmptyTitle.as_str(), {children} }
 	}
 }
 
@@ -45,7 +45,7 @@ pub fn EmptyTitle(#[props(default)] class: String, children: Element) -> Element
 pub fn EmptyDescription(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(EMPTY_DESCRIPTION, class);
 	rsx! {
-		div { class: cls, "data-slot": "empty-description", {children} }
+		div { class: cls, "data-slot": Slot::EmptyDescription.as_str(), {children} }
 	}
 }
 
@@ -53,7 +53,7 @@ pub fn EmptyDescription(#[props(default)] class: String, children: Element) -> E
 pub fn EmptyContent(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(EMPTY_CONTENT, class);
 	rsx! {
-		div { class: cls, "data-slot": "empty-content", {children} }
+		div { class: cls, "data-slot": Slot::EmptyContent.as_str(), {children} }
 	}
 }
 

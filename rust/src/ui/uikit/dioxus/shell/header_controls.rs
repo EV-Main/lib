@@ -6,10 +6,10 @@ use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		HEADER_BALANCE_BASE, HEADER_BALANCE_CHEVRON, HEADER_BALANCE_FIGURE, HEADER_BALANCE_INTERACTIVE, HEADER_BALANCE_LABEL, HEADER_BALANCE_SKELETON, HEADER_SEARCH_BASE,
-		HEADER_SEARCH_PLACEHOLDER, ICON_BUTTON_BASE, IconButtonVariant, Kbd, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER,
-		NOTIFICATION_BELL_ITEM, NOTIFICATION_BELL_ITEM_BODY, NOTIFICATION_BELL_ITEM_DESCRIPTION, NOTIFICATION_BELL_ITEM_DOT, NOTIFICATION_BELL_ITEM_DOT_READ,
-		NOTIFICATION_BELL_ITEM_DOT_UNREAD, NOTIFICATION_BELL_ITEM_TIME, NOTIFICATION_BELL_ITEM_TITLE, NOTIFICATION_BELL_ITEM_TITLE_UNREAD, NOTIFICATION_BELL_LIST, NOTIFICATION_BELL_TRIGGER,
-		NOTIFICATION_DOT, Popover, PopoverContent, PopoverTrigger, Size, Skeleton, Tone, button_classes, icon_button_size_class, primitives::icon_shapes,
+		HEADER_SEARCH_PLACEHOLDER, ICON_BUTTON_BASE, IconButtonVariant, Kbd, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER, NOTIFICATION_BELL_ITEM,
+		NOTIFICATION_BELL_ITEM_BODY, NOTIFICATION_BELL_ITEM_DESCRIPTION, NOTIFICATION_BELL_ITEM_DOT, NOTIFICATION_BELL_ITEM_DOT_READ, NOTIFICATION_BELL_ITEM_DOT_UNREAD,
+		NOTIFICATION_BELL_ITEM_TIME, NOTIFICATION_BELL_ITEM_TITLE, NOTIFICATION_BELL_ITEM_TITLE_UNREAD, NOTIFICATION_BELL_LIST, NOTIFICATION_BELL_TRIGGER, NOTIFICATION_DOT, Popover,
+		PopoverContent, PopoverTrigger, Size, Skeleton, Slot, Tone, button_classes, icon_button_size_class, primitives::icon_shapes,
 	},
 };
 
@@ -50,19 +50,19 @@ pub fn HeaderBalance(
 		if loading {
 			Skeleton { class: HEADER_BALANCE_SKELETON }
 		} else {
-			span { class: HEADER_BALANCE_FIGURE, "data-slot": "header-balance-value", {value} }
+			span { class: HEADER_BALANCE_FIGURE, "data-slot": Slot::HeaderBalanceValue.as_str(), {value} }
 		}
 	};
 	let Some(onclick) = onclick else {
 		return rsx! {
-			div { class: cls, "data-slot": "header-balance", "aria-label": aria_label, {body} }
+			div { class: cls, "data-slot": Slot::HeaderBalance.as_str(), "aria-label": aria_label, {body} }
 		};
 	};
 	rsx! {
 		button {
 			r#type: "button",
 			class: cls,
-			"data-slot": "header-balance",
+			"data-slot": Slot::HeaderBalance.as_str(),
 			"aria-label": aria_label,
 			disabled,
 			onclick: move |e| onclick.call(e),
@@ -136,7 +136,7 @@ pub fn NotificationBell(
 					{icon_shapes(Icon::Bell)}
 				}
 				if unread > 0 {
-					span { class: NOTIFICATION_DOT, "data-slot": "notification-dot", "aria-hidden": "true" }
+					span { class: NOTIFICATION_DOT, "data-slot": Slot::NotificationDot.as_str(), "aria-hidden": "true" }
 				}
 			}
 			PopoverContent { align: "end", class: NOTIFICATION_BELL_CONTENT,
@@ -180,7 +180,7 @@ pub fn HeaderSearch(
 		button {
 			r#type: "button",
 			class: cls,
-			"data-slot": "header-search",
+			"data-slot": Slot::HeaderSearch.as_str(),
 			onclick: move |e| {
 				if let Some(h) = onclick {
 					h.call(e);
@@ -214,7 +214,7 @@ fn NotificationRow(notification: HeaderNotification, on_select: Option<EventHand
 			button {
 				r#type: "button",
 				class: NOTIFICATION_BELL_ITEM,
-				"data-slot": "notification",
+				"data-slot": Slot::Notification.as_str(),
 				onclick: move |_| {
 					if let Some(h) = on_select {
 						h.call(id.clone());

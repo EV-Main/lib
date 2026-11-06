@@ -6,7 +6,7 @@ use crate::{
 	ui::uikit::{
 		core::InputOtp,
 		leptos::{
-			INPUT_OTP_CONTAINER, INPUT_OTP_GROUP, INPUT_OTP_INPUT, INPUT_OTP_SLOT, INPUT_OTP_SLOT_CARET, INPUT_OTP_SLOT_CARET_WRAPPER,
+			INPUT_OTP_CONTAINER, INPUT_OTP_GROUP, INPUT_OTP_INPUT, INPUT_OTP_SLOT, INPUT_OTP_SLOT_CARET, INPUT_OTP_SLOT_CARET_WRAPPER, Slot,
 			primitives::{Controllable, icon_shapes, use_controllable},
 		},
 	},
@@ -29,7 +29,7 @@ pub fn InputOTP(
 	let container_cls = cn!(INPUT_OTP_CONTAINER, container_class);
 	let input_cls = cn!(INPUT_OTP_INPUT, class);
 	view! {
-		<div class=container_cls data-slot="input-otp">
+		<div class=container_cls data-slot=Slot::InputOtp.as_str()>
 			<Provider value=InputOtpContext {
 				value,
 				focused,
@@ -55,7 +55,7 @@ pub fn InputOTP(
 pub fn InputOTPGroup(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(INPUT_OTP_GROUP, class);
 	view! {
-		<div class=cls data-slot="input-otp-group">
+		<div class=cls data-slot=Slot::InputOtpGroup.as_str()>
 			{children()}
 		</div>
 	}
@@ -67,7 +67,11 @@ pub fn InputOTPSlot(index: usize, #[prop(optional, into)] class: String) -> impl
 	let slot = Memo::new(move |_| ctx.otp.slot(&ctx.value.get(), ctx.focused.get(), index));
 	let cls = cn!(INPUT_OTP_SLOT, class);
 	view! {
-		<div class=cls data-slot="input-otp-slot" data-active=move || slot.get().active.to_string()>
+		<div
+			class=cls
+			data-slot=Slot::InputOtpSlot.as_str()
+			data-active=move || slot.get().active.to_string()
+		>
 			{move || slot.get().char.map(|c| c.to_string())}
 			{move || {
 				slot
@@ -88,7 +92,7 @@ pub fn InputOTPSlot(index: usize, #[prop(optional, into)] class: String) -> impl
 #[component]
 pub fn InputOTPSeparator() -> impl IntoView {
 	view! {
-		<div data-slot="input-otp-separator" role="separator">
+		<div data-slot=Slot::InputOtpSeparator.as_str() role="separator">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 24 24"

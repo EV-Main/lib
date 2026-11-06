@@ -3,7 +3,7 @@ use dioxus::prelude::*;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
-		HOVER_CARD_CONTENT,
+		HOVER_CARD_CONTENT, Slot,
 		primitives::{Controllable, Side, use_controllable},
 	},
 };
@@ -32,7 +32,7 @@ pub fn HoverCardTrigger(#[props(default)] class: String, children: Element) -> E
 	rsx! {
 		a {
 			class,
-			"data-slot": "hover-card-trigger",
+			"data-slot": Slot::HoverCardTrigger.as_str(),
 			onmouseenter: move |_| ctx.open.set(true),
 			onmouseleave: move |_| ctx.open.set(false),
 			{children}
@@ -50,7 +50,7 @@ pub fn HoverCardContent(#[props(default)] side: Side, #[props(default = String::
 	rsx! {
 		div {
 			class: cls,
-			"data-slot": "hover-card-content",
+			"data-slot": Slot::HoverCardContent.as_str(),
 			"data-state": "open",
 			"data-side": side.as_ref(),
 			"data-align": align,

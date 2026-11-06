@@ -2,14 +2,14 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{EMPTY, EMPTY_CONTENT, EMPTY_DESCRIPTION, EMPTY_HEADER, EMPTY_MEDIA_BASE, EMPTY_TITLE, EmptyMediaVariant},
+	ui::uikit::leptos::{EMPTY, EMPTY_CONTENT, EMPTY_DESCRIPTION, EMPTY_HEADER, EMPTY_MEDIA_BASE, EMPTY_TITLE, EmptyMediaVariant, Slot},
 };
 
 #[component]
 pub fn Empty(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(EMPTY, class);
 	view! {
-		<div class=cls data-slot="empty">
+		<div class=cls data-slot=Slot::Empty.as_str()>
 			{children()}
 		</div>
 	}
@@ -19,7 +19,7 @@ pub fn Empty(#[prop(optional, into)] class: String, children: Children) -> impl 
 pub fn EmptyHeader(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(EMPTY_HEADER, class);
 	view! {
-		<div class=cls data-slot="empty-header">
+		<div class=cls data-slot=Slot::EmptyHeader.as_str()>
 			{children()}
 		</div>
 	}
@@ -29,7 +29,7 @@ pub fn EmptyHeader(#[prop(optional, into)] class: String, children: Children) ->
 pub fn EmptyMedia(#[prop(optional)] variant: EmptyMediaVariant, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(EMPTY_MEDIA_BASE, variant.as_class(), class);
 	view! {
-		<div class=cls data-slot="empty-icon" data-variant=variant.as_ref().to_owned()>
+		<div class=cls data-slot=Slot::EmptyIcon.as_str() data-variant=variant.as_ref().to_owned()>
 			{children()}
 		</div>
 	}
@@ -39,7 +39,7 @@ pub fn EmptyMedia(#[prop(optional)] variant: EmptyMediaVariant, #[prop(optional,
 pub fn EmptyTitle(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(EMPTY_TITLE, class);
 	view! {
-		<div class=cls data-slot="empty-title">
+		<div class=cls data-slot=Slot::EmptyTitle.as_str()>
 			{children()}
 		</div>
 	}
@@ -49,7 +49,7 @@ pub fn EmptyTitle(#[prop(optional, into)] class: String, children: Children) -> 
 pub fn EmptyDescription(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(EMPTY_DESCRIPTION, class);
 	view! {
-		<div class=cls data-slot="empty-description">
+		<div class=cls data-slot=Slot::EmptyDescription.as_str()>
 			{children()}
 		</div>
 	}
@@ -59,7 +59,7 @@ pub fn EmptyDescription(#[prop(optional, into)] class: String, children: Childre
 pub fn EmptyContent(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(EMPTY_CONTENT, class);
 	view! {
-		<div class=cls data-slot="empty-content">
+		<div class=cls data-slot=Slot::EmptyContent.as_str()>
 			{children()}
 		</div>
 	}

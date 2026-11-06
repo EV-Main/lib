@@ -1,7 +1,7 @@
 use ev_lib_classes::{LOGO_BACKGROUND, LOGO_MARK, LOGO_MARK_INSET};
 use leptos::prelude::*;
 
-use crate::cn;
+use crate::{cn, ui::uikit::leptos::Slot};
 
 /// The consumer's mark, painted as a CSS mask (`background-color: currentColor`
 /// + `mask-image`) so a monochrome lockup follows the surrounding text colour.
@@ -16,7 +16,7 @@ pub fn Logo(#[prop(optional, into)] class: String, #[prop(optional)] with_backgr
 	let mark_cls = cn!(LOGO_MARK, if with_background { LOGO_MARK_INSET.to_string() } else { class.clone() });
 	let mark = view! {
 		<span
-			data-slot="logo"
+			data-slot=Slot::Logo.as_str()
 			aria-hidden="true"
 			// the ratio's fallback is what makes a missing mark *visible*: a masked span has no intrinsic size
 			style="background-color:currentColor;mask-image:var(--brand-mark);-webkit-mask-image:var(--brand-mark);mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center;mask-size:contain;-webkit-mask-size:contain;aspect-ratio:var(--brand-aspect,1)"
@@ -27,7 +27,7 @@ pub fn Logo(#[prop(optional, into)] class: String, #[prop(optional)] with_backgr
 		return mark.into_any();
 	}
 	view! {
-		<span data-slot="logo-background" class=cn!(LOGO_BACKGROUND, class)>
+		<span data-slot=Slot::LogoBackground.as_str() class=cn!(LOGO_BACKGROUND, class)>
 			{mark}
 		</span>
 	}

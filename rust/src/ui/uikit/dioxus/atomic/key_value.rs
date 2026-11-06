@@ -7,7 +7,7 @@ pub use ev_lib_classes::KeyValueLabels;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{KEY_VALUE_BASE, KEY_VALUE_COPY, KEY_VALUE_LABEL, KEY_VALUE_ROW, KEY_VALUE_STATUS, KEY_VALUE_VALUE, primitives::icon_shapes},
+	ui::uikit::dioxus::{KEY_VALUE_BASE, KEY_VALUE_COPY, KEY_VALUE_LABEL, KEY_VALUE_ROW, KEY_VALUE_STATUS, KEY_VALUE_VALUE, Slot, primitives::icon_shapes},
 };
 
 /// A small label over its value, with an optional copy button. Mirrors the TS
@@ -57,15 +57,15 @@ pub fn KeyValue(
 	};
 	let cls = cn!(KEY_VALUE_BASE, class);
 	rsx! {
-		div { class: cls, "data-slot": "key-value",
-			span { class: KEY_VALUE_LABEL, "data-slot": "key-value-label", {label} }
+		div { class: cls, "data-slot": Slot::KeyValue.as_str(),
+			span { class: KEY_VALUE_LABEL, "data-slot": Slot::KeyValueLabel.as_str(), {label} }
 			div { class: KEY_VALUE_ROW,
-				span { class: KEY_VALUE_VALUE, "data-slot": "key-value-value", {value} }
+				span { class: KEY_VALUE_VALUE, "data-slot": Slot::KeyValueValue.as_str(), {value} }
 				if has_copy {
 					button {
 						r#type: "button",
 						class: KEY_VALUE_COPY,
-						"data-slot": "key-value-copy",
+						"data-slot": Slot::KeyValueCopy.as_str(),
 						"aria-label": copy_label,
 						onclick: on_press,
 						if copied() {

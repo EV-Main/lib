@@ -3,7 +3,7 @@ use dioxus::prelude::*;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
-		Orientation, TABS_CONTENT, TABS_LIST, TABS_ROOT, TABS_TRIGGER,
+		Orientation, Slot, TABS_CONTENT, TABS_LIST, TABS_ROOT, TABS_TRIGGER,
 		primitives::{Controllable, RovingFocus, use_controllable, use_roving_focus, use_roving_item},
 	},
 };
@@ -21,7 +21,7 @@ pub fn Tabs(
 	use_context_provider(|| TabsCtx { value: state, orientation });
 	let cls = cn!(TABS_ROOT, class);
 	rsx! {
-		div { class: cls, "data-slot": "tabs", "data-orientation": orientation.as_ref(), {children} }
+		div { class: cls, "data-slot": Slot::Tabs.as_str(), "data-orientation": orientation.as_ref(), {children} }
 	}
 }
 /// Owns the group's roving focus, so the `tabindex="-1"` its triggers carry is
@@ -36,7 +36,7 @@ pub fn TabsList(#[props(default)] class: String, children: Element) -> Element {
 		div {
 			role: "tablist",
 			class: cls,
-			"data-slot": "tabs-list",
+			"data-slot": Slot::TabsList.as_str(),
 			"aria-orientation": ctx.orientation.as_ref(),
 			// Automatic activation, the ARIA pattern for panels that render
 			// instantly: arrowing to a tab selects it as well as focusing it,
@@ -67,7 +67,7 @@ pub fn TabsTrigger(value: String, #[props(default)] class: String, children: Ele
 			r#type: "button",
 			role: "tab",
 			class: cls,
-			"data-slot": "tabs-trigger",
+			"data-slot": Slot::TabsTrigger.as_str(),
 			"data-state": data_state,
 			"aria-selected": aria_selected,
 			tabindex: if tab_stop { "0" } else { "-1" },
@@ -85,7 +85,7 @@ pub fn TabsContent(value: String, #[props(default)] class: String, children: Ele
 	}
 	let cls = cn!(TABS_CONTENT, class);
 	rsx! {
-		div { role: "tabpanel", class: cls, "data-slot": "tabs-content", "data-state": "active", {children} }
+		div { role: "tabpanel", class: cls, "data-slot": Slot::TabsContent.as_str(), "data-state": "active", {children} }
 	}
 }
 #[derive(Clone, Copy)]

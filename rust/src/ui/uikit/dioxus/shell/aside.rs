@@ -8,7 +8,7 @@ use crate::{
 	ui::uikit::dioxus::{
 		ASIDE_BODY, ASIDE_FOOTER, ASIDE_HEADER_BACK_ICON, ASIDE_HEADER_BASE, ASIDE_HEADER_CLOSE_ICON, ASIDE_HEADER_TITLE, ASIDE_PANEL_DOCKED, ASIDE_PANEL_DRAWER, ASIDE_PANEL_NARROW_ONLY,
 		ASIDE_PANEL_SHEET, ASIDE_PANEL_WIDE_ONLY, ASIDE_PANEL_WIDE_ONLY_WRAPPER, ASIDE_RAIL_BASE, ASIDE_RAIL_SPACER, AsidePanelSide, Drawer, DrawerContent, DrawerDirection, IconButton,
-		Sheet, SheetContent, Size,
+		Sheet, SheetContent, Size, Slot,
 		primitives::{Side, icon_shapes},
 	},
 };
@@ -33,7 +33,7 @@ pub fn AsideHeader(
 	let close_label = labels.close;
 	let cls = cn!(ASIDE_HEADER_BASE, class);
 	rsx! {
-		div { "data-slot": "aside-header", class: cls,
+		div { "data-slot": Slot::AsideHeader.as_str(), class: cls,
 			if let Some(back) = on_back {
 				IconButton { aria_label: back_label, size: Size::Sm, onclick: move |_| back.call(()),
 					Glyph { class: ASIDE_HEADER_BACK_ICON,
@@ -82,7 +82,7 @@ pub fn AsideRail(
 ) -> Element {
 	let cls = cn!(ASIDE_RAIL_BASE, class);
 	rsx! {
-		div { role: "group", "aria-label": aria_label, "data-slot": "aside-rail", class: cls,
+		div { role: "group", "aria-label": aria_label, "data-slot": Slot::AsideRail.as_str(), class: cls,
 			for item in items {
 				AsideRailButton { key: "{item.id}", item, value: value.clone(), on_value_change }
 			}
@@ -135,9 +135,9 @@ pub fn AsidePanel(
 	let body = || {
 		rsx! {
 			{header.clone()}
-			div { "data-slot": "aside-body", class: ASIDE_BODY, {children.clone()} }
+			div { "data-slot": Slot::AsideBody.as_str(), class: ASIDE_BODY, {children.clone()} }
 			if let Some(footer) = footer.clone() {
-				div { "data-slot": "aside-footer", class: ASIDE_FOOTER, {footer} }
+				div { "data-slot": Slot::AsideFooter.as_str(), class: ASIDE_FOOTER, {footer} }
 			}
 		}
 	};
@@ -145,7 +145,7 @@ pub fn AsidePanel(
 		rsx! {
 			aside {
 				"aria-label": aria_label.clone(),
-				"data-slot": "aside-panel",
+				"data-slot": Slot::AsidePanel.as_str(),
 				"data-mode": "docked",
 				"data-side": side.as_ref(),
 				class: cn!(ASIDE_PANEL_DOCKED, side.as_class(), &class, visibility),
@@ -167,7 +167,7 @@ pub fn AsidePanel(
 	// Mounted even while closed, so a drawer that closes plays its exit.
 	let drawer = || {
 		rsx! {
-			div { "data-slot": "aside-panel-narrow", class: ASIDE_PANEL_NARROW_ONLY,
+			div { "data-slot": Slot::AsidePanelNarrow.as_str(), class: ASIDE_PANEL_NARROW_ONLY,
 				Drawer { open, on_open_change, direction: DrawerDirection::Bottom,
 					DrawerContent { aria_label: aria_label.clone(), class: ASIDE_PANEL_DRAWER, {body()} }
 				}
@@ -189,7 +189,7 @@ pub fn AsidePanel(
 		},
 		(AsidePanelMode::Overlay, AsideCollapse::Never) => sheet(),
 		(AsidePanelMode::Overlay, AsideCollapse::Md) => rsx! {
-			div { "data-slot": "aside-panel-wide", class: ASIDE_PANEL_WIDE_ONLY_WRAPPER, {sheet()} }
+			div { "data-slot": Slot::AsidePanelWide.as_str(), class: ASIDE_PANEL_WIDE_ONLY_WRAPPER, {sheet()} }
 			{drawer()}
 		},
 	}

@@ -3,7 +3,7 @@ use dioxus::prelude::*;
 pub use crate::ui::uikit::core::SectionLabelAs;
 use crate::{
 	cn,
-	ui::uikit::dioxus::{SECTION_LABEL_BASE, SectionLabelTone},
+	ui::uikit::dioxus::{SECTION_LABEL_BASE, SectionLabelTone, Slot},
 };
 
 /// The quiet label above a figure, a group or a section. Mirrors the TS
@@ -13,22 +13,22 @@ pub fn SectionLabel(#[props(default)] r#as: SectionLabelAs, #[props(default)] to
 	let cls = cn!(SECTION_LABEL_BASE, tone.as_class(), class);
 	match r#as {
 		SectionLabelAs::P => rsx! {
-			p { class: cls, "data-slot": "section-label", {children} }
+			p { class: cls, "data-slot": Slot::SectionLabel.as_str(), {children} }
 		},
 		SectionLabelAs::Span => rsx! {
-			span { class: cls, "data-slot": "section-label", {children} }
+			span { class: cls, "data-slot": Slot::SectionLabel.as_str(), {children} }
 		},
 		SectionLabelAs::Div => rsx! {
-			div { class: cls, "data-slot": "section-label", {children} }
+			div { class: cls, "data-slot": Slot::SectionLabel.as_str(), {children} }
 		},
 		SectionLabelAs::H2 => rsx! {
-			h2 { class: cls, "data-slot": "section-label", {children} }
+			h2 { class: cls, "data-slot": Slot::SectionLabel.as_str(), {children} }
 		},
 		SectionLabelAs::H3 => rsx! {
-			h3 { class: cls, "data-slot": "section-label", {children} }
+			h3 { class: cls, "data-slot": Slot::SectionLabel.as_str(), {children} }
 		},
 		SectionLabelAs::H4 => rsx! {
-			h4 { class: cls, "data-slot": "section-label", {children} }
+			h4 { class: cls, "data-slot": Slot::SectionLabel.as_str(), {children} }
 		},
 	}
 }

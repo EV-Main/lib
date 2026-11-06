@@ -1,7 +1,7 @@
 use leptos::prelude::*;
 
 pub use crate::ui::uikit::core::button_classes;
-use crate::ui::uikit::leptos::{Accent, ButtonVariant, Size};
+use crate::ui::uikit::leptos::{Accent, ButtonVariant, Size, Slot};
 
 /// With `href` this is an `<a>` wearing the button's classes — a link that looks
 /// like a call to action is still a link, and the kit has no `asChild` slot to
@@ -34,13 +34,20 @@ pub fn Button(
 	};
 	match href {
 		Some(href) => view! {
-			<a class=cls data-slot="button" href=href title=title on:click=click>
+			<a class=cls data-slot=Slot::Button.as_str() href=href title=title on:click=click>
 				{children()}
 			</a>
 		}
 		.into_any(),
 		None => view! {
-			<button class=cls data-slot="button" type=r#type title=title disabled=disabled on:click=click>
+			<button
+				class=cls
+				data-slot=Slot::Button.as_str()
+				type=r#type
+				title=title
+				disabled=disabled
+				on:click=click
+			>
 				{children()}
 			</button>
 		}

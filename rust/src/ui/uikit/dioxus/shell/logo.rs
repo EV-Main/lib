@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use ev_lib_classes::{LOGO_BACKGROUND, LOGO_MARK, LOGO_MARK_INSET};
 
-use crate::cn;
+use crate::{cn, ui::uikit::dioxus::Slot};
 
 /// The consumer's mark, painted as a CSS mask (`background-color: currentColor`
 /// + `mask-image`) so a monochrome lockup follows the surrounding text colour
@@ -17,7 +17,7 @@ use crate::cn;
 pub fn Logo(#[props(default)] class: String, #[props(default)] with_background: bool) -> Element {
 	let mark = rsx! {
 		span {
-			"data-slot": "logo",
+			"data-slot": Slot::Logo.as_str(),
 			"aria-hidden": "true",
 			// the ratio's fallback is what makes a missing mark *visible*: a masked
 			// span has no intrinsic size, so `h-N w-auto` without it is zero-width
@@ -31,7 +31,7 @@ pub fn Logo(#[props(default)] class: String, #[props(default)] with_background: 
 	}
 
 	rsx! {
-		span { "data-slot": "logo-background", class: cn!(LOGO_BACKGROUND, class), {mark} }
+		span { "data-slot": Slot::LogoBackground.as_str(), class: cn!(LOGO_BACKGROUND, class), {mark} }
 	}
 }
 

@@ -1,12 +1,15 @@
 use dioxus::prelude::*;
 
-use crate::{cn, ui::uikit::dioxus::SKELETON_BASE};
+use crate::{
+	cn,
+	ui::uikit::dioxus::{SKELETON_BASE, Slot},
+};
 
 #[component]
 pub fn Skeleton(#[props(default)] class: String) -> Element {
 	let cls = cn!(SKELETON_BASE, class);
 	rsx! {
-		div { class: cls, "data-slot": "skeleton" }
+		div { class: cls, "data-slot": Slot::Skeleton.as_str() }
 	}
 }
 

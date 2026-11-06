@@ -6,7 +6,7 @@ use crate::{
 	ui::uikit::{
 		core::sheet_side_class,
 		leptos::{
-			SHEET_CLOSE, SHEET_CONTENT, SHEET_DESCRIPTION, SHEET_FOOTER, SHEET_HEADER, SHEET_OVERLAY, SHEET_TITLE,
+			SHEET_CLOSE, SHEET_CONTENT, SHEET_DESCRIPTION, SHEET_FOOTER, SHEET_HEADER, SHEET_OVERLAY, SHEET_TITLE, Slot,
 			primitives::{Controllable, Side, icon_shapes, use_controllable},
 		},
 	},
@@ -23,7 +23,7 @@ pub fn Sheet(
 	let provided = SheetCtx { open: state };
 	view! {
 		<Provider value=provided>
-			<div data-slot="sheet">{children()}</div>
+			<div data-slot=Slot::Sheet.as_str()>{children()}</div>
 		</Provider>
 	}
 }
@@ -35,7 +35,7 @@ pub fn SheetTrigger(#[prop(optional, into)] class: String, children: Children) -
 		<button
 			type="button"
 			class=class
-			data-slot="sheet-trigger"
+			data-slot=Slot::SheetTrigger.as_str()
 			aria-expanded=move || ctx.open.get().to_string()
 			on:click=move |_| ctx.open.set(true)
 		>
@@ -62,7 +62,7 @@ pub fn SheetContent(
 			view! {
 				<div
 					class=SHEET_OVERLAY
-					data-slot="sheet-overlay"
+					data-slot=Slot::SheetOverlay.as_str()
 					data-state="open"
 					on:click=move |_| ctx.open.set(false)
 				></div>
@@ -71,7 +71,7 @@ pub fn SheetContent(
 					aria-modal="true"
 					aria-label=aria_label.clone()
 					class=cls.clone()
-					data-slot="sheet-content"
+					data-slot=Slot::SheetContent.as_str()
 					data-state="open"
 					tabindex="-1"
 					on:click=|e| e.stop_propagation()
@@ -85,7 +85,7 @@ pub fn SheetContent(
 					<button
 						type="button"
 						class=SHEET_CLOSE
-						data-slot="sheet-close"
+						data-slot=Slot::SheetClose.as_str()
 						on:click=move |_| ctx.open.set(false)
 					>
 						<svg
@@ -114,7 +114,12 @@ pub fn SheetContent(
 pub fn SheetClose(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let ctx = expect_context::<SheetCtx>();
 	view! {
-		<button type="button" class=class data-slot="sheet-close" on:click=move |_| ctx.open.set(false)>
+		<button
+			type="button"
+			class=class
+			data-slot=Slot::SheetClose.as_str()
+			on:click=move |_| ctx.open.set(false)
+		>
 			{children()}
 		</button>
 	}
@@ -123,7 +128,7 @@ pub fn SheetClose(#[prop(optional, into)] class: String, children: Children) -> 
 #[component]
 pub fn SheetHeader(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class=cn!(SHEET_HEADER, class) data-slot="sheet-header">
+		<div class=cn!(SHEET_HEADER, class) data-slot=Slot::SheetHeader.as_str()>
 			{children()}
 		</div>
 	}
@@ -132,7 +137,7 @@ pub fn SheetHeader(#[prop(optional, into)] class: String, children: Children) ->
 #[component]
 pub fn SheetFooter(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class=cn!(SHEET_FOOTER, class) data-slot="sheet-footer">
+		<div class=cn!(SHEET_FOOTER, class) data-slot=Slot::SheetFooter.as_str()>
 			{children()}
 		</div>
 	}
@@ -141,7 +146,7 @@ pub fn SheetFooter(#[prop(optional, into)] class: String, children: Children) ->
 #[component]
 pub fn SheetTitle(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<h2 class=cn!(SHEET_TITLE, class) data-slot="sheet-title">
+		<h2 class=cn!(SHEET_TITLE, class) data-slot=Slot::SheetTitle.as_str()>
 			{children()}
 		</h2>
 	}
@@ -150,7 +155,7 @@ pub fn SheetTitle(#[prop(optional, into)] class: String, children: Children) -> 
 #[component]
 pub fn SheetDescription(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<p class=cn!(SHEET_DESCRIPTION, class) data-slot="sheet-description">
+		<p class=cn!(SHEET_DESCRIPTION, class) data-slot=Slot::SheetDescription.as_str()>
 			{children()}
 		</p>
 	}

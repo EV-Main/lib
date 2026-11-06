@@ -9,7 +9,7 @@ use crate::{
 		leptos::{
 			AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, ButtonVariant, CONFIRM_DIALOG_CONTENT,
 			CONFIRM_DIALOG_DESCRIPTION, CONFIRM_DIALOG_ERROR, CONFIRM_DIALOG_FOOTER, CONFIRM_DIALOG_HEADER, CONFIRM_DIALOG_ICON, CONFIRM_DIALOG_PENDING, CONFIRM_DIALOG_SPINNER,
-			CONFIRM_DIALOG_TEXT, CONFIRM_DIALOG_TITLE, Size, Spinner, Tone, button_classes,
+			CONFIRM_DIALOG_TEXT, CONFIRM_DIALOG_TITLE, Size, Slot, Spinner, Tone, button_classes,
 			icon_button::Glyph,
 			primitives::{icon_shapes, use_controllable, use_stable_id},
 		},
@@ -106,7 +106,7 @@ pub fn ConfirmDialog(
 		error.get().filter(|_| flow.with(ConfirmFlow::shows_error)).map(|e| {
 			let message = if e.is_empty() { error_label.clone() } else { e };
 			view! {
-				<p role="alert" class=CONFIRM_DIALOG_ERROR data-slot="confirm-dialog-error">
+				<p role="alert" class=CONFIRM_DIALOG_ERROR data-slot=Slot::ConfirmDialogError.as_str()>
 					{message}
 				</p>
 			}
@@ -134,7 +134,7 @@ pub fn ConfirmDialog(
 			<AlertDialogHeader class=CONFIRM_DIALOG_HEADER>
 				<span
 					class=CONFIRM_DIALOG_ICON
-					data-slot="confirm-dialog-icon"
+					data-slot=Slot::ConfirmDialogIcon.as_str()
 					data-tone=tone.as_ref().to_owned()
 				>
 					{glyph}
@@ -158,7 +158,7 @@ pub fn ConfirmDialog(
 				<button
 					type="button"
 					class=cancel_cls
-					data-slot="confirm-dialog-cancel"
+					data-slot=Slot::ConfirmDialogCancel.as_str()
 					aria-disabled=busy
 					on:click=move |_| change.run(false)
 				>
@@ -167,7 +167,7 @@ pub fn ConfirmDialog(
 				<button
 					type="button"
 					class=confirm_cls
-					data-slot="confirm-dialog-confirm"
+					data-slot=Slot::ConfirmDialogConfirm.as_str()
 					aria-disabled=busy
 					aria-busy=busy
 					on:click=confirm

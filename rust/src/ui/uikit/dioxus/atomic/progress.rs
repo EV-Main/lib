@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{PROGRESS_INDICATOR, PROGRESS_TRACK},
+	ui::uikit::dioxus::{PROGRESS_INDICATOR, PROGRESS_TRACK, Slot},
 };
 
 #[component]
@@ -12,14 +12,14 @@ pub fn Progress(#[props(default)] value: f64, #[props(default)] class: String) -
 	rsx! {
 		div {
 			class: cls,
-			"data-slot": "progress",
+			"data-slot": Slot::Progress.as_str(),
 			role: "progressbar",
 			"aria-valuenow": value,
 			"aria-valuemin": 0,
 			"aria-valuemax": 100,
 			div {
 				class: PROGRESS_INDICATOR,
-				"data-slot": "progress-indicator",
+				"data-slot": Slot::ProgressIndicator.as_str(),
 				style,
 			}
 		}

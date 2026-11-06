@@ -4,7 +4,7 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{KEY_VALUE_BASE, KEY_VALUE_COPY, KEY_VALUE_LABEL, KEY_VALUE_ROW, KEY_VALUE_STATUS, KEY_VALUE_VALUE, icon_button::Glyph, primitives::icon_shapes},
+	ui::uikit::leptos::{KEY_VALUE_BASE, KEY_VALUE_COPY, KEY_VALUE_LABEL, KEY_VALUE_ROW, KEY_VALUE_STATUS, KEY_VALUE_VALUE, Slot, icon_button::Glyph, primitives::icon_shapes},
 };
 
 /// A [`KeyValue`] label: text, or any view. Text is what the copy button's
@@ -85,7 +85,7 @@ pub fn KeyValue(
 			<button
 				type="button"
 				class=KEY_VALUE_COPY
-				data-slot="key-value-copy"
+				data-slot=Slot::KeyValueCopy.as_str()
 				aria-label=copy_label
 				on:click=on_press
 			>
@@ -101,12 +101,12 @@ pub fn KeyValue(
 	});
 	let cls = cn!(KEY_VALUE_BASE, class);
 	view! {
-		<div class=cls data-slot="key-value">
-			<span class=KEY_VALUE_LABEL data-slot="key-value-label">
+		<div class=cls data-slot=Slot::KeyValue.as_str()>
+			<span class=KEY_VALUE_LABEL data-slot=Slot::KeyValueLabel.as_str()>
 				{label}
 			</span>
 			<div class=KEY_VALUE_ROW>
-				<span class=KEY_VALUE_VALUE data-slot="key-value-value">
+				<span class=KEY_VALUE_VALUE data-slot=Slot::KeyValueValue.as_str()>
 					{value.run()}
 				</span>
 				{button}

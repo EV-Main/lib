@@ -1,12 +1,15 @@
 use dioxus::prelude::*;
 
-use crate::{cn, ui::uikit::dioxus::LABEL_BASE};
+use crate::{
+	cn,
+	ui::uikit::dioxus::{LABEL_BASE, Slot},
+};
 
 #[component]
 pub fn Label(#[props(default)] class: String, #[props(default)] r#for: String, children: Element) -> Element {
 	let cls = cn!(LABEL_BASE, class);
 	rsx! {
-		label { class: cls, "data-slot": "label", r#for, {children} }
+		label { class: cls, "data-slot": Slot::Label.as_str(), r#for, {children} }
 	}
 }
 

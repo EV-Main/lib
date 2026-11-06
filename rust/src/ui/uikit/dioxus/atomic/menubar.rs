@@ -6,7 +6,7 @@ use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		MENUBAR_CHECKBOX_ITEM, MENUBAR_CONTENT, MENUBAR_ITEM, MENUBAR_ITEM_INDICATOR, MENUBAR_LABEL, MENUBAR_RADIO_ITEM, MENUBAR_ROOT, MENUBAR_SEPARATOR, MENUBAR_SHORTCUT,
-		MENUBAR_SUB_CONTENT, MENUBAR_SUB_TRIGGER, MENUBAR_TRIGGER,
+		MENUBAR_SUB_CONTENT, MENUBAR_SUB_TRIGGER, MENUBAR_TRIGGER, Slot,
 		primitives::{Controllable, icon_shapes, use_controllable},
 	},
 };
@@ -15,7 +15,7 @@ use crate::{
 pub fn Menubar(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(MENUBAR_ROOT, class);
 	rsx! {
-		div { class: cls, "data-slot": "menubar", role: "menubar", {children} }
+		div { class: cls, "data-slot": Slot::Menubar.as_str(), role: "menubar", {children} }
 	}
 }
 
@@ -27,7 +27,7 @@ pub fn MenubarMenu(open: Option<bool>, #[props(default)] default_open: bool, on_
 	use_context_provider(|| MenubarMenuCtx { open: state });
 	// dep-light: inline positioning + backdrop; no portal/floating — see README Limitations
 	rsx! {
-		div { class: "relative", "data-slot": "menubar-menu", {children} }
+		div { class: "relative", "data-slot": Slot::MenubarMenu.as_str(), {children} }
 	}
 }
 
@@ -40,7 +40,7 @@ pub fn MenubarTrigger(#[props(default)] class: String, children: Element) -> Ele
 		button {
 			r#type: "button",
 			class: cls,
-			"data-slot": "menubar-trigger",
+			"data-slot": Slot::MenubarTrigger.as_str(),
 			"data-state": if open { "open" } else { "closed" },
 			onclick: move |_| ctx.open.set(!ctx.open.get()),
 			{children}
@@ -63,7 +63,7 @@ pub fn MenubarContent(#[props(default)] class: String, children: Element) -> Ele
 		}
 		div {
 			class: cls,
-			"data-slot": "menubar-content",
+			"data-slot": Slot::MenubarContent.as_str(),
 			"data-state": "open",
 			role: "menu",
 			onkeydown: move |e| if e.key() == Key::Escape { ctx.open.set(false); },
@@ -75,7 +75,7 @@ pub fn MenubarContent(#[props(default)] class: String, children: Element) -> Ele
 #[component]
 pub fn MenubarGroup(#[props(default)] class: String, children: Element) -> Element {
 	rsx! {
-		div { class, "data-slot": "menubar-group", role: "group", {children} }
+		div { class, "data-slot": Slot::MenubarGroup.as_str(), role: "group", {children} }
 	}
 }
 
@@ -91,7 +91,7 @@ pub fn MenubarItem(
 	rsx! {
 		div {
 			class: cls,
-			"data-slot": "menubar-item",
+			"data-slot": Slot::MenubarItem.as_str(),
 			"data-inset": inset.then_some(""),
 			"data-variant": variant.as_ref(),
 			role: "menuitem",
@@ -112,7 +112,7 @@ pub fn MenubarCheckboxItem(#[props(default)] checked: bool, #[props(default)] cl
 	rsx! {
 		div {
 			class: cls,
-			"data-slot": "menubar-checkbox-item",
+			"data-slot": Slot::MenubarCheckboxItem.as_str(),
 			role: "menuitemcheckbox",
 			"aria-checked": checked,
 			onclick: move |e| { if let Some(h) = onclick { h.call(e); } },
@@ -148,7 +148,7 @@ pub fn MenubarRadioGroup(
 	let state = use_controllable(value, default_value, on_value_change);
 	use_context_provider(|| MenubarRadioCtx { value: state });
 	rsx! {
-		div { class, "data-slot": "menubar-radio-group", role: "group", {children} }
+		div { class, "data-slot": Slot::MenubarRadioGroup.as_str(), role: "group", {children} }
 	}
 }
 
@@ -161,7 +161,7 @@ pub fn MenubarRadioItem(value: String, #[props(default)] class: String, children
 	rsx! {
 		div {
 			class: cls,
-			"data-slot": "menubar-radio-item",
+			"data-slot": Slot::MenubarRadioItem.as_str(),
 			role: "menuitemradio",
 			"aria-checked": checked,
 			onclick: move |_| ctx.value.set(select_value.clone()),
@@ -183,7 +183,7 @@ pub fn MenubarRadioItem(value: String, #[props(default)] class: String, children
 pub fn MenubarLabel(#[props(default)] inset: bool, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(MENUBAR_LABEL, class);
 	rsx! {
-		div { class: cls, "data-slot": "menubar-label", "data-inset": inset.then_some(""), {children} }
+		div { class: cls, "data-slot": Slot::MenubarLabel.as_str(), "data-inset": inset.then_some(""), {children} }
 	}
 }
 
@@ -191,7 +191,7 @@ pub fn MenubarLabel(#[props(default)] inset: bool, #[props(default)] class: Stri
 pub fn MenubarSeparator(#[props(default)] class: String) -> Element {
 	let cls = cn!(MENUBAR_SEPARATOR, class);
 	rsx! {
-		div { class: cls, "data-slot": "menubar-separator", role: "separator" }
+		div { class: cls, "data-slot": Slot::MenubarSeparator.as_str(), role: "separator" }
 	}
 }
 
@@ -199,7 +199,7 @@ pub fn MenubarSeparator(#[props(default)] class: String) -> Element {
 pub fn MenubarShortcut(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(MENUBAR_SHORTCUT, class);
 	rsx! {
-		span { class: cls, "data-slot": "menubar-shortcut", {children} }
+		span { class: cls, "data-slot": Slot::MenubarShortcut.as_str(), {children} }
 	}
 }
 
@@ -211,7 +211,7 @@ pub fn MenubarSub(open: Option<bool>, #[props(default)] default_open: bool, on_o
 	use_context_provider(|| MenubarSubCtx { open: state });
 	// dep-light: inline positioning + backdrop; no portal/floating — see README Limitations
 	rsx! {
-		div { class: "relative", "data-slot": "menubar-sub", {children} }
+		div { class: "relative", "data-slot": Slot::MenubarSub.as_str(), {children} }
 	}
 }
 
@@ -223,7 +223,7 @@ pub fn MenubarSubTrigger(#[props(default)] inset: bool, #[props(default)] class:
 	rsx! {
 		div {
 			class: cls,
-			"data-slot": "menubar-sub-trigger",
+			"data-slot": Slot::MenubarSubTrigger.as_str(),
 			"data-inset": inset.then_some(""),
 			"data-state": if open { "open" } else { "closed" },
 			role: "menuitem",
@@ -254,7 +254,7 @@ pub fn MenubarSubContent(#[props(default)] class: String, children: Element) -> 
 	rsx! {
 		div {
 			class: cls,
-			"data-slot": "menubar-sub-content",
+			"data-slot": Slot::MenubarSubContent.as_str(),
 			"data-state": "open",
 			role: "menu",
 			onkeydown: move |e| if e.key() == Key::Escape { ctx.open.set(false); },

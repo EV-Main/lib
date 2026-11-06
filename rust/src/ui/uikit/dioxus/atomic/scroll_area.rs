@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{SCROLL_AREA_THUMB, SCROLL_AREA_VIEWPORT, SCROLLBAR_BASE, ScrollBarOrientation},
+	ui::uikit::dioxus::{SCROLL_AREA_THUMB, SCROLL_AREA_VIEWPORT, SCROLLBAR_BASE, ScrollBarOrientation, Slot},
 };
 
 // Dep-light scroll area: a viewport `div` with native `overflow` scrolling.
@@ -13,9 +13,9 @@ use crate::{
 pub fn ScrollArea(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!("relative", class);
 	rsx! {
-		div { class: cls, "data-slot": "scroll-area",
+		div { class: cls, "data-slot": Slot::ScrollArea.as_str(),
 			div {
-				"data-slot": "scroll-area-viewport",
+				"data-slot": Slot::ScrollAreaViewport.as_str(),
 				class: SCROLL_AREA_VIEWPORT,
 				{children}
 			}
@@ -29,10 +29,10 @@ pub fn ScrollBar(#[props(default)] orientation: ScrollBarOrientation, #[props(de
 	let cls = cn!(SCROLLBAR_BASE, orientation.as_class(), class);
 	rsx! {
 		div {
-			"data-slot": "scroll-area-scrollbar",
+			"data-slot": Slot::ScrollAreaScrollbar.as_str(),
 			"data-orientation": orientation.as_ref(),
 			class: cls,
-			div { "data-slot": "scroll-area-thumb", class: SCROLL_AREA_THUMB }
+			div { "data-slot": Slot::ScrollAreaThumb.as_str(), class: SCROLL_AREA_THUMB }
 		}
 	}
 }

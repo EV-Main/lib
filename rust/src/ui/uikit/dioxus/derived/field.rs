@@ -5,7 +5,7 @@ use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		FIELD_BASE, FIELD_CONTENT, FIELD_DESCRIPTION, FIELD_ERROR, FIELD_GROUP, FIELD_LABEL, FIELD_LEGEND, FIELD_SEPARATOR, FIELD_SEPARATOR_CONTENT, FIELD_SEPARATOR_LINE, FIELD_SET,
-		FIELD_TITLE, FieldOrientation, label::Label,
+		FIELD_TITLE, FieldOrientation, Slot, label::Label,
 	},
 };
 
@@ -13,7 +13,7 @@ use crate::{
 pub fn FieldSet(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(FIELD_SET, class);
 	rsx! {
-		fieldset { class: cls, "data-slot": "field-set", {children} }
+		fieldset { class: cls, "data-slot": Slot::FieldSet.as_str(), {children} }
 	}
 }
 
@@ -21,7 +21,7 @@ pub fn FieldSet(#[props(default)] class: String, children: Element) -> Element {
 pub fn FieldLegend(#[props(default)] variant: FieldLegendVariant, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(FIELD_LEGEND, class);
 	rsx! {
-		legend { class: cls, "data-slot": "field-legend", "data-variant": variant.as_ref(), {children} }
+		legend { class: cls, "data-slot": Slot::FieldLegend.as_str(), "data-variant": variant.as_ref(), {children} }
 	}
 }
 
@@ -29,7 +29,7 @@ pub fn FieldLegend(#[props(default)] variant: FieldLegendVariant, #[props(defaul
 pub fn FieldGroup(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(FIELD_GROUP, class);
 	rsx! {
-		div { class: cls, "data-slot": "field-group", {children} }
+		div { class: cls, "data-slot": Slot::FieldGroup.as_str(), {children} }
 	}
 }
 
@@ -40,7 +40,7 @@ pub fn Field(#[props(default)] orientation: FieldOrientation, #[props(default)] 
 		div {
 			role: "group",
 			class: cls,
-			"data-slot": "field",
+			"data-slot": Slot::Field.as_str(),
 			"data-orientation": orientation.as_ref(),
 			{children}
 		}
@@ -51,7 +51,7 @@ pub fn Field(#[props(default)] orientation: FieldOrientation, #[props(default)] 
 pub fn FieldContent(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(FIELD_CONTENT, class);
 	rsx! {
-		div { class: cls, "data-slot": "field-content", {children} }
+		div { class: cls, "data-slot": Slot::FieldContent.as_str(), {children} }
 	}
 }
 
@@ -67,7 +67,7 @@ pub fn FieldLabel(#[props(default)] class: String, #[props(default)] r#for: Stri
 pub fn FieldTitle(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(FIELD_TITLE, class);
 	rsx! {
-		div { class: cls, "data-slot": "field-label", {children} }
+		div { class: cls, "data-slot": Slot::FieldLabel.as_str(), {children} }
 	}
 }
 
@@ -75,7 +75,7 @@ pub fn FieldTitle(#[props(default)] class: String, children: Element) -> Element
 pub fn FieldDescription(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(FIELD_DESCRIPTION, class);
 	rsx! {
-		p { class: cls, "data-slot": "field-description", {children} }
+		p { class: cls, "data-slot": Slot::FieldDescription.as_str(), {children} }
 	}
 }
 
@@ -87,13 +87,13 @@ pub fn FieldSeparator(#[props(default)] content: bool, #[props(default)] class: 
 	rsx! {
 		div {
 			class: cls,
-			"data-slot": "field-separator",
+			"data-slot": Slot::FieldSeparator.as_str(),
 			"data-content": if content { "true" } else { "false" },
 			div { role: "separator", class: FIELD_SEPARATOR_LINE }
 			if content {
 				span {
 					class: FIELD_SEPARATOR_CONTENT,
-					"data-slot": "field-separator-content",
+					"data-slot": Slot::FieldSeparatorContent.as_str(),
 					{children}
 				}
 			}
@@ -105,7 +105,7 @@ pub fn FieldSeparator(#[props(default)] content: bool, #[props(default)] class: 
 pub fn FieldError(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(FIELD_ERROR, class);
 	rsx! {
-		div { role: "alert", class: cls, "data-slot": "field-error", {children} }
+		div { role: "alert", class: cls, "data-slot": Slot::FieldError.as_str(), {children} }
 	}
 }
 

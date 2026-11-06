@@ -3,7 +3,7 @@ use dioxus::prelude::*;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
-		TOOLTIP_CONTENT,
+		Slot, TOOLTIP_CONTENT,
 		primitives::{Controllable, use_controllable},
 	},
 };
@@ -41,7 +41,7 @@ pub fn TooltipTrigger(#[props(default)] class: String, children: Element) -> Ele
 		button {
 			r#type: "button",
 			class,
-			"data-slot": "tooltip-trigger",
+			"data-slot": Slot::TooltipTrigger.as_str(),
 			onmouseenter: move |_| ctx.open.set(true),
 			onmouseleave: move |_| ctx.open.set(false),
 			onfocusin: move |_| ctx.open.set(true),
@@ -62,7 +62,7 @@ pub fn TooltipContent(#[props(default)] class: String, children: Element) -> Ele
 		div {
 			class: cls,
 			role: "tooltip",
-			"data-slot": "tooltip-content",
+			"data-slot": Slot::TooltipContent.as_str(),
 			"data-state": "open",
 			"data-side": "top",
 			{children}

@@ -2,14 +2,14 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{AVATAR, AVATAR_FALLBACK, AVATAR_IMAGE},
+	ui::uikit::leptos::{AVATAR, AVATAR_FALLBACK, AVATAR_IMAGE, Slot},
 };
 
 #[component]
 pub fn Avatar(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(AVATAR, class);
 	view! {
-		<div class=cls data-slot="avatar">
+		<div class=cls data-slot=Slot::Avatar.as_str()>
 			{children()}
 		</div>
 	}
@@ -24,7 +24,7 @@ pub fn AvatarImage(#[prop(optional, into)] class: String, #[prop(optional, into)
 			view! {
 				<img
 					class=cls.clone()
-					data-slot="avatar-image"
+					data-slot=Slot::AvatarImage.as_str()
 					src=src.clone()
 					alt=alt.clone()
 					on:error=move |_| errored.set(true)
@@ -38,7 +38,7 @@ pub fn AvatarImage(#[prop(optional, into)] class: String, #[prop(optional, into)
 pub fn AvatarFallback(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(AVATAR_FALLBACK, class);
 	view! {
-		<div class=cls data-slot="avatar-fallback">
+		<div class=cls data-slot=Slot::AvatarFallback.as_str()>
 			{children()}
 		</div>
 	}

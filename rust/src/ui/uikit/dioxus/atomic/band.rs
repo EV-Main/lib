@@ -9,7 +9,7 @@ use tailwind_fuse::AsTailwindClass;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{CHECK, DISPLAY_BASE, EYEBROW, LEDE, PROSE, Polarity, SECTION_BASE, SECTION_HEAD, SECTION_PY, SECTION_PY_TIGHT, STAT, STAT_FIGURE, STAT_LABEL, Surface},
+	ui::uikit::dioxus::{CHECK, DISPLAY_BASE, EYEBROW, LEDE, PROSE, Polarity, SECTION_BASE, SECTION_HEAD, SECTION_PY, SECTION_PY_TIGHT, STAT, STAT_FIGURE, STAT_LABEL, Slot, Surface},
 };
 
 /// A full-bleed horizontal band. `polarity` sets the token scope on the element,
@@ -37,7 +37,7 @@ pub fn Section(
 	);
 	let cls = cn!(base, class);
 	rsx! {
-		section { id, class: cls, "data-slot": "section", {children} }
+		section { id, class: cls, "data-slot": Slot::Section.as_str(), {children} }
 	}
 }
 
@@ -46,7 +46,7 @@ pub fn Section(
 pub fn Eyebrow(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(EYEBROW, class);
 	rsx! {
-		p { class: cls, "data-slot": "eyebrow", {children} }
+		p { class: cls, "data-slot": Slot::Eyebrow.as_str(), {children} }
 	}
 }
 
@@ -55,7 +55,7 @@ pub fn Eyebrow(#[props(default)] class: String, children: Element) -> Element {
 pub fn Display(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(DISPLAY_BASE, class);
 	rsx! {
-		h2 { class: cls, "data-slot": "display", {children} }
+		h2 { class: cls, "data-slot": Slot::Display.as_str(), {children} }
 	}
 }
 
@@ -64,7 +64,7 @@ pub fn Display(#[props(default)] class: String, children: Element) -> Element {
 pub fn SectionHead(eyebrow: String, title: String, #[props(default)] lede: Option<String>, #[props(default)] class: String) -> Element {
 	let cls = cn!(SECTION_HEAD, class);
 	rsx! {
-		div { class: cls, "data-slot": "section-head",
+		div { class: cls, "data-slot": Slot::SectionHead.as_str(),
 			Eyebrow { {eyebrow} }
 			Display { {title} }
 			if let Some(lede) = lede {
@@ -79,7 +79,7 @@ pub fn SectionHead(eyebrow: String, title: String, #[props(default)] lede: Optio
 pub fn Prose(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(PROSE, class);
 	rsx! {
-		p { class: cls, "data-slot": "prose", {children} }
+		p { class: cls, "data-slot": Slot::Prose.as_str(), {children} }
 	}
 }
 
@@ -88,7 +88,7 @@ pub fn Prose(#[props(default)] class: String, children: Element) -> Element {
 pub fn Stat(figure: String, label: String, #[props(default)] class: String) -> Element {
 	let cls = cn!(STAT, class);
 	rsx! {
-		span { class: cls, "data-slot": "stat",
+		span { class: cls, "data-slot": Slot::Stat.as_str(),
 			span { class: STAT_FIGURE, {figure} }
 			span { class: STAT_LABEL, {label} }
 		}
@@ -101,7 +101,7 @@ pub fn Stat(figure: String, label: String, #[props(default)] class: String) -> E
 pub fn Check(#[props(default)] class: String) -> Element {
 	let cls = cn!(CHECK, class);
 	rsx! {
-		span { class: cls, "data-slot": "check", "aria-hidden": "true", "✓" }
+		span { class: cls, "data-slot": Slot::Check.as_str(), "aria-hidden": "true", "✓" }
 	}
 }
 

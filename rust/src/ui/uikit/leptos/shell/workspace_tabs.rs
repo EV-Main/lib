@@ -4,7 +4,7 @@ use leptos::{context::Provider, prelude::*};
 use crate::{
 	cn,
 	ui::uikit::leptos::{
-		WORKSPACE_TAB_BASE, WORKSPACE_TAB_CLOSE, WORKSPACE_TAB_LABEL, WORKSPACE_TAB_SELECTED, WORKSPACE_TAB_SPACER, WORKSPACE_TAB_TRIGGER, WORKSPACE_TABS_BASE,
+		Slot, WORKSPACE_TAB_BASE, WORKSPACE_TAB_CLOSE, WORKSPACE_TAB_LABEL, WORKSPACE_TAB_SELECTED, WORKSPACE_TAB_SPACER, WORKSPACE_TAB_TRIGGER, WORKSPACE_TABS_BASE,
 		icon_button::Glyph,
 		primitives::{Controllable, RovingFocus, RovingOrientation, icon_shapes, use_controllable, use_roving_focus, use_roving_item},
 	},
@@ -31,7 +31,12 @@ pub fn WorkspaceTabs(
 	let roving = use_roving_focus(RovingOrientation::Horizontal);
 	let cls = cn!(WORKSPACE_TABS_BASE, class);
 	view! {
-		<div role="tablist" aria-orientation="horizontal" data-slot="workspace-tabs" class=cls>
+		<div
+			role="tablist"
+			aria-orientation="horizontal"
+			data-slot=Slot::WorkspaceTabs.as_str()
+			class=cls
+		>
 			<Provider value=WorkspaceTabsCtx { value, roving }>{children()}</Provider>
 		</div>
 	}
@@ -67,7 +72,7 @@ pub fn WorkspaceTab(
 		Some(close) => view! {
 			<button
 				type="button"
-				data-slot="workspace-tab-close"
+				data-slot=Slot::WorkspaceTabClose.as_str()
 				aria-label=close_label
 				tabindex="-1"
 				class=WORKSPACE_TAB_CLOSE
@@ -81,14 +86,14 @@ pub fn WorkspaceTab(
 	};
 	view! {
 		<div
-			data-slot="workspace-tab"
+			data-slot=Slot::WorkspaceTab.as_str()
 			data-state=move || if selected.get() { "active" } else { "inactive" }
 			class=cls
 		>
 			<button
 				type="button"
 				role="tab"
-				data-slot="workspace-tab-trigger"
+				data-slot=Slot::WorkspaceTabTrigger.as_str()
 				aria-selected=move || selected.get().to_string()
 				tabindex=move || {
 					if key.with_value(|k| roving.is_tab_stop(k, &ctx.value.get())) { "0" } else { "-1" }

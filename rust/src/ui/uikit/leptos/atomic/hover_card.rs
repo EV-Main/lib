@@ -3,7 +3,7 @@ use leptos::{context::Provider, prelude::*};
 use crate::{
 	cn,
 	ui::uikit::leptos::{
-		HOVER_CARD_CONTENT,
+		HOVER_CARD_CONTENT, Slot,
 		primitives::{Controllable, Side, use_controllable},
 	},
 };
@@ -40,7 +40,7 @@ pub fn HoverCardTrigger(#[prop(optional, into)] class: String, children: Childre
 	view! {
 		<a
 			class=class
-			data-slot="hover-card-trigger"
+			data-slot=Slot::HoverCardTrigger.as_str()
 			on:mouseenter=move |_| ctx.open.set(true)
 			on:mouseleave=move |_| ctx.open.set(false)
 		>
@@ -58,7 +58,7 @@ pub fn HoverCardContent(#[prop(optional)] side: Side, #[prop(default = "center".
 			view! {
 				<div
 					class=cls.clone()
-					data-slot="hover-card-content"
+					data-slot=Slot::HoverCardContent.as_str()
 					data-state="open"
 					data-side=side.as_ref().to_owned()
 					data-align=align.clone()

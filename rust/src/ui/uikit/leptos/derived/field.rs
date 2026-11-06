@@ -5,7 +5,7 @@ use crate::{
 	cn,
 	ui::uikit::leptos::{
 		FIELD_BASE, FIELD_CONTENT, FIELD_DESCRIPTION, FIELD_ERROR, FIELD_GROUP, FIELD_LABEL, FIELD_LEGEND, FIELD_SEPARATOR, FIELD_SEPARATOR_CONTENT, FIELD_SEPARATOR_LINE, FIELD_SET,
-		FIELD_TITLE, FieldOrientation, label::Label,
+		FIELD_TITLE, FieldOrientation, Slot, label::Label,
 	},
 };
 
@@ -13,7 +13,7 @@ use crate::{
 pub fn FieldSet(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(FIELD_SET, class);
 	view! {
-		<fieldset class=cls data-slot="field-set">
+		<fieldset class=cls data-slot=Slot::FieldSet.as_str()>
 			{children()}
 		</fieldset>
 	}
@@ -23,7 +23,7 @@ pub fn FieldSet(#[prop(optional, into)] class: String, children: Children) -> im
 pub fn FieldLegend(#[prop(optional)] variant: FieldLegendVariant, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(FIELD_LEGEND, class);
 	view! {
-		<legend class=cls data-slot="field-legend" data-variant=variant.as_ref().to_owned()>
+		<legend class=cls data-slot=Slot::FieldLegend.as_str() data-variant=variant.as_ref().to_owned()>
 			{children()}
 		</legend>
 	}
@@ -33,7 +33,7 @@ pub fn FieldLegend(#[prop(optional)] variant: FieldLegendVariant, #[prop(optiona
 pub fn FieldGroup(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(FIELD_GROUP, class);
 	view! {
-		<div class=cls data-slot="field-group">
+		<div class=cls data-slot=Slot::FieldGroup.as_str()>
 			{children()}
 		</div>
 	}
@@ -43,7 +43,12 @@ pub fn FieldGroup(#[prop(optional, into)] class: String, children: Children) -> 
 pub fn Field(#[prop(optional)] orientation: FieldOrientation, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(FIELD_BASE, orientation.as_class(), class);
 	view! {
-		<div role="group" class=cls data-slot="field" data-orientation=orientation.as_ref().to_owned()>
+		<div
+			role="group"
+			class=cls
+			data-slot=Slot::Field.as_str()
+			data-orientation=orientation.as_ref().to_owned()
+		>
 			{children()}
 		</div>
 	}
@@ -53,7 +58,7 @@ pub fn Field(#[prop(optional)] orientation: FieldOrientation, #[prop(optional, i
 pub fn FieldContent(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(FIELD_CONTENT, class);
 	view! {
-		<div class=cls data-slot="field-content">
+		<div class=cls data-slot=Slot::FieldContent.as_str()>
 			{children()}
 		</div>
 	}
@@ -73,7 +78,7 @@ pub fn FieldLabel(#[prop(optional, into)] class: String, #[prop(optional, into)]
 pub fn FieldTitle(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(FIELD_TITLE, class);
 	view! {
-		<div class=cls data-slot="field-label">
+		<div class=cls data-slot=Slot::FieldLabel.as_str()>
 			{children()}
 		</div>
 	}
@@ -83,7 +88,7 @@ pub fn FieldTitle(#[prop(optional, into)] class: String, children: Children) -> 
 pub fn FieldDescription(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(FIELD_DESCRIPTION, class);
 	view! {
-		<p class=cls data-slot="field-description">
+		<p class=cls data-slot=Slot::FieldDescription.as_str()>
 			{children()}
 		</p>
 	}
@@ -95,12 +100,16 @@ pub fn FieldDescription(#[prop(optional, into)] class: String, children: Childre
 pub fn FieldSeparator(#[prop(optional)] content: bool, #[prop(optional, into)] class: String, #[prop(optional)] children: Option<Children>) -> impl IntoView {
 	let cls = cn!(FIELD_SEPARATOR, class);
 	view! {
-		<div class=cls data-slot="field-separator" data-content=if content { "true" } else { "false" }>
+		<div
+			class=cls
+			data-slot=Slot::FieldSeparator.as_str()
+			data-content=if content { "true" } else { "false" }
+		>
 			<div role="separator" class=FIELD_SEPARATOR_LINE></div>
 			{content
 				.then(|| {
 					view! {
-						<span class=FIELD_SEPARATOR_CONTENT data-slot="field-separator-content">
+						<span class=FIELD_SEPARATOR_CONTENT data-slot=Slot::FieldSeparatorContent.as_str()>
 							{children.map(|c| c())}
 						</span>
 					}
@@ -113,7 +122,7 @@ pub fn FieldSeparator(#[prop(optional)] content: bool, #[prop(optional, into)] c
 pub fn FieldError(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(FIELD_ERROR, class);
 	view! {
-		<div role="alert" class=cls data-slot="field-error">
+		<div role="alert" class=cls data-slot=Slot::FieldError.as_str()>
 			{children()}
 		</div>
 	}

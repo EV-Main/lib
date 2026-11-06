@@ -3,7 +3,7 @@ use ev_lib_classes::{Icon, copy};
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{BREADCRUMB_ELLIPSIS, BREADCRUMB_ITEM, BREADCRUMB_LINK, BREADCRUMB_LIST, BREADCRUMB_PAGE, BREADCRUMB_SEPARATOR, primitives::icon_shapes},
+	ui::uikit::dioxus::{BREADCRUMB_ELLIPSIS, BREADCRUMB_ITEM, BREADCRUMB_LINK, BREADCRUMB_LIST, BREADCRUMB_PAGE, BREADCRUMB_SEPARATOR, Slot, primitives::icon_shapes},
 };
 
 #[component]
@@ -12,7 +12,7 @@ pub fn Breadcrumb(#[props(default)] class: String, children: Element) -> Element
 		nav {
 			class,
 			"aria-label": copy::BREADCRUMB,
-			"data-slot": "breadcrumb",
+			"data-slot": Slot::Breadcrumb.as_str(),
 			{children}
 		}
 	}
@@ -22,7 +22,7 @@ pub fn Breadcrumb(#[props(default)] class: String, children: Element) -> Element
 pub fn BreadcrumbList(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(BREADCRUMB_LIST, class);
 	rsx! {
-		ol { class: cls, "data-slot": "breadcrumb-list", {children} }
+		ol { class: cls, "data-slot": Slot::BreadcrumbList.as_str(), {children} }
 	}
 }
 
@@ -30,7 +30,7 @@ pub fn BreadcrumbList(#[props(default)] class: String, children: Element) -> Ele
 pub fn BreadcrumbItem(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(BREADCRUMB_ITEM, class);
 	rsx! {
-		li { class: cls, "data-slot": "breadcrumb-item", {children} }
+		li { class: cls, "data-slot": Slot::BreadcrumbItem.as_str(), {children} }
 	}
 }
 
@@ -43,7 +43,7 @@ pub fn BreadcrumbLink(#[props(default)] class: String, href: Option<String>, onc
 	rsx! {
 		a {
 			class: cls,
-			"data-slot": "breadcrumb-link",
+			"data-slot": Slot::BreadcrumbLink.as_str(),
 			href,
 			onclick: move |e| { if let Some(h) = onclick { h.call(e); } },
 			{children}
@@ -57,7 +57,7 @@ pub fn BreadcrumbPage(#[props(default)] class: String, children: Element) -> Ele
 	rsx! {
 		span {
 			class: cls,
-			"data-slot": "breadcrumb-page",
+			"data-slot": Slot::BreadcrumbPage.as_str(),
 			role: "link",
 			"aria-disabled": "true",
 			"aria-current": "page",
@@ -72,7 +72,7 @@ pub fn BreadcrumbSeparator(#[props(default)] class: String, children: Option<Ele
 	rsx! {
 		li {
 			class: cls,
-			"data-slot": "breadcrumb-separator",
+			"data-slot": Slot::BreadcrumbSeparator.as_str(),
 			role: "presentation",
 			"aria-hidden": "true",
 			if let Some(children) = children {
@@ -96,7 +96,7 @@ pub fn BreadcrumbEllipsis(#[props(default)] class: String) -> Element {
 	rsx! {
 		span {
 			class: cls,
-			"data-slot": "breadcrumb-ellipsis",
+			"data-slot": Slot::BreadcrumbEllipsis.as_str(),
 			role: "presentation",
 			"aria-hidden": "true",
 			svg {

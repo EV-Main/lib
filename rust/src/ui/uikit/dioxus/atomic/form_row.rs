@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{FORM_ROW_BASE, FORM_ROW_CONTROL, FORM_ROW_DESCRIPTION, FORM_ROW_DIVIDER, FORM_ROW_HINT, FORM_ROW_LABEL, FORM_ROW_LABEL_COLUMN},
+	ui::uikit::dioxus::{FORM_ROW_BASE, FORM_ROW_CONTROL, FORM_ROW_DESCRIPTION, FORM_ROW_DIVIDER, FORM_ROW_HINT, FORM_ROW_LABEL, FORM_ROW_LABEL_COLUMN, Slot},
 };
 
 /// Label on the left, the value or its control on the right; they stack on a
@@ -45,10 +45,10 @@ pub(crate) fn FormRowFrame(
 	rsx! {
 		div {
 			class: cls,
-			"data-slot": "form-row",
+			"data-slot": Slot::FormRow.as_str(),
 			"data-divider": if divider { "true" } else { "false" },
 			"data-inline": inline.map(|on| if on { "true" } else { "false" }),
-			div { class: FORM_ROW_LABEL_COLUMN, "data-slot": "form-row-label",
+			div { class: FORM_ROW_LABEL_COLUMN, "data-slot": Slot::FormRowLabel.as_str(),
 				if let Some(id) = r#for {
 					label { class: FORM_ROW_LABEL, r#for: id, {label} }
 				} else {
@@ -58,7 +58,7 @@ pub(crate) fn FormRowFrame(
 					span { class: FORM_ROW_DESCRIPTION, {description} }
 				}
 			}
-			div { class: FORM_ROW_CONTROL, "data-slot": "form-row-control",
+			div { class: FORM_ROW_CONTROL, "data-slot": Slot::FormRowControl.as_str(),
 				{children}
 				if let Some(hint) = hint {
 					span { class: FORM_ROW_HINT, {hint} }

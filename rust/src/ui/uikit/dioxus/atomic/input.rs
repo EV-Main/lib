@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{FormControlContext, INPUT_BASE, Size, input_size_class},
+	ui::uikit::dioxus::{FormControlContext, INPUT_BASE, Size, Slot, input_size_class},
 };
 
 /// Picks up the id and `aria-*` of an enclosing
@@ -30,7 +30,7 @@ pub fn Input(
 		input {
 			r#type: input_type,
 			class: cls,
-			"data-slot": "input",
+			"data-slot": Slot::Input.as_str(),
 			"data-size": size.as_ref(),
 			id: form.as_ref().map(|f| f.id.clone()),
 			"aria-describedby": form.as_ref().map(|f| f.described_by.clone()),

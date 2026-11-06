@@ -3,7 +3,7 @@ use dioxus::prelude::*;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
-		TABLE, TABLE_BODY, TABLE_CAPTION, TABLE_CARD, TABLE_CELL, TABLE_CONTAINER, TABLE_FOOTER, TABLE_HEAD, TABLE_HEADER, TABLE_ROW, TableAlign, TableDensity, TableVariant,
+		Slot, TABLE, TABLE_BODY, TABLE_CAPTION, TABLE_CARD, TABLE_CELL, TABLE_CONTAINER, TABLE_FOOTER, TABLE_HEAD, TABLE_HEADER, TABLE_ROW, TableAlign, TableDensity, TableVariant,
 	},
 };
 
@@ -13,10 +13,10 @@ use crate::{
 pub fn Table(#[props(default)] variant: TableVariant, #[props(default)] density: TableDensity, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(TABLE, variant.as_class(), density.as_class(), class);
 	rsx! {
-		div { class: TABLE_CONTAINER, "data-slot": "table-container",
+		div { class: TABLE_CONTAINER, "data-slot": Slot::TableContainer.as_str(),
 			table {
 				class: cls,
-				"data-slot": "table",
+				"data-slot": Slot::Table.as_str(),
 				"data-variant": variant.as_ref(),
 				"data-density": density.as_ref(),
 				{children}
@@ -30,7 +30,7 @@ pub fn Table(#[props(default)] variant: TableVariant, #[props(default)] density:
 pub fn TableCard(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(TABLE_CARD, class);
 	rsx! {
-		div { class: cls, "data-slot": "table-card", {children} }
+		div { class: cls, "data-slot": Slot::TableCard.as_str(), {children} }
 	}
 }
 
@@ -38,7 +38,7 @@ pub fn TableCard(#[props(default)] class: String, children: Element) -> Element 
 pub fn TableHeader(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(TABLE_HEADER, class);
 	rsx! {
-		thead { class: cls, "data-slot": "table-header", {children} }
+		thead { class: cls, "data-slot": Slot::TableHeader.as_str(), {children} }
 	}
 }
 
@@ -46,7 +46,7 @@ pub fn TableHeader(#[props(default)] class: String, children: Element) -> Elemen
 pub fn TableBody(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(TABLE_BODY, class);
 	rsx! {
-		tbody { class: cls, "data-slot": "table-body", {children} }
+		tbody { class: cls, "data-slot": Slot::TableBody.as_str(), {children} }
 	}
 }
 
@@ -54,7 +54,7 @@ pub fn TableBody(#[props(default)] class: String, children: Element) -> Element 
 pub fn TableFooter(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(TABLE_FOOTER, class);
 	rsx! {
-		tfoot { class: cls, "data-slot": "table-footer", {children} }
+		tfoot { class: cls, "data-slot": Slot::TableFooter.as_str(), {children} }
 	}
 }
 
@@ -62,7 +62,7 @@ pub fn TableFooter(#[props(default)] class: String, children: Element) -> Elemen
 pub fn TableRow(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(TABLE_ROW, class);
 	rsx! {
-		tr { class: cls, "data-slot": "table-row", {children} }
+		tr { class: cls, "data-slot": Slot::TableRow.as_str(), {children} }
 	}
 }
 
@@ -70,7 +70,7 @@ pub fn TableRow(#[props(default)] class: String, children: Element) -> Element {
 pub fn TableHead(#[props(default)] align: TableAlign, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(TABLE_HEAD, align.as_class(), class);
 	rsx! {
-		th { class: cls, "data-slot": "table-head", {children} }
+		th { class: cls, "data-slot": Slot::TableHead.as_str(), {children} }
 	}
 }
 
@@ -78,7 +78,7 @@ pub fn TableHead(#[props(default)] align: TableAlign, #[props(default)] class: S
 pub fn TableCell(#[props(default)] align: TableAlign, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(TABLE_CELL, align.as_class(), class);
 	rsx! {
-		td { class: cls, "data-slot": "table-cell", {children} }
+		td { class: cls, "data-slot": Slot::TableCell.as_str(), {children} }
 	}
 }
 
@@ -86,7 +86,7 @@ pub fn TableCell(#[props(default)] align: TableAlign, #[props(default)] class: S
 pub fn TableCaption(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(TABLE_CAPTION, class);
 	rsx! {
-		caption { class: cls, "data-slot": "table-caption", {children} }
+		caption { class: cls, "data-slot": Slot::TableCaption.as_str(), {children} }
 	}
 }
 

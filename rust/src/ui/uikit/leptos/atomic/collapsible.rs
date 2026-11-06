@@ -1,6 +1,9 @@
 use leptos::{context::Provider, prelude::*};
 
-use crate::ui::uikit::leptos::primitives::{Controllable, use_controllable};
+use crate::ui::uikit::leptos::{
+	Slot,
+	primitives::{Controllable, use_controllable},
+};
 
 #[component]
 pub fn Collapsible(
@@ -12,7 +15,7 @@ pub fn Collapsible(
 ) -> impl IntoView {
 	let open = use_controllable(open, default_open, on_open_change);
 	view! {
-		<div class=class data-slot="collapsible" data-state=move || data_state(open.get())>
+		<div class=class data-slot=Slot::Collapsible.as_str() data-state=move || data_state(open.get())>
 			<Provider value=CollapsibleCtx { open }>{children()}</Provider>
 		</div>
 	}
@@ -25,7 +28,7 @@ pub fn CollapsibleTrigger(#[prop(optional, into)] class: String, children: Child
 		<button
 			type="button"
 			class=class
-			data-slot="collapsible-trigger"
+			data-slot=Slot::CollapsibleTrigger.as_str()
 			data-state=move || data_state(ctx.open.get())
 			aria-expanded=move || ctx.open.get().to_string()
 			on:click=move |_| ctx.open.set(!ctx.open.get_untracked())
@@ -41,7 +44,7 @@ pub fn CollapsibleContent(#[prop(optional, into)] class: String, children: Child
 	move || {
 		ctx.open.get().then(|| {
 			view! {
-				<div class=class.clone() data-slot="collapsible-content" data-state="open">
+				<div class=class.clone() data-slot=Slot::CollapsibleContent.as_str() data-state="open">
 					{children()}
 				</div>
 			}

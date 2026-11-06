@@ -8,7 +8,7 @@ use crate::{
 	ui::uikit::leptos::{
 		ASIDE_BODY, ASIDE_FOOTER, ASIDE_HEADER_BACK_ICON, ASIDE_HEADER_BASE, ASIDE_HEADER_CLOSE_ICON, ASIDE_HEADER_TITLE, ASIDE_PANEL_DOCKED, ASIDE_PANEL_DRAWER, ASIDE_PANEL_NARROW_ONLY,
 		ASIDE_PANEL_SHEET, ASIDE_PANEL_WIDE_ONLY, ASIDE_PANEL_WIDE_ONLY_WRAPPER, ASIDE_RAIL_BASE, ASIDE_RAIL_SPACER, AsidePanelSide, Drawer, DrawerContent, DrawerDirection, IconButton,
-		Sheet, SheetContent, Size,
+		Sheet, SheetContent, Size, Slot,
 		icon_button::Glyph,
 		primitives::{Side, icon_shapes},
 	},
@@ -37,7 +37,7 @@ pub fn AsideHeader(
 	let close_label = labels.close;
 	let cls = cn!(ASIDE_HEADER_BASE, class);
 	view! {
-		<div data-slot="aside-header" class=cls>
+		<div data-slot=Slot::AsideHeader.as_str() class=cls>
 			{on_back
 				.map(|back| {
 					view! {
@@ -98,7 +98,7 @@ pub fn AsideRail(
 	let cls = cn!(ASIDE_RAIL_BASE, class);
 	let buttons = move |items: Vec<AsideRailItem>| items.into_iter().map(|item| view! { <AsideRailButton item value on_value_change /> }).collect_view();
 	view! {
-		<div role="group" aria-label=aria_label data-slot="aside-rail" class=cls>
+		<div role="group" aria-label=aria_label data-slot=Slot::AsideRail.as_str() class=cls>
 			{buttons(items)}
 			<span class=ASIDE_RAIL_SPACER></span>
 			{buttons(end_items)}
@@ -156,14 +156,14 @@ pub fn AsidePanel(
 	let body = move || {
 		view! {
 			{header.as_ref().map(ViewFn::run)}
-			<div data-slot="aside-body" class=ASIDE_BODY>
+			<div data-slot=Slot::AsideBody.as_str() class=ASIDE_BODY>
 				{children()}
 			</div>
 			{footer
 				.as_ref()
 				.map(|f| {
 					view! {
-						<div data-slot="aside-footer" class=ASIDE_FOOTER>
+						<div data-slot=Slot::AsideFooter.as_str() class=ASIDE_FOOTER>
 							{f.run()}
 						</div>
 					}
@@ -176,7 +176,7 @@ pub fn AsidePanel(
 			view! {
 				<aside
 					aria-label=aria_label.clone()
-					data-slot="aside-panel"
+					data-slot=Slot::AsidePanel.as_str()
 					data-mode="docked"
 					data-side=side.as_ref().to_owned()
 					class=cn!(ASIDE_PANEL_DOCKED, side.as_class(), &class, visibility)
@@ -208,7 +208,7 @@ pub fn AsidePanel(
 	let drawer = move || {
 		let body = body.clone();
 		view! {
-			<div data-slot="aside-panel-narrow" class=ASIDE_PANEL_NARROW_ONLY>
+			<div data-slot=Slot::AsidePanelNarrow.as_str() class=ASIDE_PANEL_NARROW_ONLY>
 				<Drawer open=open on_open_change=change direction=DrawerDirection::Bottom>
 					<DrawerContent aria_label=aria_label.clone() class=ASIDE_PANEL_DRAWER>
 						{body()}
@@ -226,7 +226,7 @@ pub fn AsidePanel(
 		.into_any(),
 		(AsidePanelMode::Overlay, AsideCollapse::Never) => sheet().into_any(),
 		(AsidePanelMode::Overlay, AsideCollapse::Md) => view! {
-			<div data-slot="aside-panel-wide" class=ASIDE_PANEL_WIDE_ONLY_WRAPPER>
+			<div data-slot=Slot::AsidePanelWide.as_str() class=ASIDE_PANEL_WIDE_ONLY_WRAPPER>
 				{sheet()}
 			</div>
 			{drawer()}

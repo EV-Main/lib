@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{BUTTON_GROUP_BASE, BUTTON_GROUP_SEPARATOR_BASE, BUTTON_GROUP_TEXT_BASE, ButtonGroupOrientation},
+	ui::uikit::dioxus::{BUTTON_GROUP_BASE, BUTTON_GROUP_SEPARATOR_BASE, BUTTON_GROUP_TEXT_BASE, ButtonGroupOrientation, Slot},
 };
 
 #[component]
@@ -11,7 +11,7 @@ pub fn ButtonGroup(#[props(default)] orientation: ButtonGroupOrientation, #[prop
 	rsx! {
 		div {
 			role: "group",
-			"data-slot": "button-group",
+			"data-slot": Slot::ButtonGroup.as_str(),
 			"data-orientation": orientation.as_ref(),
 			class: cls,
 			{children}
@@ -32,7 +32,7 @@ pub fn ButtonGroupSeparator(#[props(default)] class: String) -> Element {
 	let cls = cn!(BUTTON_GROUP_SEPARATOR_BASE, class);
 	rsx! {
 		div {
-			"data-slot": "button-group-separator",
+			"data-slot": Slot::ButtonGroupSeparator.as_str(),
 			"data-orientation": "vertical",
 			role: "separator",
 			class: cls,

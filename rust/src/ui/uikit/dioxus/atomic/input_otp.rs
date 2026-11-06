@@ -6,7 +6,7 @@ use crate::{
 	ui::uikit::{
 		core::InputOtp,
 		dioxus::{
-			INPUT_OTP_CONTAINER, INPUT_OTP_GROUP, INPUT_OTP_INPUT, INPUT_OTP_SLOT, INPUT_OTP_SLOT_CARET, INPUT_OTP_SLOT_CARET_WRAPPER,
+			INPUT_OTP_CONTAINER, INPUT_OTP_GROUP, INPUT_OTP_INPUT, INPUT_OTP_SLOT, INPUT_OTP_SLOT_CARET, INPUT_OTP_SLOT_CARET_WRAPPER, Slot,
 			primitives::{Controllable, icon_shapes, use_controllable},
 		},
 	},
@@ -38,7 +38,7 @@ pub fn InputOTP(
 	let container_cls = cn!(INPUT_OTP_CONTAINER, container_class);
 	let input_cls = cn!(INPUT_OTP_INPUT, class);
 	rsx! {
-		div { class: container_cls, "data-slot": "input-otp",
+		div { class: container_cls, "data-slot": Slot::InputOtp.as_str(),
 			{children}
 			input {
 				inputmode: "numeric",
@@ -58,7 +58,7 @@ pub fn InputOTP(
 pub fn InputOTPGroup(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(INPUT_OTP_GROUP, class);
 	rsx! {
-		div { class: cls, "data-slot": "input-otp-group", {children} }
+		div { class: cls, "data-slot": Slot::InputOtpGroup.as_str(), {children} }
 	}
 }
 #[component]
@@ -69,7 +69,7 @@ pub fn InputOTPSlot(index: usize, #[props(default)] class: String) -> Element {
 	rsx! {
 		div {
 			class: cls,
-			"data-slot": "input-otp-slot",
+			"data-slot": Slot::InputOtpSlot.as_str(),
 			"data-active": slot.active,
 			{slot.char.map(|c| c.to_string())}
 			if slot.caret {
@@ -83,7 +83,7 @@ pub fn InputOTPSlot(index: usize, #[props(default)] class: String) -> Element {
 #[component]
 pub fn InputOTPSeparator() -> Element {
 	rsx! {
-		div { "data-slot": "input-otp-separator", role: "separator",
+		div { "data-slot": Slot::InputOtpSeparator.as_str(), role: "separator",
 			svg {
 				xmlns: "http://www.w3.org/2000/svg",
 				view_box: "0 0 24 24",

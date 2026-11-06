@@ -3,7 +3,7 @@ use ev_lib_classes::{Icon, PAGINATION_CONTENT, PAGINATION_ELLIPSIS, PAGINATION_L
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{ButtonVariant, Size, button::button_classes, primitives::icon_shapes},
+	ui::uikit::dioxus::{ButtonVariant, Size, Slot, button::button_classes, primitives::icon_shapes},
 };
 
 #[component]
@@ -13,7 +13,7 @@ pub fn Pagination(#[props(default)] class: String, children: Element) -> Element
 		nav {
 			role: "navigation",
 			"aria-label": copy::PAGINATION,
-			"data-slot": "pagination",
+			"data-slot": Slot::Pagination.as_str(),
 			class: cls,
 			{children}
 		}
@@ -24,14 +24,14 @@ pub fn Pagination(#[props(default)] class: String, children: Element) -> Element
 pub fn PaginationContent(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(PAGINATION_CONTENT, class);
 	rsx! {
-		ul { "data-slot": "pagination-content", class: cls, {children} }
+		ul { "data-slot": Slot::PaginationContent.as_str(), class: cls, {children} }
 	}
 }
 
 #[component]
 pub fn PaginationItem(children: Element) -> Element {
 	rsx! {
-		li { "data-slot": "pagination-item", {children} }
+		li { "data-slot": Slot::PaginationItem.as_str(), {children} }
 	}
 }
 
@@ -54,7 +54,7 @@ pub fn PaginationLink(
 		a {
 			"aria-current": if is_active { "page" },
 			"aria-label": aria_label,
-			"data-slot": "pagination-link",
+			"data-slot": Slot::PaginationLink.as_str(),
 			"data-active": is_active,
 			class: cls,
 			href,
@@ -116,7 +116,7 @@ pub fn PaginationEllipsis(#[props(default)] class: String) -> Element {
 	rsx! {
 		span {
 			"aria-hidden": "true",
-			"data-slot": "pagination-ellipsis",
+			"data-slot": Slot::PaginationEllipsis.as_str(),
 			class: cls,
 			svg {
 				class: "size-4",

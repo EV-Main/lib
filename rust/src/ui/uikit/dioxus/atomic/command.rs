@@ -16,7 +16,7 @@ use crate::{
 		core::{self as uikit, CommandKey, Row},
 		dioxus::{
 			COMMAND_DIALOG_COMMAND, COMMAND_DIALOG_CONTENT, COMMAND_DIALOG_OVERLAY, COMMAND_EMPTY, COMMAND_GROUP, COMMAND_INPUT, COMMAND_INPUT_WRAPPER, COMMAND_ITEM, COMMAND_LIST,
-			COMMAND_ROOT, COMMAND_SEPARATOR, COMMAND_SHORTCUT,
+			COMMAND_ROOT, COMMAND_SEPARATOR, COMMAND_SHORTCUT, Slot,
 			primitives::{Controllable, icon_shapes, use_controllable, use_stable_id},
 		},
 	},
@@ -66,7 +66,7 @@ pub fn Command(
 	});
 	let cls = cn!(COMMAND_ROOT, class);
 	rsx! {
-		div { class: cls, "data-slot": "command", {children} }
+		div { class: cls, "data-slot": Slot::Command.as_str(), {children} }
 	}
 }
 /// `class` is fused over the dialog box, as the TS `className` is.
@@ -100,7 +100,7 @@ pub fn CommandDialog(
 			"aria-modal": "true",
 			"aria-labelledby": aria_labelledby,
 			class: cls,
-			"data-slot": "command-dialog",
+			"data-slot": Slot::CommandDialog.as_str(),
 			onkeydown: move |e| {
 				if e.key() == Key::Escape {
 					open.set(false);
@@ -126,7 +126,7 @@ pub fn CommandInput(
 	rsx! {
 		div {
 			class: COMMAND_INPUT_WRAPPER,
-			"data-slot": "command-input-wrapper",
+			"data-slot": Slot::CommandInputWrapper.as_str(),
 			svg {
 				xmlns: "http://www.w3.org/2000/svg",
 				width: "24",
@@ -145,7 +145,7 @@ pub fn CommandInput(
 				r#type: "text",
 				role: "combobox",
 				class: cls,
-				"data-slot": "command-input",
+				"data-slot": Slot::CommandInput.as_str(),
 				// Focus stays here and points at the highlighted row (the ARIA
 				// combobox pattern), so the rows never need to be tabbable.
 				"aria-autocomplete": "list",
@@ -171,7 +171,7 @@ pub fn CommandList(#[props(default)] class: String, children: Element) -> Elemen
 			role: "listbox",
 			id: ctx.list_id.read().clone(),
 			class: cls,
-			"data-slot": "command-list",
+			"data-slot": Slot::CommandList.as_str(),
 			{children}
 		}
 	}
@@ -186,7 +186,7 @@ pub fn CommandEmpty(#[props(default)] class: String, children: Element) -> Eleme
 	}
 	let cls = cn!(COMMAND_EMPTY, class);
 	rsx! {
-		div { class: cls, "data-slot": "command-empty", {children} }
+		div { class: cls, "data-slot": Slot::CommandEmpty.as_str(), {children} }
 	}
 }
 #[component]
@@ -194,9 +194,9 @@ pub fn CommandGroup(#[props(default)] heading: String, #[props(default)] class: 
 	use_context_provider(|| CommandGroupId(dioxus::dioxus_core::current_scope_id().0));
 	let cls = cn!(COMMAND_GROUP, class);
 	rsx! {
-		div { role: "group", class: cls, "data-slot": "command-group",
+		div { role: "group", class: cls, "data-slot": Slot::CommandGroup.as_str(),
 			if !heading.is_empty() {
-				div { "data-slot": "command-group-heading", {heading} }
+				div { "data-slot": Slot::CommandGroupHeading.as_str(), {heading} }
 			}
 			{children}
 		}
@@ -269,7 +269,7 @@ pub fn CommandItem(value: String, #[props(default)] disabled: bool, on_select: O
 			role: "option",
 			id: dom_id,
 			class: cls,
-			"data-slot": "command-item",
+			"data-slot": Slot::CommandItem.as_str(),
 			style: "order: {rank}",
 			"data-disabled": if disabled { "true" } else { "false" },
 			"data-selected": if selected { "true" } else { "false" },
@@ -294,14 +294,14 @@ pub fn CommandItem(value: String, #[props(default)] disabled: bool, on_select: O
 pub fn CommandSeparator(#[props(default)] class: String) -> Element {
 	let cls = cn!(COMMAND_SEPARATOR, class);
 	rsx! {
-		div { class: cls, "data-slot": "command-separator" }
+		div { class: cls, "data-slot": Slot::CommandSeparator.as_str() }
 	}
 }
 #[component]
 pub fn CommandShortcut(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(COMMAND_SHORTCUT, class);
 	rsx! {
-		span { class: cls, "data-slot": "command-shortcut", {children} }
+		span { class: cls, "data-slot": Slot::CommandShortcut.as_str(), {children} }
 	}
 }
 #[derive(Clone, Copy)]

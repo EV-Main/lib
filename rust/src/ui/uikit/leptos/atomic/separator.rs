@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{Orientation, SEPARATOR_BASE, separator_orientation_class},
+	ui::uikit::leptos::{Orientation, SEPARATOR_BASE, Slot, separator_orientation_class},
 };
 
 #[component]
@@ -11,7 +11,7 @@ pub fn Separator(#[prop(optional)] orientation: Orientation, #[prop(optional, in
 	view! {
 		<div
 			role="separator"
-			data-slot="separator"
+			data-slot=Slot::Separator.as_str()
 			data-orientation=orientation.as_ref().to_owned()
 			class=cls
 		></div>

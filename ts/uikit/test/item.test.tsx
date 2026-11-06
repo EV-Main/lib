@@ -57,7 +57,7 @@ describe("Item", () => {
 
   it("separator wraps Separator with my-0", () => {
     const { container } = render(<ItemSeparator />);
-    const el = container.querySelector("[data-slot=item-separator]")!;
+    const el = container.querySelector("[data-slot=separator]")!;
     expect(el).toHaveClass("my-0");
     expect(el).toHaveAttribute("data-orientation", "horizontal");
   });

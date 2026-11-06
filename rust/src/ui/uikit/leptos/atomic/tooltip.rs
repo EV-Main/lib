@@ -3,7 +3,7 @@ use leptos::{context::Provider, prelude::*};
 use crate::{
 	cn,
 	ui::uikit::leptos::{
-		TOOLTIP_CONTENT,
+		Slot, TOOLTIP_CONTENT,
 		primitives::{Controllable, use_controllable},
 	},
 };
@@ -47,7 +47,7 @@ pub fn TooltipTrigger(#[prop(optional, into)] class: String, children: Children)
 		<button
 			type="button"
 			class=class
-			data-slot="tooltip-trigger"
+			data-slot=Slot::TooltipTrigger.as_str()
 			on:mouseenter=move |_| ctx.open.set(true)
 			on:mouseleave=move |_| ctx.open.set(false)
 			on:focusin=move |_| ctx.open.set(true)
@@ -68,7 +68,7 @@ pub fn TooltipContent(#[prop(optional, into)] class: String, children: ChildrenF
 				<div
 					class=cls.clone()
 					role="tooltip"
-					data-slot="tooltip-content"
+					data-slot=Slot::TooltipContent.as_str()
 					data-state="open"
 					data-side="top"
 				>

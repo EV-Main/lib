@@ -6,7 +6,7 @@ use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		DROPDOWN_MENU_CHECK_ITEM, DROPDOWN_MENU_CONTENT, DROPDOWN_MENU_ITEM, DROPDOWN_MENU_ITEM_INDICATOR, DROPDOWN_MENU_LABEL, DROPDOWN_MENU_SEPARATOR, DROPDOWN_MENU_SHORTCUT,
-		DROPDOWN_MENU_SUB_CONTENT, DROPDOWN_MENU_SUB_TRIGGER,
+		DROPDOWN_MENU_SUB_CONTENT, DROPDOWN_MENU_SUB_TRIGGER, Slot,
 		primitives::{Controllable, DismissableLayer, Side, icon_shapes, use_controllable, use_dismissable_layer},
 	},
 };
@@ -17,7 +17,7 @@ pub fn DropdownMenu(open: Option<bool>, #[props(default)] default_open: bool, on
 	let layer = use_dismissable_layer(state.get(), move |_| state.set(false));
 	use_context_provider(|| DropdownMenuCtx { open: state, layer });
 	rsx! {
-		div { class: "relative inline-block", "data-slot": "dropdown-menu", {children} }
+		div { class: "relative inline-block", "data-slot": Slot::DropdownMenu.as_str(), {children} }
 	}
 }
 /// `aria_label` names a trigger whose text alone says too little: the kit has
@@ -31,7 +31,7 @@ pub fn DropdownMenuTrigger(#[props(default)] class: String, aria_label: Option<S
 		button {
 			r#type: "button",
 			class,
-			"data-slot": "dropdown-menu-trigger",
+			"data-slot": Slot::DropdownMenuTrigger.as_str(),
 			"data-state": data_state,
 			"aria-label": aria_label,
 			"aria-haspopup": "menu",
@@ -60,7 +60,7 @@ pub fn DropdownMenuContent(#[props(default)] side: Side, #[props(default)] class
 			class: cls,
 			role: "menu",
 			tabindex: "-1",
-			"data-slot": "dropdown-menu-content",
+			"data-slot": Slot::DropdownMenuContent.as_str(),
 			"data-state": "open",
 			"data-side": side.as_ref(),
 			onkeydown: move |e| {
@@ -73,7 +73,7 @@ pub fn DropdownMenuContent(#[props(default)] side: Side, #[props(default)] class
 #[component]
 pub fn DropdownMenuGroup(#[props(default)] class: String, children: Element) -> Element {
 	rsx! {
-		div { class, role: "group", "data-slot": "dropdown-menu-group", {children} }
+		div { class, role: "group", "data-slot": Slot::DropdownMenuGroup.as_str(), {children} }
 	}
 }
 #[component]
@@ -92,7 +92,7 @@ pub fn DropdownMenuItem(
 			class: cls,
 			role: "menuitem",
 			tabindex: "-1",
-			"data-slot": "dropdown-menu-item",
+			"data-slot": Slot::DropdownMenuItem.as_str(),
 			"data-variant": variant.as_ref(),
 			"data-inset": inset.then_some(""),
 			"data-disabled": disabled.then_some(""),
@@ -124,7 +124,7 @@ pub fn DropdownMenuCheckboxItem(
 			class: cls,
 			role: "menuitemcheckbox",
 			tabindex: "-1",
-			"data-slot": "dropdown-menu-checkbox-item",
+			"data-slot": Slot::DropdownMenuCheckboxItem.as_str(),
 			"data-state": if checked { "checked" } else { "unchecked" },
 			"data-disabled": disabled.then_some(""),
 			"aria-checked": if checked { "true" } else { "false" },
@@ -167,7 +167,7 @@ pub fn DropdownMenuRadioGroup(
 	let state = use_controllable(value, default_value, on_value_change);
 	use_context_provider(|| DropdownMenuRadioCtx { value: state });
 	rsx! {
-		div { class, role: "group", "data-slot": "dropdown-menu-radio-group", {children} }
+		div { class, role: "group", "data-slot": Slot::DropdownMenuRadioGroup.as_str(), {children} }
 	}
 }
 #[component]
@@ -181,7 +181,7 @@ pub fn DropdownMenuRadioItem(value: String, #[props(default)] disabled: bool, #[
 			class: cls,
 			role: "menuitemradio",
 			tabindex: "-1",
-			"data-slot": "dropdown-menu-radio-item",
+			"data-slot": Slot::DropdownMenuRadioItem.as_str(),
 			"data-state": if checked { "checked" } else { "unchecked" },
 			"data-disabled": disabled.then_some(""),
 			"aria-checked": if checked { "true" } else { "false" },
@@ -207,21 +207,21 @@ pub fn DropdownMenuRadioItem(value: String, #[props(default)] disabled: bool, #[
 pub fn DropdownMenuLabel(#[props(default)] inset: bool, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(DROPDOWN_MENU_LABEL, class);
 	rsx! {
-		div { class: cls, "data-slot": "dropdown-menu-label", "data-inset": inset.then_some(""), {children} }
+		div { class: cls, "data-slot": Slot::DropdownMenuLabel.as_str(), "data-inset": inset.then_some(""), {children} }
 	}
 }
 #[component]
 pub fn DropdownMenuSeparator(#[props(default)] class: String) -> Element {
 	let cls = cn!(DROPDOWN_MENU_SEPARATOR, class);
 	rsx! {
-		div { class: cls, role: "separator", "data-slot": "dropdown-menu-separator" }
+		div { class: cls, role: "separator", "data-slot": Slot::DropdownMenuSeparator.as_str() }
 	}
 }
 #[component]
 pub fn DropdownMenuShortcut(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(DROPDOWN_MENU_SHORTCUT, class);
 	rsx! {
-		span { class: cls, "data-slot": "dropdown-menu-shortcut", {children} }
+		span { class: cls, "data-slot": Slot::DropdownMenuShortcut.as_str(), {children} }
 	}
 }
 /// Sub-menus open inline (nested) rather than in a separate floating layer:
@@ -233,7 +233,7 @@ pub fn DropdownMenuSub(open: Option<bool>, #[props(default)] default_open: bool,
 	let state = use_controllable(open, default_open, on_open_change);
 	use_context_provider(|| DropdownMenuSubCtx { open: state });
 	rsx! {
-		div { "data-slot": "dropdown-menu-sub", {children} }
+		div { "data-slot": Slot::DropdownMenuSub.as_str(), {children} }
 	}
 }
 #[component]
@@ -246,7 +246,7 @@ pub fn DropdownMenuSubTrigger(#[props(default)] inset: bool, #[props(default)] c
 			class: cls,
 			role: "menuitem",
 			tabindex: "-1",
-			"data-slot": "dropdown-menu-sub-trigger",
+			"data-slot": Slot::DropdownMenuSubTrigger.as_str(),
 			"data-state": if open { "open" } else { "closed" },
 			"data-inset": inset.then_some(""),
 			"aria-haspopup": "menu",
@@ -275,7 +275,7 @@ pub fn DropdownMenuSubContent(#[props(default)] class: String, children: Element
 	}
 	let cls = cn!(DROPDOWN_MENU_SUB_CONTENT, class);
 	rsx! {
-		div { class: cls, role: "menu", "data-slot": "dropdown-menu-sub-content", "data-state": "open", {children} }
+		div { class: cls, role: "menu", "data-slot": Slot::DropdownMenuSubContent.as_str(), "data-state": "open", {children} }
 	}
 }
 #[derive(Clone)]

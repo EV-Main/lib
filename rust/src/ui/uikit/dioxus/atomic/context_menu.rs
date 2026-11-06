@@ -6,7 +6,7 @@ use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		CONTEXT_MENU_CHECK_ITEM, CONTEXT_MENU_CONTENT, CONTEXT_MENU_ITEM, CONTEXT_MENU_LABEL, CONTEXT_MENU_SEPARATOR, CONTEXT_MENU_SHORTCUT, CONTEXT_MENU_SUB_CONTENT,
-		CONTEXT_MENU_SUB_TRIGGER,
+		CONTEXT_MENU_SUB_TRIGGER, Slot,
 		primitives::{Controllable, icon_shapes, use_controllable},
 	},
 };
@@ -17,7 +17,7 @@ pub fn ContextMenu(open: Option<bool>, #[props(default)] default_open: bool, on_
 	let point = use_signal(|| (0, 0));
 	use_context_provider(|| ContextMenuCtx { open: state, point });
 	rsx! {
-		div { "data-slot": "context-menu", {children} }
+		div { "data-slot": Slot::ContextMenu.as_str(), {children} }
 	}
 }
 #[component]
@@ -27,7 +27,7 @@ pub fn ContextMenuTrigger(#[props(default)] class: String, children: Element) ->
 	rsx! {
 		div {
 			class,
-			"data-slot": "context-menu-trigger",
+			"data-slot": Slot::ContextMenuTrigger.as_str(),
 			oncontextmenu: move |e| {
 				e.prevent_default();
 				let c = e.client_coordinates();
@@ -57,7 +57,7 @@ pub fn ContextMenuContent(#[props(default)] class: String, children: Element) ->
 			role: "menu",
 			tabindex: "-1",
 			style: "position: fixed; left: {x}px; top: {y}px;",
-			"data-slot": "context-menu-content",
+			"data-slot": Slot::ContextMenuContent.as_str(),
 			"data-state": "open",
 			"data-side": "bottom",
 			onkeydown: move |e| {
@@ -72,7 +72,7 @@ pub fn ContextMenuContent(#[props(default)] class: String, children: Element) ->
 #[component]
 pub fn ContextMenuGroup(#[props(default)] class: String, children: Element) -> Element {
 	rsx! {
-		div { class, role: "group", "data-slot": "context-menu-group", {children} }
+		div { class, role: "group", "data-slot": Slot::ContextMenuGroup.as_str(), {children} }
 	}
 }
 #[component]
@@ -91,7 +91,7 @@ pub fn ContextMenuItem(
 			class: cls,
 			role: "menuitem",
 			tabindex: "-1",
-			"data-slot": "context-menu-item",
+			"data-slot": Slot::ContextMenuItem.as_str(),
 			"data-variant": variant.as_ref(),
 			"data-inset": inset.then_some(""),
 			"data-disabled": disabled.then_some(""),
@@ -123,7 +123,7 @@ pub fn ContextMenuCheckboxItem(
 			class: cls,
 			role: "menuitemcheckbox",
 			tabindex: "-1",
-			"data-slot": "context-menu-checkbox-item",
+			"data-slot": Slot::ContextMenuCheckboxItem.as_str(),
 			"data-state": if checked { "checked" } else { "unchecked" },
 			"data-disabled": disabled.then_some(""),
 			"aria-checked": if checked { "true" } else { "false" },
@@ -166,7 +166,7 @@ pub fn ContextMenuRadioGroup(
 	let state = use_controllable(value, default_value, on_value_change);
 	use_context_provider(|| ContextMenuRadioCtx { value: state });
 	rsx! {
-		div { class, role: "group", "data-slot": "context-menu-radio-group", {children} }
+		div { class, role: "group", "data-slot": Slot::ContextMenuRadioGroup.as_str(), {children} }
 	}
 }
 #[component]
@@ -180,7 +180,7 @@ pub fn ContextMenuRadioItem(value: String, #[props(default)] disabled: bool, #[p
 			class: cls,
 			role: "menuitemradio",
 			tabindex: "-1",
-			"data-slot": "context-menu-radio-item",
+			"data-slot": Slot::ContextMenuRadioItem.as_str(),
 			"data-state": if checked { "checked" } else { "unchecked" },
 			"data-disabled": disabled.then_some(""),
 			"aria-checked": if checked { "true" } else { "false" },
@@ -206,21 +206,21 @@ pub fn ContextMenuRadioItem(value: String, #[props(default)] disabled: bool, #[p
 pub fn ContextMenuLabel(#[props(default)] inset: bool, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(CONTEXT_MENU_LABEL, class);
 	rsx! {
-		div { class: cls, "data-slot": "context-menu-label", "data-inset": inset.then_some(""), {children} }
+		div { class: cls, "data-slot": Slot::ContextMenuLabel.as_str(), "data-inset": inset.then_some(""), {children} }
 	}
 }
 #[component]
 pub fn ContextMenuSeparator(#[props(default)] class: String) -> Element {
 	let cls = cn!(CONTEXT_MENU_SEPARATOR, class);
 	rsx! {
-		div { class: cls, role: "separator", "data-slot": "context-menu-separator" }
+		div { class: cls, role: "separator", "data-slot": Slot::ContextMenuSeparator.as_str() }
 	}
 }
 #[component]
 pub fn ContextMenuShortcut(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(CONTEXT_MENU_SHORTCUT, class);
 	rsx! {
-		span { class: cls, "data-slot": "context-menu-shortcut", {children} }
+		span { class: cls, "data-slot": Slot::ContextMenuShortcut.as_str(), {children} }
 	}
 }
 /// Sub-menus open inline (nested) rather than in a separate floating layer; the
@@ -231,7 +231,7 @@ pub fn ContextMenuSub(open: Option<bool>, #[props(default)] default_open: bool, 
 	let state = use_controllable(open, default_open, on_open_change);
 	use_context_provider(|| ContextMenuSubCtx { open: state });
 	rsx! {
-		div { "data-slot": "context-menu-sub", {children} }
+		div { "data-slot": Slot::ContextMenuSub.as_str(), {children} }
 	}
 }
 #[component]
@@ -244,7 +244,7 @@ pub fn ContextMenuSubTrigger(#[props(default)] inset: bool, #[props(default)] cl
 			class: cls,
 			role: "menuitem",
 			tabindex: "-1",
-			"data-slot": "context-menu-sub-trigger",
+			"data-slot": Slot::ContextMenuSubTrigger.as_str(),
 			"data-state": if open { "open" } else { "closed" },
 			"data-inset": inset.then_some(""),
 			"aria-haspopup": "menu",
@@ -273,7 +273,7 @@ pub fn ContextMenuSubContent(#[props(default)] class: String, children: Element)
 	}
 	let cls = cn!(CONTEXT_MENU_SUB_CONTENT, class);
 	rsx! {
-		div { class: cls, role: "menu", "data-slot": "context-menu-sub-content", "data-state": "open", {children} }
+		div { class: cls, role: "menu", "data-slot": Slot::ContextMenuSubContent.as_str(), "data-state": "open", {children} }
 	}
 }
 #[derive(Clone, Copy)]

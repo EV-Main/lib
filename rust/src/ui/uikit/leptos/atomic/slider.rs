@@ -4,7 +4,7 @@ use crate::{
 	cn,
 	ui::uikit::{
 		core::{self as uikit, Drag},
-		leptos::{Orientation, SLIDER_RANGE, SLIDER_ROOT, SLIDER_THUMB, SLIDER_TRACK, primitives::use_controllable},
+		leptos::{Orientation, SLIDER_RANGE, SLIDER_ROOT, SLIDER_THUMB, SLIDER_TRACK, Slot, primitives::use_controllable},
 	},
 };
 
@@ -38,7 +38,7 @@ pub fn Slider(
 	view! {
 		<span
 			class=cn!(SLIDER_ROOT, class)
-			data-slot="slider"
+			data-slot=Slot::Slider.as_str()
 			data-orientation=ori
 			data-disabled=move || disabled.get().then_some("true")
 			on:pointerdown=move |e| {
@@ -80,17 +80,22 @@ pub fn Slider(
 			on:pointerleave=release
 			on:pointercancel=release
 		>
-			<span class=SLIDER_TRACK data-slot="slider-track" data-orientation=ori node_ref=track>
+			<span
+				class=SLIDER_TRACK
+				data-slot=Slot::SliderTrack.as_str()
+				data-orientation=ori
+				node_ref=track
+			>
 				<span
 					class=SLIDER_RANGE
-					data-slot="slider-range"
+					data-slot=Slot::SliderRange.as_str()
 					data-orientation=ori
 					style=move || slider.range_style(current.get())
 				></span>
 			</span>
 			<span
 				class=SLIDER_THUMB
-				data-slot="slider-thumb"
+				data-slot=Slot::SliderThumb.as_str()
 				data-orientation=ori
 				style=move || slider.thumb_style(current.get())
 				role="slider"

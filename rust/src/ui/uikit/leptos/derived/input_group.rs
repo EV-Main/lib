@@ -4,7 +4,7 @@ use crate::{
 	cn,
 	ui::uikit::leptos::{
 		ButtonVariant, INPUT_BASE, INPUT_GROUP_ADDON_BASE, INPUT_GROUP_BASE, INPUT_GROUP_BUTTON_BASE, INPUT_GROUP_INPUT_CONTROL, INPUT_GROUP_TEXT, INPUT_GROUP_TEXTAREA_CONTROL,
-		InputGroupAddonAlign, InputGroupButtonSize, TEXTAREA_BASE, button::Button, input_group_button_size_class,
+		InputGroupAddonAlign, InputGroupButtonSize, Slot, TEXTAREA_BASE, button::Button, input_group_button_size_class,
 	},
 };
 
@@ -12,7 +12,7 @@ use crate::{
 pub fn InputGroup(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(INPUT_GROUP_BASE, class);
 	view! {
-		<div class=cls data-slot="input-group" role="group">
+		<div class=cls data-slot=Slot::InputGroup.as_str() role="group">
 			{children()}
 		</div>
 	}
@@ -22,7 +22,12 @@ pub fn InputGroup(#[prop(optional, into)] class: String, children: Children) -> 
 pub fn InputGroupAddon(#[prop(optional)] align: InputGroupAddonAlign, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let cls = cn!(INPUT_GROUP_ADDON_BASE, align.as_class(), class);
 	view! {
-		<div role="group" class=cls data-slot="input-group-addon" data-align=align.as_ref().to_owned()>
+		<div
+			role="group"
+			class=cls
+			data-slot=Slot::InputGroupAddon.as_str()
+			data-align=align.as_ref().to_owned()
+		>
 			{children()}
 		</div>
 	}
@@ -80,7 +85,7 @@ pub fn InputGroupInput(
 		<input
 			type=input_type
 			class=cls
-			data-slot="input-group-control"
+			data-slot=Slot::InputGroupControl.as_str()
 			placeholder=placeholder
 			disabled=disabled
 			value=value.get_untracked()
@@ -106,7 +111,7 @@ pub fn InputGroupTextarea(
 	view! {
 		<textarea
 			class=cls
-			data-slot="input-group-control"
+			data-slot=Slot::InputGroupControl.as_str()
 			placeholder=placeholder
 			disabled=disabled
 			prop:value=value

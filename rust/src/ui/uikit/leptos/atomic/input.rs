@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{FormControlContext, INPUT_BASE, Size, input_size_class},
+	ui::uikit::leptos::{FormControlContext, INPUT_BASE, Size, Slot, input_size_class},
 };
 
 /// Picks up the id and `aria-*` of an enclosing `FormControl`; outside one, all
@@ -29,7 +29,7 @@ pub fn Input(
 		<input
 			type=input_type
 			class=cls
-			data-slot="input"
+			data-slot=Slot::Input.as_str()
 			data-size=size.as_ref().to_owned()
 			id=move || form.map(|f| f.get().id)
 			aria-describedby=move || form.map(|f| f.get().described_by)

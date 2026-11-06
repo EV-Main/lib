@@ -6,7 +6,7 @@ use crate::{
 	cn,
 	ui::uikit::leptos::{
 		MENUBAR_CHECKBOX_ITEM, MENUBAR_CONTENT, MENUBAR_ITEM, MENUBAR_ITEM_INDICATOR, MENUBAR_LABEL, MENUBAR_RADIO_ITEM, MENUBAR_ROOT, MENUBAR_SEPARATOR, MENUBAR_SHORTCUT,
-		MENUBAR_SUB_CONTENT, MENUBAR_SUB_TRIGGER, MENUBAR_TRIGGER,
+		MENUBAR_SUB_CONTENT, MENUBAR_SUB_TRIGGER, MENUBAR_TRIGGER, Slot,
 		primitives::{Controllable, icon_shapes, use_controllable},
 	},
 };
@@ -14,7 +14,7 @@ use crate::{
 #[component]
 pub fn Menubar(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class=cn!(MENUBAR_ROOT, class) data-slot="menubar" role="menubar">
+		<div class=cn!(MENUBAR_ROOT, class) data-slot=Slot::Menubar.as_str() role="menubar">
 			{children()}
 		</div>
 	}
@@ -34,7 +34,7 @@ pub fn MenubarMenu(
 	// dep-light: inline positioning + backdrop; no portal/floating — see README Limitations
 	view! {
 		<Provider value=provided>
-			<div class="relative" data-slot="menubar-menu">
+			<div class="relative" data-slot=Slot::MenubarMenu.as_str()>
 				{children()}
 			</div>
 		</Provider>
@@ -48,7 +48,7 @@ pub fn MenubarTrigger(#[prop(optional, into)] class: String, children: Children)
 		<button
 			type="button"
 			class=cn!(MENUBAR_TRIGGER, class)
-			data-slot="menubar-trigger"
+			data-slot=Slot::MenubarTrigger.as_str()
 			data-state=move || if ctx.open.get() { "open" } else { "closed" }
 			on:click=move |_| ctx.open.set(!ctx.open.get_untracked())
 		>
@@ -68,7 +68,7 @@ pub fn MenubarContent(#[prop(optional, into)] class: String, children: ChildrenF
 				<div class="fixed inset-0 z-40" on:click=move |_| ctx.open.set(false)></div>
 				<div
 					class=cls.clone()
-					data-slot="menubar-content"
+					data-slot=Slot::MenubarContent.as_str()
 					data-state="open"
 					role="menu"
 					on:keydown=move |e| {
@@ -87,7 +87,7 @@ pub fn MenubarContent(#[prop(optional, into)] class: String, children: ChildrenF
 #[component]
 pub fn MenubarGroup(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class=class data-slot="menubar-group" role="group">
+		<div class=class data-slot=Slot::MenubarGroup.as_str() role="group">
 			{children()}
 		</div>
 	}
@@ -104,7 +104,7 @@ pub fn MenubarItem(
 	view! {
 		<div
 			class=cn!(MENUBAR_ITEM, class)
-			data-slot="menubar-item"
+			data-slot=Slot::MenubarItem.as_str()
 			data-inset=inset.then_some("")
 			data-variant=variant.as_ref().to_owned()
 			role="menuitem"
@@ -134,7 +134,7 @@ pub fn MenubarCheckboxItem(
 	view! {
 		<div
 			class=cn!(MENUBAR_CHECKBOX_ITEM, class)
-			data-slot="menubar-checkbox-item"
+			data-slot=Slot::MenubarCheckboxItem.as_str()
 			role="menuitemcheckbox"
 			aria-checked=move || checked.get().to_string()
 			on:click=move |e| {
@@ -183,7 +183,7 @@ pub fn MenubarRadioGroup(
 	let provided = MenubarRadioCtx { value: state };
 	view! {
 		<Provider value=provided>
-			<div class=class data-slot="menubar-radio-group" role="group">
+			<div class=class data-slot=Slot::MenubarRadioGroup.as_str() role="group">
 				{children()}
 			</div>
 		</Provider>
@@ -200,7 +200,7 @@ pub fn MenubarRadioItem(#[prop(into)] value: String, #[prop(optional, into)] cla
 	view! {
 		<div
 			class=cn!(MENUBAR_RADIO_ITEM, class)
-			data-slot="menubar-radio-item"
+			data-slot=Slot::MenubarRadioItem.as_str()
 			role="menuitemradio"
 			aria-checked=move || checked.get().to_string()
 			on:click=move |_| ctx.value.set(value.clone())
@@ -226,7 +226,11 @@ pub fn MenubarRadioItem(#[prop(into)] value: String, #[prop(optional, into)] cla
 #[component]
 pub fn MenubarLabel(#[prop(optional)] inset: bool, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class=cn!(MENUBAR_LABEL, class) data-slot="menubar-label" data-inset=inset.then_some("")>
+		<div
+			class=cn!(MENUBAR_LABEL, class)
+			data-slot=Slot::MenubarLabel.as_str()
+			data-inset=inset.then_some("")
+		>
 			{children()}
 		</div>
 	}
@@ -235,14 +239,18 @@ pub fn MenubarLabel(#[prop(optional)] inset: bool, #[prop(optional, into)] class
 #[component]
 pub fn MenubarSeparator(#[prop(optional, into)] class: String) -> impl IntoView {
 	view! {
-		<div class=cn!(MENUBAR_SEPARATOR, class) data-slot="menubar-separator" role="separator"></div>
+		<div
+			class=cn!(MENUBAR_SEPARATOR, class)
+			data-slot=Slot::MenubarSeparator.as_str()
+			role="separator"
+		></div>
 	}
 }
 
 #[component]
 pub fn MenubarShortcut(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<span class=cn!(MENUBAR_SHORTCUT, class) data-slot="menubar-shortcut">
+		<span class=cn!(MENUBAR_SHORTCUT, class) data-slot=Slot::MenubarShortcut.as_str()>
 			{children()}
 		</span>
 	}
@@ -262,7 +270,7 @@ pub fn MenubarSub(
 	// dep-light: inline positioning + backdrop; no portal/floating — see README Limitations
 	view! {
 		<Provider value=provided>
-			<div class="relative" data-slot="menubar-sub">
+			<div class="relative" data-slot=Slot::MenubarSub.as_str()>
 				{children()}
 			</div>
 		</Provider>
@@ -275,7 +283,7 @@ pub fn MenubarSubTrigger(#[prop(optional)] inset: bool, #[prop(optional, into)] 
 	view! {
 		<div
 			class=cn!(MENUBAR_SUB_TRIGGER, class)
-			data-slot="menubar-sub-trigger"
+			data-slot=Slot::MenubarSubTrigger.as_str()
 			data-inset=inset.then_some("")
 			data-state=move || if ctx.open.get() { "open" } else { "closed" }
 			role="menuitem"
@@ -307,7 +315,7 @@ pub fn MenubarSubContent(#[prop(optional, into)] class: String, children: Childr
 			view! {
 				<div
 					class=cls.clone()
-					data-slot="menubar-sub-content"
+					data-slot=Slot::MenubarSubContent.as_str()
 					data-state="open"
 					role="menu"
 					on:keydown=move |e| {

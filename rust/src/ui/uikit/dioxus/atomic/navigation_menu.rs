@@ -6,7 +6,7 @@ use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		NAVIGATION_MENU, NAVIGATION_MENU_CONTENT, NAVIGATION_MENU_INDICATOR, NAVIGATION_MENU_ITEM, NAVIGATION_MENU_LINK, NAVIGATION_MENU_LIST, NAVIGATION_MENU_TRIGGER_STYLE,
-		NAVIGATION_MENU_VIEWPORT,
+		NAVIGATION_MENU_VIEWPORT, Slot,
 		primitives::{Controllable, icon_shapes, use_controllable},
 	},
 };
@@ -17,7 +17,7 @@ pub fn NavigationMenu(#[props(default = true)] viewport: bool, #[props(default)]
 	rsx! {
 		nav {
 			class: cls,
-			"data-slot": "navigation-menu",
+			"data-slot": Slot::NavigationMenu.as_str(),
 			"data-viewport": viewport,
 			role: "navigation",
 			{children}
@@ -29,7 +29,7 @@ pub fn NavigationMenu(#[props(default = true)] viewport: bool, #[props(default)]
 pub fn NavigationMenuList(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(NAVIGATION_MENU_LIST, class);
 	rsx! {
-		ul { class: cls, "data-slot": "navigation-menu-list", role: "list", {children} }
+		ul { class: cls, "data-slot": Slot::NavigationMenuList.as_str(), role: "list", {children} }
 	}
 }
 
@@ -47,7 +47,7 @@ pub fn NavigationMenuItem(
 	use_context_provider(|| NavigationMenuItemCtx { open: state });
 	let cls = cn!(NAVIGATION_MENU_ITEM, class);
 	rsx! {
-		li { class: cls, "data-slot": "navigation-menu-item", {children} }
+		li { class: cls, "data-slot": Slot::NavigationMenuItem.as_str(), {children} }
 	}
 }
 
@@ -60,7 +60,7 @@ pub fn NavigationMenuTrigger(#[props(default)] class: String, children: Element)
 		button {
 			r#type: "button",
 			class: cls,
-			"data-slot": "navigation-menu-trigger",
+			"data-slot": Slot::NavigationMenuTrigger.as_str(),
 			"data-state": if open { "open" } else { "closed" },
 			onclick: move |_| ctx.open.set(!ctx.open.get()),
 			{children}
@@ -96,7 +96,7 @@ pub fn NavigationMenuContent(#[props(default)] class: String, children: Element)
 		}
 		div {
 			class: cls,
-			"data-slot": "navigation-menu-content",
+			"data-slot": Slot::NavigationMenuContent.as_str(),
 			"data-state": "open",
 			onkeydown: move |e| if e.key() == Key::Escape { ctx.open.set(false); },
 			{children}
@@ -110,7 +110,7 @@ pub fn NavigationMenuLink(#[props(default)] active: bool, #[props(default)] href
 	rsx! {
 		a {
 			class: cls,
-			"data-slot": "navigation-menu-link",
+			"data-slot": Slot::NavigationMenuLink.as_str(),
 			"data-active": active,
 			href,
 			{children}
@@ -124,7 +124,7 @@ pub fn NavigationMenuLink(#[props(default)] active: bool, #[props(default)] href
 pub fn NavigationMenuIndicator(#[props(default)] class: String) -> Element {
 	let cls = cn!(NAVIGATION_MENU_INDICATOR, class);
 	rsx! {
-		div { class: cls, "data-slot": "navigation-menu-indicator",
+		div { class: cls, "data-slot": Slot::NavigationMenuIndicator.as_str(),
 			div { class: NAVIGATION_MENU_INDICATOR_ARROW }
 		}
 	}
@@ -137,7 +137,7 @@ pub fn NavigationMenuViewport(#[props(default)] class: String, children: Element
 	let cls = cn!(NAVIGATION_MENU_VIEWPORT, class);
 	rsx! {
 		div { class: NAVIGATION_MENU_VIEWPORT_WRAPPER,
-			div { class: cls, "data-slot": "navigation-menu-viewport", {children} }
+			div { class: cls, "data-slot": Slot::NavigationMenuViewport.as_str(), {children} }
 		}
 	}
 }

@@ -6,7 +6,7 @@ use crate::{
 	cn,
 	ui::uikit::leptos::{
 		NAVIGATION_MENU, NAVIGATION_MENU_CONTENT, NAVIGATION_MENU_INDICATOR, NAVIGATION_MENU_ITEM, NAVIGATION_MENU_LINK, NAVIGATION_MENU_LIST, NAVIGATION_MENU_TRIGGER_STYLE,
-		NAVIGATION_MENU_VIEWPORT,
+		NAVIGATION_MENU_VIEWPORT, Slot,
 		primitives::{Controllable, icon_shapes, use_controllable},
 	},
 };
@@ -16,7 +16,7 @@ pub fn NavigationMenu(#[prop(default = true)] viewport: bool, #[prop(optional, i
 	view! {
 		<nav
 			class=cn!(NAVIGATION_MENU, class)
-			data-slot="navigation-menu"
+			data-slot=Slot::NavigationMenu.as_str()
 			data-viewport=viewport.to_string()
 			role="navigation"
 		>
@@ -28,7 +28,11 @@ pub fn NavigationMenu(#[prop(default = true)] viewport: bool, #[prop(optional, i
 #[component]
 pub fn NavigationMenuList(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<ul class=cn!(NAVIGATION_MENU_LIST, class) data-slot="navigation-menu-list" role="list">
+		<ul
+			class=cn!(NAVIGATION_MENU_LIST, class)
+			data-slot=Slot::NavigationMenuList.as_str()
+			role="list"
+		>
 			{children()}
 		</ul>
 	}
@@ -48,7 +52,7 @@ pub fn NavigationMenuItem(
 	let provided = NavigationMenuItemCtx { open: state };
 	view! {
 		<Provider value=provided>
-			<li class=cn!(NAVIGATION_MENU_ITEM, class) data-slot="navigation-menu-item">
+			<li class=cn!(NAVIGATION_MENU_ITEM, class) data-slot=Slot::NavigationMenuItem.as_str()>
 				{children()}
 			</li>
 		</Provider>
@@ -62,7 +66,7 @@ pub fn NavigationMenuTrigger(#[prop(optional, into)] class: String, children: Ch
 		<button
 			type="button"
 			class=cn!(NAVIGATION_MENU_TRIGGER_STYLE, "group", class)
-			data-slot="navigation-menu-trigger"
+			data-slot=Slot::NavigationMenuTrigger.as_str()
 			data-state=move || if ctx.open.get() { "open" } else { "closed" }
 			on:click=move |_| ctx.open.set(!ctx.open.get_untracked())
 		>
@@ -96,7 +100,7 @@ pub fn NavigationMenuContent(#[prop(optional, into)] class: String, children: Ch
 				<div class="fixed inset-0 z-40" on:click=move |_| ctx.open.set(false)></div>
 				<div
 					class=cls.clone()
-					data-slot="navigation-menu-content"
+					data-slot=Slot::NavigationMenuContent.as_str()
 					data-state="open"
 					on:keydown=move |e| {
 						if e.key() == "Escape" {
@@ -116,7 +120,7 @@ pub fn NavigationMenuLink(#[prop(optional, into)] active: Signal<bool>, #[prop(o
 	view! {
 		<a
 			class=cn!(NAVIGATION_MENU_LINK, class)
-			data-slot="navigation-menu-link"
+			data-slot=Slot::NavigationMenuLink.as_str()
 			data-active=move || active.get().to_string()
 			href=href
 		>
@@ -130,7 +134,10 @@ pub fn NavigationMenuLink(#[prop(optional, into)] active: Signal<bool>, #[prop(o
 #[component]
 pub fn NavigationMenuIndicator(#[prop(optional, into)] class: String) -> impl IntoView {
 	view! {
-		<div class=cn!(NAVIGATION_MENU_INDICATOR, class) data-slot="navigation-menu-indicator">
+		<div
+			class=cn!(NAVIGATION_MENU_INDICATOR, class)
+			data-slot=Slot::NavigationMenuIndicator.as_str()
+		>
 			<div class=NAVIGATION_MENU_INDICATOR_ARROW></div>
 		</div>
 	}
@@ -142,7 +149,10 @@ pub fn NavigationMenuIndicator(#[prop(optional, into)] class: String) -> impl In
 pub fn NavigationMenuViewport(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
 		<div class=NAVIGATION_MENU_VIEWPORT_WRAPPER>
-			<div class=cn!(NAVIGATION_MENU_VIEWPORT, class) data-slot="navigation-menu-viewport">
+			<div
+				class=cn!(NAVIGATION_MENU_VIEWPORT, class)
+				data-slot=Slot::NavigationMenuViewport.as_str()
+			>
 				{children()}
 			</div>
 		</div>

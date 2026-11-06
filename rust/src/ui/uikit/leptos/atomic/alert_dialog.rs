@@ -3,7 +3,7 @@ use leptos::{context::Provider, prelude::*};
 use crate::{
 	cn,
 	ui::uikit::leptos::{
-		ALERT_DIALOG_CONTENT, ALERT_DIALOG_DESCRIPTION, ALERT_DIALOG_FOOTER, ALERT_DIALOG_HEADER, ALERT_DIALOG_OVERLAY, ALERT_DIALOG_TITLE, ButtonVariant, Size, button_classes,
+		ALERT_DIALOG_CONTENT, ALERT_DIALOG_DESCRIPTION, ALERT_DIALOG_FOOTER, ALERT_DIALOG_HEADER, ALERT_DIALOG_OVERLAY, ALERT_DIALOG_TITLE, ButtonVariant, Size, Slot, button_classes,
 		primitives::{Controllable, use_controllable},
 	},
 };
@@ -19,7 +19,7 @@ pub fn AlertDialog(
 	let provided = AlertDialogCtx { open: state };
 	view! {
 		<Provider value=provided>
-			<div data-slot="alert-dialog">{children()}</div>
+			<div data-slot=Slot::AlertDialog.as_str()>{children()}</div>
 		</Provider>
 	}
 }
@@ -31,7 +31,7 @@ pub fn AlertDialogTrigger(#[prop(optional, into)] class: String, children: Child
 		<button
 			type="button"
 			class=class
-			data-slot="alert-dialog-trigger"
+			data-slot=Slot::AlertDialogTrigger.as_str()
 			aria-expanded=move || ctx.open.get().to_string()
 			on:click=move |_| ctx.open.set(true)
 		>
@@ -60,7 +60,7 @@ pub fn AlertDialogContent(
 			view! {
 				<div
 					class=ALERT_DIALOG_OVERLAY
-					data-slot="alert-dialog-overlay"
+					data-slot=Slot::AlertDialogOverlay.as_str()
 					data-state="open"
 					on:click=move |_| ctx.open.set(false)
 				></div>
@@ -70,7 +70,7 @@ pub fn AlertDialogContent(
 					aria-labelledby=aria_labelledby.clone()
 					aria-describedby=move || aria_describedby.get()
 					class=cls.clone()
-					data-slot="alert-dialog-content"
+					data-slot=Slot::AlertDialogContent.as_str()
 					data-state="open"
 					tabindex="-1"
 					on:click=|e| e.stop_propagation()
@@ -90,7 +90,7 @@ pub fn AlertDialogContent(
 #[component]
 pub fn AlertDialogHeader(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class=cn!(ALERT_DIALOG_HEADER, class) data-slot="alert-dialog-header">
+		<div class=cn!(ALERT_DIALOG_HEADER, class) data-slot=Slot::AlertDialogHeader.as_str()>
 			{children()}
 		</div>
 	}
@@ -99,7 +99,7 @@ pub fn AlertDialogHeader(#[prop(optional, into)] class: String, children: Childr
 #[component]
 pub fn AlertDialogFooter(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class=cn!(ALERT_DIALOG_FOOTER, class) data-slot="alert-dialog-footer">
+		<div class=cn!(ALERT_DIALOG_FOOTER, class) data-slot=Slot::AlertDialogFooter.as_str()>
 			{children()}
 		</div>
 	}
@@ -108,7 +108,7 @@ pub fn AlertDialogFooter(#[prop(optional, into)] class: String, children: Childr
 #[component]
 pub fn AlertDialogTitle(#[prop(optional, into)] id: Option<String>, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<h2 id=id class=cn!(ALERT_DIALOG_TITLE, class) data-slot="alert-dialog-title">
+		<h2 id=id class=cn!(ALERT_DIALOG_TITLE, class) data-slot=Slot::AlertDialogTitle.as_str()>
 			{children()}
 		</h2>
 	}
@@ -117,7 +117,11 @@ pub fn AlertDialogTitle(#[prop(optional, into)] id: Option<String>, #[prop(optio
 #[component]
 pub fn AlertDialogDescription(#[prop(optional, into)] id: Option<String>, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<p id=id class=cn!(ALERT_DIALOG_DESCRIPTION, class) data-slot="alert-dialog-description">
+		<p
+			id=id
+			class=cn!(ALERT_DIALOG_DESCRIPTION, class)
+			data-slot=Slot::AlertDialogDescription.as_str()
+		>
 			{children()}
 		</p>
 	}
@@ -133,7 +137,7 @@ pub fn AlertDialogAction(#[prop(optional)] on_click: Option<Callback<leptos::ev:
 		<button
 			type="button"
 			class=cls
-			data-slot="alert-dialog-action"
+			data-slot=Slot::AlertDialogAction.as_str()
 			on:click=move |e| ctx.run_then_close(on_click, e)
 		>
 			{children()}
@@ -150,7 +154,7 @@ pub fn AlertDialogCancel(#[prop(optional)] on_click: Option<Callback<leptos::ev:
 		<button
 			type="button"
 			class=cls
-			data-slot="alert-dialog-cancel"
+			data-slot=Slot::AlertDialogCancel.as_str()
 			on:click=move |e| ctx.run_then_close(on_click, e)
 		>
 			{children()}

@@ -7,7 +7,7 @@ use crate::{
 	ui::uikit::{
 		core::{self as uikit, Day, NO_CLOCK_MONTH},
 		dioxus::{
-			CALENDAR_CAPTION, CALENDAR_DAY_CELL, CALENDAR_DAY_EMPTY, CALENDAR_GRID, CALENDAR_NAV, CALENDAR_ROOT, CALENDAR_WEEK, CALENDAR_WEEKDAY, CALENDAR_WEEKDAY_ROW,
+			CALENDAR_CAPTION, CALENDAR_DAY_CELL, CALENDAR_DAY_EMPTY, CALENDAR_GRID, CALENDAR_NAV, CALENDAR_ROOT, CALENDAR_WEEK, CALENDAR_WEEKDAY, CALENDAR_WEEKDAY_ROW, Slot,
 			primitives::{icon_shapes, use_controllable},
 		},
 	},
@@ -73,7 +73,7 @@ pub fn Calendar(
 	let root = cn!(CALENDAR_ROOT, class);
 
 	rsx! {
-		div { class: root, "data-slot": "calendar", role: "application",
+		div { class: root, "data-slot": Slot::Calendar.as_str(), role: "application",
 			div { class: CALENDAR_NAV,
 				button {
 					r#type: "button",
@@ -83,7 +83,7 @@ pub fn Calendar(
 					onclick: move |_| go(-1),
 					Chevron { icon: Icon::ChevronLeft }
 				}
-				div { class: CALENDAR_CAPTION, "data-slot": "calendar-caption", {grid.caption()} }
+				div { class: CALENDAR_CAPTION, "data-slot": Slot::CalendarCaption.as_str(), {grid.caption()} }
 				button {
 					r#type: "button",
 					class: nav_class.clone(),
@@ -134,7 +134,7 @@ fn DayCell(day: Option<Day>, on_select: Option<EventHandler<CalendarDate>>) -> E
 			button {
 				r#type: "button",
 				class: day.class(),
-				"data-slot": "calendar-day",
+				"data-slot": Slot::CalendarDay.as_str(),
 				"data-selected": if day.selected { "true" } else { "false" },
 				"data-today": if day.today { "true" } else { "false" },
 				// Absent rather than "false", so the unbounded grid renders as before.

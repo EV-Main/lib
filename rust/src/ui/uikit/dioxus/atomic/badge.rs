@@ -2,14 +2,14 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{BADGE_BASE, Tone},
+	ui::uikit::dioxus::{BADGE_BASE, Slot, Tone},
 };
 
 #[component]
 pub fn Badge(#[props(default)] tone: Tone, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(BADGE_BASE, tone.as_class(), class);
 	rsx! {
-		span { class: cls, "data-slot": "badge", {children} }
+		span { class: cls, "data-slot": Slot::Badge.as_str(), {children} }
 	}
 }
 

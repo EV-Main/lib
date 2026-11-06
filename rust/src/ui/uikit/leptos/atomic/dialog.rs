@@ -4,7 +4,7 @@ use leptos::{context::Provider, prelude::*};
 use crate::{
 	cn,
 	ui::uikit::leptos::{
-		DIALOG_CLOSE, DIALOG_CONTENT, DIALOG_DESCRIPTION, DIALOG_FOOTER, DIALOG_HEADER, DIALOG_OVERLAY, DIALOG_TITLE,
+		DIALOG_CLOSE, DIALOG_CONTENT, DIALOG_DESCRIPTION, DIALOG_FOOTER, DIALOG_HEADER, DIALOG_OVERLAY, DIALOG_TITLE, Slot,
 		primitives::{Controllable, DismissableLayer, icon_shapes, use_controllable, use_dismissable_layer},
 	},
 };
@@ -21,7 +21,7 @@ pub fn Dialog(
 	let provided = DialogCtx { open: state, layer };
 	view! {
 		<Provider value=provided>
-			<div data-slot="dialog">{children()}</div>
+			<div data-slot=Slot::Dialog.as_str()>{children()}</div>
 		</Provider>
 	}
 }
@@ -33,7 +33,7 @@ pub fn DialogTrigger(#[prop(optional, into)] class: String, children: Children) 
 		<button
 			type="button"
 			class=class
-			data-slot="dialog-trigger"
+			data-slot=Slot::DialogTrigger.as_str()
 			aria-expanded=move || ctx.open.get().to_string()
 			on:click=move |_| ctx.open.set(true)
 		>
@@ -70,7 +70,7 @@ pub fn DialogContent(
 			view! {
 				<div
 					class=DIALOG_OVERLAY
-					data-slot="dialog-overlay"
+					data-slot=Slot::DialogOverlay.as_str()
 					data-state="open"
 					on:click=move |_| ctx.layer.on_outside()
 				></div>
@@ -80,7 +80,7 @@ pub fn DialogContent(
 					aria-labelledby=aria_labelledby.clone()
 					aria-describedby=move || aria_describedby.get()
 					class=cls.clone()
-					data-slot="dialog-content"
+					data-slot=Slot::DialogContent.as_str()
 					data-state="open"
 					tabindex="-1"
 					on:click=|e| e.stop_propagation()
@@ -95,7 +95,7 @@ pub fn DialogContent(
 								<button
 									type="button"
 									class=DIALOG_CLOSE
-									data-slot="dialog-close"
+									data-slot=Slot::DialogClose.as_str()
 									on:click=move |_| ctx.open.set(false)
 								>
 									<svg
@@ -128,7 +128,7 @@ pub fn DialogClose(#[prop(optional, into)] class: String, children: Children) ->
 		<button
 			type="button"
 			class=class
-			data-slot="dialog-close"
+			data-slot=Slot::DialogClose.as_str()
 			on:click=move |_| ctx.open.set(false)
 		>
 			{children()}
@@ -139,7 +139,7 @@ pub fn DialogClose(#[prop(optional, into)] class: String, children: Children) ->
 #[component]
 pub fn DialogHeader(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class=cn!(DIALOG_HEADER, class) data-slot="dialog-header">
+		<div class=cn!(DIALOG_HEADER, class) data-slot=Slot::DialogHeader.as_str()>
 			{children()}
 		</div>
 	}
@@ -148,7 +148,7 @@ pub fn DialogHeader(#[prop(optional, into)] class: String, children: Children) -
 #[component]
 pub fn DialogFooter(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class=cn!(DIALOG_FOOTER, class) data-slot="dialog-footer">
+		<div class=cn!(DIALOG_FOOTER, class) data-slot=Slot::DialogFooter.as_str()>
 			{children()}
 		</div>
 	}
@@ -157,7 +157,7 @@ pub fn DialogFooter(#[prop(optional, into)] class: String, children: Children) -
 #[component]
 pub fn DialogTitle(#[prop(optional, into)] id: Option<String>, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<h2 id=id class=cn!(DIALOG_TITLE, class) data-slot="dialog-title">
+		<h2 id=id class=cn!(DIALOG_TITLE, class) data-slot=Slot::DialogTitle.as_str()>
 			{children()}
 		</h2>
 	}
@@ -166,7 +166,7 @@ pub fn DialogTitle(#[prop(optional, into)] id: Option<String>, #[prop(optional, 
 #[component]
 pub fn DialogDescription(#[prop(optional, into)] id: Option<String>, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<p id=id class=cn!(DIALOG_DESCRIPTION, class) data-slot="dialog-description">
+		<p id=id class=cn!(DIALOG_DESCRIPTION, class) data-slot=Slot::DialogDescription.as_str()>
 			{children()}
 		</p>
 	}

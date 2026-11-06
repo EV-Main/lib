@@ -2,14 +2,14 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{ALERT_BASE, ALERT_DESCRIPTION, ALERT_TITLE, Tone},
+	ui::uikit::dioxus::{ALERT_BASE, ALERT_DESCRIPTION, ALERT_TITLE, Slot, Tone},
 };
 
 #[component]
 pub fn Alert(#[props(default)] tone: Tone, #[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(ALERT_BASE, tone.as_class(), class);
 	rsx! {
-		div { class: cls, "data-slot": "alert", role: "alert", {children} }
+		div { class: cls, "data-slot": Slot::Alert.as_str(), role: "alert", {children} }
 	}
 }
 
@@ -17,7 +17,7 @@ pub fn Alert(#[props(default)] tone: Tone, #[props(default)] class: String, chil
 pub fn AlertTitle(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(ALERT_TITLE, class);
 	rsx! {
-		div { class: cls, "data-slot": "alert-title", {children} }
+		div { class: cls, "data-slot": Slot::AlertTitle.as_str(), {children} }
 	}
 }
 
@@ -25,7 +25,7 @@ pub fn AlertTitle(#[props(default)] class: String, children: Element) -> Element
 pub fn AlertDescription(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(ALERT_DESCRIPTION, class);
 	rsx! {
-		div { class: cls, "data-slot": "alert-description", {children} }
+		div { class: cls, "data-slot": Slot::AlertDescription.as_str(), {children} }
 	}
 }
 

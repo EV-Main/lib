@@ -1,10 +1,10 @@
+pub use ev_lib_classes::PopoverFormLabels;
 use leptos::prelude::*;
 
-pub use ev_lib_classes::PopoverFormLabels;
 use crate::{
 	cn,
 	ui::uikit::leptos::{
-		Button, ButtonVariant, POPOVER_FORM_ACTIONS, POPOVER_FORM_CONTENT, POPOVER_FORM_FIELDS, POPOVER_FORM_FORM, POPOVER_FORM_TITLE, Popover, PopoverContent, PopoverTrigger, Size,
+		Button, ButtonVariant, POPOVER_FORM_ACTIONS, POPOVER_FORM_CONTENT, POPOVER_FORM_FIELDS, POPOVER_FORM_FORM, POPOVER_FORM_TITLE, Popover, PopoverContent, PopoverTrigger, Size, Slot,
 		button_classes,
 		primitives::{use_controllable, use_stable_id},
 	},
@@ -57,7 +57,7 @@ pub fn PopoverForm(
 		view! {
 			<form
 				class=POPOVER_FORM_FORM
-				data-slot="popover-form"
+				data-slot=Slot::PopoverForm.as_str()
 				on:submit=move |e| {
 					e.prevent_default();
 					if let Some(h) = on_submit {
@@ -71,13 +71,13 @@ pub fn PopoverForm(
 					}
 				}
 			>
-				<h3 id=title_id.clone() class=POPOVER_FORM_TITLE data-slot="popover-form-title">
+				<h3 id=title_id.clone() class=POPOVER_FORM_TITLE data-slot=Slot::PopoverFormTitle.as_str()>
 					{title.run()}
 				</h3>
-				<div class=POPOVER_FORM_FIELDS data-slot="popover-form-fields">
+				<div class=POPOVER_FORM_FIELDS data-slot=Slot::PopoverFormFields.as_str()>
 					{children()}
 				</div>
-				<div class=POPOVER_FORM_ACTIONS data-slot="popover-form-actions">
+				<div class=POPOVER_FORM_ACTIONS data-slot=Slot::PopoverFormActions.as_str()>
 					<Button r#type="reset" variant=ButtonVariant::Ghost size=Size::Sm>
 						{reset_label}
 					</Button>

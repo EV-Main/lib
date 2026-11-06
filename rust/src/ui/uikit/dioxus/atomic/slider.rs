@@ -4,7 +4,7 @@ use crate::{
 	cn,
 	ui::uikit::{
 		core::{self as uikit, Drag, Track},
-		dioxus::{Orientation, SLIDER_RANGE, SLIDER_ROOT, SLIDER_THUMB, SLIDER_TRACK, primitives::use_controllable},
+		dioxus::{Orientation, SLIDER_RANGE, SLIDER_ROOT, SLIDER_THUMB, SLIDER_TRACK, Slot, primitives::use_controllable},
 	},
 };
 
@@ -52,7 +52,7 @@ pub fn Slider(
 	rsx! {
 		span {
 			class: cn!(SLIDER_ROOT, class),
-			"data-slot": "slider",
+			"data-slot": Slot::Slider.as_str(),
 			"data-orientation": ori,
 			"data-disabled": disabled.then_some(true),
 			onpointerdown: move |e: PointerEvent| async move {
@@ -91,19 +91,19 @@ pub fn Slider(
 			onpointercancel: move |_| drag.write().release(),
 			span {
 				class: SLIDER_TRACK,
-				"data-slot": "slider-track",
+				"data-slot": Slot::SliderTrack.as_str(),
 				"data-orientation": ori,
 				onmounted: move |e: MountedEvent| track.set(Some(e.data())),
 				span {
 					class: SLIDER_RANGE,
-					"data-slot": "slider-range",
+					"data-slot": Slot::SliderRange.as_str(),
 					"data-orientation": ori,
 					style: slider.range_style(current),
 				}
 			}
 			span {
 				class: SLIDER_THUMB,
-				"data-slot": "slider-thumb",
+				"data-slot": Slot::SliderThumb.as_str(),
 				"data-orientation": ori,
 				style: slider.thumb_style(current),
 				role: "slider",

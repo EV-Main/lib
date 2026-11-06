@@ -7,7 +7,7 @@ use crate::{
 	ui::uikit::{
 		core::{self as uikit, Day, NO_CLOCK_MONTH},
 		leptos::{
-			CALENDAR_CAPTION, CALENDAR_DAY_CELL, CALENDAR_DAY_EMPTY, CALENDAR_GRID, CALENDAR_NAV, CALENDAR_ROOT, CALENDAR_WEEK, CALENDAR_WEEKDAY, CALENDAR_WEEKDAY_ROW,
+			CALENDAR_CAPTION, CALENDAR_DAY_CELL, CALENDAR_DAY_EMPTY, CALENDAR_GRID, CALENDAR_NAV, CALENDAR_ROOT, CALENDAR_WEEK, CALENDAR_WEEKDAY, CALENDAR_WEEKDAY_ROW, Slot,
 			primitives::{icon_shapes, use_controllable},
 		},
 	},
@@ -76,7 +76,7 @@ pub fn Calendar(
 	let next_label = move || next_month_label.get().unwrap_or_else(|| copy::CALENDAR_NEXT_MONTH.to_owned());
 	let root = cn!(CALENDAR_ROOT, class);
 	view! {
-		<div class=root data-slot="calendar" role="application">
+		<div class=root data-slot=Slot::Calendar.as_str() role="application">
 			<div class=CALENDAR_NAV>
 				<button
 					type="button"
@@ -87,7 +87,7 @@ pub fn Calendar(
 				>
 					<Chevron icon=Icon::ChevronLeft />
 				</button>
-				<div class=CALENDAR_CAPTION data-slot="calendar-caption">
+				<div class=CALENDAR_CAPTION data-slot=Slot::CalendarCaption.as_str()>
 					{move || grid.with(uikit::Grid::caption)}
 				</div>
 				<button
@@ -144,7 +144,7 @@ fn DayCell(day: Option<Day>, on_select: Option<Callback<CalendarDate>>) -> impl 
 			<button
 				type="button"
 				class=day.class()
-				data-slot="calendar-day"
+				data-slot=Slot::CalendarDay.as_str()
 				data-selected=flag(day.selected)
 				data-today=flag(day.today)
 				// Absent rather than "false", so the unbounded grid renders as before.
