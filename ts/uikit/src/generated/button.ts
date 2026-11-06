@@ -4,7 +4,7 @@ export const BUTTON_BASE = "inline-flex h-(--control-box) items-center justify-c
 
 export const buttonVariantClasses = {
   "primary": "bg-primary text-on-primary hover:bg-primary-hover focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-  "secondary": "bg-secondary text-on-secondary hover:bg-secondary/80 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+  "secondary": "bg-secondary text-on-secondary hover:bg-[image:linear-gradient(var(--hover),var(--hover))] focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
   "outline": "border border-border bg-secondary text-ink hover:bg-[image:linear-gradient(var(--hover),var(--hover))]",
   "ghost": "hover:bg-hover hover:text-ink",
   "destructive": "border border-button-danger-border bg-button-danger-bg text-button-danger-ink hover:bg-button-danger-hover focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",

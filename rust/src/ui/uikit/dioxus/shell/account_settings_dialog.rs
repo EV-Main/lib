@@ -316,7 +316,7 @@ mod tests {
 		let content = &html[html.find("role=\"dialog\"").expect("dialog")..];
 		let content = &content[..content.find('>').expect("tag end")];
 		assert!(content.contains("p-0") && !content.contains("p-6") && !content.contains(" grid "), "{content}");
-		assert!(tab(&html, "Профиль").contains("data-[state=active]:bg-active"), "{html}");
+		assert!(tab(&html, "Профиль").contains("data-[state=active]:bg-selected"), "{html}");
 		assert!(tab(&html, "Профиль").contains("border-0") && !tab(&html, "Профиль").contains("border-b "), "{html}");
 		assert!(html.contains("class=\"font-serif text-h1 font-light text-ink\" data-slot=\"dialog-title\""), "{html}");
 	}

@@ -42,3 +42,13 @@ names four roles off them and the `full` shape:
 | `rounded-chip` | `--chip-radius` | a label pill |
 
 The `--radius-sm…2xl` steps stay in the sheet for a consumer's own markup.
+
+## State on a surface
+
+A state on a surface is the ladder, never a surface colour at an alpha:
+`bg-hover` pointed at or open, `bg-active` pressed, `bg-selected` chosen or
+current. A face with a fill of its own (a Secondary button, a tinted chip)
+takes the hover as a layer over the fill
+(`bg-[image:linear-gradient(var(--hover),var(--hover))]`), so the fill
+survives it. A state on a role's solid fill (primary, danger, an accent)
+belongs to that role.

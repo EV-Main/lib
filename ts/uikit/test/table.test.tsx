@@ -41,8 +41,8 @@ describe("Table", () => {
       </table>,
     );
     const row = container.querySelector('[data-slot="table-row"]')!;
-    expect(row).toHaveClass("hover:bg-muted/50");
-    expect(row).toHaveClass("data-[state=selected]:bg-muted");
+    expect(row).toHaveClass("hover:bg-hover");
+    expect(row).toHaveClass("data-[state=selected]:bg-selected");
   });
 
   it("footer is landing-only canon", () => {
@@ -57,7 +57,7 @@ describe("Table", () => {
     );
     const footer = container.querySelector('[data-slot="table-footer"]')!;
     expect(footer.tagName).toBe("TFOOT");
-    expect(footer).toHaveClass("bg-muted/50");
+    expect(footer).toHaveClass("bg-muted");
     expect(footer).toHaveClass("[&>tr]:last:border-b-0");
   });
 

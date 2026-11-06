@@ -133,3 +133,25 @@ fn radius_is_a_role() {
 	let offending = literals(literal, &[("rounded-tl-sm", "the navigation viewport's arrow tip, a shape and no surface")]);
 	assert!(offending.is_empty(), "a radius literal, where rounded-{{control,panel,chip,row}} belongs: {offending:#?}");
 }
+
+/// A state on a surface is the ladder: `bg-hover` pointed at or open,
+/// `bg-active` pressed, `bg-selected` chosen. A surface at an alpha, or `muted`
+/// as a hover, is a state spelled by hand.
+#[test]
+fn state_is_the_ladder() {
+	let literal = |class: &str| {
+		let fill = utility(class);
+		let surface = ["hover", "muted", "secondary", "card", "popover", "background", "active", "selected"]
+			.iter()
+			.any(|s| fill.strip_prefix("bg-").and_then(|f| f.strip_prefix(s)).is_some_and(|alpha| alpha.starts_with('/')));
+		surface || (fill == "bg-muted" && class.contains("hover:"))
+	};
+	let offending = literals(
+		literal,
+		&[(
+			"[[data-slot=tooltip-content]_&]:bg-background/20",
+			"a key cap on the inverted tooltip face: a tint of it, no state",
+		)],
+	);
+	assert!(offending.is_empty(), "a hand-spelled state fill, where bg-{{hover,active,selected}} belongs: {offending:#?}");
+}

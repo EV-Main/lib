@@ -7,8 +7,8 @@ pub const NAVIGATION_MENU_ITEM: &str = "relative";
 pub const NAVIGATION_MENU_TRIGGER_STYLE: &str = "group inline-flex h-9 w-max items-center justify-center rounded-control bg-background px-4 py-2 \
                              text-sm font-medium hover:bg-hover hover:text-ink focus:bg-hover \
                              focus:text-ink disabled:pointer-events-none disabled:opacity-50 \
-                             data-[state=open]:hover:bg-hover data-[state=open]:text-ink \
-                             data-[state=open]:focus:bg-hover data-[state=open]:bg-hover/50 focus-visible:ring-ring/50 \
+                             data-[state=open]:text-ink \
+                             data-[state=open]:bg-hover focus-visible:ring-ring/50 \
                              outline-none transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1";
 
 pub const NAVIGATION_MENU_CONTENT: &str = "data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in \
@@ -23,7 +23,7 @@ pub const NAVIGATION_MENU_CONTENT: &str = "data-[motion^=from-]:animate-in data-
                        **:data-[slot=navigation-menu-link]:focus:ring-0 \
                        **:data-[slot=navigation-menu-link]:focus:outline-none";
 
-pub const NAVIGATION_MENU_LINK: &str = "data-[active=true]:focus:bg-hover data-[active=true]:hover:bg-hover data-[active=true]:bg-hover/50 \
+pub const NAVIGATION_MENU_LINK: &str = "data-[active=true]:bg-selected \
                     data-[active=true]:text-ink hover:bg-hover hover:text-ink \
                     focus:bg-hover focus:text-ink focus-visible:ring-ring/50 \
                     [&_svg:not([class*='text-'])]:text-ink-soft flex flex-col gap-1 rounded-row p-2 text-sm \
