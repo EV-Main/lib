@@ -23,9 +23,9 @@
  *              primary-ink — the primary role as ink on a surface, where the
  *              fill and the readable value are different colours;
  *              primary-hover · primary-border — the solid button's states
- *              positive-ink · accent-info-ink · accent-warn-ink · accent-error-ink —
- *              a status role as text on a surface or on its own tint; derived
- *              from the role and the ink, a palette may pin them
+ *              positive-ink · accent-info-ink — a quiet status role as text on
+ *              a surface; derived from the role and the ink, a palette may pin
+ *              them. warn and error are text in their own colour
  *   FACES      button-primary-* · button-danger-* ({bg,hover,border,ink}) and
  *              chip-{neutral,primary,positive,info,warn,error}-{bg,border}:
  *              what a Button or Badge paints, pinned per theme by EV and
@@ -51,8 +51,7 @@
  *
  * Accents are ordered by significance, not by meaning; see docs/spec/accents.md.
  * Their values are read outside CSS (gitops mirrors them into Discord embed
- * bars), so they stay plain hex — no color-mix. `accent-error-ink` is not an
- * accent but a reading of one, so it lives with the derived tokens.
+ * bars), so they stay plain hex — no color-mix.
  */
 
 @import "./theme.css";

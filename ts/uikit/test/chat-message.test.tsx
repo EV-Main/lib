@@ -78,7 +78,7 @@ describe("ChatMarker", () => {
     expect(screen.getByText("0.4s")).toHaveClass("text-ink-soft");
     rerender(<ChatMarker type="tool" state="error" title="get_positions" meta="Failed · 1.2s" />);
     expect(container.firstChild).toHaveAttribute("data-state", "error");
-    expect(screen.getByText("Failed · 1.2s")).toHaveClass("text-accent-error-ink");
+    expect(screen.getByText("Failed · 1.2s")).toHaveClass("text-accent-error");
   });
 
   it("draws a labelled separator", () => {

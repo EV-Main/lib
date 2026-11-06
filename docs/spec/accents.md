@@ -43,27 +43,28 @@ the link and eyebrow colour on a card. Hence `primary` / `primary-ink`, the
 same hue and chroma one step apart in lightness; a role whose two values ever
 diverge names its ink the same way, `{role}-ink`.
 
-**`accent-error-ink` is the second.** The error fill reads as ink on a bare
-surface, but not on its own 10 % tint — a destructive menu row (`DropdownMenu`,
-`ContextMenu`, `Menubar`) measured 3.76:1 on EV and 2.48:1 on a dark brand
-(lib#166). So that row's text and icon wear `accent-error-ink`. Unlike
-`primary-ink` it is derived, not required: the contract mixes 70 % of
-`accent-error` with 30 % of `ink`, which moves it toward whichever polarity
-the text needs — Oldschool's lands at `#ec8379`, 4.83:1 on the tint over
-`popover` and 5.36:1 on `popover` itself — so a brand file written before it
-still renders. A palette whose mix misses the floor pins its own value, as the
-test fixture's dark side does. EV's Dark and Light pin it (`#f2736a`,
-`#b82826`): Figma's own text values measured 4.49:1 and 4.21:1 on the danger
-button's hover tint.
+**The quiet status roles follow it.** `positive-ink` and `accent-info-ink`
+are the colour for status *text* in those roles. On a light plane the fills
+are shapes only, so a label, a chip or a message in a quiet status colour
+wears the ink. They are derived — 60 % of the role toward `ink` — and EV pins
+Figma's values. In Light, `positive` itself is `#1f7f48`, one step darker than
+Figma's `#228a4e`, because neither label reached 4.5:1 on the Figma value.
 
-**The other status inks follow it.** `positive-ink`, `accent-info-ink` and
-`accent-warn-ink` are the same idea for the rest of the status roles, and they
-are the colour for status *text*. On a light plane the fills are shapes only
-(the Light status fills measure 1.89–3.81:1 as text), so a label, a chip or a message
-in a status colour wears the ink. They are derived too — 60 % of the role
-toward `ink` — and EV pins Figma's values. In Light, `positive` itself is
-`#1f7f48`, one step darker than Figma's `#228a4e`, because neither label
-reached 4.5:1 on the Figma value.
+**Attention colours have no ink.** `accent-warn` and `accent-error` exist to
+grab attention, so they are exempt from the 4.5:1 text floor: their text,
+icon and border — a form message, an invalid field, an alert, a destructive
+menu row, a danger button, a warn badge — wear the role itself, held to the
+non-text 3:1 against the surface they sit on. A lightened ink would clear AA
+by going pastel, which is what the role must not do (Oldschool's mix read
+`#ed8379` where the role is `#f05b52`). The floor is still met by every
+palette: in Light, `accent-warn` is `#a77f12`, darkened toward Figma's warn
+text from `#d8a523`, which read 1.89:1 on the page plane.
+
+**Fill intensity is not text intensity.** A fill or a tint covers an area, a
+glyph is a few pixels of stroke, so the same colour reads far quieter as text
+than as a fill. Do not match a text colour to a fill by eye or by value: a
+`bg-accent-error/10` tint behind `text-accent-error` is the intended pair, and a
+tint is never measured against the 3:1 or 4.5:1 a text colour owes.
 
 **Label polarity is deliberately split.** White on a fill marks the one call to
 action, so it belongs to `primary` alone; `destructive`, `positive` and the five
@@ -119,5 +120,5 @@ state and overlay edges, never for a control: a control edge stays `--input`.
 `rust/classes/src/{slider,progress}.rs`; every floor above is asserted in
 `ts/uikit/test/tokens.test.ts`, so a retune of one value cannot quietly move
 the other. The 3:1 the fill needs against `popover` pins `card` from above.
-The destructive row's ink is held at 4.5:1 on its tint and on `popover`, and
+The destructive row's text is held at 3:1 on its tint and on `popover`, and
 a Toggle's on-vs-off at the fill's 3:1, for every palette the test measures.

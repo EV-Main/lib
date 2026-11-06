@@ -78,7 +78,7 @@ describe("Form", () => {
     );
     const el = getByText("required");
     expect(el).toHaveAttribute("data-slot", "form-message");
-    expect(el).toHaveClass("text-accent-error-ink");
+    expect(el).toHaveClass("text-accent-error");
   });
 
   it("FormMessage renders nothing without children", () => {

@@ -138,7 +138,7 @@ mod tests {
 		assert!(root.contains("role=\"status\""), "{html}");
 		assert!(root.contains("data-tone=\"warn\""), "{html}");
 		assert!(root.contains("bg-accent-warn/10") && root.contains("border-accent-warn/40"), "{html}");
-		assert!(icon_wrapper(&html).contains("text-accent-warn-ink"), "{html}");
+		assert!(icon_wrapper(&html).contains("text-accent-warn"), "{html}");
 		let html = render(neutral);
 		let root = &html[..html.find('>').expect("root tag")];
 		assert!(root.contains("bg-card") && root.contains("border-border"), "{html}");

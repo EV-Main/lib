@@ -6,8 +6,8 @@ export const toastVariantClasses = {
   "neutral": "bg-popover text-ink border-border",
   "positive": "bg-popover text-ink border-chip-positive-border",
   "info": "bg-popover text-ink border-chip-info-border",
-  "warn": "bg-popover text-ink border-chip-warn-border",
-  "error": "bg-popover text-ink border-chip-error-border",
+  "warn": "bg-popover text-ink border-accent-warn/50",
+  "error": "bg-popover text-ink border-accent-error/50",
 } as const;
 export type ToastVariant = keyof typeof toastVariantClasses;
 

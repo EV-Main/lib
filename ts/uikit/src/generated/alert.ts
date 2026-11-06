@@ -4,7 +4,7 @@ export const ALERT_BASE = "relative w-full rounded-lg border px-4 py-3 text-sm g
 
 export const alertVariants = {
   "neutral": "bg-card text-ink border-border",
-  "destructive": "text-accent-error-ink bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid",
+  "destructive": "text-accent-error bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid",
   "success": "text-positive-ink bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid",
   "info": "text-accent-info-ink bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid",
 } as const;

@@ -9,8 +9,10 @@
 #   dark  primary-ink  (new)       #e08f5c — 6.11:1 on card (was 4.20 as copper)
 #   chart-1 … chart-6  (new)       the accents, which are already distinguishable;
 #                                  chart-6 is a violet the contract added in 1.0
-#   dark  accent-error-ink  (new)  #f4958d — the contract's mix lands at 3.83:1 on
-#                                  the destructive row's tint; this reads 5.28:1
+#   light accent-warn  #e08a3c → #c57935 — warn is text in its own colour, and
+#                                  read 2.35:1 on secondary; now 3.00:1
+#   dark  accent-error #d8362a → #e05e55 — 2.48:1 on the destructive row's tint,
+#                                  now 3.10:1; its label turns dark (white 3.56:1)
 #   primary-hover  (new)           #c97a46 on both polarities — the contract's
 #                                  darker step leaves the dark label at 4.46:1,
 #                                  so the hover lightens instead (5.49:1)
@@ -42,7 +44,7 @@ accent-debug = "#5a6b7c"
 on-accent-debug = "#ffffff"
 accent-info = "#5a6b7c"
 on-accent-info = "#ffffff"
-accent-warn = "#e08a3c"
+accent-warn = "#c57935"
 on-accent-warn = "#051726"
 accent-error = "#d8362a"
 on-accent-error = "#ffffff"
@@ -76,9 +78,8 @@ accent-info = "#a9bdd1"
 on-accent-info = "#051726"
 accent-warn = "#e08a3c"
 on-accent-warn = "#051726"
-accent-error = "#d8362a"
-on-accent-error = "#ffffff"
-accent-error-ink = "#f4958d"
+accent-error = "#e05e55"
+on-accent-error = "#051726"
 chart-1 = "#e08f5c"
 chart-2 = "#1e9e6a"
 chart-3 = "#e08a3c"

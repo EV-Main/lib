@@ -16,7 +16,7 @@ export const HEADER_BALANCE_CHEVRON = "size-4 text-ink-soft";
 
 export const headerBalanceToneClasses = {
   "default": "text-ink",
-  "warn": "text-accent-warn-ink",
+  "warn": "text-accent-warn",
 } as const;
 export type HeaderBalanceTone = keyof typeof headerBalanceToneClasses;
 

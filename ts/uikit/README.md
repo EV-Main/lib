@@ -66,7 +66,7 @@ your Tailwind v4 entrypoint — this is the load-bearing part of the kit:
 | ink | `ink` · `ink-mid` · `ink-soft` — hierarchy, loudest first; `ink-faint` — disabled only |
 | lines | `border-subtle` (row rule) · `border` (hairline, 14 %) · `border-strong` (state and overlay edges) · `input` (control edge, ≥ 3:1) · `ring` |
 | roles | `brand` `primary` `secondary` `positive` `accent-trace` `accent-debug` `accent-info` `accent-warn` `accent-error`, each with `on-*` where it gets filled; `primary-ink` — the primary role as ink on a surface; `primary-hover` · `primary-border` — the primary button's states |
-| status inks | `positive-ink` · `accent-info-ink` · `accent-warn-ink` · `accent-error-ink` — a status role as text on a surface or on its own tint (derived, a palette may pin them) |
+| status inks | `positive-ink` · `accent-info-ink` — a quiet status role as text on a surface (derived, a palette may pin them); warn and error text wears `accent-warn` · `accent-error` itself, held to 3:1 |
 | faces | `button-danger-*` (`bg` `hover` `border` `ink`) — the destructive `Button`; `chip-{neutral,primary,positive,info,warn,error}-{bg,border}` — the `Badge`; `button-primary-*` — no kit component paints it; derived for a brand, pinned per theme by EV |
 | type | `text-caption` 11/14 · `body-s` 12/16 · `body` 13/18 · `body-l` 14/20 · `h3` 14/20 · `h2` 24/30 · `h1` 32/38 · `figure-m` 20/24 · `figure-l` 28/32 (size and line height each) |
 | scalars | `radius` (panel, 6 px) · `control-radius` (4 px) · `chip-radius` (4 px) · `depth-card` `depth-elevated` `depth-overlay` · `control-py` `display-scale` `band-py` `page-max` `page-px` `shell-rail-w` `shell-tab-bar-h` · `font-*` |
@@ -783,6 +783,7 @@ a button step only — `Input` and `SelectTrigger` already clear it at `lg`.
 | `Badge variant="outline"` · `"secondary"` | `neutral` |
 | `Badge variant="destructive"` · `"success"` | `error` · `positive` (new: `primary`, `info`, `warn`) |
 | `SystemBanner` tones `warn`, `info` | the same, plus `neutral` and `primary`; `info` draws its icon in `accent-info-ink` |
+| `accent-error-ink` (`text-accent-error-ink`, a brand file's `accent-error-ink`) | `accent-error`; destructive menu rows read in it, and `evinvest-palette` refuses the key |
 | `Terminal`, `TerminalPane*`, `TerminalChart`, `TerminalTicker`, `TickerStat`, `OrderBook*`, `TradesTapeRow`, `OrderForm*`, `OpenOrdersEmpty` and their types | removed from the TS kit (the Rust terminal stays) |
 
 **Silent changes: the compiler does not flag these.**

@@ -59,16 +59,14 @@ export const COLOR_GROUPS: readonly ColorGroup[] = [
   {
     id: "status",
     title: "Status",
-    note: "Each tone has a fill, a label colour for that fill, and an ink for text on a surface.",
+    note: "Positive and info have a fill and an ink for text on a surface. Warn and error are one colour for both: they exist to grab attention, so their text is held to the 3:1 floor.",
     tokens: [
       info("positive"),
       text("positive-ink"),
       info("accent-info"),
       text("accent-info-ink"),
-      info("accent-warn"),
-      text("accent-warn-ink"),
-      info("accent-error"),
-      text("accent-error-ink"),
+      ui("accent-warn"),
+      ui("accent-error"),
     ],
   },
   {

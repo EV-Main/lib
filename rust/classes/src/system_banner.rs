@@ -33,7 +33,7 @@ pub enum SystemBannerTone {
 	#[tw(default, class = "text-accent-info-ink")]
 	Info,
 	/// A platform state: maintenance, read-only.
-	#[tw(class = "text-accent-warn-ink")]
+	#[tw(class = "text-accent-warn")]
 	Warn,
 }
 
@@ -42,6 +42,6 @@ pub fn system_banner_tone_class(tone: &SystemBannerTone) -> &'static str {
 	match tone {
 		SystemBannerTone::Neutral | SystemBannerTone::Info => "border-border bg-card text-ink",
 		SystemBannerTone::Primary => "border-primary-ink/40 bg-primary-ink/10 text-primary-ink",
-		SystemBannerTone::Warn => "border-accent-warn/40 bg-accent-warn/10 text-accent-warn-ink",
+		SystemBannerTone::Warn => "border-accent-warn/40 bg-accent-warn/10 text-accent-warn",
 	}
 }

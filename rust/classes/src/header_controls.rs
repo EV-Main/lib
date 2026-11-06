@@ -62,6 +62,6 @@ pub const HEADER_SEARCH_PLACEHOLDER: &str = "min-w-0 flex-1 truncate";
 pub enum HeaderBalanceTone {
 	#[tw(default, class = "text-ink")]
 	Default,
-	#[tw(class = "text-accent-warn-ink")]
+	#[tw(class = "text-accent-warn")]
 	Warn,
 }

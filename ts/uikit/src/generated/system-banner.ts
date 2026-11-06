@@ -20,7 +20,7 @@ export const systemBannerIconToneClasses = {
   "neutral": "text-ink-soft",
   "primary": "text-primary-ink",
   "info": "text-accent-info-ink",
-  "warn": "text-accent-warn-ink",
+  "warn": "text-accent-warn",
 } as const;
 export type SystemBannerTone = keyof typeof systemBannerIconToneClasses;
 
@@ -28,6 +28,6 @@ export const systemBannerToneClasses = {
   "neutral": "border-border bg-card text-ink",
   "primary": "border-primary-ink/40 bg-primary-ink/10 text-primary-ink",
   "info": "border-border bg-card text-ink",
-  "warn": "border-accent-warn/40 bg-accent-warn/10 text-accent-warn-ink",
+  "warn": "border-accent-warn/40 bg-accent-warn/10 text-accent-warn",
 } as const;
 export type SystemBannerFill = keyof typeof systemBannerToneClasses;

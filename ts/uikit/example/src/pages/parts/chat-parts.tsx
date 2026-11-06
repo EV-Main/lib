@@ -82,7 +82,7 @@ export function ExposureTable() {
             <TableRow key={r.name} className="hover:bg-transparent">
               <TableCell className="text-body-s">{r.name}</TableCell>
               <TableCell align="end" className="text-body-s">{r.size}</TableCell>
-              <TableCell align="end" className={`text-body-s ${r.over ? "text-accent-error-ink" : ""}`}>{r.exposure}</TableCell>
+              <TableCell align="end" className={`text-body-s ${r.over ? "text-accent-error" : ""}`}>{r.exposure}</TableCell>
               <TableCell align="end" className="text-body-s">25%</TableCell>
             </TableRow>
           ))}

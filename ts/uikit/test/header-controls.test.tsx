@@ -23,7 +23,7 @@ describe("HeaderBalance", () => {
 
   it("colours the figure for the warn tone", () => {
     render(<HeaderBalance value="$0.00" tone="warn" />);
-    expect(screen.getByText("$0.00")).toHaveClass("text-accent-warn-ink");
+    expect(screen.getByText("$0.00")).toHaveClass("text-accent-warn");
   });
 
   it("formats a numeric amount as USD by default and speaks it once", () => {
@@ -33,7 +33,7 @@ describe("HeaderBalance", () => {
 
   it("keeps the figure's colour class on the animated amount", () => {
     const { container } = render(<HeaderBalance amount={3} tone="warn" />);
-    expect(container.querySelector(".text-accent-warn-ink")).toContainElement(
+    expect(container.querySelector(".text-accent-warn")).toContainElement(
       container.querySelector('[data-slot="animated-number"]'),
     );
   });

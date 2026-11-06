@@ -15,8 +15,8 @@ describe("Badge", () => {
     ["primary", "text-primary-ink"],
     ["positive", "text-positive-ink"],
     ["info", "text-accent-info-ink"],
-    ["warn", "text-accent-warn-ink"],
-    ["error", "text-accent-error-ink"],
+    ["warn", "text-accent-warn"],
+    ["error", "text-accent-error"],
   ] as const)("renders the %s tone on its chip tokens (canon parity with Rust)", (variant, ink) => {
     const { getByText } = render(<Badge variant={variant}>ok</Badge>);
     expect(getByText("ok")).toHaveClass(`bg-chip-${variant}-bg`, `border-chip-${variant}-border`, ink, "text-caption");

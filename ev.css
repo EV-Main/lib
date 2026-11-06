@@ -85,12 +85,8 @@
   --accent-info-ink: #6ca6e4;
   --accent-warn: #f5c84e;
   --on-accent-warn: #0d0d0f;
-  --accent-warn-ink: #f5c84e;
   --accent-error: #f05b52;
   --on-accent-error: #0d0d0f;
-  /* Figma's #f06c61 is 4.49:1 on the danger button's hover over the popover;
-   * one step lighter clears AA there */
-  --accent-error-ink: #f2736a;
 
   --chart-1: #35a395;
   --chart-2: #4990d8;
@@ -106,9 +102,9 @@
   --button-danger-bg: #f05b5200;
   --button-danger-hover: #f05b521a;
   --button-danger-border: #f05b52;
-  --button-danger-ink: var(--accent-error-ink);
+  --button-danger-ink: var(--accent-error);
 
-  /* chips are outlines: a transparent fill and the ink's hue at 50 % */
+  /* chips are outlines: a transparent fill and the label's hue at 50 % */
   --chip-neutral-bg: var(--hover);
   --chip-neutral-border: var(--border);
   --chip-primary-bg: #35a39500;
@@ -120,7 +116,7 @@
   --chip-warn-bg: #f5c84e00;
   --chip-warn-border: #f5c84e80;
   --chip-error-bg: #f05b5200;
-  --chip-error-border: #f06c6180;
+  --chip-error-border: #f05b5280;
 }
 
 /* ── u2 Light ────────────────────────────────────────────────── */
@@ -167,13 +163,13 @@
   --accent-info: #2d79c2;
   --on-accent-info: #ffffff;
   --accent-info-ink: #25639f;
-  --accent-warn: #d8a523;
+  /* Figma's #d8a523 is 1.89:1 on the page plane; warn is text in its own
+   * colour, so it is darkened toward Figma's warn text #846305 until it clears
+   * the non-text 3:1 (3.10:1) */
+  --accent-warn: #a77f12;
   --on-accent-warn: #0d0d0f;
-  --accent-warn-ink: #846305;
   --accent-error: #db3834;
   --on-accent-error: #ffffff;
-  /* Figma's #c52c2a is 4.21:1 on the danger button's hover over the page plane */
-  --accent-error-ink: #b82826;
 
   --chart-1: #116f65;
   --chart-2: #2d79c2;
@@ -189,7 +185,7 @@
   --button-danger-bg: #db383400;
   --button-danger-hover: #db383414;
   --button-danger-border: #db3834;
-  --button-danger-ink: var(--accent-error-ink);
+  --button-danger-ink: var(--accent-error);
 
   /* the solid hue at 50 % (warning 60 %), where Dark uses the ink's */
   --chip-neutral-bg: var(--hover);
@@ -200,8 +196,8 @@
   --chip-positive-border: #228a4e80;
   --chip-info-bg: #2d79c200;
   --chip-info-border: #2d79c280;
-  --chip-warn-bg: #d8a52300;
-  --chip-warn-border: #d8a52399;
+  --chip-warn-bg: #a77f1200;
+  --chip-warn-border: #a77f1299;
   --chip-error-bg: #db383400;
   --chip-error-border: #db383480;
 }
@@ -260,12 +256,8 @@
   --accent-info-ink: #6ca6e4;
   --accent-warn: #f5c84e;
   --on-accent-warn: #070d18;
-  --accent-warn-ink: #f5c84e;
   --accent-error: #f05b52;
   --on-accent-error: #070d18;
-  /* Figma's #f06c61 is 4.24:1 on the error chip's tint; the derived mix is
-   * ≈#ec8379 (4.83:1) */
-  --accent-error-ink: color-mix(in srgb, var(--accent-error) 70%, var(--ink));
 
   --chart-1: #35a395;
   --chart-2: #4990d8;

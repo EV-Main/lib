@@ -161,7 +161,7 @@ fn palette() -> Vec<(&'static str, &'static str)> {
 
 fn d_hero() -> Element {
 	let nav = lorem(4);
-	let stats = [("text-primary-ink", "18.4%"), ("text-positive", "+9.1%"), ("text-accent-error-ink", "-2.7%")];
+	let stats = [("text-primary-ink", "18.4%"), ("text-positive", "+9.1%"), ("text-accent-error", "-2.7%")];
 	let chart = [
 		("bg-chart-1", "h-10"),
 		("bg-chart-2", "h-6"),
@@ -197,7 +197,7 @@ fn d_hero() -> Element {
 				div { class: "flex flex-col gap-2 rounded-lg bg-popover p-2 shadow-(--shadow-overlay)",
 					div { class: "rounded-sm px-2 py-1.5 text-sm text-ink", {lorem(2)} }
 					div { class: "rounded-sm bg-hover px-2 py-1.5 text-sm text-ink", {lorem(3)} }
-					div { class: "rounded-sm bg-accent-error/10 px-2 py-1.5 text-sm text-accent-error-ink", {lorem(1)} }
+					div { class: "rounded-sm bg-accent-error/10 px-2 py-1.5 text-sm text-accent-error", {lorem(1)} }
 					div { class: "flex items-end gap-1.5 rounded-sm bg-muted px-2 pt-2",
 						for (bg, h) in chart {
 							div { class: "w-6 rounded-t-sm {bg} {h}" }

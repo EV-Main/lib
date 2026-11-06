@@ -7,7 +7,7 @@ export const badgeVariants = {
   "primary": "border-chip-primary-border bg-chip-primary-bg text-primary-ink [a&]:hover:bg-hover",
   "positive": "border-chip-positive-border bg-chip-positive-bg text-positive-ink [a&]:hover:bg-hover",
   "info": "border-chip-info-border bg-chip-info-bg text-accent-info-ink [a&]:hover:bg-hover",
-  "warn": "border-chip-warn-border bg-chip-warn-bg text-accent-warn-ink [a&]:hover:bg-hover",
-  "error": "border-chip-error-border bg-chip-error-bg text-accent-error-ink [a&]:hover:bg-hover",
+  "warn": "border-chip-warn-border bg-chip-warn-bg text-accent-warn [a&]:hover:bg-hover",
+  "error": "border-chip-error-border bg-chip-error-bg text-accent-error [a&]:hover:bg-hover",
 } as const;
 export type BadgeVariant = keyof typeof badgeVariants;

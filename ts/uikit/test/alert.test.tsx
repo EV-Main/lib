@@ -13,7 +13,7 @@ describe("Alert", () => {
 
   it("renders the destructive variant", () => {
     const { getByRole } = render(<Alert variant="destructive">x</Alert>);
-    expect(getByRole("alert")).toHaveClass("text-accent-error-ink");
+    expect(getByRole("alert")).toHaveClass("text-accent-error");
   });
 
   it("renders the success variant", () => {

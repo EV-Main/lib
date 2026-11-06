@@ -28,8 +28,8 @@ pub enum BadgeVariant {
 	Positive,
 	#[tw(class = "border-chip-info-border bg-chip-info-bg text-accent-info-ink [a&]:hover:bg-hover")]
 	Info,
-	#[tw(class = "border-chip-warn-border bg-chip-warn-bg text-accent-warn-ink [a&]:hover:bg-hover")]
+	#[tw(class = "border-chip-warn-border bg-chip-warn-bg text-accent-warn [a&]:hover:bg-hover")]
 	Warn,
-	#[tw(class = "border-chip-error-border bg-chip-error-bg text-accent-error-ink [a&]:hover:bg-hover")]
+	#[tw(class = "border-chip-error-border bg-chip-error-bg text-accent-error [a&]:hover:bg-hover")]
 	Error,
 }

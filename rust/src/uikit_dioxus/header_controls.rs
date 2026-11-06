@@ -320,7 +320,7 @@ mod tests {
 		}
 		let html = render(app);
 		let figure = html.split("data-slot=\"header-balance-value\"").next().and_then(|b| b.rsplit("<span").next()).expect("figure");
-		assert!(figure.contains("text-accent-warn-ink") && !figure.contains("text-ink "), "{figure}");
+		assert!(figure.contains("text-accent-warn") && !figure.contains("text-ink "), "{figure}");
 	}
 
 	#[test]

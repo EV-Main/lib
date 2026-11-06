@@ -107,7 +107,7 @@ function Ledger() {
         {FILLS.map((f) => (
           <TableRow key={f.at}>
             <TableCell className="text-ink-soft">{f.at}</TableCell>
-            <TableCell className={f.side === "sell" ? "text-accent-error-ink font-medium" : "text-positive-ink font-medium"}>{f.side}</TableCell>
+            <TableCell className={f.side === "sell" ? "text-accent-error font-medium" : "text-positive-ink font-medium"}>{f.side}</TableCell>
             <TableCell align="end">{f.price}</TableCell>
             <TableCell align="end">{f.size}</TableCell>
             <TableCell align="end">{f.fee || "—"}</TableCell>

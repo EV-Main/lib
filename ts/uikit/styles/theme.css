@@ -755,10 +755,8 @@
   --color-accent-info-ink: var(--accent-info-ink);
   --color-accent-warn: var(--accent-warn);
   --color-on-accent-warn: var(--on-accent-warn);
-  --color-accent-warn-ink: var(--accent-warn-ink);
   --color-accent-error: var(--accent-error);
   --color-on-accent-error: var(--on-accent-error);
-  --color-accent-error-ink: var(--accent-error-ink);
 
   /* component faces: derived below, pinned per theme by EV, so `bg-button-primary-bg`
    * and `border-chip-error-border` are real utilities the class merge understands */
@@ -823,18 +821,12 @@
   --ring: var(--primary-ink);
   --primary-hover: color-mix(in srgb, var(--primary) 95%, black);
   --primary-border: color-mix(in srgb, var(--primary-ink) 55%, transparent);
-  /* the status roles as text on a surface: a fill is a shape, and as text it
-   * reads far below AA on a light plane (docs/spec/accents.md). 60 % of the
-   * role toward the ink is the fallback for a brand that pins nothing. */
+  /* the quiet status roles as text on a surface: a fill is a shape, and as text
+   * it reads far below AA on a light plane. warn and error have none: they are
+   * text in their own colour (docs/spec/accents.md). 60 % of the role toward
+   * the ink is the fallback for a brand that pins nothing. */
   --positive-ink: color-mix(in srgb, var(--positive) 60%, var(--ink));
   --accent-info-ink: color-mix(in srgb, var(--accent-info) 60%, var(--ink));
-  --accent-warn-ink: color-mix(in srgb, var(--accent-warn) 60%, var(--ink));
-  /* the error role as text on its own 10 % tint — a destructive menu row
-   * (lib#166). The fill alone read 3.76:1 there on EV and 2.48:1 on a dark
-   * brand; 30 % of the ink pulls it toward whichever polarity the text needs.
-   * Derived rather than required so a brand file that predates it still
-   * renders; one that misses the floor pins its own (docs/spec/accents.md). */
-  --accent-error-ink: color-mix(in srgb, var(--accent-error) 70%, var(--ink));
 }
 
 /* Component faces built from the palette. Derived like the rule above (a brand
@@ -849,13 +841,12 @@
   --button-primary-ink: var(--ink);
   --button-danger-bg: transparent;
   --button-danger-hover: color-mix(in srgb, var(--accent-error) 10%, transparent);
-  /* the ink, not the fill: a brand's error fill may sit under 3:1 on its dark
-   * planes, and an outline owes the non-text floor */
-  --button-danger-border: var(--accent-error-ink);
-  --button-danger-ink: var(--accent-error-ink);
+  --button-danger-border: var(--accent-error);
+  --button-danger-ink: var(--accent-error);
 
-  /* chips (Badge, status pills). The source is the role's ink, so the edge and
-   * the label are one hue; --chip-fill and --chip-edge are in the geometry. */
+  /* chips (Badge, status pills). The source is the colour the label wears, so
+   * the edge and the label are one hue; --chip-fill and --chip-edge are in the
+   * geometry. */
   --chip-neutral-bg: var(--hover);
   --chip-neutral-border: var(--border);
   --chip-primary-bg: color-mix(in srgb, var(--primary-ink) var(--chip-fill), transparent);
@@ -864,10 +855,10 @@
   --chip-positive-border: color-mix(in srgb, var(--positive-ink) var(--chip-edge), transparent);
   --chip-info-bg: color-mix(in srgb, var(--accent-info-ink) var(--chip-fill), transparent);
   --chip-info-border: color-mix(in srgb, var(--accent-info-ink) var(--chip-edge), transparent);
-  --chip-warn-bg: color-mix(in srgb, var(--accent-warn-ink) var(--chip-fill), transparent);
-  --chip-warn-border: color-mix(in srgb, var(--accent-warn-ink) var(--chip-edge), transparent);
-  --chip-error-bg: color-mix(in srgb, var(--accent-error-ink) var(--chip-fill), transparent);
-  --chip-error-border: color-mix(in srgb, var(--accent-error-ink) var(--chip-edge), transparent);
+  --chip-warn-bg: color-mix(in srgb, var(--accent-warn) var(--chip-fill), transparent);
+  --chip-warn-border: color-mix(in srgb, var(--accent-warn) var(--chip-edge), transparent);
+  --chip-error-bg: color-mix(in srgb, var(--accent-error) var(--chip-fill), transparent);
+  --chip-error-border: color-mix(in srgb, var(--accent-error) var(--chip-edge), transparent);
 }
 
 /* Geometry. A `[data-brand]` scope is a theme root of its own, so it restarts

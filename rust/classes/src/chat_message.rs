@@ -99,6 +99,6 @@ pub enum ChatToolState {
 	Running,
 	#[tw(default, class = "text-ink-soft")]
 	Done,
-	#[tw(class = "text-accent-error-ink")]
+	#[tw(class = "text-accent-error")]
 	Error,
 }

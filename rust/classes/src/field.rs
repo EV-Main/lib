@@ -1,6 +1,6 @@
 use tailwind_fuse::{AsTailwindClass, TwVariant};
 
-pub const FIELD_BASE: &str = "group/field flex w-full gap-3 data-[invalid=true]:text-accent-error-ink";
+pub const FIELD_BASE: &str = "group/field flex w-full gap-3 data-[invalid=true]:text-accent-error";
 
 pub const FIELD_SET: &str = "flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3";
 
@@ -29,7 +29,7 @@ pub const FIELD_SEPARATOR_LINE: &str = "absolute inset-0 top-1/2 shrink-0 bg-bor
 
 pub const FIELD_SEPARATOR_CONTENT: &str = "bg-background text-ink-soft relative mx-auto block w-fit px-2";
 
-pub const FIELD_ERROR: &str = "text-accent-error-ink text-sm font-normal";
+pub const FIELD_ERROR: &str = "text-accent-error text-sm font-normal";
 
 #[derive(PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
 #[strum(serialize_all = "kebab-case")]

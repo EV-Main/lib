@@ -12,7 +12,7 @@ pub const CONFIRM_DIALOG_TITLE: &str = "text-h3 font-medium text-ink";
 
 pub const CONFIRM_DIALOG_DESCRIPTION: &str = "text-body text-ink-mid";
 
-pub const CONFIRM_DIALOG_ERROR: &str = "text-body text-accent-error-ink";
+pub const CONFIRM_DIALOG_ERROR: &str = "text-body text-accent-error";
 
 pub const CONFIRM_DIALOG_FOOTER: &str = "flex-row justify-end gap-2";
 
@@ -29,6 +29,6 @@ pub const CONFIRM_DIALOG_SPINNER: &str = "size-3.5";
 pub enum ConfirmDialogTone {
 	#[tw(default, class = "bg-muted text-ink-mid")]
 	Default,
-	#[tw(class = "bg-chip-error-bg text-accent-error-ink")]
+	#[tw(class = "bg-chip-error-bg text-accent-error")]
 	Danger,
 }

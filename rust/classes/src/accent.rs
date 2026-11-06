@@ -20,15 +20,15 @@ pub enum Accent {
 }
 
 /// Accent text colour — on a status page it threads through the mark, the
-/// eyebrow, the code and the headline. The loud rungs wear their `-ink`: a fill
-/// as text reads under AA on a light plane (docs/spec/accents.md).
+/// eyebrow, the code and the headline. Info wears its `-ink`; warn and error
+/// are text in their own colour (docs/spec/accents.md).
 pub fn accent_text_class(accent: Accent) -> &'static str {
 	match accent {
 		Accent::Trace => "text-accent-trace",
 		Accent::Debug => "text-accent-debug",
 		Accent::Info => "text-accent-info-ink",
-		Accent::Warn => "text-accent-warn-ink",
-		Accent::Error => "text-accent-error-ink",
+		Accent::Warn => "text-accent-warn",
+		Accent::Error => "text-accent-error",
 	}
 }
 
@@ -51,8 +51,8 @@ pub fn accent_outline_class(accent: Accent) -> &'static str {
 		Accent::Trace => "border border-accent-trace/40 text-accent-trace hover:bg-accent-trace/10",
 		Accent::Debug => "border border-accent-debug/40 text-accent-debug hover:bg-accent-debug/10",
 		Accent::Info => "border border-accent-info/40 text-accent-info-ink hover:bg-accent-info/10",
-		Accent::Warn => "border border-accent-warn/40 text-accent-warn-ink hover:bg-accent-warn/10",
-		Accent::Error => "border border-accent-error/40 text-accent-error-ink hover:bg-accent-error/10",
+		Accent::Warn => "border border-accent-warn/40 text-accent-warn hover:bg-accent-warn/10",
+		Accent::Error => "border border-accent-error/40 text-accent-error hover:bg-accent-error/10",
 	}
 }
 

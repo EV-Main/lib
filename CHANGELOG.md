@@ -48,6 +48,14 @@ Rust crate and its TypeScript mirror at once.
   is `Neutral` (the default, was a filled `Primary`), `Primary`, `Positive`,
   `Info`, `Warn`, `Error`; `Secondary`, `Destructive`, `Outline` and `Success`
   are gone.
+- **`accent-error-ink` is removed** (`ev_lib` `uikit` and `@evinvest/uikit`):
+  warn and error text, icons and borders — destructive menu rows, the danger
+  button, form and field errors, alerts, badges — wear `accent-warn` and
+  `accent-error` themselves, held to 3:1 instead of AA (they exist to grab
+  attention; see `docs/spec/accents.md`). A brand file that pins
+  `accent-error-ink` is refused; drop the key, and lighten `accent-error` if it
+  misses 3:1 on its planes. Light's `accent-warn` is `#a77f12` (was Figma's
+  `#d8a523`, 1.89:1 on the page).
 ### Changed
 
 - **Connected landings: sites_panel by derived address, and `/.well-known/sa-site`**
@@ -110,8 +118,8 @@ Rust crate and its TypeScript mirror at once.
   signed-in caller without the permission).
 - **Theme tokens** (`ev_lib` `uikit` and `@evinvest/uikit`): `active`,
   `selected`, `scrim`, `border-subtle`, `border-strong`, `ink-faint`,
-  `primary-hover`, `primary-border`, the status inks `positive-ink`,
-  `accent-info-ink` and `accent-warn-ink`, `chart-6`, the button faces
+  `primary-hover`, `primary-border`, the status inks `positive-ink` and
+  `accent-info-ink`, `chart-6`, the button faces
   `button-primary-*` and `button-danger-*`, the chips `chip-{tone}-{bg,border}`,
   the type scale `text-caption` … `text-figure-l`, `--chip-radius` and the
   `--depth-*` tiers behind `shadow-card`, `shadow-elevated` and `shadow-overlay`.
@@ -192,10 +200,11 @@ Rust crate and its TypeScript mirror at once.
   `action`; `info` draws its icon in `accent-info-ink`. The `Select` trigger,
   list and `NativeSelect` classes now live in the class tables instead of the
   components.
-- **Status text uses the `-ink` tokens** (`ev_lib` `uikit` and
-  `@evinvest/uikit`): the outline accent faces, status pages, field and form
-  errors read in `accent-error-ink` and its siblings, which clear AA on a light
-  plane where the fill does not.
+- **Positive and info text use the `-ink` tokens** (`ev_lib` `uikit` and
+  `@evinvest/uikit`): the outline accent faces, status pages and chips read in
+  `positive-ink` and `accent-info-ink`, which clear AA on a light plane where
+  the fill does not. Warn and error text stays in `accent-warn` and
+  `accent-error`, as in 0.30.
 - **The `uikit` feature is now `uikit_dioxus`, and `ev_lib::uikit` is
   `ev_lib::uikit_dioxus`** (`ev_lib`, breaking → minor). The kit's behaviour
   moved into a crate-private, framework-free core that both Rust ports drive;

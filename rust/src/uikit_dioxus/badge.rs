@@ -37,8 +37,8 @@ mod tests {
 			(BadgeVariant::Primary, "primary", "text-primary-ink"),
 			(BadgeVariant::Positive, "positive", "text-positive-ink"),
 			(BadgeVariant::Info, "info", "text-accent-info-ink"),
-			(BadgeVariant::Warn, "warn", "text-accent-warn-ink"),
-			(BadgeVariant::Error, "error", "text-accent-error-ink"),
+			(BadgeVariant::Warn, "warn", "text-accent-warn"),
+			(BadgeVariant::Error, "error", "text-accent-error"),
 		] {
 			let classes = cn!(BADGE_BASE, variant.as_class());
 			assert!(classes.contains(&format!("bg-chip-{tone}-bg")), "{classes}");
@@ -52,7 +52,7 @@ mod tests {
 	#[test]
 	fn the_type_size_survives_the_tone_ink() {
 		let classes = cn!(BADGE_BASE, BadgeVariant::Error.as_class());
-		assert!(classes.contains("text-caption") && classes.contains("text-accent-error-ink"), "{classes}");
+		assert!(classes.contains("text-caption") && classes.contains("text-accent-error"), "{classes}");
 	}
 
 	#[test]

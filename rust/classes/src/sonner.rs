@@ -23,9 +23,9 @@ pub enum ToastVariant {
 	Positive,
 	#[tw(class = "bg-popover text-ink border-chip-info-border")]
 	Info,
-	#[tw(class = "bg-popover text-ink border-chip-warn-border")]
+	#[tw(class = "bg-popover text-ink border-accent-warn/50")]
 	Warn,
-	#[tw(class = "bg-popover text-ink border-chip-error-border")]
+	#[tw(class = "bg-popover text-ink border-accent-error/50")]
 	Error,
 }
 

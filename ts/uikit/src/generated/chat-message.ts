@@ -66,7 +66,7 @@ export const CHAT_MARKER_TOOL_META = "shrink-0 text-caption";
 export const chatToolMetaClasses = {
   "running": "text-primary-ink",
   "done": "text-ink-soft",
-  "error": "text-accent-error-ink",
+  "error": "text-accent-error",
 } as const;
 export type ChatToolState = keyof typeof chatToolMetaClasses;
 

@@ -32,7 +32,7 @@ describe("readContract", () => {
   });
 
   it("owes no state, line or status-ink token: the contract derives them", () => {
-    for (const name of ["active", "selected", "scrim", "ink-faint", "border-subtle", "border-strong", "primary-hover", "primary-border", "positive-ink", "accent-info-ink", "accent-warn-ink"]) {
+    for (const name of ["active", "selected", "scrim", "ink-faint", "border-subtle", "border-strong", "primary-hover", "primary-border", "positive-ink", "accent-info-ink"]) {
       expect(contract.derived).toContain(name);
       expect(contract.required).not.toContain(name);
     }
