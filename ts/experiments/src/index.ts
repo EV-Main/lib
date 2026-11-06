@@ -17,12 +17,12 @@
  * `./react`. It deliberately does **not** import `@evinvest/analytics`.
  */
 
-import { DEFAULT_COOKIE_PREFIX } from './generated/contract';
+import { DEFAULT_COOKIE_PREFIX, type ExperimentSpec } from './generated/contract';
 import { hashRng } from './hash';
 import { overrideWeights } from './overrides';
 
 /** The default cookie-name prefix, `ab_` (the Rust `cookie_name` contract). */
-export { DEFAULT_COOKIE_PREFIX } from './generated/contract';
+export { DEFAULT_COOKIE_PREFIX, type ExperimentSpec } from './generated/contract';
 
 export { fnv1a32, hashRng, hashToUnit } from './hash';
 export {
@@ -52,22 +52,6 @@ export {
  * ```
  */
 export type ExperimentConfig = Record<string, ExperimentSpec>;
-
-/**
- * One experiment of an {@link ExperimentConfig}. `variants[0]` is the control.
- *
- * - `enabled` — kill switch. `false` makes every helper return the control:
- *   {@link pickVariant} draws nothing, {@link resolveVariant} ignores a stored
- *   cookie, and a force ({@link forcedVariant}) is refused. Omitted = enabled.
- * - `holdout` — the share in `[0, 1]` of assignments pinned to the control
- *   before the split (values outside the range are clamped, `NaN` is
- *   0). Omitted = no holdout.
- */
-export type ExperimentSpec = {
-  readonly variants: readonly string[];
-  readonly enabled?: boolean;
-  readonly holdout?: number;
-};
 
 /**
  * The valid experiment keys of a config `C` — the union of its property names.

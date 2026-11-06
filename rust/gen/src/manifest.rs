@@ -287,8 +287,9 @@ fn policy() -> Vec<Ts> {
 }
 
 fn experiments() -> Vec<Ts> {
-	use ev_lib::experiments::{COOKIE_MAX_AGE_SECS, COOKIE_PREFIX, FNV_OFFSET_BASIS, FNV_PRIME};
+	use ev_lib::experiments::{COOKIE_MAX_AGE_SECS, COOKIE_PREFIX, Experiment, FNV_OFFSET_BASIS, FNV_PRIME};
 	vec![
+		Ts::types::<Experiment>(),
 		Ts::Value {
 			name: "FNV_OFFSET_BASIS",
 			value: FNV_OFFSET_BASIS.into(),

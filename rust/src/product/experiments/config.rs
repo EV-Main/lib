@@ -16,20 +16,20 @@ pub const COOKIE_MAX_AGE_SECS: u32 = 60 * 60 * 24 * 30;
 /// by hand is a guess made at the declaration point, so every variant gets the
 /// same share. Re-weighting is an operator's override, and it lives on the TS
 /// side (`applyOverrides` of `@evinvest/experiments`, fed by the panel).
-///
-/// `enabled` and `holdout` mirror the optional TS `ExperimentSpec` fields: `None`
-/// means "enabled" and "no holdout", so an experiment built without them behaves
-/// exactly as before they existed.
 #[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "ts_gen", derive(ts_rs::TS), ts(rename = "ExperimentSpec"))]
 pub struct Experiment {
 	/// Variant keys, control first. Stable: these are the dashboard contract.
+	#[cfg_attr(feature = "ts_gen", ts(type = "readonly string[]"))]
 	pub variants: Vec<String>,
-	/// Kill switch. `Some(false)` makes every helper return the control:
+	/// Kill switch. `false` makes every helper return the control:
 	/// [`pick_variant`] draws nothing and [`resolve_variant`] ignores a stored
-	/// cookie. `None` = enabled.
+	/// cookie. Unset = enabled.
+	#[cfg_attr(feature = "ts_gen", ts(optional))]
 	pub enabled: Option<bool>,
 	/// Share in `[0, 1]` of assignments pinned to the control before the equal
-	/// split; out-of-range values are clamped, `NaN` is 0. `None` = no holdout.
+	/// split; out-of-range values are clamped, `NaN` is 0. Unset = no holdout.
+	#[cfg_attr(feature = "ts_gen", ts(optional))]
 	pub holdout: Option<f64>,
 }
 
