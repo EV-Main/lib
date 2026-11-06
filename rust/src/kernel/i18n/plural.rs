@@ -48,8 +48,9 @@ impl std::fmt::Display for PluralCategory {
 }
 
 impl Locale {
-	/// Every plural category this locale can select — the mirror of
-	/// `Intl.PluralRules(locale).resolvedOptions().pluralCategories`.
+	/// Every plural category this locale can select, in CLDR order — the set
+	/// `Intl.PluralRules(locale).resolvedOptions().pluralCategories` returns, whose
+	/// order varies with the ICU version.
 	///
 	/// This is the arithmetic half of the translation policy: a Russian plural
 	/// that only carries `one`/`other` is *provably* not equivalent to an English
@@ -63,7 +64,7 @@ impl Locale {
 			Locale::Vi => &[P::Other],
 			// French: `one` covers 0 and 1; `many` is the compact-millions rule.
 			Locale::Fr => &[P::One, P::Many, P::Other],
-			Locale::Ru => &[P::Few, P::Many, P::One, P::Other],
+			Locale::Ru => &[P::One, P::Few, P::Many, P::Other],
 		}
 	}
 

@@ -41,6 +41,8 @@
 
 import { DEFAULT_LOCALE, type Locale, type LocaleRegistry, type Messages } from "../index.js";
 
+const CLDR_ORDER: readonly Intl.LDMLPluralRule[] = ["zero", "one", "two", "few", "many", "other"];
+
 /**
  * One translated entry: the text, plus the English it was translated from.
  *
@@ -276,7 +278,7 @@ function check(
       // one branch (Vietnamese) declares only `other`, so it passes on the same
       // rule rather than an exemption.
       const required = new Intl.PluralRules(locale).resolvedOptions().pluralCategories;
-      const absent = required.filter(category => !mirrored.branches.has(category));
+      const absent = CLDR_ORDER.filter(category => required.includes(category) && !mirrored.branches.has(category)); // Intl's order varies with the ICU version
       if (absent.length > 0) {
         return {
           reason: "plural-category-missing",
