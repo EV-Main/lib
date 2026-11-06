@@ -328,10 +328,7 @@ mod tests {
 		// avatar's own circle and sans initial.
 		let tile = &html[..html.find("data-slot=\"avatar\"").expect("avatar")];
 		let tile = &tile[tile.rfind("class=").expect("class")..];
-		assert!(
-			tile.contains("size-14") && tile.contains("rounded-(--control-radius)") && !tile.contains("rounded-full"),
-			"{tile}"
-		);
+		assert!(tile.contains("size-14") && tile.contains("rounded-control") && !tile.contains("rounded-full"), "{tile}");
 		assert!(html.contains("font-serif text-h2 font-light text-ink\" data-slot=\"avatar-fallback\""), "{html}");
 	}
 

@@ -17,8 +17,8 @@ export const DRAWER_TITLE = "text-ink font-semibold";
 export const DRAWER_DESCRIPTION = "text-ink-soft text-sm";
 
 export const drawerDirectionClasses = {
-  "bottom": "inset-x-0 bottom-0 mt-24 max-h-[80vh] flex-col rounded-t-lg border-b-0",
-  "top": "inset-x-0 top-0 mb-24 max-h-[80vh] flex-col rounded-b-lg border-t-0",
+  "bottom": "inset-x-0 bottom-0 mt-24 max-h-[80vh] flex-col rounded-t-panel border-b-0",
+  "top": "inset-x-0 top-0 mb-24 max-h-[80vh] flex-col rounded-b-panel border-t-0",
   "left": "inset-y-0 left-0 w-3/4 flex-row border-r sm:max-w-sm",
   "right": "inset-y-0 right-0 w-3/4 flex-row border-l sm:max-w-sm",
 } as const;

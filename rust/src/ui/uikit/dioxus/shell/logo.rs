@@ -60,7 +60,7 @@ mod tests {
 	fn with_background_seats_the_mark_on_the_brand_field() {
 		fn app() -> Element {
 			rsx! {
-				Logo { class: "w-16 h-16 rounded-md", with_background: true }
+				Logo { class: "w-16 h-16 rounded-panel", with_background: true }
 			}
 		}
 		let html = render(app);

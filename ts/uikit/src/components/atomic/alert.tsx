@@ -4,22 +4,19 @@ import {
   ALERT_BASE,
   ALERT_DESCRIPTION,
   ALERT_TITLE,
-  alertVariants,
-  type AlertVariant,
 } from "../../generated/alert";
-
-export type { AlertVariant };
+import { toneClasses, type Tone } from "../../generated/tone";
 
 export interface AlertProps extends React.ComponentProps<"div"> {
-  variant?: AlertVariant;
+  tone?: Tone;
 }
 
-export function Alert({ className, variant = "neutral", ...props }: AlertProps) {
+export function Alert({ className, tone = "neutral", ...props }: AlertProps) {
   return (
     <div
       data-slot="alert"
       role="alert"
-      className={cn(ALERT_BASE, alertVariants[variant], className)}
+      className={cn(ALERT_BASE, toneClasses[tone], className)}
       {...props}
     />
   );

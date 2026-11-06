@@ -1,25 +1,20 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
 import { Badge } from "../src/components/atomic/badge";
+import { toneClasses } from "../src/generated/tone";
 
 describe("Badge", () => {
-  it("renders the default variant", () => {
+  it("renders the neutral tone by default", () => {
     const { getByText } = render(<Badge>hi</Badge>);
     const el = getByText("hi");
     expect(el.tagName).toBe("SPAN");
-    expect(el).toHaveClass("bg-chip-neutral-bg", "text-ink-mid", "h-5");
+    expect(el).toHaveClass(toneClasses.neutral, "h-5");
     expect(el).toHaveAttribute("data-slot", "badge");
   });
 
-  it.each([
-    ["primary", "text-primary-ink"],
-    ["positive", "text-positive-ink"],
-    ["info", "text-accent-info-ink"],
-    ["warn", "text-accent-warn"],
-    ["error", "text-accent-error"],
-  ] as const)("renders the %s tone on its chip tokens (canon parity with Rust)", (variant, ink) => {
-    const { getByText } = render(<Badge variant={variant}>ok</Badge>);
-    expect(getByText("ok")).toHaveClass(`bg-chip-${variant}-bg`, `border-chip-${variant}-border`, ink, "text-caption");
+  it.each(["primary", "positive", "info", "warn", "error"] as const)("fuses the %s tone onto the chip", (tone) => {
+    const { getByText } = render(<Badge tone={tone}>ok</Badge>);
+    expect(getByText("ok")).toHaveClass(toneClasses[tone], "text-caption");
   });
 
   it("lets className override the base", () => {
@@ -37,6 +32,6 @@ describe("Badge", () => {
     );
     const el = getByRole("link");
     expect(el.tagName).toBe("A");
-    expect(el).toHaveClass("bg-chip-neutral-bg");
+    expect(el).toHaveClass(toneClasses.neutral);
   });
 });

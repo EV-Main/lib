@@ -1,6 +1,6 @@
 pub const ACCOUNT_LIST_BASE: &str = "flex flex-col gap-2";
 
-pub const ACCOUNT_LIST_ITEM_BASE: &str = "flex items-center gap-3 rounded-(--control-radius) border p-2.5 pr-3 transition-colors";
+pub const ACCOUNT_LIST_ITEM_BASE: &str = "flex items-center gap-3 rounded-panel border p-2.5 pr-3 transition-colors";
 
 pub const ACCOUNT_LIST_ITEM_CHECKED: &str = "border-primary-border bg-selected";
 
@@ -10,9 +10,9 @@ pub const ACCOUNT_LIST_ITEM_DISABLED: &str = "opacity-40";
 
 /// `min-w-0` lets a long name truncate instead of pushing the actions out of
 /// the row.
-pub const ACCOUNT_LIST_ITEM_RADIO: &str = "flex min-w-0 flex-1 items-center gap-3 rounded-(--control-radius) text-left outline-none focus-visible:ring-2 focus-visible:ring-ring";
+pub const ACCOUNT_LIST_ITEM_RADIO: &str = "flex min-w-0 flex-1 items-center gap-3 rounded-panel text-left outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
-pub const ACCOUNT_LIST_ITEM_AVATAR: &str = "size-14 shrink-0 rounded-(--control-radius)";
+pub const ACCOUNT_LIST_ITEM_AVATAR: &str = "size-14 shrink-0 rounded-control";
 
 pub const ACCOUNT_LIST_ITEM_AVATAR_FALLBACK: &str = "font-serif text-h2 font-light text-ink";
 

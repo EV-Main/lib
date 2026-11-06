@@ -26,7 +26,7 @@ export interface MobileAppBarProps extends Omit<React.ComponentProps<"header">, 
 
 // A bare glyph has no border of its own, so it needs a rounded box for the ring to trace.
 const BACK =
-  "-ml-1 flex size-6 shrink-0 items-center justify-center rounded-md text-ink outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  "-ml-1 flex size-6 shrink-0 items-center justify-center rounded-control text-ink outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
 const HIDE_FROM = { md: "md:hidden", lg: "lg:hidden" } as const;
 
@@ -54,7 +54,7 @@ export function MobileAppBar({
       data-slot="mobile-app-bar"
       data-enter="rise"
       className={cn(
-        "sticky top-[var(--ev-shell-offset,0px)] z-30 flex items-center gap-2 border-b border-border bg-secondary px-4 pb-3.5 pt-4",
+        "sticky top-[var(--ev-shell-offset,0px)] z-30 flex items-center gap-2 border-b border-border bg-card px-4 pb-3.5 pt-4",
         hideFrom && HIDE_FROM[hideFrom],
         className,
       )}

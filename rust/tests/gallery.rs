@@ -1,6 +1,6 @@
 //! Visual regression of the uikit: every primitive (all variants), the
 //! combined board and the colorscheme page, rendered via dioxus-ssr, captured by
-//! Playwright and compared byte for byte against `tests/visual/__screenshots__/`.
+//! Playwright in each theme and compared byte for byte against `tests/visual/__screenshots__/`.
 //! `UPDATE_EXPECT=1` accepts the current render instead. See tests/visual/README.md.
 #![cfg(feature = "uikit_dioxus")]
 
@@ -17,6 +17,9 @@ fn matches_baselines() {
 	let shots = format!("{VISUAL}/__screenshots__");
 	let captured = pngs(&capture());
 	assert!(!captured.is_empty(), "playwright captured nothing");
+	if std::env::var_os("EV_CAPTURE_ONLY").is_some() {
+		return; // for `nix run .#visual-review -- --fresh`
+	}
 
 	if std::env::var_os("UPDATE_EXPECT").is_some() {
 		// cleared, not merged into: a page dropped from the manifest must not leave its baseline behind

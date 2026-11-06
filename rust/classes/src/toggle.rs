@@ -8,10 +8,10 @@ use crate::{Size, focus::filled_focus_ring};
 /// pointed-at one. A fill, it wears the offset ring rather than the halo — see
 /// [`FILLED_FOCUS_RING`](crate::FILLED_FOCUS_RING).
 pub const TOGGLE_BASE: &str = concat!(
-	"inline-flex items-center justify-center gap-2 rounded-[var(--control-radius)] text-sm font-medium \
-	 hover:bg-muted hover:text-ink-soft disabled:pointer-events-none disabled:opacity-50 \
+	"inline-flex h-(--control-box) min-w-(--control-box) items-center justify-center gap-2 rounded-control font-medium \
+	 hover:bg-hover hover:text-ink disabled:pointer-events-none disabled:opacity-50 \
 	 data-[state=on]:bg-primary data-[state=on]:text-on-primary [&_svg]:pointer-events-none \
-	 [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 focus-visible:border-ring outline-none \
+	 [&_svg:not([class*='size-'])]:size-[calc(1em+2px)] [&_svg]:shrink-0 focus-visible:border-ring outline-none \
 	 transition-[color,box-shadow] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error \
 	 whitespace-nowrap ",
 	filled_focus_ring!()
@@ -26,15 +26,14 @@ pub enum ToggleVariant {
 	Outline,
 }
 
-/// Per-size height + min-width + horizontal padding. Mirrors the TS `toggleSizeClasses` table.
+/// Per-size padding; the height and min-width are the [`Size`]'s `--control-box`.
+/// Mirrors the TS `toggleSizeClasses` table.
 pub fn toggle_size_class(size: Size) -> &'static str {
 	match size {
-		Size::Xs => "h-7 px-1 min-w-7",
-		Size::Sm => "h-8 px-1.5 min-w-8",
-		Size::Md => "h-9 px-2 min-w-9",
-		Size::Lg => "h-10 px-2.5 min-w-10",
-		// `Xl` already clears the 44 px floor, and a step with no TS key would
-		// ship classes missing from the inventory
-		Size::Touch | Size::Xl => "h-12 px-3 min-w-12",
+		Size::Xs => "px-1",
+		Size::Sm => "px-1.5",
+		Size::Md => "px-2",
+		Size::Lg => "px-2.5",
+		Size::Xl | Size::Touch => "px-3",
 	}
 }

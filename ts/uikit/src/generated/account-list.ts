@@ -2,7 +2,7 @@
 
 export const ACCOUNT_LIST_BASE = "flex flex-col gap-2";
 
-export const ACCOUNT_LIST_ITEM_BASE = "flex items-center gap-3 rounded-(--control-radius) border p-2.5 pr-3 transition-colors";
+export const ACCOUNT_LIST_ITEM_BASE = "flex items-center gap-3 rounded-panel border p-2.5 pr-3 transition-colors";
 
 export const ACCOUNT_LIST_ITEM_CHECKED = "border-primary-border bg-selected";
 
@@ -10,9 +10,9 @@ export const ACCOUNT_LIST_ITEM_UNCHECKED = "border-border-subtle bg-muted hover:
 
 export const ACCOUNT_LIST_ITEM_DISABLED = "opacity-40";
 
-export const ACCOUNT_LIST_ITEM_RADIO = "flex min-w-0 flex-1 items-center gap-3 rounded-(--control-radius) text-left outline-none focus-visible:ring-2 focus-visible:ring-ring";
+export const ACCOUNT_LIST_ITEM_RADIO = "flex min-w-0 flex-1 items-center gap-3 rounded-panel text-left outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
-export const ACCOUNT_LIST_ITEM_AVATAR = "size-14 shrink-0 rounded-(--control-radius)";
+export const ACCOUNT_LIST_ITEM_AVATAR = "size-14 shrink-0 rounded-control";
 
 export const ACCOUNT_LIST_ITEM_AVATAR_FALLBACK = "font-serif text-h2 font-light text-ink";
 

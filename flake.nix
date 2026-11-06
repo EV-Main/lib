@@ -220,8 +220,20 @@
               wait $server
             '';
           };
+
+          # `nix run .#visual-review -- [<git-ref>] [--themes a,b] [--fresh]`; see rust/tests/visual/README.md.
+          visual-review = pkgs.writeShellApplication {
+            name = "visual-review";
+            runtimeInputs = [ pkgs.git pkgs.imagemagick pkgs.python3 ];
+            text = ''exec python3 -I "$(git rev-parse --show-toplevel)/scripts/visual-review.py" "$@"'';
+          };
         in
         {
+          apps.visual-review = {
+            type = "app";
+            program = "${visual-review}/bin/visual-review";
+          };
+
           apps.help = {
             type = "app";
             program = "${pkgs.writeShellScriptBin "help" ''
@@ -234,6 +246,7 @@
                 nix run .#publish -- <major|minor|patch> cargo-release + npm publish of impacted ts packages
                 nix run .#visual                         serve the kit gallery: live board, colorscheme, every page the visual test captures
                 cargo test --test gallery --features uikit_dioxus   visual regression of the kit gallery (UPDATE_EXPECT=1 accepts)
+                nix run .#visual-review -- [<git-ref>]   diff | old | new of every component whose baseline moved since <git-ref> (default origin/main), in tmp/visual-review.html
 
               Docs: README.md, docs/
               EOF

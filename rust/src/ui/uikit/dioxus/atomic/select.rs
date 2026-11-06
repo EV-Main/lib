@@ -494,7 +494,7 @@ mod tests {
 		assert!(html.contains("h-12"), "{html}");
 		assert!(html.contains("text-base"), "{html}");
 		assert!(!html.contains("text-sm"), "lg replaces the md type: {html}");
-		assert!(html.contains("rounded-[var(--control-radius)]"), "{html}");
+		assert!(html.contains("rounded-control"), "{html}");
 	}
 
 	/// The value the trigger shows, i.e. what the keys chose.

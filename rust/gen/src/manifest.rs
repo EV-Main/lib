@@ -10,6 +10,8 @@ use tailwind_fuse::AsTailwindClass;
 /// Per uikit module, merged after its consts. A module named here need not have a classes file.
 pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 	vec![
+		("size", vec![table::<Size>("sizeClasses", "Size")]),
+		("tone", vec![table::<Tone>("toneClasses", "Tone")]),
 		("icons", vec![union::<Icon>("ICON_NAMES", "IconName"), icons()]),
 		("footer", vec![Ts::types::<(FooterLinkGroup, FooterLink, FooterOffice)>()]),
 		("popover-form", vec![labels::<PopoverFormLabels>("POPOVER_FORM_LABELS")]),
@@ -27,7 +29,6 @@ pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 				accent_table("accentOutlineClasses", "AccentOutline", accent_outline_class),
 			],
 		),
-		("alert", vec![table::<AlertVariant>("alertVariants", "AlertVariant")]),
 		(
 			"aside",
 			vec![
@@ -36,17 +37,14 @@ pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 				union::<AsidePanelMode>("ASIDE_PANEL_MODES", "AsidePanelMode"),
 			],
 		),
-		("badge", vec![table::<BadgeVariant>("badgeVariants", "BadgeVariant")]),
 		("band", vec![table::<Polarity>("polarityClasses", "Polarity"), table::<Surface>("surfaceClasses", "Surface")]),
 		(
 			"button",
 			vec![
 				table::<ButtonVariant>("buttonVariantClasses", "ButtonVariant"),
-				// Size and shape are two axes, so they are two tables over the same keys —
-				// not one table whose keys fuse them (`"icon-sm"`) and elide the default
-				// (`"icon"` meaning icon-at-Md). See docs/spec/variants.md.
-				size_table("buttonSizeClasses", "ButtonSize", |s| button_size_class(s, false)),
-				size_table("buttonIconSizeClasses", "ButtonIconSize", |s| button_size_class(s, true)),
+				// Size and shape are two axes: the square is one class over every step, not
+				// a key fused into the size table (`"icon-sm"`). See docs/spec/variants.md.
+				size_table("buttonSizeClasses", "ButtonSize", button_size_class),
 			],
 		),
 		("button-group", vec![table::<ButtonGroupOrientation>("buttonGroupOrientationClasses", "ButtonGroupOrientation")]),
@@ -61,13 +59,7 @@ pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 				union::<ChatAttachmentState>("CHAT_ATTACHMENT_STATES", "ChatAttachmentState"),
 			],
 		),
-		(
-			"confirm-dialog",
-			vec![
-				labels::<ConfirmDialogLabels>("CONFIRM_DIALOG_LABELS"),
-				table::<ConfirmDialogTone>("confirmDialogIconToneClasses", "ConfirmDialogTone"),
-			],
-		),
+		("confirm-dialog", vec![labels::<ConfirmDialogLabels>("CONFIRM_DIALOG_LABELS")]),
 		("drawer", vec![table::<DrawerDirection>("drawerDirectionClasses", "DrawerDirection")]),
 		("empty", vec![table::<EmptyMediaVariant>("emptyMediaVariants", "EmptyMediaVariant")]),
 		(
@@ -77,7 +69,6 @@ pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 				union::<FieldLegendVariant>("FIELD_LEGEND_VARIANTS", "FieldLegendVariant"),
 			],
 		),
-		("header-controls", vec![table::<HeaderBalanceTone>("headerBalanceToneClasses", "HeaderBalanceTone")]),
 		(
 			"icon-button",
 			vec![
@@ -144,7 +135,6 @@ pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 				entries: Orientation::iter().map(|o| (o.as_ref().to_string(), separator_orientation_class(o).to_string())).collect(),
 			}],
 		),
-		("settings", vec![table::<SettingsSectionTone>("settingsSectionToneClasses", "SettingsSectionTone")]),
 		(
 			"sidebar",
 			vec![
@@ -162,26 +152,9 @@ pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 			],
 		),
 		("smart-header", vec![union::<SmartHeaderState>("SMART_HEADER_STATES", "SmartHeaderState")]),
-		(
-			"sonner",
-			vec![
-				table::<ToastVariant>("toastVariantClasses", "ToastVariant"),
-				table::<ToastPosition>("positionClasses", "ToastPosition"),
-			],
-		),
+		("sonner", vec![table::<ToastPosition>("positionClasses", "ToastPosition")]),
 		("status-item", vec![table::<StatusTone>("statusDotClasses", "StatusTone")]),
-		(
-			"system-banner",
-			vec![
-				labels::<SystemBannerLabels>("SYSTEM_BANNER_LABELS"),
-				table::<SystemBannerTone>("systemBannerIconToneClasses", "SystemBannerTone"),
-				Ts::Table {
-					name: "systemBannerToneClasses",
-					ty: "SystemBannerFill",
-					entries: SystemBannerTone::iter().map(|t| (t.as_ref().to_string(), system_banner_tone_class(&t).to_string())).collect(),
-				},
-			],
-		),
+		("system-banner", vec![labels::<SystemBannerLabels>("SYSTEM_BANNER_LABELS")]),
 		(
 			"table",
 			vec![
@@ -196,14 +169,7 @@ pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 			"toggle",
 			vec![
 				table::<ToggleVariant>("toggleVariantClasses", "ToggleVariant"),
-				Ts::Table {
-					name: "toggleSizeClasses",
-					ty: "ToggleSize",
-					entries: [(Size::Md, "md"), (Size::Xs, "xs"), (Size::Sm, "sm"), (Size::Lg, "lg"), (Size::Xl, "xl")]
-						.into_iter()
-						.map(|(s, k)| (k.to_string(), toggle_size_class(s).to_string()))
-						.collect(),
-				},
+				size_table("toggleSizeClasses", "ToggleSize", toggle_size_class),
 			],
 		),
 	]

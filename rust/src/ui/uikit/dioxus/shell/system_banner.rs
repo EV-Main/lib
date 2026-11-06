@@ -6,9 +6,8 @@ use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		SYSTEM_BANNER_ACTION, SYSTEM_BANNER_BASE, SYSTEM_BANNER_BODY_AFTER_TITLE, SYSTEM_BANNER_DISMISS, SYSTEM_BANNER_GLYPH, SYSTEM_BANNER_ICON, SYSTEM_BANNER_MESSAGE, SYSTEM_BANNER_TITLE,
-		SystemBannerTone,
+		Tone,
 		primitives::{has_content, icon_shapes},
-		system_banner_tone_class,
 	},
 };
 
@@ -21,7 +20,7 @@ use crate::{
 /// "unset" from "null" without a nested `Option`.
 #[component]
 pub fn SystemBanner(
-	#[props(default)] tone: SystemBannerTone,
+	#[props(default)] tone: Tone,
 	/// A bold lead before the message.
 	title: Option<Element>,
 	icon: Option<Element>,
@@ -33,20 +32,19 @@ pub fn SystemBanner(
 	#[props(default)] class: String,
 	children: Element,
 ) -> Element {
-	let cls = cn!(SYSTEM_BANNER_BASE, system_banner_tone_class(&tone), class);
+	let cls = cn!(SYSTEM_BANNER_BASE, tone.as_class(), class);
 	let glyph = match icon {
 		Some(icon) => icon,
-		None if tone == SystemBannerTone::Warn => rsx! { TriangleAlertIcon {} },
+		None if tone == Tone::Warn => rsx! { TriangleAlertIcon {} },
 		None => rsx! { InfoIcon {} },
 	};
-	let icon_cls = cn!(SYSTEM_BANNER_ICON, tone.as_class());
 	let has_message = has_content(&children);
 	let body_cls = title.as_ref().map(|_| SYSTEM_BANNER_BODY_AFTER_TITLE);
 	let dismiss_label = labels.dismiss;
 	rsx! {
 		div { class: cls, "data-slot": "system-banner", "data-tone": tone.as_ref(), role: "status",
 			if has_content(&glyph) {
-				span { class: icon_cls, {glyph} }
+				span { class: SYSTEM_BANNER_ICON, {glyph} }
 			}
 			div { class: SYSTEM_BANNER_MESSAGE,
 				if let Some(title) = title {
@@ -110,6 +108,8 @@ fn CloseIcon() -> Element {
 
 #[cfg(test)]
 mod tests {
+	use tailwind_fuse::AsTailwindClass;
+
 	use super::*;
 	use crate::ui::uikit::dioxus::test_util::{render, render_after_click};
 
@@ -122,41 +122,18 @@ mod tests {
 	}
 
 	#[test]
-	fn the_tone_fills_the_strip_and_inks_the_icon() {
+	fn the_strip_wears_the_tone_and_the_icon_inherits_it() {
 		fn warn() -> Element {
 			rsx! {
-				SystemBanner { tone: SystemBannerTone::Warn, icon: rsx! { svg { "data-testid": "glyph" } }, "Работы сегодня ночью" }
+				SystemBanner { tone: Tone::Warn, icon: rsx! { svg { "data-testid": "glyph" } }, "Работы сегодня ночью" }
 			}
-		}
-		fn neutral() -> Element {
-			rsx! { SystemBanner { tone: SystemBannerTone::Neutral, "Hello" } }
 		}
 		let html = render(warn);
 		let root = &html[..html.find('>').expect("root tag")];
 		assert!(root.contains("role=\"status\""), "{html}");
 		assert!(root.contains("data-tone=\"warn\""), "{html}");
-		assert!(root.contains("bg-accent-warn/10") && root.contains("border-accent-warn/40"), "{html}");
-		assert!(icon_wrapper(&html).contains("text-accent-warn"), "{html}");
-		let html = render(neutral);
-		let root = &html[..html.find('>').expect("root tag")];
-		assert!(root.contains("bg-card") && root.contains("border-border"), "{html}");
-	}
-
-	#[test]
-	fn tints_the_icon_per_tone() {
-		fn neutral() -> Element {
-			rsx! { SystemBanner { tone: SystemBannerTone::Neutral, icon: rsx! { svg { "data-testid": "glyph" } }, "Hello" } }
-		}
-		fn primary() -> Element {
-			rsx! { SystemBanner { tone: SystemBannerTone::Primary, icon: rsx! { svg { "data-testid": "glyph" } }, "Hello" } }
-		}
-		fn info() -> Element {
-			rsx! { SystemBanner { tone: SystemBannerTone::Info, icon: rsx! { svg { "data-testid": "glyph" } }, "Hello" } }
-		}
-		for (app, cls) in [(neutral as fn() -> Element, "text-ink-soft"), (primary, "text-primary-ink"), (info, "text-accent-info-ink")] {
-			let html = render(app);
-			assert!(icon_wrapper(&html).contains(cls), "{cls}: {html}");
-		}
+		assert!(root.contains(Tone::Warn.as_class()), "{html}");
+		assert!(!icon_wrapper(&html).contains("text-"), "{html}");
 	}
 
 	#[test]
@@ -172,20 +149,19 @@ mod tests {
 	}
 
 	#[test]
-	fn defaults_to_info_with_the_info_glyph() {
+	fn defaults_to_neutral_with_the_info_glyph() {
 		fn app() -> Element {
 			rsx! { SystemBanner { "Hello" } }
 		}
 		let html = render(app);
-		assert!(html.contains("data-tone=\"info\""), "{html}");
+		assert!(html.contains("data-tone=\"neutral\""), "{html}");
 		assert!(html.contains("<circle"), "{html}");
-		assert!(html.contains("text-accent-info-ink"), "{html}");
 	}
 
 	#[test]
 	fn warns_with_the_triangle_glyph() {
 		fn app() -> Element {
-			rsx! { SystemBanner { tone: SystemBannerTone::Warn, "Только чтение" } }
+			rsx! { SystemBanner { tone: Tone::Warn, "Только чтение" } }
 		}
 		let html = render(app);
 		assert!(html.contains("M12 9v4"), "{html}");

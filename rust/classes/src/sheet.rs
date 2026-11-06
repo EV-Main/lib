@@ -14,7 +14,7 @@ pub const SHEET_CONTENT: &str = "bg-background border-border data-[state=open]:a
                                  data-[state=closed]:fill-mode-forwards outline-hidden";
 
 /// `focus-visible`, not `focus`: the panel can hand focus here on a mouse open, where a ring is noise.
-pub const SHEET_CLOSE: &str = "ring-offset-background focus-visible:ring-ring absolute top-4 right-4 rounded-xs opacity-70 transition-opacity \
+pub const SHEET_CLOSE: &str = "ring-offset-background focus-visible:ring-ring absolute top-4 right-4 rounded-control opacity-70 transition-opacity \
                                hover:opacity-100 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:pointer-events-none";
 
 pub const SHEET_SIDE_RIGHT: &str = "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-3/4 border-l sm:max-w-sm";

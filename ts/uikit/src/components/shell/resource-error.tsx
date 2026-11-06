@@ -51,7 +51,7 @@ export function ResourceError(props: ResourceErrorProps) {
     const { message, title, labels: _labels, variant: _variant, className, ...rest } = props;
     return (
       <div data-slot="resource-error" data-variant="alert" className={className} {...rest}>
-        <Alert variant="destructive">
+        <Alert tone="error">
           <TriangleAlertIcon className="size-4" />
           {title !== undefined && <AlertTitle>{title}</AlertTitle>}
           <AlertDescription>{message}</AlertDescription>
@@ -74,7 +74,7 @@ export function ResourceError(props: ResourceErrorProps) {
       role="alert"
       className={cn(
         onRetry &&
-          "flex flex-wrap items-center gap-3 rounded-lg border border-accent-error/40 bg-accent-error/10 px-3 py-2.5",
+          "flex flex-wrap items-center gap-3 rounded-panel border border-tint-error-edge bg-accent-error/(--tint-hover) px-3 py-2.5",
         className,
       )}
       {...rest}

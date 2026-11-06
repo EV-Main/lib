@@ -49,7 +49,7 @@ export interface ShellNavProps
 // is that same hue.
 const NAV_FOCUS =
   "outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-secondary";
-const ROW = "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors";
+const ROW = "flex items-center gap-3 rounded-row px-3 py-2 text-sm transition-colors";
 
 /**
  * The app's left rail: data-driven groups, a footer block pinned to the bottom,
@@ -96,7 +96,7 @@ export function ShellNav({
     <aside
       data-slot="shell-nav"
       className={cn(
-        "flex h-full w-(--shell-rail-w) flex-col gap-7 overflow-y-auto border-r border-border bg-secondary px-4.5 pb-5 pt-6",
+        "flex h-full w-(--shell-rail-w) flex-col gap-7 overflow-y-auto border-r border-border bg-card px-4.5 pb-5 pt-6",
         className,
       )}
       {...props}
@@ -165,7 +165,7 @@ function ShellNavSection({
         <span
           data-slot="shell-nav-marker"
           aria-hidden
-          className="pointer-events-none absolute left-0 top-0 -z-10 rounded-lg bg-primary"
+          className="pointer-events-none absolute left-0 top-0 -z-10 rounded-row bg-primary"
         />
       )}
       <ul

@@ -8,6 +8,11 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
+  /* the roles the kit's tables name; the steps above are the consumer's */
+  --radius-control: var(--control-radius);
+  --radius-panel: var(--radius);
+  --radius-chip: var(--chip-radius);
+  --radius-row: calc(var(--radius) - 4px); /* concentric inside a panel's p-1 */
 
   /* The names stay, the values are per theme: u2 is flat (`--depth-*` is a
    * zero shadow), Oldschool brings the ladder back in ev.css. */
@@ -103,7 +108,7 @@
   --color-on-accent-error: var(--on-accent-error);
 
   /* component faces: derived below, pinned per theme by EV, so `bg-button-primary-bg`
-   * and `border-chip-error-border` are real utilities the class merge understands */
+   * and `border-tint-error-edge` are real utilities the class merge understands */
   --color-button-primary-bg: var(--button-primary-bg);
   --color-button-primary-hover: var(--button-primary-hover);
   --color-button-primary-border: var(--button-primary-border);
@@ -112,18 +117,30 @@
   --color-button-danger-hover: var(--button-danger-hover);
   --color-button-danger-border: var(--button-danger-border);
   --color-button-danger-ink: var(--button-danger-ink);
-  --color-chip-neutral-bg: var(--chip-neutral-bg);
-  --color-chip-neutral-border: var(--chip-neutral-border);
-  --color-chip-primary-bg: var(--chip-primary-bg);
-  --color-chip-primary-border: var(--chip-primary-border);
-  --color-chip-positive-bg: var(--chip-positive-bg);
-  --color-chip-positive-border: var(--chip-positive-border);
-  --color-chip-info-bg: var(--chip-info-bg);
-  --color-chip-info-border: var(--chip-info-border);
-  --color-chip-warn-bg: var(--chip-warn-bg);
-  --color-chip-warn-border: var(--chip-warn-border);
-  --color-chip-error-bg: var(--chip-error-bg);
-  --color-chip-error-border: var(--chip-error-border);
+  --color-tint-neutral-fill: var(--tint-neutral-fill);
+  --color-tint-neutral-edge: var(--tint-neutral-edge);
+  --color-tint-neutral-wash: var(--tint-neutral-wash);
+  --color-tint-primary-fill: var(--tint-primary-fill);
+  --color-tint-primary-edge: var(--tint-primary-edge);
+  --color-tint-primary-wash: var(--tint-primary-wash);
+  --color-tint-positive-fill: var(--tint-positive-fill);
+  --color-tint-positive-edge: var(--tint-positive-edge);
+  --color-tint-positive-wash: var(--tint-positive-wash);
+  --color-tint-info-fill: var(--tint-info-fill);
+  --color-tint-info-edge: var(--tint-info-edge);
+  --color-tint-info-wash: var(--tint-info-wash);
+  --color-tint-warn-fill: var(--tint-warn-fill);
+  --color-tint-warn-edge: var(--tint-warn-edge);
+  --color-tint-warn-wash: var(--tint-warn-wash);
+  --color-tint-error-fill: var(--tint-error-fill);
+  --color-tint-error-edge: var(--tint-error-edge);
+  --color-tint-error-wash: var(--tint-error-wash);
+  --color-tint-trace-fill: var(--tint-trace-fill);
+  --color-tint-trace-edge: var(--tint-trace-edge);
+  --color-tint-trace-wash: var(--tint-trace-wash);
+  --color-tint-debug-fill: var(--tint-debug-fill);
+  --color-tint-debug-edge: var(--tint-debug-edge);
+  --color-tint-debug-wash: var(--tint-debug-wash);
 
   /* charts — distinguishable hues carrying no significance */
   --color-chart-1: var(--chart-1);
@@ -184,25 +201,38 @@
   --button-primary-border: color-mix(in srgb, var(--ink) 60%, transparent);
   --button-primary-ink: var(--ink);
   --button-danger-bg: transparent;
-  --button-danger-hover: color-mix(in srgb, var(--accent-error) 10%, transparent);
+  --button-danger-hover: color-mix(in srgb, var(--accent-error) var(--tint-hover), transparent);
   --button-danger-border: var(--accent-error);
   --button-danger-ink: var(--accent-error);
 
-  /* chips (Badge, status pills). The source is the colour the label wears, so
-   * the edge and the label are one hue; --chip-fill and --chip-edge are in the
-   * geometry. */
-  --chip-neutral-bg: var(--hover);
-  --chip-neutral-border: var(--border);
-  --chip-primary-bg: color-mix(in srgb, var(--primary-ink) var(--chip-fill), transparent);
-  --chip-primary-border: color-mix(in srgb, var(--primary-ink) var(--chip-edge), transparent);
-  --chip-positive-bg: color-mix(in srgb, var(--positive-ink) var(--chip-fill), transparent);
-  --chip-positive-border: color-mix(in srgb, var(--positive-ink) var(--chip-edge), transparent);
-  --chip-info-bg: color-mix(in srgb, var(--accent-info-ink) var(--chip-fill), transparent);
-  --chip-info-border: color-mix(in srgb, var(--accent-info-ink) var(--chip-edge), transparent);
-  --chip-warn-bg: color-mix(in srgb, var(--accent-warn) var(--chip-fill), transparent);
-  --chip-warn-border: color-mix(in srgb, var(--accent-warn) var(--chip-edge), transparent);
-  --chip-error-bg: color-mix(in srgb, var(--accent-error) var(--chip-fill), transparent);
-  --chip-error-border: color-mix(in srgb, var(--accent-error) var(--chip-edge), transparent);
+  /* a tone worn as a tint: a chip's fill and edge are the tone's ink at
+   * --tint-fill and --tint-edge, so the edge and the label are one hue, and an
+   * area's wash is it at --tint-wash. warn and error are their own ink
+   * (docs/spec/accents.md). */
+  --tint-neutral-fill: var(--hover);
+  --tint-neutral-edge: var(--border);
+  --tint-neutral-wash: transparent;
+  --tint-primary-fill: color-mix(in srgb, var(--primary-ink) var(--tint-fill), transparent);
+  --tint-primary-edge: color-mix(in srgb, var(--primary-ink) var(--tint-edge), transparent);
+  --tint-primary-wash: color-mix(in srgb, var(--primary-ink) var(--tint-wash), transparent);
+  --tint-positive-fill: color-mix(in srgb, var(--positive-ink) var(--tint-fill), transparent);
+  --tint-positive-edge: color-mix(in srgb, var(--positive-ink) var(--tint-edge), transparent);
+  --tint-positive-wash: color-mix(in srgb, var(--positive-ink) var(--tint-wash), transparent);
+  --tint-info-fill: color-mix(in srgb, var(--accent-info-ink) var(--tint-fill), transparent);
+  --tint-info-edge: color-mix(in srgb, var(--accent-info-ink) var(--tint-edge), transparent);
+  --tint-info-wash: color-mix(in srgb, var(--accent-info-ink) var(--tint-wash), transparent);
+  --tint-warn-fill: color-mix(in srgb, var(--accent-warn) var(--tint-fill), transparent);
+  --tint-warn-edge: color-mix(in srgb, var(--accent-warn) var(--tint-edge), transparent);
+  --tint-warn-wash: color-mix(in srgb, var(--accent-warn) var(--tint-wash), transparent);
+  --tint-error-fill: color-mix(in srgb, var(--accent-error) var(--tint-fill), transparent);
+  --tint-error-edge: color-mix(in srgb, var(--accent-error) var(--tint-edge), transparent);
+  --tint-error-wash: color-mix(in srgb, var(--accent-error) var(--tint-wash), transparent);
+  --tint-trace-fill: color-mix(in srgb, var(--accent-trace) var(--tint-fill), transparent);
+  --tint-trace-edge: color-mix(in srgb, var(--accent-trace) var(--tint-edge), transparent);
+  --tint-trace-wash: color-mix(in srgb, var(--accent-trace) var(--tint-wash), transparent);
+  --tint-debug-fill: color-mix(in srgb, var(--accent-debug) var(--tint-fill), transparent);
+  --tint-debug-edge: color-mix(in srgb, var(--accent-debug) var(--tint-edge), transparent);
+  --tint-debug-wash: color-mix(in srgb, var(--accent-debug) var(--tint-wash), transparent);
 }
 
 /* Geometry. A `[data-brand]` scope is a theme root of its own, so it restarts
@@ -212,19 +242,25 @@
   --radius: 0.375rem; /* panels and menus */
   /* control geometry, so a consumer reshapes every button/input at once */
   --control-radius: 0.25rem;
+  --control-h: 2.25rem;
+  --control-step: 0.25rem;
   --chip-radius: 0.25rem;
-  /* how much of its ink a chip's fill and edge take, for a brand that pins
-   * nothing: an outline by default, a tint where a theme raises the fill */
-  --chip-fill: 0%;
-  --chip-edge: 50%;
+  /* how much of its ink a tint's fill and edge take: an outline by default, a
+   * tinted pill where a theme raises the fill; and a tone's pointed-at row or face */
+  --tint-fill: 0%;
+  --tint-edge: 50%;
+  --tint-hover: 10%;
+  /* how much of its ink an area in a tone (a banner, an alert) is washed with:
+   * an area needs a body to read as content, where a chip reads as an outline.
+   * At 10 % Light's positive and warn labels fall under their floor. */
+  --tint-wash: 6%;
   /* u2 is flat: depth is surface steps and hairlines. Never `none` — inside
    * Tailwind's comma-separated box-shadow list it invalidates the whole
    * declaration, and the focus ring goes with it. */
   --depth-card: 0 0 #0000;
   --depth-elevated: 0 0 #0000;
   --depth-overlay: 0 0 #0000;
-  --control-py: 0.5rem;
-  /* the Xl (call-to-action) button reads all three */
+  /* the Xl (call-to-action) button reads both */
   --control-px: 2rem;
   --control-text: 1rem;
   /* multiplies the display type scale (uikit <Display>) */
@@ -269,6 +305,17 @@
    *   --brand-mark: url("/assets/logo.svg");
    *   --brand-aspect: 387 / 335;
    */
+}
+
+/* The control height ramp a `Size` step names, re-derived on every scope that
+ * may set `--control-h`. Pin one step to bend the ramp. */
+:where(:root, [data-brand], [data-theme]) {
+  --control-h-xs: calc(var(--control-h) - 2 * var(--control-step));
+  --control-h-sm: calc(var(--control-h) - var(--control-step));
+  --control-h-md: var(--control-h);
+  --control-h-lg: calc(var(--control-h) + var(--control-step));
+  --control-h-xl: calc(var(--control-h) + 3 * var(--control-step));
+  --control-h-touch: max(var(--control-h-lg), 2.75rem); /* the 44 px pointer-target floor (WCAG 2.5.5) */
 }
 
 :root {

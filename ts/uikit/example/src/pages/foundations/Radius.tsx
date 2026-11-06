@@ -37,7 +37,7 @@ export default function Radius() {
             <span className="text-body-s text-ink-mid">Card, menu, dialog</span>
           </RadiusTile>
           <RadiusTile name="Chip" utility="rounded-(--chip-radius)">
-            <Badge variant="neutral">Badge</Badge>
+            <Badge tone="neutral">Badge</Badge>
           </RadiusTile>
           <RadiusTile name="Circle" utility="rounded-full">
             <Avatar className="size-14">
@@ -50,7 +50,7 @@ export default function Radius() {
         <div className="flex flex-wrap items-center gap-3">
           <Input aria-label="Sample" placeholder="Input" className="w-48" />
           <Button size="xs" variant="outline">Outline</Button>
-          <Badge variant="primary">Accent</Badge>
+          <Badge tone="primary">Accent</Badge>
           <Avatar className="size-7 rounded-(--chip-radius)">
             <AvatarFallback className="rounded-(--chip-radius)">J</AvatarFallback>
           </Avatar>

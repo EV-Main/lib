@@ -34,12 +34,12 @@ discrepancy because the key carried no information to contradict.
 
 **A table key names one axis.** A multi-axis table is multiple tables, never a
 product flattened into strings: `buttonSizeClasses` over the sizes and
-`buttonIconSizeClasses` over the same sizes, not one table keyed `"icon-sm"` —
+`BUTTON_ICON` for the shape at any of them, not one table keyed `"icon-sm"` —
 which fuses magnitude with shape and, in `"icon"`, elides the default as well.
 
-**There is one severity vocabulary.** A toast is `{Neutral, Positive, Info,
-Warn, Error}` — the [accent rungs](./accents.md) plus the valence — not a second
-ladder written in different words. A badge adds `Primary`: `{Neutral, Primary,
-Positive, Info, Warn, Error}`. Figma's own names (accent, negative, warning) map
-onto these; the chip tokens `--chip-{tone}-{bg,border}` carry the same six
-tones.
+**There is one severity vocabulary.** `Tone` is `{Neutral, Primary, Positive,
+Info, Warn, Error}`: the [accent rungs](./accents.md) a status needs, the
+valence and the action role. Every toned component takes it, never a second
+ladder written in different words. Figma's own names (accent, negative,
+warning) map onto these; the tint tokens `--tint-{tone}-{fill,edge}` carry the
+same six tones.

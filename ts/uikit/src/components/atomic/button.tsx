@@ -1,10 +1,11 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { Slot } from "../../primitives/slot";
+import { sizeClasses } from "../../generated/size";
 import { accentFillClasses, accentOutlineClasses, type Accent } from "../../generated/accent";
 import {
   BUTTON_BASE,
-  buttonIconSizeClasses,
+  BUTTON_ICON,
   buttonSizeClasses,
   buttonVariantClasses,
   type ButtonSize,
@@ -40,7 +41,8 @@ export function buttonVariants({
   return cn(
     BUTTON_BASE,
     buttonVariantClasses[variant],
-    icon ? buttonIconSizeClasses[size] : buttonSizeClasses[size],
+    sizeClasses[size],
+    icon ? BUTTON_ICON : buttonSizeClasses[size],
     accent === undefined ? undefined : accentClass(accent, variant),
     className,
   );

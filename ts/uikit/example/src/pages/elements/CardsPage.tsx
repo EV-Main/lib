@@ -35,7 +35,7 @@ export default function CardsPage() {
             <CardTitle>Open positions</CardTitle>
             <CardDescription>Net exposure is 38% of equity.</CardDescription>
             <CardAction>
-              <Badge variant="positive">live</Badge>
+              <Badge tone="positive">live</Badge>
             </CardAction>
           </CardHeader>
           <CardContent>
@@ -55,7 +55,7 @@ export default function CardsPage() {
             <ListRow label="Stage" value="new" />
             <ListRow label="Price" value="1,250" />
             <ListRow label="Owner" description="Assigned 3 days ago">
-              <Badge variant="info">Ada</Badge>
+              <Badge tone="info">Ada</Badge>
             </ListRow>
           </ListRows>
         </div>

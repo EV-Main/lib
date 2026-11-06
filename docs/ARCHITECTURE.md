@@ -220,11 +220,11 @@ discipline:
   is silent: Tailwind answers an undefined token by emitting no rule, so a
   drifted sheet is a colour quietly going missing on a consumer, not a build
   error.
-- **Class strings may be composed at runtime** (`format!("h-{}", n)`), e.g. the
-  shared `Size` whose `scale()` magnitude each component applies on its own axis
-  (`h-`/`size-`/`min-w-`). A consumer on the v4 browser CDN gets them by its DOM
-  scan; one on a *static* Tailwind build `@source`s `CLASS_INVENTORY` and must
-  likewise safelist the kit's magnitudes.
+- **An intent enum sets custom properties; a base reads them.** A variant
+  emits one literal (`Size::Sm` is `[--control-box:var(--control-h-sm)]`) and a
+  component base reads it on whatever axis it sizes (`h-(--control-box)`), so
+  no component keeps its own table of the same steps and every class stays a
+  literal the inventory carries. A later fuse of the same property wins.
 
 Because there is no renderer-agnostic portal and layout measuring is host-only,
 the Rust overlays/engines carry documented fidelity gaps (inline positioning
@@ -251,6 +251,9 @@ the full list is in [`ts/uikit/README.md`](../ts/uikit/README.md#limitations).
 - **A component exists in both ports or neither.** The same test fails on a
   gallery label present on one side only, and on a `#[component]` exported by
   one port only; every exported component appears in a gallery entry.
+- **A class table names a role, never a magnitude**
+  ([spec/roles.md](spec/roles.md)). A literal where the theme has a role token
+  is a missing token; `rust/tests/roles.rs` fails on one.
 - **Three layers, edges only downward** (#234). Every component sits in
   `atomic/`, `derived/` or `shell/` — the same one in the core, both ports and
   TS. `atomic` renders no other component; `derived` composes `atomic` ones

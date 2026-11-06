@@ -29,12 +29,13 @@ export type { HoverIntentHandlers } from "./primitives/use-hover-intent";
 export { mergeRefs } from "./primitives/merge-refs";
 
 export { Alert, AlertTitle, AlertDescription } from "./components/atomic/alert";
-export type { AlertProps, AlertVariant } from "./components/atomic/alert";
+export type { Tone } from "./generated/tone";
+export type { AlertProps } from "./components/atomic/alert";
 
 export { Avatar, AvatarImage, AvatarFallback } from "./components/atomic/avatar";
 
 export { Badge } from "./components/atomic/badge";
-export type { BadgeProps, BadgeVariant } from "./components/atomic/badge";
+export type { BadgeProps } from "./components/atomic/badge";
 
 export {
   Breadcrumb,
@@ -663,7 +664,6 @@ export type {
   ToastOptions,
   ToastPosition,
   ToastState,
-  ToastVariant,
   ToasterProps,
 } from "./components/atomic/sonner";
 export {
@@ -734,7 +734,7 @@ export { ResourceError } from "./components/shell/resource-error";
 export type { ResourceErrorLabels, ResourceErrorProps } from "./components/shell/resource-error";
 
 export { SystemBanner } from "./components/shell/system-banner";
-export type { SystemBannerLabels, SystemBannerProps, SystemBannerTone } from "./components/shell/system-banner";
+export type { SystemBannerLabels, SystemBannerProps } from "./components/shell/system-banner";
 
 export { Settled } from "./components/shell/settled";
 export type { SettledProps } from "./components/shell/settled";
@@ -763,7 +763,7 @@ export type {
   AccountSettingsSection,
 } from "./components/shell/account-settings-dialog";
 export { ConfirmDialog } from "./components/derived/confirm-dialog";
-export type { ConfirmDialogLabels, ConfirmDialogProps, ConfirmDialogTone } from "./components/derived/confirm-dialog";
+export type { ConfirmDialogLabels, ConfirmDialogProps } from "./components/derived/confirm-dialog";
 export { AccountList, AccountListItem } from "./components/shell/account-list";
 export type { AccountListItemProps, AccountListProps } from "./components/shell/account-list";
 export { PopoverForm } from "./components/derived/popover-form";

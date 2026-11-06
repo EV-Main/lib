@@ -8,7 +8,7 @@ export const CHAT_MESSAGE_USER = "justify-end";
 
 export const CHAT_MESSAGE_AVATAR = "shrink-0";
 
-export const CHAT_MESSAGE_AVATAR_TILE = "flex size-7 items-center justify-center rounded-(--control-radius) border border-border bg-secondary text-ink-mid";
+export const CHAT_MESSAGE_AVATAR_TILE = "flex size-7 items-center justify-center rounded-control border border-border bg-card text-ink-mid";
 
 export const CHAT_MESSAGE_BODY = "flex min-w-0 flex-col gap-1.5";
 
@@ -32,11 +32,11 @@ export const CHAT_MARKER_STATUS = "flex items-center gap-2 text-body-s text-ink-
 
 export const CHAT_MARKER_DOT = "size-1.5 rounded-full";
 
-export const CHAT_MARKER_TOOL = "flex items-center gap-2.5 rounded-(--control-radius) border bg-card px-2.5 py-2";
+export const CHAT_MARKER_TOOL = "flex items-center gap-2.5 rounded-panel border bg-card px-2.5 py-2";
 
 export const CHAT_MARKER_TOOL_BORDER = "border-border";
 
-export const CHAT_MARKER_TOOL_ERROR_BORDER = "border-chip-error-border";
+export const CHAT_MARKER_TOOL_ERROR_BORDER = "border-tint-error-edge";
 
 export const CHAT_MARKER_TOOL_ICON = "size-4 shrink-0 text-ink-mid";
 
@@ -50,11 +50,11 @@ export const CHAT_MARKER_TOOL_DETAIL = "truncate text-body-s tabular-nums text-i
 
 export const CHAT_MARKER_TOOL_META = "shrink-0 text-caption";
 
-export const CHAT_ATTACHMENT_BASE = "flex w-60 max-w-full flex-col overflow-hidden rounded-(--control-radius) border border-border bg-card";
+export const CHAT_ATTACHMENT_BASE = "flex w-60 max-w-full flex-col overflow-hidden rounded-panel border border-border bg-card";
 
 export const CHAT_ATTACHMENT_ROW = "flex items-center gap-2.5 p-2";
 
-export const CHAT_ATTACHMENT_ICON = "flex size-9 shrink-0 items-center justify-center rounded-(--control-radius) border border-border-subtle bg-muted text-ink-mid";
+export const CHAT_ATTACHMENT_ICON = "flex size-9 shrink-0 items-center justify-center rounded-control border border-border-subtle bg-muted text-ink-mid";
 
 export const CHAT_ATTACHMENT_BODY = "flex min-w-0 flex-1 flex-col gap-px";
 
@@ -67,9 +67,9 @@ export const CHAT_ATTACHMENT_PROGRESS = "h-0.5 bg-border-subtle";
 export const CHAT_ATTACHMENT_PROGRESS_FILL = "h-full bg-primary";
 
 export const chatBubbleVariantClasses = {
-  "user": "max-w-105 rounded-lg border border-border bg-secondary px-3.5 py-2.5",
+  "user": "max-w-105 rounded-panel border border-border bg-card px-3.5 py-2.5",
   "assistant": "py-0.5",
-  "muted": "max-w-105 rounded-lg border border-border-subtle bg-muted px-3.5 py-2.5",
+  "muted": "max-w-105 rounded-panel border border-border-subtle bg-muted px-3.5 py-2.5",
 } as const;
 export type ChatBubbleVariant = keyof typeof chatBubbleVariantClasses;
 

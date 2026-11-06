@@ -1,6 +1,6 @@
 /// Fused over `DIALOG_CONTENT`: the pane and the rail carry their own padding,
 /// so the content drops its padding and its gap.
-pub const ACCOUNT_SETTINGS_DIALOG_CONTENT: &str = "flex max-h-[90dvh] max-w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden bg-popover p-0 sm:max-w-260 md:h-170 md:flex-row";
+pub const ACCOUNT_SETTINGS_DIALOG_CONTENT: &str = "flex max-h-[90dvh] max-w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden p-0 sm:max-w-260 md:h-170 md:flex-row";
 
 pub const ACCOUNT_SETTINGS_DIALOG_TABS: &str = "min-h-0 flex-1 flex-col gap-0 md:flex-row";
 
@@ -13,8 +13,8 @@ pub const ACCOUNT_SETTINGS_DIALOG_LIST: &str = "h-auto w-full flex-1 flex-col it
 
 /// Fused over `TABS_TRIGGER`: a rail entry is a filled row, so the underline
 /// tab look is switched off.
-pub const ACCOUNT_SETTINGS_DIALOG_ENTRY: &str = "h-8 w-full flex-none justify-start gap-2.5 rounded-(--control-radius) border-0 px-2.5 text-body font-normal text-ink-mid shadow-none \
-                                                 data-[state=active]:bg-active data-[state=active]:text-ink data-[state=active]:shadow-none hover:bg-hover [&_svg]:text-ink-soft";
+pub const ACCOUNT_SETTINGS_DIALOG_ENTRY: &str = "h-8 w-full flex-none justify-start gap-2.5 rounded-row border-0 px-2.5 text-body font-normal text-ink-mid shadow-none \
+                                                 data-[state=active]:bg-selected data-[state=active]:text-ink data-[state=active]:shadow-none hover:bg-hover [&_svg]:text-ink-soft";
 
 pub const ACCOUNT_SETTINGS_DIALOG_FOOTER: &str = "flex items-center gap-1 border-t border-border-subtle pt-2";
 

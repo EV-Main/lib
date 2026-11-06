@@ -2,11 +2,11 @@
 
 export const SELECT_CONTENT_BOUNDS = "min-w-[max(8rem,var(--select-trigger-width,0px))] max-w-[min(24rem,calc(100vw-2rem))] max-h-[min(24rem,calc(100dvh-2rem))]";
 
-export const SELECT_ITEM = "focus:bg-hover focus:text-ink aria-selected:bg-accent-info/20 aria-selected:text-accent-info data-[reset]:not-aria-selected:bg-accent-trace/20 focus-visible:inset-ring-2 focus-visible:inset-ring-ring [&_svg:not([class*='text-'])]:text-ink-soft relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm whitespace-normal [overflow-wrap:anywhere] outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2";
+export const SELECT_ITEM = "focus:bg-hover focus:text-ink aria-selected:bg-accent-info/20 aria-selected:text-accent-info data-[reset]:not-aria-selected:bg-accent-trace/20 focus-visible:inset-ring-2 focus-visible:inset-ring-ring [&_svg:not([class*='text-'])]:text-ink-soft relative flex w-full cursor-default items-center gap-2 rounded-row py-1.5 pr-8 pl-2 text-sm whitespace-normal [overflow-wrap:anywhere] outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2";
 
-export const SELECT_TRIGGER_BASE = "border-input [&_[data-placeholder]]:text-ink-soft [&_svg:not([class*='text-'])]:text-ink-soft focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error flex w-fit items-center justify-between gap-2 rounded-[var(--control-radius)] border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
+export const SELECT_TRIGGER_BASE = "border-input [&_[data-placeholder]]:text-ink-soft [&_svg:not([class*='text-'])]:text-ink-soft focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error flex w-fit items-center justify-between gap-2 rounded-control border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
 
-export const SELECT_CONTENT_SURFACE = "bg-popover text-ink overflow-x-hidden overflow-y-auto rounded-md border border-border shadow-md";
+export const SELECT_CONTENT_SURFACE = "bg-popover text-ink overflow-x-hidden overflow-y-auto rounded-panel border border-border shadow-md";
 
 export const SELECT_LIST = "p-1";
 
@@ -14,7 +14,7 @@ export const SELECT_LABEL = "text-ink-soft px-2 py-1.5 text-xs";
 
 export const SELECT_SEPARATOR = "bg-border pointer-events-none -mx-1 my-1 h-px";
 
-export const NATIVE_SELECT_BASE = "border-input text-ink h-7 w-full min-w-0 appearance-none rounded-[var(--control-radius)] border bg-secondary py-0 pr-9 pl-2 text-base pointer-fine:text-body transition-colors outline-none disabled:pointer-events-none disabled:cursor-not-allowed focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error has-[option[value='']:checked]:text-ink-soft [&_option]:bg-popover [&_option]:text-ink [&_optgroup]:bg-popover [&_optgroup]:text-ink-soft [color-scheme:var(--scheme,normal)]";
+export const NATIVE_SELECT_BASE = "border-input text-ink h-7 w-full min-w-0 appearance-none rounded-control border bg-transparent py-0 pr-9 pl-2 text-base pointer-fine:text-body transition-colors outline-none disabled:pointer-events-none disabled:cursor-not-allowed focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error has-[option[value='']:checked]:text-ink-soft [&_option]:bg-popover [&_option]:text-ink [&_optgroup]:bg-popover [&_optgroup]:text-ink-soft [color-scheme:var(--scheme,normal)]";
 
 export const SELECT_TYPEAHEAD_MS = 500;
 

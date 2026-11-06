@@ -11,14 +11,10 @@ import {
   SYSTEM_BANNER_ICON,
   SYSTEM_BANNER_MESSAGE,
   SYSTEM_BANNER_TITLE,
-  systemBannerIconToneClasses,
-  systemBannerToneClasses,
-  type SystemBannerTone,
   SYSTEM_BANNER_LABELS,
 } from "../../generated/system-banner";
+import { toneClasses, type Tone } from "../../generated/tone";
 import { CloseIcon, InfoIcon, TriangleAlertIcon } from "./shell-icons";
-
-export type { SystemBannerTone };
 
 export interface SystemBannerLabels {
   /** The close button. Default `"Dismiss"`. */
@@ -27,7 +23,7 @@ export interface SystemBannerLabels {
 
 export interface SystemBannerProps extends Omit<React.ComponentProps<"div">, "title"> {
   /** `warn` — a platform state (maintenance, read-only); `info` — an announcement. */
-  tone?: SystemBannerTone;
+  tone?: Tone;
   /** Bold lead before the message. */
   title?: React.ReactNode;
   /** Replaces the tone's glyph; `null` drops it. */
@@ -45,7 +41,7 @@ export interface SystemBannerProps extends Omit<React.ComponentProps<"div">, "ti
  * `AppShell`'s `banner` slot; several stack with a gap.
  */
 export function SystemBanner({
-  tone = "info",
+  tone = "neutral",
   title,
   icon,
   onDismiss,
@@ -62,10 +58,10 @@ export function SystemBanner({
       data-slot="system-banner"
       data-tone={tone}
       role="status"
-      className={cn(SYSTEM_BANNER_BASE, systemBannerToneClasses[tone], className)}
+      className={cn(SYSTEM_BANNER_BASE, toneClasses[tone], className)}
       {...props}
     >
-      {glyph !== null && <span className={cn(SYSTEM_BANNER_ICON, systemBannerIconToneClasses[tone])}>{glyph}</span>}
+      {glyph !== null && <span className={SYSTEM_BANNER_ICON}>{glyph}</span>}
       <div className={SYSTEM_BANNER_MESSAGE}>
         {title !== undefined && <span className={SYSTEM_BANNER_TITLE}>{title}</span>}
         {title !== undefined && children !== undefined && " — "}

@@ -218,7 +218,7 @@ export function ThreadList({ className }: { className?: string }) {
         </Avatar>
         <span className="text-body-s text-ink-mid">jane.doe</span>
         <span className="flex-1" />
-        <Badge variant="neutral">Pro</Badge>
+        <Badge tone="neutral">Pro</Badge>
       </div>
     </div>
   );
@@ -231,7 +231,7 @@ export function FullChat() {
     <div className="flex min-h-0 min-w-0 flex-1 flex-col">
       <div className="border-border flex h-11 shrink-0 items-center gap-2.5 border-b pr-4 pl-5">
         <span className="text-body text-ink font-medium">Q3 exposure review</span>
-        <Badge variant="neutral">Agent</Badge>
+        <Badge tone="neutral">Agent</Badge>
         <span className="flex-1" />
         <IconButton aria-label="Export" size="sm"><UploadIcon /></IconButton>
         <IconButton aria-label="More" size="sm"><MoreIcon /></IconButton>

@@ -27,9 +27,8 @@ import {
   NOTIFICATION_BELL_LIST,
   NOTIFICATION_BELL_TRIGGER,
   NOTIFICATION_DOT,
-  headerBalanceToneClasses,
-  type HeaderBalanceTone,
 } from "../../generated/header-controls";
+import { toneClasses, type Tone } from "../../generated/tone";
 import { AnimatedNumber } from "../derived/animated-number";
 import { IconButton } from "../derived/icon-button";
 import { Kbd } from "../atomic/kbd";
@@ -55,7 +54,7 @@ export interface HeaderBalanceProps extends Omit<React.HTMLAttributes<HTMLElemen
   /** A glyph before the label. */
   icon?: React.ReactNode;
   /** `warn` colours the figure as a low-funds signal. */
-  tone?: HeaderBalanceTone;
+  tone?: Tone;
 }
 
 const USD: Intl.NumberFormatOptions = { style: "currency", currency: "USD" };
@@ -69,13 +68,13 @@ export function HeaderBalance({
   locales,
   loading = false,
   icon,
-  tone = "default",
+  tone = "neutral",
   onClick,
   disabled,
   className,
   ...props
 }: HeaderBalanceProps) {
-  const face = cn(HEADER_BALANCE_BASE, onClick && HEADER_BALANCE_INTERACTIVE, className);
+  const face = cn(HEADER_BALANCE_BASE, toneClasses[tone], onClick && HEADER_BALANCE_INTERACTIVE, className);
   const body = (
     <>
       {icon}
@@ -85,7 +84,7 @@ export function HeaderBalance({
         skeleton={<Skeleton className={HEADER_BALANCE_SKELETON} />}
         className={HEADER_BALANCE_SETTLED}
       >
-        <span className={cn(HEADER_BALANCE_FIGURE, headerBalanceToneClasses[tone])}>
+        <span className={HEADER_BALANCE_FIGURE}>
           {amount === undefined ? value : <AnimatedNumber value={amount} format={format} locales={locales} />}
         </span>
       </Settled>

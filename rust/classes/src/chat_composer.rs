@@ -1,6 +1,6 @@
-pub const MODEL_CHIP_BASE: &str = "inline-flex h-6.5 items-center gap-1 rounded-(--control-radius) border border-border py-1 pl-2 pr-1.5 text-body-s text-ink-mid outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring";
+pub const MODEL_CHIP_BASE: &str = "inline-flex h-6.5 items-center gap-1 rounded-chip border border-border py-1 pl-2 pr-1.5 text-body-s text-ink-mid outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring";
 
-pub const CHAT_COMPOSER_BASE: &str = "flex flex-col gap-2 rounded-lg border bg-card px-3 pb-2.5 pt-3 focus-within:ring-2 focus-within:ring-ring";
+pub const CHAT_COMPOSER_BASE: &str = "flex flex-col gap-2 rounded-panel border bg-card px-3 pb-2.5 pt-3 focus-within:ring-2 focus-within:ring-ring";
 
 /// The edge softens while the assistant answers.
 pub const CHAT_COMPOSER_STREAMING: &str = "border-border";

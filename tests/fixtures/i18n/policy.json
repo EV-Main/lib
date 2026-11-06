@@ -105,7 +105,7 @@
       "source": { "n": "{n, plural, one {# lot} other {# lots}}" },
       "translated": { "n": { "en": "{n, plural, one {# lot} other {# lots}}", "t": "{n, plural, other {# участков}}" } },
       "messages": { "n": "{n, plural, one {# lot} other {# lots}}" },
-      "rejected": [["n", "plural-category-missing", "{n} needs few, many, one in ru"]],
+      "rejected": [["n", "plural-category-missing", "{n} needs one, few, many in ru"]],
       "missing": [],
       "coverage": 0
     },

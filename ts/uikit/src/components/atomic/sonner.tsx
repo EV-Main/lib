@@ -9,17 +9,16 @@ import {
   TOAST_TITLE,
   TOASTER_BASE,
   positionClasses,
-  toastVariantClasses,
   type ToastPosition,
-  type ToastVariant,
   TOAST_DURATION_MS,
   TOAST_GAP,
   TOAST_VISIBLE,
 } from "../../generated/sonner";
 import * as copy from "../../generated/copy";
 import { iconShapes } from "../../icons/icon-shapes";
+import { toneClasses, type Tone } from "../../generated/tone";
 
-export type { ToastPosition, ToastVariant };
+export type { ToastPosition };
 
 /**
  * Lifecycle phase of a toast. It is added `"open"` (plays the enter keyframe);
@@ -37,7 +36,7 @@ export interface ToastOptions {
    * `toast.dismiss(id)` removes it. Hovering the stack also pauses the countdown.
    */
   duration?: number;
-  variant?: ToastVariant;
+  tone?: Tone;
 }
 
 export interface Toast {
@@ -45,7 +44,7 @@ export interface Toast {
   message: React.ReactNode;
   description?: React.ReactNode;
   duration: number;
-  variant: ToastVariant;
+  tone: Tone;
   state: ToastState;
 }
 
@@ -79,7 +78,7 @@ const store = (() => {
       message,
       description: opts.description,
       duration: opts.duration ?? TOAST_DURATION_MS,
-      variant: opts.variant ?? "neutral",
+      tone: opts.tone ?? "neutral",
       state: "open",
     };
     toasts = [...toasts, next];
@@ -129,20 +128,20 @@ export interface ToastFn {
 
 /**
  * Global toast handle. `toast(msg)` enqueues a neutral toast; the `.positive`,
- * `.error`, `.info` and `.warn` helpers pin the variant; `toast.dismiss(id)`
+ * `.error`, `.info` and `.warn` helpers pin the tone; `toast.dismiss(id)`
  * removes one early. Mirrors Rust's `use_toaster()` handle methods.
  */
 export const toast: ToastFn = Object.assign(
   (message: React.ReactNode, opts?: ToastOptions) => store.add(message, opts),
   {
     positive: (message: React.ReactNode, opts?: ToastOptions) =>
-      store.add(message, { ...opts, variant: "positive" }),
+      store.add(message, { ...opts, tone: "positive" }),
     error: (message: React.ReactNode, opts?: ToastOptions) =>
-      store.add(message, { ...opts, variant: "error" }),
+      store.add(message, { ...opts, tone: "error" }),
     info: (message: React.ReactNode, opts?: ToastOptions) =>
-      store.add(message, { ...opts, variant: "info" }),
+      store.add(message, { ...opts, tone: "info" }),
     warn: (message: React.ReactNode, opts?: ToastOptions) =>
-      store.add(message, { ...opts, variant: "warn" }),
+      store.add(message, { ...opts, tone: "warn" }),
     dismiss: (id: number) => store.dismiss(id),
   },
 );
@@ -308,7 +307,7 @@ function ToastItem({
       role="status"
       aria-live="polite"
       data-slot="toast"
-      data-variant={t.variant}
+      data-tone={t.tone}
       data-state={t.state === "closing" ? "closed" : "open"}
       data-front={index === 0}
       data-visible={index < TOAST_VISIBLE}
@@ -327,8 +326,8 @@ function ToastItem({
       }
       className={cn(
         TOAST_BASE,
+        toneClasses[t.tone],
         "touch-pan-y select-none",
-        toastVariantClasses[t.variant],
       )}
     >
       <div className={TOAST_CONTENT}>

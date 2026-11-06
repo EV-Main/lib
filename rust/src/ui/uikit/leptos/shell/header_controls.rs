@@ -6,10 +6,10 @@ use crate::{
 	cn,
 	ui::uikit::leptos::{
 		HEADER_BALANCE_BASE, HEADER_BALANCE_CHEVRON, HEADER_BALANCE_FIGURE, HEADER_BALANCE_INTERACTIVE, HEADER_BALANCE_LABEL, HEADER_BALANCE_SKELETON, HEADER_SEARCH_BASE,
-		HEADER_SEARCH_PLACEHOLDER, HeaderBalanceTone, ICON_BUTTON_BASE, IconButtonVariant, Kbd, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER,
+		HEADER_SEARCH_PLACEHOLDER, ICON_BUTTON_BASE, IconButtonVariant, Kbd, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER,
 		NOTIFICATION_BELL_ITEM, NOTIFICATION_BELL_ITEM_BODY, NOTIFICATION_BELL_ITEM_DESCRIPTION, NOTIFICATION_BELL_ITEM_DOT, NOTIFICATION_BELL_ITEM_DOT_READ,
 		NOTIFICATION_BELL_ITEM_DOT_UNREAD, NOTIFICATION_BELL_ITEM_TIME, NOTIFICATION_BELL_ITEM_TITLE, NOTIFICATION_BELL_ITEM_TITLE_UNREAD, NOTIFICATION_BELL_LIST, NOTIFICATION_BELL_TRIGGER,
-		NOTIFICATION_DOT, Popover, PopoverContent, PopoverTrigger, Size, Skeleton, button_classes, icon_button::Glyph, icon_button_size_class, primitives::icon_shapes,
+		NOTIFICATION_DOT, Popover, PopoverContent, PopoverTrigger, Size, Skeleton, Tone, button_classes, icon_button::Glyph, icon_button_size_class, primitives::icon_shapes,
 	},
 };
 
@@ -34,7 +34,7 @@ pub fn HeaderBalance(
 	/// A glyph before the label.
 	#[prop(optional, into)]
 	icon: Option<ViewFn>,
-	#[prop(optional)] tone: HeaderBalanceTone,
+	#[prop(optional)] tone: Tone,
 	/// Makes the balance a button, with a chevron after the figure.
 	#[prop(optional)]
 	on_click: Option<Callback<leptos::ev::MouseEvent>>,
@@ -47,8 +47,7 @@ pub fn HeaderBalance(
 	aria_label: Option<String>,
 	#[prop(optional, into)] class: String,
 ) -> impl IntoView {
-	let cls = cn!(HEADER_BALANCE_BASE, if on_click.is_some() { HEADER_BALANCE_INTERACTIVE } else { "" }, class);
-	let figure_cls = cn!(HEADER_BALANCE_FIGURE, tone.as_class());
+	let cls = cn!(HEADER_BALANCE_BASE, tone.as_class(), if on_click.is_some() { HEADER_BALANCE_INTERACTIVE } else { "" }, class);
 	let body = view! {
 		{icon.map(|i| i.run())}
 		<span class=HEADER_BALANCE_LABEL>
@@ -62,7 +61,7 @@ pub fn HeaderBalance(
 				view! { <Skeleton class=HEADER_BALANCE_SKELETON /> }.into_any()
 			} else {
 				view! {
-					<span class=figure_cls.clone() data-slot="header-balance-value">
+					<span class=HEADER_BALANCE_FIGURE data-slot="header-balance-value">
 						{value.get()}
 					</span>
 				}

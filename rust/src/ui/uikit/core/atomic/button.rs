@@ -1,4 +1,4 @@
-use ev_lib_classes::{Accent, BUTTON_BASE, ButtonVariant, Size, button_accent_class, button_size_class, cn};
+use ev_lib_classes::{Accent, BUTTON_BASE, BUTTON_ICON, ButtonVariant, Size, button_accent_class, button_size_class, cn};
 
 /// Fuses the base, variant, size and accent classes with a caller override, last
 /// wins. Mirrors the TS `buttonVariants` helper so consumers (e.g. pagination)
@@ -9,7 +9,8 @@ pub fn button_classes(variant: &ButtonVariant, size: Size, icon: bool, accent: O
 	cn!(
 		BUTTON_BASE,
 		variant.as_class(),
-		button_size_class(size, icon),
+		size.as_class(),
+		if icon { BUTTON_ICON } else { button_size_class(size) },
 		accent.map_or("", |a| button_accent_class(a, variant)),
 		class
 	)

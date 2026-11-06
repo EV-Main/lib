@@ -24,10 +24,9 @@ pub mod primitives;
 // to build a prop are re-exported.
 pub(crate) use ev_lib_classes::*;
 pub use ev_lib_classes::{
-	Accent, AlertVariant, AsidePanelSide, BadgeVariant, ButtonGroupOrientation, ButtonVariant, ChatBubbleVariant, ChatStatusState, ChatToolState, ConfirmDialogTone, DrawerDirection,
-	EmptyMediaVariant, FieldOrientation, HeaderBalanceTone, IconButtonVariant, InputGroupAddonAlign, InputGroupButtonSize, ItemMediaVariant, ItemSize, ItemVariant, Orientation, Polarity,
-	ScrollBarOrientation, SectionLabelTone, SettingsSectionTone, Size, StatusTone, Surface, SystemBannerTone, TableAlign, TableDensity, TableVariant, ToastPosition, ToastVariant,
-	ToggleVariant,
+	Accent, AsidePanelSide, ButtonGroupOrientation, ButtonVariant, ChatBubbleVariant, ChatStatusState, ChatToolState, DrawerDirection, EmptyMediaVariant, FieldOrientation,
+	IconButtonVariant, InputGroupAddonAlign, InputGroupButtonSize, ItemMediaVariant, ItemSize, ItemVariant, Orientation, Polarity, ScrollBarOrientation, SectionLabelTone, Size, StatusTone,
+	Surface, TableAlign, TableDensity, TableVariant, ToastPosition, ToggleVariant, Tone,
 };
 
 pub use crate::ui::uikit::core::FormControlContext;

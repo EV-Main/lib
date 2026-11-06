@@ -2,12 +2,12 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{ALERT_BASE, ALERT_DESCRIPTION, ALERT_TITLE, AlertVariant},
+	ui::uikit::leptos::{ALERT_BASE, ALERT_DESCRIPTION, ALERT_TITLE, Tone},
 };
 
 #[component]
-pub fn Alert(#[prop(optional)] variant: AlertVariant, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
-	let cls = cn!(ALERT_BASE, variant.as_class(), class);
+pub fn Alert(#[prop(optional)] tone: Tone, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
+	let cls = cn!(ALERT_BASE, tone.as_class(), class);
 	view! {
 		<div class=cls data-slot="alert" role="alert">
 			{children()}

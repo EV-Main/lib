@@ -1,6 +1,4 @@
-use tailwind_fuse::{AsTailwindClass, TwVariant};
-
-pub const HEADER_BALANCE_BASE: &str = "inline-flex h-8 items-center gap-2 rounded-(--control-radius) border border-border bg-secondary pl-2.5 pr-2 text-body-s";
+pub const HEADER_BALANCE_BASE: &str = "inline-flex h-8 items-center gap-2 rounded-control border border-border bg-secondary pl-2.5 pr-2 text-body-s";
 
 /// Added only when the balance is a button: a static figure must not look pressable.
 pub const HEADER_BALANCE_INTERACTIVE: &str = "cursor-pointer outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring";
@@ -13,7 +11,8 @@ pub const HEADER_BALANCE_SETTLED: &str = "inline-flex";
 
 pub const HEADER_BALANCE_SKELETON: &str = "h-3 w-12";
 
-pub const HEADER_BALANCE_FIGURE: &str = "font-medium tabular-nums";
+/// Wears its [`Tone`](crate::Tone)'s ink: `Warn` is the low-funds signal.
+pub const HEADER_BALANCE_FIGURE: &str = "font-medium tabular-nums text-(color:--tone-ink)";
 
 pub const HEADER_BALANCE_CHEVRON: &str = "size-4 text-ink-soft";
 
@@ -28,8 +27,7 @@ pub const NOTIFICATION_BELL_EMPTY: &str = "px-2 py-3 text-center text-body text-
 
 pub const NOTIFICATION_BELL_LIST: &str = "flex max-h-80 flex-col gap-0.5 overflow-y-auto";
 
-pub const NOTIFICATION_BELL_ITEM: &str =
-	"flex w-full items-start gap-2 rounded-(--control-radius) px-2 py-1.5 text-left outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring";
+pub const NOTIFICATION_BELL_ITEM: &str = "flex w-full items-start gap-2 rounded-row px-2 py-1.5 text-left outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring";
 
 pub const NOTIFICATION_BELL_ITEM_DOT: &str = "mt-1.5 size-1.5 shrink-0 rounded-full";
 
@@ -50,18 +48,8 @@ pub const NOTIFICATION_BELL_ITEM_TIME: &str = "shrink-0 text-caption text-ink-so
 
 pub const NOTIFICATION_BELL_FOOTER: &str = "border-t border-border-subtle p-1 pt-1.5";
 
-pub const HEADER_SEARCH_BASE: &str = "flex h-8 w-55 items-center gap-2 rounded-(--control-radius) border border-border bg-muted pl-2.5 pr-1.5 text-left text-body text-ink-mid outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring";
+pub const HEADER_SEARCH_BASE: &str = "flex h-8 w-55 items-center gap-2 rounded-control border border-border bg-muted pl-2.5 pr-1.5 text-left text-body text-ink-mid outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring";
 
 /// `min-w-0` with `truncate`: a long placeholder ends in an ellipsis and the
 /// shortcut hint stays visible.
 pub const HEADER_SEARCH_PLACEHOLDER: &str = "min-w-0 flex-1 truncate";
-
-/// The figure's ink. `Warn` is the low-funds signal.
-#[derive(Debug, PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
-#[strum(serialize_all = "kebab-case")]
-pub enum HeaderBalanceTone {
-	#[tw(default, class = "text-ink")]
-	Default,
-	#[tw(class = "text-accent-warn")]
-	Warn,
-}

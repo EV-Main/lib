@@ -1,10 +1,10 @@
-use tailwind_fuse::{AsTailwindClass, TwVariant};
-
-pub const CONFIRM_DIALOG_CONTENT: &str = "max-w-105 gap-4 bg-popover p-5";
+pub const CONFIRM_DIALOG_CONTENT: &str = "max-w-105 gap-4 p-5";
 
 pub const CONFIRM_DIALOG_HEADER: &str = "flex-row gap-3 text-left";
 
-pub const CONFIRM_DIALOG_ICON: &str = "flex size-8 shrink-0 items-center justify-center rounded-(--control-radius)";
+/// The glyph tile wears the dialog's [`Tone`](crate::Tone): its wash over the well, and its ink.
+pub const CONFIRM_DIALOG_ICON: &str =
+	"flex size-8 shrink-0 items-center justify-center rounded-control bg-muted bg-[image:linear-gradient(var(--tone-wash),var(--tone-wash))] text-(color:--tone-ink)";
 
 pub const CONFIRM_DIALOG_TEXT: &str = "flex min-w-0 flex-col gap-1";
 
@@ -21,17 +21,6 @@ pub const CONFIRM_DIALOG_FOOTER: &str = "flex-row justify-end gap-2";
 pub const CONFIRM_DIALOG_PENDING: &str = "aria-disabled:cursor-not-allowed aria-disabled:opacity-40";
 
 pub const CONFIRM_DIALOG_SPINNER: &str = "size-3.5";
-
-/// The glyph tile per tone. Mirrors the TS `ConfirmDialogTone`; the confirm
-/// button follows the tone too (`danger` or `solid`).
-#[derive(PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
-#[strum(serialize_all = "kebab-case")]
-pub enum ConfirmDialogTone {
-	#[tw(default, class = "bg-muted text-ink-mid")]
-	Default,
-	#[tw(class = "bg-chip-error-bg text-accent-error")]
-	Danger,
-}
 
 /// The `ConfirmDialog`'s own strings. English by default; a caller translates by overriding fields.
 #[derive(Clone, Debug, PartialEq)]

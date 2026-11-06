@@ -21,8 +21,8 @@ function Accounts() {
         handle="jane.doe"
         badges={
           <>
-            <Badge variant="neutral">Personal</Badge>
-            <Badge variant="neutral">Owner</Badge>
+            <Badge tone="neutral">Personal</Badge>
+            <Badge tone="neutral">Owner</Badge>
           </>
         }
       />
@@ -30,7 +30,7 @@ function Accounts() {
         value="team"
         name="Desk 7"
         handle="desk-7"
-        badges={<Badge variant="neutral">Team</Badge>}
+        badges={<Badge tone="neutral">Team</Badge>}
         figure="$12,480.00"
         actions={
           <IconButton aria-label="Desk 7 options" size="sm">
@@ -38,8 +38,8 @@ function Accounts() {
           </IconButton>
         }
       />
-      <AccountListItem value="org" name="Acme Fund" handle="acme" badges={<Badge variant="primary">Organization</Badge>} />
-      <AccountListItem value="archived" name="Old desk" handle="old-desk" disabled badges={<Badge variant="neutral">Archived</Badge>} />
+      <AccountListItem value="org" name="Acme Fund" handle="acme" badges={<Badge tone="primary">Organization</Badge>} />
+      <AccountListItem value="archived" name="Old desk" handle="old-desk" disabled badges={<Badge tone="neutral">Archived</Badge>} />
     </AccountList>
   );
 }

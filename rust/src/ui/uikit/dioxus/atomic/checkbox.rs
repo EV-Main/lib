@@ -88,7 +88,7 @@ mod tests {
 			rsx! { Checkbox {} }
 		}
 		let html = render(app);
-		assert!(html.contains("rounded-[4px]"), "{html}");
+		assert!(html.contains("rounded-control"), "{html}");
 		assert!(html.contains("data-slot=\"checkbox\""), "{html}");
 	}
 

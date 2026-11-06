@@ -318,7 +318,7 @@ mod tests {
 	fn marks_the_open_tab_and_fills_only_it() {
 		let html = render(three_tabs);
 		assert_eq!(html.matches("data-state=\"active\"").count(), 1, "{html}");
-		assert_eq!(html.matches("hover:bg-secondary").count(), 1, "{html}");
+		assert_eq!(html.matches("hover:bg-card").count(), 1, "{html}");
 		// A tab without a close button keeps the title's right inset.
 		assert_eq!(html.matches("class=\"w-2\"").count(), 2, "{html}");
 	}

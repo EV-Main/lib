@@ -48,11 +48,11 @@ pub fn accent_fill_class(accent: Accent) -> &'static str {
 /// Tints an outlined control's border and ink at the rung, leaving it outlined.
 pub fn accent_outline_class(accent: Accent) -> &'static str {
 	match accent {
-		Accent::Trace => "border border-accent-trace/40 text-accent-trace hover:bg-accent-trace/10",
-		Accent::Debug => "border border-accent-debug/40 text-accent-debug hover:bg-accent-debug/10",
-		Accent::Info => "border border-accent-info/40 text-accent-info-ink hover:bg-accent-info/10",
-		Accent::Warn => "border border-accent-warn/40 text-accent-warn hover:bg-accent-warn/10",
-		Accent::Error => "border border-accent-error/40 text-accent-error hover:bg-accent-error/10",
+		Accent::Trace => "border border-accent-trace/40 text-accent-trace hover:bg-accent-trace/(--tint-hover)",
+		Accent::Debug => "border border-accent-debug/40 text-accent-debug hover:bg-accent-debug/(--tint-hover)",
+		Accent::Info => "border border-accent-info/40 text-accent-info-ink hover:bg-accent-info/(--tint-hover)",
+		Accent::Warn => "border border-accent-warn/40 text-accent-warn hover:bg-accent-warn/(--tint-hover)",
+		Accent::Error => "border border-accent-error/40 text-accent-error hover:bg-accent-error/(--tint-hover)",
 	}
 }
 

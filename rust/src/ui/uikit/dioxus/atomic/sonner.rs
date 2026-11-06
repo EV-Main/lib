@@ -42,7 +42,7 @@ use crate::{
 	ui::uikit::{
 		core::{ToastQueue, ToastState, ToastView, toaster_style, y_position},
 		dioxus::{
-			TOAST_BASE, TOAST_CLOSE, TOAST_CONTENT, TOAST_TITLE, TOASTER_BASE, ToastPosition, ToastVariant,
+			TOAST_BASE, TOAST_CLOSE, TOAST_CONTENT, TOAST_TITLE, TOASTER_BASE, ToastPosition, Tone,
 			primitives::{icon_shapes, is_transform_transition},
 		},
 	},
@@ -53,7 +53,7 @@ use crate::{
 pub struct Toasts(Signal<ToastQueue>);
 
 /// Imperative handle, the mirror of the TS global `toast` object. Obtained via
-/// [`use_toaster`]; each method enqueues a toast of the matching variant and
+/// [`use_toaster`]; each method enqueues a toast of the matching tone and
 /// returns its id, and [`ToasterHandle::dismiss`] closes one by id.
 #[derive(Clone, Copy)]
 pub struct ToasterHandle {
@@ -62,32 +62,32 @@ pub struct ToasterHandle {
 
 impl ToasterHandle {
 	pub fn toast(&self, message: impl Into<String>) -> u64 {
-		self.show(message, ToastVariant::Neutral, Some(TOAST_DURATION_MS))
+		self.show(message, Tone::Neutral, Some(TOAST_DURATION_MS))
 	}
 
 	pub fn positive(&self, message: impl Into<String>) -> u64 {
-		self.show(message, ToastVariant::Positive, Some(TOAST_DURATION_MS))
+		self.show(message, Tone::Positive, Some(TOAST_DURATION_MS))
 	}
 
 	pub fn error(&self, message: impl Into<String>) -> u64 {
-		self.show(message, ToastVariant::Error, Some(TOAST_DURATION_MS))
+		self.show(message, Tone::Error, Some(TOAST_DURATION_MS))
 	}
 
 	pub fn info(&self, message: impl Into<String>) -> u64 {
-		self.show(message, ToastVariant::Info, Some(TOAST_DURATION_MS))
+		self.show(message, Tone::Info, Some(TOAST_DURATION_MS))
 	}
 
 	pub fn warn(&self, message: impl Into<String>) -> u64 {
-		self.show(message, ToastVariant::Warn, Some(TOAST_DURATION_MS))
+		self.show(message, Tone::Warn, Some(TOAST_DURATION_MS))
 	}
 
-	/// Full control over variant + lifetime. `duration` is ms, or `None` for a
+	/// Full control over tone + lifetime. `duration` is ms, or `None` for a
 	/// **persistent** toast that stays until the close button or
 	/// [`ToasterHandle::dismiss`]. The convenience methods above use the TS
 	/// `TOAST_DURATION_MS`; this is the mirror of the TS `toast(msg, { duration })`.
-	pub fn show(&self, message: impl Into<String>, variant: ToastVariant, duration: Option<u32>) -> u64 {
+	pub fn show(&self, message: impl Into<String>, tone: Tone, duration: Option<u32>) -> u64 {
 		let mut queue = self.toasts.0;
-		queue.write().push(message.into(), variant, duration)
+		queue.write().push(message.into(), tone, duration)
 	}
 
 	/// Begins the exit animation: the toast flips to `data-state="closed"` and
@@ -179,7 +179,7 @@ fn ToastItem(toast: ToastView) -> Element {
 			role: "status",
 			"aria-live": "polite",
 			"data-slot": "toast",
-			"data-variant": toast.variant.as_ref(),
+			"data-tone": toast.tone.as_ref(),
 			"data-state": state.as_str(),
 			"data-front": "{toast.front}",
 			"data-visible": "{toast.visible}",
@@ -195,7 +195,7 @@ fn ToastItem(toast: ToastView) -> Element {
 					handle.remove(id);
 				}
 			},
-			class: cn!(TOAST_BASE, toast.variant.as_class()),
+			class: cn!(TOAST_BASE, toast.tone.as_class()),
 			div { class: TOAST_CONTENT,
 				div { class: TOAST_TITLE, "{toast.message}" }
 			}
@@ -229,7 +229,7 @@ mod tests {
 	use crate::ui::uikit::dioxus::test_util::render;
 
 	#[test]
-	fn enqueued_toast_renders_with_role_and_variant() {
+	fn enqueued_toast_renders_with_role_and_tone() {
 		fn app() -> Element {
 			rsx! {
 				ToasterProvider {
@@ -246,7 +246,7 @@ mod tests {
 		}
 		let html = render(app);
 		assert!(html.contains("role=\"status\""), "{html}");
-		assert!(html.contains("data-variant=\"positive\""), "{html}");
+		assert!(html.contains("data-tone=\"positive\""), "{html}");
 		assert!(html.contains("data-state=\"open\""), "fresh toast mounts open: {html}");
 		assert!(html.contains("Done"), "{html}");
 		assert!(html.contains("data-slot=\"toast\""), "{html}");
@@ -274,7 +274,7 @@ mod tests {
 	}
 
 	#[test]
-	fn every_variant_helper_enqueues() {
+	fn every_tone_helper_enqueues() {
 		fn app() -> Element {
 			rsx! {
 				ToasterProvider {
@@ -294,8 +294,8 @@ mod tests {
 			rsx! {}
 		}
 		let html = render(app);
-		assert!(html.contains("data-variant=\"info\""), "{html}");
-		assert!(html.contains("data-variant=\"warn\""), "{html}");
+		assert!(html.contains("data-tone=\"info\""), "{html}");
+		assert!(html.contains("data-tone=\"warn\""), "{html}");
 	}
 
 	#[test]
@@ -413,7 +413,7 @@ mod tests {
 			let toaster = use_toaster();
 			use_hook(move || {
 				toaster.positive("times out");
-				toaster.show("sticky", ToastVariant::Info, None);
+				toaster.show("sticky", Tone::Info, None);
 			});
 			rsx! {}
 		}

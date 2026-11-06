@@ -119,7 +119,7 @@ export function InstrumentToolbar() {
       <Separator />
       <span className="flex items-center gap-2">
         <span className="font-serif text-figure-l text-ink font-light tabular-nums">2398.73</span>
-        <Badge variant="error">-2.97%</Badge>
+        <Badge tone="error">-2.97%</Badge>
       </span>
       <div className="flex gap-4 max-xl:hidden">
         <Stat label="24h volume" value="$8.96B" />
@@ -148,7 +148,7 @@ export function CollapsedInstrument() {
     <span className="flex items-center gap-3 px-3">
       <span className="text-body text-ink font-medium">ABCUSD</span>
       <span className="font-serif text-figure-m text-ink font-light tabular-nums">2398.73</span>
-      <Badge variant="error">-2.97%</Badge>
+      <Badge tone="error">-2.97%</Badge>
       <ToggleGroup type="single" aria-label="Timeframe" defaultValue="1m">
         <ToggleGroupItem value="1m">1m</ToggleGroupItem>
       </ToggleGroup>

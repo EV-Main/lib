@@ -11,7 +11,7 @@ describe("ChatBubble", () => {
         <ChatBubble>a</ChatBubble>
       </>,
     );
-    expect(screen.getByText("u")).toHaveClass("border", "bg-secondary");
+    expect(screen.getByText("u")).toHaveClass("border", "bg-card");
     expect(screen.getByText("m")).toHaveClass("bg-muted");
     expect(screen.getByText("a")).not.toHaveClass("border");
   });

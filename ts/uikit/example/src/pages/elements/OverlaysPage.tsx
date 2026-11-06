@@ -19,7 +19,7 @@ function Confirms() {
       />
       <ConfirmDialog
         trigger={<Button size="xs" variant="destructive">Delete (fails)</Button>}
-        tone="danger"
+        tone="error"
         title="Delete the position?"
         description="A rejection keeps the dialog open and shows why."
         confirmLabel="Delete"

@@ -1,7 +1,8 @@
 # Visual regression
 
 One PNG per uikit primitive, plus the combined board and the colorscheme page,
-in `__screenshots__/`, compared **byte for byte** by the gallery test.
+per theme (`<label>.{dark,light,oldschool}.png`) in `__screenshots__/`, compared
+**byte for byte** by the gallery test.
 
 ```sh
 cargo test --features uikit_dioxus --test gallery                   # capture and compare
@@ -11,6 +12,33 @@ nix run .#visual                                             # look at the pages
 
 Adding a primitive is still one line in `../support/gallery.rs`; the page list
 flows from there through `dist/manifest.json` into the spec.
+
+## Review a change
+
+```sh
+nix run .#visual-review -- [<git-ref>] [--themes dark,light,oldschool] [--fresh]
+```
+
+Writes `tmp/visual-review.html`: per component whose render moved, a diff panel
+(changed pixels in red over the dimmed old render), the old and the new, with the
+share of changed pixels. The old side is the ref's committed baselines
+(`git show`), so nothing is checked out or rebuilt; the new side is the working
+tree's baselines, or with `--fresh` a capture run without accepting (from inside
+`nix develop`). Default ref `origin/main`, default theme `dark`.
+
+On a PR that moves a baseline, `.github/workflows/visual-review.yml` runs it
+against the base branch: the changed-% table lands as one PR comment (rewritten
+on each push) and the job summary, the page as the `visual-review` artifact.
+
+The page is also where the decision is made: per component pick old, new or
+either (click a column caption, or `j`/`k` and `1`/`2`/`3`/`0`), double-click a
+panel for a lockstep zoom. Ctrl+S writes the picks into the file (first save asks
+where; Chromium only, elsewhere it downloads). Regenerating keeps picks for
+labels still present. An agent reads them with:
+
+```sh
+nix run .#visual-review -- --decisions [tmp/visual-review.html]   # marked (label: old|new|both), then unmarked
+```
 
 ## Why it is shaped this way
 

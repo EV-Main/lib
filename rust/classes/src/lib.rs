@@ -86,6 +86,7 @@ mod tabs;
 mod textarea;
 mod toggle;
 mod toggle_group;
+mod tone;
 mod tooltip;
 mod top_bar;
 mod workspace_tab;
@@ -171,6 +172,7 @@ pub use tabs::*;
 pub use textarea::*;
 pub use toggle::*;
 pub use toggle_group::*;
+pub use tone::*;
 pub use tooltip::*;
 pub use top_bar::*;
 pub use workspace_tab::*;
@@ -251,12 +253,12 @@ const TEXT_SCALE: [&str; 9] = ["caption", "body-s", "body", "body-l", "h3", "h2"
 ///
 /// `tailwind_fuse` cannot parse Tailwind v4's `(--var)` shorthand, and keeps a
 /// class it cannot parse beside the one it should replace: `rounded-full
-/// rounded-(--control-radius)` would survive whole, with the CSS order picking
+/// rounded-control` would survive whole, with the CSS order picking
 /// the radius. Such a class is merged in its `[var(--var)]` long form and
 /// written back as the caller wrote it.
 #[doc(hidden)]
 pub fn fuse(class: &str) -> String {
-	if !class.contains("-(") {
+	if !class.contains("-(") && !class.contains("/(") {
 		return merge(class);
 	}
 	let mut written = std::collections::HashMap::new();
@@ -281,10 +283,14 @@ fn merge(class: &str) -> String {
 	tailwind_fuse::merge::tw_merge_override(&[class], tailwind_fuse::merge::MergeOptions::default(), ring_width_collision, |_: &str| None)
 }
 
-/// `rounded-(--r)` as `rounded-[var(--r)]`, and `text-(length:--s)` as
-/// `text-[length:var(--s)]`; `None` for a class without the shorthand.
+/// `rounded-(--r)` as `rounded-[var(--r)]`, `text-(length:--s)` as
+/// `text-[length:var(--s)]` and `bg-x/(--a)` as `bg-x/[var(--a)]`; `None` for a
+/// class without the shorthand.
 fn var_long_form(token: &str) -> Option<String> {
 	let inner = token.strip_suffix(')')?;
+	if let Some((head, var)) = inner.rsplit_once("/(").filter(|(_, var)| var.starts_with("--")) {
+		return Some(format!("{head}/[var({var})]"));
+	}
 	let open = inner.rfind("-(")?;
 	let (head, var) = (&inner[..open], &inner[open + 2..]);
 	match var.split_once(':') {
@@ -340,11 +346,51 @@ mod tests {
 	/// `[var(--var)]` long form, and comes back as written.
 	#[test]
 	fn var_shorthand_conflicts_like_its_long_form() {
-		assert_eq!(cn!("rounded-full size-7", "rounded-(--control-radius)"), "size-7 rounded-(--control-radius)");
-		assert_eq!(cn!("rounded-(--control-radius)", "rounded-full"), "rounded-full");
+		assert_eq!(cn!("rounded-full size-7", "rounded-control"), "size-7 rounded-control");
+		assert_eq!(cn!("rounded-control", "rounded-full"), "rounded-full");
 		assert_eq!(cn!("hover:rounded-(--a)", "rounded-(--b)"), "hover:rounded-(--a) rounded-(--b)");
 		assert_eq!(cn!("text-(length:--size) text-ink", "text-body"), "text-ink text-body");
 		assert_eq!(cn!("has-[:focus-visible]:ring-2", "p-(--pad) p-2"), "has-[:focus-visible]:ring-2 p-2");
+	}
+
+	/// A step's `--control-box` yields to a later one by property name, and the
+	/// height reading it yields to a literal one.
+	#[test]
+	fn control_box_conflicts_by_property() {
+		assert_eq!(
+			cn!("[--control-box:var(--control-h-sm)] px-3", "[--control-box:var(--control-h-xs)]"),
+			"px-3 [--control-box:var(--control-h-xs)]"
+		);
+		assert_eq!(cn!("h-(--control-box) min-w-(--control-box)", "h-auto"), "min-w-(--control-box) h-auto");
+	}
+
+	/// A radius role is a radius: it replaces a shape and yields to one.
+	#[test]
+	fn radius_roles_conflict_as_radii() {
+		assert_eq!(cn!("rounded-full size-7", "rounded-control"), "size-7 rounded-control");
+		assert_eq!(cn!("rounded-panel", "rounded-full"), "rounded-full");
+		assert_eq!(cn!("rounded-row", "rounded-l-none"), "rounded-row rounded-l-none");
+	}
+
+	/// A tone's ink is a colour, so the type size beside it survives; a later
+	/// tone's properties replace an earlier one's.
+	#[test]
+	fn tone_parts_conflict_by_kind() {
+		assert_eq!(cn!("text-caption text-(color:--tone-ink)", "text-ink"), "text-caption text-ink");
+		assert_eq!(cn!("[--tone-ink:var(--ink)] px-2", "[--tone-ink:var(--accent-warn)]"), "px-2 [--tone-ink:var(--accent-warn)]");
+	}
+
+	/// A tint laid over a surface is an image, so the surface's colour survives it.
+	#[test]
+	fn tint_layer_keeps_the_surface() {
+		let layer = "bg-[image:linear-gradient(var(--tint-error-fill),var(--tint-error-fill))]";
+		assert_eq!(cn!("bg-card", layer), format!("bg-card {layer}"));
+	}
+
+	/// A tone at `--tint-hover` is a background colour like any other.
+	#[test]
+	fn tint_hover_conflicts_as_a_background() {
+		assert_eq!(cn!("hover:bg-accent-error/(--tint-hover) px-2", "hover:bg-hover"), "px-2 hover:bg-hover");
 	}
 
 	/// The serif face is a family, not a weight: a weight beside it keeps it,

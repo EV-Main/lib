@@ -1,5 +1,3 @@
-use tailwind_fuse::{AsTailwindClass, TwVariant};
-
 /// Centres a 1408 px measure; the rail goes beside the cards from `lg` up.
 pub const SETTINGS_LAYOUT: &str = "mx-auto flex w-full max-w-352 flex-col gap-6 px-4 py-8 lg:flex-row lg:gap-8";
 
@@ -8,7 +6,8 @@ pub const SETTINGS_NAV: &str = "shrink-0 lg:w-64";
 
 pub const SETTINGS_MAIN: &str = "flex min-w-0 flex-1 flex-col gap-6";
 
-pub const SETTINGS_SECTION_BASE: &str = "flex flex-col rounded-lg border bg-card";
+/// Wears its [`Tone`](crate::Tone)'s edge and its wash as a layer over the card.
+pub const SETTINGS_SECTION_BASE: &str = "flex flex-col rounded-panel border border-(color:--tone-edge) bg-card bg-[image:linear-gradient(var(--tone-wash),var(--tone-wash))]";
 
 pub const SETTINGS_SECTION_HEADER: &str = "flex items-start justify-between gap-4 p-4";
 
@@ -33,14 +32,3 @@ pub const SETTINGS_SECTION_BODY_PADDED: &str = "gap-4 px-4 pb-4";
 /// Keeps label and control on one line at every width, control at the end.
 /// `flex-row` must win over the form row's `flex-col`, so it goes after the base.
 pub const SETTINGS_ROW_INLINE: &str = "flex-row items-center justify-between sm:gap-6 [&>[data-slot=form-row-control]]:flex-none [&>[data-slot=form-row-control]]:items-end";
-
-/// The card edge per tone. Mirrors the TS `SettingsSectionProps["tone"]`.
-#[derive(PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
-#[strum(serialize_all = "kebab-case")]
-pub enum SettingsSectionTone {
-	#[tw(default, class = "border-border")]
-	Default,
-	/// The destructive zone.
-	#[tw(class = "border-accent-error")]
-	Danger,
-}

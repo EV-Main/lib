@@ -4,9 +4,9 @@ use crate::Size;
 
 /// Base classes shared by every button variant. Split out from the variant enum
 /// so the TS codegen can emit it verbatim and `button_classes` fuses it last-wins.
-pub const BUTTON_BASE: &str = "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[var(--control-radius)] text-sm \
+pub const BUTTON_BASE: &str = "inline-flex h-(--control-box) items-center justify-center gap-2 whitespace-nowrap rounded-control \
                                font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-40 \
-                               [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 \
+                               [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-[calc(1em+2px)] shrink-0 [&_svg]:shrink-0 \
                                outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] \
                                aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error";
 
@@ -24,7 +24,7 @@ pub enum ButtonVariant {
 	)]
 	Primary,
 	#[tw(
-		class = "bg-secondary text-on-secondary hover:bg-secondary/80 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+		class = "bg-secondary text-on-secondary hover:bg-[image:linear-gradient(var(--hover),var(--hover))] focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
 	)]
 	Secondary,
 	/// The hover is a second layer over the raised face, not a replacement, so the
@@ -43,25 +43,19 @@ pub enum ButtonVariant {
 	Link,
 }
 
-/// Size + shape dimensions. An `icon` button is a square (`h-N aspect-square px-0`);
-/// otherwise per-size height + text padding. Mirrors the TS `buttonSizeClasses` table.
-pub fn button_size_class(size: Size, icon: bool) -> &'static str {
-	match (size, icon) {
-		(Size::Xs, false) => "h-7 gap-1 px-2 text-xs has-[>svg]:px-1.5",
-		(Size::Sm, false) => "h-8 gap-1.5 px-3 has-[>svg]:px-2.5",
-		(Size::Md, false) => "h-9 px-4 py-[var(--control-py)] has-[>svg]:px-3",
-		(Size::Lg, false) => "h-10 px-6 has-[>svg]:px-4",
-		// the CTA size: geometry entirely from the control tokens, so a consumer
-		// reshapes its call to action by writing values
-		(Size::Xl, false) => "px-[var(--control-px)] py-[var(--control-py)] text-[length:var(--control-text)]",
-		// a floor, not a fixed height: the text sizing matches `Lg`, the box never
-		// drops under 44 px
-		(Size::Touch, false) => "min-h-11 px-6 has-[>svg]:px-4",
-		(Size::Xs, true) => "h-7 aspect-square px-0",
-		(Size::Sm, true) => "h-8 aspect-square px-0",
-		(Size::Md, true) => "h-9 aspect-square px-0",
-		(Size::Lg, true) => "h-10 aspect-square px-0",
-		(Size::Xl, true) => "aspect-square p-[var(--control-py)]",
-		(Size::Touch, true) => "size-11 px-0",
+/// A button holding a bare glyph: the square of its step's height, in place of
+/// [`button_size_class`].
+pub const BUTTON_ICON: &str = "aspect-square px-0";
+
+/// Padding and gap per step; the height is the [`Size`]'s `--control-box`.
+/// Mirrors the TS `buttonSizeClasses` table.
+pub fn button_size_class(size: Size) -> &'static str {
+	match size {
+		Size::Xs => "gap-1 px-2 has-[>svg]:px-1.5",
+		Size::Sm => "gap-1.5 px-3 has-[>svg]:px-2.5",
+		Size::Md => "px-4 has-[>svg]:px-3",
+		Size::Lg | Size::Touch => "px-6 has-[>svg]:px-4",
+		// the CTA size: a consumer reshapes its call to action by writing the control tokens
+		Size::Xl => "px-[var(--control-px)] text-[length:var(--control-text)]",
 	}
 }
