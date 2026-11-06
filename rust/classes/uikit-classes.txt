@@ -27,12 +27,13 @@ PlayfairDisplay-Italic.ttf
 [&_tr:last-child]:border-0
 [&_tr]:border-b
 [--control-box:calc(var(--control-h-xs)_-_var(--control-step))]
-[--control-box:var(--control-h-lg)]
-[--control-box:var(--control-h-md)]
-[--control-box:var(--control-h-sm)]
-[--control-box:var(--control-h-touch)]
-[--control-box:var(--control-h-xl)]
+[--control-box:var(--control-h-lg)] text-base
+[--control-box:var(--control-h-md)] text-sm
+[--control-box:var(--control-h-sm)] text-sm
+[--control-box:var(--control-h-touch)] text-base
+[--control-box:var(--control-h-xl)] text-base
 [--control-box:var(--control-h-xs)]
+[--control-box:var(--control-h-xs)] text-xs
 [--table-dense-py:calc(var(--spacing)*1.5)]
 [--table-dense-py:calc(var(--spacing)*1.5)] [--table-head-h:calc(var(--spacing)*8)]
 [--table-dense-py:initial]
@@ -671,7 +672,7 @@ form-message\
 form-row
 form-row-control
 form-row-label
-gap-1 px-2 text-xs has-[>svg]:px-1.5
+gap-1 px-2 has-[>svg]:px-1.5
 gap-1 px-2.5 sm:pl-2.5
 gap-1 px-2.5 sm:pr-2.5
 gap-1.5 px-3 has-[>svg]:px-2.5
@@ -756,8 +757,8 @@ info-tip-trigger
 info-tip-trigger\
 inline-block
 inline-flex
-inline-flex h-(--control-box) items-center justify-center gap-2 whitespace-nowrap rounded-[var(--control-radius)] text-sm font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error
-inline-flex h-(--control-box) min-w-(--control-box) items-center justify-center gap-2 rounded-[var(--control-radius)] text-sm font-medium hover:bg-muted hover:text-ink-soft disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-primary data-[state=on]:text-on-primary [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 focus-visible:border-ring outline-none transition-[color,box-shadow] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error whitespace-nowrap focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+inline-flex h-(--control-box) items-center justify-center gap-2 whitespace-nowrap rounded-[var(--control-radius)] font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-[calc(1em+2px)] shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error
+inline-flex h-(--control-box) min-w-(--control-box) items-center justify-center gap-2 rounded-[var(--control-radius)] font-medium hover:bg-muted hover:text-ink-soft disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-primary data-[state=on]:text-on-primary [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-[calc(1em+2px)] [&_svg]:shrink-0 focus-visible:border-ring outline-none transition-[color,box-shadow] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error whitespace-nowrap focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 inline-flex h-5 items-center gap-1.5 px-2 text-caption text-ink-mid
 inline-flex h-5 items-center justify-center rounded-[var(--chip-radius)] border px-1.5 text-caption font-medium w-fit whitespace-nowrap shrink-0 gap-1 overflow-hidden [&>svg]:size-3 [&>svg]:pointer-events-none transition-colors outline-none aria-invalid:border-accent-error focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 inline-flex h-6 items-center gap-1 text-ink-soft
