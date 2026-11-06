@@ -99,21 +99,6 @@ pub fn AsideRail(
 	}
 }
 
-#[component]
-fn AsideRailButton(item: AsideRailItem, value: Option<String>, on_value_change: EventHandler<Option<String>>) -> Element {
-	let open = value.as_deref() == Some(item.id.as_str());
-	let id = item.id;
-	rsx! {
-		IconButton {
-			aria_label: item.label.clone(),
-			tooltip: rsx! { {item.label} },
-			pressed: open,
-			onclick: move |_| on_value_change.call(if open { None } else { Some(id.clone()) }),
-			{item.icon}
-		}
-	}
-}
-
 /// How an [`AsidePanel`] takes its place. Mirrors the TS `AsidePanelMode`.
 #[derive(Clone, Copy, Debug, Default, PartialEq)]
 pub enum AsidePanelMode {
@@ -234,6 +219,21 @@ pub fn AsidePanel(
 			div { "data-slot": "aside-panel-wide", class: ASIDE_PANEL_WIDE_ONLY_WRAPPER, {sheet()} }
 			{drawer()}
 		},
+	}
+}
+
+#[component]
+fn AsideRailButton(item: AsideRailItem, value: Option<String>, on_value_change: EventHandler<Option<String>>) -> Element {
+	let open = value.as_deref() == Some(item.id.as_str());
+	let id = item.id;
+	rsx! {
+		IconButton {
+			aria_label: item.label.clone(),
+			tooltip: rsx! { {item.label} },
+			pressed: open,
+			onclick: move |_| on_value_change.call(if open { None } else { Some(id.clone()) }),
+			{item.icon}
+		}
 	}
 }
 

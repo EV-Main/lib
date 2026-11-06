@@ -2,18 +2,6 @@ use tailwind_fuse::{AsTailwindClass, TwVariant};
 
 pub const CHAT_BUBBLE_BASE: &str = "min-w-0 break-words whitespace-pre-wrap text-body text-ink";
 
-/// `assistant` has no box, so a long answer reads as a page.
-#[derive(Debug, PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
-#[strum(serialize_all = "kebab-case")]
-pub enum ChatBubbleVariant {
-	#[tw(class = "max-w-105 rounded-lg border border-border bg-secondary px-3.5 py-2.5")]
-	User,
-	#[tw(default, class = "py-0.5")]
-	Assistant,
-	#[tw(class = "max-w-105 rounded-lg border border-border-subtle bg-muted px-3.5 py-2.5")]
-	Muted,
-}
-
 pub const CHAT_MESSAGE_BASE: &str = "flex gap-3";
 
 pub const CHAT_MESSAGE_USER: &str = "justify-end";
@@ -46,16 +34,6 @@ pub const CHAT_MARKER_STATUS: &str = "flex items-center gap-2 text-body-s text-i
 
 pub const CHAT_MARKER_DOT: &str = "size-1.5 rounded-full";
 
-/// The dot of a status marker: it pulses only while the work runs.
-#[derive(Debug, PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
-#[strum(serialize_all = "kebab-case")]
-pub enum ChatStatusState {
-	#[tw(class = "bg-primary-ink motion-safe:animate-pulse")]
-	Running,
-	#[tw(default, class = "bg-ink-soft")]
-	Done,
-}
-
 pub const CHAT_MARKER_TOOL: &str = "flex items-center gap-2.5 rounded-(--control-radius) border bg-card px-2.5 py-2";
 
 pub const CHAT_MARKER_TOOL_BORDER: &str = "border-border";
@@ -75,18 +53,6 @@ pub const CHAT_MARKER_TOOL_DETAIL: &str = "truncate text-body-s tabular-nums tex
 
 pub const CHAT_MARKER_TOOL_META: &str = "shrink-0 text-caption";
 
-/// A tool call's state; the class colours its right-hand note.
-#[derive(Debug, PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
-#[strum(serialize_all = "kebab-case")]
-pub enum ChatToolState {
-	#[tw(class = "text-primary-ink")]
-	Running,
-	#[tw(default, class = "text-ink-soft")]
-	Done,
-	#[tw(class = "text-accent-error-ink")]
-	Error,
-}
-
 pub const CHAT_ATTACHMENT_BASE: &str = "flex w-60 max-w-full flex-col overflow-hidden rounded-(--control-radius) border border-border bg-card";
 
 pub const CHAT_ATTACHMENT_ROW: &str = "flex items-center gap-2.5 p-2";
@@ -102,3 +68,37 @@ pub const CHAT_ATTACHMENT_META: &str = "truncate text-caption text-ink-soft";
 pub const CHAT_ATTACHMENT_PROGRESS: &str = "h-0.5 bg-border-subtle";
 
 pub const CHAT_ATTACHMENT_PROGRESS_FILL: &str = "h-full bg-primary";
+
+/// `assistant` has no box, so a long answer reads as a page.
+#[derive(Debug, PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
+#[strum(serialize_all = "kebab-case")]
+pub enum ChatBubbleVariant {
+	#[tw(class = "max-w-105 rounded-lg border border-border bg-secondary px-3.5 py-2.5")]
+	User,
+	#[tw(default, class = "py-0.5")]
+	Assistant,
+	#[tw(class = "max-w-105 rounded-lg border border-border-subtle bg-muted px-3.5 py-2.5")]
+	Muted,
+}
+
+/// The dot of a status marker: it pulses only while the work runs.
+#[derive(Debug, PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
+#[strum(serialize_all = "kebab-case")]
+pub enum ChatStatusState {
+	#[tw(class = "bg-primary-ink motion-safe:animate-pulse")]
+	Running,
+	#[tw(default, class = "bg-ink-soft")]
+	Done,
+}
+
+/// A tool call's state; the class colours its right-hand note.
+#[derive(Debug, PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
+#[strum(serialize_all = "kebab-case")]
+pub enum ChatToolState {
+	#[tw(class = "text-primary-ink")]
+	Running,
+	#[tw(default, class = "text-ink-soft")]
+	Done,
+	#[tw(class = "text-accent-error-ink")]
+	Error,
+}

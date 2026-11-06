@@ -13,6 +13,8 @@ use crate::{
 	},
 };
 
+const SPARKLES: &str = "M9.9 4.4 11 8l3.6 1.1L11 10.2 9.9 13.8 8.8 10.2 5.2 9.1 8.8 8ZM18 14l.7 2.3L21 17l-2.3.7L18 20l-.7-2.3L15 17l2.3-.7Z";
+
 /// One block of message text. Mirrors the TS `ChatBubble`.
 ///
 /// `streaming` marks a bubble that still receives text, for the caret and the
@@ -269,8 +271,6 @@ pub fn ChatAttachment(
 		}
 	}
 }
-
-const SPARKLES: &str = "M9.9 4.4 11 8l3.6 1.1L11 10.2 9.9 13.8 8.8 10.2 5.2 9.1 8.8 8ZM18 14l.7 2.3L21 17l-2.3.7L18 20l-.7-2.3L15 17l2.3-.7Z";
 
 /// The TS `UiIcon` frame: a 24-unit lucide glyph drawn in the current ink.
 /// Shared with the composer, which draws the same frame.

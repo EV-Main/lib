@@ -97,47 +97,6 @@ pub fn KeyValue(
 	}
 }
 
-fn announce(mut copied: Signal<bool>, mut generation: Signal<u32>) {
-	// `try_write`: under `wasm` this also runs from a promise or a timer, which
-	// can fire after the component is gone and its signals with it.
-	if let Ok(mut c) = copied.try_write() {
-		*c = true;
-	}
-	let started = {
-		let Ok(mut g) = generation.try_write() else { return };
-		*g = g.wrapping_add(1);
-		*g
-	};
-	#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
-	clear_later(copied, generation, started);
-	// No timer outside `wasm`, so nothing waits on this copy's number.
-	#[cfg(not(all(target_arch = "wasm32", feature = "wasm")))]
-	let _ = started;
-}
-
-#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
-fn clear_later(mut copied: Signal<bool>, generation: Signal<u32>, started: u32) {
-	use web_sys::{js_sys::Function, wasm_bindgen::JsCast};
-
-	let Some(window) = web_sys::window() else { return };
-	let clear = web_sys::wasm_bindgen::closure::Closure::once_into_js(move || {
-		if generation.try_read().is_ok_and(|g| *g == started)
-			&& let Ok(mut c) = copied.try_write()
-		{
-			*c = false;
-		}
-	});
-	// A failed `setTimeout` only leaves the check mark up; nothing to recover.
-	let _ = window.set_timeout_with_callback_and_timeout_and_arguments_0(clear.unchecked_ref::<Function>(), COPIED_MS);
-}
-
-#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
-fn kit_copy(text: &str, done: impl FnOnce(bool) + 'static) {
-	write_clipboard(text, done);
-}
-#[cfg(not(all(target_arch = "wasm32", feature = "wasm")))]
-fn kit_copy(_: &str, _: impl FnOnce(bool) + 'static) {}
-
 /// Writes `text` to the clipboard, then calls `done` with whether it got
 /// there. The mirror of the TS `writeClipboard` behind [`KeyValue`].
 ///
@@ -188,6 +147,47 @@ pub fn write_clipboard(text: &str, done: impl FnOnce(bool) + 'static) {
 		done(false);
 	}
 }
+
+fn announce(mut copied: Signal<bool>, mut generation: Signal<u32>) {
+	// `try_write`: under `wasm` this also runs from a promise or a timer, which
+	// can fire after the component is gone and its signals with it.
+	if let Ok(mut c) = copied.try_write() {
+		*c = true;
+	}
+	let started = {
+		let Ok(mut g) = generation.try_write() else { return };
+		*g = g.wrapping_add(1);
+		*g
+	};
+	#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
+	clear_later(copied, generation, started);
+	// No timer outside `wasm`, so nothing waits on this copy's number.
+	#[cfg(not(all(target_arch = "wasm32", feature = "wasm")))]
+	let _ = started;
+}
+
+#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
+fn clear_later(mut copied: Signal<bool>, generation: Signal<u32>, started: u32) {
+	use web_sys::{js_sys::Function, wasm_bindgen::JsCast};
+
+	let Some(window) = web_sys::window() else { return };
+	let clear = web_sys::wasm_bindgen::closure::Closure::once_into_js(move || {
+		if generation.try_read().is_ok_and(|g| *g == started)
+			&& let Ok(mut c) = copied.try_write()
+		{
+			*c = false;
+		}
+	});
+	// A failed `setTimeout` only leaves the check mark up; nothing to recover.
+	let _ = window.set_timeout_with_callback_and_timeout_and_arguments_0(clear.unchecked_ref::<Function>(), COPIED_MS);
+}
+
+#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
+fn kit_copy(text: &str, done: impl FnOnce(bool) + 'static) {
+	write_clipboard(text, done);
+}
+#[cfg(not(all(target_arch = "wasm32", feature = "wasm")))]
+fn kit_copy(_: &str, _: impl FnOnce(bool) + 'static) {}
 
 /// The fallback for a browser without the async clipboard API.
 #[cfg(all(target_arch = "wasm32", feature = "wasm"))]

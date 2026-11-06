@@ -7,7 +7,7 @@ use crate::{
 
 /// Which rows a [`SmartHeader`] shows around its bar. Mirrors the TS
 /// `SmartHeaderState`.
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, strum::AsRefStr)]
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr)]
 #[strum(serialize_all = "kebab-case")]
 pub enum SmartHeaderState {
 	/// The bar, the toolbar and the context line.

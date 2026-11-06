@@ -238,7 +238,7 @@ mod listener {
 
 /// What one `keydown` means to the shortcut.
 #[cfg(any(test, all(target_arch = "wasm32", feature = "wasm")))]
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum ShortcutHit {
 	/// Not ⌘K / Ctrl+K: the key goes on as usual.
 	Miss,

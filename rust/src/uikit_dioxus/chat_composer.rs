@@ -11,6 +11,9 @@ use crate::{
 	},
 };
 
+/// The `keyCode` every browser reports for a key that an IME takes.
+const IME_KEY_CODE: u32 = 229;
+
 /// One choice of a [`ModelChip`]. Mirrors the TS `ModelOption`.
 #[derive(Clone, Debug, PartialEq)]
 pub struct ModelOption {
@@ -172,9 +175,6 @@ pub fn ChatComposer(
 		}
 	}
 }
-
-/// The `keyCode` every browser reports for a key that an IME takes.
-const IME_KEY_CODE: u32 = 229;
 
 /// Whether a keydown sends the message: a plain Enter that no IME composition
 /// owns. The Enter of an IME composition confirms the candidate. Safari reports

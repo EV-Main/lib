@@ -7,7 +7,7 @@ use crate::{
 
 /// The element a [`SectionLabel`] renders as. The TS `as` takes any element
 /// type; Dioxus has no dynamic tag, so this lists the ones a label plausibly is.
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 pub enum SectionLabelAs {
 	#[default]
 	P,

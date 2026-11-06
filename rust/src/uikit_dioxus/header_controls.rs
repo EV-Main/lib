@@ -11,6 +11,10 @@ use crate::{
 	},
 };
 
+const CTRL_K: &str = "Ctrl K";
+
+#[cfg(any(test, all(target_arch = "wasm32", feature = "wasm")))]
+const COMMAND_K: &str = "⌘K";
 /// "Balance: $0.00" in the header; a button only when given `onclick`.
 /// Mirrors the TS `HeaderBalance`.
 ///
@@ -160,46 +164,6 @@ pub fn NotificationBell(
 	}
 }
 
-#[component]
-fn NotificationRow(notification: HeaderNotification, on_select: Option<EventHandler<String>>) -> Element {
-	let HeaderNotification {
-		id,
-		title,
-		description,
-		time,
-		unread,
-	} = notification;
-	let dot_cls = cn!(
-		NOTIFICATION_BELL_ITEM_DOT,
-		if unread { NOTIFICATION_BELL_ITEM_DOT_UNREAD } else { NOTIFICATION_BELL_ITEM_DOT_READ }
-	);
-	let title_cls = cn!(NOTIFICATION_BELL_ITEM_TITLE, if unread { NOTIFICATION_BELL_ITEM_TITLE_UNREAD } else { "" });
-	rsx! {
-		li {
-			button {
-				r#type: "button",
-				class: NOTIFICATION_BELL_ITEM,
-				"data-slot": "notification",
-				onclick: move |_| {
-					if let Some(h) = on_select {
-						h.call(id.clone());
-					}
-				},
-				span { class: dot_cls, "aria-hidden": "true" }
-				span { class: NOTIFICATION_BELL_ITEM_BODY,
-					span { class: title_cls, {title} }
-					if let Some(description) = description {
-						span { class: NOTIFICATION_BELL_ITEM_DESCRIPTION, {description} }
-					}
-				}
-				if let Some(time) = time {
-					span { class: NOTIFICATION_BELL_ITEM_TIME, {time} }
-				}
-			}
-		}
-	}
-}
-
 /// A button dressed as the search field; it opens the palette rather than
 /// taking input. Mirrors the TS `HeaderSearch`.
 ///
@@ -239,9 +203,45 @@ pub fn HeaderSearch(
 	}
 }
 
-const CTRL_K: &str = "Ctrl K";
-#[cfg(any(test, all(target_arch = "wasm32", feature = "wasm")))]
-const COMMAND_K: &str = "⌘K";
+#[component]
+fn NotificationRow(notification: HeaderNotification, on_select: Option<EventHandler<String>>) -> Element {
+	let HeaderNotification {
+		id,
+		title,
+		description,
+		time,
+		unread,
+	} = notification;
+	let dot_cls = cn!(
+		NOTIFICATION_BELL_ITEM_DOT,
+		if unread { NOTIFICATION_BELL_ITEM_DOT_UNREAD } else { NOTIFICATION_BELL_ITEM_DOT_READ }
+	);
+	let title_cls = cn!(NOTIFICATION_BELL_ITEM_TITLE, if unread { NOTIFICATION_BELL_ITEM_TITLE_UNREAD } else { "" });
+	rsx! {
+		li {
+			button {
+				r#type: "button",
+				class: NOTIFICATION_BELL_ITEM,
+				"data-slot": "notification",
+				onclick: move |_| {
+					if let Some(h) = on_select {
+						h.call(id.clone());
+					}
+				},
+				span { class: dot_cls, "aria-hidden": "true" }
+				span { class: NOTIFICATION_BELL_ITEM_BODY,
+					span { class: title_cls, {title} }
+					if let Some(description) = description {
+						span { class: NOTIFICATION_BELL_ITEM_DESCRIPTION, {description} }
+					}
+				}
+				if let Some(time) = time {
+					span { class: NOTIFICATION_BELL_ITEM_TIME, {time} }
+				}
+			}
+		}
+	}
+}
 
 /// The TS `APPLE` test: Mac, iPhone, iPad and iPod name their platform so.
 /// Outside the effect so a server-rendered test can check it.
@@ -293,7 +293,10 @@ fn Glyph(class: &'static str, children: Element) -> Element {
 
 #[cfg(test)]
 mod tests {
-	use std::sync::atomic::{AtomicUsize, Ordering};
+	use std::sync::{
+		Mutex,
+		atomic::{AtomicUsize, Ordering},
+	};
 
 	use super::*;
 	use crate::uikit_dioxus::test_util::{Harness, render, render_after_click};
@@ -425,7 +428,7 @@ mod tests {
 
 	#[test]
 	fn the_bell_lists_notifications_in_a_popover_and_reports_the_pick() {
-		static PICKED: std::sync::Mutex<Vec<String>> = std::sync::Mutex::new(Vec::new());
+		static PICKED: Mutex<Vec<String>> = Mutex::new(Vec::new());
 		fn app() -> Element {
 			rsx! {
 				NotificationBell {

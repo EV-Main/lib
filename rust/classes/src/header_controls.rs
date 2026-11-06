@@ -17,16 +17,6 @@ pub const HEADER_BALANCE_FIGURE: &str = "font-medium tabular-nums";
 
 pub const HEADER_BALANCE_CHEVRON: &str = "size-4 text-ink-soft";
 
-/// The figure's ink. `Warn` is the low-funds signal.
-#[derive(Debug, PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
-#[strum(serialize_all = "kebab-case")]
-pub enum HeaderBalanceTone {
-	#[tw(default, class = "text-ink")]
-	Default,
-	#[tw(class = "text-accent-warn-ink")]
-	Warn,
-}
-
 /// The dot is absolutely placed over the glyph, so the button is its frame.
 pub const NOTIFICATION_BELL_TRIGGER: &str = "relative";
 
@@ -65,3 +55,13 @@ pub const HEADER_SEARCH_BASE: &str = "flex h-8 w-55 items-center gap-2 rounded-(
 /// `min-w-0` with `truncate`: a long placeholder ends in an ellipsis and the
 /// shortcut hint stays visible.
 pub const HEADER_SEARCH_PLACEHOLDER: &str = "min-w-0 flex-1 truncate";
+
+/// The figure's ink. `Warn` is the low-funds signal.
+#[derive(Debug, PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
+#[strum(serialize_all = "kebab-case")]
+pub enum HeaderBalanceTone {
+	#[tw(default, class = "text-ink")]
+	Default,
+	#[tw(class = "text-accent-warn-ink")]
+	Warn,
+}
