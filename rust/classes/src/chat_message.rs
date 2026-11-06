@@ -9,7 +9,7 @@ pub const CHAT_MESSAGE_USER: &str = "justify-end";
 pub const CHAT_MESSAGE_AVATAR: &str = "shrink-0";
 
 /// The default sparkle tile of an assistant turn.
-pub const CHAT_MESSAGE_AVATAR_TILE: &str = "flex size-7 items-center justify-center rounded-control border border-border bg-secondary text-ink-mid";
+pub const CHAT_MESSAGE_AVATAR_TILE: &str = "flex size-7 items-center justify-center rounded-control border border-border bg-card text-ink-mid";
 
 pub const CHAT_MESSAGE_BODY: &str = "flex min-w-0 flex-col gap-1.5";
 
@@ -73,7 +73,7 @@ pub const CHAT_ATTACHMENT_PROGRESS_FILL: &str = "h-full bg-primary";
 #[derive(Debug, PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
 #[strum(serialize_all = "kebab-case")]
 pub enum ChatBubbleVariant {
-	#[tw(class = "max-w-105 rounded-panel border border-border bg-secondary px-3.5 py-2.5")]
+	#[tw(class = "max-w-105 rounded-panel border border-border bg-card px-3.5 py-2.5")]
 	User,
 	#[tw(default, class = "py-0.5")]
 	Assistant,

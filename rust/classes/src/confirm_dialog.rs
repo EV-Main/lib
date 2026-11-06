@@ -1,4 +1,4 @@
-pub const CONFIRM_DIALOG_CONTENT: &str = "max-w-105 gap-4 bg-popover p-5";
+pub const CONFIRM_DIALOG_CONTENT: &str = "max-w-105 gap-4 p-5";
 
 pub const CONFIRM_DIALOG_HEADER: &str = "flex-row gap-3 text-left";
 

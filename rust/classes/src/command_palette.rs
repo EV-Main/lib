@@ -1,6 +1,6 @@
 /// Fused over the dialog content's own classes: it drops the palette into the top
 /// sixth of the screen instead of centring it.
-pub const COMMAND_PALETTE_CONTENT: &str = "top-1/6 max-w-[calc(100%-2rem)] translate-y-0 gap-0 overflow-hidden bg-popover p-0 sm:max-w-105";
+pub const COMMAND_PALETTE_CONTENT: &str = "top-1/6 max-w-[calc(100%-2rem)] translate-y-0 gap-0 overflow-hidden p-0 sm:max-w-105";
 
 pub const COMMAND_PALETTE_TITLE: &str = "sr-only";
 

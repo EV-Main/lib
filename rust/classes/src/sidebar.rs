@@ -8,11 +8,11 @@ pub const SIDEBAR_MENU_BUTTON_BASE: &str = "peer/menu-button flex w-full items-c
                                             data-[state=open]:hover:text-ink group-data-[collapsible=icon]:size-8! \
                                             group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0";
 
-pub const SIDEBAR_WRAPPER: &str = "group/sidebar-wrapper has-data-[variant=inset]:bg-secondary flex min-h-svh w-full";
+pub const SIDEBAR_WRAPPER: &str = "group/sidebar-wrapper has-data-[variant=inset]:bg-card flex min-h-svh w-full";
 
-pub const SIDEBAR_FLAT: &str = "bg-secondary text-ink flex h-full w-(--sidebar-width) flex-col";
+pub const SIDEBAR_FLAT: &str = "bg-card text-ink flex h-full w-(--sidebar-width) flex-col";
 
-pub const SIDEBAR_INNER: &str = "bg-secondary group-data-[variant=floating]:border-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-panel group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm";
+pub const SIDEBAR_INNER: &str = "bg-card group-data-[variant=floating]:border-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-panel group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm";
 
 pub const SIDEBAR_TRIGGER: &str = "inline-flex size-7 items-center justify-center rounded-control hover:bg-hover hover:text-ink";
 

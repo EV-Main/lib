@@ -54,7 +54,7 @@ export function MobileAppBar({
       data-slot="mobile-app-bar"
       data-enter="rise"
       className={cn(
-        "sticky top-[var(--ev-shell-offset,0px)] z-30 flex items-center gap-2 border-b border-border bg-secondary px-4 pb-3.5 pt-4",
+        "sticky top-[var(--ev-shell-offset,0px)] z-30 flex items-center gap-2 border-b border-border bg-card px-4 pb-3.5 pt-4",
         hideFrom && HIDE_FROM[hideFrom],
         className,
       )}
