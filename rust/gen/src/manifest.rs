@@ -2316,11 +2316,13 @@ fn button() -> Vec<Ts> {
 			value: BUTTON_BASE,
 		},
 		table::<ButtonVariant>("buttonVariantClasses", "ButtonVariant"),
-		// Size and shape are two axes, so they are two tables over the same keys —
-		// not one table whose keys fuse them (`"icon-sm"`) and elide the default
-		// (`"icon"` meaning icon-at-Md). See docs/spec/variants.md.
-		size_table("buttonSizeClasses", "ButtonSize", |s| button_size_class(s, false)),
-		size_table("buttonIconSizeClasses", "ButtonIconSize", |s| button_size_class(s, true)),
+		// Size and shape are two axes: the square is one class over every step, not
+		// a key fused into the size table (`"icon-sm"`). See docs/spec/variants.md.
+		Ts::Const {
+			name: "BUTTON_ICON",
+			value: BUTTON_ICON,
+		},
+		size_table("buttonSizeClasses", "ButtonSize", button_size_class),
 	]
 }
 

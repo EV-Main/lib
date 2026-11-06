@@ -937,8 +937,7 @@
   --depth-card: 0 0 #0000;
   --depth-elevated: 0 0 #0000;
   --depth-overlay: 0 0 #0000;
-  --control-py: 0.5rem;
-  /* the Xl (call-to-action) button reads all three */
+  /* the Xl (call-to-action) button reads both */
   --control-px: 2rem;
   --control-text: 1rem;
   /* multiplies the display type scale (uikit <Display>) */

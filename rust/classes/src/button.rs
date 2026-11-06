@@ -43,17 +43,19 @@ pub enum ButtonVariant {
 	Link,
 }
 
-/// Padding and gap per step; the height is the [`Size`]'s `--control-box`. An
-/// `icon` button is the square of that height. Mirrors the TS `buttonSizeClasses` table.
-pub fn button_size_class(size: Size, icon: bool) -> &'static str {
-	match (size, icon) {
-		(Size::Xs, false) => "gap-1 px-2 text-xs has-[>svg]:px-1.5",
-		(Size::Sm, false) => "gap-1.5 px-3 has-[>svg]:px-2.5",
-		(Size::Md, false) => "px-4 has-[>svg]:px-3",
-		(Size::Lg | Size::Touch, false) => "px-6 has-[>svg]:px-4",
+/// A button holding a bare glyph: the square of its step's height, in place of
+/// [`button_size_class`].
+pub const BUTTON_ICON: &str = "aspect-square px-0";
+
+/// Padding and gap per step; the height is the [`Size`]'s `--control-box`.
+/// Mirrors the TS `buttonSizeClasses` table.
+pub fn button_size_class(size: Size) -> &'static str {
+	match size {
+		Size::Xs => "gap-1 px-2 text-xs has-[>svg]:px-1.5",
+		Size::Sm => "gap-1.5 px-3 has-[>svg]:px-2.5",
+		Size::Md => "px-4 has-[>svg]:px-3",
+		Size::Lg | Size::Touch => "px-6 has-[>svg]:px-4",
 		// the CTA size: a consumer reshapes its call to action by writing the control tokens
-		(Size::Xl, false) => "h-auto px-[var(--control-px)] py-[var(--control-py)] text-[length:var(--control-text)]",
-		(Size::Xl, true) => "h-auto aspect-square p-[var(--control-py)]",
-		(_, true) => "aspect-square px-0",
+		Size::Xl => "px-[var(--control-px)] text-[length:var(--control-text)]",
 	}
 }
