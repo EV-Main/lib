@@ -35,20 +35,20 @@
   --text-figure-l: 1.75rem;
   --text-figure-l--line-height: 2rem;
 
-  /* The families are parameters: a brand scope sets `--brand-font-sans`,
-   * `--brand-font-display` and `--brand-font-mono` (evinvest-palette writes
-   * them from a brand file's [fonts]); `font-serif` is the display role under
-   * its older name. Unset, each falls through to EV: next/font (landing) sets
-   * `--font-inter` / `--font-playfair`, a Rust consumer `@font-face`s the same
-   * families itself. Every leading var() carries its own fallback — an
-   * undefined one would invalidate the whole `font-family` and drop the
-   * browser to its default, so it must never resolve to guaranteed-invalid.
-   * `inline` puts the var() chain in the utility itself, so it resolves on
-   * the element and a brand scope re-fonts its subtree. */
+  /* The families are parameters, apart from the colour contract: a brand scope
+   * sets `--brand-font-sans`, `--brand-font-display` and `--brand-font-mono`
+   * (evinvest-palette writes them from a brand file's [fonts]); `font-serif` is
+   * the display role under its older name. `display` is the face for headings
+   * and figures, so a brand with a second family sets it; unset it is the sans
+   * role. Every leading var() carries its own fallback — an undefined one would
+   * invalidate the whole `font-family` and drop the browser to its default, so
+   * it must never resolve to guaranteed-invalid. `inline` puts the var() chain
+   * in the utility itself, so it resolves on the element and a brand scope
+   * re-fonts its subtree. */
   --font-sans: var(--brand-font-sans, var(--font-inter, "Inter")), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--brand-font-display, var(--font-source-serif, "Source Serif 4")), Georgia, serif;
+  --font-serif: var(--brand-font-display, var(--brand-font-sans, var(--font-inter, "Inter"))), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--brand-font-mono, var(--font-inter, "Inter")), ui-monospace, monospace;
-  --font-display: var(--brand-font-display, var(--font-source-serif, "Source Serif 4")), Georgia, serif;
+  --font-display: var(--brand-font-display, var(--brand-font-sans, var(--font-inter, "Inter"))), ui-sans-serif, system-ui, sans-serif;
 
   /* The colour contract: every `--color-X: var(--X)` below is a name a palette
    * owes, except the derived ones in the next rule. `evinvest-palette` reads

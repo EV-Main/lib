@@ -1,7 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "@fontsource-variable/inter";
-import "@fontsource-variable/source-serif-4";
 import { Gallery } from "./gallery/Gallery";
 import "./app.css";
 // the second brand's palette, generated from its brand.toml (see vite.config.ts)

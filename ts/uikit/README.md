@@ -227,12 +227,15 @@ under a brand under another brand may match either.
 
 ### Fonts
 
-The families are parameters, one per role; unset, each is EV's:
+The families are parameters, one per role, and not part of the 29 colour names:
+a palette is complete without them, and the generator only carries what a
+brand file's `[fonts]` declares. A site that tells kinds of content apart by
+face (a serif for headings and figures, a sans for the rest) sets two roles.
 
-| parameter | utilities | default (EV) |
+| parameter | utilities | unset |
 |---|---|---|
 | `--brand-font-sans` | `font-sans`, the page's base family | `--font-inter`, else `"Inter"` |
-| `--brand-font-display` | `font-display`, `font-serif` | `--font-source-serif`, else `"Source Serif 4"` |
+| `--brand-font-display` | `font-display`, `font-serif` | the sans role |
 | `--brand-font-mono` | `font-mono` | `--font-inter`, else `"Inter"` |
 
 Declare them on the brand scope (the palette generator writes them from
@@ -245,11 +248,9 @@ the kit ships no font files:
 }
 ```
 
-From 1.0 the display face is **Source Serif 4** (headings, figures, the avatar
-initial). The kit ships no font files, so a consumer loads it — `next/font`
-with `variable: "--font-source-serif"`, or an `@font-face` for the family
-"Source Serif 4" at weight 300 (Light) — and keeps loading Inter for the rest.
-`--font-playfair` is no longer read.
+The display role covers headings, figures and the avatar initial. `--font-playfair`
+is no longer read: a site that wants a serif there sets `--brand-font-display`
+to the family it loads.
 
 The utilities resolve the chain on the element, so a scope re-fonts everything
 under it that carries one. The page's base family resolves once, on `<html>`: a
@@ -818,8 +819,8 @@ becomes `variant="solid"`.
 
 **Tokens and look**
 
-- `--font-playfair` is no longer read; load Source Serif 4 and set
-  `--font-source-serif` (see [Fonts](#fonts)).
+- `--font-playfair` is no longer read; a site that keeps a serif for headings
+  sets `--brand-font-display` to it (see [Fonts](#fonts)).
 - A brand file must add `chart-6` (29 names now); `evinvest-palette` names it.
 - Panel radius is 6 px at every width (the `sm` bump to 8 px is gone), controls
   4 px, and the depth tiers are flat. **Aquafix, vifnet and any other brand take
