@@ -26,8 +26,8 @@ export type SystemBannerTone = keyof typeof systemBannerIconToneClasses;
 
 export const systemBannerToneClasses = {
   "neutral": "border-border bg-card text-ink",
-  "primary": "border-primary-ink/40 bg-primary-ink/10 text-primary-ink",
+  "primary": "border-tint-primary-edge bg-tint-primary-fill text-primary-ink",
   "info": "border-border bg-card text-ink",
-  "warn": "border-accent-warn/40 bg-accent-warn/10 text-accent-warn",
+  "warn": "border-tint-warn-edge bg-tint-warn-fill text-accent-warn",
 } as const;
 export type SystemBannerFill = keyof typeof systemBannerToneClasses;

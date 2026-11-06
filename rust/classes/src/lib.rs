@@ -303,7 +303,7 @@ const TEXT_SCALE: [&str; 9] = ["caption", "body-s", "body", "body-l", "h3", "h2"
 /// written back as the caller wrote it.
 #[doc(hidden)]
 pub fn fuse(class: &str) -> String {
-	if !class.contains("-(") {
+	if !class.contains("-(") && !class.contains("/(") {
 		return merge(class);
 	}
 	let mut written = std::collections::HashMap::new();
@@ -328,10 +328,14 @@ fn merge(class: &str) -> String {
 	tailwind_fuse::merge::tw_merge_override(&[class], tailwind_fuse::merge::MergeOptions::default(), ring_width_collision, |_: &str| None)
 }
 
-/// `rounded-(--r)` as `rounded-[var(--r)]`, and `text-(length:--s)` as
-/// `text-[length:var(--s)]`; `None` for a class without the shorthand.
+/// `rounded-(--r)` as `rounded-[var(--r)]`, `text-(length:--s)` as
+/// `text-[length:var(--s)]` and `bg-x/(--a)` as `bg-x/[var(--a)]`; `None` for a
+/// class without the shorthand.
 fn var_long_form(token: &str) -> Option<String> {
 	let inner = token.strip_suffix(')')?;
+	if let Some((head, var)) = inner.rsplit_once("/(").filter(|(_, var)| var.starts_with("--")) {
+		return Some(format!("{head}/[var({var})]"));
+	}
 	let open = inner.rfind("-(")?;
 	let (head, var) = (&inner[..open], &inner[open + 2..]);
 	match var.split_once(':') {
@@ -411,6 +415,19 @@ mod tests {
 		assert_eq!(cn!("rounded-full size-7", "rounded-control"), "size-7 rounded-control");
 		assert_eq!(cn!("rounded-panel", "rounded-full"), "rounded-full");
 		assert_eq!(cn!("rounded-row", "rounded-l-none"), "rounded-row rounded-l-none");
+	}
+
+	/// A tint laid over a surface is an image, so the surface's colour survives it.
+	#[test]
+	fn tint_layer_keeps_the_surface() {
+		let layer = "bg-[image:linear-gradient(var(--tint-error-fill),var(--tint-error-fill))]";
+		assert_eq!(cn!("bg-card", layer), format!("bg-card {layer}"));
+	}
+
+	/// A tone at `--tint-hover` is a background colour like any other.
+	#[test]
+	fn tint_hover_conflicts_as_a_background() {
+		assert_eq!(cn!("hover:bg-accent-error/(--tint-hover) px-2", "hover:bg-hover"), "px-2 hover:bg-hover");
 	}
 
 	/// The serif face is a family, not a weight: a weight beside it keeps it,

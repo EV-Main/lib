@@ -164,7 +164,6 @@ bg-accent-trace text-on-accent-trace hover:bg-accent-trace/90 focus-visible:ring
 bg-accent-warn
 bg-accent-warn 
 bg-accent-warn text-on-accent-warn hover:bg-accent-warn/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
-bg-accent-warn/10
 bg-active
 bg-active text-ink hover:bg-active
 bg-background
@@ -189,9 +188,6 @@ bg-card text-ink
 bg-card text-ink border-border
 bg-card text-ink flex flex-col gap-4 rounded-panel border border-border py-4 shadow-card
 bg-card text-ink overflow-hidden rounded-panel border border-border shadow-sm
-bg-chip-error-bg text-accent-error
-bg-chip-neutral-bg
-bg-chip-{tone}-bg
 bg-hover
 bg-hover animate-pulse rounded-control
 bg-hover text-ink rounded-control
@@ -210,11 +206,11 @@ bg-muted text-ink flex size-10 shrink-0 items-center justify-center rounded-cont
 bg-muted text-ink-mid
 bg-muted text-ink-soft inline-flex h-9 w-fit items-center justify-center rounded-panel p-[3px]
 bg-muted text-ink-soft pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-control px-1 font-sans text-xs font-medium select-none [&_svg:not([class*='size-'])]:size-3 [[data-slot=tooltip-content]_&]:bg-background/20 [[data-slot=tooltip-content]_&]:text-background
-bg-popover text-ink border-accent-error/50
-bg-popover text-ink border-accent-warn/50
 bg-popover text-ink border-border
-bg-popover text-ink border-chip-info-border
-bg-popover text-ink border-chip-positive-border
+bg-popover text-ink border-tint-error-edge
+bg-popover text-ink border-tint-info-edge
+bg-popover text-ink border-tint-positive-edge
+bg-popover text-ink border-tint-warn-edge
 bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 absolute z-50 min-w-[8rem] overflow-hidden rounded-panel border border-border p-1 shadow-lg
 bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-(--radix-context-menu-content-transform-origin) overflow-hidden rounded-panel border border-border p-1 shadow-lg
 bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-(--radix-context-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-panel border border-border p-1 shadow-md
@@ -238,20 +234,23 @@ bg-secondary
 bg-secondary group-data-[variant=floating]:border-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-panel group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm
 bg-secondary text-ink flex h-full w-(--sidebar-width) flex-col
 bg-secondary text-on-secondary hover:bg-[image:linear-gradient(var(--hover),var(--hover))] focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+bg-tint-error-fill text-accent-error
+bg-tint-neutral-fill
+bg-tint-warn-fill
+bg-tint-{tone}-fill
 bg-transparent
 body-a
-border border-accent-debug/40 text-accent-debug hover:bg-accent-debug/10
-border border-accent-error/40 text-accent-error hover:bg-accent-error/10
-border border-accent-info/40 text-accent-info-ink hover:bg-accent-info/10
-border border-accent-trace/40 text-accent-trace hover:bg-accent-trace/10
-border border-accent-warn/40 text-accent-warn hover:bg-accent-warn/10
+border border-accent-debug/40 text-accent-debug hover:bg-accent-debug/(--tint-hover)
+border border-accent-error/40 text-accent-error hover:bg-accent-error/(--tint-hover)
+border border-accent-info/40 text-accent-info-ink hover:bg-accent-info/(--tint-hover)
+border border-accent-trace/40 text-accent-trace hover:bg-accent-trace/(--tint-hover)
+border border-accent-warn/40 text-accent-warn hover:bg-accent-warn/(--tint-hover)
 border border-border bg-secondary text-ink hover:bg-[image:linear-gradient(var(--hover),var(--hover))]
 border border-button-danger-border bg-button-danger-bg text-button-danger-ink hover:bg-button-danger-hover focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 border border-input bg-transparent shadow-xs hover:bg-hover hover:text-ink data-[state=on]:border-primary
 border-0
 border-accent-error
 border-accent-warn/40
-border-accent-warn/40 bg-accent-warn/10 text-accent-warn
 border-b
 border-b 
 border-b border-border last:border-b-0
@@ -264,14 +263,6 @@ border-border-subtle
 border-border-subtle bg-muted hover:bg-hover
 border-border-subtle bg-secondary text-ink hover:bg-secondary
 border-border\
-border-chip-error-border
-border-chip-error-border bg-chip-error-bg text-accent-error
-border-chip-info-border bg-chip-info-bg text-accent-info-ink
-border-chip-neutral-border bg-chip-neutral-bg text-ink-mid
-border-chip-positive-border bg-chip-positive-bg text-positive-ink
-border-chip-primary-border bg-chip-primary-bg text-primary-ink
-border-chip-warn-border bg-chip-warn-bg text-accent-warn
-border-chip-{tone}-border
 border-dashed
 border-input
 border-input [&_[data-placeholder]]:text-ink-soft [&_svg:not([class*='text-'])]:text-ink-soft focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error flex w-fit items-center justify-between gap-2 rounded-control border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
@@ -283,13 +274,21 @@ border-l
 border-l border-border
 border-primary-border bg-selected
 border-primary-ink ring-ring/50 block size-4 shrink-0 rounded-full border bg-ink shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50
-border-primary-ink/40 bg-primary-ink/10 text-primary-ink
 border-r
 border-r border-border
 border-t
 border-t border-border-subtle
 border-t border-border-subtle p-1 pt-1.5
 border-t border-ink/10 pt-8 text-[10px] font-mono text-ink/40
+border-tint-error-edge
+border-tint-error-edge bg-tint-error-fill text-accent-error
+border-tint-info-edge bg-tint-info-fill text-accent-info-ink
+border-tint-neutral-edge bg-tint-neutral-fill text-ink-mid
+border-tint-positive-edge bg-tint-positive-fill text-positive-ink
+border-tint-primary-edge bg-tint-primary-fill text-primary-ink
+border-tint-warn-edge
+border-tint-warn-edge bg-tint-warn-fill text-accent-warn
+border-tint-{tone}-edge
 bottom-4 left-1/2 -translate-x-1/2
 bottom-4 left-4
 bottom-4 right-4
@@ -648,7 +647,7 @@ focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-rin
 focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[state=open]:bg-hover data-[state=open]:text-ink [&_svg:not([class*='text-'])]:text-ink-soft flex cursor-default items-center rounded-row px-2 py-1.5 text-sm outline-hidden select-none data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
 focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[state=open]:bg-hover data-[state=open]:text-ink flex cursor-default items-center rounded-row px-2 py-1.5 text-sm outline-none select-none data-[inset]:pl-8
 focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[state=open]:bg-hover data-[state=open]:text-ink flex items-center rounded-row px-2 py-1 text-sm font-medium outline-hidden select-none
-focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[variant=destructive]:text-accent-error data-[variant=destructive]:focus:bg-accent-error/10 data-[variant=destructive]:focus:text-accent-error data-[variant=destructive]:*:[svg]:!text-accent-error [&_svg:not([class*='text-'])]:text-ink-soft relative flex cursor-default items-center gap-2 rounded-row px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
+focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[variant=destructive]:text-accent-error data-[variant=destructive]:focus:bg-accent-error/(--tint-hover) data-[variant=destructive]:focus:text-accent-error data-[variant=destructive]:*:[svg]:!text-accent-error [&_svg:not([class*='text-'])]:text-ink-soft relative flex cursor-default items-center gap-2 rounded-row px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
 focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring relative flex cursor-default items-center gap-2 rounded-row py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
 font-medium
 font-medium tabular-nums
@@ -1107,12 +1106,12 @@ text-[14px] md:text-[15px] leading-[1.62] text-ink-soft
 text-[color:var(--table-head-ink,var(--ink))] h-[var(--table-head-h,calc(var(--spacing)*10))] px-[var(--table-px,calc(var(--spacing)*2))] text-start align-middle font-medium whitespace-nowrap text-[length:var(--table-head-text)] tracking-[var(--table-head-tracking)] [text-transform:var(--table-head-case)] [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]
 text-accent-debug
 text-accent-error
-text-accent-error bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid
+text-accent-error bg-card bg-[image:linear-gradient(var(--tint-error-fill),var(--tint-error-fill))] border-tint-error-edge [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid
 text-accent-error text-sm
 text-accent-error text-sm font-normal
 text-accent-info
 text-accent-info-ink
-text-accent-info-ink bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid
+text-accent-info-ink bg-card bg-[image:linear-gradient(var(--tint-info-fill),var(--tint-info-fill))] border-tint-info-edge [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid
 text-accent-trace
 text-accent-warn
 text-base
@@ -1160,7 +1159,7 @@ text-lg font-semibold
 text-lg leading-none font-semibold
 text-positive
 text-positive-ink
-text-positive-ink bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid
+text-positive-ink bg-card bg-[image:linear-gradient(var(--tint-positive-fill),var(--tint-positive-fill))] border-tint-positive-edge [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid
 text-primary-ink
 text-primary-ink underline-offset-4 hover:underline
 text-sm

@@ -41,7 +41,7 @@ pub enum SystemBannerTone {
 pub fn system_banner_tone_class(tone: &SystemBannerTone) -> &'static str {
 	match tone {
 		SystemBannerTone::Neutral | SystemBannerTone::Info => "border-border bg-card text-ink",
-		SystemBannerTone::Primary => "border-primary-ink/40 bg-primary-ink/10 text-primary-ink",
-		SystemBannerTone::Warn => "border-accent-warn/40 bg-accent-warn/10 text-accent-warn",
+		SystemBannerTone::Primary => "border-tint-primary-edge bg-tint-primary-fill text-primary-ink",
+		SystemBannerTone::Warn => "border-tint-warn-edge bg-tint-warn-fill text-accent-warn",
 	}
 }

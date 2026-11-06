@@ -432,7 +432,7 @@ mod tests {
 		assert!(html.contains("M20 6 9 17l-5-5"), "a finished call shows the check: {html}");
 		let html = render(failed);
 		let root = opening_tag(&html, "data-slot=\"chat-marker\"");
-		assert!(root.contains("data-state=\"error\"") && root.contains("border-chip-error-border"), "{root}");
+		assert!(root.contains("data-state=\"error\"") && root.contains("border-tint-error-edge"), "{root}");
 		assert!(opening_tag(&html, "Ошибка · 1,2 с").contains("text-accent-error"), "{html}");
 		assert!(!html.contains("M20 6 9 17l-5-5"), "{html}");
 	}

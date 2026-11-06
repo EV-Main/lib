@@ -24,7 +24,7 @@ mod tests {
 			rsx! { Badge { "hi" } }
 		}
 		let html = render(app);
-		assert!(html.contains("bg-chip-neutral-bg"), "{html}");
+		assert!(html.contains("bg-tint-neutral-fill"), "{html}");
 		assert!(html.contains("hi"));
 		assert!(html.contains("data-slot=\"badge\""));
 	}
@@ -41,8 +41,8 @@ mod tests {
 			(BadgeVariant::Error, "error", "text-accent-error"),
 		] {
 			let classes = cn!(BADGE_BASE, variant.as_class());
-			assert!(classes.contains(&format!("bg-chip-{tone}-bg")), "{classes}");
-			assert!(classes.contains(&format!("border-chip-{tone}-border")), "{classes}");
+			assert!(classes.contains(&format!("bg-tint-{tone}-fill")), "{classes}");
+			assert!(classes.contains(&format!("border-tint-{tone}-edge")), "{classes}");
 			assert!(classes.contains(ink), "{classes}");
 		}
 		assert_eq!(BadgeVariant::iter().count(), 6);

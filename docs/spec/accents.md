@@ -63,8 +63,15 @@ text from `#d8a523`, which read 1.89:1 on the page plane.
 **Fill intensity is not text intensity.** A fill or a tint covers an area, a
 glyph is a few pixels of stroke, so the same colour reads far quieter as text
 than as a fill. Do not match a text colour to a fill by eye or by value: a
-`bg-accent-error/10` tint behind `text-accent-error` is the intended pair, and a
+`bg-accent-error/(--tint-hover)` tint behind `text-accent-error` is the intended pair, and a
 tint is never measured against the 3:1 or 4.5:1 a text colour owes.
+
+**A tone worn as a tint is one rule.** A chip, a toast edge, a banner, an
+alert: the tone's ink at `--tint-fill` for the fill and `--tint-edge` for the
+edge (`--tint-{tone}-{fill,edge}`), and at `--tint-hover` for a pointed-at row
+or face in the tone. A theme picks the shape by those three numbers (u2: an
+outline, Oldschool: a pill with no edge); a tone pins its own fill only where
+its label would fall under a floor, and says which.
 
 **Label polarity is deliberately split.** White on a fill marks the one call to
 action, so it belongs to `primary` alone; `destructive`, `positive` and the five

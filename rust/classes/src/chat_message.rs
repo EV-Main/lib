@@ -38,7 +38,7 @@ pub const CHAT_MARKER_TOOL: &str = "flex items-center gap-2.5 rounded-panel bord
 
 pub const CHAT_MARKER_TOOL_BORDER: &str = "border-border";
 
-pub const CHAT_MARKER_TOOL_ERROR_BORDER: &str = "border-chip-error-border";
+pub const CHAT_MARKER_TOOL_ERROR_BORDER: &str = "border-tint-error-edge";
 
 /// The tool glyph, and the same box for the check of a finished call.
 pub const CHAT_MARKER_TOOL_ICON: &str = "size-4 shrink-0 text-ink-mid";
