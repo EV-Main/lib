@@ -342,10 +342,16 @@ fn settings() -> Vec<Ts> {
 }
 
 fn analytics() -> Vec<Ts> {
-	vec![Ts::Const {
-		name: "DEFAULT_HOST",
-		value: ev_lib::analytics::DEFAULT_HOST,
-	}]
+	vec![
+		Ts::Const {
+			name: "DEFAULT_HOST",
+			value: ev_lib::analytics::DEFAULT_HOST,
+		},
+		Ts::Const {
+			name: "LIB_MARKER",
+			value: ev_lib::analytics::LIB_MARKER,
+		},
+	]
 }
 
 fn mfe() -> Vec<Ts> {

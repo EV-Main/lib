@@ -1,9 +1,7 @@
 import { withPropPolicy, type PropPolicy, type PropValue } from "./props";
 import { resolveHost, type PostHogTarget } from "./region";
 import { noopSink, type AnalyticsSink } from "./sink";
-
-/** The `$lib` marker `ev_lib::analytics::capture_body` stamps on every event. */
-const LIB_MARKER = "ev-analytics";
+import { LIB_MARKER } from "./generated/host";
 
 // Rust orders map keys by UTF-8 bytes, which is code-point order; JS `<` on
 // strings compares UTF-16 code units, which disagrees above the BMP.

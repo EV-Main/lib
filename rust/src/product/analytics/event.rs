@@ -10,6 +10,8 @@ use serde_json::{Value, json};
 /// PostHog's default US ingestion host, used when no host is configured (mirrors
 /// the TS default).
 pub const DEFAULT_HOST: &str = "https://us.i.posthog.com";
+/// The `$lib` property [`capture_body`] stamps on every event.
+pub const LIB_MARKER: &str = "ev-analytics";
 
 /// A single event property value. Restricted to primitives by construction: event
 /// properties are a dashboard contract and must never carry PII or nested objects
@@ -107,7 +109,7 @@ pub fn capture_body(api_key: &str, distinct_id: &str, event: &Event) -> Value {
 	for (key, value) in &event.props {
 		properties.insert(key.clone(), serde_json::to_value(value).unwrap_or(Value::Null));
 	}
-	properties.insert("$lib".to_string(), Value::String("ev-analytics".to_string()));
+	properties.insert("$lib".to_string(), Value::String(LIB_MARKER.to_string()));
 	json!({
 		"api_key": api_key,
 		"event": event.name,
