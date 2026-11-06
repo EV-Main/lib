@@ -18,9 +18,10 @@ shared locale registry was created to prevent.
 The two halves are not merely similar — they read **the same
 `messages/<locale>/*.json` files** and apply the same rules, so a catalogue
 authored for the site works unchanged in a zone and neither half can drift
-alone. `tests.rs` pins that: it renders the site's shipped plural patterns and
-asserts the output matches what `Intl.PluralRules` + `Intl.NumberFormat` produce
-in the browser.
+alone. [`tests/fixtures/i18n/`](../../../../tests/fixtures/i18n) pins that:
+both suites run its format, policy and registry vectors, so the hand-written
+CLDR rules here are held to what `Intl.PluralRules` + `Intl.NumberFormat`
+produce in the browser.
 
 ## What's here
 

@@ -1,0 +1,126 @@
+{
+  "_": "The locale-registry and URL contract both @evinvest/i18n and ev_lib::i18n run. Every case names a registry: `ev` is the generated five-locale one (the free functions), the rest are built from `registries`. subset null = all of the registry's locales. invalid: [config, error, offending code or tag].",
+  "registries": {
+    "fr": { "locales": ["fr", "en"], "labels": { "fr": "Français", "en": "English" }, "default": "fr", "prefixDefaultLocale": true, "hreflang": { "fr": "fr-FR" } },
+    "fr_bare": { "locales": ["fr", "en"], "labels": { "fr": "Français", "en": "English" }, "default": "fr", "prefixDefaultLocale": false, "hreflang": { "fr": "fr-FR" } },
+    "be": { "locales": ["fr", "nl"], "labels": { "fr": "Français", "nl": "Nederlands" }, "default": "fr", "prefixDefaultLocale": false, "hreflang": { "fr": "fr-BE", "nl": "nl-BE" } }
+  },
+  "isLocale": [
+    ["ev", "ru", true],
+    ["ev", "vi", true],
+    ["ev", "vn", false],
+    ["ev", "EN", false],
+    ["ev", "", false],
+    ["fr", "en", true],
+    ["fr", "EN", false],
+    ["fr", "de", false]
+  ],
+  "localePath": [
+    ["ev", "en", "/team", "/team"],
+    ["ev", "en", "/", "/"],
+    ["ev", "ru", "/team", "/ru/team"],
+    ["ev", "vi", "/hiring/analyst", "/vi/hiring/analyst"],
+    ["ev", "ru", "/", "/ru"],
+    ["ev", "ru", "team", "/ru/team"],
+    ["fr", "fr", "/contact", "/fr/contact"],
+    ["fr", "en", "/contact", "/en/contact"],
+    ["fr", "fr", "/", "/fr"],
+    ["fr", "en", "/", "/en"],
+    ["fr", "fr", "contact", "/fr/contact"],
+    ["fr_bare", "fr", "/prices", "/prices"],
+    ["fr_bare", "en", "/", "/en"]
+  ],
+  "splitLocalePath": [
+    ["ev", "/ru/team", "ru", "/team"],
+    ["ev", "/ru", "ru", "/"],
+    ["ev", "/team", "en", "/team"],
+    ["ev", "/cabinet/wallet", "en", "/cabinet/wallet"],
+    ["ev", "/vn/team", "en", "/vn/team"],
+    ["ev", "/en/team", "en", "/en/team"],
+    ["ev", "", "en", "/"],
+    ["fr", "/fr/contact", "fr", "/contact"],
+    ["fr", "/fr", "fr", "/"],
+    ["fr", "/fr/", "fr", "/"],
+    ["fr", "/en", "en", "/"],
+    ["fr", "/en/services/fuite", "en", "/services/fuite"],
+    ["fr", "/contact", "fr", "/contact"],
+    ["fr", "/de/contact", "fr", "/de/contact"],
+    ["fr", "", "fr", "/"],
+    ["fr_bare", "/fr/prices", "fr", "/fr/prices"]
+  ],
+  "roundTrip": [
+    ["ev", ["/", "/team", "/hiring/analyst", "/a/b/c"]],
+    ["fr", ["/", "/contact", "/a/b"]],
+    ["fr_bare", ["/", "/contact", "/a/b"]]
+  ],
+  "localeAlternates": [
+    ["ev", "/team", null, [["en", "/team"], ["ru", "/ru/team"], ["vi", "/vi/team"], ["fr", "/fr/team"], ["de", "/de/team"]]],
+    ["ev", "/team", ["en", "vi"], [["en", "/team"], ["vi", "/vi/team"]]],
+    ["fr", "/contact", null, [["fr", "/fr/contact"], ["en", "/en/contact"]]],
+    ["fr_bare", "/prices", null, [["fr", "/prices"], ["en", "/en/prices"]]]
+  ],
+  "hreflangOf": [
+    ["ev", "ru", "ru"],
+    ["fr", "fr", "fr-FR"],
+    ["fr", "en", "en"]
+  ],
+  "languageAlternates": [
+    ["ev", "/team", "https://evinvest.ltd", [
+      ["en", "https://evinvest.ltd/team"],
+      ["ru", "https://evinvest.ltd/ru/team"],
+      ["vi", "https://evinvest.ltd/vi/team"],
+      ["fr", "https://evinvest.ltd/fr/team"],
+      ["de", "https://evinvest.ltd/de/team"],
+      ["x-default", "https://evinvest.ltd/team"]
+    ]],
+    ["fr", "/contact", "https://plombier.example", [
+      ["fr-FR", "https://plombier.example/fr/contact"],
+      ["en", "https://plombier.example/en/contact"],
+      ["x-default", "https://plombier.example/fr/contact"]
+    ]],
+    ["fr", "/", "https://plombier.example/", [
+      ["fr-FR", "https://plombier.example/fr"],
+      ["en", "https://plombier.example/en"],
+      ["x-default", "https://plombier.example/fr"]
+    ]],
+    ["be", "/", "https://plombier.example", [
+      ["fr-BE", "https://plombier.example/"],
+      ["nl-BE", "https://plombier.example/nl"],
+      ["x-default", "https://plombier.example/"]
+    ]]
+  ],
+  "negotiate": [
+    ["ev", null, null, "en"],
+    ["ev", "", null, "en"],
+    ["ev", "ru-RU,ru;q=0.9,en;q=0.8", null, "ru"],
+    ["ev", "en;q=0.4,de;q=0.9", null, "de"],
+    ["ev", "de;q=0.2,vi;q=0.9", null, "vi"],
+    ["ev", "fr-CA", null, "fr"],
+    ["ev", "ja,ko;q=0.8", null, "en"],
+    ["ev", "*", null, "en"],
+    ["ev", "ru;q=0,de", null, "de"],
+    ["ev", "ru;q=banana,de;q=0.5", null, "de"],
+    ["ev", "xx;q=notanumber,ru;q=0.4", null, "ru"],
+    ["ev", "ru;q=inf,de;q=0.5", null, "de"],
+    ["ev", "ru;q=NaN,de;q=0.5", null, "de"],
+    ["ev", "ru,en", ["en", "de"], "en"],
+    ["fr", null, null, "fr"],
+    ["fr", "ja", null, "fr"],
+    ["fr", "fr-BE", null, "fr"],
+    ["fr", "en-GB,en;q=0.9,fr;q=0.5", null, "en"],
+    ["fr", "de,fr-CH;q=0.8,en;q=0.5", null, "fr"],
+    ["fr", "en;q=0,*", null, "fr"],
+    ["fr", "en;q=inf,fr;q=0.1", null, "fr"]
+  ],
+  "invalid": [
+    [{ "locales": [], "labels": {}, "default": "fr", "prefixDefaultLocale": false, "hreflang": {} }, "no-locales", null],
+    [{ "locales": ["fr"], "labels": { "fr": "Français" }, "default": "en", "prefixDefaultLocale": false, "hreflang": {} }, "default-not-listed", "en"],
+    [{ "locales": ["fr", "fr"], "labels": { "fr": "Français" }, "default": "fr", "prefixDefaultLocale": false, "hreflang": {} }, "listed-twice", "fr"],
+    [{ "locales": ["fr"], "labels": { "fr": "Français" }, "default": "fr", "prefixDefaultLocale": false, "hreflang": { "de": "de-DE" } }, "unknown-hreflang-locale", "de"],
+    [{ "locales": ["fr"], "labels": { "fr": "Français" }, "default": "fr", "prefixDefaultLocale": false, "hreflang": { "fr": "X-Default" } }, "reserved-hreflang", "fr"],
+    [{ "locales": ["fr", "en"], "labels": { "fr": "Français", "en": "English" }, "default": "fr", "prefixDefaultLocale": false, "hreflang": { "en": "x-default" } }, "reserved-hreflang", "en"],
+    [{ "locales": ["fr", "en"], "labels": { "fr": "Français", "en": "English" }, "default": "fr", "prefixDefaultLocale": false, "hreflang": { "fr": "EN" } }, "hreflang-collision", "en"],
+    [{ "locales": ["fr", "en"], "labels": { "fr": "Français", "en": "English" }, "default": "fr", "prefixDefaultLocale": false, "hreflang": { "en": "fr" } }, "hreflang-collision", "fr"],
+    [{ "locales": ["fr", "en"], "labels": { "fr": "Français", "en": "English" }, "default": "fr", "prefixDefaultLocale": false, "hreflang": { "fr": "fr-FR", "en": "FR-fr" } }, "hreflang-collision", "FR-fr"]
+  ]
+}

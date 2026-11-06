@@ -595,7 +595,7 @@ reader who deliberately chose English should not be bounced out of it.
 contract, the same formatter, the same policy, and the same `(key, en)` call
 shape via the `t!` macro. It reads the *same* `messages/<locale>/common.json`
 files, so a catalogue is portable between the two halves and neither can drift
-alone. Its extractor is the linker rather than a parser — a `t!` site that
+alone: both suites run the vectors in `tests/fixtures/i18n/`. Its extractor is the linker rather than a parser — a `t!` site that
 compiles is registered — which is why the Rust half needs no equivalent of the
 bins above.
 
