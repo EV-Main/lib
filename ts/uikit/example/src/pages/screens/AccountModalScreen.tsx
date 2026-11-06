@@ -37,7 +37,7 @@ function ModalPreview() {
       <div className="border-border-subtle bg-card flex shrink-0 flex-col gap-2 border-b p-2 md:w-60 md:border-r md:border-b-0">
         <SectionNav className="w-full" groups={SIDEBAR} value="info" onValueChange={() => {}} />
         <div className="border-border-subtle flex items-center border-t pt-2">
-          <Button variant="ghost">Sign out</Button>
+          <Button size="xs" variant="ghost">Sign out</Button>
         </div>
       </div>
       <div className="flex min-w-0 flex-1 flex-col gap-5 p-6 md:p-8">

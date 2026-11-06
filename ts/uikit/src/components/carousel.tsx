@@ -212,7 +212,7 @@ export function CarouselEdgeFade({
 
 export function CarouselPrevious({
   className,
-  variant = "secondary",
+  variant = "outline",
   size = "md",
   icon = true,
   ...props
@@ -255,7 +255,7 @@ export function CarouselPrevious({
 
 export function CarouselNext({
   className,
-  variant = "secondary",
+  variant = "outline",
   size = "md",
   icon = true,
   ...props

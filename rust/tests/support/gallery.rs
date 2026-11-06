@@ -42,11 +42,11 @@ const GALLERY: &[(&str, fn() -> Element)] = &[
 
 fn d_button() -> Element {
 	rsx! {
-		Button { "Primary" }
+		Button { "Default" }
 		Button { variant: ButtonVariant::Secondary, "Secondary" }
+		Button { variant: ButtonVariant::Outline, "Outline" }
 		Button { variant: ButtonVariant::Ghost, "Ghost" }
-		Button { variant: ButtonVariant::Solid, "Solid" }
-		Button { variant: ButtonVariant::Danger, "Danger" }
+		Button { variant: ButtonVariant::Destructive, "Destructive" }
 		Button { variant: ButtonVariant::Link, "Link" }
 		Button { size: Size::Sm, "Small" }
 		Button { size: Size::Lg, "Large" }
@@ -61,10 +61,10 @@ fn d_button() -> Element {
 fn d_button_accent() -> Element {
 	rsx! {
 		for accent in [Accent::Trace, Accent::Debug, Accent::Info, Accent::Warn, Accent::Error] {
-			Button { variant: ButtonVariant::Solid, accent, "{accent.as_ref()}" }
+			Button { accent, "{accent.as_ref()}" }
 		}
 		for accent in [Accent::Trace, Accent::Debug, Accent::Info, Accent::Warn, Accent::Error] {
-			Button { accent, "{accent.as_ref()}" }
+			Button { variant: ButtonVariant::Outline, accent, "{accent.as_ref()}" }
 		}
 	}
 }
@@ -144,11 +144,11 @@ fn d_alert() -> Element {
 				AlertTitle { "Heads up" }
 				AlertDescription { "This is a neutral informational alert." }
 			}
-			Alert { variant: AlertVariant::Error,
+			Alert { variant: AlertVariant::Destructive,
 				AlertTitle { "Something failed" }
 				AlertDescription { "Your changes could not be saved." }
 			}
-			Alert { variant: AlertVariant::Positive,
+			Alert { variant: AlertVariant::Success,
 				AlertTitle { "Order filled" }
 				AlertDescription { "120 units bought at 1.024." }
 			}
@@ -334,9 +334,9 @@ fn d_field() -> Element {
 fn d_button_group() -> Element {
 	rsx! {
 		ButtonGroup {
-			Button { variant: ButtonVariant::Secondary, "Day" }
-			Button { variant: ButtonVariant::Secondary, "Week" }
-			Button { variant: ButtonVariant::Secondary, "Month" }
+			Button { variant: ButtonVariant::Outline, "Day" }
+			Button { variant: ButtonVariant::Outline, "Week" }
+			Button { variant: ButtonVariant::Outline, "Month" }
 		}
 	}
 }
@@ -424,10 +424,10 @@ fn glyph() -> Element {
 fn d_icon_button() -> Element {
 	rsx! {
 		IconButton { aria_label: "Search", {glyph()} }
-		IconButton { aria_label: "Search", variant: IconButtonVariant::Secondary, {glyph()} }
+		IconButton { aria_label: "Search", variant: IconButtonVariant::Outline, {glyph()} }
 		IconButton { aria_label: "Pin", pressed: true, {glyph()} }
 		IconButton { aria_label: "Search", size: Size::Sm, {glyph()} }
-		IconButton { aria_label: "Search", size: Size::Touch, variant: IconButtonVariant::Secondary, {glyph()} }
+		IconButton { aria_label: "Search", size: Size::Touch, variant: IconButtonVariant::Outline, {glyph()} }
 		IconButton { aria_label: "Search", disabled: true, {glyph()} }
 	}
 }
@@ -461,7 +461,7 @@ fn d_settings() -> Element {
 		div { class: "w-full",
 		SettingsLayout { nav: rsx! { nav { "aria-label": "Sections", class: "text-body text-ink-mid", "Account" } },
 			SettingsSection { title: rsx! { "Accounts" }, description: rsx! { "Switch accounts" },
-				action: rsx! { Button { variant: ButtonVariant::Secondary, "Create team" } },
+				action: rsx! { Button { variant: ButtonVariant::Outline, "Create team" } },
 				p { class: "text-body text-ink", "Personal" }
 			}
 			SettingsSection { title: rsx! { "Notifications" }, flush: true,
@@ -535,7 +535,7 @@ fn d_aside() -> Element {
 						actions: rsx! { IconButton { aria_label: "Pin", size: Size::Sm, pressed: true, {glyph("M12 17v5M9 3h6l-1 7 4 3H6l4-3z")} } },
 					}
 				},
-				footer: rsx! { Button { variant: ButtonVariant::Ghost, size: Size::Sm, "Cancel" } Button { size: Size::Sm, "Save" } },
+				footer: rsx! { Button { variant: ButtonVariant::Ghost, size: Size::Sm, "Cancel" } Button { variant: ButtonVariant::Outline, size: Size::Sm, "Save" } },
 				p { class: "p-4 text-body text-ink-mid", "BTC-USD above 64,000" }
 			}
 			AsideRail { items, end_items, value: "chat".to_string(), on_value_change: |_| {} }
@@ -910,7 +910,7 @@ fn d_tooltip() -> Element {
 		TooltipProvider {
 			Tooltip { default_open: true,
 				TooltipTrigger {
-					Button { variant: ButtonVariant::Secondary, "Hover me" }
+					Button { variant: ButtonVariant::Outline, "Hover me" }
 				}
 				TooltipContent { "Tooltip content" }
 			}
@@ -922,7 +922,7 @@ fn d_popover() -> Element {
 	rsx! {
 		Popover { default_open: true,
 			PopoverTrigger {
-				Button { variant: ButtonVariant::Secondary, "Open popover" }
+				Button { variant: ButtonVariant::Outline, "Open popover" }
 			}
 			PopoverContent {
 				div { class: "flex flex-col gap-2",
@@ -949,14 +949,14 @@ fn d_dropdown_menu() -> Element {
 	rsx! {
 		DropdownMenu { default_open: true,
 			DropdownMenuTrigger {
-				Button { variant: ButtonVariant::Secondary, "Menu" }
+				Button { variant: ButtonVariant::Outline, "Menu" }
 			}
 			DropdownMenuContent {
 				DropdownMenuLabel { "Account" }
 				DropdownMenuSeparator {}
 				DropdownMenuItem { "Profile" }
 				DropdownMenuItem { "Settings" }
-				DropdownMenuItem { variant: DropdownMenuItemVariant::Danger, "Delete" }
+				DropdownMenuItem { variant: DropdownMenuItemVariant::Destructive, "Delete" }
 			}
 		}
 	}
@@ -972,7 +972,7 @@ fn d_context_menu() -> Element {
 				ContextMenuItem { "Back" }
 				ContextMenuItem { "Forward" }
 				ContextMenuSeparator {}
-				ContextMenuItem { variant: ContextMenuItemVariant::Danger, "Delete" }
+				ContextMenuItem { variant: ContextMenuItemVariant::Destructive, "Delete" }
 			}
 		}
 	}
@@ -987,7 +987,7 @@ fn d_menubar() -> Element {
 					MenubarItem { "New" }
 					MenubarItem { "Open" }
 					MenubarSeparator {}
-					MenubarItem { variant: MenubarItemVariant::Danger, "Quit" }
+					MenubarItem { variant: MenubarItemVariant::Destructive, "Quit" }
 				}
 			}
 		}
@@ -1018,7 +1018,7 @@ fn d_dialog() -> Element {
 					DialogDescription { "Update your account details." }
 				}
 				DialogFooter {
-					Button { variant: ButtonVariant::Secondary, "Cancel" }
+					Button { variant: ButtonVariant::Outline, "Cancel" }
 					Button { "Save" }
 				}
 			}

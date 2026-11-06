@@ -36,7 +36,7 @@ export default function CommandPalettePage() {
     >
       <Block title="CommandPalette" note="Groups, icons, shortcuts, a disabled row and the hint bar.">
         <Specimen>
-          <Button variant="secondary" onClick={() => setOpen(true)}>
+          <Button size="xs" variant="outline" onClick={() => setOpen(true)}>
             Open palette
           </Button>
           <span className="text-body-s text-ink-soft">The header's search (⌘K) opens the shell's palette instead, so the shortcut is not bound here.</span>

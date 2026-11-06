@@ -119,8 +119,8 @@ describe("AccountMenu profile form", () => {
     expect(onValueChange).toHaveBeenCalledWith("teal");
   });
 
-  it("marks sign out as the danger row", () => {
+  it("marks sign out as the destructive row", () => {
     const menu = open({});
-    expect(within(menu).getByRole("menuitem", { name: "Sign out" })).toHaveAttribute("data-variant", "danger");
+    expect(within(menu).getByRole("menuitem", { name: "Sign out" })).toHaveAttribute("data-variant", "destructive");
   });
 });

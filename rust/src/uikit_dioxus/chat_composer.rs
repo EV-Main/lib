@@ -125,7 +125,7 @@ pub fn ChatComposer(
 				}
 				if streaming {
 					IconButton {
-						variant: IconButtonVariant::Secondary,
+						variant: IconButtonVariant::Outline,
 						aria_label: labels.stop.unwrap_or_else(|| "Stop".into()),
 						onclick: move |_| {
 							if let Some(stop) = on_stop {
@@ -143,7 +143,7 @@ pub fn ChatComposer(
 					}
 				} else {
 					IconButton {
-						variant: IconButtonVariant::Secondary,
+						variant: IconButtonVariant::Outline,
 						aria_label: labels.send.unwrap_or_else(|| "Send".into()),
 						disabled: disabled || empty,
 						onclick: move |_| send(),

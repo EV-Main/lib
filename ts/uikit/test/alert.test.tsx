@@ -11,19 +11,24 @@ describe("Alert", () => {
     expect(el).toHaveAttribute("data-slot", "alert");
   });
 
-  it.each([
-    ["error", "text-accent-error-ink", "border-chip-error-border"],
-    ["positive", "text-positive-ink", "border-chip-positive-border"],
-    ["warn", "text-accent-warn-ink", "border-chip-warn-border"],
-    ["info", "text-accent-info-ink", "border-chip-info-border"],
-  ] as const)("renders the %s tone in its ink and chip edge", (variant, ink, edge) => {
-    const { getByRole } = render(<Alert variant={variant}>x</Alert>);
-    expect(getByRole("alert")).toHaveClass(ink, edge);
+  it("renders the destructive variant", () => {
+    const { getByRole } = render(<Alert variant="destructive">x</Alert>);
+    expect(getByRole("alert")).toHaveClass("text-accent-error-ink");
+  });
+
+  it("renders the success variant", () => {
+    const { getByRole } = render(<Alert variant="success">x</Alert>);
+    expect(getByRole("alert")).toHaveClass("text-positive-ink");
+  });
+
+  it("renders the info variant", () => {
+    const { getByRole } = render(<Alert variant="info">x</Alert>);
+    expect(getByRole("alert")).toHaveClass("text-accent-info-ink");
   });
 
   // the role tint stays on the root (icon + title inherit it); the description
   // child is lifted to ink so body copy and nested controls hold the contrast floor
-  it.each(["error", "positive", "warn", "info"] as const)(
+  it.each(["destructive", "success", "info"] as const)(
     "keeps the %s description in ink",
     (variant) => {
       const { getByRole } = render(

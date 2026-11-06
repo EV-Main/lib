@@ -157,7 +157,7 @@ pub fn ChatComposer(
 						if streaming.get() {
 							view! {
 								<IconButton
-									variant=IconButtonVariant::Secondary
+									variant=IconButtonVariant::Outline
 									aria_label=stop_label.clone()
 									on_click=Callback::new(move |_| {
 										if let Some(stop) = on_stop {
@@ -178,7 +178,7 @@ pub fn ChatComposer(
 						} else {
 							view! {
 								<IconButton
-									variant=IconButtonVariant::Secondary
+									variant=IconButtonVariant::Outline
 									aria_label=send_label.clone()
 									disabled=Signal::derive(move || disabled.get() || empty.get())
 									on_click=Callback::new(move |_| send())

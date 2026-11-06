@@ -140,7 +140,7 @@ export function NotificationBell({ notifications, onSelect, labels = {}, footer,
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <IconButton aria-label={spoken} variant="secondary" className={cn(NOTIFICATION_BELL_TRIGGER, className)}>
+        <IconButton aria-label={spoken} variant="outline" className={cn(NOTIFICATION_BELL_TRIGGER, className)}>
           <UiIcon name="bell" />
           {unread > 0 && (
             <span data-slot="notification-dot" aria-hidden className={NOTIFICATION_DOT} />

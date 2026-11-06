@@ -56,11 +56,11 @@ const PARITY_ONLY: &[(&str, fn() -> AnyView)] = &[
 
 fn d_button() -> AnyView {
 	view! {
-		<Button>"Primary"</Button>
+		<Button>"Default"</Button>
 		<Button variant=ButtonVariant::Secondary>"Secondary"</Button>
+		<Button variant=ButtonVariant::Outline>"Outline"</Button>
 		<Button variant=ButtonVariant::Ghost>"Ghost"</Button>
-		<Button variant=ButtonVariant::Solid>"Solid"</Button>
-		<Button variant=ButtonVariant::Danger>"Danger"</Button>
+		<Button variant=ButtonVariant::Destructive>"Destructive"</Button>
 		<Button variant=ButtonVariant::Link>"Link"</Button>
 		<Button size=Size::Sm>"Small"</Button>
 		<Button size=Size::Lg>"Large"</Button>
@@ -77,15 +77,15 @@ fn d_button() -> AnyView {
 fn d_button_accent() -> AnyView {
 	const ACCENTS: [Accent; 5] = [Accent::Trace, Accent::Debug, Accent::Info, Accent::Warn, Accent::Error];
 	view! {
+		{ACCENTS.map(|accent| view! { <Button accent>{accent.as_ref().to_owned()}</Button> })}
 		{ACCENTS
 			.map(|accent| {
 				view! {
-					<Button variant=ButtonVariant::Solid accent>
+					<Button variant=ButtonVariant::Outline accent>
 						{accent.as_ref().to_owned()}
 					</Button>
 				}
 			})}
-		{ACCENTS.map(|accent| view! { <Button accent>{accent.as_ref().to_owned()}</Button> })}
 	}
 	.into_any()
 }
@@ -164,11 +164,11 @@ fn d_alert() -> AnyView {
 				<AlertTitle>"Heads up"</AlertTitle>
 				<AlertDescription>"This is a neutral informational alert."</AlertDescription>
 			</Alert>
-			<Alert variant=AlertVariant::Error>
+			<Alert variant=AlertVariant::Destructive>
 				<AlertTitle>"Something failed"</AlertTitle>
 				<AlertDescription>"Your changes could not be saved."</AlertDescription>
 			</Alert>
-			<Alert variant=AlertVariant::Positive>
+			<Alert variant=AlertVariant::Success>
 				<AlertTitle>"Order filled"</AlertTitle>
 				<AlertDescription>"120 units bought at 1.024."</AlertDescription>
 			</Alert>
@@ -352,9 +352,9 @@ fn d_item() -> AnyView {
 fn d_button_group() -> AnyView {
 	view! {
 		<ButtonGroup>
-			<Button variant=ButtonVariant::Secondary>"Day"</Button>
-			<Button variant=ButtonVariant::Secondary>"Week"</Button>
-			<Button variant=ButtonVariant::Secondary>"Month"</Button>
+			<Button variant=ButtonVariant::Outline>"Day"</Button>
+			<Button variant=ButtonVariant::Outline>"Week"</Button>
+			<Button variant=ButtonVariant::Outline>"Month"</Button>
 		</ButtonGroup>
 	}
 	.into_any()
@@ -375,7 +375,7 @@ fn glyph() -> AnyView {
 fn d_icon_button() -> AnyView {
 	view! {
 		<IconButton aria_label="Search">{glyph()}</IconButton>
-		<IconButton aria_label="Search" variant=IconButtonVariant::Secondary>
+		<IconButton aria_label="Search" variant=IconButtonVariant::Outline>
 			{glyph()}
 		</IconButton>
 		<IconButton aria_label="Pin" pressed=true>
@@ -384,7 +384,7 @@ fn d_icon_button() -> AnyView {
 		<IconButton aria_label="Search" size=Size::Sm>
 			{glyph()}
 		</IconButton>
-		<IconButton aria_label="Search" size=Size::Touch variant=IconButtonVariant::Secondary>
+		<IconButton aria_label="Search" size=Size::Touch variant=IconButtonVariant::Outline>
 			{glyph()}
 		</IconButton>
 		<IconButton aria_label="Search" disabled=true>
@@ -443,7 +443,7 @@ fn d_settings() -> AnyView {
 				<SettingsSection
 					title=|| "Accounts"
 					description=|| "Switch accounts"
-					action=|| view! { <Button variant=ButtonVariant::Secondary>"Create team"</Button> }
+					action=|| view! { <Button variant=ButtonVariant::Outline>"Create team"</Button> }
 				>
 					<p class="text-body text-ink">"Personal"</p>
 				</SettingsSection>
@@ -580,7 +580,9 @@ fn d_aside() -> AnyView {
 						<Button variant=ButtonVariant::Ghost size=Size::Sm>
 							"Cancel"
 						</Button>
-						<Button size=Size::Sm>"Save"</Button>
+						<Button variant=ButtonVariant::Outline size=Size::Sm>
+							"Save"
+						</Button>
 					}
 				}
 			>
@@ -955,7 +957,7 @@ fn d_tooltip() -> AnyView {
 		<TooltipProvider>
 			<Tooltip default_open=true>
 				<TooltipTrigger>
-					<Button variant=ButtonVariant::Secondary>"Hover me"</Button>
+					<Button variant=ButtonVariant::Outline>"Hover me"</Button>
 				</TooltipTrigger>
 				<TooltipContent>"Tooltip content"</TooltipContent>
 			</Tooltip>
@@ -968,7 +970,7 @@ fn d_popover() -> AnyView {
 	view! {
 		<Popover default_open=true>
 			<PopoverTrigger>
-				<Button variant=ButtonVariant::Secondary>"Open popover"</Button>
+				<Button variant=ButtonVariant::Outline>"Open popover"</Button>
 			</PopoverTrigger>
 			<PopoverContent>
 				<div class="flex flex-col gap-2">
@@ -996,14 +998,14 @@ fn d_dropdown_menu() -> AnyView {
 	view! {
 		<DropdownMenu default_open=true>
 			<DropdownMenuTrigger>
-				<Button variant=ButtonVariant::Secondary>"Menu"</Button>
+				<Button variant=ButtonVariant::Outline>"Menu"</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
 				<DropdownMenuLabel>"Account"</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem>"Profile"</DropdownMenuItem>
 				<DropdownMenuItem>"Settings"</DropdownMenuItem>
-				<DropdownMenuItem variant=DropdownMenuItemVariant::Danger>"Delete"</DropdownMenuItem>
+				<DropdownMenuItem variant=DropdownMenuItemVariant::Destructive>"Delete"</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	}
@@ -1022,7 +1024,7 @@ fn d_context_menu() -> AnyView {
 				<ContextMenuItem>"Back"</ContextMenuItem>
 				<ContextMenuItem>"Forward"</ContextMenuItem>
 				<ContextMenuSeparator />
-				<ContextMenuItem variant=ContextMenuItemVariant::Danger>"Delete"</ContextMenuItem>
+				<ContextMenuItem variant=ContextMenuItemVariant::Destructive>"Delete"</ContextMenuItem>
 			</ContextMenuContent>
 		</ContextMenu>
 	}
@@ -1038,7 +1040,7 @@ fn d_menubar() -> AnyView {
 					<MenubarItem>"New"</MenubarItem>
 					<MenubarItem>"Open"</MenubarItem>
 					<MenubarSeparator />
-					<MenubarItem variant=MenubarItemVariant::Danger>"Quit"</MenubarItem>
+					<MenubarItem variant=MenubarItemVariant::Destructive>"Quit"</MenubarItem>
 				</MenubarContent>
 			</MenubarMenu>
 		</Menubar>
@@ -1077,7 +1079,7 @@ fn d_dialog() -> AnyView {
 					<DialogDescription>"Update your account details."</DialogDescription>
 				</DialogHeader>
 				<DialogFooter>
-					<Button variant=ButtonVariant::Secondary>"Cancel"</Button>
+					<Button variant=ButtonVariant::Outline>"Cancel"</Button>
 					<Button>"Save"</Button>
 				</DialogFooter>
 			</DialogContent>
@@ -1635,8 +1637,8 @@ fn p_button_group_parts() -> AnyView {
 		<ButtonGroup>
 			<ButtonGroupText>"Range"</ButtonGroupText>
 			<ButtonGroupSeparator />
-			<Button variant=ButtonVariant::Secondary>"Day"</Button>
-			<Button variant=ButtonVariant::Secondary>"Week"</Button>
+			<Button variant=ButtonVariant::Outline>"Day"</Button>
+			<Button variant=ButtonVariant::Outline>"Week"</Button>
 		</ButtonGroup>
 	}
 	.into_any()
@@ -1962,7 +1964,7 @@ fn p_popover_anchor() -> AnyView {
 		<Popover default_open=true>
 			<PopoverAnchor>
 				<PopoverTrigger>
-					<Button variant=ButtonVariant::Secondary>"Open popover"</Button>
+					<Button variant=ButtonVariant::Outline>"Open popover"</Button>
 				</PopoverTrigger>
 			</PopoverAnchor>
 			<PopoverContent>"Popover body"</PopoverContent>

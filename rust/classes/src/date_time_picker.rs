@@ -1,5 +1,6 @@
-/// Fused on top of the outline `md` button: the field-shaped trigger.
-pub const DATE_TIME_PICKER_TRIGGER: &str = "w-full justify-start gap-2 text-left font-normal data-[placeholder]:text-ink-soft [&>svg]:text-ink-soft";
+/// Fused on top of the outline `md` button: the field-shaped trigger, edged and
+/// filled like an `Input` rather than the raised button face.
+pub const DATE_TIME_PICKER_TRIGGER: &str = "border-input bg-transparent shadow-xs w-full justify-start gap-2 text-left font-normal data-[placeholder]:text-ink-soft [&>svg]:text-ink-soft";
 
 /// Fused on top of the popover content: the calendar brings its own padding.
 pub const DATE_TIME_PICKER_CONTENT: &str = "w-auto p-0";

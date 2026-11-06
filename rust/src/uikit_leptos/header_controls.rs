@@ -9,7 +9,7 @@ use crate::{
 		HEADER_SEARCH_PLACEHOLDER, HeaderBalanceTone, ICON_BUTTON_BASE, IconButtonVariant, Kbd, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER,
 		NOTIFICATION_BELL_ITEM, NOTIFICATION_BELL_ITEM_BODY, NOTIFICATION_BELL_ITEM_DESCRIPTION, NOTIFICATION_BELL_ITEM_DOT, NOTIFICATION_BELL_ITEM_DOT_READ,
 		NOTIFICATION_BELL_ITEM_DOT_UNREAD, NOTIFICATION_BELL_ITEM_TIME, NOTIFICATION_BELL_ITEM_TITLE, NOTIFICATION_BELL_ITEM_TITLE_UNREAD, NOTIFICATION_BELL_LIST, NOTIFICATION_BELL_TRIGGER,
-		NOTIFICATION_DOT, Popover, PopoverContent, PopoverTrigger, Size, Skeleton, button_classes, icon_button::Glyph,
+		NOTIFICATION_DOT, Popover, PopoverContent, PopoverTrigger, Size, Skeleton, button_classes, icon_button::Glyph, icon_button_size_class,
 	},
 };
 
@@ -134,10 +134,11 @@ pub fn NotificationBell(
 		(n, Some(say)) => format!("{name}, {}", say.run(n)),
 		(n, None) => format!("{name}, {n} unread"),
 	};
-	// The trigger is the popover's own button wearing the secondary icon
+	// The trigger is the popover's own button wearing the outline icon
 	// button face: the kit has no `asChild` to hand the toggle to an `IconButton`.
 	let trigger_cls = cn!(
-		button_classes(&IconButtonVariant::Secondary.button_variant(), Size::Md, true, None, ""),
+		button_classes(&IconButtonVariant::Outline.button_variant(), Size::Md, true, None, ""),
+		icon_button_size_class(Size::Md),
 		ICON_BUTTON_BASE,
 		NOTIFICATION_BELL_TRIGGER,
 		class

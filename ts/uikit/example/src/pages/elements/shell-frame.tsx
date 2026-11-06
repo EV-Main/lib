@@ -117,7 +117,7 @@ function DemoPage({ pathname }: { pathname: string }) {
       title={pathname === "/" ? "Home" : pathname}
       description="Sections arrive in sequence by CSS alone."
       appBar={<MobileAppBar title={pathname} hideFrom="lg" />}
-      actions={<Button variant="secondary" size="sm">Export</Button>}
+      actions={<Button variant="outline" size="sm">Export</Button>}
     >
       <Card>
         <CardHeader>

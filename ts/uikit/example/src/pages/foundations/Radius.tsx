@@ -40,7 +40,7 @@ export default function Radius() {
             <Badge variant="neutral">Badge</Badge>
           </RadiusTile>
           <RadiusTile name="Circle" utility="rounded-full">
-            <Avatar shape="circle" size="lg">
+            <Avatar className="size-14">
               <AvatarFallback>J</AvatarFallback>
             </Avatar>
           </RadiusTile>
@@ -49,10 +49,10 @@ export default function Radius() {
       <Block title="In use" note="Input and Button share the control radius; Badge and Switch share the chip radius.">
         <div className="flex flex-wrap items-center gap-3">
           <Input aria-label="Sample" placeholder="Input" className="w-48" />
-          <Button variant="secondary">Secondary</Button>
+          <Button size="xs" variant="outline">Outline</Button>
           <Badge variant="primary">Accent</Badge>
-          <Avatar shape="square" size="md">
-            <AvatarFallback>J</AvatarFallback>
+          <Avatar className="size-7 rounded-(--chip-radius)">
+            <AvatarFallback className="rounded-(--chip-radius)">J</AvatarFallback>
           </Avatar>
         </div>
       </Block>

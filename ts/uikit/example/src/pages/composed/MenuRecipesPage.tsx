@@ -59,11 +59,11 @@ function Profile() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="secondary">Profile menu</Button>
+        <Button size="xs" variant="outline">Profile menu</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[300px]">
         <div className="flex items-center gap-2.5 p-2">
-          <Avatar shape="circle" size="lg">
+          <Avatar className="size-14">
             <AvatarFallback>J</AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
@@ -90,7 +90,7 @@ function Profile() {
           <Switch checked={dark} aria-hidden tabIndex={-1} className="pointer-events-none ml-auto" />
         </DropdownMenuCheckboxItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="danger"><LogOutIcon />Sign out</DropdownMenuItem>
+        <DropdownMenuItem variant="destructive"><LogOutIcon />Sign out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -100,7 +100,7 @@ function Action() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="secondary">Action menu</Button>
+        <Button size="xs" variant="outline">Action menu</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[220px]">
         <DropdownMenuItem><PencilIcon />Edit<DropdownMenuShortcut>⌘E</DropdownMenuShortcut></DropdownMenuItem>
@@ -114,7 +114,7 @@ function Action() {
         </DropdownMenuSub>
         <DropdownMenuItem disabled><StarIcon />Pin to top</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="danger"><TrashIcon />Delete<DropdownMenuShortcut>⌫</DropdownMenuShortcut></DropdownMenuItem>
+        <DropdownMenuItem variant="destructive"><TrashIcon />Delete<DropdownMenuShortcut>⌫</DropdownMenuShortcut></DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -127,7 +127,7 @@ function SelectMenu() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="secondary">Select menu · {frame}</Button>
+        <Button size="xs" variant="outline">Select menu · {frame}</Button>
       </PopoverTrigger>
       <PopoverContent className="w-[220px] p-1.5">
         <Command>
@@ -162,7 +162,7 @@ function Context() {
         <ContextMenuItem><PencilIcon />Draw horizontal line<ContextMenuShortcut>Alt H</ContextMenuShortcut></ContextMenuItem>
         <ContextMenuItem><EyeIcon />Hide all drawings</ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem variant="danger"><TrashIcon />Remove all drawings</ContextMenuItem>
+        <ContextMenuItem variant="destructive"><TrashIcon />Remove all drawings</ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
   );
@@ -176,7 +176,7 @@ function Submenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="secondary">Submenu</Button>
+        <Button size="xs" variant="outline">Submenu</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[200px]">
         <DropdownMenuSub>
@@ -215,10 +215,10 @@ export default function MenuRecipesPage() {
       title="Menu recipes"
       lede="The five menu shapes from the design, built from the kit's menu parts: profile, action, select, context and submenu. Each opens in a layer and closes one layer at a time."
     >
-      <Block title="Profile" note="A profile card, grouped rows, badges, a switch and a danger row.">
+      <Block title="Profile" note="A profile card, grouped rows, badges, a switch and a destructive row.">
         <Specimen><Profile /></Specimen>
       </Block>
-      <Block title="Action" note="Icons, shortcuts, a submenu row, a disabled row and a danger row.">
+      <Block title="Action" note="Icons, shortcuts, a submenu row, a disabled row and a destructive row.">
         <Specimen><Action /></Specimen>
       </Block>
       <Block title="Select" note="One choice: the selected row has the active fill and a check.">

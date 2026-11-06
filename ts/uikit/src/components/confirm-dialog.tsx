@@ -135,7 +135,7 @@ export function ConfirmDialog({
             type="button"
             aria-disabled={pending}
             onClick={() => change(false)}
-            className={cn(buttonVariants({ variant: "ghost" }), CONFIRM_DIALOG_PENDING)}
+            className={cn(buttonVariants({ variant: "ghost", size: "xs" }), CONFIRM_DIALOG_PENDING)}
           >
             {labels.cancel ?? "Cancel"}
           </button>
@@ -144,7 +144,7 @@ export function ConfirmDialog({
             aria-disabled={pending}
             aria-busy={pending}
             onClick={confirm}
-            className={cn(buttonVariants({ variant: danger ? "danger" : "solid" }), CONFIRM_DIALOG_PENDING)}
+            className={cn(buttonVariants({ variant: danger ? "destructive" : "primary", size: "xs" }), CONFIRM_DIALOG_PENDING)}
           >
             {pending && <Spinner className={CONFIRM_DIALOG_SPINNER} />}
             {confirmLabel}

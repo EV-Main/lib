@@ -208,13 +208,21 @@ describe.each(scopes)("palette $label", (scope) => {
     it("stands off the fill, so the ring is never measured against it", () => {
       for (const classes of [
         buttonVariants({ variant: "primary" }),
-        buttonVariants({ variant: "solid" }),
-        buttonVariants({ variant: "danger" }),
+        buttonVariants({ variant: "secondary" }),
+        buttonVariants({ variant: "destructive" }),
         buttonVariants({ variant: "ghost", accent: "warn" }),
       ]) {
         expect(classes).toMatch(/\bfocus-visible:outline-offset-2\b/);
         expect(classes).toMatch(/\bfocus-visible:outline-ring\b/);
         expect(classes).not.toMatch(/focus-visible:ring-\[3px\]/);
+      }
+    });
+
+    it("leaves the halo to the unfilled faces", () => {
+      for (const variant of ["outline", "ghost", "link"] as const) {
+        const classes = buttonVariants({ variant });
+        expect(classes).toMatch(/focus-visible:ring-\[3px\]/);
+        expect(classes).not.toMatch(/\bfocus-visible:outline-offset-2\b/);
       }
     });
   });
@@ -228,15 +236,11 @@ describe.each(scopes)("palette $label", (scope) => {
       expect(contrast(line("input", scope, t(surface)), t(surface))).toBeGreaterThanOrEqual(3);
     });
 
-    // Off, the track is a muted well edged by --input and the knob is the mid
-    // ink: the edge carries the 3:1 shape floor, the knob reads against the well.
-    it("the unchecked switch is a muted well edged by --input, and its thumb reads on it", () => {
-      expect(SWITCH_BASE).toMatch(/\bdata-\[state=unchecked\]:bg-muted\b/);
-      expect(SWITCH_BASE).toMatch(/\bdata-\[state=unchecked\]:border-input\b/);
-      expect(SWITCH_THUMB).toMatch(/\bdata-\[state=unchecked\]:bg-ink-mid\b/);
+    it("the unchecked switch thumb still reads on its --input track", () => {
+      expect(SWITCH_BASE).toMatch(/\bdata-\[state=unchecked\]:bg-input\b/);
+      expect(SWITCH_THUMB).toMatch(/\bdata-\[state=unchecked\]:bg-ink\b/);
       for (const surface of ["background", "card"]) {
-        expect(contrast(line("ink-mid", scope, t("muted")), t("muted"))).toBeGreaterThanOrEqual(3);
-        expect(contrast(line("input", scope, t(surface)), t(surface))).toBeGreaterThanOrEqual(3);
+        expect(contrast(t("ink"), line("input", scope, t(surface)))).toBeGreaterThanOrEqual(3);
       }
     });
   });
@@ -261,7 +265,7 @@ describe.each(scopes)("palette $label", (scope) => {
     // ring's inner edge sits on that instead.
     it("the ring reads against a destructive row's tint (non-text 3:1)", () => {
       for (const classes of [DROPDOWN_MENU_ITEM, CONTEXT_MENU_ITEM, MENUBAR_ITEM]) {
-        expect(classes).toMatch(/(^|\s)data-\[variant=danger\]:focus:bg-accent-error\/10(\s|$)/);
+        expect(classes).toMatch(/(^|\s)data-\[variant=destructive\]:focus:bg-accent-error\/10(\s|$)/);
       }
       const destructive = composite(t("accent-error"), 0.1, t("popover"));
       expect(contrast(ring(scope), destructive)).toBeGreaterThanOrEqual(3);
@@ -303,8 +307,8 @@ describe.each(scopes)("palette $label", (scope) => {
   // A track is a shape under a shape, so it owes two floors at once: the moving
   // part reads on it (3:1) and it reads against the plane it sits on (~1.3:1, or
   // the UI goes flat). Both are painted by the class tables, so the classes are
-  // asserted alongside the numbers they were chosen for. The u2 planes sit only
-  // 1.10:1 apart, so a `bg-muted` track would vanish: it is 14 % of the ink.
+  // asserted alongside the numbers they were chosen for. The Dark planes sit only
+  // 1.10:1 apart, so a `bg-muted` track would vanish.
   describe("slider and progress tracks", () => {
     const track = (surface: string) => composite(t("ink"), 0.14, t(surface));
 
@@ -317,12 +321,13 @@ describe.each(scopes)("palette $label", (scope) => {
       }
     });
 
-    it("the progress indicator is the ink on the same track", () => {
+    it("the progress indicator is the ink on a 20% tint of itself", () => {
       expect(PROGRESS_INDICATOR).toMatch(/\bbg-primary-ink\b/);
-      expect(PROGRESS_TRACK).toMatch(/\bbg-ink\/14\b/);
+      expect(PROGRESS_TRACK).toMatch(/\bbg-primary-ink\/20\b/);
       for (const surface of ["background", "card"]) {
-        expect(contrast(t("primary-ink"), track(surface))).toBeGreaterThanOrEqual(3);
-        expect(contrast(track(surface), t(surface))).toBeGreaterThanOrEqual(1.3);
+        const tint = composite(t("primary-ink"), 0.2, t(surface));
+        expect(contrast(t("primary-ink"), tint)).toBeGreaterThanOrEqual(3);
+        expect(contrast(tint, t(surface))).toBeGreaterThanOrEqual(1.3);
       }
     });
   });
@@ -439,9 +444,9 @@ describe("destructive menu rows read in the error ink", () => {
     ["context menu item", CONTEXT_MENU_ITEM],
     ["menubar item", MENUBAR_ITEM],
   ])("%s", (_, classes) => {
-    expect(classes).toMatch(/(^|\s)data-\[variant=danger\]:text-accent-error-ink(\s|$)/);
-    expect(classes).toMatch(/(^|\s)data-\[variant=danger\]:focus:text-accent-error-ink(\s|$)/);
-    expect(classes).toMatch(/(^|\s)data-\[variant=danger\]:\*:\[svg\]:!text-accent-error-ink(\s|$)/);
+    expect(classes).toMatch(/(^|\s)data-\[variant=destructive\]:text-accent-error-ink(\s|$)/);
+    expect(classes).toMatch(/(^|\s)data-\[variant=destructive\]:focus:text-accent-error-ink(\s|$)/);
+    expect(classes).toMatch(/(^|\s)data-\[variant=destructive\]:\*:\[svg\]:!text-accent-error-ink(\s|$)/);
     expect(classes).not.toMatch(/text-accent-error(\s|$)/);
   });
 });

@@ -2,14 +2,14 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	uikit_dioxus::{AVATAR, AVATAR_FALLBACK, AVATAR_IMAGE, AvatarShape, AvatarSize},
+	uikit_dioxus::{AVATAR, AVATAR_FALLBACK, AVATAR_IMAGE},
 };
 
 #[component]
-pub fn Avatar(#[props(default)] shape: AvatarShape, #[props(default)] size: AvatarSize, #[props(default)] class: String, children: Element) -> Element {
-	let cls = cn!(AVATAR, shape.as_class(), size.as_class(), class);
+pub fn Avatar(#[props(default)] class: String, children: Element) -> Element {
+	let cls = cn!(AVATAR, class);
 	rsx! {
-		div { class: cls, "data-slot": "avatar", "data-size": size.as_ref(), {children} }
+		div { class: cls, "data-slot": "avatar", {children} }
 	}
 }
 
@@ -78,23 +78,7 @@ mod tests {
 		}
 		let html = render(app);
 		assert!(html.contains("data-slot=\"avatar-fallback\""), "{html}");
-		assert!(html.contains("rounded-[inherit]"), "{html}");
+		assert!(html.contains("bg-muted"), "{html}");
 		assert!(html.contains("AB"));
-	}
-
-	#[test]
-	fn circle_md_is_the_default_and_square_follows_the_chip_radius() {
-		fn app() -> Element {
-			rsx! {
-				Avatar { "a" }
-				Avatar { shape: AvatarShape::Square, size: AvatarSize::Lg, "b" }
-			}
-		}
-		let html = render(app);
-		assert!(html.contains("rounded-full") && html.contains("size-7") && html.contains("data-size=\"md\""), "{html}");
-		assert!(
-			html.contains("rounded-[var(--chip-radius)]") && html.contains("size-14") && html.contains("data-size=\"lg\""),
-			"{html}"
-		);
 	}
 }

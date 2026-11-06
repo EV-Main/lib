@@ -69,7 +69,7 @@ describe("Sidebar", () => {
   it("menu button carries variant, size and active state", () => {
     const { getByText } = render(
       <SidebarProvider>
-        <SidebarMenuButton variant="secondary" size="lg" isActive>
+        <SidebarMenuButton variant="outline" size="lg" isActive>
           go
         </SidebarMenuButton>
       </SidebarProvider>,
@@ -78,7 +78,7 @@ describe("Sidebar", () => {
     expect(el).toHaveAttribute("data-slot", "sidebar-menu-button");
     expect(el).toHaveAttribute("data-size", "lg");
     expect(el).toHaveAttribute("data-active", "true");
-    expect(el).toHaveClass("h-11");
+    expect(el).toHaveClass("h-12");
   });
 
   it("menu button renders as child when asChild", () => {

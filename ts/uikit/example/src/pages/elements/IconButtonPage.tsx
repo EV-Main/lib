@@ -3,7 +3,7 @@ import { IconButton, type IconButtonSize, type IconButtonVariant } from "@evinve
 import { BellIcon, SearchIcon } from "../../gallery/icons";
 import { Block, LIVE_STATES, Matrix, PageRoot, Specimen } from "../../gallery/ui";
 
-const VARIANTS: readonly IconButtonVariant[] = ["secondary", "ghost"];
+const VARIANTS: readonly IconButtonVariant[] = ["outline", "ghost"];
 const SIZES: readonly IconButtonSize[] = ["sm", "md", "touch"];
 
 function Toggled() {

@@ -7,21 +7,8 @@ describe("Avatar", () => {
     const { getByText } = render(<Avatar>x</Avatar>);
     const el = getByText("x");
     expect(el.tagName).toBe("DIV");
-    expect(el).toHaveClass("rounded-full", "size-7", "bg-secondary");
+    expect(el).toHaveClass("rounded-full");
     expect(el).toHaveAttribute("data-slot", "avatar");
-    expect(el).toHaveAttribute("data-size", "md");
-  });
-
-  it("takes the chip radius as a square and the 56 px size at lg", () => {
-    const { getByText } = render(
-      <Avatar shape="square" size="lg">
-        x
-      </Avatar>,
-    );
-    const el = getByText("x");
-    expect(el).toHaveClass("rounded-[var(--chip-radius)]", "size-14");
-    expect(el).not.toHaveClass("rounded-full");
-    expect(el).toHaveAttribute("data-size", "lg");
   });
 
   it("renders an image with the base classes", () => {
@@ -42,7 +29,7 @@ describe("Avatar", () => {
   it("renders the fallback base and slot", () => {
     const { getByText } = render(<AvatarFallback>AB</AvatarFallback>);
     const el = getByText("AB");
-    expect(el).toHaveClass("rounded-[inherit]", "text-ink");
+    expect(el).toHaveClass("bg-muted");
     expect(el).toHaveAttribute("data-slot", "avatar-fallback");
   });
 });

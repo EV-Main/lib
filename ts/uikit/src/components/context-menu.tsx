@@ -144,7 +144,7 @@ export function ContextMenuContent({ className, children, ...props }: React.Comp
 
 export interface ContextMenuItemProps extends React.ComponentProps<"div"> {
   inset?: boolean;
-  variant?: "neutral" | "danger";
+  variant?: "neutral" | "destructive";
   disabled?: boolean;
 }
 

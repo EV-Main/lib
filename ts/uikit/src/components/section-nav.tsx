@@ -140,7 +140,7 @@ function SectionNavGroupView({
     <div className="flex flex-col gap-0.5 pt-3.5 first:pt-0">
       {(group.label !== undefined || group.description !== undefined) && (
         <div className="flex flex-col">
-          {group.label !== undefined && <SectionLabel>{group.label}</SectionLabel>}
+          {group.label !== undefined && <SectionLabel className="px-2 py-1">{group.label}</SectionLabel>}
           {group.description !== undefined && (
             <p className="px-2 text-caption text-ink-soft">{group.description}</p>
           )}

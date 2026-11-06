@@ -39,13 +39,13 @@ function ProfileTab() {
   return (
     <div className="flex flex-col gap-5">
       <div className="border-border bg-card flex flex-wrap items-center gap-4 rounded-lg border p-5">
-        <Avatar shape="circle" size="lg">
+        <Avatar className="size-14">
           <AvatarFallback>J</AvatarFallback>
         </Avatar>
         <div className="flex flex-col items-start gap-1.5">
           <span className="text-body text-ink font-medium">Profile picture</span>
           <span className="text-caption text-ink-mid">Recommended size is 400×400px</span>
-          <Button size="sm" variant="secondary">
+          <Button size="sm" variant="outline">
             Upload new
           </Button>
         </div>
@@ -67,7 +67,7 @@ function ProfileTab() {
           </FormRow>
         </div>
       </div>
-      <Button className="self-start" onClick={() => toast.positive("Saved", { description: "Your profile is up to date." })}>
+      <Button size="xs" className="self-start" onClick={() => toast.positive("Saved", { description: "Your profile is up to date." })}>
         Save changes
       </Button>
     </div>
@@ -84,7 +84,7 @@ function SecurityTab() {
     <div className="flex flex-col gap-5">
       <div className={FORM_CARD}>
         <SettingsRow label="Password" hint="Last changed 3 months ago.">
-          <Button size="sm" variant="secondary">
+          <Button size="sm" variant="outline">
             Change password
           </Button>
         </SettingsRow>
@@ -103,7 +103,7 @@ function SecurityTab() {
               {s.current ? (
                 <Badge variant="positive">Current</Badge>
               ) : (
-                <Button size="sm" variant="danger">
+                <Button size="sm" variant="destructive">
                   Sign out
                 </Button>
               )}
@@ -161,7 +161,7 @@ export function AccountSettingsButton({ label = "Open account settings" }: { lab
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button variant="secondary" onClick={() => setOpen(true)}>
+      <Button size="xs" variant="outline" onClick={() => setOpen(true)}>
         {label}
       </Button>
       <AccountSettingsDialog
@@ -172,7 +172,7 @@ export function AccountSettingsButton({ label = "Open account settings" }: { lab
         sections={ACCOUNT_SECTIONS}
         sidebarFooter={
           <>
-            <Button variant="ghost">Sign out</Button>
+            <Button size="xs" variant="ghost">Sign out</Button>
             <span className="flex-1" />
             <IconButton aria-label="Feedback" size="sm">
               <MessageIcon />
@@ -194,7 +194,7 @@ export function ConfirmVariants() {
   return (
     <>
       <ConfirmDialog
-        trigger={<Button variant="secondary">Default · slow confirm</Button>}
+        trigger={<Button size="xs" variant="outline">Default · slow confirm</Button>}
         title="Publish the report?"
         description="Investors see it as soon as it is published."
         confirmLabel="Publish"
@@ -204,7 +204,7 @@ export function ConfirmVariants() {
         }}
       />
       <ConfirmDialog
-        trigger={<Button variant="danger">Danger · slow confirm</Button>}
+        trigger={<Button size="xs" variant="destructive">Danger · slow confirm</Button>}
         tone="danger"
         title="Delete workspace?"
         description="This permanently removes the workspace, its layouts and saved drawings. This action cannot be undone."
@@ -215,14 +215,14 @@ export function ConfirmVariants() {
         }}
       />
       <ConfirmDialog
-        trigger={<Button variant="secondary">Default · rejects</Button>}
+        trigger={<Button size="xs" variant="outline">Default · rejects</Button>}
         title="Publish the report?"
         description="A rejection keeps the dialog open and shows why."
         confirmLabel="Publish"
         onConfirm={failing}
       />
       <ConfirmDialog
-        trigger={<Button variant="danger">Danger · rejects</Button>}
+        trigger={<Button size="xs" variant="destructive">Danger · rejects</Button>}
         tone="danger"
         title="Delete workspace?"
         description="A rejection keeps the dialog open and shows why."
@@ -236,7 +236,8 @@ export function ConfirmVariants() {
 export function ToastTrio() {
   return (
     <Button
-      variant="secondary"
+      size="xs"
+      variant="outline"
       onClick={() => {
         toast.positive("Order filled", { description: "Bought 0.50 ABC at 2398.81" });
         setTimeout(() => toast.error("Order rejected", { description: "Insufficient margin for this size." }), 400);

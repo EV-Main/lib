@@ -57,13 +57,12 @@ pub fn accent_outline_class(accent: Accent) -> &'static str {
 }
 
 /// Which face a button's accent wears. The choice is the *variant's* — an
-/// outlined button (`Primary`, `Danger`) tints what it already has, anything
-/// else repaints — so a
+/// outlined button tints what it already has, anything else repaints — so a
 /// caller never names a face; it names a rung and a variant, and both ports
 /// resolve the pair here.
 pub fn button_accent_class(accent: Accent, variant: &ButtonVariant) -> &'static str {
 	match variant {
-		ButtonVariant::Primary | ButtonVariant::Danger => accent_outline_class(accent),
+		ButtonVariant::Outline => accent_outline_class(accent),
 		_ => accent_fill_class(accent),
 	}
 }

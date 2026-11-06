@@ -21,12 +21,13 @@ export default function ToastsPage() {
       <Block title="Tones">
         <Specimen>
           {TONES.map((tone) => (
-            <Button key={tone} size="sm" variant={tone === "error" ? "danger" : "secondary"} onClick={() => fire(tone)}>
+            <Button key={tone} size="sm" variant={tone === "error" ? "destructive" : "outline"} onClick={() => fire(tone)}>
               {tone}
             </Button>
           ))}
           <Button
             size="sm"
+            variant="outline"
             onClick={() => {
               fire("positive");
               fire("info");
@@ -43,7 +44,7 @@ export default function ToastsPage() {
       <Block title="Position">
         <Specimen>
           {TOAST_POSITIONS.map((p) => (
-            <Button key={p} size="sm" variant={p === position ? "solid" : "secondary"} onClick={() => setToastPosition(p)}>
+            <Button key={p} size="sm" variant={p === position ? "primary" : "outline"} onClick={() => setToastPosition(p)}>
               {p}
             </Button>
           ))}

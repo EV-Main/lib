@@ -51,7 +51,7 @@ export function ResourceError(props: ResourceErrorProps) {
     const { message, title, labels: _labels, variant: _variant, className, ...rest } = props;
     return (
       <div data-slot="resource-error" data-variant="alert" className={className} {...rest}>
-        <Alert variant="error">
+        <Alert variant="destructive" className="border-chip-error-border">
           <TriangleAlertIcon className="size-4" />
           {title !== undefined && <AlertTitle>{title}</AlertTitle>}
           <AlertDescription>{message}</AlertDescription>
@@ -81,7 +81,7 @@ export function ResourceError(props: ResourceErrorProps) {
     >
       {line}
       {onRetry && (
-        <Button type="button" variant="secondary" size="sm" disabled={retrying} onClick={onRetry}>
+        <Button type="button" variant="outline" size="xs" disabled={retrying} onClick={onRetry}>
           <RefreshIcon className={cn("size-4", retrying && "motion-safe:animate-spin")} />
           {labels.retry ?? "Try again"}
         </Button>

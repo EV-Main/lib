@@ -38,7 +38,7 @@ function Dropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="secondary">Actions</Button>
+        <Button size="xs" variant="outline">Actions</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>Position</DropdownMenuLabel>
@@ -64,7 +64,7 @@ function Dropdown() {
           <DropdownMenuRadioItem value="size">Largest</DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="danger">
+        <DropdownMenuItem variant="destructive">
           <TrashIcon />
           Delete
         </DropdownMenuItem>
@@ -88,7 +88,7 @@ function Context() {
         </ContextMenuItem>
         <ContextMenuItem disabled>Paste</ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem variant="danger">Delete</ContextMenuItem>
+        <ContextMenuItem variant="destructive">Delete</ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
   );
@@ -106,7 +106,7 @@ function MenuBar() {
               <MenubarShortcut>⌘N</MenubarShortcut>
             </MenubarItem>
             <MenubarSeparator />
-            <MenubarItem variant="danger">Close all</MenubarItem>
+            <MenubarItem variant="destructive">Close all</MenubarItem>
           </MenubarContent>
         </MenubarMenu>
       ))}
@@ -118,9 +118,9 @@ export default function MenusPage() {
   return (
     <PageRoot
       title="Menus"
-      lede="Menus open in a layer above the page and close one layer at a time. A destructive item is marked danger, never only by position."
+      lede="Menus open in a layer above the page and close one layer at a time. A destructive item is marked destructive, never only by position."
     >
-      <Block title="DropdownMenu" note="Icons, shortcuts, a submenu, a checkbox item, a radio group, a disabled item and a danger item.">
+      <Block title="DropdownMenu" note="Icons, shortcuts, a submenu, a checkbox item, a radio group, a disabled item and a destructive item.">
         <Specimen>
           <Dropdown />
         </Specimen>

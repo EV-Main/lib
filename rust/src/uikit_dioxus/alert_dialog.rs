@@ -98,7 +98,7 @@ pub fn AlertDialogDescription(id: Option<String>, #[props(default)] class: Strin
 #[component]
 pub fn AlertDialogAction(onclick: Option<EventHandler<MouseEvent>>, #[props(default)] class: String, children: Element) -> Element {
 	let ctx = use_context::<AlertDialogCtx>();
-	let cls = button_classes(&ButtonVariant::Solid, Size::Md, false, None, &class);
+	let cls = button_classes(&ButtonVariant::Primary, Size::Md, false, None, &class);
 	rsx! {
 		button {
 			r#type: "button",
@@ -118,7 +118,7 @@ pub fn AlertDialogAction(onclick: Option<EventHandler<MouseEvent>>, #[props(defa
 #[component]
 pub fn AlertDialogCancel(onclick: Option<EventHandler<MouseEvent>>, #[props(default)] class: String, children: Element) -> Element {
 	let ctx = use_context::<AlertDialogCtx>();
-	let cls = button_classes(&ButtonVariant::Secondary, Size::Md, false, None, &class);
+	let cls = button_classes(&ButtonVariant::Outline, Size::Md, false, None, &class);
 	rsx! {
 		button {
 			r#type: "button",
@@ -233,6 +233,6 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("bg-primary"), "the action is the solid call to action: {html}");
+		assert!(html.contains("bg-primary"), "action uses default button variant: {html}");
 	}
 }

@@ -87,7 +87,7 @@ export function HeaderEnd({ extra }: { extra?: ReactNode }) {
         <WalletIcon />
       </IconButton>
       <Separator />
-      <Avatar shape="circle" size="md">
+      <Avatar className="size-7">
         <AvatarFallback>J</AvatarFallback>
       </Avatar>
     </>
@@ -127,7 +127,7 @@ export function InstrumentToolbar() {
         <Stat label="Funding / countdown" value="+0.0010% · 02:52:34" tone="text-positive-ink" />
       </div>
       <span className="ml-auto flex items-center gap-1">
-        <Button variant="ghost">Indicators  1/3</Button>
+        <Button size="xs" variant="ghost">Indicators  1/3</Button>
         <IconButton aria-label="Alerts">
           <BellIcon />
         </IconButton>
@@ -137,7 +137,7 @@ export function InstrumentToolbar() {
         <IconButton aria-label="Panels sidebar">
           <SidebarIcon />
         </IconButton>
-        <Button variant="secondary">Panels</Button>
+        <Button size="xs" variant="outline">Panels</Button>
       </span>
     </>
   );

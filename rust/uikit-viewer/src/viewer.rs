@@ -60,13 +60,13 @@ fn Gallery() -> Element {
 								onclick: move |_| { toaster.toast("Neutral toast"); }, "neutral" }
 							Button { size: Size::Sm, variant: ButtonVariant::Secondary,
 								onclick: move |_| { toaster.positive("Positive toast"); }, "positive" }
-							Button { size: Size::Sm, variant: ButtonVariant::Danger,
+							Button { size: Size::Sm, variant: ButtonVariant::Destructive,
 								onclick: move |_| { toaster.error("Error toast"); }, "error" }
 							Button { size: Size::Sm, variant: ButtonVariant::Secondary,
 								onclick: move |_| { toaster.info("Info toast"); }, "info" }
 							Button { size: Size::Sm, variant: ButtonVariant::Secondary,
 								onclick: move |_| { toaster.warn("Warn toast"); }, "warn" }
-							Button { size: Size::Sm, variant: ButtonVariant::Ghost,
+							Button { size: Size::Sm, variant: ButtonVariant::Outline,
 								onclick: move |_| { toaster.show("Persistent — won't auto-close", ToastVariant::Neutral, None); }, "persistent" }
 						}
 						Separator {}
@@ -77,7 +77,7 @@ fn Gallery() -> Element {
 									Button {
 										key: "{label}",
 										size: Size::Sm,
-										variant: if position() == pos { ButtonVariant::Primary } else { ButtonVariant::Secondary },
+										variant: if position() == pos { ButtonVariant::Primary } else { ButtonVariant::Outline },
 										onclick: move |_| position.set(pos),
 										"{label}"
 									}
@@ -90,11 +90,11 @@ fn Gallery() -> Element {
 				section { class: "space-y-3",
 					h2 { class: "text-ink text-lg font-semibold", "Buttons" }
 					div { class: "flex flex-wrap items-center gap-3",
-						Button { "Primary" }
+						Button { "Default" }
 						Button { variant: ButtonVariant::Secondary, "Secondary" }
-						Button { variant: ButtonVariant::Solid, "Solid" }
+						Button { variant: ButtonVariant::Outline, "Outline" }
 						Button { variant: ButtonVariant::Ghost, "Ghost" }
-						Button { variant: ButtonVariant::Danger, "Danger" }
+						Button { variant: ButtonVariant::Destructive, "Destructive" }
 						Button { variant: ButtonVariant::Link, "Link" }
 					}
 				}
@@ -118,7 +118,7 @@ fn Gallery() -> Element {
 							AlertTitle { "Heads up" }
 							AlertDescription { "This kit is the source of truth the React port mirrors." }
 						}
-						Alert { variant: AlertVariant::Error,
+						Alert { variant: AlertVariant::Destructive,
 							AlertTitle { "Something failed" }
 							AlertDescription { "Check the console for details." }
 						}

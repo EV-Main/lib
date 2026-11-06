@@ -212,7 +212,7 @@ export function SelectTrigger({
       {...(props as Record<string, unknown>)}
     >
       {children}
-      <SelectChevron className="size-4 opacity-40" />
+      <SelectChevron className="size-4 opacity-50" />
     </button>
   );
 }

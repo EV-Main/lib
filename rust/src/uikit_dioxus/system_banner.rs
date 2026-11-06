@@ -5,11 +5,11 @@ use crate::{
 	cn,
 	uikit_dioxus::{
 		SYSTEM_BANNER_ACTION, SYSTEM_BANNER_BASE, SYSTEM_BANNER_BODY_AFTER_TITLE, SYSTEM_BANNER_DISMISS, SYSTEM_BANNER_GLYPH, SYSTEM_BANNER_ICON, SYSTEM_BANNER_MESSAGE, SYSTEM_BANNER_TITLE,
-		SystemBannerTone, primitives::has_content,
+		SystemBannerTone, primitives::has_content, system_banner_tone_class,
 	},
 };
 
-/// A slim full-width strip above the page. Mirrors the TS `SystemBanner`.
+/// A notice strip. Mirrors the TS `SystemBanner`.
 /// It only presents: where its state comes from, and whether a dismissal
 /// sticks, are the caller's.
 ///
@@ -30,7 +30,7 @@ pub fn SystemBanner(
 	#[props(default)] class: String,
 	children: Element,
 ) -> Element {
-	let cls = cn!(SYSTEM_BANNER_BASE, class);
+	let cls = cn!(SYSTEM_BANNER_BASE, system_banner_tone_class(&tone), class);
 	let glyph = match icon {
 		Some(icon) => icon,
 		None if tone == SystemBannerTone::Warn => rsx! { TriangleAlertIcon {} },
@@ -124,20 +124,24 @@ mod tests {
 	}
 
 	#[test]
-	fn keeps_the_strip_on_the_card_fill_and_colours_only_the_icon() {
-		fn app() -> Element {
+	fn the_tone_fills_the_strip_and_inks_the_icon() {
+		fn warn() -> Element {
 			rsx! {
 				SystemBanner { tone: SystemBannerTone::Warn, icon: rsx! { svg { "data-testid": "glyph" } }, "Работы сегодня ночью" }
 			}
 		}
-		let html = render(app);
+		fn neutral() -> Element {
+			rsx! { SystemBanner { tone: SystemBannerTone::Neutral, "Hello" } }
+		}
+		let html = render(warn);
 		let root = &html[..html.find('>').expect("root tag")];
 		assert!(root.contains("role=\"status\""), "{html}");
-		assert!(root.contains("bg-card") && root.contains("border-b"), "{html}");
-		assert!(!html.contains("bg-accent-warn/10"), "{html}");
 		assert!(root.contains("data-tone=\"warn\""), "{html}");
+		assert!(root.contains("bg-accent-warn/10") && root.contains("border-accent-warn/40"), "{html}");
 		assert!(icon_wrapper(&html).contains("text-accent-warn-ink"), "{html}");
-		assert!(!root.contains("text-accent-warn-ink"), "{html}");
+		let html = render(neutral);
+		let root = &html[..html.find('>').expect("root tag")];
+		assert!(root.contains("bg-card") && root.contains("border-border"), "{html}");
 	}
 
 	#[test]

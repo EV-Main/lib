@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 
 use crate::{
 	cn,
-	uikit_dioxus::{ICON_BUTTON_BASE, ICON_BUTTON_PRESSED, IconButtonVariant, Size, Tooltip, TooltipContent, button_classes, tooltip::TooltipCtx},
+	uikit_dioxus::{ICON_BUTTON_BASE, ICON_BUTTON_PRESSED, IconButtonVariant, Size, Tooltip, TooltipContent, button_classes, icon_button_size_class, tooltip::TooltipCtx},
 };
 
 /// A square button holding one glyph. Mirrors the TS `IconButton`.
@@ -32,6 +32,7 @@ pub fn IconButton(
 ) -> Element {
 	let cls = cn!(
 		button_classes(&variant.button_variant(), size, true, None, ""),
+		icon_button_size_class(size),
 		ICON_BUTTON_BASE,
 		if pressed == Some(true) { ICON_BUTTON_PRESSED } else { "" },
 		class
@@ -188,14 +189,14 @@ mod tests {
 
 	#[test]
 	fn wears_the_square_button_face() {
-		let classes = |variant: IconButtonVariant, size: Size| cn!(button_classes(&variant.button_variant(), size, true, None, ""), ICON_BUTTON_BASE);
+		let classes = |variant: IconButtonVariant, size: Size| cn!(button_classes(&variant.button_variant(), size, true, None, ""), icon_button_size_class(size), ICON_BUTTON_BASE);
 		let md = classes(IconButtonVariant::Ghost, Size::Md);
 		assert!(md.contains("h-7") && md.contains("aspect-square") && md.contains("px-0"), "{md}");
 		assert!(classes(IconButtonVariant::Ghost, Size::Sm).contains("h-6"));
 		assert!(classes(IconButtonVariant::Ghost, Size::Touch).contains("size-11"));
-		let secondary = classes(IconButtonVariant::Secondary, Size::Md);
-		assert!(secondary.contains("bg-secondary") && secondary.contains("text-ink-mid"), "{secondary}");
-		assert_eq!(IconButtonVariant::Secondary.button_variant(), ButtonVariant::Secondary);
+		let outline = classes(IconButtonVariant::Outline, Size::Md);
+		assert!(outline.contains("bg-secondary") && outline.contains("text-ink-mid"), "{outline}");
+		assert_eq!(IconButtonVariant::Outline.button_variant(), ButtonVariant::Outline);
 	}
 
 	#[test]

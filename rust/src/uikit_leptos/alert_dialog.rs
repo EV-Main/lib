@@ -128,7 +128,7 @@ pub fn AlertDialogDescription(#[prop(optional, into)] id: Option<String>, #[prop
 #[component]
 pub fn AlertDialogAction(#[prop(optional)] on_click: Option<Callback<leptos::ev::MouseEvent>>, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let ctx = expect_context::<AlertDialogCtx>();
-	let cls = button_classes(&ButtonVariant::Solid, Size::Md, false, None, &class);
+	let cls = button_classes(&ButtonVariant::Primary, Size::Md, false, None, &class);
 	view! {
 		<button
 			type="button"
@@ -145,7 +145,7 @@ pub fn AlertDialogAction(#[prop(optional)] on_click: Option<Callback<leptos::ev:
 #[component]
 pub fn AlertDialogCancel(#[prop(optional)] on_click: Option<Callback<leptos::ev::MouseEvent>>, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	let ctx = expect_context::<AlertDialogCtx>();
-	let cls = button_classes(&ButtonVariant::Secondary, Size::Md, false, None, &class);
+	let cls = button_classes(&ButtonVariant::Outline, Size::Md, false, None, &class);
 	view! {
 		<button
 			type="button"

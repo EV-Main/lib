@@ -9,13 +9,13 @@ describe("Switch", () => {
     expect(el).toHaveAttribute("data-slot", "switch");
     expect(el).toHaveAttribute("data-state", "unchecked");
     expect(el).toHaveAttribute("aria-checked", "false");
-    expect(el).toHaveClass("rounded-full", "h-4", "w-7");
+    expect(el).toHaveClass("rounded-full");
   });
 
   it("renders the thumb with translate classes", () => {
     const { container } = render(<Switch />);
     const thumb = container.querySelector('[data-slot="switch-thumb"]')!;
-    expect(thumb).toHaveClass("data-[state=checked]:translate-x-[13px]", "size-3");
+    expect(thumb).toHaveClass("data-[state=checked]:translate-x-[calc(100%-2px)]");
   });
 
   it("toggles checked on click and fires onCheckedChange", () => {

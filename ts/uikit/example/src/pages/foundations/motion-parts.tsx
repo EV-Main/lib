@@ -25,7 +25,7 @@ import { Specimen } from "../../gallery/ui";
 
 export function Replay({ onClick }: { onClick: () => void }) {
   return (
-    <Button size="sm" variant="secondary" onClick={onClick}>
+    <Button size="sm" variant="outline" onClick={onClick}>
       Replay
     </Button>
   );
@@ -110,7 +110,7 @@ export function SettledDemo() {
     <Specimen className="items-start">
       <div className="flex w-full flex-col gap-3">
         <div className="flex flex-wrap items-center gap-2">
-          <Button size="sm" variant="secondary" onClick={() => setRound((r) => r + 1)}>
+          <Button size="sm" variant="outline" onClick={() => setRound((r) => r + 1)}>
             Reload
           </Button>
           <ToggleGroup
@@ -180,6 +180,7 @@ export function ToastBurst() {
     <Specimen>
       <Button
         size="sm"
+        variant="outline"
         onClick={() =>
           TONES.forEach((tone, i) => {
             setTimeout(() => fire(tone), i * 140);
@@ -189,7 +190,7 @@ export function ToastBurst() {
         Burst of five
       </Button>
       {TONES.map((tone) => (
-        <Button key={tone} size="sm" variant={tone === "error" ? "danger" : "secondary"} onClick={() => fire(tone)}>
+        <Button key={tone} size="sm" variant={tone === "error" ? "destructive" : "outline"} onClick={() => fire(tone)}>
           {tone}
         </Button>
       ))}
@@ -205,18 +206,18 @@ export function PresenceDemo() {
     <Specimen>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="secondary">Menu</Button>
+          <Button size="xs" variant="outline">Menu</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem>Rename</DropdownMenuItem>
           <DropdownMenuItem>Duplicate</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="danger">Delete</DropdownMenuItem>
+          <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="secondary">Dialog</Button>
+          <Button size="xs" variant="outline">Dialog</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -224,7 +225,7 @@ export function PresenceDemo() {
             <DialogDescription>The scrim fades with the panel on open and on close.</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button>Done</Button>
+            <Button size="xs">Done</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -240,7 +241,7 @@ export function EaseDemo() {
   return (
     <Specimen className="items-start">
       <div className="flex w-full flex-col gap-3">
-        <Button size="sm" variant="secondary" className="self-start" onClick={() => setMoved((m) => !m)}>
+        <Button size="sm" variant="outline" className="self-start" onClick={() => setMoved((m) => !m)}>
           Move
         </Button>
         <div className="flex flex-col gap-1">

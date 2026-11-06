@@ -126,7 +126,7 @@ pub fn CommandInput(
 				stroke-width="2"
 				stroke-linecap="round"
 				stroke-linejoin="round"
-				class="size-4 shrink-0 opacity-40"
+				class="size-4 shrink-0 opacity-50"
 				aria-hidden="true"
 			>
 				<circle cx="11" cy="11" r="8"></circle>

@@ -89,13 +89,13 @@ pub fn NotFound(#[props(default = "/".to_string())] home_href: String, #[props(d
 				StatusLinkData {
 					label: "Back to home".to_string(),
 					href: home_href,
-					variant: ButtonVariant::Solid,
+					variant: ButtonVariant::Primary,
 					leading_arrow: true,
 				},
 				StatusLinkData {
 					label: "Contact the team".to_string(),
 					href: contact_href,
-					variant: ButtonVariant::Secondary,
+					variant: ButtonVariant::Outline,
 					leading_arrow: false,
 				},
 			],
@@ -117,13 +117,13 @@ pub fn Forbidden(#[props(default = "/".to_string())] home_href: String, #[props(
 				StatusLinkData {
 					label: "Back to home".to_string(),
 					href: home_href,
-					variant: ButtonVariant::Solid,
+					variant: ButtonVariant::Primary,
 					leading_arrow: true,
 				},
 				StatusLinkData {
 					label: "Request access".to_string(),
 					href: contact_href,
-					variant: ButtonVariant::Secondary,
+					variant: ButtonVariant::Outline,
 					leading_arrow: false,
 				},
 			],
@@ -145,13 +145,13 @@ pub fn ServerError(#[props(default = "/".to_string())] home_href: String, reset:
 				StatusLinkData {
 					label: "Back to home".to_string(),
 					href: home_href,
-					variant: ButtonVariant::Secondary,
+					variant: ButtonVariant::Outline,
 					leading_arrow: true,
 				},
 			],
 			button {
 				r#type: "button",
-				class: status_cta_class(Accent::Error, ButtonVariant::Solid),
+				class: status_cta_class(Accent::Error, ButtonVariant::Primary),
 				onclick: move |_| {
 					if let Some(cb) = reset {
 						cb.call(());
@@ -202,7 +202,7 @@ mod tests {
 					links: vec![StatusLinkData {
 						label: "Back to home".to_string(),
 						href: "/".to_string(),
-						variant: ButtonVariant::Solid,
+						variant: ButtonVariant::Primary,
 						leading_arrow: true,
 					}],
 				}

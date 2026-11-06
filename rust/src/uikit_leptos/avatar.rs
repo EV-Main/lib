@@ -2,14 +2,14 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	uikit_leptos::{AVATAR, AVATAR_FALLBACK, AVATAR_IMAGE, AvatarShape, AvatarSize},
+	uikit_leptos::{AVATAR, AVATAR_FALLBACK, AVATAR_IMAGE},
 };
 
 #[component]
-pub fn Avatar(#[prop(optional)] shape: AvatarShape, #[prop(optional)] size: AvatarSize, #[prop(optional, into)] class: String, children: Children) -> impl IntoView {
-	let cls = cn!(AVATAR, shape.as_class(), size.as_class(), class);
+pub fn Avatar(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
+	let cls = cn!(AVATAR, class);
 	view! {
-		<div class=cls data-slot="avatar" data-size=size.as_ref().to_owned()>
+		<div class=cls data-slot="avatar">
 			{children()}
 		</div>
 	}

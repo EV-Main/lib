@@ -20,7 +20,7 @@ function OverlayStage() {
         aside={<StaticRail value="alerts" />}
         children={
           <div className="bg-background flex h-full items-center justify-center p-4">
-            <Button variant="secondary" onClick={() => setOpen(true)}>
+            <Button size="xs" variant="outline" onClick={() => setOpen(true)}>
               Open the delete-alert dialog aside
             </Button>
           </div>
@@ -43,7 +43,7 @@ function LeftStage() {
             {open ? (
               <ContentPlaceholder />
             ) : (
-              <Button variant="secondary" onClick={() => setOpen(true)}>
+              <Button size="xs" variant="outline" onClick={() => setOpen(true)}>
                 Reopen the navigation aside
               </Button>
             )}

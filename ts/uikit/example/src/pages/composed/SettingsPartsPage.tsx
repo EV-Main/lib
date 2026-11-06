@@ -35,7 +35,7 @@ export default function SettingsPartsPage() {
           <SettingsSection title="Default" description="The body is padded.">
             <p className="text-body text-ink-mid">Cards are one surface step above the page, with a hairline.</p>
           </SettingsSection>
-          <SettingsSection title="With an action" action={<Button size="sm" variant="secondary">Create team</Button>}>
+          <SettingsSection title="With an action" action={<Button size="sm" variant="outline">Create team</Button>}>
             <p className="text-body text-ink-mid">The action sits at the top right.</p>
           </SettingsSection>
           <NotificationRows />

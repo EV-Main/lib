@@ -96,7 +96,7 @@ pub fn SelectTrigger(#[props(default)] size: Size, #[props(default)] class: Stri
 				stroke_width: "2",
 				stroke_linecap: "round",
 				stroke_linejoin: "round",
-				class: "size-4 opacity-40",
+				class: "size-4 opacity-50",
 				path { d: "m6 9 6 6 6-6" }
 			}
 		}
@@ -475,7 +475,7 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("h-6"), "{html}");
+		assert!(html.contains("h-8"), "{html}");
 	}
 
 	#[test]
@@ -483,14 +483,14 @@ mod tests {
 		fn app() -> Element {
 			rsx! {
 				Select {
-					SelectTrigger { size: Size::Touch, "x" }
+					SelectTrigger { size: Size::Lg, "x" }
 				}
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("h-11"), "{html}");
+		assert!(html.contains("h-12"), "{html}");
 		assert!(html.contains("text-base"), "{html}");
-		assert!(!html.contains("text-body"), "lg replaces the md type: {html}");
+		assert!(!html.contains("text-sm"), "lg replaces the md type: {html}");
 		assert!(html.contains("rounded-[var(--control-radius)]"), "{html}");
 	}
 

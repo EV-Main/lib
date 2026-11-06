@@ -167,7 +167,7 @@ export function ChatComposer({
         {hint != null && <span className={CHAT_COMPOSER_HINT}>{hint}</span>}
         {streaming ? (
           <IconButton
-            variant="secondary"
+            variant="outline"
             aria-label={labels.stop ?? "Stop"}
             onClick={() => {
               onStop?.();
@@ -179,7 +179,7 @@ export function ChatComposer({
           </IconButton>
         ) : (
           <IconButton
-            variant="secondary"
+            variant="outline"
             aria-label={labels.send ?? "Send"}
             onClick={send}
             disabled={disabled || trimmed === ""}

@@ -99,7 +99,7 @@ export function ChatPanel({ children, empty, composer, streaming = false, labels
         {!isEmpty && (
           // Stays mounted so it can fade; hidden from the tree and the tab order until it matters.
           <IconButton
-            variant="secondary"
+            variant="outline"
             aria-label={labels.jump ?? "Jump to latest"}
             data-chat-jump={away ? "visible" : "hidden"}
             aria-hidden={!away}

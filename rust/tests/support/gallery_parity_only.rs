@@ -91,8 +91,8 @@ fn p_button_group_parts() -> Element {
 		ButtonGroup {
 			ButtonGroupText { "Range" }
 			ButtonGroupSeparator {}
-			Button { variant: ButtonVariant::Secondary, "Day" }
-			Button { variant: ButtonVariant::Secondary, "Week" }
+			Button { variant: ButtonVariant::Outline, "Day" }
+			Button { variant: ButtonVariant::Outline, "Week" }
 		}
 	}
 }
@@ -421,7 +421,7 @@ fn p_popover_anchor() -> Element {
 		Popover { default_open: true,
 			PopoverAnchor {
 				PopoverTrigger {
-					Button { variant: ButtonVariant::Secondary, "Open popover" }
+					Button { variant: ButtonVariant::Outline, "Open popover" }
 				}
 			}
 			PopoverContent { "Popover body" }

@@ -78,9 +78,10 @@ focus `ring`, a radio dot, a Slider range and a Progress indicator are the ink.
 The radio dot, range and indicator are ink although they are painted shapes
 because a shape with no label is identified by contrast alone, and the ink
 holds more of it: on Dark card 5.92:1 against the fill's 3.94:1 for the 8px dot.
-The range and the indicator ride a 14 % ink track (`bg-ink/14`), which is
-1.42:1 against card on Dark and 1.35:1 on Light; the planes sit only 1.10:1 from
-`muted`, so a muted track would vanish. A Checkbox and a
+The range rides a 14 % ink track (`bg-ink/14`), 1.42:1 against card on Dark
+and 1.35:1 on Light, and the indicator a 20 % tint of itself, 1.30:1 on
+background at its tightest; the planes sit only 1.10:1 from `muted`, so a muted
+track would vanish. A Checkbox and a
 Switch stay the fill because their mark — the tick, the thumb — is
 `on-primary`, so they identify themselves even where the fill does not clear
 the surface.

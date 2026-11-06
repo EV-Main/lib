@@ -186,7 +186,7 @@ export interface DropdownMenuItemProps extends React.ComponentProps<"div"> {
   /** Render the child (a link) as the item. */
   asChild?: boolean;
   inset?: boolean;
-  variant?: "neutral" | "danger";
+  variant?: "neutral" | "destructive";
   disabled?: boolean;
 }
 

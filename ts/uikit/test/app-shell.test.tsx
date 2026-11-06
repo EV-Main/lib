@@ -85,15 +85,13 @@ describe("PageFrame", () => {
 describe("PageHeading / SectionLabel", () => {
   it("renders only the parts given", () => {
     const { container, getByRole } = render(<PageHeading title="Users" />);
-    const heading = getByRole("heading", { level: 1, name: "Users" });
-    expect(heading).toHaveClass("font-serif", "text-h1", "font-light");
+    expect(getByRole("heading", { level: 1, name: "Users" })).toBeInTheDocument();
     expect(container.querySelector("p")).toBeNull();
   });
 
   it("labels in two tones, on any element", () => {
     const { container } = render(<SectionLabel as="h2" tone="accent">Portfolio</SectionLabel>);
-    expect(container.querySelector("h2")).toHaveClass("text-primary-ink");
-    expect(container.querySelector("h2")).not.toHaveClass("uppercase");
+    expect(container.querySelector("h2")).toHaveClass("text-primary-ink", "uppercase");
   });
 });
 

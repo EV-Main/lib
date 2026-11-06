@@ -90,7 +90,7 @@ pub fn NotFound(#[prop(default = "/".to_string(), into)] home_href: String, #[pr
 			headline_accent="open water"
 			subtext="The page you're looking for has drifted off our coastline — moved, renamed, or never charted. Let's get you back to shore."
 			links=vec![
-				home("Back to home", home_href, ButtonVariant::Solid),
+				home("Back to home", home_href, ButtonVariant::Primary),
 				contact("Contact the team", contact_href),
 			]
 		/>
@@ -109,7 +109,7 @@ pub fn Forbidden(#[prop(default = "/".to_string(), into)] home_href: String, #[p
 			headline_accent="private"
 			subtext="You don't have the credentials to view this page. If you believe you should, our team can open the right doors."
 			links=vec![
-				home("Back to home", home_href, ButtonVariant::Solid),
+				home("Back to home", home_href, ButtonVariant::Primary),
 				contact("Request access", contact_href),
 			]
 		/>
@@ -127,11 +127,11 @@ pub fn ServerError(#[prop(default = "/".to_string(), into)] home_href: String, #
 			headline_lead="Our systems are "
 			headline_accent="recalibrating"
 			subtext="Something broke on our end — not yours. We've been alerted and are restoring service. Please try again in a moment."
-			links=vec![home("Back to home", home_href, ButtonVariant::Secondary)]
+			links=vec![home("Back to home", home_href, ButtonVariant::Outline)]
 		>
 			<button
 				type="button"
-				class=status_cta_class(Accent::Error, ButtonVariant::Solid)
+				class=status_cta_class(Accent::Error, ButtonVariant::Primary)
 				on:click=move |_| match reset {
 					Some(cb) => cb.run(()),
 					None => {
@@ -158,7 +158,7 @@ fn contact(label: &str, href: String) -> StatusLinkData {
 	StatusLinkData {
 		label: label.to_string(),
 		href,
-		variant: ButtonVariant::Secondary,
+		variant: ButtonVariant::Outline,
 		leading_arrow: false,
 	}
 }

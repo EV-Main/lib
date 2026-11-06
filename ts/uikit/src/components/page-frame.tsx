@@ -11,7 +11,7 @@ export interface SectionLabelProps extends React.HTMLAttributes<HTMLElement> {
   tone?: SectionLabelTone;
 }
 
-/** The quiet label above a figure, a group or a section; no case change, no tracking. */
+/** The tracked-uppercase label above a figure, a group or a section. */
 export function SectionLabel({ as: Comp = "p", tone = "muted", className, ...props }: SectionLabelProps) {
   return (
     <Comp
@@ -41,8 +41,8 @@ export function PageHeading({ title, description, eyebrow, actions, className, .
     >
       <div className="flex min-w-0 flex-col gap-1">
         {eyebrow !== undefined && <SectionLabel tone="accent">{eyebrow}</SectionLabel>}
-        <h1 className="font-serif text-h1 font-light text-ink">{title}</h1>
-        {description !== undefined && <p className="text-body text-ink-soft">{description}</p>}
+        <h1 className="text-2xl font-semibold leading-tight text-ink">{title}</h1>
+        {description !== undefined && <p className="text-sm text-ink-soft">{description}</p>}
       </div>
       {actions !== undefined && <div className="flex shrink-0 items-center gap-2.5">{actions}</div>}
     </header>

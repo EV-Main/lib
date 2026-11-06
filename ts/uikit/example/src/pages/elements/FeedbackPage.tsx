@@ -10,10 +10,10 @@ function ProgressDemo() {
       <div className="flex w-64 flex-col gap-2">
         <Progress value={value} aria-label="Upload" />
         <div className="flex gap-2">
-          <Button size="sm" variant="secondary" onClick={() => setValue((p) => Math.max(0, p - 10))}>
+          <Button size="sm" variant="outline" onClick={() => setValue((p) => Math.max(0, p - 10))}>
             −10
           </Button>
-          <Button size="sm" variant="secondary" onClick={() => setValue((p) => Math.min(100, p + 10))}>
+          <Button size="sm" variant="outline" onClick={() => setValue((p) => Math.min(100, p + 10))}>
             +10
           </Button>
         </div>
@@ -38,7 +38,7 @@ function SettledDemo() {
   }, [round]);
   return (
     <Specimen>
-      <Button size="sm" variant="secondary" onClick={() => setRound((r) => r + 1)}>
+      <Button size="sm" variant="outline" onClick={() => setRound((r) => r + 1)}>
         Reload
       </Button>
       <Settled loading={loading} skeleton={<Skeleton className="h-8 w-40" />}>

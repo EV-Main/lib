@@ -44,7 +44,7 @@ pub fn PopoverForm(
 	let state = use_controllable(open, default_open, on_open_change);
 	let title_id = use_stable_id("popover-form-title");
 	let cls = cn!(POPOVER_FORM_CONTENT, class);
-	let trigger_cls = button_classes(&ButtonVariant::Secondary, Size::Md, false, None, &trigger_class);
+	let trigger_cls = button_classes(&ButtonVariant::Outline, Size::Xs, false, None, &trigger_class);
 	let submit_label = labels.submit.unwrap_or_else(|| String::from("Apply"));
 	let reset_label = labels.reset.unwrap_or_else(|| String::from("Reset"));
 	rsx! {

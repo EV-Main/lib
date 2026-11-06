@@ -1,11 +1,11 @@
 import * as React from "react";
 import { cn } from "../lib/cn";
-import { ICON_BUTTON_BASE, ICON_BUTTON_PRESSED } from "../generated/icon-button";
+import { ICON_BUTTON_BASE, ICON_BUTTON_PRESSED, iconButtonSizeClasses, type IconButtonSize } from "../generated/icon-button";
 import { buttonVariants } from "./button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 
-export type IconButtonVariant = "secondary" | "ghost";
-export type IconButtonSize = "sm" | "md" | "touch";
+export type { IconButtonSize };
+export type IconButtonVariant = "outline" | "ghost";
 
 export interface IconButtonProps extends Omit<React.ComponentPropsWithoutRef<"button">, "aria-label" | "children"> {
   /** Required: a glyph alone names nothing. */
@@ -38,6 +38,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(f
       aria-pressed={pressed}
       className={cn(
         buttonVariants({ variant, size, icon: true }),
+        iconButtonSizeClasses[size],
         ICON_BUTTON_BASE,
         pressed && ICON_BUTTON_PRESSED,
         className,

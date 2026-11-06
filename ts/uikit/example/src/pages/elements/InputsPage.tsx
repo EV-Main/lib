@@ -26,7 +26,7 @@ import {
 import { CopyIcon, SearchIcon } from "../../gallery/icons";
 import { Block, LIVE_STATES, Matrix, PageRoot, Specimen } from "../../gallery/ui";
 
-const SIZES = ["sm", "md", "touch"] as const;
+const SIZES = ["sm", "md", "lg"] as const;
 
 function InputMatrix() {
   return (

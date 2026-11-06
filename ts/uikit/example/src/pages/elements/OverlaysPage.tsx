@@ -8,7 +8,7 @@ function Confirms() {
   return (
     <>
       <ConfirmDialog
-        trigger={<Button variant="secondary">Confirm (async)</Button>}
+        trigger={<Button size="xs" variant="outline">Confirm (async)</Button>}
         title="Publish the report?"
         description="Investors see it as soon as it is published."
         confirmLabel="Publish"
@@ -18,7 +18,7 @@ function Confirms() {
         }}
       />
       <ConfirmDialog
-        trigger={<Button variant="danger">Delete (fails)</Button>}
+        trigger={<Button size="xs" variant="destructive">Delete (fails)</Button>}
         tone="danger"
         title="Delete the position?"
         description="A rejection keeps the dialog open and shows why."

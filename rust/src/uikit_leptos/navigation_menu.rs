@@ -87,8 +87,7 @@ pub fn NavigationMenuTrigger(#[prop(optional, into)] class: String, children: Ch
 pub fn NavigationMenuContent(#[prop(optional, into)] class: String, children: ChildrenFn) -> impl IntoView {
 	let ctx = expect_context::<NavigationMenuItemCtx>();
 	// dep-light: inline positioning + backdrop; no portal/floating — see README Limitations.
-	// `relative z-50` keeps the panel above the z-40 backdrop (the shared class is z-auto
-	// because the TS mirror dismisses via events and has no backdrop to outstack).
+	// The shared class is z-50, above the z-40 backdrop.
 	let cls = cn!(NAVIGATION_MENU_CONTENT, class);
 	move || {
 		ctx.open.get().then(|| {
@@ -131,7 +130,7 @@ pub fn NavigationMenuLink(#[prop(optional, into)] active: Signal<bool>, #[prop(o
 pub fn NavigationMenuIndicator(#[prop(optional, into)] class: String) -> impl IntoView {
 	view! {
 		<div class=cn!(NAVIGATION_MENU_INDICATOR, class) data-slot="navigation-menu-indicator">
-			<div class="bg-border relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm shadow-elevated"></div>
+			<div class="bg-border relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm shadow-md"></div>
 		</div>
 	}
 }

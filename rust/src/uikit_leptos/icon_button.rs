@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 use crate::{
 	cn,
-	uikit_leptos::{ICON_BUTTON_BASE, ICON_BUTTON_PRESSED, IconButtonVariant, Size, Tooltip, TooltipContent, button_classes, tooltip::TooltipCtx},
+	uikit_leptos::{ICON_BUTTON_BASE, ICON_BUTTON_PRESSED, IconButtonVariant, Size, Tooltip, TooltipContent, button_classes, icon_button_size_class, tooltip::TooltipCtx},
 };
 
 /// A square button holding one glyph. Mirrors the TS `IconButton`.
@@ -31,7 +31,15 @@ pub fn IconButton(
 	children: Children,
 ) -> impl IntoView {
 	let base = button_classes(&variant.button_variant(), size, true, None, "");
-	let cls = Signal::derive(move || cn!(&base, ICON_BUTTON_BASE, if pressed.get() == Some(true) { ICON_BUTTON_PRESSED } else { "" }, &class));
+	let cls = Signal::derive(move || {
+		cn!(
+			&base,
+			icon_button_size_class(size),
+			ICON_BUTTON_BASE,
+			if pressed.get() == Some(true) { ICON_BUTTON_PRESSED } else { "" },
+			&class
+		)
+	});
 	let face = move |tip: Option<TooltipCtx>| {
 		let show = move |open: bool| {
 			if let Some(t) = tip {

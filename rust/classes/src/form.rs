@@ -4,4 +4,4 @@ pub const FORM_LABEL: &str = "text-accent-error-ink";
 
 pub const FORM_DESCRIPTION: &str = "text-ink-soft text-sm";
 
-pub const FORM_MESSAGE: &str = "text-accent-error-ink text-body-s";
+pub const FORM_MESSAGE: &str = "text-accent-error-ink text-sm";

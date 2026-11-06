@@ -43,7 +43,7 @@ export default function CardsPage() {
           </CardContent>
           <CardFooter className="gap-2">
             <Button size="sm">Add funds</Button>
-            <Button size="sm" variant="secondary">
+            <Button size="sm" variant="outline">
               Details
             </Button>
           </CardFooter>
@@ -71,7 +71,7 @@ export default function CardsPage() {
               <ItemDescription>USD · updated 13:06</ItemDescription>
             </ItemContent>
             <ItemActions>
-              <Button size="sm" variant="secondary">
+              <Button size="sm" variant="outline">
                 Open
               </Button>
             </ItemActions>

@@ -1,27 +1,25 @@
 use tailwind_fuse::{AsTailwindClass, TwVariant};
 
-/// The strip stays on the card fill for every tone: a platform notice must not
-/// shout louder than the page, so only the glyph carries the tone. The right
-/// padding keeps the text clear of the absolutely placed close button.
-pub const SYSTEM_BANNER_BASE: &str = "relative flex min-h-8 items-center justify-center gap-2 border-b border-border bg-card py-1.5 pl-4 pr-10 text-center text-body text-ink";
+/// The tone's fill rides on it: [`system_banner_tone_class`].
+pub const SYSTEM_BANNER_BASE: &str = "flex items-start gap-2.5 rounded-lg border px-4 py-2.5 text-sm";
 
-pub const SYSTEM_BANNER_ICON: &str = "flex shrink-0";
+pub const SYSTEM_BANNER_ICON: &str = "mt-0.5 flex shrink-0";
 
 pub const SYSTEM_BANNER_GLYPH: &str = "size-4";
 
 /// `min-w-0` lets a long message wrap instead of pushing the action out.
-pub const SYSTEM_BANNER_MESSAGE: &str = "min-w-0";
+pub const SYSTEM_BANNER_MESSAGE: &str = "min-w-0 flex-1";
 
-pub const SYSTEM_BANNER_TITLE: &str = "font-medium";
+pub const SYSTEM_BANNER_TITLE: &str = "font-semibold";
 
-/// The message steps back to the mid ink only when a bold title leads it.
-pub const SYSTEM_BANNER_BODY_AFTER_TITLE: &str = "text-ink-mid";
+/// The message steps back to the soft ink only when a bold title leads it.
+pub const SYSTEM_BANNER_BODY_AFTER_TITLE: &str = "text-ink-soft";
 
 pub const SYSTEM_BANNER_ACTION: &str = "shrink-0";
 
-/// Its own face, not an `IconButton`: it is pinned to the strip's right edge
-/// whatever the centred content does.
-pub const SYSTEM_BANNER_DISMISS: &str = "absolute right-3 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-(--control-radius) text-ink-mid outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring";
+/// A 24 px hit area; the negative margins keep it from growing the strip.
+pub const SYSTEM_BANNER_DISMISS: &str = "-my-0.5 -mr-1 flex size-6 shrink-0 items-center justify-center rounded-md opacity-70 outline-none \
+                                         transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring";
 
 /// The glyph ink per tone. Mirrors the TS `SystemBannerTone`.
 #[derive(PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
@@ -37,4 +35,13 @@ pub enum SystemBannerTone {
 	/// A platform state: maintenance, read-only.
 	#[tw(class = "text-accent-warn-ink")]
 	Warn,
+}
+
+/// The strip's edge, fill and text per tone, fused over [`SYSTEM_BANNER_BASE`].
+pub fn system_banner_tone_class(tone: &SystemBannerTone) -> &'static str {
+	match tone {
+		SystemBannerTone::Neutral | SystemBannerTone::Info => "border-border bg-card text-ink",
+		SystemBannerTone::Primary => "border-primary-ink/40 bg-primary-ink/10 text-primary-ink",
+		SystemBannerTone::Warn => "border-accent-warn/40 bg-accent-warn/10 text-accent-warn-ink",
+	}
 }

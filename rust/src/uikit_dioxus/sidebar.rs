@@ -297,7 +297,7 @@ mod tests {
 			rsx! {
 				SidebarProvider {
 					SidebarMenuButton {
-						variant: ButtonVariant::Secondary,
+						variant: ButtonVariant::Outline,
 						size: Size::Lg,
 						is_active: true,
 						"go"
@@ -309,7 +309,7 @@ mod tests {
 		assert!(html.contains("data-slot=\"sidebar-menu-button\""), "{html}");
 		assert!(html.contains("data-size=\"lg\""), "{html}");
 		assert!(html.contains("data-active=true"), "{html}");
-		assert!(html.contains("h-11"), "{html}");
+		assert!(html.contains("h-12"), "{html}");
 	}
 
 	#[test]

@@ -84,7 +84,7 @@ pub fn SelectTrigger(#[prop(optional)] size: Size, #[prop(optional, into)] class
 				stroke-width="2"
 				stroke-linecap="round"
 				stroke-linejoin="round"
-				class="size-4 opacity-40"
+				class="size-4 opacity-50"
 			>
 				<path d="m6 9 6 6 6-6"></path>
 			</svg>

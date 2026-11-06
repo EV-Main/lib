@@ -31,7 +31,7 @@ export default function TipsPage() {
         <Specimen>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="secondary">Hover me</Button>
+              <Button size="xs" variant="outline">Hover me</Button>
             </TooltipTrigger>
             <TooltipContent>Tooltip text</TooltipContent>
           </Tooltip>
@@ -44,11 +44,11 @@ export default function TipsPage() {
         <Specimen>
           <HoverCard>
             <HoverCardTrigger asChild>
-              <Button variant="link">@ada</Button>
+              <Button size="xs" variant="link">@ada</Button>
             </HoverCardTrigger>
             <HoverCardContent>
               <div className="flex items-center gap-3">
-                <Avatar shape="circle" size="md">
+                <Avatar className="size-7">
                   <AvatarFallback>A</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
@@ -75,7 +75,7 @@ export default function TipsPage() {
         <Specimen>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="secondary">Set a limit</Button>
+              <Button size="xs" variant="outline">Set a limit</Button>
             </PopoverTrigger>
             <PopoverContent className="flex w-64 flex-col gap-3">
               <Label htmlFor="limit">Limit price</Label>

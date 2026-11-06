@@ -96,7 +96,7 @@ function Suggestions({ labels, column = false }: { labels: readonly string[]; co
   return (
     <div className={column ? "flex flex-col gap-2" : "flex flex-wrap gap-2"}>
       {labels.map((l) => (
-        <Button key={l} size={column ? "md" : "sm"} variant="secondary" className={column ? "w-full" : ""}>
+        <Button key={l} size={column ? "md" : "sm"} variant="outline" className={column ? "w-full" : ""}>
           {l}
         </Button>
       ))}
@@ -189,7 +189,7 @@ export function ThreadList({ className }: { className?: string }) {
     <div className={`bg-background flex flex-col gap-3 p-3 ${className ?? ""}`}>
       <div className="flex h-6 items-center justify-between gap-2">
         <span className="text-body text-ink font-medium">Chats</span>
-        <Button size="sm" variant="secondary">New chat</Button>
+        <Button size="sm" variant="outline">New chat</Button>
       </div>
       <div className="relative">
         <SearchIcon className="text-ink-soft pointer-events-none absolute top-1/2 left-2 size-4 -translate-y-1/2" />
@@ -213,8 +213,8 @@ export function ThreadList({ className }: { className?: string }) {
       ))}
       <span className="flex-1" />
       <div className="flex items-center gap-2 pt-2">
-        <Avatar shape="square" size="sm">
-          <AvatarFallback>J</AvatarFallback>
+        <Avatar className="size-5 rounded-md">
+          <AvatarFallback className="rounded-md text-xs">J</AvatarFallback>
         </Avatar>
         <span className="text-body-s text-ink-mid">jane.doe</span>
         <span className="flex-1" />

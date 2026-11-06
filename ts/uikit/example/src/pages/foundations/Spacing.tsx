@@ -15,10 +15,10 @@ const SPACE = [
 ] as const;
 
 const HEIGHTS = [
-  { token: "height/xs", px: 20, box: "h-5", used: "Badge, Kbd, StatusItem, Avatar sm" },
-  { token: "height/sm", px: 24, box: "h-6", used: "Button sm, IconButton sm, Segmented, SectionLabel" },
-  { token: "height/md", px: 28, box: "h-7", used: "Button md, Input, Select, MenuItem, Avatar md" },
-  { token: "height/lg", px: 32, box: "h-8", used: "Tab, NavItem, Banner" },
+  { token: "height/xs", px: 20, box: "h-5", used: "Badge, Kbd, StatusItem" },
+  { token: "height/sm", px: 24, box: "h-6", used: "IconButton sm, Segmented" },
+  { token: "height/md", px: 28, box: "h-7", used: "Button xs, IconButton md, NativeSelect md" },
+  { token: "height/lg", px: 32, box: "h-8", used: "Button sm, Input sm, Select sm, NavItem" },
   { token: "touch", px: 44, box: "h-11", used: "Touch targets on coarse pointers" },
 ] as const;
 

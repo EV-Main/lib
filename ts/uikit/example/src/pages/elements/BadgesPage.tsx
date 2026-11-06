@@ -1,10 +1,8 @@
 import { Avatar, AvatarFallback, Badge, Kbd, KbdGroup, StatusItem, type BadgeVariant, type StatusTone } from "@evinvest/uikit";
-import { Block, Matrix, PageRoot, Specimen } from "../../gallery/ui";
+import { Block, PageRoot, Specimen } from "../../gallery/ui";
 
 const BADGES: readonly BadgeVariant[] = ["neutral", "primary", "positive", "info", "warn", "error"];
 const TONES: readonly StatusTone[] = ["positive", "neutral", "warn", "error", "muted"];
-const SHAPES = ["circle", "square"] as const;
-const SIZES = ["sm", "md", "lg"] as const;
 
 export default function BadgesPage() {
   return (
@@ -45,18 +43,12 @@ export default function BadgesPage() {
           </span>
         </Specimen>
       </Block>
-      <Block title="Avatar" note="A circle is always round; a square follows the chip radius.">
-        <Matrix
-          columns={SIZES}
-          rows={SHAPES.map((shape) => ({
-            label: shape,
-            cells: SIZES.map((size) => (
-              <Avatar key={size} shape={shape} size={size}>
-                <AvatarFallback>J</AvatarFallback>
-              </Avatar>
-            )),
-          }))}
-        />
+      <Block title="Avatar">
+        <Specimen>
+          <Avatar>
+            <AvatarFallback>J</AvatarFallback>
+          </Avatar>
+        </Specimen>
       </Block>
     </PageRoot>
   );

@@ -39,15 +39,14 @@ mod tests {
 	use crate::uikit_dioxus::test_util::render;
 
 	#[test]
-	fn is_plain_body_s_text_not_tracked_uppercase() {
+	fn is_tracked_uppercase_text() {
 		fn app() -> Element {
 			rsx! { SectionLabel { "Общие" } }
 		}
 		let html = render(app);
 		assert!(html.starts_with("<p"), "{html}");
 		assert!(html.contains("data-slot=\"section-label\""), "{html}");
-		assert!(html.contains("text-body-s") && html.contains("text-ink-soft"), "{html}");
-		assert!(!html.contains("uppercase") && !html.contains("tracking-widest"), "{html}");
+		assert!(html.contains("uppercase") && html.contains("tracking-widest") && html.contains("text-ink-soft"), "{html}");
 		assert!(html.contains("Общие"), "{html}");
 	}
 
@@ -58,17 +57,15 @@ mod tests {
 		}
 		let html = render(app);
 		assert!(html.starts_with("<h2"), "{html}");
-		assert!(html.contains("text-primary-ink") && html.contains("font-medium"), "{html}");
-		assert!(!html.contains("text-ink-soft") && !html.contains("px-2"), "{html}");
-		assert!(!html.contains("uppercase"), "{html}");
+		assert!(html.contains("text-primary-ink") && !html.contains("text-ink-soft"), "{html}");
 	}
 
 	#[test]
 	fn a_class_fuses_over_the_tone() {
 		fn app() -> Element {
-			rsx! { SectionLabel { class: "px-0", "Группа" } }
+			rsx! { SectionLabel { class: "text-ink", "Группа" } }
 		}
 		let html = render(app);
-		assert!(html.contains("px-0") && !html.contains("px-2"), "{html}");
+		assert!(html.contains("text-ink") && !html.contains("text-ink-soft"), "{html}");
 	}
 }

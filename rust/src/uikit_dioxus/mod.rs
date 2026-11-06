@@ -27,10 +27,10 @@ mod test_util;
 // prop are re-exported.
 pub(crate) use ev_lib_classes::*;
 pub use ev_lib_classes::{
-	Accent, AlertVariant, AsidePanelSide, AvatarShape, AvatarSize, BadgeVariant, BookSide, ButtonGroupOrientation, ButtonVariant, ChatBubbleVariant, ChatStatusState, ChatToolState,
-	ConfirmDialogTone, DrawerDirection, EmptyMediaVariant, FieldOrientation, HeaderBalanceTone, IconButtonVariant, InputGroupAddonAlign, InputGroupButtonSize, ItemMediaVariant, ItemSize,
-	ItemVariant, OrderSide, Orientation, Polarity, ScrollBarOrientation, SectionLabelTone, SettingsSectionTone, Size, StatusTone, Surface, SystemBannerTone, TableAlign, TableDensity,
-	TableVariant, TerminalArea, ToastPosition, ToastVariant, ToggleVariant,
+	Accent, AlertVariant, AsidePanelSide, BadgeVariant, BookSide, ButtonGroupOrientation, ButtonVariant, ChatBubbleVariant, ChatStatusState, ChatToolState, ConfirmDialogTone,
+	DrawerDirection, EmptyMediaVariant, FieldOrientation, HeaderBalanceTone, IconButtonVariant, InputGroupAddonAlign, InputGroupButtonSize, ItemMediaVariant, ItemSize, ItemVariant,
+	OrderSide, Orientation, Polarity, ScrollBarOrientation, SectionLabelTone, SettingsSectionTone, Size, StatusTone, Surface, SystemBannerTone, TableAlign, TableDensity, TableVariant,
+	TerminalArea, ToastPosition, ToastVariant, ToggleVariant,
 };
 
 mod accordion;

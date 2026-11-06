@@ -66,13 +66,13 @@ export function DrawerLauncher() {
   return (
     <div className="flex flex-wrap items-center gap-2">
       {DIRECTIONS.map((d) => (
-        <Button key={d} variant={d === direction ? "solid" : "secondary"} size="sm" onClick={() => setDirection(d)}>
+        <Button key={d} variant={d === direction ? "primary" : "outline"} size="sm" onClick={() => setDirection(d)}>
           {d}
         </Button>
       ))}
       <Drawer direction={direction}>
         <DrawerTrigger asChild>
-          <Button data-testid="drawer-open">Open drawer</Button>
+          <Button size="xs" variant="outline" data-testid="drawer-open">Open drawer</Button>
         </DrawerTrigger>
         <DrawerContent className="max-h-[85vh]">
           <DrawerHeader>
@@ -88,7 +88,7 @@ export function DrawerLauncher() {
           </ul>
           <DrawerFooter>
             <DrawerClose asChild>
-              <Button variant="secondary">Close</Button>
+              <Button size="xs" variant="outline">Close</Button>
             </DrawerClose>
           </DrawerFooter>
         </DrawerContent>
@@ -106,7 +106,7 @@ export function ModalTriggers() {
     <div className="flex flex-wrap items-center gap-2">
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="secondary">Sheet</Button>
+          <Button size="xs" variant="outline">Sheet</Button>
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>
@@ -114,7 +114,7 @@ export function ModalTriggers() {
             <SheetDescription>The panel takes focus; the first Tab reaches “Call”.</SheetDescription>
           </SheetHeader>
           <div className="flex flex-col gap-4 px-4">
-            <Button>Call</Button>
+            <Button size="xs">Call</Button>
             <ListRows>
               <ListRow label="Stage" value="new" />
               <ListRow label="Price" value="1,250" />
@@ -124,7 +124,7 @@ export function ModalTriggers() {
       </Sheet>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="secondary">Dialog</Button>
+          <Button size="xs" variant="outline">Dialog</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -133,13 +133,13 @@ export function ModalTriggers() {
           </DialogHeader>
           <Input aria-label="Name" defaultValue="Aquafix" />
           <DialogFooter>
-            <Button>Save</Button>
+            <Button size="xs">Save</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button variant="secondary">Alert dialog</Button>
+          <Button size="xs" variant="outline">Alert dialog</Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -162,7 +162,7 @@ function DialogWithMenu() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="secondary">Dialog with a menu</Button>
+        <Button size="xs" variant="outline">Dialog with a menu</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -174,15 +174,15 @@ function DialogWithMenu() {
         <div className="flex flex-wrap gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="secondary">Actions</Button>
+              <Button size="xs" variant="outline">Actions</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem>Rename</DropdownMenuItem>
               <DropdownMenuItem>Duplicate</DropdownMenuItem>
-              <DropdownMenuItem variant="danger">Archive</DropdownMenuItem>
+              <DropdownMenuItem variant="destructive">Archive</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant="secondary" onClick={() => toast("Saved", { duration: Infinity })}>
+          <Button size="xs" variant="outline" onClick={() => toast("Saved", { duration: Infinity })}>
             Raise a toast
           </Button>
         </div>
@@ -195,7 +195,7 @@ function DrawerWithSelect() {
   return (
     <Drawer direction="right">
       <DrawerTrigger asChild>
-        <Button variant="secondary">Drawer with a Select</Button>
+        <Button size="xs" variant="outline">Drawer with a Select</Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
@@ -214,7 +214,7 @@ function DrawerWithSelect() {
           </Select>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="secondary" className="w-48">
+              <Button size="xs" variant="outline" className="w-48">
                 Pick a user
               </Button>
             </PopoverTrigger>
@@ -242,7 +242,7 @@ function AlertOverDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="secondary">AlertDialog over Dialog</Button>
+        <Button size="xs" variant="outline">AlertDialog over Dialog</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -251,7 +251,7 @@ function AlertOverDialog() {
         </DialogHeader>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="danger" className="self-start">
+            <Button size="xs" variant="destructive" className="self-start">
               Delete
             </Button>
           </AlertDialogTrigger>
@@ -277,7 +277,7 @@ function OpenedTogether() {
   const [round, setRound] = useState(0);
   return (
     <>
-      <Button variant="secondary" onClick={() => setRound((r) => r + 1)}>
+      <Button size="xs" variant="outline" onClick={() => setRound((r) => r + 1)}>
         defaultOpen parent+child
       </Button>
       {round > 0 && (
@@ -290,7 +290,7 @@ function OpenedTogether() {
             <Popover defaultOpen>
               <PopoverTrigger asChild>
                 {/* DialogContent is a grid: `self-*` aligns the block axis, `justify-self-*` the width. */}
-                <Button variant="secondary" className="justify-self-start">
+                <Button size="xs" variant="outline" className="justify-self-start">
                   Details
                 </Button>
               </PopoverTrigger>

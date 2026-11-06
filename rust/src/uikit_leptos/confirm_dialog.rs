@@ -111,13 +111,13 @@ pub fn ConfirmDialog(
 	};
 	let busy = move || pending.get().to_string();
 	let danger = tone == ConfirmDialogTone::Danger;
-	let confirm_variant = if danger { ButtonVariant::Danger } else { ButtonVariant::Solid };
-	let cancel_cls = button_classes(&ButtonVariant::Ghost, Size::Md, false, None, CONFIRM_DIALOG_PENDING);
-	let confirm_cls = button_classes(&confirm_variant, Size::Md, false, None, CONFIRM_DIALOG_PENDING);
+	let confirm_variant = if danger { ButtonVariant::Destructive } else { ButtonVariant::Primary };
+	let cancel_cls = button_classes(&ButtonVariant::Ghost, Size::Xs, false, None, CONFIRM_DIALOG_PENDING);
+	let confirm_cls = button_classes(&confirm_variant, Size::Xs, false, None, CONFIRM_DIALOG_PENDING);
 	let icon_cls = cn!(CONFIRM_DIALOG_ICON, tone.as_class());
 	let cancel_label = labels.cancel.unwrap_or_else(|| String::from("Cancel"));
 	let cls = cn!(CONFIRM_DIALOG_CONTENT, class);
-	let trigger_cls = button_classes(&ButtonVariant::Secondary, Size::Md, false, None, &trigger_class);
+	let trigger_cls = button_classes(&ButtonVariant::Outline, Size::Xs, false, None, &trigger_class);
 	let labelled_by = title_id.clone();
 	// Run on every opening, so it clones what the inner parts take by value.
 	let body = move || {

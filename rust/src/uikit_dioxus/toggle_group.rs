@@ -177,8 +177,8 @@ mod tests {
 		}
 		let html = render(app);
 		assert!(html.contains("data-slot=\"toggle-group-item\""), "{html}");
-		assert!(html.contains("first:rounded-l-[var(--control-radius)]"), "{html}");
-		assert!(html.contains("h-6"), "{html}");
+		assert!(html.contains("first:rounded-l-md"), "{html}");
+		assert!(html.contains("h-8"), "{html}");
 	}
 
 	#[test]

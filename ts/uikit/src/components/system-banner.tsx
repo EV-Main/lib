@@ -12,6 +12,7 @@ import {
   SYSTEM_BANNER_MESSAGE,
   SYSTEM_BANNER_TITLE,
   systemBannerIconToneClasses,
+  systemBannerToneClasses,
   type SystemBannerTone,
 } from "../generated/system-banner";
 import { CloseIcon, InfoIcon, TriangleAlertIcon } from "./shell-icons";
@@ -24,7 +25,7 @@ export interface SystemBannerLabels {
 }
 
 export interface SystemBannerProps extends Omit<React.ComponentProps<"div">, "title"> {
-  /** `warn` — a platform state (maintenance, read-only); `info` — an announcement. Only the icon carries the tone. */
+  /** `warn` — a platform state (maintenance, read-only); `info` — an announcement. */
   tone?: SystemBannerTone;
   /** Bold lead before the message. */
   title?: React.ReactNode;
@@ -60,7 +61,7 @@ export function SystemBanner({
       data-slot="system-banner"
       data-tone={tone}
       role="status"
-      className={cn(SYSTEM_BANNER_BASE, className)}
+      className={cn(SYSTEM_BANNER_BASE, systemBannerToneClasses[tone], className)}
       {...props}
     >
       {glyph !== null && <span className={cn(SYSTEM_BANNER_ICON, systemBannerIconToneClasses[tone])}>{glyph}</span>}

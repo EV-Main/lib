@@ -12,12 +12,12 @@ import {
 import { Block, PageRoot } from "../../gallery/ui";
 
 const BANNER_TONES: readonly SystemBannerTone[] = ["info", "primary", "warn", "neutral"];
-const ALERTS: readonly AlertVariant[] = ["neutral", "info", "positive", "warn", "error"];
+const ALERTS: readonly AlertVariant[] = ["neutral", "info", "success", "destructive"];
 
 function Banners() {
   const [shown, setShown] = useState(true);
   return (
-    <div className="border-border flex flex-col overflow-hidden rounded-lg border">
+    <div className="flex flex-col gap-2">
       {BANNER_TONES.map((tone) => (
         <SystemBanner key={tone} tone={tone} action={<Button size="sm" variant="link">Details</Button>}>
           Scheduled maintenance tonight at 22:00 UTC ({tone})
@@ -28,8 +28,8 @@ function Banners() {
           Withdrawals are paused until the audit ends.
         </SystemBanner>
       ) : (
-        <div className="p-3">
-          <Button size="sm" variant="secondary" onClick={() => setShown(true)}>
+        <div>
+          <Button size="sm" variant="outline" onClick={() => setShown(true)}>
             Show the dismissible banner again
           </Button>
         </div>
@@ -44,7 +44,7 @@ export default function BannersPage() {
       title="Banners and alerts"
       lede="A banner is a full-width strip above a page. An alert sits inside the page, next to what it is about."
     >
-      <Block title="Banner" note="The fill is always the surface with a bottom hairline. Only the icon carries the tone.">
+      <Block title="Banner" note="Warn and primary tint the strip; neutral and info sit on the card.">
         <Banners />
       </Block>
       <Block title="Alert">

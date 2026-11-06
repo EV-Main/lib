@@ -107,7 +107,7 @@ fn link(
 	children: AnyView,
 ) -> impl IntoView {
 	let cls = move || {
-		let variant = if is_active.get() { ButtonVariant::Secondary } else { ButtonVariant::Ghost };
+		let variant = if is_active.get() { ButtonVariant::Outline } else { ButtonVariant::Ghost };
 		button_classes(&variant, size, icon, None, &class)
 	};
 	view! {

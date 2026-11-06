@@ -3,3 +3,10 @@
 export const ICON_BUTTON_BASE = "text-ink-mid hover:text-ink";
 
 export const ICON_BUTTON_PRESSED = "bg-active text-ink hover:bg-active";
+
+export const iconButtonSizeClasses = {
+  "sm": "h-6",
+  "md": "h-7",
+  "touch": "",
+} as const;
+export type IconButtonSize = keyof typeof iconButtonSizeClasses;

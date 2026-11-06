@@ -101,7 +101,7 @@ pub fn CarouselPrevious(#[prop(optional, into)] class: String) -> impl IntoView 
 	let cls = cn!(CAROUSEL_NAV, pos, class);
 	view! {
 		<Button
-			variant=ButtonVariant::Secondary
+			variant=ButtonVariant::Outline
 			size=Size::Md
 			icon=true
 			class=cls
@@ -135,7 +135,7 @@ pub fn CarouselNext(#[prop(optional, into)] class: String) -> impl IntoView {
 	let cls = cn!(CAROUSEL_NAV, pos, class);
 	view! {
 		<Button
-			variant=ButtonVariant::Secondary
+			variant=ButtonVariant::Outline
 			size=Size::Md
 			icon=true
 			class=cls

@@ -109,7 +109,7 @@ export function AccountMenu({
             onOpen={profile.onOpenProfile}
           />
         ) : (
-          <DropdownMenuLabel>
+          <DropdownMenuLabel className="flex flex-col">
             {account.name && <span className="truncate text-ink">{account.name}</span>}
             <span className="truncate font-normal text-ink-soft">{account.email}</span>
           </DropdownMenuLabel>
@@ -145,7 +145,7 @@ export function AccountMenu({
         <DropdownMenuItem asChild>
           <a href={switchHref}>{labels.switchAccount ?? "Switch account"}</a>
         </DropdownMenuItem>
-        <DropdownMenuItem variant={profile ? "danger" : "neutral"} onClick={onSignOut}>
+        <DropdownMenuItem variant={profile ? "destructive" : "neutral"} onClick={onSignOut}>
           {labels.signOut ?? "Sign out"}
         </DropdownMenuItem>
           </>

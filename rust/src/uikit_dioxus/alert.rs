@@ -47,24 +47,36 @@ mod tests {
 	}
 
 	#[test]
-	fn each_tone_wears_its_ink_and_chip_edge() {
+	fn destructive_variant() {
 		fn app() -> Element {
 			rsx! {
-				Alert { variant: AlertVariant::Error, "e" }
-				Alert { variant: AlertVariant::Positive, "p" }
-				Alert { variant: AlertVariant::Warn, "w" }
-				Alert { variant: AlertVariant::Info, "i" }
+				Alert { variant: AlertVariant::Destructive, "x" }
 			}
 		}
 		let html = render(app);
-		for (ink, edge) in [
-			("text-accent-error-ink", "border-chip-error-border"),
-			("text-positive-ink", "border-chip-positive-border"),
-			("text-accent-warn-ink", "border-chip-warn-border"),
-			("text-accent-info-ink", "border-chip-info-border"),
-		] {
-			assert!(html.contains(ink) && html.contains(edge), "{ink} {edge}: {html}");
+		assert!(html.contains("text-accent-error"), "{html}");
+	}
+
+	#[test]
+	fn success_variant() {
+		fn app() -> Element {
+			rsx! {
+				Alert { variant: AlertVariant::Success, "x" }
+			}
 		}
+		let html = render(app);
+		assert!(html.contains("text-positive"), "{html}");
+	}
+
+	#[test]
+	fn info_variant() {
+		fn app() -> Element {
+			rsx! {
+				Alert { variant: AlertVariant::Info, "x" }
+			}
+		}
+		let html = render(app);
+		assert!(html.contains("text-accent-info"), "{html}");
 	}
 
 	/// The role tint stays on the root (icon + title inherit it); the description
@@ -73,14 +85,13 @@ mod tests {
 	fn tinted_variants_keep_description_in_ink() {
 		fn app() -> Element {
 			rsx! {
-				Alert { variant: AlertVariant::Error, AlertDescription { "d" } }
-				Alert { variant: AlertVariant::Positive, AlertDescription { "s" } }
-				Alert { variant: AlertVariant::Warn, AlertDescription { "w" } }
+				Alert { variant: AlertVariant::Destructive, AlertDescription { "d" } }
+				Alert { variant: AlertVariant::Success, AlertDescription { "s" } }
 				Alert { variant: AlertVariant::Info, AlertDescription { "i" } }
 			}
 		}
 		let html = render(app);
-		assert_eq!(html.matches("*:data-[slot=alert-description]:text-ink-mid").count(), 4, "{html}");
+		assert_eq!(html.matches("*:data-[slot=alert-description]:text-ink-mid").count(), 3, "{html}");
 		assert!(!html.contains("/90"), "{html}");
 	}
 

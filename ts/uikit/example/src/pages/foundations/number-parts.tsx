@@ -59,7 +59,7 @@ export function CountOnReveal() {
   const [round, setRound] = useState(0);
   return (
     <Specimen className="items-start">
-      <Button size="sm" variant="secondary" onClick={() => setRound((r) => r + 1)}>
+      <Button size="sm" variant="outline" onClick={() => setRound((r) => r + 1)}>
         Replay
       </Button>
       <Figure label="mode=&quot;count&quot;">
@@ -88,13 +88,13 @@ export function TrendDemo() {
   return (
     <Specimen className="items-start">
       <div className="flex gap-2">
-        <Button size="sm" variant="secondary" onClick={() => setValue((v) => v + 11)}>
+        <Button size="sm" variant="outline" onClick={() => setValue((v) => v + 11)}>
           +11
         </Button>
-        <Button size="sm" variant="secondary" onClick={() => setValue((v) => v - 11)}>
+        <Button size="sm" variant="outline" onClick={() => setValue((v) => v - 11)}>
           −11
         </Button>
-        <Button size="sm" variant="secondary" onClick={() => setValue((v) => v + 2000)}>
+        <Button size="sm" variant="outline" onClick={() => setValue((v) => v + 2000)}>
           +2000
         </Button>
       </div>
@@ -120,7 +120,7 @@ export function DigitsDemo() {
   const [at, setAt] = useState(0);
   return (
     <Specimen>
-      <Button size="sm" variant="secondary" onClick={() => setAt((i) => (i + 1) % STEPS.length)}>
+      <Button size="sm" variant="outline" onClick={() => setAt((i) => (i + 1) % STEPS.length)}>
         Next: {STEPS[(at + 1) % STEPS.length]}
       </Button>
       <Figure label="9 → 10 → 1,000 → 99">

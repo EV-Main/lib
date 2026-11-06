@@ -7,7 +7,7 @@ function Overlay() {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button variant="secondary" onClick={() => setOpen(true)}>
+      <Button size="xs" variant="outline" onClick={() => setOpen(true)}>
         Open overlay aside
       </Button>
       <DeleteAlertOverlay open={open} onOpenChange={setOpen} />

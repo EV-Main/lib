@@ -22,7 +22,7 @@ export default function PopoverFormPage() {
       <Block title="Filter" note="Focus moves in on open, Tab stays inside, and the focus returns to the trigger on close.">
         <Specimen>
           <PopoverForm
-            trigger={<Button variant="secondary">Filter</Button>}
+            trigger={<Button size="xs" variant="outline">Filter</Button>}
             title="Filter"
             onSubmit={(e) => {
               e.preventDefault();

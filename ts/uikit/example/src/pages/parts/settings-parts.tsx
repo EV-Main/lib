@@ -74,8 +74,8 @@ export function ProfileSection() {
   return (
     <SettingsSection title="Personal profile">
       <div className="flex flex-col gap-4">
-        <Avatar shape="square" size="lg">
-          <AvatarFallback>J</AvatarFallback>
+        <Avatar className="size-14 rounded-md">
+          <AvatarFallback className="rounded-md">J</AvatarFallback>
         </Avatar>
         <KeyValue label="Display name" value="JD" copyText="JD" />
         <KeyValue label="Full name" value="JD" copyText="JD" />
@@ -97,7 +97,7 @@ export function AccountsSection() {
       title="Accounts"
       description="Switch between your personal, organization, and team accounts."
       action={
-        <Button size="sm" variant="secondary">
+        <Button size="sm" variant="outline">
           <PlusIcon />
           Create team
         </Button>
@@ -136,7 +136,7 @@ export function DeleteSection() {
         </p>
         <ConfirmDialog
           tone="danger"
-          trigger={<Button variant="danger">Request deletion</Button>}
+          trigger={<Button size="xs" variant="destructive">Request deletion</Button>}
           title="Request deletion?"
           description="Support reviews the request and writes back within two business days."
           confirmLabel="Send request"

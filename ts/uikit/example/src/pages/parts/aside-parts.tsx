@@ -78,7 +78,7 @@ export function AppFrame({ aside, left, children }: { aside?: ReactNode; left?: 
 
 function Row({ icon, label, value, selected }: { icon: ReactNode; label: string; value?: string; selected?: boolean }) {
   return (
-    <Button variant="ghost" className={`h-7 w-full justify-start gap-2 px-2 font-normal ${selected ? "bg-active text-ink" : ""}`}>
+    <Button size="xs" variant="ghost" className={`h-7 w-full justify-start gap-2 px-2 font-normal ${selected ? "bg-active text-ink" : ""}`}>
       {icon}
       <span className="flex-1 text-left">{label}</span>
       {value ? <span className="text-caption text-ink-soft tabular-nums">{value}</span> : null}
@@ -141,8 +141,8 @@ export function EditAlertAside({ onClose }: { onClose?: () => void }) {
       header={<AsideHeader title="Edit alert" onBack={() => {}} {...(onClose ? { onClose } : {})} />}
       footer={
         <>
-          <Button variant="ghost">Cancel</Button>
-          <Button>Save alert</Button>
+          <Button size="xs" variant="ghost">Cancel</Button>
+          <Button size="xs">Save alert</Button>
         </>
       }
     >
@@ -258,8 +258,8 @@ export function DeleteAlertOverlay({ open, onOpenChange }: { open: boolean; onOp
       header={<AsideHeader title="Delete alert" onClose={() => onOpenChange(false)} />}
       footer={
         <>
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button variant="danger" onClick={() => onOpenChange(false)}>Delete alert</Button>
+          <Button size="xs" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
+          <Button size="xs" variant="destructive" onClick={() => onOpenChange(false)}>Delete alert</Button>
         </>
       }
     >

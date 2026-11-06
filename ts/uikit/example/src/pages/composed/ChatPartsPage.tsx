@@ -21,7 +21,7 @@ function Stream() {
         <Button size="sm" onClick={() => a.send("Rebalance ABCUSD")} disabled={a.streaming}>
           Simulate an answer
         </Button>
-        <Button size="sm" variant="secondary" onClick={a.stop} disabled={!a.streaming}>
+        <Button size="sm" variant="outline" onClick={a.stop} disabled={!a.streaming}>
           Stop
         </Button>
       </div>
@@ -55,7 +55,7 @@ function GrowingText() {
       <p className="text-body text-ink min-h-12">
         <ChatStreamText text={words.slice(0, n).join(" ")} streaming={n < words.length} />
       </p>
-      <Button size="sm" variant="secondary" onClick={() => setN(0)}>Replay</Button>
+      <Button size="sm" variant="outline" onClick={() => setN(0)}>Replay</Button>
     </div>
   );
 }

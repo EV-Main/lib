@@ -1120,8 +1120,6 @@ fn avatar() -> Vec<Ts> {
 			name: "AVATAR_FALLBACK",
 			value: AVATAR_FALLBACK,
 		},
-		table::<AvatarShape>("avatarShapeClasses", "AvatarShape"),
-		table::<AvatarSize>("avatarSizeClasses", "AvatarSize"),
 	]
 }
 
@@ -1272,7 +1270,7 @@ fn form_size_table(name: &'static str, ty: &'static str, class: fn(Size) -> &'st
 	Ts::Table {
 		name,
 		ty,
-		entries: [Size::Sm, Size::Md, Size::Touch].into_iter().map(|s| (s.as_ref().to_string(), class(s).to_string())).collect(),
+		entries: [Size::Sm, Size::Md, Size::Lg].into_iter().map(|s| (s.as_ref().to_string(), class(s).to_string())).collect(),
 	}
 }
 
@@ -1336,6 +1334,14 @@ fn icon_button() -> Vec<Ts> {
 		Ts::Const {
 			name: "ICON_BUTTON_PRESSED",
 			value: ICON_BUTTON_PRESSED,
+		},
+		Ts::Table {
+			name: "iconButtonSizeClasses",
+			ty: "IconButtonSize",
+			entries: [Size::Sm, Size::Md, Size::Touch]
+				.into_iter()
+				.map(|s| (s.as_ref().to_string(), icon_button_size_class(s).to_string()))
+				.collect(),
 		},
 	]
 }
@@ -1488,6 +1494,11 @@ fn system_banner() -> Vec<Ts> {
 			value: SYSTEM_BANNER_DISMISS,
 		},
 		table::<SystemBannerTone>("systemBannerIconToneClasses", "SystemBannerTone"),
+		Ts::Table {
+			name: "systemBannerToneClasses",
+			ty: "SystemBannerFill",
+			entries: SystemBannerTone::iter().map(|t| (t.as_ref().to_string(), system_banner_tone_class(&t).to_string())).collect(),
+		},
 	]
 }
 

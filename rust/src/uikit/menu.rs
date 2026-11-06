@@ -1,21 +1,21 @@
 use ev_lib_classes::NAVIGATION_MENU_TRIGGER_STYLE;
 
-/// Neutral vs danger item styling; mirrors the TS `variant` union.
+/// Neutral vs destructive item styling; mirrors the TS `variant` union.
 #[derive(Clone, Copy, Debug, Default, PartialEq, strum::AsRefStr)]
 #[strum(serialize_all = "kebab-case")]
 pub enum DropdownMenuItemVariant {
 	#[default]
 	Neutral,
-	Danger,
+	Destructive,
 }
 
-/// Neutral vs danger item styling; mirrors the TS `variant` union.
+/// Neutral vs destructive item styling; mirrors the TS `variant` union.
 #[derive(Clone, Copy, Debug, Default, PartialEq, strum::AsRefStr)]
 #[strum(serialize_all = "kebab-case")]
 pub enum ContextMenuItemVariant {
 	#[default]
 	Neutral,
-	Danger,
+	Destructive,
 }
 
 /// Item visual tone — the canonical superset mirrors the TS `variant` prop.
@@ -24,7 +24,7 @@ pub enum ContextMenuItemVariant {
 pub enum MenubarItemVariant {
 	#[default]
 	Neutral,
-	Danger,
+	Destructive,
 }
 
 /// Canonical class for a navigation-menu trigger, the mirror of the TS

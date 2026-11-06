@@ -189,9 +189,9 @@ fn d_hero() -> Element {
 					h1 { class: "font-serif text-3xl text-ink", {lorem(6)} }
 					p { class: "text-ink-mid", {lorem(24)} }
 					div { class: "flex gap-3",
-						Button { variant: ButtonVariant::Solid, {lorem(2)} }
+						Button { {lorem(2)} }
 						Button { variant: ButtonVariant::Secondary, {lorem(2)} }
-						Button { {lorem(1)} }
+						Button { variant: ButtonVariant::Outline, {lorem(1)} }
 					}
 				}
 				div { class: "flex flex-col gap-2 rounded-lg bg-popover p-2 shadow-(--shadow-overlay)",

@@ -5,11 +5,11 @@ use crate::{
 	cn,
 	uikit_leptos::{
 		SYSTEM_BANNER_ACTION, SYSTEM_BANNER_BASE, SYSTEM_BANNER_BODY_AFTER_TITLE, SYSTEM_BANNER_DISMISS, SYSTEM_BANNER_GLYPH, SYSTEM_BANNER_ICON, SYSTEM_BANNER_MESSAGE, SYSTEM_BANNER_TITLE,
-		SystemBannerTone,
+		SystemBannerTone, system_banner_tone_class,
 	},
 };
 
-/// A slim full-width strip above the page. Mirrors the TS `SystemBanner`.
+/// A notice strip. Mirrors the TS `SystemBanner`.
 /// It only presents: where its state comes from, and whether a dismissal
 /// sticks, are the caller's.
 ///
@@ -34,7 +34,7 @@ pub fn SystemBanner(
 	#[prop(optional, into)] class: String,
 	#[prop(optional)] children: Option<Children>,
 ) -> impl IntoView {
-	let cls = cn!(SYSTEM_BANNER_BASE, class);
+	let cls = cn!(SYSTEM_BANNER_BASE, system_banner_tone_class(&tone), class);
 	let glyph = match icon {
 		Some(icon) => icon.map(|i| i.run()),
 		None if tone == SystemBannerTone::Warn => Some(view! { <TriangleAlertIcon /> }.into_any()),

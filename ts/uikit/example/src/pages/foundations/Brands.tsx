@@ -72,7 +72,7 @@ function BrandCard({ id, brand }: { id: string; brand: string }) {
       </CardHeader>
       <CardContent className="flex flex-wrap items-center gap-3">
         <Button>Primary</Button>
-        <Button variant="secondary">Secondary</Button>
+        <Button variant="outline">Outline</Button>
         <Switch checked={on} onCheckedChange={setOn} aria-label="toggle" />
         <Select defaultValue="one">
           <SelectTrigger className="w-40" data-testid={`select-${id}`}>
