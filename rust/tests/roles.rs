@@ -17,6 +17,61 @@ const IRREGULAR_SIZE_TABLES: [(&str, &str); 6] = [
 	("sizeClasses", "the ramp itself"),
 ];
 
+/// Every class the kit emits: the inventory (the tables and both ports' literals)
+/// and the string literals of the hand-written TS components, as `(where, class)`.
+fn classes() -> Vec<(String, String)> {
+	let root = Path::new(ROOT);
+	let inventory = fs::read_to_string(root.join("rust/classes/uikit-classes.txt")).expect("read the class inventory");
+	let mut found: Vec<(String, String)> = inventory
+		.lines()
+		.skip(1)
+		.flat_map(|line| line.split_whitespace().map(|c| ("uikit-classes.txt".to_owned(), c.to_owned())))
+		.collect();
+	let mut dirs = vec![root.join("ts/uikit/src/components")];
+	while let Some(dir) = dirs.pop() {
+		for entry in fs::read_dir(&dir).unwrap_or_else(|e| panic!("read {}: {e}", dir.display())) {
+			let path = entry.expect("dir entry").path();
+			if path.is_dir() {
+				dirs.push(path);
+				continue;
+			}
+			let src = fs::read_to_string(&path).expect("read component");
+			let at = path.strip_prefix(root).expect("walked from root").display().to_string();
+			found.extend(src.split('"').skip(1).step_by(2).flat_map(|piece| piece.split_whitespace().map(|c| (at.clone(), c.to_owned()))));
+		}
+	}
+	found
+}
+
+/// `classes()` that match, minus the exempt ones; fails if an exemption matches nothing.
+fn literals(is_literal: impl Fn(&str) -> bool, exempt: &[(&str, &str)]) -> Vec<String> {
+	let all = classes();
+	for (class, _) in exempt {
+		assert!(all.iter().any(|(_, c)| c == class), "{class} is exempt but no longer emitted");
+	}
+	all.into_iter()
+		.filter(|(_, c)| is_literal(c) && !exempt.iter().any(|(e, _)| e == c))
+		.map(|(at, c)| format!("{at}: {c}"))
+		.collect::<std::collections::BTreeSet<_>>()
+		.into_iter()
+		.collect()
+}
+
+/// The utility a class applies, without its variants.
+fn utility(class: &str) -> &str {
+	let mut depth = 0;
+	let mut start = 0;
+	for (i, c) in class.char_indices() {
+		match c {
+			'[' | '(' => depth += 1,
+			']' | ')' => depth -= 1,
+			':' if depth == 0 => start = i + 1,
+			_ => {}
+		}
+	}
+	class[start..].trim_start_matches('!')
+}
+
 /// Every generated TS table keyed by `Size` steps, as `(name, [(key, classes)])`.
 fn size_tables() -> Vec<(String, Vec<(String, String)>)> {
 	let dir = Path::new(ROOT).join("ts/uikit/src/generated");
@@ -47,10 +102,9 @@ fn size_tables() -> Vec<(String, Vec<(String, String)>)> {
 #[test]
 fn size_tables_read_the_ramp() {
 	let magnitude = |class: &str| {
-		let utility = class.rsplit(':').next().expect("rsplit yields at least one piece");
 		["h-", "min-h-", "size-", "min-w-"]
 			.iter()
-			.any(|axis| utility.strip_prefix(axis).is_some_and(|n| n.starts_with(|c: char| c.is_ascii_digit())))
+			.any(|axis| utility(class).strip_prefix(axis).is_some_and(|n| n.starts_with(|c: char| c.is_ascii_digit())))
 	};
 	let tables = size_tables();
 	for (exempt, _) in IRREGULAR_SIZE_TABLES {
@@ -63,4 +117,19 @@ fn size_tables_read_the_ramp() {
 		}
 	}
 	assert!(offending.is_empty(), "a literal height in a size table, where the step's --control-box belongs: {offending:#?}");
+}
+
+/// A corner is `rounded-{control,panel,chip,row}` or the `full` shape.
+#[test]
+fn radius_is_a_role() {
+	let literal = |class: &str| {
+		let Some(rest) = utility(class).strip_prefix("rounded") else { return false };
+		let value = ["-t", "-r", "-b", "-l", "-tl", "-tr", "-bl", "-br", "-s", "-e", "-ss", "-se", "-es", "-ee"]
+			.iter()
+			.find_map(|side| rest.strip_prefix(side).filter(|v| v.starts_with('-')))
+			.unwrap_or(rest);
+		["-xs", "-sm", "-md", "-lg", "-xl", "-2xl", "-3xl", "-4xl"].contains(&value) || (value.starts_with("-[") && value != "-[inherit]") || value.starts_with("-(")
+	};
+	let offending = literals(literal, &[("rounded-tl-sm", "the navigation viewport's arrow tip, a shape and no surface")]);
+	assert!(offending.is_empty(), "a radius literal, where rounded-{{control,panel,chip,row}} belongs: {offending:#?}");
 }

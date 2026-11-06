@@ -6,7 +6,7 @@ export const SETTINGS_NAV = "shrink-0 lg:w-64";
 
 export const SETTINGS_MAIN = "flex min-w-0 flex-1 flex-col gap-6";
 
-export const SETTINGS_SECTION_BASE = "flex flex-col rounded-lg border bg-card";
+export const SETTINGS_SECTION_BASE = "flex flex-col rounded-panel border bg-card";
 
 export const SETTINGS_SECTION_HEADER = "flex items-start justify-between gap-4 p-4";
 

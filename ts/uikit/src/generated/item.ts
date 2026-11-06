@@ -4,7 +4,7 @@ export const ITEM_GROUP = "group/item-group flex flex-col";
 
 export const ITEM_SEPARATOR = "my-0";
 
-export const ITEM_BASE = "group/item flex items-center border border-transparent text-sm rounded-md transition-colors [a]:hover:bg-hover/50 [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]";
+export const ITEM_BASE = "group/item flex items-center border border-transparent text-sm rounded-panel transition-colors [a]:hover:bg-hover/50 [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]";
 
 export const itemVariants = {
   "bare": "bg-transparent",
@@ -23,8 +23,8 @@ export const ITEM_MEDIA_BASE = "flex shrink-0 items-center justify-center gap-2 
 
 export const itemMediaVariants = {
   "bare": "bg-transparent",
-  "icon": "size-8 border border-border rounded-sm bg-muted [&_svg:not([class*='size-'])]:size-4",
-  "image": "size-10 rounded-sm overflow-hidden [&_img]:size-full [&_img]:object-cover",
+  "icon": "size-8 border border-border rounded-control bg-muted [&_svg:not([class*='size-'])]:size-4",
+  "image": "size-10 rounded-control overflow-hidden [&_img]:size-full [&_img]:object-cover",
 } as const;
 export type ItemMediaVariant = keyof typeof itemMediaVariants;
 

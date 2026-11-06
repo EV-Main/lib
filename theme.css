@@ -8,6 +8,11 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
+  /* the roles the kit's tables name; the steps above are the consumer's */
+  --radius-control: var(--control-radius);
+  --radius-panel: var(--radius);
+  --radius-chip: var(--chip-radius);
+  --radius-row: calc(var(--radius) - 4px); /* concentric inside a panel's p-1 */
 
   /* The names stay, the values are per theme: u2 is flat (`--depth-*` is a
    * zero shadow), Oldschool brings the ladder back in ev.css. */

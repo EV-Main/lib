@@ -108,7 +108,7 @@ mod tests {
 		// height class must be gone.
 		assert!(!html.split(['"', ' ']).any(|class| class == "h-9"), "lg drops the md height: {html}");
 		assert!(!html.contains("md:text-sm"), "lg must not shrink below 16px: {html}");
-		assert!(html.contains("rounded-[var(--control-radius)]"), "{html}");
+		assert!(html.contains("rounded-control"), "{html}");
 		assert!(html.contains("data-size=\"lg\""), "{html}");
 	}
 

@@ -12,7 +12,7 @@ pub const TABLE: &str = "w-full caption-bottom text-sm";
 
 /// The card a `variant="card"` table sits in: the [`CARD`](crate::CARD)
 /// surface without its padding and gap, clipping the rows to the radius.
-pub const TABLE_CARD: &str = "bg-card text-ink overflow-hidden rounded-xl border border-border shadow-sm";
+pub const TABLE_CARD: &str = "bg-card text-ink overflow-hidden rounded-panel border border-border shadow-sm";
 pub const TABLE_HEADER: &str = "[&_tr]:border-b";
 pub const TABLE_BODY: &str = "[&_tr:last-child]:border-0";
 pub const TABLE_FOOTER: &str = "bg-muted/50 border-t border-border font-medium [&>tr]:last:border-b-0";

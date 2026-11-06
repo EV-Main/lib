@@ -34,7 +34,7 @@ describe("Input", () => {
 
     rerender(<Input size="lg" />);
     expect(el).toHaveAttribute("data-size", "lg");
-    expect(el).toHaveClass("h-12", "px-4", "text-base", "md:text-base", "rounded-[var(--control-radius)]");
+    expect(el).toHaveClass("h-12", "px-4", "text-base", "md:text-base", "rounded-control");
     // below 16px iOS Safari zooms into the focused field
     expect(el).not.toHaveClass("h-9");
     expect(el).not.toHaveClass("md:text-sm");

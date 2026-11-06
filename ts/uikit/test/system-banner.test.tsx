@@ -10,7 +10,7 @@ describe("SystemBanner tones", () => {
         Maintenance tonight
       </SystemBanner>,
     );
-    expect(screen.getByRole("status")).toHaveClass("rounded-lg", "border", "border-accent-warn/40", "bg-accent-warn/10");
+    expect(screen.getByRole("status")).toHaveClass("rounded-panel", "border", "border-accent-warn/40", "bg-accent-warn/10");
     expect(screen.getByRole("status")).not.toHaveClass("bg-card");
     expect(screen.getByTestId("glyph").parentElement).toHaveClass("text-accent-warn");
     expect(container.querySelector('[data-tone="warn"]')).not.toBeNull();

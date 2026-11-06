@@ -2,10 +2,10 @@ use tailwind_fuse::{AsTailwindClass, TwVariant};
 
 pub const BUTTON_GROUP_BASE: &str = "flex w-fit items-stretch [&>*]:focus-visible:z-10 [&>*]:focus-visible:relative \
                                      [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1 \
-                                     has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-[var(--control-radius)] \
+                                     has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-control \
                                      has-[>[data-slot=button-group]]:gap-2";
 
-pub const BUTTON_GROUP_TEXT_BASE: &str = "bg-muted flex items-center gap-2 rounded-[var(--control-radius)] border border-border px-4 text-body font-medium \
+pub const BUTTON_GROUP_TEXT_BASE: &str = "bg-muted flex items-center gap-2 rounded-control border border-border px-4 text-body font-medium \
                                           [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4";
 
 pub const BUTTON_GROUP_SEPARATOR_BASE: &str = "bg-input relative !m-0 self-stretch shrink-0 data-[orientation=vertical]:h-auto";

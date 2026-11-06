@@ -179,7 +179,7 @@ mod tests {
 		}
 		let html = render(app);
 		assert!(html.contains("data-slot=\"toggle-group-item\""), "{html}");
-		assert!(html.contains("first:rounded-l-md"), "{html}");
+		assert!(html.contains("first:rounded-l-control"), "{html}");
 		assert!(html.contains(tailwind_fuse::AsTailwindClass::as_class(&Size::Sm)), "{html}");
 	}
 

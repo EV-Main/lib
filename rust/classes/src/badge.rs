@@ -8,7 +8,7 @@ use crate::focus::filled_focus_ring;
 ///
 /// A badge only takes focus as a link; it then wears the offset ring.
 pub const BADGE_BASE: &str = concat!(
-	"inline-flex h-5 items-center justify-center rounded-[var(--chip-radius)] border px-1.5 text-caption \
+	"inline-flex h-5 items-center justify-center rounded-chip border px-1.5 text-caption \
 	 font-medium w-fit whitespace-nowrap shrink-0 gap-1 overflow-hidden \
 	 [&>svg]:size-3 [&>svg]:pointer-events-none transition-colors outline-none \
 	 aria-invalid:border-accent-error ",
