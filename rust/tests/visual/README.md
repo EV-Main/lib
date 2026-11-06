@@ -26,9 +26,11 @@ share of changed pixels. The old side is the ref's committed baselines
 tree's baselines, or with `--fresh` a capture run without accepting (from inside
 `nix develop`). Default ref `origin/main`, default theme `dark`.
 
-On a PR that moves a baseline, `.github/workflows/visual-review.yml` runs it
-against the base branch: the changed-% table lands as one PR comment (rewritten
-on each push) and the job summary, the page as the `visual-review` artifact.
+On a PR whose baselines differ from its base, `.github/workflows/visual-review.yml`
+hosts the page at `https://ev-main.github.io/web_std/pr/<n>/` (the `gh-pages`
+branch, rewritten as one commit each time) and links it in one PR comment with
+the changed-% table. No difference, no page and no comment; closing the PR takes
+the page down.
 
 The page is also where the decision is made: per component pick old, new or
 either (click a column caption, or `j`/`k` and `1`/`2`/`3`/`0`), double-click a
