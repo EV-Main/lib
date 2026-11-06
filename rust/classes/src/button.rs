@@ -4,7 +4,7 @@ use crate::Size;
 
 /// Base classes shared by every button variant. Split out from the variant enum
 /// so the TS codegen can emit it verbatim and `button_classes` fuses it last-wins.
-pub const BUTTON_BASE: &str = "inline-flex h-(--control-box) items-center justify-center gap-2 whitespace-nowrap rounded-[var(--control-radius)] \
+pub const BUTTON_BASE: &str = "inline-flex h-(--control-box) items-center justify-center gap-2 whitespace-nowrap rounded-control \
                                font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-40 \
                                [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-[calc(1em+2px)] shrink-0 [&_svg]:shrink-0 \
                                outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] \

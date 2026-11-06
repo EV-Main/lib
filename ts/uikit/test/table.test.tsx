@@ -215,7 +215,7 @@ describe("TableCard", () => {
     const { container } = render(<TableCard className="max-w-sm">x</TableCard>);
     const card = container.querySelector('[data-slot="table-card"]')!;
     expect(card.tagName).toBe("DIV");
-    expect(card).toHaveClass("bg-card", "rounded-xl", "border", "overflow-hidden", "max-w-sm");
+    expect(card).toHaveClass("bg-card", "rounded-panel", "border", "overflow-hidden", "max-w-sm");
     expect(card.className).not.toMatch(/(^|\s)p[xy]?-/);
   });
 });

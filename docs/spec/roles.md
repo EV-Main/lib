@@ -28,3 +28,17 @@ A step names its text size with its rung (`xs` 12 px, `sm`/`md` 14 px,
 `lg`/`xl`/`touch` 16 px). A glyph follows the text, not the box: it is
 `1em + 2px`, so a lone glyph in a small square and a label's glyph in a tall
 one stay the same pair.
+
+## Radius
+
+`--control-radius`, `--radius` and `--chip-radius` are the inputs; the kit
+names four roles off them and the `full` shape:
+
+| role | reads | wears it |
+|---|---|---|
+| `rounded-control` | `--control-radius` | anything pressed or typed into, and a glyph tile |
+| `rounded-panel` | `--radius` | a surface: card, dialog, menu, popover, toast, banner |
+| `rounded-row` | `--radius` − 4 px | a row inset in a panel's `p-1`, so the corners stay concentric |
+| `rounded-chip` | `--chip-radius` | a label pill |
+
+The `--radius-sm…2xl` steps stay in the sheet for a consumer's own markup.

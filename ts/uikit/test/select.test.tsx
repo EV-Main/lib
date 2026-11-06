@@ -110,7 +110,7 @@ describe("Select", () => {
 
   it("sizes the trigger from the shared form scale", () => {
     const { unmount } = render(tree());
-    expect(screen.getByRole("combobox")).toHaveClass("h-9", "rounded-[var(--control-radius)]");
+    expect(screen.getByRole("combobox")).toHaveClass("h-9", "rounded-control");
     unmount();
     render(
       <Select>

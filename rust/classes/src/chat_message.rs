@@ -9,7 +9,7 @@ pub const CHAT_MESSAGE_USER: &str = "justify-end";
 pub const CHAT_MESSAGE_AVATAR: &str = "shrink-0";
 
 /// The default sparkle tile of an assistant turn.
-pub const CHAT_MESSAGE_AVATAR_TILE: &str = "flex size-7 items-center justify-center rounded-(--control-radius) border border-border bg-secondary text-ink-mid";
+pub const CHAT_MESSAGE_AVATAR_TILE: &str = "flex size-7 items-center justify-center rounded-control border border-border bg-secondary text-ink-mid";
 
 pub const CHAT_MESSAGE_BODY: &str = "flex min-w-0 flex-col gap-1.5";
 
@@ -34,7 +34,7 @@ pub const CHAT_MARKER_STATUS: &str = "flex items-center gap-2 text-body-s text-i
 
 pub const CHAT_MARKER_DOT: &str = "size-1.5 rounded-full";
 
-pub const CHAT_MARKER_TOOL: &str = "flex items-center gap-2.5 rounded-(--control-radius) border bg-card px-2.5 py-2";
+pub const CHAT_MARKER_TOOL: &str = "flex items-center gap-2.5 rounded-panel border bg-card px-2.5 py-2";
 
 pub const CHAT_MARKER_TOOL_BORDER: &str = "border-border";
 
@@ -53,11 +53,11 @@ pub const CHAT_MARKER_TOOL_DETAIL: &str = "truncate text-body-s tabular-nums tex
 
 pub const CHAT_MARKER_TOOL_META: &str = "shrink-0 text-caption";
 
-pub const CHAT_ATTACHMENT_BASE: &str = "flex w-60 max-w-full flex-col overflow-hidden rounded-(--control-radius) border border-border bg-card";
+pub const CHAT_ATTACHMENT_BASE: &str = "flex w-60 max-w-full flex-col overflow-hidden rounded-panel border border-border bg-card";
 
 pub const CHAT_ATTACHMENT_ROW: &str = "flex items-center gap-2.5 p-2";
 
-pub const CHAT_ATTACHMENT_ICON: &str = "flex size-9 shrink-0 items-center justify-center rounded-(--control-radius) border border-border-subtle bg-muted text-ink-mid";
+pub const CHAT_ATTACHMENT_ICON: &str = "flex size-9 shrink-0 items-center justify-center rounded-control border border-border-subtle bg-muted text-ink-mid";
 
 pub const CHAT_ATTACHMENT_BODY: &str = "flex min-w-0 flex-1 flex-col gap-px";
 
@@ -73,11 +73,11 @@ pub const CHAT_ATTACHMENT_PROGRESS_FILL: &str = "h-full bg-primary";
 #[derive(Debug, PartialEq, TwVariant, strum::AsRefStr, strum::EnumIter)]
 #[strum(serialize_all = "kebab-case")]
 pub enum ChatBubbleVariant {
-	#[tw(class = "max-w-105 rounded-lg border border-border bg-secondary px-3.5 py-2.5")]
+	#[tw(class = "max-w-105 rounded-panel border border-border bg-secondary px-3.5 py-2.5")]
 	User,
 	#[tw(default, class = "py-0.5")]
 	Assistant,
-	#[tw(class = "max-w-105 rounded-lg border border-border-subtle bg-muted px-3.5 py-2.5")]
+	#[tw(class = "max-w-105 rounded-panel border border-border-subtle bg-muted px-3.5 py-2.5")]
 	Muted,
 }
 

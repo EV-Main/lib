@@ -1,6 +1,6 @@
 use tailwind_fuse::{AsTailwindClass, TwVariant};
 
-pub const EMPTY: &str = "flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border-dashed p-6 text-center text-balance md:p-12";
+pub const EMPTY: &str = "flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-panel border-dashed p-6 text-center text-balance md:p-12";
 
 pub const EMPTY_HEADER: &str = "flex max-w-sm flex-col items-center gap-2 text-center";
 
@@ -17,6 +17,6 @@ pub const EMPTY_MEDIA_BASE: &str = "flex shrink-0 items-center justify-center mb
 pub enum EmptyMediaVariant {
 	#[tw(default, class = "bg-transparent")]
 	Bare,
-	#[tw(class = "bg-muted text-ink flex size-10 shrink-0 items-center justify-center rounded-lg [&_svg:not([class*='size-'])]:size-6")]
+	#[tw(class = "bg-muted text-ink flex size-10 shrink-0 items-center justify-center rounded-control [&_svg:not([class*='size-'])]:size-6")]
 	Icon,
 }

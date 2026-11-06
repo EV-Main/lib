@@ -8,7 +8,7 @@ use crate::{
 /// A static, always-visible block explaining a whole feature, in neutral body
 /// copy rather than a coloured alert. With `collapsible` it is a native
 /// `<details>`, for free keyboard support and find-in-page auto-expand.
-const SECTION_DESCRIPTOR: &str = "flex flex-col gap-2 rounded-lg border border-border bg-hover p-4 text-left";
+const SECTION_DESCRIPTOR: &str = "flex flex-col gap-2 rounded-panel border border-border bg-hover p-4 text-left";
 
 #[component]
 pub fn SectionDescriptor(

@@ -3,9 +3,9 @@
 export const CHAT_BUBBLE_BASE = "min-w-0 break-words whitespace-pre-wrap text-body text-ink";
 
 export const chatBubbleVariantClasses = {
-  "user": "max-w-105 rounded-lg border border-border bg-secondary px-3.5 py-2.5",
+  "user": "max-w-105 rounded-panel border border-border bg-secondary px-3.5 py-2.5",
   "assistant": "py-0.5",
-  "muted": "max-w-105 rounded-lg border border-border-subtle bg-muted px-3.5 py-2.5",
+  "muted": "max-w-105 rounded-panel border border-border-subtle bg-muted px-3.5 py-2.5",
 } as const;
 export type ChatBubbleVariant = keyof typeof chatBubbleVariantClasses;
 
@@ -15,7 +15,7 @@ export const CHAT_MESSAGE_USER = "justify-end";
 
 export const CHAT_MESSAGE_AVATAR = "shrink-0";
 
-export const CHAT_MESSAGE_AVATAR_TILE = "flex size-7 items-center justify-center rounded-(--control-radius) border border-border bg-secondary text-ink-mid";
+export const CHAT_MESSAGE_AVATAR_TILE = "flex size-7 items-center justify-center rounded-control border border-border bg-secondary text-ink-mid";
 
 export const CHAT_MESSAGE_BODY = "flex min-w-0 flex-col gap-1.5";
 
@@ -45,7 +45,7 @@ export const chatStatusDotClasses = {
 } as const;
 export type ChatStatusState = keyof typeof chatStatusDotClasses;
 
-export const CHAT_MARKER_TOOL = "flex items-center gap-2.5 rounded-(--control-radius) border bg-card px-2.5 py-2";
+export const CHAT_MARKER_TOOL = "flex items-center gap-2.5 rounded-panel border bg-card px-2.5 py-2";
 
 export const CHAT_MARKER_TOOL_BORDER = "border-border";
 
@@ -70,11 +70,11 @@ export const chatToolMetaClasses = {
 } as const;
 export type ChatToolState = keyof typeof chatToolMetaClasses;
 
-export const CHAT_ATTACHMENT_BASE = "flex w-60 max-w-full flex-col overflow-hidden rounded-(--control-radius) border border-border bg-card";
+export const CHAT_ATTACHMENT_BASE = "flex w-60 max-w-full flex-col overflow-hidden rounded-panel border border-border bg-card";
 
 export const CHAT_ATTACHMENT_ROW = "flex items-center gap-2.5 p-2";
 
-export const CHAT_ATTACHMENT_ICON = "flex size-9 shrink-0 items-center justify-center rounded-(--control-radius) border border-border-subtle bg-muted text-ink-mid";
+export const CHAT_ATTACHMENT_ICON = "flex size-9 shrink-0 items-center justify-center rounded-control border border-border-subtle bg-muted text-ink-mid";
 
 export const CHAT_ATTACHMENT_BODY = "flex min-w-0 flex-1 flex-col gap-px";
 

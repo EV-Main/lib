@@ -8,7 +8,7 @@ pub const SETTINGS_NAV: &str = "shrink-0 lg:w-64";
 
 pub const SETTINGS_MAIN: &str = "flex min-w-0 flex-1 flex-col gap-6";
 
-pub const SETTINGS_SECTION_BASE: &str = "flex flex-col rounded-lg border bg-card";
+pub const SETTINGS_SECTION_BASE: &str = "flex flex-col rounded-panel border bg-card";
 
 pub const SETTINGS_SECTION_HEADER: &str = "flex items-start justify-between gap-4 p-4";
 

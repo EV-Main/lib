@@ -74,7 +74,7 @@ export function ResourceError(props: ResourceErrorProps) {
       role="alert"
       className={cn(
         onRetry &&
-          "flex flex-wrap items-center gap-3 rounded-lg border border-accent-error/40 bg-accent-error/10 px-3 py-2.5",
+          "flex flex-wrap items-center gap-3 rounded-panel border border-accent-error/40 bg-accent-error/10 px-3 py-2.5",
         className,
       )}
       {...rest}

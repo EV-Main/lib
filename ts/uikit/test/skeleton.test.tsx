@@ -8,7 +8,7 @@ describe("Skeleton", () => {
     const el = container.querySelector('[data-slot="skeleton"]')!;
     expect(el).toHaveClass("bg-hover");
     expect(el).toHaveClass("animate-pulse");
-    expect(el).toHaveClass("rounded-md");
+    expect(el).toHaveClass("rounded-control");
   });
 
   it("merges a className override", () => {

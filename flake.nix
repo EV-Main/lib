@@ -256,7 +256,7 @@
                 echo "<!doctype html><title>visual diff vs $ref</title><body style='background:#222;color:#ddd;font:14px sans-serif'>"
                 echo "<p>old | new | diff, against $ref</p>"
                 printf '%s\n' "''${rows[@]}" | sort -rn | while read -r px name rest; do
-                  echo "<h3>$name $rest — $px px</h3><img src='$name' style='max-width:100%'>"
+                  echo "<h3>$name $rest — $px changed</h3><img src='$name' style='max-width:100%'>"
                 done
               } >"$out/index.html"
               printf '%s\n' "''${rows[@]}" | sort -rn

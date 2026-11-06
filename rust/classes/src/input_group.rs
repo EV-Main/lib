@@ -1,6 +1,6 @@
 use tailwind_fuse::{AsTailwindClass, TwVariant};
 
-pub const INPUT_GROUP_BASE: &str = "group/input-group border-input relative flex w-full items-center rounded-md border \
+pub const INPUT_GROUP_BASE: &str = "group/input-group border-input relative flex w-full items-center rounded-control border \
                                     shadow-xs transition-[color,box-shadow] outline-none \
                                     h-9 min-w-0 has-[>textarea]:h-auto \
                                     has-[>[data-align=inline-start]]:[&>input]:pl-2 \
@@ -12,7 +12,7 @@ pub const INPUT_GROUP_BASE: &str = "group/input-group border-input relative flex
 
 pub const INPUT_GROUP_ADDON_BASE: &str = "text-ink-soft flex h-auto cursor-text items-center justify-center gap-2 \
                                           py-1.5 text-sm font-medium select-none [&>svg:not([class*='size-'])]:size-4 \
-                                          [&>kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50";
+                                          [&>kbd]:rounded-control group-data-[disabled=true]/input-group:opacity-50";
 
 pub const INPUT_GROUP_BUTTON_BASE: &str = "text-sm shadow-none flex gap-2 items-center";
 
@@ -48,9 +48,9 @@ pub enum InputGroupButtonSize {
 /// `inputGroupButtonSizes` table; an icon button is a square (`size-N p-0`).
 pub fn input_group_button_size_class(size: InputGroupButtonSize, icon: bool) -> &'static str {
 	match (size, icon) {
-		(InputGroupButtonSize::Xs, false) => "h-6 gap-1 px-2 rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-3.5 has-[>svg]:px-2",
-		(InputGroupButtonSize::Sm, false) => "h-8 px-2.5 gap-1.5 rounded-md has-[>svg]:px-2.5",
-		(InputGroupButtonSize::Xs, true) => "size-6 rounded-[calc(var(--radius)-5px)] p-0 has-[>svg]:p-0",
+		(InputGroupButtonSize::Xs, false) => "h-6 gap-1 px-2 rounded-control [&>svg:not([class*='size-'])]:size-3.5 has-[>svg]:px-2",
+		(InputGroupButtonSize::Sm, false) => "h-8 px-2.5 gap-1.5 rounded-control has-[>svg]:px-2.5",
+		(InputGroupButtonSize::Xs, true) => "size-6 rounded-control p-0 has-[>svg]:p-0",
 		(InputGroupButtonSize::Sm, true) => "size-8 p-0 has-[>svg]:p-0",
 	}
 }

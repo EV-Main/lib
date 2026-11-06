@@ -6,7 +6,7 @@ pub const ITEM_SEPARATOR: &str = "my-0";
 
 /// Shared base for the two-axis (variant × size) item. Fused with the variant
 /// and size class last-wins, mirroring the TS `cn(ITEM_BASE, itemVariants[v], itemSizes[s])`.
-pub const ITEM_BASE: &str = "group/item flex items-center border border-transparent text-sm rounded-md transition-colors \
+pub const ITEM_BASE: &str = "group/item flex items-center border border-transparent text-sm rounded-panel transition-colors \
                              [a]:hover:bg-hover/50 [a]:transition-colors duration-100 flex-wrap outline-none \
                              focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]";
 
@@ -52,8 +52,8 @@ pub enum ItemSize {
 pub enum ItemMediaVariant {
 	#[tw(default, class = "bg-transparent")]
 	Bare,
-	#[tw(class = "size-8 border border-border rounded-sm bg-muted [&_svg:not([class*='size-'])]:size-4")]
+	#[tw(class = "size-8 border border-border rounded-control bg-muted [&_svg:not([class*='size-'])]:size-4")]
 	Icon,
-	#[tw(class = "size-10 rounded-sm overflow-hidden [&_img]:size-full [&_img]:object-cover")]
+	#[tw(class = "size-10 rounded-control overflow-hidden [&_img]:size-full [&_img]:object-cover")]
 	Image,
 }

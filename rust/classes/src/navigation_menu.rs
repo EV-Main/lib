@@ -4,7 +4,7 @@ pub const NAVIGATION_MENU_LIST: &str = "group flex flex-1 list-none items-center
 
 pub const NAVIGATION_MENU_ITEM: &str = "relative";
 
-pub const NAVIGATION_MENU_TRIGGER_STYLE: &str = "group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 \
+pub const NAVIGATION_MENU_TRIGGER_STYLE: &str = "group inline-flex h-9 w-max items-center justify-center rounded-control bg-background px-4 py-2 \
                              text-sm font-medium hover:bg-hover hover:text-ink focus:bg-hover \
                              focus:text-ink disabled:pointer-events-none disabled:opacity-50 \
                              data-[state=open]:hover:bg-hover data-[state=open]:text-ink \
@@ -16,7 +16,7 @@ pub const NAVIGATION_MENU_CONTENT: &str = "data-[motion^=from-]:animate-in data-
                        data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 \
                        data-[motion=to-start]:slide-out-to-left-52 \
                        absolute top-full left-0 z-50 mt-1.5 w-max max-w-[calc(100vw-2rem)] overflow-hidden \
-                       rounded-md border border-border bg-popover p-2 pr-2.5 text-ink shadow \
+                       rounded-panel border border-border bg-popover p-2 pr-2.5 text-ink shadow \
                        data-[state=open]:animate-in data-[state=closed]:animate-out \
                        data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 \
                        data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 duration-200 \
@@ -26,7 +26,7 @@ pub const NAVIGATION_MENU_CONTENT: &str = "data-[motion^=from-]:animate-in data-
 pub const NAVIGATION_MENU_LINK: &str = "data-[active=true]:focus:bg-hover data-[active=true]:hover:bg-hover data-[active=true]:bg-hover/50 \
                     data-[active=true]:text-ink hover:bg-hover hover:text-ink \
                     focus:bg-hover focus:text-ink focus-visible:ring-ring/50 \
-                    [&_svg:not([class*='text-'])]:text-ink-soft flex flex-col gap-1 rounded-sm p-2 text-sm \
+                    [&_svg:not([class*='text-'])]:text-ink-soft flex flex-col gap-1 rounded-row p-2 text-sm \
                     transition-all outline-none focus-visible:ring-[3px] focus-visible:outline-1 \
                     [&_svg:not([class*='size-'])]:size-4";
 
@@ -36,4 +36,4 @@ pub const NAVIGATION_MENU_INDICATOR: &str = "data-[state=visible]:animate-in dat
 pub const NAVIGATION_MENU_VIEWPORT: &str = "origin-top-center bg-popover text-ink data-[state=open]:animate-in \
                               data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 \
                               relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden \
-                              rounded-md border border-border shadow md:w-[var(--radix-navigation-menu-viewport-width)]";
+                              rounded-panel border border-border shadow md:w-[var(--radix-navigation-menu-viewport-width)]";
