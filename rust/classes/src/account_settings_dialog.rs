@@ -1,6 +1,6 @@
 /// Fused over `DIALOG_CONTENT`: the pane and the rail carry their own padding,
 /// so the content drops its padding and its gap.
-pub const ACCOUNT_SETTINGS_DIALOG_CONTENT: &str = "flex max-h-[90dvh] max-w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden bg-popover p-0 sm:max-w-260 md:h-170 md:flex-row";
+pub const ACCOUNT_SETTINGS_DIALOG_CONTENT: &str = "flex max-h-[90dvh] max-w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden p-0 sm:max-w-260 md:h-170 md:flex-row";
 
 pub const ACCOUNT_SETTINGS_DIALOG_TABS: &str = "min-h-0 flex-1 flex-col gap-0 md:flex-row";
 

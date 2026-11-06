@@ -290,7 +290,7 @@ mod tests {
 		}
 		let html = render(app);
 		let user = opening_tag(&html, "data-variant=\"user\"");
-		assert!(user.contains(" border ") && user.contains("bg-secondary"), "{user}");
+		assert!(user.contains(" border ") && user.contains("bg-card"), "{user}");
 		assert!(opening_tag(&html, "data-variant=\"muted\"").contains("bg-muted"), "{html}");
 		let assistant = opening_tag(&html, "data-variant=\"assistant\"");
 		assert!(!assistant.contains("border"), "{assistant}");

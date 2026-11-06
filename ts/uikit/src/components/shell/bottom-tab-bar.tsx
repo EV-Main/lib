@@ -59,7 +59,7 @@ export function BottomTabBar({
       data-slot="tab-bar"
       aria-label={labels.nav ?? "Main"}
       className={cn(
-        "relative box-content flex h-(--shell-tab-bar-h) items-center border-t border-border bg-secondary px-2 pb-[env(safe-area-inset-bottom,0px)]",
+        "relative box-content flex h-(--shell-tab-bar-h) items-center border-t border-border bg-card px-2 pb-[env(safe-area-inset-bottom,0px)]",
         className,
       )}
       {...props}

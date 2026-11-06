@@ -6,7 +6,7 @@ export const ACCOUNT_LIST_ITEM_BASE = "flex items-center gap-3 rounded-panel bor
 
 export const ACCOUNT_LIST_ITEM_CHECKED = "border-primary-border bg-selected";
 
-export const ACCOUNT_LIST_ITEM_UNCHECKED = "border-border-subtle bg-muted hover:bg-hover";
+export const ACCOUNT_LIST_ITEM_UNCHECKED = "border-input bg-transparent hover:bg-hover";
 
 export const ACCOUNT_LIST_ITEM_DISABLED = "opacity-40";
 

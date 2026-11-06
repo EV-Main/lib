@@ -52,3 +52,18 @@ takes the hover as a layer over the fill
 (`bg-[image:linear-gradient(var(--hover),var(--hover))]`), so the fill
 survives it. A state on a role's solid fill (primary, danger, an accent)
 belongs to that role.
+
+## Surface
+
+A fill names where the element sits, not how light it should look:
+
+| role | fill | what sits there |
+|---|---|---|
+| page | `bg-background` | the plane a screen is laid out on |
+| raised | `bg-card` | a surface in flow: card, rail, bar, a chosen tab, the user's bubble |
+| floating | `bg-popover` | an overlay: dialog, sheet, drawer, menu, popover, toast |
+| well | `bg-muted` | a recess: a track, a skeleton, a muted band |
+| control | transparent, `--input` edge | anything typed into or pressed that is not a button face |
+
+`secondary` is a role fill, the face of the Secondary and Outline buttons, and
+never a plane.

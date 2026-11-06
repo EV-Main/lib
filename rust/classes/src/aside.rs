@@ -26,7 +26,7 @@ pub const ASIDE_PANEL_DOCKED: &str = "flex h-full w-95 shrink-0 flex-col bg-card
 /// `AsideHeader` carries its own.
 pub const ASIDE_PANEL_DRAWER: &str = "flex max-h-[85dvh] flex-col bg-card";
 
-pub const ASIDE_PANEL_SHEET: &str = "w-full gap-0 border-border-strong bg-card p-0 sm:max-w-105 [&>[data-slot=sheet-close]]:hidden";
+pub const ASIDE_PANEL_SHEET: &str = "w-full gap-0 border-border-strong bg-popover p-0 sm:max-w-105 [&>[data-slot=sheet-close]]:hidden";
 
 /// Dioxus only: the Dioxus port has no `matchMedia`, so it renders the wide
 /// and the narrow form together and lets the `md` breakpoint show one of them.

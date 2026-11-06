@@ -4,7 +4,7 @@ export const WORKSPACE_TABS_BASE = "flex items-center gap-1";
 
 export const WORKSPACE_TAB_BASE = "group inline-flex h-7 items-center rounded-control border border-transparent text-body-s font-medium text-ink-mid transition-colors hover:bg-hover hover:text-ink has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring";
 
-export const WORKSPACE_TAB_SELECTED = "border-border-subtle bg-secondary text-ink hover:bg-secondary";
+export const WORKSPACE_TAB_SELECTED = "border-border-subtle bg-card text-ink hover:bg-card";
 
 export const WORKSPACE_TAB_TRIGGER = "inline-flex h-full min-w-0 items-center gap-2 rounded-[inherit] pl-2 outline-none";
 

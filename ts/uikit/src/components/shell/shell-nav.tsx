@@ -96,7 +96,7 @@ export function ShellNav({
     <aside
       data-slot="shell-nav"
       className={cn(
-        "flex h-full w-(--shell-rail-w) flex-col gap-7 overflow-y-auto border-r border-border bg-secondary px-4.5 pb-5 pt-6",
+        "flex h-full w-(--shell-rail-w) flex-col gap-7 overflow-y-auto border-r border-border bg-card px-4.5 pb-5 pt-6",
         className,
       )}
       {...props}
