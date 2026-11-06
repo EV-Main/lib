@@ -142,29 +142,24 @@ describe("validation", () => {
   });
 });
 
+// Shared with ev_lib::marketing (rust/tests/marketing.rs).
+const CONTACT = JSON.parse(readFileSync(join(import.meta.dirname, "../../../tests/fixtures/marketing/contact.json"), "utf8")) as {
+  channel: [string, ReturnType<typeof contactChannel>][];
+  tel: [string, string][];
+  whatsapp: [string, string | null, string][];
+};
+
 describe("contact links", () => {
-  it.each([
-    ["tel:+33 1 23", "phone"],
-    ["TEL:+331", "phone"],
-    ["mailto:a@b.c", "email"],
-    ["https://wa.me/33612345678", "whatsapp"],
-    ["https://api.whatsapp.com/send?phone=336", "whatsapp"],
-    ["https://web.whatsapp.com/send?phone=336", "whatsapp"],
-    ["whatsapp://send?phone=336", "whatsapp"],
-    ["https://wa.me.evil.com/336", null],
-    ["https://example.com/tel:+331", null],
-    ["/contact", null],
-    ["", null],
-  ] as const)("classifies %s as %s", (href, channel) => {
+  it.each(CONTACT.channel)("classifies %s as %s", (href, channel) => {
     expect(contactChannel(href)).toBe(channel);
   });
 
-  it("builds dialable hrefs from formatted numbers", () => {
-    expect(telHref("+33 (0)1 23-45.67 89")).toBe("tel:+33123456789");
-    expect(whatsappHref("+33 6 12 34 56 78", "Bonjour, fuite ?")).toBe(
-      "https://wa.me/33612345678?text=Bonjour%2C%20fuite%20%3F",
-    );
-    expect(whatsappHref("0033 6 12 34 56 78")).toBe("https://wa.me/33612345678");
+  it.each(CONTACT.tel)("tel href of %s is %s", (phone, href) => {
+    expect(telHref(phone)).toBe(href);
+  });
+
+  it.each(CONTACT.whatsapp)("wa.me href of %s with %s is %s", (phone, message, href) => {
+    expect(whatsappHref(phone, message ?? undefined)).toBe(href);
   });
 });
 

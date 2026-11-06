@@ -2,12 +2,12 @@
 // for. Classification lives in the server-safe core so the same rule decides
 // both what a link *is* when rendered and what the click tracker reports.
 
-/** The channel a contact link opens. */
-export type ContactChannel = "phone" | "whatsapp" | "email";
+import { type ContactChannel, WHATSAPP_HOSTS } from "../generated/contact";
 
-// `web.whatsapp.com/send` is what desktop "click to chat" lands on, and
+export type { ContactChannel };
+
 // `whatsapp://send` is the native deep link some pages use directly.
-const WHATSAPP_HOSTS = new Set(["wa.me", "api.whatsapp.com", "web.whatsapp.com"]);
+const whatsappHosts = new Set<string>(WHATSAPP_HOSTS);
 
 /**
  * Which contact channel `href` opens, or `null` when it is not a contact link.
@@ -20,7 +20,7 @@ export function contactChannel(href: string): ContactChannel | null {
   if (value.startsWith("whatsapp:")) return "whatsapp";
   if (!/^https?:\/\//.test(value)) return null;
   try {
-    return WHATSAPP_HOSTS.has(new URL(value).hostname) ? "whatsapp" : null;
+    return whatsappHosts.has(new URL(value).hostname) ? "whatsapp" : null;
   } catch {
     return null;
   }
