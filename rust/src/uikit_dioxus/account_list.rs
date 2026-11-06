@@ -117,7 +117,7 @@ pub fn AccountListItem(
 					if disabled || !matches!(e.key(), Key::ArrowDown | Key::ArrowRight | Key::ArrowUp | Key::ArrowLeft) {
 						return;
 					}
-					if let Some(next) = skip.next_enabled(&roving, &e, &value) {
+					if let Some(next) = roving.next_enabled(&e, &value, |k| skip.holds(k)) {
 						e.prevent_default();
 						roving.focus(&next);
 						ctx.value.set(next);
@@ -183,19 +183,8 @@ impl DisabledItems {
 		self.0.borrow_mut().remove(&id);
 	}
 
-	/// The first enabled key that `e` walks to from `from`. Bounded by the
-	/// count of disabled items: past them the walk meets an enabled one, at
-	/// worst `from` itself.
-	fn next_enabled(&self, roving: &RovingFocus, e: &KeyboardEvent, from: &str) -> Option<String> {
-		let items = self.0.borrow();
-		let mut at = roving.next(e, from)?;
-		for _ in 0..items.len() {
-			if !items.values().any(|k| *k == at) {
-				break;
-			}
-			at = roving.next(e, &at)?;
-		}
-		(!items.values().any(|k| *k == at)).then_some(at)
+	fn holds(&self, key: &str) -> bool {
+		self.0.borrow().values().any(|k| k == key)
 	}
 }
 

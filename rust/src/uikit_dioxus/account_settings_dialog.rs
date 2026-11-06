@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
 
+pub use crate::uikit::AccountSettingsDialogLabels;
 use crate::{
 	cn,
 	uikit_dioxus::{
@@ -20,13 +21,6 @@ pub struct AccountSettingsSection {
 	pub icon: Option<Element>,
 	/// Fills the pane while this entry is active.
 	pub content: Element,
-}
-
-/// The dialog's own strings; every one defaults to English.
-#[derive(Clone, Debug, Default, PartialEq)]
-pub struct AccountSettingsDialogLabels {
-	/// `aria-label` of the close button; "Close".
-	pub close: Option<String>,
 }
 
 /// The account modal: a vertical tab rail on the left, the active section on

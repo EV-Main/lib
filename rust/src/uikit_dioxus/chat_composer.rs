@@ -2,24 +2,16 @@ use std::rc::Rc;
 
 use dioxus::prelude::*;
 
+pub use crate::uikit::{ChatComposerLabels, ModelOption};
 use crate::{
 	cn,
+	uikit::{KeyInput, enter_sends},
 	uikit_dioxus::{
 		CHAT_COMPOSER_ATTACHMENTS, CHAT_COMPOSER_BASE, CHAT_COMPOSER_FIELD, CHAT_COMPOSER_HINT, CHAT_COMPOSER_IDLE, CHAT_COMPOSER_SPACER, CHAT_COMPOSER_STREAMING, CHAT_COMPOSER_TOOLBAR,
 		DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger, IconButton, IconButtonVariant, MODEL_CHIP_BASE, Size, Textarea,
 		chat_message::Glyph, primitives::use_controllable,
 	},
 };
-
-/// The `keyCode` every browser reports for a key that an IME takes.
-const IME_KEY_CODE: u32 = 229;
-
-/// One choice of a [`ModelChip`]. Mirrors the TS `ModelOption`.
-#[derive(Clone, Debug, PartialEq)]
-pub struct ModelOption {
-	pub id: String,
-	pub label: String,
-}
 
 /// The small bordered button naming the model; it opens a radio menu of the
 /// options. Mirrors the TS `ModelChip`.
@@ -52,19 +44,6 @@ pub fn ModelChip(
 	}
 }
 
-/// The composer's own strings; every one defaults to English.
-#[derive(Clone, Debug, Default, PartialEq)]
-pub struct ChatComposerLabels {
-	/// Names the message field; "Message".
-	pub field: Option<String>,
-	/// The send button; "Send".
-	pub send: Option<String>,
-	/// The stop button while streaming; "Stop".
-	pub stop: Option<String>,
-	/// The attach button; "Attach file".
-	pub attach: Option<String>,
-}
-
 /// The message field with its toolbar. Mirrors the TS `ChatComposer`.
 ///
 /// Enter or the send button calls `on_send` with the trimmed text, then clears
@@ -72,7 +51,7 @@ pub struct ChatComposerLabels {
 /// message is not sent, and `disabled` sends nothing. While `streaming`, the
 /// send button becomes Stop, but Enter still queues a follow-up.
 ///
-/// Enter that confirms an IME candidate never sends: see [`enter_sends`].
+/// Enter that confirms an IME candidate never sends, as in TS.
 ///
 /// The field grows with its text through the `Textarea` base's
 /// `field-sizing-content`, up to `max-h-40`, as in TS; there is no JS sizing.
@@ -126,7 +105,7 @@ pub fn ChatComposer(
 				class: CHAT_COMPOSER_FIELD,
 				oninput: move |e: FormEvent| text.set(e.value()),
 				onkeydown: move |e: KeyboardEvent| {
-					if enter_sends(&e.key(), e.modifiers().shift(), e.is_composing(), legacy_key_code(&e)) {
+					if enter_sends(&KeyInput::from(&e), legacy_key_code(&e)) {
 						e.prevent_default();
 						send();
 					}
@@ -174,14 +153,6 @@ pub fn ChatComposer(
 			}
 		}
 	}
-}
-
-/// Whether a keydown sends the message: a plain Enter that no IME composition
-/// owns. The Enter of an IME composition confirms the candidate. Safari reports
-/// that Enter after `compositionend`, with `isComposing` already false but
-/// `keyCode` 229, so both are checked, the same two checks as the TS composer.
-fn enter_sends(key: &Key, shift: bool, composing: bool, key_code: Option<u32>) -> bool {
-	*key == Key::Enter && !shift && !composing && key_code != Some(IME_KEY_CODE)
 }
 
 /// The legacy `keyCode`, which only the web renderer carries; `KeyboardData`
@@ -282,19 +253,6 @@ mod tests {
 		// the text, stopped the first Enter.
 		h.keyboard(id, enter(Modifiers::empty(), false));
 		assert_eq!(sent(), ["かな"]);
-	}
-
-	#[test]
-	fn the_safari_enter_with_key_code_229_does_not_send() {
-		// `SerializedKeyboardData` derives its keyCode from the key, so 229 only
-		// reaches the guard through a browser; the decision itself is pure.
-		assert!(!enter_sends(&Key::Enter, false, false, Some(IME_KEY_CODE)));
-		assert!(enter_sends(&Key::Enter, false, false, Some(13)));
-		assert!(enter_sends(&Key::Enter, false, false, None));
-		assert!(!enter_sends(&Key::Enter, false, true, None));
-		assert!(!enter_sends(&Key::Enter, true, false, None));
-		assert!(!enter_sends(&Key::Process, false, false, Some(IME_KEY_CODE)));
-		assert!(!enter_sends(&Key::Character("ы".into()), false, false, None));
 	}
 
 	#[test]

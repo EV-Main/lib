@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
 
+pub use crate::uikit::SystemBannerLabels;
 use crate::{
 	cn,
 	uikit_dioxus::{
@@ -7,13 +8,6 @@ use crate::{
 		SystemBannerTone, primitives::has_content,
 	},
 };
-
-/// The banner's own strings; every one defaults to English.
-#[derive(Clone, Debug, Default, PartialEq)]
-pub struct SystemBannerLabels {
-	/// `aria-label` of the close button; "Dismiss".
-	pub dismiss: Option<String>,
-}
 
 /// A slim full-width strip above the page. Mirrors the TS `SystemBanner`.
 /// It only presents: where its state comes from, and whether a dismissal

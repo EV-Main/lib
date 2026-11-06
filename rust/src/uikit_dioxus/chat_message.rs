@@ -2,6 +2,7 @@ use std::{cell::Cell, rc::Rc};
 
 use dioxus::prelude::*;
 
+pub use crate::uikit::{ChatAttachmentState, ChatAttachmentType, ChatMessageRole};
 use crate::{
 	cn,
 	uikit_dioxus::{
@@ -41,14 +42,6 @@ pub fn ChatBubble(#[props(default)] variant: ChatBubbleVariant, #[props(default)
 			{children}
 		}
 	}
-}
-
-/// Who spoke a [`ChatMessage`]. Rust only: the TS `role` is an inline union.
-#[derive(Clone, Copy, Debug, PartialEq, strum::AsRefStr)]
-#[strum(serialize_all = "kebab-case")]
-pub enum ChatMessageRole {
-	Assistant,
-	User,
 }
 
 /// A turn: who spoke, when, then the bubbles and markers. Mirrors the TS
@@ -181,26 +174,6 @@ pub fn ChatMarker(kind: ChatMarkerKind, #[props(default)] class: String, childre
 			}
 		}
 	}
-}
-
-/// What a [`ChatAttachment`] holds; it picks the glyph. Rust only: the TS
-/// `type` is an inline union.
-#[derive(Clone, Copy, Debug, Default, PartialEq, strum::AsRefStr)]
-#[strum(serialize_all = "kebab-case")]
-pub enum ChatAttachmentType {
-	#[default]
-	File,
-	Image,
-}
-
-/// Whether a [`ChatAttachment`] is still uploading. Rust only, like
-/// [`ChatAttachmentType`].
-#[derive(Clone, Copy, Debug, Default, PartialEq, strum::AsRefStr)]
-#[strum(serialize_all = "kebab-case")]
-pub enum ChatAttachmentState {
-	#[default]
-	Ready,
-	Uploading,
 }
 
 /// A card for a file in a message or in the composer. Mirrors the TS

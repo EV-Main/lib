@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
 
+pub use crate::uikit::PopoverFormLabels;
 use crate::{
 	cn,
 	uikit_dioxus::{
@@ -8,15 +9,6 @@ use crate::{
 		primitives::{use_controllable, use_stable_id},
 	},
 };
-
-/// The form's own strings; every one defaults to English.
-#[derive(Clone, Debug, Default, PartialEq)]
-pub struct PopoverFormLabels {
-	/// The submit button; "Apply".
-	pub submit: Option<String>,
-	/// The reset button; "Reset".
-	pub reset: Option<String>,
-}
 
 /// A filter-style form in a popover: a title, fields, Reset and Apply.
 /// Mirrors the TS `PopoverForm`.

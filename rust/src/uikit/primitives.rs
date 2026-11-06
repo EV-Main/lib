@@ -92,6 +92,19 @@ impl Roving {
 		Some(keys[to].to_owned())
 	}
 
+	/// [`Roving::next`], walking on past the keys `skip` holds; `None` when it
+	/// meets no other key, which bounds the walk at one lap.
+	pub(crate) fn next_enabled(&self, input: &KeyInput, from: &str, skip: impl Fn(&str) -> bool) -> Option<String> {
+		let mut at = self.next(input, from)?;
+		for _ in 0..self.items.len() {
+			if !skip(&at) {
+				return Some(at);
+			}
+			at = self.next(input, &at)?;
+		}
+		None
+	}
+
 	/// The item after the one keyed `key`, else the one before it, with no wrap:
 	/// where focus goes when `key` is about to unmount, so it lands on the
 	/// closest survivor instead of falling to `<body>`.

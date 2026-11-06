@@ -1,7 +1,9 @@
 use dioxus::prelude::*;
 
+pub use crate::uikit::ConfirmDialogLabels;
 use crate::{
 	cn,
+	uikit::ConfirmFlow,
 	uikit_dioxus::{
 		AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, ButtonVariant, CONFIRM_DIALOG_CONTENT,
 		CONFIRM_DIALOG_DESCRIPTION, CONFIRM_DIALOG_ERROR, CONFIRM_DIALOG_FOOTER, CONFIRM_DIALOG_HEADER, CONFIRM_DIALOG_ICON, CONFIRM_DIALOG_PENDING, CONFIRM_DIALOG_SPINNER,
@@ -10,15 +12,6 @@ use crate::{
 		primitives::{use_controllable, use_stable_id},
 	},
 };
-
-/// The dialog's own strings; every one defaults to English.
-#[derive(Clone, Debug, Default, PartialEq)]
-pub struct ConfirmDialogLabels {
-	/// The cancel button; "Cancel".
-	pub cancel: Option<String>,
-	/// Shown when the work fails with an empty `error`; "Something went wrong".
-	pub error: Option<String>,
-}
 
 /// An alert dialog that asks before an action and holds while the action
 /// runs. Mirrors the TS `ConfirmDialog`.
@@ -68,51 +61,40 @@ pub fn ConfirmDialog(
 ) -> Element {
 	let state = use_controllable(open, default_open, on_open_change);
 	let is_open = state.get();
-	// Set by a confirm until its work settles, so the dialog closes on its own
-	// only for a confirm it started, and a press before the parent's `pending`
-	// arrives cannot start the work twice.
-	let mut awaiting = use_signal(|| false);
-	let mut show_error = use_signal(|| false);
-	// A controlled parent can reopen the dialog without going through `change`.
+	let mut flow = use_signal(ConfirmFlow::default);
 	use_effect(use_reactive!(|is_open| {
-		if is_open && *show_error.peek() {
-			show_error.set(false);
+		if is_open && flow.peek().shows_error() {
+			flow.write().opened();
 		}
 	}));
 	use_effect(use_reactive!(|pending, error| {
-		if !awaiting() || pending {
-			return;
+		// Subscribed, so a confirm whose work never sets `pending` settles too.
+		let current = flow();
+		let mut next = current;
+		let close = next.settle(pending, error.is_some());
+		if next != current {
+			flow.set(next);
 		}
-		awaiting.set(false);
-		if error.is_some() {
-			show_error.set(true);
-		} else {
+		if close {
 			state.set(false);
 		}
 	}));
 
 	let mut change = move |next: bool| {
-		if pending || *awaiting.peek() {
-			return;
+		if flow.write().change(next, pending) {
+			state.set(next);
 		}
-		if next {
-			show_error.set(false);
-		}
-		state.set(next);
 	};
 	let confirm = move |_| {
-		if pending || *awaiting.peek() {
-			return;
+		if flow.write().confirm(pending) {
+			on_confirm.call(());
 		}
-		show_error.set(false);
-		awaiting.set(true);
-		on_confirm.call(());
 	};
 
 	let title_id = use_stable_id("confirm-dialog-title");
 	let description_id = use_stable_id("confirm-dialog-description");
 	let described_by = description.as_ref().map(|_| description_id.clone());
-	let shown_error = error.filter(|_| show_error()).map(|e| {
+	let shown_error = error.filter(|_| flow.read().shows_error()).map(|e| {
 		if e.is_empty() {
 			labels.error.clone().unwrap_or_else(|| String::from("Something went wrong"))
 		} else {

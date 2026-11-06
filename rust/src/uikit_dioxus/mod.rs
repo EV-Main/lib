@@ -130,8 +130,6 @@ pub use input_group::{InputGroup, InputGroupAddon, InputGroupButton, InputGroupI
 pub use input_otp::{InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot};
 pub use item::{Item, ItemActions, ItemContent, ItemDescription, ItemFooter, ItemGroup, ItemHeader, ItemMedia, ItemSeparator, ItemTitle};
 pub use kbd::{Kbd, KbdGroup};
-#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
-pub use key_value::write_clipboard;
 pub use key_value::{KeyValue, KeyValueLabels};
 pub use label::Label;
 pub use logo::Logo;
@@ -169,6 +167,8 @@ pub use top_bar::TopBar;
 pub use workspace_tabs::{WorkspaceTab, WorkspaceTabs};
 
 pub use crate::uikit::{AccordionType, CarouselOrientation, SidebarCollapsible, SidebarSide, SidebarVariant, SliderOrientation, TabsOrientation, ToggleGroupType, toggle_classes};
+#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
+pub use crate::uikit_host::write_clipboard;
 
 // Tier C — overlay/portal components. Glob-exported (each module's public
 // surface is its components + variant enums). Rust overlays are dep-light:

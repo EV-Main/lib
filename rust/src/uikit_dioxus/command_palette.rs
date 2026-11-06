@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
 
+pub use crate::uikit::CommandPaletteLabels;
 use crate::{
 	cn,
 	uikit_dioxus::{
@@ -30,23 +31,6 @@ pub struct CommandPaletteGroup {
 	pub id: String,
 	pub heading: Option<String>,
 	pub items: Vec<CommandPaletteItem>,
-}
-
-/// The palette's own strings; every one defaults to English.
-#[derive(Clone, Debug, Default, PartialEq)]
-pub struct CommandPaletteLabels {
-	/// Names the dialog for assistive tech; "Command palette".
-	pub title: Option<String>,
-	/// The search field; "Type a command or search…".
-	pub placeholder: Option<String>,
-	/// Shown when the search matches nothing; "No results.".
-	pub empty: Option<String>,
-	/// The ↑↓ hint; "navigate".
-	pub navigate: Option<String>,
-	/// The ↵ hint; "select".
-	pub select: Option<String>,
-	/// The esc hint; "close".
-	pub close: Option<String>,
 }
 
 /// Search-and-run over a list of actions. Mirrors the TS `CommandPalette`.
@@ -148,7 +132,7 @@ pub fn use_command_palette_shortcut(on_trigger: impl FnMut() + 'static, enabled:
 	// callback without being bound again.
 	let latest: Trigger = use_hook(|| Rc::new(RefCell::new(None)));
 	*latest.borrow_mut() = Some(Box::new(on_trigger));
-	let listener = use_hook(|| Rc::new(RefCell::new(None::<listener::KeydownListener>)));
+	let listener = use_hook(|| Rc::new(RefCell::new(None::<crate::uikit_host::ShortcutListener>)));
 	{
 		let listener = listener.clone();
 		use_effect(use_reactive!(|enabled| {
@@ -159,7 +143,7 @@ pub fn use_command_palette_shortcut(on_trigger: impl FnMut() + 'static, enabled:
 			}
 			if slot.is_none() {
 				let latest = latest.clone();
-				*slot = listener::KeydownListener::add(move || {
+				*slot = crate::uikit_host::ShortcutListener::add(move || {
 					// Taken out for the call: a trigger that re-renders the caller
 					// would otherwise meet its own slot still borrowed.
 					let taken = latest.borrow_mut().take();
@@ -184,92 +168,6 @@ pub fn use_command_palette_shortcut(on_trigger: impl FnMut() + 'static, enabled:
 #[cfg(not(all(target_arch = "wasm32", feature = "wasm")))]
 pub fn use_command_palette_shortcut(on_trigger: impl FnMut() + 'static, enabled: bool) {
 	let _ = (on_trigger, enabled);
-}
-
-#[cfg(all(target_arch = "wasm32", feature = "wasm"))]
-mod listener {
-	use web_sys::{
-		KeyboardEvent,
-		wasm_bindgen::{JsCast, closure::Closure},
-	};
-
-	use super::{ShortcutHit, ShortcutKey, shortcut_hit};
-
-	/// A `keydown` listener on `document`, removed when dropped.
-	pub(super) struct KeydownListener {
-		document: web_sys::Document,
-		callback: Closure<dyn FnMut(KeyboardEvent)>,
-	}
-	impl KeydownListener {
-		/// `None` when there is no `document` or it refuses the listener; the
-		/// shortcut then just does not exist, which is all a caller could do.
-		pub(super) fn add(mut on_fire: impl FnMut() + 'static) -> Option<Self> {
-			let document = web_sys::window()?.document()?;
-			let callback = Closure::<dyn FnMut(KeyboardEvent)>::new(move |e: KeyboardEvent| {
-				let key = ShortcutKey {
-					code: &e.code(),
-					ctrl: e.ctrl_key(),
-					meta: e.meta_key(),
-					alt: e.alt_key(),
-					shift: e.shift_key(),
-					repeat: e.repeat(),
-				};
-				match shortcut_hit(&key) {
-					ShortcutHit::Miss => {}
-					ShortcutHit::Held => e.prevent_default(),
-					ShortcutHit::Fire => {
-						e.prevent_default();
-						on_fire();
-					}
-				}
-			});
-			document.add_event_listener_with_callback("keydown", callback.as_ref().unchecked_ref()).ok()?;
-			Some(Self { document, callback })
-		}
-	}
-	impl Drop for KeydownListener {
-		fn drop(&mut self) {
-			// A listener the document no longer holds is already gone, so a
-			// failed removal leaves nothing to clean up.
-			let _ = self.document.remove_event_listener_with_callback("keydown", self.callback.as_ref().unchecked_ref());
-		}
-	}
-}
-
-/// What one `keydown` means to the shortcut.
-#[cfg(any(test, all(target_arch = "wasm32", feature = "wasm")))]
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-enum ShortcutHit {
-	/// Not ⌘K / Ctrl+K: the key goes on as usual.
-	Miss,
-	/// ⌘K / Ctrl+K held down: the browser must still not take it, but the
-	/// palette must not toggle again.
-	Held,
-	/// ⌘K / Ctrl+K pressed: take it from the browser and fire.
-	Fire,
-}
-
-/// The parts of a `keydown` the shortcut reads. The layout's `key` is not one
-/// of them: on a Russian layout the K key reports `key == "л"` and the same
-/// `code`.
-#[cfg(any(test, all(target_arch = "wasm32", feature = "wasm")))]
-struct ShortcutKey<'a> {
-	code: &'a str,
-	ctrl: bool,
-	meta: bool,
-	alt: bool,
-	shift: bool,
-	repeat: bool,
-}
-
-/// Pulled out of the listener so a server-rendered test, which runs no
-/// effects and has no `document`, can still check the decision.
-#[cfg(any(test, all(target_arch = "wasm32", feature = "wasm")))]
-fn shortcut_hit(k: &ShortcutKey<'_>) -> ShortcutHit {
-	if !(k.meta || k.ctrl) || k.alt || k.shift || k.code != "KeyK" {
-		return ShortcutHit::Miss;
-	}
-	if k.repeat { ShortcutHit::Held } else { ShortcutHit::Fire }
 }
 
 #[cfg(test)]
@@ -490,59 +388,6 @@ mod tests {
 		h.click(row);
 		assert_eq!(RAN.load(Ordering::SeqCst), 0);
 		assert!(h.html().contains("aria-disabled=\"true\""), "{}", h.html());
-	}
-
-	fn key(code: &str) -> ShortcutKey<'_> {
-		ShortcutKey {
-			code,
-			ctrl: false,
-			meta: false,
-			alt: false,
-			shift: false,
-			repeat: false,
-		}
-	}
-
-	#[test]
-	fn the_shortcut_fires_on_ctrl_k_and_cmd_k_on_any_layout() {
-		assert_eq!(shortcut_hit(&ShortcutKey { ctrl: true, ..key("KeyK") }), ShortcutHit::Fire);
-		// A Russian layout: `key` is "л", `code` stays "KeyK".
-		assert_eq!(shortcut_hit(&ShortcutKey { meta: true, ..key("KeyK") }), ShortcutHit::Fire);
-	}
-
-	#[test]
-	fn the_shortcut_ignores_a_held_key_but_still_keeps_it_from_the_browser() {
-		assert_eq!(
-			shortcut_hit(&ShortcutKey {
-				ctrl: true,
-				repeat: true,
-				..key("KeyK")
-			}),
-			ShortcutHit::Held
-		);
-	}
-
-	#[test]
-	fn the_shortcut_ignores_a_bare_k_other_chords_and_other_keys() {
-		assert_eq!(shortcut_hit(&key("KeyK")), ShortcutHit::Miss);
-		assert_eq!(
-			shortcut_hit(&ShortcutKey {
-				ctrl: true,
-				shift: true,
-				..key("KeyK")
-			}),
-			ShortcutHit::Miss
-		);
-		assert_eq!(
-			shortcut_hit(&ShortcutKey {
-				meta: true,
-				alt: true,
-				..key("KeyK")
-			}),
-			ShortcutHit::Miss
-		);
-		// A Dvorak "k" sits on another physical key.
-		assert_eq!(shortcut_hit(&ShortcutKey { ctrl: true, ..key("KeyV") }), ShortcutHit::Miss);
 	}
 
 	#[test]

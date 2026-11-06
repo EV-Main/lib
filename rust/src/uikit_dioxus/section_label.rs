@@ -1,22 +1,10 @@
 use dioxus::prelude::*;
 
+pub use crate::uikit::SectionLabelAs;
 use crate::{
 	cn,
 	uikit_dioxus::{SECTION_LABEL_BASE, SectionLabelTone},
 };
-
-/// The element a [`SectionLabel`] renders as. The TS `as` takes any element
-/// type; Dioxus has no dynamic tag, so this lists the ones a label plausibly is.
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
-pub enum SectionLabelAs {
-	#[default]
-	P,
-	Span,
-	Div,
-	H2,
-	H3,
-	H4,
-}
 
 /// The quiet label above a figure, a group or a section. Mirrors the TS
 /// `SectionLabel` from `page-frame.tsx`.

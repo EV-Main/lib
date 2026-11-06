@@ -137,6 +137,11 @@ impl RovingFocus {
 		self.roving.read().is_tab_stop(key, selected)
 	}
 
+	/// [`RovingFocus::next`], stepping over the keys `skip` holds.
+	pub(crate) fn next_enabled(&self, e: &KeyboardEvent, from: &str, skip: impl Fn(&str) -> bool) -> Option<String> {
+		self.roving.read().next_enabled(&e.into(), from, skip)
+	}
+
 	/// The item after the one keyed `key`, else the one before it, with no wrap.
 	pub fn neighbour(&self, key: &str) -> Option<String> {
 		self.roving.read().neighbour(key)

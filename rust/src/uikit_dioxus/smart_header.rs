@@ -1,25 +1,10 @@
 use dioxus::prelude::*;
 
+pub use crate::uikit::SmartHeaderState;
 use crate::{
 	cn,
 	uikit_dioxus::{SMART_HEADER_BAR, SMART_HEADER_BASE, SMART_HEADER_CONTEXT, SMART_HEADER_TOOLBAR, TopBar},
 };
-
-/// Which rows a [`SmartHeader`] shows around its bar. Mirrors the TS
-/// `SmartHeaderState`.
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr)]
-#[strum(serialize_all = "kebab-case")]
-pub enum SmartHeaderState {
-	/// The bar, the toolbar and the context line.
-	#[default]
-	Default,
-	/// The toolbar folds into the bar as `collapsed`.
-	Collapsed,
-	/// A banner row above the bar.
-	Banner,
-	/// The bar with the `palette` under it.
-	Search,
-}
 
 /// A page header that adapts to scroll and alerts. Mirrors the TS
 /// `SmartHeader`.

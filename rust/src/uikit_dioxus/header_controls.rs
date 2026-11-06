@@ -1,7 +1,9 @@
 use dioxus::prelude::*;
 
+pub use crate::uikit::HeaderNotification;
 use crate::{
 	cn,
+	uikit::CTRL_K,
 	uikit_dioxus::{
 		HEADER_BALANCE_BASE, HEADER_BALANCE_CHEVRON, HEADER_BALANCE_FIGURE, HEADER_BALANCE_INTERACTIVE, HEADER_BALANCE_LABEL, HEADER_BALANCE_SKELETON, HEADER_SEARCH_BASE,
 		HEADER_SEARCH_PLACEHOLDER, HeaderBalanceTone, ICON_BUTTON_BASE, IconButtonVariant, Kbd, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER,
@@ -11,10 +13,6 @@ use crate::{
 	},
 };
 
-const CTRL_K: &str = "Ctrl K";
-
-#[cfg(any(test, all(target_arch = "wasm32", feature = "wasm")))]
-const COMMAND_K: &str = "⌘K";
 /// "Balance: $0.00" in the header; a button only when given `onclick`.
 /// Mirrors the TS `HeaderBalance`.
 ///
@@ -75,19 +73,6 @@ pub fn HeaderBalance(
 			}
 		}
 	}
-}
-
-/// One entry of a [`NotificationBell`]. Mirrors the TS `HeaderNotification`;
-/// the TS fields take any node, these take text, like `CommandPaletteItem`.
-#[derive(Clone, Debug, Default, PartialEq)]
-pub struct HeaderNotification {
-	/// Reported to `on_select`.
-	pub id: String,
-	pub title: String,
-	pub description: Option<String>,
-	/// Already formatted: "2m ago".
-	pub time: Option<String>,
-	pub unread: bool,
 }
 
 /// The bell's own strings; every one defaults to English.
@@ -243,17 +228,6 @@ fn NotificationRow(notification: HeaderNotification, on_select: Option<EventHand
 	}
 }
 
-/// The TS `APPLE` test: Mac, iPhone, iPad and iPod name their platform so.
-/// Outside the effect so a server-rendered test can check it.
-#[cfg(any(test, all(target_arch = "wasm32", feature = "wasm")))]
-fn platform_shortcut(platform: &str) -> &'static str {
-	if ["Mac", "iPhone", "iPad", "iPod"].iter().any(|p| platform.contains(p)) {
-		COMMAND_K
-	} else {
-		CTRL_K
-	}
-}
-
 /// Read after mount, so the server render and the first client render agree.
 fn use_platform_shortcut() -> Signal<&'static str> {
 	let shortcut = use_signal(|| CTRL_K);
@@ -261,10 +235,7 @@ fn use_platform_shortcut() -> Signal<&'static str> {
 	{
 		let mut shortcut = shortcut;
 		use_effect(move || {
-			// A browser that refuses to name its platform gets the Ctrl hint,
-			// which is what the TS port shows for an empty platform too.
-			let platform = web_sys::window().and_then(|w| w.navigator().platform().ok()).unwrap_or_default();
-			let next = platform_shortcut(&platform);
+			let next = crate::uikit_host::platform_shortcut();
 			if *shortcut.peek() != next {
 				shortcut.set(next);
 			}
@@ -515,14 +486,5 @@ mod tests {
 		let text = html.split("Поиск по счетам").next().and_then(|b| b.rsplit("<span").next()).expect("placeholder");
 		assert!(text.contains("truncate") && text.contains("min-w-0"), "{text}");
 		assert!(html.contains(">/</kbd>") && !html.contains("Ctrl K"), "{html}");
-	}
-
-	#[test]
-	fn apple_platforms_get_the_command_key() {
-		assert_eq!(platform_shortcut("MacIntel"), "⌘K");
-		assert_eq!(platform_shortcut("iPhone"), "⌘K");
-		assert_eq!(platform_shortcut("Win32"), "Ctrl K");
-		assert_eq!(platform_shortcut("Linux x86_64"), "Ctrl K");
-		assert_eq!(platform_shortcut(""), "Ctrl K");
 	}
 }
