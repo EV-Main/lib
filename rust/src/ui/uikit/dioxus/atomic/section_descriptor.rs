@@ -1,9 +1,9 @@
 use dioxus::prelude::*;
-use ev_lib_classes::{SECTION_DESCRIPTOR, SECTION_DESCRIPTOR_SUMMARY};
+use ev_lib_classes::{Icon, SECTION_DESCRIPTOR, SECTION_DESCRIPTOR_SUMMARY};
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{FIELD_DESCRIPTION, FIELD_TITLE},
+	ui::uikit::dioxus::{FIELD_DESCRIPTION, FIELD_TITLE, primitives::icon_shapes},
 };
 
 #[component]
@@ -48,7 +48,6 @@ pub fn SectionDescriptor(
 		}
 	}
 }
-// lucide `info`, inlined per the kit's no-lucide-dep icon convention.
 fn info_glyph() -> Element {
 	rsx! {
 		svg {
@@ -61,9 +60,7 @@ fn info_glyph() -> Element {
 			stroke_linejoin: "round",
 			class: "size-4 shrink-0 text-accent-debug",
 			"aria-hidden": "true",
-			circle { cx: "12", cy: "12", r: "10" }
-			path { d: "M12 16v-4" }
-			path { d: "M12 8h.01" }
+			{icon_shapes(Icon::Info)}
 		}
 	}
 }

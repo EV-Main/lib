@@ -22,6 +22,7 @@ import {
 } from "../../generated/carousel";
 import type { Orientation } from "../../generated/orientation";
 import * as copy from "../../generated/copy";
+import { iconShapes } from "../../icons/icon-shapes";
 
 
 type CarouselContextProps = {
@@ -247,7 +248,7 @@ export function CarouselPrevious({
         strokeLinejoin="round"
         aria-hidden="true"
       >
-        <path d="m15 18-6-6 6-6" />
+        {iconShapes("chevron-left")}
       </svg>
       <span className="sr-only">{copy.CAROUSEL_PREVIOUS}</span>
     </Button>
@@ -290,7 +291,7 @@ export function CarouselNext({
         strokeLinejoin="round"
         aria-hidden="true"
       >
-        <path d="m9 18 6-6-6-6" />
+        {iconShapes("chevron-right")}
       </svg>
       <span className="sr-only">{copy.CAROUSEL_NEXT}</span>
     </Button>

@@ -1,6 +1,7 @@
+pub use ev_lib_classes::AccountSettingsDialogLabels;
+use ev_lib_classes::Icon;
 use leptos::prelude::*;
 
-pub use ev_lib_classes::AccountSettingsDialogLabels;
 use crate::{
 	cn,
 	ui::uikit::leptos::{
@@ -9,7 +10,7 @@ use crate::{
 		ACCOUNT_SETTINGS_DIALOG_TABS, ACCOUNT_SETTINGS_DIALOG_TITLE, Dialog, DialogContent, DialogDescription, DialogTitle, IconButton, Orientation, Tabs, TabsContent, TabsList,
 		TabsTrigger,
 		icon_button::Glyph,
-		primitives::{use_controllable, use_stable_id},
+		primitives::{icon_shapes, use_controllable, use_stable_id},
 	},
 };
 
@@ -147,9 +148,7 @@ pub fn AccountSettingsDialog(
 				class=ACCOUNT_SETTINGS_DIALOG_CLOSE
 				on_click=Callback::new(move |_| open.set(false))
 			>
-				<Glyph class="size-4">
-					<path d="M18 6 6 18M6 6l12 12" />
-				</Glyph>
+				<Glyph class="size-4">{icon_shapes(Icon::X)}</Glyph>
 			</IconButton>
 		}
 	};

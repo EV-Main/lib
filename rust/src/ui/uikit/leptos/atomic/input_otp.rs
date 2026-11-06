@@ -1,3 +1,4 @@
+use ev_lib_classes::Icon;
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -6,7 +7,7 @@ use crate::{
 		core::InputOtp,
 		leptos::{
 			INPUT_OTP_CONTAINER, INPUT_OTP_GROUP, INPUT_OTP_INPUT, INPUT_OTP_SLOT, INPUT_OTP_SLOT_CARET, INPUT_OTP_SLOT_CARET_WRAPPER,
-			primitives::{Controllable, use_controllable},
+			primitives::{Controllable, icon_shapes, use_controllable},
 		},
 	},
 };
@@ -98,7 +99,7 @@ pub fn InputOTPSeparator() -> impl IntoView {
 				stroke-linejoin="round"
 				aria-hidden="true"
 			>
-				<path d="M5 12h14"></path>
+				{icon_shapes(Icon::Minus)}
 			</svg>
 		</div>
 	}

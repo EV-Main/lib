@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
-use ev_lib_classes::{SPINNER, copy};
+use ev_lib_classes::{Icon, SPINNER, copy};
 
-use crate::cn;
+use crate::{cn, ui::uikit::dioxus::primitives::icon_shapes};
 
 #[component]
 pub fn Spinner(#[props(default)] class: String) -> Element {
@@ -15,7 +15,7 @@ pub fn Spinner(#[props(default)] class: String) -> Element {
 			fill: "none",
 			stroke: "currentColor",
 			stroke_width: "2",
-			path { d: "M21 12a9 9 0 1 1-6.219-8.56" }
+			{icon_shapes(Icon::Spinner)}
 		}
 	}
 }

@@ -41,6 +41,7 @@ pub const SIDEBAR_MENU_ITEM: &str = "group/menu-item relative";
 pub const SIDEBAR_WIDTH: &str = "16rem";
 
 pub const SIDEBAR_WIDTH_ICON: &str = "3rem";
+pub const SIDEBAR_ROOT: &str = "group peer text-ink hidden md:block";
 /// The rail's rows are full-width and left-aligned, so they take their height
 /// from the shared [`Size`](crate::Size) scale and nothing else — colour comes
 /// from `ButtonVariant`, like every other button in the kit.
@@ -77,4 +78,3 @@ pub enum SidebarCollapsible {
 	Icon,
 	None,
 }
-pub const SIDEBAR_ROOT: &str = "group peer text-ink hidden md:block";

@@ -1,13 +1,13 @@
 use dioxus::prelude::*;
 pub use ev_lib_classes::MenuItemVariant;
-use ev_lib_classes::{MENU_RADIO_DOT, MENUBAR_SUB_CHEVRON};
+use ev_lib_classes::{Icon, MENU_RADIO_DOT, MENUBAR_SUB_CHEVRON};
 
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		MENUBAR_CHECKBOX_ITEM, MENUBAR_CONTENT, MENUBAR_ITEM, MENUBAR_ITEM_INDICATOR, MENUBAR_LABEL, MENUBAR_RADIO_ITEM, MENUBAR_ROOT, MENUBAR_SEPARATOR, MENUBAR_SHORTCUT,
 		MENUBAR_SUB_CONTENT, MENUBAR_SUB_TRIGGER, MENUBAR_TRIGGER,
-		primitives::{Controllable, use_controllable},
+		primitives::{Controllable, icon_shapes, use_controllable},
 	},
 };
 
@@ -126,7 +126,7 @@ pub fn MenubarCheckboxItem(#[props(default)] checked: bool, #[props(default)] cl
 						stroke_width: "2",
 						stroke_linecap: "round",
 						stroke_linejoin: "round",
-						path { d: "M20 6 9 17l-5-5" }
+						{icon_shapes(Icon::Check)}
 					}
 				}
 			}
@@ -170,7 +170,7 @@ pub fn MenubarRadioItem(value: String, #[props(default)] class: String, children
 					svg {
 						class: MENU_RADIO_DOT,
 						view_box: "0 0 24 24",
-						circle { cx: "12", cy: "12", r: "10" }
+						{icon_shapes(Icon::Dot)}
 					}
 				}
 			}
@@ -237,7 +237,7 @@ pub fn MenubarSubTrigger(#[props(default)] inset: bool, #[props(default)] class:
 				stroke_width: "2",
 				stroke_linecap: "round",
 				stroke_linejoin: "round",
-				path { d: "m9 18 6-6-6-6" }
+				{icon_shapes(Icon::ChevronRight)}
 			}
 		}
 	}

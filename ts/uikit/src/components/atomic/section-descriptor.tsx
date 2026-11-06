@@ -2,6 +2,7 @@ import * as React from "react";
 import { cn } from "../../lib/cn";
 import { FIELD_TITLE, FIELD_DESCRIPTION } from "../../generated/field";
 import { SECTION_DESCRIPTOR, SECTION_DESCRIPTOR_SUMMARY } from "../../generated/section-descriptor";
+import { iconShapes } from "../../icons/icon-shapes";
 
 /**
  * `SectionDescriptor` — a static, always-visible block that explains a whole
@@ -13,7 +14,6 @@ import { SECTION_DESCRIPTOR, SECTION_DESCRIPTOR_SUMMARY } from "../../generated/
  * With `collapsible`, it renders as a native `<details>`/`<summary>` disclosure,
  * which carries keyboard support and find-in-page auto-expand for free.
  */
-// lucide `info`, inlined per the kit's no-lucide-dep icon convention.
 function InfoGlyph({ className }: { className?: string }) {
   return (
     <svg
@@ -26,9 +26,7 @@ function InfoGlyph({ className }: { className?: string }) {
       aria-hidden
       className={cn("size-4 shrink-0", className)}
     >
-      <circle cx="12" cy="12" r="10" />
-      <path d="M12 16v-4" />
-      <path d="M12 8h.01" />
+      {iconShapes("info")}
     </svg>
   );
 }

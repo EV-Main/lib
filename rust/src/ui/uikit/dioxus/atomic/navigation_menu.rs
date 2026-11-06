@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use ev_lib_classes::{NAVIGATION_MENU_INDICATOR_ARROW, NAVIGATION_MENU_TRIGGER_CHEVRON, NAVIGATION_MENU_VIEWPORT_WRAPPER};
+use ev_lib_classes::{Icon, NAVIGATION_MENU_INDICATOR_ARROW, NAVIGATION_MENU_TRIGGER_CHEVRON, NAVIGATION_MENU_VIEWPORT_WRAPPER};
 
 pub use crate::ui::uikit::core::navigation_menu_trigger_style;
 use crate::{
@@ -7,7 +7,7 @@ use crate::{
 	ui::uikit::dioxus::{
 		NAVIGATION_MENU, NAVIGATION_MENU_CONTENT, NAVIGATION_MENU_INDICATOR, NAVIGATION_MENU_ITEM, NAVIGATION_MENU_LINK, NAVIGATION_MENU_LIST, NAVIGATION_MENU_TRIGGER_STYLE,
 		NAVIGATION_MENU_VIEWPORT,
-		primitives::{Controllable, use_controllable},
+		primitives::{Controllable, icon_shapes, use_controllable},
 	},
 };
 
@@ -74,7 +74,7 @@ pub fn NavigationMenuTrigger(#[props(default)] class: String, children: Element)
 				stroke_linecap: "round",
 				stroke_linejoin: "round",
 				"aria-hidden": "true",
-				path { d: "m6 9 6 6 6-6" }
+				{icon_shapes(Icon::ChevronDown)}
 			}
 		}
 	}

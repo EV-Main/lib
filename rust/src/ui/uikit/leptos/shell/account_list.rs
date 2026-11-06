@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 
+use ev_lib_classes::Icon;
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -9,7 +10,7 @@ use crate::{
 		ACCOUNT_LIST_ITEM_CHECK_HIDDEN, ACCOUNT_LIST_ITEM_CHECKED, ACCOUNT_LIST_ITEM_DISABLED, ACCOUNT_LIST_ITEM_FIGURE, ACCOUNT_LIST_ITEM_HANDLE, ACCOUNT_LIST_ITEM_NAME,
 		ACCOUNT_LIST_ITEM_RADIO, ACCOUNT_LIST_ITEM_TEXT, ACCOUNT_LIST_ITEM_UNCHECKED, Avatar, AvatarFallback,
 		icon_button::Glyph,
-		primitives::{Controllable, RovingFocus, RovingOrientation, use_controllable, use_roving_focus, use_roving_item},
+		primitives::{Controllable, RovingFocus, RovingOrientation, icon_shapes, use_controllable, use_roving_focus, use_roving_item},
 	},
 };
 
@@ -170,9 +171,7 @@ pub fn AccountListItem(
 						}
 					})}
 				<span data-slot="account-list-item-check" class=check_cls aria-hidden="true">
-					<Glyph class="size-4">
-						<path d="M20 6 9 17l-5-5" />
-					</Glyph>
+					<Glyph class="size-4">{icon_shapes(Icon::Check)}</Glyph>
 				</span>
 			</button>
 			{actions

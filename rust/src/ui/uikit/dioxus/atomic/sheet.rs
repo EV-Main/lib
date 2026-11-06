@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use ev_lib_classes::copy;
+use ev_lib_classes::{Icon, copy};
 
 use crate::{
 	cn,
@@ -7,7 +7,7 @@ use crate::{
 		core::sheet_side_class,
 		dioxus::{
 			SHEET_CLOSE, SHEET_CONTENT, SHEET_DESCRIPTION, SHEET_FOOTER, SHEET_HEADER, SHEET_OVERLAY, SHEET_TITLE,
-			primitives::{Controllable, Side, use_controllable},
+			primitives::{Controllable, Side, icon_shapes, use_controllable},
 		},
 	},
 };
@@ -78,7 +78,7 @@ pub fn SheetContent(#[props(default = Side::Right)] side: Side, #[props(default)
 					stroke_linecap: "round",
 					stroke_linejoin: "round",
 					class: "size-4",
-					path { d: "M18 6 6 18M6 6l12 12" }
+					{icon_shapes(Icon::X)}
 				}
 				span { class: "sr-only", {copy::CLOSE} }
 			}

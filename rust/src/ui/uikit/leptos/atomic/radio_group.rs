@@ -1,11 +1,11 @@
-use ev_lib_classes::{RADIO_GROUP_DOT, RADIO_GROUP_INDICATOR};
+use ev_lib_classes::{Icon, RADIO_GROUP_DOT, RADIO_GROUP_INDICATOR};
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
 	cn,
 	ui::uikit::leptos::{
 		RADIO_GROUP_ITEM, RADIO_GROUP_ROOT,
-		primitives::{Controllable, RovingFocus, RovingOrientation, use_controllable, use_roving_focus, use_roving_item},
+		primitives::{Controllable, RovingFocus, RovingOrientation, icon_shapes, use_controllable, use_roving_focus, use_roving_item},
 	},
 };
 
@@ -79,7 +79,7 @@ pub fn RadioGroupItem(
 						view! {
 							<span data-slot="radio-group-indicator" class=RADIO_GROUP_INDICATOR>
 								<svg class=RADIO_GROUP_DOT viewBox="0 0 24 24">
-									<circle cx="12" cy="12" r="10"></circle>
+									{icon_shapes(Icon::Dot)}
 								</svg>
 							</span>
 						}

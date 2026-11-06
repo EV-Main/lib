@@ -1,4 +1,4 @@
-use ev_lib_classes::copy;
+use ev_lib_classes::{Icon, copy};
 use leptos::prelude::*;
 
 pub use crate::ui::uikit::core::HeaderNotification;
@@ -9,7 +9,7 @@ use crate::{
 		HEADER_SEARCH_PLACEHOLDER, HeaderBalanceTone, ICON_BUTTON_BASE, IconButtonVariant, Kbd, NOTIFICATION_BELL_CONTENT, NOTIFICATION_BELL_EMPTY, NOTIFICATION_BELL_FOOTER,
 		NOTIFICATION_BELL_ITEM, NOTIFICATION_BELL_ITEM_BODY, NOTIFICATION_BELL_ITEM_DESCRIPTION, NOTIFICATION_BELL_ITEM_DOT, NOTIFICATION_BELL_ITEM_DOT_READ,
 		NOTIFICATION_BELL_ITEM_DOT_UNREAD, NOTIFICATION_BELL_ITEM_TIME, NOTIFICATION_BELL_ITEM_TITLE, NOTIFICATION_BELL_ITEM_TITLE_UNREAD, NOTIFICATION_BELL_LIST, NOTIFICATION_BELL_TRIGGER,
-		NOTIFICATION_DOT, Popover, PopoverContent, PopoverTrigger, Size, Skeleton, button_classes, icon_button::Glyph, icon_button_size_class,
+		NOTIFICATION_DOT, Popover, PopoverContent, PopoverTrigger, Size, Skeleton, button_classes, icon_button::Glyph, icon_button_size_class, primitives::icon_shapes,
 	},
 };
 
@@ -88,9 +88,7 @@ pub fn HeaderBalance(
 			on:click=move |e| on_click.run(e)
 		>
 			{body}
-			<Glyph class=HEADER_BALANCE_CHEVRON>
-				<path d="m6 9 6 6 6-6" />
-			</Glyph>
+			<Glyph class=HEADER_BALANCE_CHEVRON>{icon_shapes(Icon::ChevronDown)}</Glyph>
 		</button>
 	}
 	.into_any()
@@ -156,10 +154,7 @@ pub fn NotificationBell(
 	view! {
 		<Popover>
 			<PopoverTrigger class=trigger_cls aria_label=Signal::derive(spoken)>
-				<Glyph class="size-4">
-					<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-					<path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-				</Glyph>
+				<Glyph class="size-4">{icon_shapes(Icon::Bell)}</Glyph>
 				{move || {
 					(unread.get() > 0)
 						.then(|| {
@@ -230,10 +225,7 @@ pub fn HeaderSearch(
 				}
 			}
 		>
-			<Glyph class="size-4">
-				<circle cx="11" cy="11" r="8" />
-				<path d="m21 21-4.3-4.3" />
-			</Glyph>
+			<Glyph class="size-4">{icon_shapes(Icon::Search)}</Glyph>
 			<span class=HEADER_SEARCH_PLACEHOLDER>{placeholder}</span>
 			<Kbd>{hint}</Kbd>
 		</button>

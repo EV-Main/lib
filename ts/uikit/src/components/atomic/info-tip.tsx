@@ -14,6 +14,7 @@ import { POPOVER_CONTENT } from "../../generated/popover";
 import type { Side } from "../../generated/primitives";
 import * as copy from "../../generated/copy";
 import { INFO_TIP_TRIGGER } from "../../generated/info-tip";
+import { iconShapes } from "../../icons/icon-shapes";
 
 /**
  * `InfoTip` — the ⓘ-beside-a-label *toggletip*. It reuses the popover machinery
@@ -71,7 +72,6 @@ export function InfoTip({
   );
 }
 
-// lucide `info`, inlined per the kit's no-lucide-dep icon convention.
 function InfoGlyph({ className }: { className?: string }) {
   return (
     <svg
@@ -84,9 +84,7 @@ function InfoGlyph({ className }: { className?: string }) {
       aria-hidden
       className={cn("size-4", className)}
     >
-      <circle cx="12" cy="12" r="10" />
-      <path d="M12 16v-4" />
-      <path d="M12 8h.01" />
+      {iconShapes("info")}
     </svg>
   );
 }

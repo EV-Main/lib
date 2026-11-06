@@ -5,6 +5,7 @@ import { cn } from "../../lib/cn";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useRovingFocus } from "../../primitives/use-roving-focus";
 import { RADIO_GROUP_DOT, RADIO_GROUP_INDICATOR, RADIO_GROUP_ITEM, RADIO_GROUP_ROOT } from "../../generated/radio-group";
+import { iconShapes } from "../../icons/icon-shapes";
 
 interface RadioGroupContextValue {
   value: string;
@@ -130,7 +131,7 @@ export function RadioGroupItem({
             viewBox="0 0 24 24"
             aria-hidden="true"
           >
-            <circle cx="12" cy="12" r="10" />
+            {iconShapes("dot")}
           </svg>
         </span>
       ) : null}

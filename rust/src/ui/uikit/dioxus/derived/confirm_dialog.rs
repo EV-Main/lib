@@ -1,6 +1,7 @@
 use dioxus::prelude::*;
-
 pub use ev_lib_classes::ConfirmDialogLabels;
+use ev_lib_classes::Icon;
+
 use crate::{
 	cn,
 	ui::uikit::{
@@ -10,7 +11,7 @@ use crate::{
 			CONFIRM_DIALOG_DESCRIPTION, CONFIRM_DIALOG_ERROR, CONFIRM_DIALOG_FOOTER, CONFIRM_DIALOG_HEADER, CONFIRM_DIALOG_ICON, CONFIRM_DIALOG_PENDING, CONFIRM_DIALOG_SPINNER,
 			CONFIRM_DIALOG_TEXT, CONFIRM_DIALOG_TITLE, ConfirmDialogTone, Size, Spinner,
 			button::button_classes,
-			primitives::{use_controllable, use_stable_id},
+			primitives::{icon_shapes, use_controllable, use_stable_id},
 		},
 	},
 };
@@ -96,13 +97,7 @@ pub fn ConfirmDialog(
 	let title_id = use_stable_id("confirm-dialog-title");
 	let description_id = use_stable_id("confirm-dialog-description");
 	let described_by = description.as_ref().map(|_| description_id.clone());
-	let shown_error = error.filter(|_| flow.read().shows_error()).map(|e| {
-		if e.is_empty() {
-			labels.error.clone()
-		} else {
-			e
-		}
-	});
+	let shown_error = error.filter(|_| flow.read().shows_error()).map(|e| if e.is_empty() { labels.error.clone() } else { e });
 	let busy = if pending { "true" } else { "false" };
 	let danger = tone == ConfirmDialogTone::Danger;
 	let confirm_variant = if danger { ButtonVariant::Destructive } else { ButtonVariant::Primary };
@@ -171,8 +166,7 @@ fn AlertIcon() -> Element {
 			stroke_linecap: "round",
 			stroke_linejoin: "round",
 			"aria-hidden": "true",
-			circle { cx: "12", cy: "12", r: "10" }
-			path { d: "M12 8v4M12 16h.01" }
+			{icon_shapes(Icon::Alert)}
 		}
 	}
 }

@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use ev_lib_classes::Icon;
 
 use crate::{
 	cn,
@@ -6,7 +7,7 @@ use crate::{
 		core::InputOtp,
 		dioxus::{
 			INPUT_OTP_CONTAINER, INPUT_OTP_GROUP, INPUT_OTP_INPUT, INPUT_OTP_SLOT, INPUT_OTP_SLOT_CARET, INPUT_OTP_SLOT_CARET_WRAPPER,
-			primitives::{Controllable, use_controllable},
+			primitives::{Controllable, icon_shapes, use_controllable},
 		},
 	},
 };
@@ -92,7 +93,7 @@ pub fn InputOTPSeparator() -> Element {
 				stroke_linecap: "round",
 				stroke_linejoin: "round",
 				"aria-hidden": "true",
-				path { d: "M5 12h14" }
+				{icon_shapes(Icon::Minus)}
 			}
 		}
 	}

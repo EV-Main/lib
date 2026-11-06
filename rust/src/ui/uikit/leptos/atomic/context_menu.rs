@@ -1,5 +1,5 @@
 pub use ev_lib_classes::MenuItemVariant;
-use ev_lib_classes::{CONTEXT_MENU_ITEM_INDICATOR, MENU_RADIO_DOT};
+use ev_lib_classes::{CONTEXT_MENU_ITEM_INDICATOR, Icon, MENU_RADIO_DOT};
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -7,7 +7,7 @@ use crate::{
 	ui::uikit::leptos::{
 		CONTEXT_MENU_CHECK_ITEM, CONTEXT_MENU_CONTENT, CONTEXT_MENU_ITEM, CONTEXT_MENU_LABEL, CONTEXT_MENU_SEPARATOR, CONTEXT_MENU_SHORTCUT, CONTEXT_MENU_SUB_CONTENT,
 		CONTEXT_MENU_SUB_TRIGGER,
-		primitives::{Controllable, use_controllable},
+		primitives::{Controllable, icon_shapes, use_controllable},
 	},
 };
 
@@ -150,7 +150,7 @@ pub fn ContextMenuCheckboxItem(
 									stroke-linejoin="round"
 									aria-hidden="true"
 								>
-									<path d="M20 6 9 17l-5-5"></path>
+									{icon_shapes(Icon::Check)}
 								</svg>
 							}
 						})
@@ -212,7 +212,7 @@ pub fn ContextMenuRadioItem(#[prop(into)] value: String, #[prop(optional, into)]
 						.then(|| {
 							view! {
 								<svg class=MENU_RADIO_DOT viewBox="0 0 24 24" aria-hidden="true">
-									<circle cx="12" cy="12" r="10"></circle>
+									{icon_shapes(Icon::Dot)}
 								</svg>
 							}
 						})
@@ -301,7 +301,7 @@ pub fn ContextMenuSubTrigger(#[prop(optional)] inset: bool, #[prop(optional, int
 				stroke-linejoin="round"
 				aria-hidden="true"
 			>
-				<path d="m9 18 6-6-6-6"></path>
+				{icon_shapes(Icon::ChevronRight)}
 			</svg>
 		</div>
 	}

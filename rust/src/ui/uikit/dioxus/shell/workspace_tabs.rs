@@ -1,11 +1,11 @@
 use dioxus::prelude::*;
-use ev_lib_classes::copy;
+use ev_lib_classes::{Icon, copy};
 
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		WORKSPACE_TAB_BASE, WORKSPACE_TAB_CLOSE, WORKSPACE_TAB_LABEL, WORKSPACE_TAB_SELECTED, WORKSPACE_TAB_SPACER, WORKSPACE_TAB_TRIGGER, WORKSPACE_TABS_BASE,
-		primitives::{Controllable, RovingFocus, RovingOrientation, use_controllable, use_roving_focus, use_roving_item},
+		primitives::{Controllable, RovingFocus, RovingOrientation, icon_shapes, use_controllable, use_roving_focus, use_roving_item},
 	},
 };
 
@@ -113,7 +113,7 @@ struct WorkspaceTabsCtx {
 
 /// The TS `UiIcon` frame: its default `size-4` and the 1.75 stroke.
 #[component]
-fn Glyph(paths: &'static [&'static str]) -> Element {
+fn Glyph(icon: Icon) -> Element {
 	rsx! {
 		svg {
 			class: "size-4",
@@ -124,9 +124,7 @@ fn Glyph(paths: &'static [&'static str]) -> Element {
 			stroke_linecap: "round",
 			stroke_linejoin: "round",
 			"aria-hidden": "true",
-			for d in paths {
-				path { d: *d }
-			}
+			{icon_shapes(icon)}
 		}
 	}
 }
@@ -134,19 +132,14 @@ fn Glyph(paths: &'static [&'static str]) -> Element {
 #[component]
 fn LayersIcon() -> Element {
 	rsx! {
-		Glyph {
-			paths: &[
-				"m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z",
-				"m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65M22 12.65l-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65",
-			],
-		}
+		Glyph { icon: Icon::Layers }
 	}
 }
 
 #[component]
 fn CloseIcon() -> Element {
 	rsx! {
-		Glyph { paths: &["M18 6 6 18M6 6l12 12"] }
+		Glyph { icon: Icon::X }
 	}
 }
 

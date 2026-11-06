@@ -12,14 +12,14 @@
 
 use dioxus::prelude::*;
 use ev_lib_classes::{
-	STATUS_SCREEN_ACTION_ICON, STATUS_SCREEN_ACTIONS, STATUS_SCREEN_BODY, STATUS_SCREEN_CODE, STATUS_SCREEN_EYEBROW, STATUS_SCREEN_GLOW, STATUS_SCREEN_LOGO, STATUS_SCREEN_ROOT,
+	Icon, STATUS_SCREEN_ACTION_ICON, STATUS_SCREEN_ACTIONS, STATUS_SCREEN_BODY, STATUS_SCREEN_CODE, STATUS_SCREEN_EYEBROW, STATUS_SCREEN_GLOW, STATUS_SCREEN_LOGO, STATUS_SCREEN_ROOT,
 	STATUS_SCREEN_STACK, STATUS_SCREEN_TITLE, STATUS_SCREEN_TITLE_ACCENT,
 };
 
 pub use crate::ui::uikit::core::{StatusLinkData, status_cta_class};
 use crate::{
 	cn,
-	ui::uikit::dioxus::{Accent, ButtonVariant, Logo, accent_text_class},
+	ui::uikit::dioxus::{Accent, ButtonVariant, Logo, accent_text_class, primitives::icon_shapes},
 };
 
 /// Shared skeleton for the 404 / 403 / 500 status pages: a centred hero with the
@@ -168,7 +168,6 @@ pub fn ServerError(#[props(default = "/".to_string())] home_href: String, reset:
 		}
 	}
 }
-// lucide `arrow-left`, inlined so the kit keeps its zero-icon-dep footprint.
 fn arrow_left_icon() -> Element {
 	rsx! {
 		svg {
@@ -181,8 +180,7 @@ fn arrow_left_icon() -> Element {
 			stroke_linecap: "round",
 			stroke_linejoin: "round",
 			"aria-hidden": "true",
-			path { d: "m12 19-7-7 7-7" }
-			path { d: "M19 12H5" }
+			{icon_shapes(Icon::ArrowLeft)}
 		}
 	}
 }

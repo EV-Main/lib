@@ -17,6 +17,7 @@ import {
   TOAST_VISIBLE,
 } from "../../generated/sonner";
 import * as copy from "../../generated/copy";
+import { iconShapes } from "../../icons/icon-shapes";
 
 export type { ToastPosition, ToastVariant };
 
@@ -355,7 +356,7 @@ function ToastItem({
           strokeLinejoin="round"
           aria-hidden="true"
         >
-          <path d="M18 6 6 18M6 6l12 12" />
+          {iconShapes("x")}
         </svg>
       </button>
     </li>

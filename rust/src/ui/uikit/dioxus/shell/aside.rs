@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
-use ev_lib_classes::copy;
 pub use ev_lib_classes::{AsideHeaderLabels, AsidePanelMode};
+use ev_lib_classes::{Icon, copy};
 
 pub use crate::ui::uikit::core::AsideCollapse;
 use crate::{
@@ -8,7 +8,8 @@ use crate::{
 	ui::uikit::dioxus::{
 		ASIDE_BODY, ASIDE_FOOTER, ASIDE_HEADER_BACK_ICON, ASIDE_HEADER_BASE, ASIDE_HEADER_CLOSE_ICON, ASIDE_HEADER_TITLE, ASIDE_PANEL_DOCKED, ASIDE_PANEL_DRAWER, ASIDE_PANEL_NARROW_ONLY,
 		ASIDE_PANEL_SHEET, ASIDE_PANEL_WIDE_ONLY, ASIDE_PANEL_WIDE_ONLY_WRAPPER, ASIDE_RAIL_BASE, ASIDE_RAIL_SPACER, AsidePanelSide, Drawer, DrawerContent, DrawerDirection, IconButton,
-		Sheet, SheetContent, Size, primitives::Side,
+		Sheet, SheetContent, Size,
+		primitives::{Side, icon_shapes},
 	},
 };
 
@@ -36,7 +37,7 @@ pub fn AsideHeader(
 			if let Some(back) = on_back {
 				IconButton { aria_label: back_label, size: Size::Sm, onclick: move |_| back.call(()),
 					Glyph { class: ASIDE_HEADER_BACK_ICON,
-						path { d: "m9 18 6-6-6-6" }
+						{icon_shapes(Icon::ChevronRight)}
 					}
 				}
 			}
@@ -45,7 +46,7 @@ pub fn AsideHeader(
 			if let Some(close) = on_close {
 				IconButton { aria_label: close_label, size: Size::Sm, onclick: move |_| close.call(()),
 					Glyph { class: ASIDE_HEADER_CLOSE_ICON,
-						path { d: "M18 6 6 18M6 6l12 12" }
+						{icon_shapes(Icon::X)}
 					}
 				}
 			}

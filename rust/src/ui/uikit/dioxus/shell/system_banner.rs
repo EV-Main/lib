@@ -1,11 +1,14 @@
 use dioxus::prelude::*;
-
+use ev_lib_classes::Icon;
 pub use ev_lib_classes::SystemBannerLabels;
+
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		SYSTEM_BANNER_ACTION, SYSTEM_BANNER_BASE, SYSTEM_BANNER_BODY_AFTER_TITLE, SYSTEM_BANNER_DISMISS, SYSTEM_BANNER_GLYPH, SYSTEM_BANNER_ICON, SYSTEM_BANNER_MESSAGE, SYSTEM_BANNER_TITLE,
-		SystemBannerTone, primitives::has_content, system_banner_tone_class,
+		SystemBannerTone,
+		primitives::{has_content, icon_shapes},
+		system_banner_tone_class,
 	},
 };
 
@@ -67,7 +70,7 @@ pub fn SystemBanner(
 }
 
 #[component]
-fn Glyph(paths: &'static [&'static str], circle: bool) -> Element {
+fn Glyph(icon: Icon) -> Element {
 	rsx! {
 		svg {
 			class: SYSTEM_BANNER_GLYPH,
@@ -79,12 +82,7 @@ fn Glyph(paths: &'static [&'static str], circle: bool) -> Element {
 			stroke_linecap: "round",
 			stroke_linejoin: "round",
 			"aria-hidden": "true",
-			if circle {
-				circle { cx: "12", cy: "12", r: "10" }
-			}
-			for d in paths {
-				path { d: *d }
-			}
+			{icon_shapes(icon)}
 		}
 	}
 }
@@ -92,21 +90,21 @@ fn Glyph(paths: &'static [&'static str], circle: bool) -> Element {
 #[component]
 fn TriangleAlertIcon() -> Element {
 	rsx! {
-		Glyph { paths: &["m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3", "M12 9v4", "M12 17h.01"], circle: false }
+		Glyph { icon: Icon::TriangleAlert }
 	}
 }
 
 #[component]
 fn InfoIcon() -> Element {
 	rsx! {
-		Glyph { paths: &["M12 16v-4", "M12 8h.01"], circle: true }
+		Glyph { icon: Icon::Info }
 	}
 }
 
 #[component]
 fn CloseIcon() -> Element {
 	rsx! {
-		Glyph { paths: &["M18 6 6 18", "m6 6 12 12"], circle: false }
+		Glyph { icon: Icon::Close }
 	}
 }
 

@@ -1,4 +1,4 @@
-use ev_lib_classes::{TOAST_DURATION_MS, TOAST_GAP, TOAST_VISIBLE, ToastPosition, ToastVariant};
+use ev_lib_classes::{TOAST_GAP, TOAST_VISIBLE, ToastPosition, ToastVariant};
 
 /// The kit measures nothing, so the stack assumes this height (px) for the
 /// collapse clamp and the expanded spacing: the collapsed pile is exact, the
@@ -121,6 +121,8 @@ fn view(toast: &Toast, index: usize, total: usize) -> ToastView {
 
 #[cfg(test)]
 mod tests {
+	use ev_lib_classes::TOAST_DURATION_MS;
+
 	use super::*;
 
 	#[test]

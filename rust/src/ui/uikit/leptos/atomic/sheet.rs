@@ -1,4 +1,4 @@
-use ev_lib_classes::copy;
+use ev_lib_classes::{Icon, copy};
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -7,7 +7,7 @@ use crate::{
 		core::sheet_side_class,
 		leptos::{
 			SHEET_CLOSE, SHEET_CONTENT, SHEET_DESCRIPTION, SHEET_FOOTER, SHEET_HEADER, SHEET_OVERLAY, SHEET_TITLE,
-			primitives::{Controllable, Side, use_controllable},
+			primitives::{Controllable, Side, icon_shapes, use_controllable},
 		},
 	},
 };
@@ -100,7 +100,7 @@ pub fn SheetContent(
 							stroke-linejoin="round"
 							class="size-4"
 						>
-							<path d="M18 6 6 18M6 6l12 12"></path>
+							{icon_shapes(Icon::X)}
 						</svg>
 						<span class="sr-only">{copy::CLOSE}</span>
 					</button>

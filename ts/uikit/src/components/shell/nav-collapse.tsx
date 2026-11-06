@@ -3,6 +3,7 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { useControllableState } from "../../primitives/use-controllable-state";
+import { iconShapes } from "../../icons/icon-shapes";
 
 /** What a nav group takes to become a section that opens and closes. */
 export interface NavGroupCollapse {
@@ -113,7 +114,7 @@ function Chevron({ open }: { open: boolean }) {
       strokeLinejoin="round"
       className={cn("size-4 transition-transform", MOTION, open && "rotate-90")}
     >
-      <path d="m9 18 6-6-6-6" />
+      {iconShapes("chevron-right")}
     </svg>
   );
 }

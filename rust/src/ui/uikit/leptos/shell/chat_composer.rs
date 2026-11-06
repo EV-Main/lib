@@ -1,5 +1,5 @@
 pub use ev_lib_classes::ChatComposerLabels;
-use ev_lib_classes::copy;
+use ev_lib_classes::{Icon, copy};
 use leptos::prelude::*;
 
 pub use crate::ui::uikit::core::ModelOption;
@@ -10,7 +10,8 @@ use crate::{
 		leptos::{
 			CHAT_COMPOSER_ATTACHMENTS, CHAT_COMPOSER_BASE, CHAT_COMPOSER_FIELD, CHAT_COMPOSER_HINT, CHAT_COMPOSER_IDLE, CHAT_COMPOSER_SPACER, CHAT_COMPOSER_STREAMING, CHAT_COMPOSER_TOOLBAR,
 			DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger, IconButton, IconButtonVariant, MODEL_CHIP_BASE, Size, Textarea,
-			icon_button::Glyph, primitives::use_controllable,
+			icon_button::Glyph,
+			primitives::{icon_shapes, use_controllable},
 		},
 	},
 };
@@ -40,9 +41,7 @@ pub fn ModelChip(
 				class=cn!(MODEL_CHIP_BASE, class)
 			>
 				{move || shown.get()}
-				<Glyph class="size-4">
-					<path d="m6 9 6 6 6-6" />
-				</Glyph>
+				<Glyph class="size-4">{icon_shapes(Icon::ChevronDown)}</Glyph>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
 				<DropdownMenuRadioGroup value=value on_value_change=on_value_change>
@@ -147,9 +146,7 @@ pub fn ChatComposer(
 								disabled=disabled
 								on_click=Callback::new(move |_| attach.run(()))
 							>
-								<Glyph class="size-4">
-									<path d="M5 12h14M12 5v14" />
-								</Glyph>
+								<Glyph class="size-4">{icon_shapes(Icon::Plus)}</Glyph>
 							</IconButton>
 						}
 					})} {tools.map(|t| t.run())} <span class=CHAT_COMPOSER_SPACER></span>
@@ -173,9 +170,7 @@ pub fn ChatComposer(
 										}
 									})
 								>
-									<Glyph class="size-4">
-										<rect width="12" height="12" x="6" y="6" rx="2" />
-									</Glyph>
+									<Glyph class="size-4">{icon_shapes(Icon::Stop)}</Glyph>
 								</IconButton>
 							}
 								.into_any()
@@ -187,9 +182,7 @@ pub fn ChatComposer(
 									disabled=Signal::derive(move || disabled.get() || empty.get())
 									on_click=Callback::new(move |_| send())
 								>
-									<Glyph class="size-4">
-										<path d="m5 12 7-7 7 7M12 19V5" />
-									</Glyph>
+									<Glyph class="size-4">{icon_shapes(Icon::ArrowUp)}</Glyph>
 								</IconButton>
 							}
 								.into_any()

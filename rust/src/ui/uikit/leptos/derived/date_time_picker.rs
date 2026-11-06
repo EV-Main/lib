@@ -1,22 +1,21 @@
+pub use ev_lib_classes::DateTimePickerLabels;
+use ev_lib_classes::Icon;
 use leptos::{prelude::*, web_sys::HtmlInputElement};
 
 pub use crate::ui::uikit::core::LocalDateTime;
-pub use ev_lib_classes::DateTimePickerLabels;
 use crate::{
 	cn,
 	ui::uikit::{
 		core::{self as uikit, CalendarDate},
 		leptos::{
 			ButtonVariant, DATE_TIME_PICKER_CLEAR, DATE_TIME_PICKER_CONTENT, DATE_TIME_PICKER_TIME, DATE_TIME_PICKER_TIME_INPUT, DATE_TIME_PICKER_TIME_SEPARATOR, DATE_TIME_PICKER_TRIGGER,
-			INPUT_BASE, POPOVER_CONTENT, Size, button::button_classes, calendar::Calendar, primitives::use_controllable,
+			INPUT_BASE, POPOVER_CONTENT, Size,
+			button::button_classes,
+			calendar::Calendar,
+			primitives::{icon_shapes, use_controllable},
 		},
 	},
 };
-
-// lucide `calendar`, inlined per the kit's no-icon-dep convention.
-const CALENDAR_ICON: [&str; 4] = ["M8 2v4", "M16 2v4", "M3 10h18", "M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"];
-// lucide `x`.
-const CLOSE_ICON: &str = "M18 6 6 18M6 6l12 12";
 
 /// A date + time field over the kit's own bricks: an outline trigger opening a
 /// popover with the [`Calendar`] and two numeric hours/minutes inputs — no
@@ -267,7 +266,7 @@ fn CalendarIcon() -> impl IntoView {
 			stroke-linejoin="round"
 			aria-hidden="true"
 		>
-			{CALENDAR_ICON.map(|d| view! { <path d=d></path> })}
+			{icon_shapes(Icon::Calendar)}
 		</svg>
 	}
 }
@@ -288,7 +287,7 @@ fn CloseIcon() -> impl IntoView {
 			stroke-linejoin="round"
 			aria-hidden="true"
 		>
-			<path d=CLOSE_ICON></path>
+			{icon_shapes(Icon::X)}
 		</svg>
 	}
 }

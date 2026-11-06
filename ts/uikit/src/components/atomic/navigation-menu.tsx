@@ -8,6 +8,7 @@ import { usePresence } from "../../primitives/presence";
 import { mergeRefs } from "../../primitives/merge-refs";
 import { Slot } from "../../primitives/slot";
 import { NAVIGATION_MENU, NAVIGATION_MENU_CONTENT, NAVIGATION_MENU_INDICATOR, NAVIGATION_MENU_INDICATOR_ARROW, NAVIGATION_MENU_ITEM, NAVIGATION_MENU_LINK, NAVIGATION_MENU_LIST, NAVIGATION_MENU_TRIGGER_CHEVRON, NAVIGATION_MENU_TRIGGER_STYLE, NAVIGATION_MENU_VIEWPORT, NAVIGATION_MENU_VIEWPORT_WRAPPER } from "../../generated/navigation-menu";
+import { iconShapes } from "../../icons/icon-shapes";
 
 /**
  * Fused canonical trigger class string, the mirror of Rust's
@@ -128,7 +129,7 @@ export function NavigationMenuTrigger({
         strokeLinejoin="round"
         aria-hidden="true"
       >
-        <path d="m6 9 6 6 6-6" />
+        {iconShapes("chevron-down")}
       </svg>
     </button>
   );

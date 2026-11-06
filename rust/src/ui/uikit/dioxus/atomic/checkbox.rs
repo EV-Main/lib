@@ -1,8 +1,12 @@
 use dioxus::prelude::*;
+use ev_lib_classes::Icon;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{CHECKBOX_BASE, CHECKBOX_INDICATOR, primitives::use_controllable},
+	ui::uikit::dioxus::{
+		CHECKBOX_BASE, CHECKBOX_INDICATOR,
+		primitives::{icon_shapes, use_controllable},
+	},
 };
 
 #[component]
@@ -41,7 +45,7 @@ pub fn Checkbox(
 						stroke_linejoin: "round",
 						class: "size-3.5",
 						"aria-hidden": "true",
-						path { d: "M20 6 9 17l-5-5" }
+						{icon_shapes(Icon::Check)}
 					}
 				}
 			}

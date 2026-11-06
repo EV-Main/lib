@@ -1,6 +1,7 @@
 use dioxus::prelude::*;
-
 pub use ev_lib_classes::AccountSettingsDialogLabels;
+use ev_lib_classes::Icon;
+
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
@@ -8,7 +9,7 @@ use crate::{
 		ACCOUNT_SETTINGS_DIALOG_HEADING, ACCOUNT_SETTINGS_DIALOG_LIST, ACCOUNT_SETTINGS_DIALOG_PANE, ACCOUNT_SETTINGS_DIALOG_PANEL, ACCOUNT_SETTINGS_DIALOG_SIDEBAR,
 		ACCOUNT_SETTINGS_DIALOG_TABS, ACCOUNT_SETTINGS_DIALOG_TITLE, Dialog, DialogContent, DialogDescription, DialogTitle, IconButton, Orientation, Tabs, TabsContent, TabsList,
 		TabsTrigger,
-		primitives::{use_controllable, use_stable_id},
+		primitives::{icon_shapes, use_controllable, use_stable_id},
 	},
 };
 
@@ -107,7 +108,7 @@ pub fn AccountSettingsDialog(
 						stroke_linecap: "round",
 						stroke_linejoin: "round",
 						"aria-hidden": "true",
-						path { d: "M18 6 6 18M6 6l12 12" }
+						{icon_shapes(Icon::X)}
 					}
 				}
 			}

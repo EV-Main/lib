@@ -24,6 +24,7 @@ import {
 } from "../../generated/sheet";
 import type { Side } from "../../generated/primitives";
 import * as copy from "../../generated/copy";
+import { iconShapes } from "../../icons/icon-shapes";
 
 interface SheetContextValue {
   open: boolean;
@@ -119,7 +120,7 @@ const XIcon = (props: React.SVGProps<SVGSVGElement>) => (
     strokeLinejoin="round"
     {...props}
   >
-    <path d="M18 6 6 18M6 6l12 12" />
+    {iconShapes("x")}
   </svg>
 );
 

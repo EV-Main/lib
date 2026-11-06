@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use ev_lib_classes::ACCORDION_CHEVRON;
+use ev_lib_classes::{ACCORDION_CHEVRON, Icon};
 
 use crate::{
 	cn,
@@ -7,7 +7,7 @@ use crate::{
 		core::toggled,
 		dioxus::{
 			ACCORDION_CONTENT, ACCORDION_CONTENT_INNER, ACCORDION_HEADER, ACCORDION_ITEM, ACCORDION_TRIGGER, AccordionType,
-			primitives::{Controllable, use_controllable},
+			primitives::{Controllable, icon_shapes, use_controllable},
 		},
 	},
 };
@@ -66,7 +66,7 @@ pub fn AccordionTrigger(#[props(default)] class: String, children: Element) -> E
 					stroke_linecap: "round",
 					stroke_linejoin: "round",
 					class: ACCORDION_CHEVRON,
-					path { d: "m6 9 6 6 6-6" }
+					{icon_shapes(Icon::ChevronDown)}
 				}
 			}
 		}

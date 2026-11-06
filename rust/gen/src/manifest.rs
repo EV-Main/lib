@@ -10,6 +10,7 @@ use tailwind_fuse::AsTailwindClass;
 /// Per uikit module, merged after its consts. A module named here need not have a classes file.
 pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 	vec![
+		("icons", vec![union::<Icon>("ICON_NAMES", "IconName"), icons()]),
 		("footer", vec![Ts::types::<(FooterLinkGroup, FooterLink, FooterOffice)>()]),
 		("popover-form", vec![labels::<PopoverFormLabels>("POPOVER_FORM_LABELS")]),
 		("key-value", vec![labels::<KeyValueLabels>("KEY_VALUE_LABELS")]),
@@ -239,6 +240,29 @@ fn labels<T: Default + serde::Serialize>(name: &'static str) -> Ts {
 	Ts::Value {
 		name,
 		value: serde_json::to_value(T::default()).expect("labels are plain strings"),
+	}
+}
+
+/// Every icon's children as `[tag, attributes]` pairs, which the TS renders
+/// inside each site's own `<svg>` frame.
+fn icons() -> Ts {
+	let shape = |s: &Shape| match *s {
+		Shape::Path { d } => serde_json::json!(["path", { "d": d }]),
+		Shape::Circle { cx, cy, r } => serde_json::json!(["circle", { "cx": cx, "cy": cy, "r": r }]),
+		Shape::Rect { x, y, width, height, rx, ry } => {
+			let mut attrs = serde_json::json!({ "x": x, "y": y, "width": width, "height": height, "rx": rx });
+			if let Some(ry) = ry {
+				attrs["ry"] = ry.into();
+			}
+			serde_json::json!(["rect", attrs])
+		}
+	};
+	Ts::Value {
+		name: "ICONS",
+		value: Icon::iter()
+			.map(|i| (i.as_ref().to_owned(), i.shapes().iter().map(shape).collect()))
+			.collect::<serde_json::Map<_, _>>()
+			.into(),
 	}
 }
 

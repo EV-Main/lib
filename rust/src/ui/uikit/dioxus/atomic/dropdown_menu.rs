@@ -1,13 +1,13 @@
 use dioxus::prelude::*;
 pub use ev_lib_classes::MenuItemVariant;
-use ev_lib_classes::{DROPDOWN_MENU_SUB_CHEVRON, MENU_RADIO_DOT};
+use ev_lib_classes::{DROPDOWN_MENU_SUB_CHEVRON, Icon, MENU_RADIO_DOT};
 
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		DROPDOWN_MENU_CHECK_ITEM, DROPDOWN_MENU_CONTENT, DROPDOWN_MENU_ITEM, DROPDOWN_MENU_ITEM_INDICATOR, DROPDOWN_MENU_LABEL, DROPDOWN_MENU_SEPARATOR, DROPDOWN_MENU_SHORTCUT,
 		DROPDOWN_MENU_SUB_CONTENT, DROPDOWN_MENU_SUB_TRIGGER,
-		primitives::{Controllable, DismissableLayer, Side, use_controllable, use_dismissable_layer},
+		primitives::{Controllable, DismissableLayer, Side, icon_shapes, use_controllable, use_dismissable_layer},
 	},
 };
 
@@ -148,7 +148,7 @@ pub fn DropdownMenuCheckboxItem(
 						stroke_linecap: "round",
 						stroke_linejoin: "round",
 						"aria-hidden": "true",
-						path { d: "M20 6 9 17l-5-5" }
+						{icon_shapes(Icon::Check)}
 					}
 				}
 			}
@@ -195,7 +195,7 @@ pub fn DropdownMenuRadioItem(value: String, #[props(default)] disabled: bool, #[
 			span { class: DROPDOWN_MENU_ITEM_INDICATOR,
 				if checked {
 					svg { class: MENU_RADIO_DOT, view_box: "0 0 24 24", "aria-hidden": "true",
-						circle { cx: "12", cy: "12", r: "10" }
+						{icon_shapes(Icon::Dot)}
 					}
 				}
 			}
@@ -262,7 +262,7 @@ pub fn DropdownMenuSubTrigger(#[props(default)] inset: bool, #[props(default)] c
 				stroke_linecap: "round",
 				stroke_linejoin: "round",
 				"aria-hidden": "true",
-				path { d: "m9 18 6-6-6-6" }
+				{icon_shapes(Icon::ChevronRight)}
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-use ev_lib_classes::copy;
+use ev_lib_classes::{Icon, copy};
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -6,7 +6,7 @@ use crate::{
 	ui::uikit::leptos::{
 		WORKSPACE_TAB_BASE, WORKSPACE_TAB_CLOSE, WORKSPACE_TAB_LABEL, WORKSPACE_TAB_SELECTED, WORKSPACE_TAB_SPACER, WORKSPACE_TAB_TRIGGER, WORKSPACE_TABS_BASE,
 		icon_button::Glyph,
-		primitives::{Controllable, RovingFocus, RovingOrientation, use_controllable, use_roving_focus, use_roving_item},
+		primitives::{Controllable, RovingFocus, RovingOrientation, icon_shapes, use_controllable, use_roving_focus, use_roving_item},
 	},
 };
 
@@ -61,13 +61,7 @@ pub fn WorkspaceTab(
 	let cls = Signal::derive(move || cn!(WORKSPACE_TAB_BASE, if selected.get() { WORKSPACE_TAB_SELECTED } else { "" }, &class));
 	let glyph = match icon {
 		Some(icon) => icon.run(),
-		None => view! {
-			<Glyph class="size-4">
-				<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" />
-				<path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65M22 12.65l-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65" />
-			</Glyph>
-		}
-		.into_any(),
+		None => view! { <Glyph class="size-4">{icon_shapes(Icon::Layers)}</Glyph> }.into_any(),
 	};
 	let close = match on_close {
 		Some(close) => view! {
@@ -79,9 +73,7 @@ pub fn WorkspaceTab(
 				class=WORKSPACE_TAB_CLOSE
 				on:click=move |_| close.run(())
 			>
-				<Glyph class="size-4">
-					<path d="M18 6 6 18M6 6l12 12" />
-				</Glyph>
+				<Glyph class="size-4">{icon_shapes(Icon::X)}</Glyph>
 			</button>
 		}
 		.into_any(),

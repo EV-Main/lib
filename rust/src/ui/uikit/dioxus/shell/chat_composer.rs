@@ -2,7 +2,7 @@ use std::rc::Rc;
 
 use dioxus::prelude::*;
 pub use ev_lib_classes::ChatComposerLabels;
-use ev_lib_classes::copy;
+use ev_lib_classes::{Icon, copy};
 
 pub use crate::ui::uikit::core::ModelOption;
 use crate::{
@@ -12,7 +12,8 @@ use crate::{
 		dioxus::{
 			CHAT_COMPOSER_ATTACHMENTS, CHAT_COMPOSER_BASE, CHAT_COMPOSER_FIELD, CHAT_COMPOSER_HINT, CHAT_COMPOSER_IDLE, CHAT_COMPOSER_SPACER, CHAT_COMPOSER_STREAMING, CHAT_COMPOSER_TOOLBAR,
 			DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger, IconButton, IconButtonVariant, MODEL_CHIP_BASE, Size, Textarea,
-			chat_message::Glyph, primitives::use_controllable,
+			chat_message::Glyph,
+			primitives::{icon_shapes, use_controllable},
 		},
 	},
 };
@@ -35,7 +36,7 @@ pub fn ModelChip(
 		DropdownMenu {
 			DropdownMenuTrigger { aria_label: format!("{aria_label}: {shown}"), class: cn!(MODEL_CHIP_BASE, class),
 				{shown.clone()}
-				Glyph { class: "size-4", path { d: "m6 9 6 6 6-6" } }
+				Glyph { class: "size-4", {icon_shapes(Icon::ChevronDown)} }
 			}
 			DropdownMenuContent {
 				DropdownMenuRadioGroup { value: Some(value), on_value_change: move |id| on_value_change.call(id),
@@ -119,7 +120,7 @@ pub fn ChatComposer(
 			div { class: CHAT_COMPOSER_TOOLBAR,
 				if let Some(attach) = on_attach {
 					IconButton { aria_label: labels.attach, size: Size::Sm, disabled, onclick: move |_| attach.call(()),
-						Glyph { class: "size-4", path { d: "M5 12h14M12 5v14" } }
+						Glyph { class: "size-4", {icon_shapes(Icon::Plus)} }
 					}
 				}
 				{tools}
@@ -143,7 +144,7 @@ pub fn ChatComposer(
 								});
 							}
 						},
-						Glyph { class: "size-4", rect { width: "12", height: "12", x: "6", y: "6", rx: "2" } }
+						Glyph { class: "size-4", {icon_shapes(Icon::Stop)} }
 					}
 				} else {
 					IconButton {
@@ -151,7 +152,7 @@ pub fn ChatComposer(
 						aria_label: labels.send,
 						disabled: disabled || empty,
 						onclick: move |_| send(),
-						Glyph { class: "size-4", path { d: "m5 12 7-7 7 7M12 19V5" } }
+						Glyph { class: "size-4", {icon_shapes(Icon::ArrowUp)} }
 					}
 				}
 			}

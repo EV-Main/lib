@@ -15,6 +15,7 @@ import { useFieldControlId } from "./field-context";
 import { SelectChevron } from "../../icons/select-chevron";
 import { landOnChosen, tabFromTrigger, useListboxKeys } from "./select-listbox";
 import type { Side } from "../../generated/primitives";
+import { iconShapes } from "../../icons/icon-shapes";
 
 export type { SelectTriggerSize };
 
@@ -380,7 +381,7 @@ export function SelectItem({ className, value, textValue, children, ...props }: 
             className="size-4"
             aria-hidden="true"
           >
-            <path d="M20 6 9 17l-5-5" />
+            {iconShapes("check")}
           </svg>
         </span>
       ) : null}

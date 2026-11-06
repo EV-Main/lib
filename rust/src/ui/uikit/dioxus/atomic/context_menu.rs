@@ -1,13 +1,13 @@
 use dioxus::prelude::*;
 pub use ev_lib_classes::MenuItemVariant;
-use ev_lib_classes::{CONTEXT_MENU_ITEM_INDICATOR, MENU_RADIO_DOT};
+use ev_lib_classes::{CONTEXT_MENU_ITEM_INDICATOR, Icon, MENU_RADIO_DOT};
 
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		CONTEXT_MENU_CHECK_ITEM, CONTEXT_MENU_CONTENT, CONTEXT_MENU_ITEM, CONTEXT_MENU_LABEL, CONTEXT_MENU_SEPARATOR, CONTEXT_MENU_SHORTCUT, CONTEXT_MENU_SUB_CONTENT,
 		CONTEXT_MENU_SUB_TRIGGER,
-		primitives::{Controllable, use_controllable},
+		primitives::{Controllable, icon_shapes, use_controllable},
 	},
 };
 
@@ -147,7 +147,7 @@ pub fn ContextMenuCheckboxItem(
 						stroke_linecap: "round",
 						stroke_linejoin: "round",
 						"aria-hidden": "true",
-						path { d: "M20 6 9 17l-5-5" }
+						{icon_shapes(Icon::Check)}
 					}
 				}
 			}
@@ -194,7 +194,7 @@ pub fn ContextMenuRadioItem(value: String, #[props(default)] disabled: bool, #[p
 			span { class: CONTEXT_MENU_ITEM_INDICATOR,
 				if checked {
 					svg { class: MENU_RADIO_DOT, view_box: "0 0 24 24", "aria-hidden": "true",
-						circle { cx: "12", cy: "12", r: "10" }
+						{icon_shapes(Icon::Dot)}
 					}
 				}
 			}
@@ -260,7 +260,7 @@ pub fn ContextMenuSubTrigger(#[props(default)] inset: bool, #[props(default)] cl
 				stroke_linecap: "round",
 				stroke_linejoin: "round",
 				"aria-hidden": "true",
-				path { d: "m9 18 6-6-6-6" }
+				{icon_shapes(Icon::ChevronRight)}
 			}
 		}
 	}

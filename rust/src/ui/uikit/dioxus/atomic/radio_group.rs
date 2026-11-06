@@ -1,11 +1,11 @@
 use dioxus::prelude::*;
-use ev_lib_classes::{RADIO_GROUP_DOT, RADIO_GROUP_INDICATOR};
+use ev_lib_classes::{Icon, RADIO_GROUP_DOT, RADIO_GROUP_INDICATOR};
 
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
 		RADIO_GROUP_ITEM, RADIO_GROUP_ROOT,
-		primitives::{Controllable, RovingFocus, RovingOrientation, use_controllable, use_roving_focus, use_roving_item},
+		primitives::{Controllable, RovingFocus, RovingOrientation, icon_shapes, use_controllable, use_roving_focus, use_roving_item},
 	},
 };
 
@@ -69,7 +69,7 @@ pub fn RadioGroupItem(value: String, #[props(default)] class: String, #[props(de
 					svg {
 						class: RADIO_GROUP_DOT,
 						view_box: "0 0 24 24",
-						circle { cx: "12", cy: "12", r: "10" }
+						{icon_shapes(Icon::Dot)}
 					}
 				}
 			}

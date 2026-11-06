@@ -1,9 +1,9 @@
-use ev_lib_classes::copy;
+use ev_lib_classes::{Icon, copy};
 use leptos::prelude::*;
 
 use crate::{
 	cn,
-	ui::uikit::leptos::{BREADCRUMB_ELLIPSIS, BREADCRUMB_ITEM, BREADCRUMB_LINK, BREADCRUMB_LIST, BREADCRUMB_PAGE, BREADCRUMB_SEPARATOR},
+	ui::uikit::leptos::{BREADCRUMB_ELLIPSIS, BREADCRUMB_ITEM, BREADCRUMB_LINK, BREADCRUMB_LIST, BREADCRUMB_PAGE, BREADCRUMB_SEPARATOR, primitives::icon_shapes},
 };
 
 #[component]
@@ -88,7 +88,7 @@ pub fn BreadcrumbSeparator(#[prop(optional, into)] class: String, #[prop(optiona
 				None => {
 					view! {
 						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-							<path d="m9 18 6-6-6-6" />
+							{icon_shapes(Icon::ChevronRight)}
 						</svg>
 					}
 						.into_any()
@@ -104,9 +104,7 @@ pub fn BreadcrumbEllipsis(#[prop(optional, into)] class: String) -> impl IntoVie
 	view! {
 		<span class=cls data-slot="breadcrumb-ellipsis" role="presentation" aria-hidden="true">
 			<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-				<circle cx="12" cy="12" r="1" />
-				<circle cx="19" cy="12" r="1" />
-				<circle cx="5" cy="12" r="1" />
+				{icon_shapes(Icon::Ellipsis)}
 			</svg>
 			<span class="sr-only">{copy::BREADCRUMB_MORE}</span>
 		</span>

@@ -1,6 +1,6 @@
 use std::sync::atomic::{AtomicUsize, Ordering};
 
-use ev_lib_classes::copy;
+use ev_lib_classes::{Icon, copy};
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -11,7 +11,7 @@ use crate::{
 			Button, ButtonVariant, CAROUSEL_CONTENT_TRACK, CAROUSEL_CONTENT_TRACK_HORIZONTAL, CAROUSEL_CONTENT_TRACK_VERTICAL, CAROUSEL_CONTENT_VIEWPORT, CAROUSEL_EDGE_FADE_NEXT,
 			CAROUSEL_EDGE_FADE_PREV, CAROUSEL_ITEM, CAROUSEL_ITEM_HORIZONTAL, CAROUSEL_ITEM_VERTICAL, CAROUSEL_NAV, CAROUSEL_NEXT_HORIZONTAL, CAROUSEL_NEXT_VERTICAL,
 			CAROUSEL_PREVIOUS_HORIZONTAL, CAROUSEL_PREVIOUS_VERTICAL, Orientation, Size,
-			primitives::{Controllable, use_controllable},
+			primitives::{Controllable, icon_shapes, use_controllable},
 		},
 	},
 };
@@ -124,7 +124,7 @@ pub fn CarouselPrevious(#[prop(optional, into)] class: String) -> impl IntoView 
 				stroke-linejoin="round"
 				aria-hidden="true"
 			>
-				<path d="m15 18-6-6 6-6"></path>
+				{icon_shapes(Icon::ChevronLeft)}
 			</svg>
 			<span class="sr-only">{copy::CAROUSEL_PREVIOUS}</span>
 		</Button>
@@ -158,7 +158,7 @@ pub fn CarouselNext(#[prop(optional, into)] class: String) -> impl IntoView {
 				stroke-linejoin="round"
 				aria-hidden="true"
 			>
-				<path d="m9 18 6-6-6-6"></path>
+				{icon_shapes(Icon::ChevronRight)}
 			</svg>
 			<span class="sr-only">{copy::CAROUSEL_NEXT}</span>
 		</Button>

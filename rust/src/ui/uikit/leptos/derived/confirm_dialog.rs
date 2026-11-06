@@ -1,6 +1,7 @@
+pub use ev_lib_classes::ConfirmDialogLabels;
+use ev_lib_classes::Icon;
 use leptos::prelude::*;
 
-pub use ev_lib_classes::ConfirmDialogLabels;
 use crate::{
 	cn,
 	ui::uikit::{
@@ -10,7 +11,7 @@ use crate::{
 			CONFIRM_DIALOG_DESCRIPTION, CONFIRM_DIALOG_ERROR, CONFIRM_DIALOG_FOOTER, CONFIRM_DIALOG_HEADER, CONFIRM_DIALOG_ICON, CONFIRM_DIALOG_PENDING, CONFIRM_DIALOG_SPINNER,
 			CONFIRM_DIALOG_TEXT, CONFIRM_DIALOG_TITLE, ConfirmDialogTone, Size, Spinner, button_classes,
 			icon_button::Glyph,
-			primitives::{use_controllable, use_stable_id},
+			primitives::{icon_shapes, use_controllable, use_stable_id},
 		},
 	},
 };
@@ -128,13 +129,7 @@ pub fn ConfirmDialog(
 		let (icon_cls, cancel_cls, confirm_cls) = (icon_cls.clone(), cancel_cls.clone(), confirm_cls.clone());
 		let glyph = match icon {
 			Some(icon) => icon.run(),
-			None => view! {
-				<Glyph class="size-4">
-					<circle cx="12" cy="12" r="10" />
-					<path d="M12 8v4M12 16h.01" />
-				</Glyph>
-			}
-			.into_any(),
+			None => view! { <Glyph class="size-4">{icon_shapes(Icon::Alert)}</Glyph> }.into_any(),
 		};
 		view! {
 			<AlertDialogHeader class=CONFIRM_DIALOG_HEADER>

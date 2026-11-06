@@ -17,14 +17,7 @@ import {
   DATE_TIME_PICKER_TRIGGER,
   DATE_TIME_PICKER_LABELS,
 } from "../../generated/date-time-picker";
-
-// lucide `calendar`, inlined per the kit's no-icon-dep convention.
-const CALENDAR_ICON = [
-  "M8 2v4",
-  "M16 2v4",
-  "M3 10h18",
-  "M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z",
-] as const;
+import { iconShapes } from "../../icons/icon-shapes";
 
 function CalendarIcon() {
   return (
@@ -41,14 +34,11 @@ function CalendarIcon() {
       strokeLinejoin="round"
       aria-hidden
     >
-      {CALENDAR_ICON.map(d => (
-        <path key={d} d={d} />
-      ))}
+      {iconShapes("calendar")}
     </svg>
   );
 }
 
-// lucide `x`, inlined like every other icon in the kit.
 function XIcon() {
   return (
     <svg
@@ -64,7 +54,7 @@ function XIcon() {
       strokeLinejoin="round"
       aria-hidden
     >
-      <path d="M18 6 6 18M6 6l12 12" />
+      {iconShapes("x")}
     </svg>
   );
 }

@@ -11,6 +11,7 @@ import {
   ACCORDION_TRIGGER,
 } from "../../generated/accordion";
 import type { AccordionType } from "../../generated/accordion";
+import { iconShapes } from "../../icons/icon-shapes";
 
 
 interface AccordionContextValue {
@@ -137,7 +138,7 @@ export function AccordionTrigger({
           strokeLinejoin="round"
           className="text-ink-soft pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200"
         >
-          <path d="m6 9 6 6 6-6" />
+          {iconShapes("chevron-down")}
         </svg>
       </button>
     </h3>

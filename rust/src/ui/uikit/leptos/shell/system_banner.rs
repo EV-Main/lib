@@ -1,11 +1,12 @@
+use ev_lib_classes::Icon;
+pub use ev_lib_classes::SystemBannerLabels;
 use leptos::prelude::*;
 
-pub use ev_lib_classes::SystemBannerLabels;
 use crate::{
 	cn,
 	ui::uikit::leptos::{
 		SYSTEM_BANNER_ACTION, SYSTEM_BANNER_BASE, SYSTEM_BANNER_BODY_AFTER_TITLE, SYSTEM_BANNER_DISMISS, SYSTEM_BANNER_GLYPH, SYSTEM_BANNER_ICON, SYSTEM_BANNER_MESSAGE, SYSTEM_BANNER_TITLE,
-		SystemBannerTone, system_banner_tone_class,
+		SystemBannerTone, primitives::icon_shapes, system_banner_tone_class,
 	},
 };
 
@@ -80,7 +81,7 @@ pub fn SystemBanner(
 }
 
 #[component]
-fn Glyph(paths: &'static [&'static str], circle: bool) -> impl IntoView {
+fn Glyph(icon: Icon) -> impl IntoView {
 	view! {
 		<svg
 			class=SYSTEM_BANNER_GLYPH
@@ -93,32 +94,22 @@ fn Glyph(paths: &'static [&'static str], circle: bool) -> impl IntoView {
 			stroke-linejoin="round"
 			aria-hidden="true"
 		>
-			{circle.then(|| view! { <circle cx="12" cy="12" r="10" /> })}
-			{paths.iter().map(|d| view! { <path d=*d /> }).collect_view()}
+			{icon_shapes(icon)}
 		</svg>
 	}
 }
 
 #[component]
 fn TriangleAlertIcon() -> impl IntoView {
-	view! {
-		<Glyph
-			paths=&[
-				"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3",
-				"M12 9v4",
-				"M12 17h.01",
-			]
-			circle=false
-		/>
-	}
+	view! { <Glyph icon=Icon::TriangleAlert /> }
 }
 
 #[component]
 fn InfoIcon() -> impl IntoView {
-	view! { <Glyph paths=&["M12 16v-4", "M12 8h.01"] circle=true /> }
+	view! { <Glyph icon=Icon::Info /> }
 }
 
 #[component]
 fn CloseIcon() -> impl IntoView {
-	view! { <Glyph paths=&["M18 6 6 18", "m6 6 12 12"] circle=false /> }
+	view! { <Glyph icon=Icon::Close /> }
 }

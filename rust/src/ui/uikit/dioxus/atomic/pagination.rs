@@ -1,9 +1,9 @@
 use dioxus::prelude::*;
-use ev_lib_classes::{PAGINATION_CONTENT, PAGINATION_ELLIPSIS, PAGINATION_LINK_LABEL, PAGINATION_NEXT_LINK, PAGINATION_PREVIOUS_LINK, PAGINATION_ROOT, copy};
+use ev_lib_classes::{Icon, PAGINATION_CONTENT, PAGINATION_ELLIPSIS, PAGINATION_LINK_LABEL, PAGINATION_NEXT_LINK, PAGINATION_PREVIOUS_LINK, PAGINATION_ROOT, copy};
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{ButtonVariant, Size, button::button_classes},
+	ui::uikit::dioxus::{ButtonVariant, Size, button::button_classes, primitives::icon_shapes},
 };
 
 #[component]
@@ -80,7 +80,7 @@ pub fn PaginationPrevious(#[props(default)] class: String, href: Option<String>,
 				fill: "none",
 				stroke: "currentColor",
 				stroke_width: "2",
-				path { d: "m15 18-6-6 6-6" }
+				{icon_shapes(Icon::ChevronLeft)}
 			}
 			span { class: PAGINATION_LINK_LABEL, {copy::PAGINATION_PREVIOUS} }
 		}
@@ -104,7 +104,7 @@ pub fn PaginationNext(#[props(default)] class: String, href: Option<String>, onc
 				fill: "none",
 				stroke: "currentColor",
 				stroke_width: "2",
-				path { d: "m9 18 6-6-6-6" }
+				{icon_shapes(Icon::ChevronRight)}
 			}
 		}
 	}
@@ -124,9 +124,7 @@ pub fn PaginationEllipsis(#[props(default)] class: String) -> Element {
 				fill: "none",
 				stroke: "currentColor",
 				stroke_width: "2",
-				circle { cx: "12", cy: "12", r: "1" }
-				circle { cx: "19", cy: "12", r: "1" }
-				circle { cx: "5", cy: "12", r: "1" }
+				{icon_shapes(Icon::Ellipsis)}
 			}
 			span { class: "sr-only", {copy::PAGINATION_MORE} }
 		}

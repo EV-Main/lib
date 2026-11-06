@@ -19,11 +19,11 @@ import {
   CALENDAR_WEEKDAY_ROW,
 } from "../../generated/calendar";
 import * as copy from "../../generated/copy";
+import type { IconName } from "../../generated/icons";
+import { iconShapes } from "../../icons/icon-shapes";
 
-const CHEVRON_LEFT = "m15 18-6-6 6-6";
-const CHEVRON_RIGHT = "m9 18 6-6-6-6";
 
-function Chevron({ d }: { d: string }) {
+function Chevron({ icon }: { icon: IconName }) {
   return (
     <svg
       className="size-4"
@@ -38,7 +38,7 @@ function Chevron({ d }: { d: string }) {
       strokeLinejoin="round"
       aria-hidden
     >
-      <path d={d} />
+      {iconShapes(icon)}
     </svg>
   );
 }
@@ -207,7 +207,7 @@ export function Calendar({
           disabled={disabled}
           onClick={() => go(-1)}
         >
-          <Chevron d={CHEVRON_LEFT} />
+          <Chevron icon="chevron-left" />
         </button>
         <div data-slot="calendar-caption" className={CALENDAR_CAPTION}>
           {caption}
@@ -219,7 +219,7 @@ export function Calendar({
           disabled={disabled}
           onClick={() => go(1)}
         >
-          <Chevron d={CHEVRON_RIGHT} />
+          <Chevron icon="chevron-right" />
         </button>
       </div>
       <table className={CALENDAR_GRID} role="grid">

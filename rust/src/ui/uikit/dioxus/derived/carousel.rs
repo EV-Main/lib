@@ -1,7 +1,7 @@
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 use dioxus::prelude::*;
-use ev_lib_classes::copy;
+use ev_lib_classes::{Icon, copy};
 
 use crate::{
 	cn,
@@ -12,7 +12,7 @@ use crate::{
 			CAROUSEL_EDGE_FADE_PREV, CAROUSEL_ITEM, CAROUSEL_ITEM_HORIZONTAL, CAROUSEL_ITEM_VERTICAL, CAROUSEL_NAV, CAROUSEL_NEXT_HORIZONTAL, CAROUSEL_NEXT_VERTICAL,
 			CAROUSEL_PREVIOUS_HORIZONTAL, CAROUSEL_PREVIOUS_VERTICAL, Orientation, Size,
 			button::Button,
-			primitives::{Controllable, use_controllable},
+			primitives::{Controllable, icon_shapes, use_controllable},
 		},
 	},
 };
@@ -122,7 +122,7 @@ pub fn CarouselPrevious(#[props(default)] class: String) -> Element {
 				stroke_linecap: "round",
 				stroke_linejoin: "round",
 				"aria-hidden": "true",
-				path { d: "m15 18-6-6 6-6" }
+				{icon_shapes(Icon::ChevronLeft)}
 			}
 			span { class: "sr-only", {copy::CAROUSEL_PREVIOUS} }
 		}
@@ -153,7 +153,7 @@ pub fn CarouselNext(#[props(default)] class: String) -> Element {
 				stroke_linecap: "round",
 				stroke_linejoin: "round",
 				"aria-hidden": "true",
-				path { d: "m9 18 6-6-6-6" }
+				{icon_shapes(Icon::ChevronRight)}
 			}
 			span { class: "sr-only", {copy::CAROUSEL_NEXT} }
 		}

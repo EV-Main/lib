@@ -10,6 +10,7 @@ use std::{
 	},
 };
 
+use ev_lib_classes::{Icon, Shape};
 pub use ev_lib_classes::{RovingOrientation, Side};
 use leptos::{prelude::*, reactive::owner::Owner};
 
@@ -279,3 +280,16 @@ where
 /// owner so every overlay shares it without a provider of the caller's.
 #[derive(Clone, Copy)]
 struct Layers(StoredValue<(LayerStack, BTreeMap<usize, DismissFn>)>);
+
+/// An icon's children, for the `<svg>` frame a site draws around them.
+pub(crate) fn icon_shapes(icon: Icon) -> AnyView {
+	icon.shapes()
+		.iter()
+		.map(|shape| match *shape {
+			Shape::Path { d } => view! { <path d=d /> }.into_any(),
+			Shape::Circle { cx, cy, r } => view! { <circle cx=cx cy=cy r=r /> }.into_any(),
+			Shape::Rect { x, y, width, height, rx, ry } => view! { <rect x=x y=y width=width height=height rx=rx ry=ry /> }.into_any(),
+		})
+		.collect_view()
+		.into_any()
+}

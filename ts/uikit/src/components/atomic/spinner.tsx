@@ -2,6 +2,7 @@ import * as React from "react";
 import { cn } from "../../lib/cn";
 import * as copy from "../../generated/copy";
 import { SPINNER } from "../../generated/spinner";
+import { iconShapes } from "../../icons/icon-shapes";
 
 export function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
   return (
@@ -15,7 +16,7 @@ export function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
       strokeWidth={2}
       {...props}
     >
-      <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+      {iconShapes("spinner")}
     </svg>
   );
 }

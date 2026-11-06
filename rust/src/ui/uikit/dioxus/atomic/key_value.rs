@@ -2,11 +2,12 @@ use dioxus::{
 	dioxus_core::{DynamicNode, TemplateNode},
 	prelude::*,
 };
+use ev_lib_classes::Icon;
 pub use ev_lib_classes::KeyValueLabels;
 
 use crate::{
 	cn,
-	ui::uikit::dioxus::{KEY_VALUE_BASE, KEY_VALUE_COPY, KEY_VALUE_LABEL, KEY_VALUE_ROW, KEY_VALUE_STATUS, KEY_VALUE_VALUE},
+	ui::uikit::dioxus::{KEY_VALUE_BASE, KEY_VALUE_COPY, KEY_VALUE_LABEL, KEY_VALUE_ROW, KEY_VALUE_STATUS, KEY_VALUE_VALUE, primitives::icon_shapes},
 };
 
 /// A small label over its value, with an optional copy button. Mirrors the TS
@@ -147,8 +148,7 @@ fn Glyph(children: Element) -> Element {
 fn CopyIcon() -> Element {
 	rsx! {
 		Glyph {
-			rect { width: "14", height: "14", x: "8", y: "8", rx: "2" }
-			path { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" }
+			{icon_shapes(Icon::Copy)}
 		}
 	}
 }
@@ -157,7 +157,7 @@ fn CopyIcon() -> Element {
 fn CheckIcon() -> Element {
 	rsx! {
 		Glyph {
-			path { d: "M20 6 9 17l-5-5" }
+			{icon_shapes(Icon::Check)}
 		}
 	}
 }

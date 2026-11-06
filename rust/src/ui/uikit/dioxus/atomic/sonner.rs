@@ -35,13 +35,16 @@
 //! "Limitations".
 
 use dioxus::prelude::*;
-use ev_lib_classes::{TOAST_DURATION_MS, copy};
+use ev_lib_classes::{Icon, TOAST_DURATION_MS, copy};
 
 use crate::{
 	cn,
 	ui::uikit::{
 		core::{ToastQueue, ToastState, ToastView, toaster_style, y_position},
-		dioxus::{TOAST_BASE, TOAST_CLOSE, TOAST_CONTENT, TOAST_TITLE, TOASTER_BASE, ToastPosition, ToastVariant, primitives::is_transform_transition},
+		dioxus::{
+			TOAST_BASE, TOAST_CLOSE, TOAST_CONTENT, TOAST_TITLE, TOASTER_BASE, ToastPosition, ToastVariant,
+			primitives::{icon_shapes, is_transform_transition},
+		},
 	},
 };
 
@@ -213,7 +216,7 @@ fn ToastItem(toast: ToastView) -> Element {
 					"stroke-linecap": "round",
 					"stroke-linejoin": "round",
 					"aria-hidden": "true",
-					path { d: "M18 6 6 18M6 6l12 12" }
+					{icon_shapes(Icon::X)}
 				}
 			}
 		}

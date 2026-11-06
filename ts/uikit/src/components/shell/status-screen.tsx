@@ -6,6 +6,7 @@ import { accentTextClasses, type Accent } from "../../generated/accent";
 import { buttonVariants, type ButtonVariant } from "../atomic/button";
 import { Logo } from "./logo";
 import { STATUS_SCREEN_ACTIONS, STATUS_SCREEN_ACTION_ICON, STATUS_SCREEN_BODY, STATUS_SCREEN_CODE, STATUS_SCREEN_CTA, STATUS_SCREEN_EYEBROW, STATUS_SCREEN_GLOW, STATUS_SCREEN_LOGO, STATUS_SCREEN_ROOT, STATUS_SCREEN_STACK, STATUS_SCREEN_TITLE, STATUS_SCREEN_TITLE_ACCENT } from "../../generated/status-screen";
+import { iconShapes } from "../../icons/icon-shapes";
 
 /**
  * The shared 404 / 403 / 500 status surface.
@@ -34,7 +35,6 @@ export function statusCtaClass(accent: Accent, variant: ButtonVariant) {
   );
 }
 
-// lucide `arrow-left`, inlined so the kit keeps its zero-icon-dep footprint.
 function ArrowLeftIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -47,8 +47,7 @@ function ArrowLeftIcon({ className }: { className?: string }) {
       strokeLinejoin="round"
       aria-hidden
     >
-      <path d="m12 19-7-7 7-7" />
-      <path d="M19 12H5" />
+      {iconShapes("arrow-left")}
     </svg>
   );
 }
