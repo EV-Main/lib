@@ -104,7 +104,7 @@ pub enum ChatToolState {
 }
 
 /// Who spoke a `ChatMessage`.
-#[derive(Clone, Copy, Debug, Eq, PartialEq, strum::AsRefStr, strum::IntoStaticStr, strum::EnumIter)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, strum::AsRefStr, strum::EnumIter, strum::IntoStaticStr)]
 #[strum(serialize_all = "kebab-case")]
 pub enum ChatMessageRole {
 	Assistant,
@@ -112,7 +112,7 @@ pub enum ChatMessageRole {
 }
 
 /// What a `ChatAttachment` holds; it picks the glyph.
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::IntoStaticStr, strum::EnumIter)]
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::EnumIter, strum::IntoStaticStr)]
 #[strum(serialize_all = "kebab-case")]
 pub enum ChatAttachmentType {
 	#[default]
@@ -121,7 +121,7 @@ pub enum ChatAttachmentType {
 }
 
 /// Whether a `ChatAttachment` is still uploading.
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::IntoStaticStr, strum::EnumIter)]
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::EnumIter, strum::IntoStaticStr)]
 #[strum(serialize_all = "kebab-case")]
 pub enum ChatAttachmentState {
 	#[default]

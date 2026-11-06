@@ -53,6 +53,9 @@ pub const NATIVE_SELECT_BASE: &str = "border-input text-ink h-7 w-full min-w-0 a
 	 focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error has-[option[value='']:checked]:text-ink-soft \
 	 [&_option]:bg-popover [&_option]:text-ink [&_optgroup]:bg-popover [&_optgroup]:text-ink-soft [color-scheme:var(--scheme,normal)]";
 
+/// How long (ms) typed characters keep extending one typeahead query.
+pub const SELECT_TYPEAHEAD_MS: u32 = 500;
+
 /// The `SelectTrigger`'s height, and for `Lg` its inset and type, on the same
 /// three steps as [`input_size_class`](crate::input_size_class), so a trigger
 /// lines up with the input beside it in a form row.
@@ -74,6 +77,3 @@ pub fn native_select_size_class(size: Size) -> &'static str {
 		Size::Lg | Size::Touch | Size::Xl => "h-11 pr-11 pl-3 text-base pointer-fine:text-base",
 	}
 }
-
-/// How long (ms) typed characters keep extending one typeahead query.
-pub const SELECT_TYPEAHEAD_MS: u32 = 500;

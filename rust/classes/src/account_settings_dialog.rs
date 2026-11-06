@@ -40,8 +40,6 @@ pub struct AccountSettingsDialogLabels {
 }
 impl Default for AccountSettingsDialogLabels {
 	fn default() -> Self {
-		Self {
-			close: "Close".to_owned(),
-		}
+		Self { close: "Close".to_owned() }
 	}
 }

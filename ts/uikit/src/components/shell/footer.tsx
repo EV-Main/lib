@@ -1,34 +1,9 @@
 import * as React from "react";
 import { Container } from "../atomic/container";
 import * as copy from "../../generated/copy";
+import type { FooterLink, FooterLinkGroup, FooterOffice } from "../../generated/footer";
 
-/**
- * A 12-col footer grid — brand 3 | sitemap groups 2 each | offices 3 |
- * newsletter 2 — with the legal links and copyright line. On mobile the sitemap
- * columns sit side by side. The kit brings no content of its own: every string,
- * the mark and the lock-up are the caller's, and each column renders only when
- * it has something in it. `children` render right after the `<footer>` tag —
- * the slot for app-side extras like a build-version easter egg.
- *
- * The lock-up is either composed from `mark` + `brand` + `tagline`, or handed
- * over whole as `lockup` when a brand's arrangement is not that one.
- *
- * `linkComponent` lets Next hosts pass `next/link`; everyone else gets `<a>`.
- */
-export interface FooterLink {
-  label: string;
-  href: string;
-}
-
-export interface FooterLinkGroup {
-  heading: string;
-  links: readonly FooterLink[];
-}
-
-export interface FooterOffice {
-  name: string;
-  address: string;
-}
+export type { FooterLink, FooterLinkGroup, FooterOffice };
 
 export interface FooterProps {
   /** The whole lock-up; replaces the one `mark` + `brand` + `tagline` compose. */
@@ -56,6 +31,19 @@ export interface FooterProps {
 
 const HEADING = "font-mono text-xs text-ink uppercase tracking-widest mb-6";
 
+/**
+ * A 12-col footer grid — brand 3 | sitemap groups 2 each | offices 3 |
+ * newsletter 2 — with the legal links and copyright line. On mobile the sitemap
+ * columns sit side by side. The kit brings no content of its own: every string,
+ * the mark and the lock-up are the caller's, and each column renders only when
+ * it has something in it. `children` render right after the `<footer>` tag —
+ * the slot for app-side extras like a build-version easter egg.
+ *
+ * The lock-up is either composed from `mark` + `brand` + `tagline`, or handed
+ * over whole as `lockup` when a brand's arrangement is not that one.
+ *
+ * `linkComponent` lets Next hosts pass `next/link`; everyone else gets `<a>`.
+ */
 export function Footer({
   lockup,
   brand,

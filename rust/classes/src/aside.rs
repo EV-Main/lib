@@ -50,7 +50,7 @@ pub enum AsidePanelSide {
 }
 
 /// How an `AsidePanel` takes its place.
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::IntoStaticStr, strum::EnumIter)]
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::EnumIter, strum::IntoStaticStr)]
 #[strum(serialize_all = "kebab-case")]
 pub enum AsidePanelMode {
 	/// Sits in the layout and takes room from the content.

@@ -10,6 +10,9 @@ pub const KEY_VALUE_COPY: &str = "inline-flex size-6 shrink-0 items-center justi
 
 pub const KEY_VALUE_STATUS: &str = "sr-only";
 
+/// How long (ms) a copy's check mark and "Copied" announcement stay.
+pub const KEY_VALUE_COPIED_MS: i32 = 2000;
+
 /// The `KeyValue`'s own strings. English by default; a caller translates by overriding fields.
 #[derive(Clone, Debug, PartialEq)]
 #[cfg_attr(feature = "ts_gen", derive(serde::Serialize), serde(rename_all = "camelCase"))]
@@ -28,6 +31,3 @@ impl Default for KeyValueLabels {
 		}
 	}
 }
-
-/// How long (ms) a copy's check mark and "Copied" announcement stay.
-pub const KEY_VALUE_COPIED_MS: i32 = 2000;

@@ -1,7 +1,7 @@
 use dioxus::prelude::*;
 use ev_lib_classes::copy;
+pub use ev_lib_classes::{FooterLink, FooterLinkGroup, FooterOffice};
 
-pub use crate::ui::uikit::core::{FooterLink, FooterLinkGroup, FooterOffice};
 use crate::ui::uikit::dioxus::Container;
 
 const HEADING: &str = "font-mono text-xs text-ink uppercase tracking-widest mb-6";

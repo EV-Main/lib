@@ -55,8 +55,6 @@ pub struct SystemBannerLabels {
 }
 impl Default for SystemBannerLabels {
 	fn default() -> Self {
-		Self {
-			dismiss: "Dismiss".to_owned(),
-		}
+		Self { dismiss: "Dismiss".to_owned() }
 	}
 }

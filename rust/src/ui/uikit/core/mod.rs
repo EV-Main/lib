@@ -31,7 +31,6 @@ pub use date_time_picker::LocalDateTime;
 pub(crate) use date_time_picker::Picker;
 pub(crate) use drawer::Presence;
 pub use field_context::FormControlContext;
-pub use footer::{FooterLink, FooterLinkGroup, FooterOffice};
 pub(crate) use form::FormItemContext;
 pub use header_controls::HeaderNotification;
 #[cfg(all(target_arch = "wasm32", feature = "wasm"))]

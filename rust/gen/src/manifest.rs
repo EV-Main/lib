@@ -10,6 +10,7 @@ use tailwind_fuse::AsTailwindClass;
 /// Per uikit module, merged after its consts. A module named here need not have a classes file.
 pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 	vec![
+		("footer", vec![Ts::types::<(FooterLinkGroup, FooterLink, FooterOffice)>()]),
 		("popover-form", vec![labels::<PopoverFormLabels>("POPOVER_FORM_LABELS")]),
 		("key-value", vec![labels::<KeyValueLabels>("KEY_VALUE_LABELS")]),
 		("date-time-picker", vec![labels::<DateTimePickerLabels>("DATE_TIME_PICKER_LABELS")]),
@@ -28,7 +29,8 @@ pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 		("alert", vec![table::<AlertVariant>("alertVariants", "AlertVariant")]),
 		(
 			"aside",
-			vec![labels::<AsideHeaderLabels>("ASIDE_HEADER_LABELS"), 
+			vec![
+				labels::<AsideHeaderLabels>("ASIDE_HEADER_LABELS"),
 				table::<AsidePanelSide>("asidePanelSideClasses", "AsidePanelSide"),
 				union::<AsidePanelMode>("ASIDE_PANEL_MODES", "AsidePanelMode"),
 			],
@@ -58,7 +60,13 @@ pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 				union::<ChatAttachmentState>("CHAT_ATTACHMENT_STATES", "ChatAttachmentState"),
 			],
 		),
-		("confirm-dialog", vec![labels::<ConfirmDialogLabels>("CONFIRM_DIALOG_LABELS"), table::<ConfirmDialogTone>("confirmDialogIconToneClasses", "ConfirmDialogTone")]),
+		(
+			"confirm-dialog",
+			vec![
+				labels::<ConfirmDialogLabels>("CONFIRM_DIALOG_LABELS"),
+				table::<ConfirmDialogTone>("confirmDialogIconToneClasses", "ConfirmDialogTone"),
+			],
+		),
 		("drawer", vec![table::<DrawerDirection>("drawerDirectionClasses", "DrawerDirection")]),
 		("empty", vec![table::<EmptyMediaVariant>("emptyMediaVariants", "EmptyMediaVariant")]),
 		(
@@ -163,7 +171,8 @@ pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 		("status-item", vec![table::<StatusTone>("statusDotClasses", "StatusTone")]),
 		(
 			"system-banner",
-			vec![labels::<SystemBannerLabels>("SYSTEM_BANNER_LABELS"), 
+			vec![
+				labels::<SystemBannerLabels>("SYSTEM_BANNER_LABELS"),
 				table::<SystemBannerTone>("systemBannerIconToneClasses", "SystemBannerTone"),
 				Ts::Table {
 					name: "systemBannerToneClasses",

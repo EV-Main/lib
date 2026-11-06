@@ -1,7 +1,7 @@
 use ev_lib_classes::copy;
+pub use ev_lib_classes::{FooterLink, FooterLinkGroup, FooterOffice};
 use leptos::prelude::*;
 
-pub use crate::ui::uikit::core::{FooterLink, FooterLinkGroup, FooterOffice};
 use crate::ui::uikit::leptos::Container;
 
 const HEADING: &str = "font-mono text-xs text-ink uppercase tracking-widest mb-6";

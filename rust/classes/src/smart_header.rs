@@ -9,7 +9,7 @@ pub const SMART_HEADER_TOOLBAR: &str = "flex h-11 items-center gap-3 border-t bo
 pub const SMART_HEADER_CONTEXT: &str = "flex h-6.5 items-center gap-4 border-t border-border bg-background px-3 text-caption text-ink-soft";
 
 /// Which rows a `SmartHeader` shows around its bar.
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::IntoStaticStr, strum::EnumIter)]
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::EnumIter, strum::IntoStaticStr)]
 #[strum(serialize_all = "kebab-case")]
 pub enum SmartHeaderState {
 	/// The bar, the toolbar and the context line.

@@ -9,7 +9,7 @@ pub const ACCORDION_CONTENT_INNER: &str = "pt-0 pb-4";
 pub const ACCORDION_CHEVRON: &str = "text-ink-soft pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200";
 
 /// `Single` keeps at most one item open; `Multiple` allows several.
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::IntoStaticStr, strum::EnumIter)]
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, strum::AsRefStr, strum::EnumIter, strum::IntoStaticStr)]
 #[strum(serialize_all = "kebab-case")]
 pub enum AccordionType {
 	#[default]

@@ -6,11 +6,12 @@ description = "Pure styling data (Tailwind class tables) shared by the Dioxus ui
 license = "BlueOak-1.0.0"
 repository = "https://github.com/EV-Main/web_std"
 
-[dependencies]
-strum.workspace = true
-tailwind_fuse = { workspace = true, features = ["variant"] }
-serde = { workspace = true, features = ["derive"], optional = true }
-
 [features]
 # Serde derives on the data `ev_lib_gen` emits to TS; nothing else enables it.
-ts_gen = ["dep:serde"]
+ts_gen = ["dep:serde", "dep:ts-rs"]
+
+[dependencies]
+serde = { workspace = true, features = ["derive"], optional = true }
+strum.workspace = true
+tailwind_fuse = { workspace = true, features = ["variant"] }
+ts-rs = { workspace = true, optional = true }
