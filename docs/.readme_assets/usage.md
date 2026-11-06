@@ -33,7 +33,7 @@ it enables.
 ### Consume it
 
 ```toml
-ev_lib = { git = "https://github.com/EV-invest/lib.git", default-features = false, features = ["architecture"] }
+ev_lib = { version = "0.31", default-features = false, features = ["architecture"] }
 ```
 
 For a target that also builds to wasm, enable `wasm` **per-target** so native
@@ -41,7 +41,7 @@ builds never link browser backends:
 
 ```toml
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-ev_lib = { git = "https://github.com/EV-invest/lib.git", default-features = false, features = ["architecture", "wasm"] }
+ev_lib = { version = "0.31", default-features = false, features = ["architecture", "wasm"] }
 ```
 
 ### Develop & test
@@ -65,9 +65,7 @@ TS packages live under [`ts/`](ts/), one directory per library, each with its ow
 [`ts/mfe/`](ts/mfe/) (the microfrontend host contract — registry, loader, events),
 [`ts/settings/`](ts/settings/) (typed env settings),
 [`ts/marketing/`](ts/marketing/) (the landing-page layer over the kit — motion,
-form harness, contact-link tracking; no Cargo counterpart),
-[`ts/kitstart/`](ts/kitstart/) (landing-site machinery for local-service brands —
-routing, places, the lead funnel, SEO; the Rust `kitstart` feature mirrors its core), and
+form harness, contact-link tracking; the `marketing` feature mirrors its contact core), and
 [`ts/i18n/`](ts/i18n/) (five-locale i18n — the one package with no Cargo
 counterpart yet).
 

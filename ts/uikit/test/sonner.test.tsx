@@ -6,7 +6,7 @@ import {
   act,
   cleanup,
 } from "@testing-library/react";
-import { Toaster, toast } from "../src/components/sonner";
+import { Toaster, toast } from "../src/components/atomic/sonner";
 
 // jsdom implements neither PointerEvent nor TransitionEvent, so RTL's
 // `fireEvent.*` drops their init fields (clientX / timeStamp / propertyName).

@@ -3,7 +3,7 @@ import {
   isNavItemActive,
   resolveActiveNavItem,
   type NavItem,
-} from "../src/components/nav-model";
+} from "../src/components/shell/nav-model";
 
 const item = (id: string, href: string, extra: Partial<NavItem> = {}): NavItem => ({
   id,

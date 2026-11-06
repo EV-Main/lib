@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { AccountList, AccountListItem } from "../src/components/account-list";
+import { AccountList, AccountListItem } from "../src/components/shell/account-list";
 
 function setup(onValueChange = vi.fn(), defaultValue = "personal") {
   render(

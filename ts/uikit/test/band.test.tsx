@@ -1,7 +1,7 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { Section, SectionHead } from "../src/components/band";
+import { Section, SectionHead } from "../src/components/atomic/band";
 
 describe("Section", () => {
   it("sets the scope class and its plane", () => {

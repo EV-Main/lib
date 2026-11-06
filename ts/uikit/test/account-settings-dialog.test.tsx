@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { AccountSettingsDialog } from "../src/components/account-settings-dialog";
+import { AccountSettingsDialog } from "../src/components/shell/account-settings-dialog";
 
 const sections = [
   { id: "profile", label: "Profile", content: <p>Profile pane</p> },

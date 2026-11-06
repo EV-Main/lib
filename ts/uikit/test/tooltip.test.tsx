@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
-import { Tooltip, TooltipTrigger, TooltipContent } from "../src/components/tooltip";
+import { Tooltip, TooltipTrigger, TooltipContent } from "../src/components/atomic/tooltip";
 
 describe("Tooltip", () => {
   it("hides its content until the trigger is hovered", () => {

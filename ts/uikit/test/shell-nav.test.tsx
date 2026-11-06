@@ -2,8 +2,8 @@ import * as React from "react";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render, within } from "@testing-library/react";
-import { ShellNav } from "../src/components/shell-nav";
-import type { NavGroup } from "../src/components/nav-model";
+import { ShellNav } from "../src/components/shell/shell-nav";
+import type { NavGroup } from "../src/components/shell/nav-model";
 
 // Mimics next/link: the caller's onClick runs first, then the link takes the
 // click over (which jsdom could not navigate anyway).

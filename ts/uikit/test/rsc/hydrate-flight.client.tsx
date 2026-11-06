@@ -10,9 +10,9 @@ import { JSDOM } from "jsdom";
 import { createFromNodeStream } from "react-server-dom-webpack/client.node";
 
 const modules: Record<string, unknown> = {
-  field: await import("../../src/components/field"),
-  input: await import("../../src/components/input"),
-  checkbox: await import("../../src/components/checkbox"),
+  field: await import("../../src/components/derived/field"),
+  input: await import("../../src/components/atomic/input"),
+  checkbox: await import("../../src/components/atomic/checkbox"),
 };
 Object.assign(globalThis, {
   __webpack_require__: (id: string) => modules[id],

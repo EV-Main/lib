@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from "../src/components/card";
+} from "../src/components/atomic/card";
 
 describe("Card", () => {
   it("renders the base card with its slot", () => {

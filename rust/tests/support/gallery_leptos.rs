@@ -15,7 +15,6 @@ const GALLERY: &[(&str, fn() -> AnyView)] = &[
 	("Table", d_table), ("TableCard", d_table_card), ("Breadcrumb", d_breadcrumb), ("Pagination", d_pagination),
 	("Empty", d_empty), ("Item", d_item), ("ButtonGroup", d_button_group), ("Input", d_input),
 	("Textarea", d_textarea), ("Command", d_command), ("ScrollArea", d_scroll_area), ("Container", d_container),
-	("Terminal", d_terminal),
 	("Checkbox", d_checkbox), ("Switch", d_switch), ("RadioGroup", d_radio_group), ("Slider", d_slider),
 	("Toggle", d_toggle), ("ToggleGroup", d_toggle_group), ("Tabs", d_tabs), ("Accordion", d_accordion),
 	("Collapsible", d_collapsible), ("InputOTP", d_input_otp), ("Carousel", d_carousel), ("Sidebar", d_sidebar),
@@ -39,7 +38,7 @@ const PARITY_ONLY: &[(&str, fn() -> AnyView)] = &[
 	("AuthWall", p_auth_wall), ("AvatarImage", p_avatar_image), ("Band", p_band), ("BreadcrumbEllipsis", p_breadcrumb_ellipsis),
 	("ButtonGroupParts", p_button_group_parts), ("CardAction", p_card_action), ("Fonts", p_fonts), ("Footer", p_footer),
 	("ItemParts", p_item_parts), ("Logo", p_logo), ("ScrollBar", p_scroll_bar), ("SectionDescriptor", p_section_descriptor),
-	("StatusScreen", p_status_screen), ("TableParts", p_table_parts), ("TradesTapeRow", p_trades_tape_row),
+	("StatusScreen", p_status_screen), ("TableParts", p_table_parts),
 	("CarouselEdgeFade", p_carousel_edge_fade), ("SidebarParts", p_sidebar_parts),
 	("CollapsibleSiblings", p_collapsible_siblings), ("AccordionSiblings", p_accordion_siblings), ("TabsSiblings", p_tabs_siblings),
 	("RadioGroupSiblings", p_radio_group_siblings), ("ToggleGroupSiblings", p_toggle_group_siblings), ("CarouselSiblings", p_carousel_siblings),
@@ -1516,62 +1515,6 @@ fn d_container() -> AnyView {
 	.into_any()
 }
 
-fn d_terminal() -> AnyView {
-	view! {
-		<Terminal>
-			<TerminalTicker>
-				<TickerStat label="Ha Long" value="1.024" />
-				<TickerStat label="24h" value="+2.4%" class="text-positive" />
-				<TickerStat label="Volume" value="12 400" />
-			</TerminalTicker>
-			<TerminalPane area=TerminalArea::Chart>
-				<TerminalPaneHeader>"Price"</TerminalPaneHeader>
-				<TerminalPaneBody>
-					<TerminalChart />
-				</TerminalPaneBody>
-			</TerminalPane>
-			<TerminalPane area=TerminalArea::Book>
-				<TerminalPaneHeader>"Order book"</TerminalPaneHeader>
-				<TerminalPaneBody>
-					<OrderBook>
-						<OrderBookHead price="Price" size="Size" total="Total" />
-						<OrderBookRow side=BookSide::Ask price="1.030" size="120" total="360" depth=0.9 />
-						<OrderBookRow side=BookSide::Ask price="1.028" size="80" total="240" depth=0.6 />
-						<OrderBookRow side=BookSide::Ask price="1.026" size="160" total="160" depth=0.4 />
-						<OrderBookSpread>
-							<span>"1.025"</span>
-							<span>"0.002"</span>
-						</OrderBookSpread>
-						<OrderBookRow side=BookSide::Bid price="1.024" size="140" total="140" depth=0.35 />
-						<OrderBookRow side=BookSide::Bid price="1.022" size="90" total="230" depth=0.55 />
-						<OrderBookRow side=BookSide::Bid price="1.020" size="200" total="430" depth=1.0 />
-					</OrderBook>
-				</TerminalPaneBody>
-			</TerminalPane>
-			<TerminalPane area=TerminalArea::Form>
-				<TerminalPaneHeader>"Buy / Sell"</TerminalPaneHeader>
-				<TerminalPaneBody>
-					<OrderForm>
-						<Input placeholder="Price" />
-						<Input placeholder="Size" />
-						<OrderFormRow label="Cost" value="143.36" />
-						<OrderFormRow label="Fee" value="0.14" />
-						<OrderFormSubmit>"Buy"</OrderFormSubmit>
-						<OrderFormSubmit side=OrderSide::Sell>"Sell"</OrderFormSubmit>
-					</OrderForm>
-				</TerminalPaneBody>
-			</TerminalPane>
-			<TerminalPane area=TerminalArea::Orders>
-				<TerminalPaneHeader>"Open orders"</TerminalPaneHeader>
-				<TerminalPaneBody>
-					<OpenOrdersEmpty>"No open orders"</OpenOrdersEmpty>
-				</TerminalPaneBody>
-			</TerminalPane>
-		</Terminal>
-	}
-	.into_any()
-}
-
 // ── Parity only ────────────────────────────────────────────────────────────
 
 fn p_auth_wall() -> AnyView {
@@ -1774,16 +1717,6 @@ fn p_table_parts() -> AnyView {
 				</TableRow>
 			</TableFooter>
 		</Table>
-	}
-	.into_any()
-}
-
-fn p_trades_tape_row() -> AnyView {
-	view! {
-		<div class="flex w-72 flex-col">
-			<TradesTapeRow side=BookSide::Bid price="1.024" size="140" time="12:00:01" />
-			<TradesTapeRow side=BookSide::Ask price="1.026" size="90" time="12:00:02" />
-		</div>
 	}
 	.into_any()
 }

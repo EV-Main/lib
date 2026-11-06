@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { ScrollArea, ScrollBar } from "../src/components/scroll-area";
+import { ScrollArea, ScrollBar } from "../src/components/atomic/scroll-area";
 
 describe("ScrollArea", () => {
   it("renders the viewport with native overflow and its children", () => {

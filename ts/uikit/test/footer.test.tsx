@@ -1,7 +1,7 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { Footer } from "../src/components/footer";
+import { Footer } from "../src/components/shell/footer";
 
 const NAV = [
   { heading: "Company", links: [{ label: "Home", href: "/" }] },

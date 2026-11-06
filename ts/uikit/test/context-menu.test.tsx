@@ -5,7 +5,7 @@ import {
   ContextMenuTrigger,
   ContextMenuContent,
   ContextMenuItem,
-} from "../src/components/context-menu";
+} from "../src/components/atomic/context-menu";
 
 describe("ContextMenu", () => {
   it("hides its content until the trigger is right-clicked", () => {

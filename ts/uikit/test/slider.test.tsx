@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, fireEvent, createEvent } from "@testing-library/react";
-import { Slider } from "../src/components/slider";
+import { Slider } from "../src/components/atomic/slider";
 
 describe("Slider", () => {
   it("renders slots, role and aria values", () => {

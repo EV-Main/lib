@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { Spinner } from "../src/components/spinner";
+import { Spinner } from "../src/components/atomic/spinner";
 
 describe("Spinner", () => {
   it("renders a status svg with the base classes", () => {

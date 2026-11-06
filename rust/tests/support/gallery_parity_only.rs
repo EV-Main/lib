@@ -11,7 +11,6 @@ const PARITY_ONLY: &[(&str, fn() -> Element)] = &[
 	("NavigationMenuParts", p_navigation_menu_parts), ("PopoverAnchor", p_popover_anchor), ("ScrollBar", p_scroll_bar),
 	("SectionDescriptor", p_section_descriptor), ("SelectParts", p_select_parts), ("SheetParts", p_sheet_parts),
 	("SidebarParts", p_sidebar_parts), ("StatusScreen", p_status_screen), ("TableParts", p_table_parts), ("Toaster", p_toaster),
-	("TradesTapeRow", p_trades_tape_row),
 	("CollapsibleSiblings", p_collapsible_siblings), ("AccordionSiblings", p_accordion_siblings), ("TabsSiblings", p_tabs_siblings),
 	("RadioGroupSiblings", p_radio_group_siblings), ("ToggleGroupSiblings", p_toggle_group_siblings), ("CarouselSiblings", p_carousel_siblings),
 	("InputOTPSiblings", p_input_otp_siblings), ("SidebarSiblings", p_sidebar_siblings),
@@ -578,15 +577,6 @@ fn p_toaster() -> Element {
 			QueueToast {}
 			QueueToast {}
 			Toaster { position: ToastPosition::TopLeft }
-		}
-	}
-}
-
-fn p_trades_tape_row() -> Element {
-	rsx! {
-		div { class: "flex w-72 flex-col",
-			TradesTapeRow { side: BookSide::Bid, price: "1.024", size: "140", time: "12:00:01" }
-			TradesTapeRow { side: BookSide::Ask, price: "1.026", size: "90", time: "12:00:02" }
 		}
 	}
 }

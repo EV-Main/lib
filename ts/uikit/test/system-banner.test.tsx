@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { SystemBanner } from "../src/components/system-banner";
-import { SectionLabel } from "../src/components/page-frame";
+import { SystemBanner } from "../src/components/shell/system-banner";
+import { SectionLabel } from "../src/components/shell/page-frame";
 
 describe("SystemBanner tones", () => {
   it("tints a warn strip and its icon", () => {

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
 import * as React from "react";
-import { Input } from "../src/components/input";
+import { Input } from "../src/components/atomic/input";
 
 describe("Input", () => {
   it("renders the base classes and slot", () => {

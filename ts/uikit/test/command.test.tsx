@@ -10,7 +10,7 @@ import {
   CommandSeparator,
   CommandShortcut,
   CommandDialog,
-} from "../src/components/command";
+} from "../src/components/atomic/command";
 
 describe("Command", () => {
   it("shows all items before any query", () => {

@@ -1,9 +1,9 @@
 import * as React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render } from "@testing-library/react";
-import { ShellNav } from "../src/components/shell-nav";
-import { SectionNav } from "../src/components/section-nav";
-import type { NavGroup } from "../src/components/nav-model";
+import { ShellNav } from "../src/components/shell/shell-nav";
+import { SectionNav } from "../src/components/shell/section-nav";
+import type { NavGroup } from "../src/components/shell/nav-model";
 
 const GROUPS: NavGroup[] = [
   {

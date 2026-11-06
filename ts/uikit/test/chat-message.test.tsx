@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { ChatAttachment, ChatBubble, ChatMarker, ChatMessage } from "../src/components/chat-message";
+import { ChatAttachment, ChatBubble, ChatMarker, ChatMessage } from "../src/components/shell/chat-message";
 
 describe("ChatBubble", () => {
   it("boxes user and muted text and leaves the assistant's open", () => {

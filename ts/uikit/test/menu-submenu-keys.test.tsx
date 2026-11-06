@@ -8,7 +8,7 @@ import {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuTrigger,
-} from "../src/components/context-menu";
+} from "../src/components/atomic/context-menu";
 import {
   Menubar,
   MenubarContent,
@@ -18,7 +18,7 @@ import {
   MenubarSubContent,
   MenubarSubTrigger,
   MenubarTrigger,
-} from "../src/components/menubar";
+} from "../src/components/atomic/menubar";
 
 describe("ContextMenu submenu and checkbox", () => {
   function setup(onToggle = vi.fn()) {

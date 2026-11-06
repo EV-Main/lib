@@ -8,7 +8,7 @@ import {
   NavigationMenuContent,
   NavigationMenuLink,
   navigationMenuTriggerStyle,
-} from "../src/components/navigation-menu";
+} from "../src/components/atomic/navigation-menu";
 
 describe("NavigationMenu", () => {
   it("renders the nav root with role and slot", () => {

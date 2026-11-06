@@ -4,7 +4,7 @@ import {
   ButtonGroup,
   ButtonGroupText,
   ButtonGroupSeparator,
-} from "../src/components/button-group";
+} from "../src/components/atomic/button-group";
 
 describe("ButtonGroup", () => {
   it("defaults to the horizontal orientation", () => {

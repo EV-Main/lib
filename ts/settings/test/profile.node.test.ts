@@ -13,7 +13,7 @@ import {
 } from '../src/index';
 
 /**
- * Mirrors `mod tests` in `rust/src/settings/tests.rs` (`required_in_*` and
+ * Mirrors `mod tests` in `rust/src/ops/settings/tests.rs` (`required_in_*` and
  * `required_var_names_*`): the profile semantics are part of the shared
  * contract, so a change here needs the same change there.
  */

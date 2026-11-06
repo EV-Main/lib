@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { Alert, AlertTitle, AlertDescription } from "../src/components/alert";
+import { Alert, AlertTitle, AlertDescription } from "../src/components/atomic/alert";
 
 describe("Alert", () => {
   it("renders the default variant", () => {

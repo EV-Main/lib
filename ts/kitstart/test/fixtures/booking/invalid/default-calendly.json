@@ -1,8 +1,0 @@
-{
-  "default": "calendly",
-  "providers": {
-    "calendly": {
-      "url": "https://calendly.com/vifnet/menage"
-    }
-  }
-}

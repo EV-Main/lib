@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { Logo } from "../src/components/logo";
+import { Logo } from "../src/components/shell/logo";
 
 describe("Logo", () => {
   it("masks the consumer's token and follows the current color", () => {

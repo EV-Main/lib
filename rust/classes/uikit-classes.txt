@@ -14,7 +14,6 @@
 -my-0.5 -mr-1 flex size-6 shrink-0 items-center justify-center rounded-md opacity-70 outline-none transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring
 -top-12 left-1/2 -translate-x-1/2 rotate-90
 -translate-x-1/2
-12:00:01
 13:04
 2026-06-10 09:05
 2026-06-10T09:05
@@ -152,7 +151,6 @@ basis-full
 bg-accent-debug text-on-accent-debug hover:bg-accent-debug/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 bg-accent-error
 bg-accent-error text-on-accent-error hover:bg-accent-error/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
-bg-accent-error/15
 bg-accent-info text-on-accent-info hover:bg-accent-info/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 bg-accent-trace text-on-accent-trace hover:bg-accent-trace/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 bg-accent-warn
@@ -392,8 +390,6 @@ data-active=false
 data-active=true
 data-align
 data-align=\
-data-area
-data-area=\
 data-autodismiss
 data-autodismiss=\
 data-caret
@@ -811,8 +807,6 @@ last:rounded-r-md
 left-0
 left-1/2
 lg:col-span-2
-lg:col-span-3
-lg:col-start-3
 lg:flex-row
 light
 log:{log.read().join(\
@@ -900,17 +894,9 @@ one-time-code
 opacity-0
 opacity-100
 opacity-40
-open-orders-empty
-order-book
-order-book-head
-order-book-row
-order-book-spread
 order-first
 order-first pl-3 has-[>button]:ml-[-0.45rem] has-[>kbd]:ml-[-0.35rem]
 order-first w-full justify-start px-3 pt-3 [.border-b]:pb-3 group-has-[>input]/input-group:pt-2.5
-order-form
-order-form-row
-order-form-submit
 order-last
 order-last pr-3 has-[>button]:mr-[-0.45rem] has-[>kbd]:mr-[-0.35rem]
 order-last w-full justify-start px-3 pb-3 [.border-t]:pt-3 group-has-[>input]/input-group:pb-2.5
@@ -1122,11 +1108,6 @@ tabs-list
 tabs-trigger
 tabular-nums
 tabular-nums text-ink
-terminal-chart
-terminal-pane
-terminal-pane-body
-terminal-pane-header
-terminal-ticker
 text-[14px] md:text-[15px] leading-[1.62] text-ink-soft
 text-[color:var(--table-head-ink,var(--ink))] h-[var(--table-head-h,calc(var(--spacing)*10))] px-[var(--table-px,calc(var(--spacing)*2))] text-start align-middle font-medium whitespace-nowrap text-[length:var(--table-head-text)] tracking-[var(--table-head-tracking)] [text-transform:var(--table-head-case)] [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]
 text-accent-debug
@@ -1179,11 +1160,9 @@ text-ink/30
 text-ink/40 text-xs font-light max-w-sm leading-relaxed mb-6
 text-ink/50 hover:text-ink shrink-0 transition-colors
 text-ink/70 ring-ring flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0 group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0
-text-left text-accent-error
 text-lg font-medium tracking-tight
 text-lg font-semibold
 text-lg leading-none font-semibold
-text-on-positive
 text-positive
 text-positive-ink
 text-positive-ink bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-ink-mid
@@ -1196,7 +1175,6 @@ text-sm sm:text-xs font-light leading-relaxed text-ink/70 mb-4
 text-start
 text-xs font-light text-ink/70 hover:text-accent-debug transition-colors
 text-xs font-semibold uppercase tracking-widest
-ticker-stat
 toast-close
 toggle-group
 toggle-group-item
@@ -1216,7 +1194,6 @@ top-bar-start
 top-left
 tr:hover]:bg-transparent
 tracking-widest
-trades-tape-row
 transform: translateX(-{}%)
 translateX(-100%)
 translateX(-40%)

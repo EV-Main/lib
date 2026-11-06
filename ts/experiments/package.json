@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EV-Main/lib.git",
+    "url": "git+https://github.com/EV-Main/web_std.git",
     "directory": "ts/experiments"
   },
   "type": "module",

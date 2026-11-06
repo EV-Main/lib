@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, it, expect } from "vitest";
 
-import { buttonVariants } from "../src/components/button";
+import { buttonVariants } from "../src/components/atomic/button";
 import { CHECKBOX_BASE } from "../src/generated/checkbox";
 import { CONTEXT_MENU_CHECK_ITEM, CONTEXT_MENU_ITEM, CONTEXT_MENU_SUB_TRIGGER } from "../src/generated/context-menu";
 import { DROPDOWN_MENU_CHECK_ITEM, DROPDOWN_MENU_ITEM, DROPDOWN_MENU_SUB_TRIGGER } from "../src/generated/dropdown-menu";

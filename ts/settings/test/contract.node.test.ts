@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { bool, int, list, num, str } from '../src/index';
 
 // Shared Rust↔TS parsing-contract vectors — mirrored byte-for-byte in
-// `rust/src/settings/tests.rs` (`mod contract`). Change both sides or neither.
+// `rust/src/ops/settings/tests.rs` (`mod contract`). Change both sides or neither.
 describe('parsing contract', () => {
   it('bool vectors', () => {
     for (const raw of ['true', 'TRUE', 'True', '1']) {

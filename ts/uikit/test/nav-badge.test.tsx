@@ -1,7 +1,7 @@
 import * as React from "react";
 import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
-import { NavBadge, NavDot } from "../src/components/nav-badge";
+import { NavBadge, NavDot } from "../src/components/shell/nav-badge";
 
 describe("NavBadge", () => {
   it("shows the count up to the cap and `{max}+` past it", () => {

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
-import { Checkbox } from "../src/components/checkbox";
+import { Checkbox } from "../src/components/atomic/checkbox";
 
 describe("Checkbox", () => {
   it("renders unchecked by default with role and slot", () => {

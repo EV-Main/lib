@@ -1,5 +1,6 @@
-//! Both ports render the same HTML, and a component exists in both ports or
-//! neither (docs/ARCHITECTURE.md, "The `uikit` library"). Every gallery label is
+//! Both ports render the same HTML, a component exists in both ports or
+//! neither, and renders only what its layer may (docs/ARCHITECTURE.md, "The
+//! `uikit` library"). Every gallery label is
 //! rendered through dioxus-ssr and Leptos SSR, and the two must agree once each
 //! is reduced to a canonical tree. Each test reports every problem in one run, so
 //! a porting agent finds their own labels among everybody else's.
@@ -103,8 +104,8 @@ fn ports_render_the_same_html() {
 
 #[test]
 fn every_component_is_in_both_ports_and_the_gallery() {
-	let dioxus = components("src/uikit_dioxus");
-	let leptos = components("src/uikit_leptos");
+	let dioxus = components("src/ui/uikit/dioxus");
+	let leptos = components("src/ui/uikit/leptos");
 	let dioxus_gallery = source("tests/support/gallery.rs") + &source("tests/support/gallery_parity_only.rs");
 	let leptos_gallery = source("tests/support/gallery_leptos.rs");
 	let list = |names: Vec<String>| names.join(", ");
@@ -140,6 +141,57 @@ fn every_component_is_in_both_ports_and_the_gallery() {
 	assert!(report.is_empty(), "component coverage\n{report}");
 }
 
+#[test]
+fn components_render_only_lower_layers() {
+	let mut report = String::new();
+	for (port, renders) in [
+		(
+			"dioxus",
+			(|text: &str, name: &str| used(text, name, |rest| rest.trim_start().starts_with('{'))) as fn(&str, &str) -> bool,
+		),
+		("leptos", |text: &str, name: &str| {
+			used(text, &format!("<{name}"), |rest| rest.starts_with([' ', '\t', '\n', '/', '>']))
+		}),
+	] {
+		let dir = format!("src/ui/uikit/{port}");
+		let names = components(&dir);
+		let modules: BTreeMap<String, (String, String)> = rust_files(&std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(&dir))
+			.into_iter()
+			.filter_map(|path| {
+				let layer = path.parent()?.file_name()?.to_string_lossy().into_owned();
+				let text = std::fs::read_to_string(&path).expect("read component");
+				let code = text.split("#[cfg(test)]").next().expect("split yields one piece").to_owned();
+				Some((path.file_stem()?.to_string_lossy().into_owned(), (layer, code)))
+			})
+			.collect();
+		let rank = |layer: &str| match layer {
+			"atomic" => Some(0),
+			"derived" => Some(1),
+			"shell" => Some(2),
+			_ => None,
+		};
+		for (module, (layer, code)) in &modules {
+			let Some(own) = rank(layer) else { continue };
+			for (name, owner) in &names {
+				if owner == module || !renders(code, name) {
+					continue;
+				}
+				let Some(theirs) = modules.get(owner).and_then(|(l, _)| rank(l)) else { continue };
+				// atomic renders no component; derived only atomic; shell anything beneath it or beside it
+				let allowed = match own {
+					0 => false,
+					1 => theirs == 0,
+					_ => true,
+				};
+				if !allowed {
+					writeln!(report, "{port}: {layer}/{module} renders {name} ({}/{owner})", modules[owner].0).unwrap();
+				}
+			}
+		}
+	}
+	assert!(report.is_empty(), "layer violations\n{report}");
+}
+
 fn by_label(side: &str, rendered: Vec<(&'static str, String)>) -> BTreeMap<&'static str, String> {
 	let mut map = BTreeMap::new();
 	for (label, html) in rendered {
@@ -155,14 +207,12 @@ fn source(rel: &str) -> String {
 	std::fs::read_to_string(&path).unwrap_or_else(|e| panic!("read {path}: {e}"))
 }
 
-/// Every `#[component] pub fn` of a port, name → module. Private components and
-/// test modules (everything after `#[cfg(test)]`) are not exported.
+/// Every `#[component] pub fn` of a port, at any depth, name → module. Private
+/// components and test modules (everything after `#[cfg(test)]`) are not exported.
 fn components(dir: &str) -> BTreeMap<String, String> {
-	let dir = format!("{}/{dir}", env!("CARGO_MANIFEST_DIR"));
 	let mut found = BTreeMap::new();
-	for entry in std::fs::read_dir(&dir).unwrap_or_else(|e| panic!("read {dir}: {e}")) {
-		let path = entry.expect("read_dir entry").path();
-		let module = path.file_stem().expect("read_dir yields named entries").to_string_lossy().into_owned();
+	for path in rust_files(&std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(dir)) {
+		let module = path.file_stem().expect("rust_files yields named files").to_string_lossy().into_owned();
 		let text = std::fs::read_to_string(&path).unwrap_or_else(|e| panic!("read {}: {e}", path.display()));
 		let mut pending = false;
 		for line in text.lines().map(str::trim).take_while(|l| !l.starts_with("#[cfg(test)]")) {
@@ -177,6 +227,19 @@ fn components(dir: &str) -> BTreeMap<String, String> {
 			} else if pending && line.starts_with("fn ") {
 				pending = false;
 			}
+		}
+	}
+	found
+}
+
+fn rust_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
+	let mut found = Vec::new();
+	for entry in std::fs::read_dir(dir).unwrap_or_else(|e| panic!("read {}: {e}", dir.display())) {
+		let path = entry.expect("read_dir entry").path();
+		if path.is_dir() {
+			found.extend(rust_files(&path));
+		} else if path.extension().is_some_and(|e| e == "rs") {
+			found.push(path);
 		}
 	}
 	found

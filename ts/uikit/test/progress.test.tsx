@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { Progress } from "../src/components/progress";
+import { Progress } from "../src/components/atomic/progress";
 
 describe("Progress", () => {
   it("renders the base, slot and role", () => {

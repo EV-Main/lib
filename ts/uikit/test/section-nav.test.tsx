@@ -1,7 +1,7 @@
 import * as React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render } from "@testing-library/react";
-import { SectionNav, type SectionNavGroup } from "../src/components/section-nav";
+import { SectionNav, type SectionNavGroup } from "../src/components/shell/section-nav";
 
 const GROUPS: SectionNavGroup[] = [
   {

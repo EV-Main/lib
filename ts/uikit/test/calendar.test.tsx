@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
-import { Calendar } from "../src/components/calendar";
+import { Calendar } from "../src/components/atomic/calendar";
 
 describe("Calendar", () => {
   it("renders one month grid with the caption, weekday headers and day cells", () => {

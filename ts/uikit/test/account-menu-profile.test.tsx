@@ -1,7 +1,7 @@
 import * as React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen, within } from "@testing-library/react";
-import { AccountMenu, type AccountMenuProfile } from "../src/components/account-menu";
+import { AccountMenu, type AccountMenuProfile } from "../src/components/shell/account-menu";
 
 function open(profile: AccountMenuProfile, onSignOut = () => {}) {
   render(

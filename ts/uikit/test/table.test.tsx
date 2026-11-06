@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
   TableCell,
-} from "../src/components/table";
+} from "../src/components/atomic/table";
 
 describe("Table", () => {
   it("wraps the table in a scroll container", () => {

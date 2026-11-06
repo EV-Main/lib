@@ -7,7 +7,7 @@ import {
   FormControl,
   FormDescription,
   FormMessage,
-} from "../src/components/form";
+} from "../src/components/derived/form";
 
 describe("Form", () => {
   it("Form is a passthrough form wrapper", () => {

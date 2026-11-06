@@ -7,7 +7,7 @@ import {
   InputGroupText,
   InputGroupInput,
   InputGroupTextarea,
-} from "../src/components/input-group";
+} from "../src/components/derived/input-group";
 
 describe("InputGroup", () => {
   it("renders the base, slot and role", () => {

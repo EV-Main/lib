@@ -1,7 +1,7 @@
 # @evinvest/uikit
 
 A **dep-light** React UI kit with shadcn-style semantics — the TypeScript mirror
-of the UI kit of the [`ev_lib`](https://github.com/EV-invest/lib) Rust crate,
+of the UI kit of the [`ev_lib`](https://github.com/EV-Main/web_std) Rust crate,
 which ships it for Dioxus (`ev_lib::uikit_dioxus`) and Leptos
 (`ev_lib::uikit_leptos`) over one framework-free core. All three are driven from
 the same canonical class strings and the same design tokens, so a component
@@ -784,7 +784,7 @@ a button step only — `Input` and `SelectTrigger` already clear it at `lg`.
 | `Badge variant="destructive"` · `"success"` | `error` · `positive` (new: `primary`, `info`, `warn`) |
 | `SystemBanner` tones `warn`, `info` | the same, plus `neutral` and `primary`; `info` draws its icon in `accent-info-ink` |
 | `accent-error-ink` (`text-accent-error-ink`, a brand file's `accent-error-ink`) | `accent-error`; destructive menu rows read in it, and `evinvest-palette` refuses the key |
-| `Terminal`, `TerminalPane*`, `TerminalChart`, `TerminalTicker`, `TickerStat`, `OrderBook*`, `TradesTapeRow`, `OrderForm*`, `OpenOrdersEmpty` and their types | removed from the TS kit (the Rust terminal stays) |
+| `Terminal`, `TerminalPane*`, `TerminalChart`, `TerminalTicker`, `TickerStat`, `OrderBook*`, `TradesTapeRow`, `OrderForm*`, `OpenOrdersEmpty` and their types | removed from the kit; a trading view owns its terminal |
 
 **Silent changes: the compiler does not flag these.**
 

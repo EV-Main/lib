@@ -8,7 +8,7 @@ import {
 } from "../src/index";
 
 // Golden output of `serde_json::to_string(&ev_lib::analytics::capture_body(..))`,
-// printed by a throwaway binary against `rust/src/analytics/event.rs` @ 9cd7c07.
+// printed by a throwaway binary against `rust/src/product/analytics/event.rs` @ 9cd7c07.
 // Regenerate from Rust if either side changes — never edit by hand.
 const GOLDEN_BARE =
   '{"api_key":"phc_test","distinct_id":"anon-1","event":"app_booted","properties":{"$lib":"ev-analytics"}}';

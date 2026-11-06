@@ -7,7 +7,7 @@ import {
   EmptyTitle,
   EmptyDescription,
   EmptyContent,
-} from "../src/components/empty";
+} from "../src/components/atomic/empty";
 
 describe("Empty", () => {
   it("renders the base and slot", () => {

@@ -2,8 +2,8 @@ import * as React from "react";
 import { describe, it, expect } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "../src/components/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../src/components/select";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "../src/components/atomic/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../src/components/atomic/select";
 import { Portal, PortalProvider } from "../src/primitives/portal";
 
 // A brand scope with its own overlay root inside it, the way a consumer wires it.

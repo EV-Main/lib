@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { StatusItem, StatusDot } from "../src/components/status-item";
+import { StatusItem, StatusDot } from "../src/components/atomic/status-item";
 
 describe("StatusItem", () => {
   it("shows the label with a hidden dot of the tone's colour", () => {

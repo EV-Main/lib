@@ -2,9 +2,9 @@
 
 End-to-end recipes for every surface of the package. For the API summary and
 the parity rules, see [`README.md`](./README.md). The Rust mirror is
-[`ev_lib::settings`](../../rust/src/settings); the org's sops/age secrets
+[`ev_lib::settings`](../../rust/src/ops/settings); the org's sops/age secrets
 workflow is documented once, in its
-[GUIDE](../../rust/src/settings/GUIDE.md#secrets-the-sops-boundary) — this file
+[GUIDE](../../rust/src/ops/settings/GUIDE.md#secrets-the-sops-boundary) — this file
 covers the TS-specific ends of it.
 
 - [The model](#the-model)
@@ -97,7 +97,7 @@ export const settings = createSettings({
 ## Secrets at the boundary
 
 The full sops/age workflow (keys, `.sops.yaml`, direnv, CI, rotation) is in the
-[Rust GUIDE](../../rust/src/settings/GUIDE.md#secrets-the-sops-boundary) — it
+[Rust GUIDE](../../rust/src/ops/settings/GUIDE.md#secrets-the-sops-boundary) — it
 is language-agnostic. The TS-specific ends:
 
 ```sh

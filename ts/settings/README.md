@@ -3,12 +3,12 @@
 Typed, validated env settings with aggregate error reporting and a
 server/client split — **zero runtime dependencies**, one server-safe,
 browser-safe ESM entry. The TypeScript mirror of the `settings` Cargo feature
-of [`ev_lib`](../../rust/src/settings).
+of [`ev_lib`](../../rust/src/ops/settings).
 
 > This package reads **environment variables only** — no config files, no hot
 > reload, and no decryption: secrets management stays at the shell/CI boundary
 > (sops + age). See the [GUIDE](./GUIDE.md) and the Rust
-> [GUIDE](../../rust/src/settings/GUIDE.md#secrets-the-sops-boundary) for the
+> [GUIDE](../../rust/src/ops/settings/GUIDE.md#secrets-the-sops-boundary) for the
 > full sops workflow.
 
 ## Install
@@ -110,7 +110,7 @@ export function register() {
 
 The Rust crate is the source of truth; this package preserves its *semantics*.
 The full mapping table lives in the Rust
-[README](../../rust/src/settings/README.md#rust--ts-parity); the load-bearing
+[README](../../rust/src/ops/settings/README.md#rust--ts-parity); the load-bearing
 shared rules:
 
 - var names are written-out SCREAMING_SNAKE keys; required by default;
@@ -131,10 +131,10 @@ shared rules:
   compile error on the Rust side, a thrown declaration error here). The profile
   semantics are pinned by mirrored tests:
   [`test/profile.node.test.ts`](./test/profile.node.test.ts) ↔
-  `rust/src/settings/tests.rs` (`required_in_*`).
+  `rust/src/ops/settings/tests.rs` (`required_in_*`).
 - the contract is pinned by mirrored vectors:
   [`test/contract.node.test.ts`](./test/contract.node.test.ts) ↔
-  `rust/src/settings/tests.rs` (`mod contract`). Change both sides or neither.
+  `rust/src/ops/settings/tests.rs` (`mod contract`). Change both sides or neither.
 
 TS-only (browser-bundler concerns, no Rust equivalent): the `server`/`client`
 split with `clientPrefix`, the explicit `runtimeEnv` destructure, the `profile`

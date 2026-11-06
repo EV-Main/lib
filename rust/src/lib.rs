@@ -6,7 +6,7 @@
 //! consumer pulls in only what it asks for and nothing else is compiled:
 //!
 //! ```toml
-//! ev_lib = { git = "https://github.com/EV-invest/lib.git", default-features = false, features = ["architecture"] }
+//! ev_lib = { version = "0.31", default-features = false, features = ["architecture"] }
 //! ```
 //!
 //! # Available features
@@ -52,65 +52,48 @@
 //! - **`ts_gen`** — TypeScript emitted from Rust types (through `ts-rs`) and
 //!   values (through serde), for a repo's own `gen` step. Build-time only. See
 //!   [`ts_gen`].
-//! - **`kitstart`** — the pure core of a small-business landing (mirrors the core
-//!   of `@evinvest/kitstart`): the place model, the publication gate, request
-//!   routing, schema.org JSON-LD, `<head>` metadata, sitemap and robots, the
-//!   form's spam barriers. No I/O, wasm-safe; pinned with the TypeScript port to
-//!   the fixtures in `tests/fixtures/kitstart/`. See [`kitstart`].
+//! - **`marketing`** — outbound contact links (the Rust twin of
+//!   `@evinvest/marketing`'s contact core): `tel:` / `wa.me` hrefs and which
+//!   channel a link opens. No I/O, wasm-safe. See [`marketing`].
 
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
-#[cfg(feature = "architecture")]
-pub mod architecture;
+mod codegen;
+mod kernel;
+mod ops;
+mod product;
+mod ui;
 
-#[cfg(any(feature = "uikit_dioxus", feature = "uikit_leptos"))]
-mod uikit;
-#[cfg(any(feature = "uikit_dioxus", feature = "uikit_leptos"))]
-mod uikit_host;
-
-#[cfg(feature = "uikit_dioxus")]
-pub mod uikit_dioxus;
-
-#[cfg(feature = "uikit_leptos")]
-pub mod uikit_leptos;
-
+// Public names stay flat; the scopes are internal (docs/ARCHITECTURE.md, "Scopes").
+#[cfg(feature = "ts_gen")]
+pub use codegen::ts_gen;
 // The `cn!` fuse macro and styling data live in the framework-free `ev_lib_classes`
 // crate; re-export so the in-crate `crate::cn` path keeps resolving.
 #[cfg(any(feature = "uikit_dioxus", feature = "uikit_leptos"))]
 pub use ev_lib_classes::cn;
-
-#[cfg(feature = "analytics")]
-pub mod analytics;
-
-#[cfg(feature = "error_monitoring")]
-pub mod error_monitoring;
-
-#[cfg(feature = "otel")]
-pub mod otel;
-
-#[cfg(all(feature = "alerts", not(target_arch = "wasm32")))]
-pub mod alerts;
-
-#[cfg(feature = "experiments")]
-pub mod experiments;
-
+#[cfg(feature = "architecture")]
+pub use kernel::architecture;
 #[cfg(feature = "i18n")]
-pub mod i18n;
-
-#[cfg(feature = "kitstart")]
-pub mod kitstart;
-
-#[cfg(feature = "settings")]
-pub mod settings;
-
-#[cfg(feature = "ts_gen")]
-pub mod ts_gen;
-
+pub use kernel::i18n;
 #[cfg(feature = "types")]
-pub mod types;
-
-// wasm-only: the module links wasm-bindgen/web-sys, which aren't deps on native.
-// The `mfe!` macro is `#[macro_export]`ed from inside, so it too is wasm-only —
-// the sole consumer (a producer cdylib) is always a wasm build.
+pub use kernel::types;
+#[cfg(all(feature = "alerts", not(target_arch = "wasm32")))]
+pub use ops::alerts;
+#[cfg(feature = "error_monitoring")]
+pub use ops::error_monitoring;
+#[cfg(feature = "otel")]
+pub use ops::otel;
+#[cfg(feature = "settings")]
+pub use ops::settings;
+#[cfg(feature = "analytics")]
+pub use product::analytics;
+#[cfg(feature = "experiments")]
+pub use product::experiments;
+#[cfg(feature = "marketing")]
+pub use ui::active::contact as marketing;
 #[cfg(all(feature = "mfe", target_arch = "wasm32"))]
-pub mod mfe;
+pub use ui::active::mfe;
+#[cfg(feature = "uikit_dioxus")]
+pub use ui::uikit::dioxus as uikit_dioxus;
+#[cfg(feature = "uikit_leptos")]
+pub use ui::uikit::leptos as uikit_leptos;

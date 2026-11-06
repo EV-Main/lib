@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
-import { KeyValue } from "../src/components/key-value";
+import { KeyValue } from "../src/components/atomic/key-value";
 
 afterEach(() => {
   vi.useRealTimers();

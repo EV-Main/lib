@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "../src/components/dialog";
+} from "../src/components/atomic/dialog";
 
 function tree(props = {}) {
   return (

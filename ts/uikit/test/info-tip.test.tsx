@@ -4,7 +4,7 @@ import {
   InfoTip,
   InfoTipTrigger,
   InfoTipContent,
-} from "../src/components/info-tip";
+} from "../src/components/atomic/info-tip";
 
 describe("InfoTip", () => {
   it("hides its bubble until the trigger is clicked, then toggles", () => {

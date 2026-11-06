@@ -14,7 +14,6 @@ ts/
 ├── mfe/               host side of the `mfe` Cargo feature (registry, loader, events, RemoteElement)
 ├── settings/          port of the `settings` Cargo feature (typed env settings)
 ├── marketing/         landing-page layer over uikit: motion, form harness, contact tracking
-├── kitstart/          landing-site machinery: routing, places, lead funnel, SEO, Next glue
 └── i18n/              five-locale i18n: registry, URL contract, ICU-subset formatter
 ```
 
@@ -44,12 +43,9 @@ hand-written for one of four reasons:
 ```
  package      lines  what                                                   why
  ───────────────────────────────────────────────────────────────────────────────────
- uikit        14.7k  components/*.tsx (Dioxus twin; only classes shared)    A B
+ uikit        14.7k  components/{atomic,derived,shell}/* (Dioxus twin; only classes shared) A B
                      primitives/ (portal, floating, focus-scope)            B C
                      palette/ (brand palette tool)                          C
- kitstart     15.3k  core/{antispam,routing,site,place,seo}                 D  fixtures/kitstart
-                     core/{lead,pricing,booking,messenger,ab,phone}         C  Rust core is non-rendering, no I/O
-                     react/ · server/ · next/ · template/ · cli/ · proxy/   B C
  architecture  0.3k  kernel ports + combinators                             A  README mapping table
  types         0.9k  phone / email validation                               D  contract tests
  settings      0.7k  createSettings, redaction                              A
@@ -66,11 +62,10 @@ hand-written for one of four reasons:
  analytics     1.4k  sink / beacon / consent                                A
                      posthog, react, next                                   B
  error-monitoring 0.6k  Sentry / React / Next wiring                        B
- marketing     2.0k  everything                                             C  Rust kitstart/contact.rs mirrors *it*
+ marketing     2.0k  core/contact                                           D  fixtures/marketing
+                     motion, form harness, react                            C
 ```
 
 Known data still copied by hand:
 
-- `STOREFRONT_GATE` / `SERVICE_AREA_GATE`: data in Rust (`PublicationPolicy { required }`),
-  a `required()` function in TS, so they need the shapes reconciled first.
 - Email error codes: Rust has `EmailError::code()`, TS email validation has no codes.

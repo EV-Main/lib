@@ -24,6 +24,10 @@ Rust crate and its TypeScript mirror at once.
 
 ### Breaking
 
+- **`kitstart` moved to `EV-Service-Arb/sites_tools`** (`ev_lib` feature
+  `kitstart`, `@evinvest/kitstart`, `lib.mkLanding`): the npm name is kept and
+  now publishes from there. Contact links stay as the `marketing` feature.
+- **Repository renamed** `EV-Main/lib` → `EV-Main/web_std`.
 - **Font roles** (`ev_lib` `uikit` and `@evinvest/uikit`): `sans`, `serif` and
   `mono` are separate parameters (`--brand-font-sans`, `--brand-font-serif`,
   `--brand-font-mono`); the role formerly called `display` is `serif`. Defaults
@@ -36,8 +40,9 @@ Rust crate and its TypeScript mirror at once.
   `OrderFormSubmit`, `OpenOrdersEmpty` and the types `TerminalArea`,
   `TerminalPaneProps`, `TickerStatProps`, `OrderBookHeadProps`,
   `OrderBookRowProps`, `OrderFormRowProps`, `OrderFormSubmitProps`,
-  `BookSide`, `OrderSide`, `TradesTapeRowProps`. The Rust terminal in
-  `ev_lib::uikit` stays.
+  `BookSide`, `OrderSide`, `TradesTapeRowProps`. The Rust terminal is removed
+  too (`ev_lib` `uikit_dioxus` / `uikit_leptos` and `ev_lib_classes`): its only
+  consumer, cabinet's trade view, owns its copy.
 - **Themes** (`ev_lib` `uikit` and `@evinvest/uikit`): Dark is EV's default,
   `.light` is Light, and the navy look is opt-in as `data-theme="oldschool"`.
   A brand file must add `chart-6` (29 names). Panels are 6 px at every width,

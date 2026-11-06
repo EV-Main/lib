@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { SettingsLayout, SettingsSection, SettingsRow } from "../src/components/settings";
-import { SectionNav } from "../src/components/section-nav";
+import { SettingsLayout, SettingsSection, SettingsRow } from "../src/components/derived/settings";
+import { SectionNav } from "../src/components/shell/section-nav";
 
 describe("Settings", () => {
   it("puts the rail and the main column side by side", () => {

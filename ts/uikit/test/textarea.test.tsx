@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { Textarea } from "../src/components/textarea";
+import { Textarea } from "../src/components/atomic/textarea";
 
 describe("Textarea", () => {
   it("renders the base classes and slot", () => {

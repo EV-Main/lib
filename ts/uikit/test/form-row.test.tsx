@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { FormRow } from "../src/components/form-row";
+import { FormRow } from "../src/components/atomic/form-row";
 
 describe("FormRow", () => {
   it("labels the control it wraps when given htmlFor", () => {

@@ -1,8 +1,0 @@
-{
-  "default": "cal_com",
-  "providers": {
-    "cal_com": {
-      "url": "https://cal.com"
-    }
-  }
-}

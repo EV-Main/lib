@@ -8,7 +8,7 @@
  * unions narrow at the call site.
  *
  * This is the TypeScript mirror of the `experiments` Cargo feature of the
- * [`ev`](https://github.com/EV-invest/lib) Rust crate; it preserves the
+ * [`ev`](https://github.com/EV-Main/web_std) Rust crate; it preserves the
  * _semantics_ (cookie shape, equal-share pick, control fallback) while reading
  * like idiomatic TS.
  *

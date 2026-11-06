@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
-import { Toggle, toggleVariants } from "../src/components/toggle";
+import { Toggle, toggleVariants } from "../src/components/atomic/toggle";
 
 describe("Toggle", () => {
   it("renders off by default with slot and base", () => {

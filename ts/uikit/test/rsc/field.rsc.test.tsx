@@ -6,9 +6,9 @@ import { Writable } from "node:stream";
 import { registerClientReference, renderToPipeableStream } from "react-server-dom-webpack/server.node";
 import { describe, expect, it } from "vitest";
 
-import type * as FieldModule from "../../src/components/field";
-import type * as InputModule from "../../src/components/input";
-import type * as CheckboxModule from "../../src/components/checkbox";
+import type * as FieldModule from "../../src/components/derived/field";
+import type * as InputModule from "../../src/components/atomic/input";
+import type * as CheckboxModule from "../../src/components/atomic/checkbox";
 
 // A Server Component page that writes `<Field><FieldLabel/><Input/></Field>`
 // never runs those modules: they say "use client", so the bundler hands the

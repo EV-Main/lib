@@ -1,7 +1,7 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
 import { fireEvent, render } from "@testing-library/react";
-import { NativeSelect, NativeSelectGroup, NativeSelectOption } from "../src/components/native-select";
+import { NativeSelect, NativeSelectGroup, NativeSelectOption } from "../src/components/atomic/native-select";
 
 function select(container: HTMLElement): HTMLSelectElement {
   return container.querySelector("select")!;

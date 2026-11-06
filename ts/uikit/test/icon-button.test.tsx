@@ -1,7 +1,7 @@
 import * as React from "react";
 import { describe, it, expect } from "vitest";
 import { render, fireEvent, screen } from "@testing-library/react";
-import { IconButton } from "../src/components/icon-button";
+import { IconButton } from "../src/components/derived/icon-button";
 
 describe("IconButton", () => {
   it("is a named button that does not submit forms", () => {

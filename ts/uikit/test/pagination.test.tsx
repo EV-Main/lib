@@ -7,7 +7,7 @@ import {
   PaginationLink,
   PaginationPrevious,
   PaginationEllipsis,
-} from "../src/components/pagination";
+} from "../src/components/atomic/pagination";
 
 describe("Pagination", () => {
   it("renders a labelled navigation landmark", () => {

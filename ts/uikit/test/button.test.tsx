@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { Button, buttonVariants } from "../src/components/button";
+import { Button, buttonVariants } from "../src/components/atomic/button";
 
 describe("Button", () => {
   it("renders the default variant and size", () => {
