@@ -4,7 +4,7 @@ export const AVATAR = "group/avatar relative flex shrink-0 overflow-hidden borde
 
 export const AVATAR_IMAGE = "aspect-square size-full";
 
-export const AVATAR_FALLBACK = "flex size-full items-center justify-center rounded-[inherit] text-ink font-medium group-data-[size=sm]/avatar:text-caption group-data-[size=md]/avatar:text-body-s group-data-[size=lg]/avatar:font-display group-data-[size=lg]/avatar:text-h2 group-data-[size=lg]/avatar:font-light";
+export const AVATAR_FALLBACK = "flex size-full items-center justify-center rounded-[inherit] text-ink font-medium group-data-[size=sm]/avatar:text-caption group-data-[size=md]/avatar:text-body-s group-data-[size=lg]/avatar:font-serif group-data-[size=lg]/avatar:text-h2 group-data-[size=lg]/avatar:font-light";
 
 export const avatarShapeClasses = {
   "circle": "rounded-full",

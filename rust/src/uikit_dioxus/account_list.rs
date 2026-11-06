@@ -56,7 +56,7 @@ pub fn AccountListItem(
 	avatar: Option<Element>,
 	/// Role badges after the name block.
 	badges: Option<Element>,
-	/// A figure at the end, set in the display face: a balance.
+	/// A figure at the end, set in the serif face: a balance.
 	figure: Option<Element>,
 	/// Controls beside the row, such as a menu button.
 	actions: Option<Element>,
@@ -334,7 +334,7 @@ mod tests {
 		let html = render(app);
 		assert!(html.contains("data-slot=\"avatar-fallback\""), "{html}");
 		assert!(html.contains(">Я</div>"), "{html}");
-		// The square tile and the display face survive the fuse over the
+		// The square tile and the serif face survive the fuse over the
 		// avatar's own circle and sans initial.
 		let tile = &html[..html.find("data-slot=\"avatar\"").expect("avatar")];
 		let tile = &tile[tile.rfind("class=").expect("class")..];
@@ -342,7 +342,7 @@ mod tests {
 			tile.contains("size-14") && tile.contains("rounded-(--control-radius)") && !tile.contains("rounded-full"),
 			"{tile}"
 		);
-		assert!(html.contains("font-display text-h2 font-light text-ink\" data-slot=\"avatar-fallback\""), "{html}");
+		assert!(html.contains("font-serif text-h2 font-light text-ink\" data-slot=\"avatar-fallback\""), "{html}");
 	}
 
 	#[test]

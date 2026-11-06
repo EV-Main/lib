@@ -46,7 +46,7 @@ function PlaceCard<L extends string>({ place, locale, hrefOf, phoneOf, openLabel
   const front = storefrontOf(place);
   return (
     <li className={cn("flex flex-col gap-3 rounded-xl border border-border bg-card p-6 md:p-7", c?.card)}>
-      <p className={cn("font-display text-xl font-bold text-ink", c?.name)}>{place.name[locale]}</p>
+      <p className={cn("font-serif text-xl font-bold text-ink", c?.name)}>{place.name[locale]}</p>
       {front && (
         <address className={partWithLeading("text-sm not-italic text-ink-soft", "leading-relaxed", c?.address)}>
           {front.address.street}
@@ -55,7 +55,7 @@ function PlaceCard<L extends string>({ place, locale, hrefOf, phoneOf, openLabel
         </address>
       )}
       {phone && (
-        <a href={telHref(phone)} className={cn("font-display text-lg font-bold text-primary-ink", c?.phone)}>
+        <a href={telHref(phone)} className={cn("font-serif text-lg font-bold text-primary-ink", c?.phone)}>
           {phone}
         </a>
       )}

@@ -41,7 +41,7 @@ export function PageHeading({ title, description, eyebrow, actions, className, .
     >
       <div className="flex min-w-0 flex-col gap-1">
         {eyebrow !== undefined && <SectionLabel tone="accent">{eyebrow}</SectionLabel>}
-        <h1 className="font-display text-h1 font-light text-ink">{title}</h1>
+        <h1 className="font-serif text-h1 font-light text-ink">{title}</h1>
         {description !== undefined && <p className="text-body text-ink-soft">{description}</p>}
       </div>
       {actions !== undefined && <div className="flex shrink-0 items-center gap-2.5">{actions}</div>}

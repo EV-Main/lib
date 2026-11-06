@@ -56,7 +56,7 @@ export default function SettingsScreen() {
         </TabsList>
       </Tabs>
       <header className="border-border-subtle flex flex-col gap-1 border-b px-4 py-7 lg:px-8">
-        <h1 className="font-display text-h1 text-ink font-light">Settings</h1>
+        <h1 className="font-serif text-h1 text-ink font-light">Settings</h1>
         <p className="text-body-l text-ink-mid">Account, billing and developer configuration.</p>
       </header>
       <SettingsLayout nav={<SettingsNav value={section} onValueChange={setSection} />}>

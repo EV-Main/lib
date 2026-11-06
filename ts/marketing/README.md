@@ -294,7 +294,7 @@ in the app.
 ## Also in `./react`
 
 - `H1`…`H6`, `P` — document typography (legal pages, articles) on token
-  classes (`font-display`, `text-ink`, `text-primary-ink`), each with `asChild`.
+  classes (`font-serif`, `text-ink`, `text-primary-ink`), each with `asChild`.
 - `createStatusCopy<T>()` — a typed provider/hook pair to hand server-resolved
   copy to Next's client-only `error.tsx` without shipping every catalogue;
   the hook returns `null` rather than throwing without a provider. **Call it

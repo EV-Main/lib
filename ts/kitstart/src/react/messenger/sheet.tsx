@@ -69,7 +69,7 @@ export default function Sheet({ kit }: { kit: MessengerKit }) {
           <div className={cn("flex flex-col gap-4 p-4", kit.classNames?.messengerPicker)}>
             {step === "pick" ? (
               <>
-                <DrawerTitle id={titleId} className="font-display text-xl font-bold text-ink">
+                <DrawerTitle id={titleId} className="font-serif text-xl font-bold text-ink">
                   {words.messengerSheetTitle}
                 </DrawerTitle>
                 {action.panel}
@@ -87,7 +87,7 @@ export default function Sheet({ kit }: { kit: MessengerKit }) {
                 <Button type="button" variant="link" size="sm" className="self-start px-0" onClick={() => setStep("pick")}>
                   ‹ {words.messengerChange}
                 </Button>
-                <DrawerTitle id={titleId} className="font-display text-xl font-bold text-ink">
+                <DrawerTitle id={titleId} className="font-serif text-xl font-bold text-ink">
                   {words.messengerCallTitle}
                 </DrawerTitle>
                 {kit.phone({ form: formId })}

@@ -12,7 +12,7 @@ pub const EYEBROW: &str = "font-medium text-[10px] md:text-[11.5px] tracking-[0.
 /// `cn!` merges every `font-*` utility as one group, so a `font-bold` here would
 /// take the family down with it the moment a caller overrides anything — hence
 /// the weight as a property.
-pub const DISPLAY_BASE: &str = "font-display [font-weight:700] max-w-[54rem] tracking-[-0.005em] leading-[1.16] md:leading-[1.14] \
+pub const DISPLAY_BASE: &str = "font-serif [font-weight:700] max-w-[54rem] tracking-[-0.005em] leading-[1.16] md:leading-[1.14] \
                                 text-[calc(1.5625rem*var(--display-scale))] md:text-[calc(2.625rem*var(--display-scale))]";
 /// The paragraph directly under a [`DISPLAY_BASE`] headline — one step up from
 /// [`PROSE`], which is body copy.

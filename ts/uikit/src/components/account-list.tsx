@@ -97,7 +97,7 @@ export interface AccountListItemProps extends Omit<React.ComponentProps<"div">, 
   avatar?: React.ReactNode;
   /** Role badges after the name block. */
   badges?: React.ReactNode;
-  /** A figure at the end, set in the display face: a balance. */
+  /** A figure at the end, set in the serif face: a balance. */
   figure?: React.ReactNode;
   /** Controls beside the row (a menu button); they cannot live inside the radio. */
   actions?: React.ReactNode;

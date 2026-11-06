@@ -520,7 +520,7 @@ function ReturnScreen(props: { left: Left; words: LeadCaptureMessengerText; onAn
   const name = left.channel === "whatsapp" ? words.messengerOptionWhatsapp : words.messengerOptionTelegram;
   return (
     <div role="status" className={cn("absolute inset-0 z-10 flex flex-col justify-center gap-4 bg-card", c?.messengerReturn)}>
-      <p ref={title} tabIndex={-1} className="font-display text-xl font-bold text-ink outline-none">
+      <p ref={title} tabIndex={-1} className="font-serif text-xl font-bold text-ink outline-none">
         {words.messengerReturnTitle}
       </p>
       <p className="text-ink-soft">{fillText(words.messengerReturnBody, { channel: name, ref: left.ref ?? "" })}</p>

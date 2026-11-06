@@ -32,7 +32,7 @@ export function MapFacade({ query, title, show, address, className, classNames: 
       className={cn("relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-muted md:aspect-[21/9]", className)}
       placeholder={load => (
         <button type="button" onClick={load} className="flex size-full flex-col items-center justify-center gap-2 px-6 text-center hover:bg-hover">
-          <span className={cn("font-display text-lg font-bold text-ink", c?.show)}>{show}</span>
+          <span className={cn("font-serif text-lg font-bold text-ink", c?.show)}>{show}</span>
           <span className={cn("text-sm text-ink-soft", c?.address)}>{address}</span>
         </button>
       )}

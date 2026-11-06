@@ -186,7 +186,7 @@ fn d_hero() -> Element {
 			div { class: "grid grid-cols-[3fr_2fr] gap-6 border-t-4 border-brand bg-card px-8 py-6",
 				div { class: "flex flex-col gap-3",
 					span { class: "text-xs font-medium uppercase tracking-wide text-primary-ink", {lorem(3)} }
-					h1 { class: "font-display text-3xl text-ink", {lorem(6)} }
+					h1 { class: "font-serif text-3xl text-ink", {lorem(6)} }
 					p { class: "text-ink-mid", {lorem(24)} }
 					div { class: "flex gap-3",
 						Button { variant: ButtonVariant::Solid, {lorem(2)} }

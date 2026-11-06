@@ -324,6 +324,6 @@ mod tests {
 		assert!(content.contains("p-0") && !content.contains("p-6") && !content.contains(" grid "), "{content}");
 		assert!(tab(&html, "Профиль").contains("data-[state=active]:bg-active"), "{html}");
 		assert!(tab(&html, "Профиль").contains("border-0") && !tab(&html, "Профиль").contains("border-b "), "{html}");
-		assert!(html.contains("class=\"font-display text-h1 font-light text-ink\" data-slot=\"dialog-title\""), "{html}");
+		assert!(html.contains("class=\"font-serif text-h1 font-light text-ink\" data-slot=\"dialog-title\""), "{html}");
 	}
 }

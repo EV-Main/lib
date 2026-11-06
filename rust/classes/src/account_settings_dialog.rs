@@ -23,7 +23,7 @@ pub const ACCOUNT_SETTINGS_DIALOG_PANE: &str = "relative flex min-h-0 min-w-0 fl
 /// The right padding keeps the heading clear of the pinned close button.
 pub const ACCOUNT_SETTINGS_DIALOG_HEADING: &str = "flex flex-col gap-1 pr-10";
 
-pub const ACCOUNT_SETTINGS_DIALOG_TITLE: &str = "font-display text-h1 font-light text-ink";
+pub const ACCOUNT_SETTINGS_DIALOG_TITLE: &str = "font-serif text-h1 font-light text-ink";
 
 pub const ACCOUNT_SETTINGS_DIALOG_DESCRIPTION: &str = "text-body text-ink-mid";
 

@@ -53,7 +53,7 @@ export function PriceBox(props: {
     <div aria-live="polite" aria-atomic="true" className={cn("flex flex-col gap-2 rounded-[var(--control-radius)] border border-border bg-card p-4", c?.price)}>
       <p className="text-sm text-ink-soft">{text.priceTitle}</p>
       {price ? (
-        <p className={cn("font-display text-3xl font-bold text-ink", c?.priceTotal)} data-price-cents={price.cents}>
+        <p className={cn("font-serif text-3xl font-bold text-ink", c?.priceTotal)} data-price-cents={price.cents}>
           {formatCents(price.cents, locale)}
         </p>
       ) : (

@@ -86,7 +86,7 @@ describe("PageHeading / SectionLabel", () => {
   it("renders only the parts given", () => {
     const { container, getByRole } = render(<PageHeading title="Users" />);
     const heading = getByRole("heading", { level: 1, name: "Users" });
-    expect(heading).toHaveClass("font-display", "text-h1", "font-light");
+    expect(heading).toHaveClass("font-serif", "text-h1", "font-light");
     expect(container.querySelector("p")).toBeNull();
   });
 

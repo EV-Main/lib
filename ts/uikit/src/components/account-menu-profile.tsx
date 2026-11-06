@@ -117,7 +117,7 @@ export function ProfileCard({
   const content = (
     <>
       <Avatar className="size-14 shrink-0 rounded-full">
-        <AvatarFallback className="font-display text-h2 font-light text-ink">{initials.slice(0, 1)}</AvatarFallback>
+        <AvatarFallback className="font-serif text-h2 font-light text-ink">{initials.slice(0, 1)}</AvatarFallback>
       </Avatar>
       <span className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="truncate text-body font-medium text-ink">{name}</span>

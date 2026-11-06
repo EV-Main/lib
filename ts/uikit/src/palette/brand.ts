@@ -15,10 +15,10 @@ export interface BrandConfig {
   fonts?: Partial<Record<FontRole, string>>;
 }
 
-export type FontRole = "sans" | "display" | "mono";
-export const FONT_ROLES: readonly FontRole[] = ["sans", "display", "mono"];
+export type FontRole = "sans" | "serif" | "mono";
+export const FONT_ROLES: readonly FontRole[] = ["sans", "serif", "mono"];
 // aquafix's file calls the body family `text`.
-const FONT_KEYS: Record<string, FontRole> = { sans: "sans", text: "sans", display: "display", mono: "mono" };
+const FONT_KEYS: Record<string, FontRole> = { sans: "sans", text: "sans", serif: "serif", mono: "mono" };
 
 /** Every problem with a brand file at once, so one run fixes them all. */
 export class PaletteError extends Error {
@@ -41,7 +41,7 @@ const FAMILY = /^[A-Za-z0-9][A-Za-z0-9 _-]*$/;
 /**
  * Reads the aquafix `brand.toml` shape: `[colors.light]` and `[colors.dark]`
  * keyed by contract name, optional top-level `mark` / `mark-aspect`, and the
- * family names in `[fonts]` (`sans` or `text`, `display`, `mono`). The rest of
+ * family names in `[fonts]` (`sans` or `text`, `serif`, `mono`). The rest of
  * `[fonts]` and every other table (`[print]`, …) belong to other tools and are
  * ignored — loading the font files is the site's job, not the palette's.
  */

@@ -87,6 +87,6 @@ chart-5 = "#a9bdd1"
 chart-6 = "#9a8cf0"
 
 [fonts]
-display = "Archivo"
+serif = "Archivo"
 text = "Inter"
 display-weights = [600, 700]

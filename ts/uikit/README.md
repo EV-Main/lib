@@ -162,7 +162,7 @@ brand's dark values. The package ships a generator for it, reading the
 `brand.toml` shape (`[colors.light]` and `[colors.dark]`, keyed by token name;
 optional top-level `mark` and `mark-aspect` become `--brand-mark` and
 `--brand-aspect`; the family names in `[fonts]` — `sans` (or aquafix's `text`),
-`display`, `mono` — become the [font parameters](#fonts); other keys and tables
+`serif`, `mono` — become the [font parameters](#fonts); other keys and tables
 are ignored). Each polarity block also declares `--scheme: light | dark`, which
 the platform-drawn parts of the kit read (a `NativeSelect`'s popup):
 
@@ -235,7 +235,7 @@ face (a serif for headings and figures, a sans for the rest) sets two roles.
 | parameter | utilities | unset |
 |---|---|---|
 | `--brand-font-sans` | `font-sans`, the page's base family | `--font-inter`, else `"Inter"` |
-| `--brand-font-display` | `font-display`, `font-serif` | the sans role |
+| `--brand-font-serif` | `font-serif` | the sans role |
 | `--brand-font-mono` | `font-mono` | `--font-inter`, else `"Inter"` |
 
 Declare them on the brand scope (the palette generator writes them from
@@ -244,13 +244,14 @@ the kit ships no font files:
 
 ```css
 [data-brand="aquafix"] {
-  --brand-font-display: "Archivo";
+  --brand-font-serif: "Archivo";
 }
 ```
 
-The display role covers headings, figures and the avatar initial. `--font-playfair`
-is no longer read: a site that wants a serif there sets `--brand-font-display`
-to the family it loads.
+The serif role is the second face, for headings, figures, wordmarks, italic
+accents and the avatar initial; it need not have serifs. `--font-playfair` is no
+longer read: a site that wants a serif there sets `--brand-font-serif` to the
+family it loads.
 
 The utilities resolve the chain on the element, so a scope re-fonts everything
 under it that carries one. The page's base family resolves once, on `<html>`: a
@@ -538,7 +539,7 @@ count-up is `requestAnimationFrame`.
 | `live` | announce each new value politely; off by default |
 | `animateOnMount`, `from` | animate the first render from `from` (default 0) |
 
-It inherits font, size and colour, so it fits `text-figure-l font-display
+It inherits font, size and colour, so it fits `text-figure-l font-serif
 font-light` as well as a `text-body` table cell. `tabular-nums` is on.
 `useCountTween(value, { duration, easing, from, animateOnMount })` returns the
 in-flight number for a chart or a label of your own. `HeaderBalance` takes
@@ -820,7 +821,9 @@ becomes `variant="solid"`.
 **Tokens and look**
 
 - `--font-playfair` is no longer read; a site that keeps a serif for headings
-  sets `--brand-font-display` to it (see [Fonts](#fonts)).
+  sets `--brand-font-serif` to it (see [Fonts](#fonts)). Anyone who adopted
+  `--brand-font-display` / `font-display` renames them to `--brand-font-serif` /
+  `font-serif`.
 - A brand file must add `chart-6` (29 names now); `evinvest-palette` names it.
 - Panel radius is 6 px at every width (the `sm` bump to 8 px is gone), controls
   4 px, and the depth tiers are flat. **Aquafix, vifnet and any other brand take

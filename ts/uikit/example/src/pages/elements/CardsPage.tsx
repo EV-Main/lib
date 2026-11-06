@@ -39,7 +39,7 @@ export default function CardsPage() {
             </CardAction>
           </CardHeader>
           <CardContent>
-            <span className="font-display text-figure-l text-ink font-light tabular-nums">2,398.73</span>
+            <span className="font-serif text-figure-l text-ink font-light tabular-nums">2,398.73</span>
           </CardContent>
           <CardFooter className="gap-2">
             <Button size="sm">Add funds</Button>

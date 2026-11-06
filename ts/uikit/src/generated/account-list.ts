@@ -14,7 +14,7 @@ export const ACCOUNT_LIST_ITEM_RADIO = "flex min-w-0 flex-1 items-center gap-3 r
 
 export const ACCOUNT_LIST_ITEM_AVATAR = "size-14 shrink-0 rounded-(--control-radius)";
 
-export const ACCOUNT_LIST_ITEM_AVATAR_FALLBACK = "font-display text-h2 font-light text-ink";
+export const ACCOUNT_LIST_ITEM_AVATAR_FALLBACK = "font-serif text-h2 font-light text-ink";
 
 export const ACCOUNT_LIST_ITEM_TEXT = "flex min-w-0 flex-1 flex-col gap-0.5";
 
@@ -24,7 +24,7 @@ export const ACCOUNT_LIST_ITEM_HANDLE = "truncate text-body text-ink-mid";
 
 export const ACCOUNT_LIST_ITEM_BADGES = "flex shrink-0 items-center gap-1.5";
 
-export const ACCOUNT_LIST_ITEM_FIGURE = "shrink-0 font-display text-figure-m font-light tabular-nums text-ink";
+export const ACCOUNT_LIST_ITEM_FIGURE = "shrink-0 font-serif text-figure-m font-light tabular-nums text-ink";
 
 export const ACCOUNT_LIST_ITEM_CHECK = "flex size-4 shrink-0 text-primary-ink";
 

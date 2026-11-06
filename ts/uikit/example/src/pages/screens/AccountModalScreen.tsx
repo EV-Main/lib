@@ -42,7 +42,7 @@ function ModalPreview() {
       </div>
       <div className="flex min-w-0 flex-1 flex-col gap-5 p-6 md:p-8">
         <div className="flex flex-col gap-1">
-          <h2 className="font-display text-h1 text-ink font-light">Account settings</h2>
+          <h2 className="font-serif text-h1 text-ink font-light">Account settings</h2>
           <p className="text-body text-ink-mid">Manage your account information and security settings</p>
         </div>
         <MyInformation />

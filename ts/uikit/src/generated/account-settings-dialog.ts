@@ -16,7 +16,7 @@ export const ACCOUNT_SETTINGS_DIALOG_PANE = "relative flex min-h-0 min-w-0 flex-
 
 export const ACCOUNT_SETTINGS_DIALOG_HEADING = "flex flex-col gap-1 pr-10";
 
-export const ACCOUNT_SETTINGS_DIALOG_TITLE = "font-display text-h1 font-light text-ink";
+export const ACCOUNT_SETTINGS_DIALOG_TITLE = "font-serif text-h1 font-light text-ink";
 
 export const ACCOUNT_SETTINGS_DIALOG_DESCRIPTION = "text-body text-ink-mid";
 

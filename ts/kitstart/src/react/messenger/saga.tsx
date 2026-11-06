@@ -31,7 +31,7 @@ function SagaHead({ kit }: { kit: MessengerKit }) {
           ‹ {words.messengerChange}
         </Button>
       )}
-      <p className="font-display text-2xl font-bold text-ink">{title}</p>
+      <p className="font-serif text-2xl font-bold text-ink">{title}</p>
       <p className="text-ink-soft">{lede}</p>
     </div>
   );

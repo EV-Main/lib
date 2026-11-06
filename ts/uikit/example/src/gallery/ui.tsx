@@ -9,7 +9,7 @@ export function PageRoot({ title, lede, children }: { title: string; lede?: Reac
   return (
     <div data-enter="stagger" className="page-root flex flex-col gap-10 p-4 lg:p-8">
       <header className="flex max-w-3xl flex-col gap-2">
-        <h1 className="font-display text-h1 text-ink font-light">{title}</h1>
+        <h1 className="font-serif text-h1 text-ink font-light">{title}</h1>
         {lede ? <p className="text-body-l text-ink-mid">{lede}</p> : null}
       </header>
       {children}

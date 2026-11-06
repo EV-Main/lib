@@ -14,7 +14,7 @@ pub const ACCOUNT_LIST_ITEM_RADIO: &str = "flex min-w-0 flex-1 items-center gap-
 
 pub const ACCOUNT_LIST_ITEM_AVATAR: &str = "size-14 shrink-0 rounded-(--control-radius)";
 
-pub const ACCOUNT_LIST_ITEM_AVATAR_FALLBACK: &str = "font-display text-h2 font-light text-ink";
+pub const ACCOUNT_LIST_ITEM_AVATAR_FALLBACK: &str = "font-serif text-h2 font-light text-ink";
 
 pub const ACCOUNT_LIST_ITEM_TEXT: &str = "flex min-w-0 flex-1 flex-col gap-0.5";
 
@@ -24,7 +24,7 @@ pub const ACCOUNT_LIST_ITEM_HANDLE: &str = "truncate text-body text-ink-mid";
 
 pub const ACCOUNT_LIST_ITEM_BADGES: &str = "flex shrink-0 items-center gap-1.5";
 
-pub const ACCOUNT_LIST_ITEM_FIGURE: &str = "shrink-0 font-display text-figure-m font-light tabular-nums text-ink";
+pub const ACCOUNT_LIST_ITEM_FIGURE: &str = "shrink-0 font-serif text-figure-m font-light tabular-nums text-ink";
 
 pub const ACCOUNT_LIST_ITEM_CHECK: &str = "flex size-4 shrink-0 text-primary-ink";
 

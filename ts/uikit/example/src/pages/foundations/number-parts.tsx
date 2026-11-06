@@ -12,7 +12,7 @@ function Figure({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="flex min-w-36 flex-col gap-1">
       <span className="text-caption text-ink-soft">{label}</span>
-      <span className="font-display text-figure-l font-light text-ink">{children}</span>
+      <span className="font-serif text-figure-l font-light text-ink">{children}</span>
     </div>
   );
 }

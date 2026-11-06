@@ -38,7 +38,7 @@ Rust crate and its TypeScript mirror at once.
   pre-1.0 navy look is opt-in as `data-theme="oldschool"`. The planes are flat
   steps separated by a hairline; panels are 6 px, controls and chips 4 px, and
   the shadow tiers are a zero shadow outside Oldschool. A brand file must add
-  `chart-6` (29 names). `--font-playfair` is no longer read: the display face
+  `chart-6` (29 names). `--font-playfair` is no longer read: the serif face
   is Source Serif 4 (`--font-source-serif`). Brands without their own
   radius or depth take the u2 shapes. See the README's *Migrating 0.x → 1.0*.
 - **Variant names** (`ev_lib` `uikit` and `@evinvest/uikit`): `ButtonVariant`
@@ -239,10 +239,9 @@ Rust crate and its TypeScript mirror at once.
 
 ### Fixed
 
-- **`cn!` merges `font-display` and the `(--var)` shorthand like
-  `tailwind-merge`** (`ev_lib` `uikit`): `font-display` is a font family, so a
-  later `font-light` no longer drops it, and `rounded-(--control-radius)`
-  replaces `rounded-full` instead of sitting beside it.
+- **`cn!` merges the `(--var)` shorthand like `tailwind-merge`** (`ev_lib`
+  `uikit`): `rounded-(--control-radius)` replaces `rounded-full` instead of
+  sitting beside it.
 - **`PopoverContent` honours `align`** (`ev_lib` `uikit`): `start` and `end` pin
   the panel to the trigger's left or right edge. It always centred before, and a
   wide panel under a trigger at the edge of its container ran off the screen.

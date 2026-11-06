@@ -720,7 +720,7 @@ export function LeadCapture(props: LeadCaptureProps) {
         {slot("head") ||
           (props.head ?? (
             <div className={cn("flex flex-col gap-1", c?.head)}>
-              <p className={cn("font-display text-2xl font-bold text-ink", c?.title)}>{text.title}</p>
+              <p className={cn("font-serif text-2xl font-bold text-ink", c?.title)}>{text.title}</p>
               {/* `chip` says it in place of the lede. */}
               {!drawsAt(shown, "afterHead") && <p className={cn("text-ink-soft", c?.lede)}>{text.lede}</p>}
             </div>

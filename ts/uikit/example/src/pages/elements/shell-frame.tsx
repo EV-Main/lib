@@ -125,7 +125,7 @@ function DemoPage({ pathname }: { pathname: string }) {
         </CardHeader>
         <CardContent>
           <Settled loading={loading} skeleton={<Skeleton className="h-8 w-40" />}>
-            <p className="font-display text-figure-l text-ink font-light tabular-nums">12 480.00</p>
+            <p className="font-serif text-figure-l text-ink font-light tabular-nums">12 480.00</p>
           </Settled>
         </CardContent>
       </Card>

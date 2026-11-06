@@ -19,10 +19,10 @@ const SANS = "Inter Regular";
 const SANS_MEDIUM = "Inter Medium";
 
 const DISPLAY: readonly Style[] = [
-  { name: "Heading / H1", font: SERIF, size: "32/38", classes: "font-display text-h1 font-light", sample: "Priced by probability" },
-  { name: "Heading / H2", font: SERIF, size: "24/30", classes: "font-display text-h2 font-light", sample: "Open positions" },
-  { name: "Figure / L", font: SERIF, size: "28/32", classes: "font-display text-figure-l font-light tabular-nums", sample: "2,398.73" },
-  { name: "Figure / M", font: SERIF, size: "20/24", classes: "font-display text-figure-m font-light tabular-nums", sample: "12.40 ABC" },
+  { name: "Heading / H1", font: SERIF, size: "32/38", classes: "font-serif text-h1 font-light", sample: "Priced by probability" },
+  { name: "Heading / H2", font: SERIF, size: "24/30", classes: "font-serif text-h2 font-light", sample: "Open positions" },
+  { name: "Figure / L", font: SERIF, size: "28/32", classes: "font-serif text-figure-l font-light tabular-nums", sample: "2,398.73" },
+  { name: "Figure / M", font: SERIF, size: "20/24", classes: "font-serif text-figure-m font-light tabular-nums", sample: "12.40 ABC" },
 ];
 
 const TEXT: readonly Style[] = [
@@ -79,9 +79,9 @@ export default function Type() {
   return (
     <PageRoot
       title="Type"
-      lede="One family, Inter; headings and figures use the display role, which a brand may point at another face. Letter spacing is 0 and nothing is upper-cased."
+      lede="One family, Inter; headings and figures use the serif role, which a brand may point at another face. Letter spacing is 0 and nothing is upper-cased."
     >
-      <Block title="Display" note="Headings and figures use the display role. Figures are tabular so columns of numbers align.">
+      <Block title="Display" note="Headings and figures use the serif role. Figures are tabular so columns of numbers align.">
         <StyleTable styles={DISPLAY} />
       </Block>
       <Block title="Text">

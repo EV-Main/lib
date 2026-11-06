@@ -143,7 +143,7 @@ export function SettledDemo() {
           }
         >
           <div className="flex flex-col gap-1">
-            <span className="font-display text-figure-l text-ink font-light tabular-nums">2,398.73</span>
+            <span className="font-serif text-figure-l text-ink font-light tabular-nums">2,398.73</span>
             <span className="text-body text-ink-mid">Net exposure is 38% of equity.</span>
             <span className="text-caption text-ink-soft">24h volume · Funding · Updated 13:06</span>
           </div>

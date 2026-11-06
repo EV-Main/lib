@@ -289,7 +289,7 @@ export function DockPanel({ empty = false }: { empty?: boolean }) {
       empty={
         empty && !a.asked ? (
           <div className="flex flex-col gap-4 px-4">
-            <h3 className="font-display text-h2 text-ink font-light">How can I help?</h3>
+            <h3 className="font-serif text-h2 text-ink font-light">How can I help?</h3>
             <p className="text-body-s text-ink-soft">Ask about positions, risk, orders or documents. Answers can run tools on your account.</p>
             <Suggestions labels={SUMMARY} column />
           </div>

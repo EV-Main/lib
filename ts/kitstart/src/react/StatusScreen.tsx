@@ -74,7 +74,7 @@ export function StatusScreen<L extends string, F>(props: StatusScreenProps<L, F>
           brand keeping one row says so through `lang` (`order-none w-auto`). */}
       <header className={cn("relative flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-border px-5 py-3 md:flex-nowrap md:gap-5 md:px-12 md:py-5", c?.header)}>
         <a href={target.home} aria-label={brandName} className={cn("shrink-0 text-ink", c?.logo)}>
-          {logo ?? <span className="font-display text-lg font-bold md:text-xl">{brandName}</span>}
+          {logo ?? <span className="font-serif text-lg font-bold md:text-xl">{brandName}</span>}
         </a>
         <div className="flex-1" />
         <LangSwitch
@@ -85,7 +85,7 @@ export function StatusScreen<L extends string, F>(props: StatusScreenProps<L, F>
           className={cn("order-last w-full text-sm font-medium text-ink-soft md:order-none md:w-auto", c?.lang)}
         />
         {target.phone && (
-          <a href={telHref(target.phone)} className={cn("whitespace-nowrap font-display text-base font-bold text-primary-ink md:text-xl", c?.phone)}>
+          <a href={telHref(target.phone)} className={cn("whitespace-nowrap font-serif text-base font-bold text-primary-ink md:text-xl", c?.phone)}>
             {target.phone}
           </a>
         )}
@@ -93,8 +93,8 @@ export function StatusScreen<L extends string, F>(props: StatusScreenProps<L, F>
       <main className={cn("relative flex flex-1 flex-col items-center gap-5 px-5 py-12 text-center md:gap-6 md:py-24", c?.main)}>
         {mark}
         <p className={cn("text-xs font-medium tracking-widest text-primary-ink", c?.eyebrow)}>{status.eyebrow}</p>
-        <p className={partWithLeading("font-display text-8xl font-bold tracking-tight text-ink md:text-9xl", "leading-none", c?.code)}>{status.code}</p>
-        <h1 className={partWithLeading("font-display text-2xl font-bold text-ink md:text-4xl", "leading-snug", c?.headline)}>
+        <p className={partWithLeading("font-serif text-8xl font-bold tracking-tight text-ink md:text-9xl", "leading-none", c?.code)}>{status.code}</p>
+        <h1 className={partWithLeading("font-serif text-2xl font-bold text-ink md:text-4xl", "leading-snug", c?.headline)}>
           {status.headline[0]}
           <span className="text-primary-ink">{status.headline[1]}</span>
         </h1>

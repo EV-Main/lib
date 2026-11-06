@@ -138,7 +138,7 @@ describe("brandFromToml + renderPalette", () => {
 
   it("writes the brand file's families as the font parameters, `text` being sans", () => {
     const css = renderPalette("aqua", brandFromToml(demo), contract);
-    expect(css).toContain('--brand-font-display: "Archivo";');
+    expect(css).toContain('--brand-font-serif: "Archivo";');
     expect(css).toContain('--brand-font-sans: "Inter";');
     expect(css).not.toContain("--brand-font-mono");
   });
@@ -149,9 +149,9 @@ describe("brandFromToml + renderPalette", () => {
   });
 
   it("rejects a family name that could escape its quotes", () => {
-    const config: BrandConfig = { colors: { light: complete(), dark: complete() }, fonts: { display: 'x"; } body {' } };
+    const config: BrandConfig = { colors: { light: complete(), dark: complete() }, fonts: { serif: 'x"; } body {' } };
     expect(problems(() => renderPalette("aqua", config, contract))).toEqual([
-      'fonts.display "x\\"; } body {" is not a plain family name',
+      'fonts.serif "x\\"; } body {" is not a plain family name',
     ]);
   });
 

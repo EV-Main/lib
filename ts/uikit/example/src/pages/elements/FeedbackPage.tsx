@@ -42,7 +42,7 @@ function SettledDemo() {
         Reload
       </Button>
       <Settled loading={loading} skeleton={<Skeleton className="h-8 w-40" />}>
-        <span className="font-display text-figure-l text-ink font-light tabular-nums">12,480.00</span>
+        <span className="font-serif text-figure-l text-ink font-light tabular-nums">12,480.00</span>
       </Settled>
     </Specimen>
   );

@@ -26,7 +26,7 @@ export function Faq({ items, head, id = "faq", className, classNames: c }: FaqPr
         {items.map(item => (
           <details key={item.q} className={cn("group border-b border-border last:border-b-0", c?.item)}>
             <summary className={cn("flex cursor-pointer list-none items-start gap-4 px-5 py-5 md:px-8 md:py-6 [&::-webkit-details-marker]:hidden", c?.summary)}>
-              <span className={partWithLeading("flex-1 font-display text-lg font-bold text-ink", "leading-snug", c?.question)}>{item.q}</span>
+              <span className={partWithLeading("flex-1 font-serif text-lg font-bold text-ink", "leading-snug", c?.question)}>{item.q}</span>
               <span className={cn("text-lg text-primary-ink transition-transform group-open:rotate-45", c?.icon)} aria-hidden="true">
                 +
               </span>
