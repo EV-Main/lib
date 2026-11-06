@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 import { Toggle, toggleVariants } from "../src/components/atomic/toggle";
+import { sizeClasses } from "../src/generated/size";
 
 describe("Toggle", () => {
   it("renders off by default with slot and base", () => {
@@ -38,7 +39,7 @@ describe("Toggle", () => {
   it("toggleVariants fuses variant, size and override", () => {
     const cls = toggleVariants({ variant: "outline", size: "sm", className: "px-10" });
     expect(cls).toContain("border-input");
-    expect(cls).toContain("h-8");
+    expect(cls).toContain(sizeClasses.sm);
     expect(cls).toContain("px-10");
   });
 });

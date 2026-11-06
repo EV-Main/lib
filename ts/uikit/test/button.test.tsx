@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
 import { Button, buttonVariants } from "../src/components/atomic/button";
+import { sizeClasses } from "../src/generated/size";
 
 describe("Button", () => {
   it("renders the default variant and size", () => {
@@ -8,7 +9,7 @@ describe("Button", () => {
     const el = getByText("go");
     expect(el.tagName).toBe("BUTTON");
     expect(el).toHaveClass("bg-primary");
-    expect(el).toHaveClass("h-9");
+    expect(el).toHaveClass("h-(--control-box)", sizeClasses.md);
     expect(el).toHaveAttribute("data-slot", "button");
   });
 
@@ -18,11 +19,11 @@ describe("Button", () => {
         x
       </Button>,
     );
-    expect(getByText("x")).toHaveClass("h-8");
+    expect(getByText("x")).toHaveClass(sizeClasses.sm);
     expect(getByText("x")).toHaveClass("aspect-square");
   });
 
-  it("holds the 44px touch floor, as a square when icon", () => {
+  it("takes the touch step, as a square when icon", () => {
     const { getByText } = render(
       <>
         <Button size="touch">go</Button>
@@ -31,8 +32,8 @@ describe("Button", () => {
         </Button>
       </>,
     );
-    expect(getByText("go")).toHaveClass("min-h-11", "px-6");
-    expect(getByText("x")).toHaveClass("size-11", "px-0");
+    expect(getByText("go")).toHaveClass(sizeClasses.touch, "px-6");
+    expect(getByText("x")).toHaveClass(sizeClasses.touch, "aspect-square", "px-0");
     expect(getByText("x")).not.toHaveClass("px-6");
   });
 
@@ -60,7 +61,7 @@ describe("Button", () => {
   it("buttonVariants helper fuses variant, size and className override", () => {
     const cls = buttonVariants({ variant: "ghost", size: "md", className: "px-10" });
     expect(cls).toContain("hover:bg-hover");
-    expect(cls).toContain("h-9");
+    expect(cls).toContain(sizeClasses.md);
     expect(cls).toContain("px-10");
     // the default size's standalone `px-4` is dropped by the override (the
     // `has-[>svg]:px-3` refinement stays — it's a different utility).

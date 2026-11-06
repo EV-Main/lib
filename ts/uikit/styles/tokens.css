@@ -924,6 +924,8 @@
   --radius: 0.375rem; /* panels and menus */
   /* control geometry, so a consumer reshapes every button/input at once */
   --control-radius: 0.25rem;
+  --control-h: 2.25rem;
+  --control-step: 0.25rem;
   --chip-radius: 0.25rem;
   /* how much of its ink a chip's fill and edge take, for a brand that pins
    * nothing: an outline by default, a tint where a theme raises the fill */
@@ -981,6 +983,17 @@
    *   --brand-mark: url("/assets/logo.svg");
    *   --brand-aspect: 387 / 335;
    */
+}
+
+/* The control height ramp a `Size` step names, re-derived on every scope that
+ * may set `--control-h`. Pin one step to bend the ramp. */
+:where(:root, [data-brand], [data-theme]) {
+  --control-h-xs: calc(var(--control-h) - 2 * var(--control-step));
+  --control-h-sm: calc(var(--control-h) - var(--control-step));
+  --control-h-md: var(--control-h);
+  --control-h-lg: calc(var(--control-h) + var(--control-step));
+  --control-h-xl: calc(var(--control-h) + 3 * var(--control-step));
+  --control-h-touch: max(var(--control-h-lg), 2.75rem); /* the 44 px pointer-target floor (WCAG 2.5.5) */
 }
 
 :root {

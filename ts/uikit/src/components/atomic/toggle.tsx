@@ -3,6 +3,7 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { useControllableState } from "../../primitives/use-controllable-state";
+import { sizeClasses } from "../../generated/size";
 import {
   TOGGLE_BASE,
   toggleSizeClasses,
@@ -28,7 +29,7 @@ export function toggleVariants({
   size = "md",
   className,
 }: ToggleVariantsOptions = {}): string {
-  return cn(TOGGLE_BASE, toggleVariantClasses[variant], toggleSizeClasses[size], className);
+  return cn(TOGGLE_BASE, toggleVariantClasses[variant], sizeClasses[size], toggleSizeClasses[size], className);
 }
 
 export interface ToggleProps
