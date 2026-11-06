@@ -721,8 +721,6 @@ h-8 px-2.5 gap-1.5 rounded-md has-[>svg]:px-2.5
 h-8 text-sm
 h-8 w-full flex-none justify-start gap-2.5 rounded-(--control-radius) border-0 px-2.5 text-body font-normal text-ink-mid shadow-none data-[state=active]:bg-active data-[state=active]:text-ink data-[state=active]:shadow-none hover:bg-hover [&_svg]:text-ink-soft
 h-9
-h-auto aspect-square p-[var(--control-py)]
-h-auto px-[var(--control-px)] py-[var(--control-py)] text-[length:var(--control-text)]
 h-auto w-full flex-1 flex-col items-stretch justify-start gap-0.5 bg-transparent p-0
 h-full bg-primary
 h-full w-2.5 border-l border-l-transparent
@@ -957,13 +955,13 @@ px-2 py-1.5 text-sm font-medium data-[inset]:pl-8
 px-2 py-3 text-center text-body text-ink-soft
 px-2.5
 px-3
-px-3 [--control-box:var(--control-h-xl)]
 px-4
 px-4 has-[>svg]:px-3
 px-5
 px-6
 px-6 has-[>svg]:px-4
 px-8
+px-[var(--control-px)] text-[length:var(--control-text)]
 px-[var(--page-px,1rem)]
 px-[var(--table-px
 px-[var(--table-px,calc(var(--spacing)*2))]

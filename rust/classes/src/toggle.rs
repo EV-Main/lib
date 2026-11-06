@@ -34,7 +34,6 @@ pub fn toggle_size_class(size: Size) -> &'static str {
 		Size::Sm => "px-1.5",
 		Size::Md => "px-2",
 		Size::Lg => "px-2.5",
-		Size::Xl => "px-3",
-		Size::Touch => "px-3 [--control-box:var(--control-h-xl)]",
+		Size::Xl | Size::Touch => "px-3",
 	}
 }

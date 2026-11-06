@@ -102,7 +102,7 @@ mod tests {
 		}
 		let html = render(app);
 		// the rendered attribute escapes `>`, so match the escaped class string
-		let text = button_size_class(Size::Touch, false).replace('>', "&#62;");
+		let text = button_size_class(Size::Touch).replace('>', "&#62;");
 		assert!(html.contains(&text), "{html}");
 		assert!(
 			html.contains(Size::Touch.as_class()) && html.contains("aspect-square px-0"),
