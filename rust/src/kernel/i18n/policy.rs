@@ -64,6 +64,7 @@ pub struct TranslatedEntry {
 
 /// Why a translated entry was refused, and English used instead.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[cfg_attr(feature = "ts_gen", derive(strum::EnumIter))]
 pub enum RejectionReason {
 	/// Today's English differs from the `en` the translation was written against.
 	SourceDrift,
@@ -80,8 +81,7 @@ pub enum RejectionReason {
 }
 
 impl RejectionReason {
-	/// The kebab-case name, matching the TypeScript mirror's string union so both
-	/// halves report the same vocabulary.
+	/// The kebab-case name; `ev_lib_gen` writes the TypeScript union from it.
 	pub fn as_str(self) -> &'static str {
 		match self {
 			Self::SourceDrift => "source-drift",

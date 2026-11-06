@@ -199,6 +199,7 @@ pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 pub fn shared() -> Vec<(&'static str, &'static str, Vec<Ts>)> {
 	vec![
 		("i18n", "locales", locales()),
+		("i18n", "policy", policy()),
 		("experiments", "contract", experiments()),
 		("settings", "contract", settings()),
 		("analytics", "host", analytics()),
@@ -275,6 +276,16 @@ fn locales() -> Vec<Ts> {
 		},
 	]
 }
+
+fn policy() -> Vec<Ts> {
+	use ev_lib::i18n::policy::RejectionReason;
+	vec![Ts::Union {
+		name: "REJECTION_REASONS",
+		ty: "RejectionReason",
+		items: RejectionReason::iter().map(RejectionReason::as_str).collect(),
+	}]
+}
+
 fn experiments() -> Vec<Ts> {
 	use ev_lib::experiments::{COOKIE_MAX_AGE_SECS, COOKIE_PREFIX, FNV_OFFSET_BASIS, FNV_PRIME};
 	vec![

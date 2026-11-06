@@ -125,8 +125,9 @@ settings = []
 settings_drift = ["settings", "dep:tokio", "tokio?/time", "dep:tracing"]
 
 # TypeScript emitted from Rust types and values, for a repo's own `gen` step
-# (docs/ARCHITECTURE.md, "Generated TypeScript"). Build-time only.
-ts_gen = ["dep:serde_json", "dep:ts-rs"]
+# (docs/ARCHITECTURE.md, "Generated TypeScript"). Build-time only. `strum` is
+# what lets gen walk a zero-dep kernel enum without the kernel depending on it.
+ts_gen = ["dep:serde_json", "dep:ts-rs", "dep:strum"]
 
 # Shared domain TypeObjects — PhoneNumber, Email, … — with validation.
 # Zero runtime deps, wasm-safe.
