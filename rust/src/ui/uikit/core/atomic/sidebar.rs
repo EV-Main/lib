@@ -1,7 +1,9 @@
-use ev_lib_classes::SidebarCollapsible;
+use ev_lib_classes::{SIDEBAR_WIDTH, SIDEBAR_WIDTH_ICON, SidebarCollapsible};
 
 /// The width variables a `SidebarProvider` sets for its parts.
-pub(crate) const SIDEBAR_STYLE: &str = "--sidebar-width: 16rem; --sidebar-width-icon: 3rem;";
+pub(crate) fn sidebar_style() -> String {
+	format!("--sidebar-width: {SIDEBAR_WIDTH}; --sidebar-width-icon: {SIDEBAR_WIDTH_ICON};")
+}
 
 /// `data-collapsible`: how the sidebar collapsed, empty while it is open.
 pub(crate) fn sidebar_collapsible_data(collapsible: SidebarCollapsible, open: bool) -> &'static str {

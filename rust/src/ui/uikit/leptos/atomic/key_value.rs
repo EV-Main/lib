@@ -1,6 +1,6 @@
+pub use ev_lib_classes::KeyValueLabels;
 use leptos::prelude::*;
 
-pub use ev_lib_classes::KeyValueLabels;
 use crate::{
 	cn,
 	ui::uikit::leptos::{KEY_VALUE_BASE, KEY_VALUE_COPY, KEY_VALUE_LABEL, KEY_VALUE_ROW, KEY_VALUE_STATUS, KEY_VALUE_VALUE, icon_button::Glyph},
@@ -145,7 +145,7 @@ fn announce(copied: RwSignal<bool>, generation: RwSignal<u32>) {
 				copied.try_set(false);
 			}
 		},
-		std::time::Duration::from_millis(crate::ui::uikit::host::COPIED_MS as u64),
+		std::time::Duration::from_millis(ev_lib_classes::KEY_VALUE_COPIED_MS as u64),
 	);
 	// No timer outside `wasm`, so nothing waits on this copy's number.
 	#[cfg(not(all(target_arch = "wasm32", feature = "wasm")))]

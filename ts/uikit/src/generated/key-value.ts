@@ -12,6 +12,8 @@ export const KEY_VALUE_COPY = "inline-flex size-6 shrink-0 items-center justify-
 
 export const KEY_VALUE_STATUS = "sr-only";
 
+export const KEY_VALUE_COPIED_MS = 2000;
+
 export const KEY_VALUE_LABELS = {
   "copied": "Copied",
 } as const;

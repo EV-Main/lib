@@ -35,12 +35,12 @@
 //! "Limitations".
 
 use dioxus::prelude::*;
-use ev_lib_classes::copy;
+use ev_lib_classes::{TOAST_DURATION_MS, copy};
 
 use crate::{
 	cn,
 	ui::uikit::{
-		core::{DEFAULT_DURATION_MS, ToastQueue, ToastState, ToastView, toaster_style, y_position},
+		core::{ToastQueue, ToastState, ToastView, toaster_style, y_position},
 		dioxus::{TOAST_BASE, TOAST_CLOSE, TOAST_CONTENT, TOAST_TITLE, TOASTER_BASE, ToastPosition, ToastVariant, primitives::is_transform_transition},
 	},
 };
@@ -59,29 +59,29 @@ pub struct ToasterHandle {
 
 impl ToasterHandle {
 	pub fn toast(&self, message: impl Into<String>) -> u64 {
-		self.show(message, ToastVariant::Neutral, Some(DEFAULT_DURATION_MS))
+		self.show(message, ToastVariant::Neutral, Some(TOAST_DURATION_MS))
 	}
 
 	pub fn positive(&self, message: impl Into<String>) -> u64 {
-		self.show(message, ToastVariant::Positive, Some(DEFAULT_DURATION_MS))
+		self.show(message, ToastVariant::Positive, Some(TOAST_DURATION_MS))
 	}
 
 	pub fn error(&self, message: impl Into<String>) -> u64 {
-		self.show(message, ToastVariant::Error, Some(DEFAULT_DURATION_MS))
+		self.show(message, ToastVariant::Error, Some(TOAST_DURATION_MS))
 	}
 
 	pub fn info(&self, message: impl Into<String>) -> u64 {
-		self.show(message, ToastVariant::Info, Some(DEFAULT_DURATION_MS))
+		self.show(message, ToastVariant::Info, Some(TOAST_DURATION_MS))
 	}
 
 	pub fn warn(&self, message: impl Into<String>) -> u64 {
-		self.show(message, ToastVariant::Warn, Some(DEFAULT_DURATION_MS))
+		self.show(message, ToastVariant::Warn, Some(TOAST_DURATION_MS))
 	}
 
 	/// Full control over variant + lifetime. `duration` is ms, or `None` for a
 	/// **persistent** toast that stays until the close button or
 	/// [`ToasterHandle::dismiss`]. The convenience methods above use the TS
-	/// `DEFAULT_DURATION` (4s); this is the mirror of the TS `toast(msg, { duration })`.
+	/// `TOAST_DURATION_MS`; this is the mirror of the TS `toast(msg, { duration })`.
 	pub fn show(&self, message: impl Into<String>, variant: ToastVariant, duration: Option<u32>) -> u64 {
 		let mut queue = self.toasts.0;
 		queue.write().push(message.into(), variant, duration)

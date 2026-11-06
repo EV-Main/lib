@@ -2,8 +2,8 @@ use dioxus::{
 	dioxus_core::{DynamicNode, TemplateNode},
 	prelude::*,
 };
-
 pub use ev_lib_classes::KeyValueLabels;
+
 use crate::{
 	cn,
 	ui::uikit::dioxus::{KEY_VALUE_BASE, KEY_VALUE_COPY, KEY_VALUE_LABEL, KEY_VALUE_ROW, KEY_VALUE_STATUS, KEY_VALUE_VALUE},
@@ -115,7 +115,7 @@ fn clear_later(mut copied: Signal<bool>, generation: Signal<u32>, started: u32) 
 		}
 	});
 	// A failed `setTimeout` only leaves the check mark up; nothing to recover.
-	let _ = window.set_timeout_with_callback_and_timeout_and_arguments_0(clear.unchecked_ref::<Function>(), crate::ui::uikit::host::COPIED_MS);
+	let _ = window.set_timeout_with_callback_and_timeout_and_arguments_0(clear.unchecked_ref::<Function>(), ev_lib_classes::KEY_VALUE_COPIED_MS);
 }
 
 #[cfg(all(target_arch = "wasm32", feature = "wasm"))]

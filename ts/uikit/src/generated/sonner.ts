@@ -10,6 +10,12 @@ export const TOAST_TITLE = "font-medium";
 
 export const TOASTER_BASE = "pointer-events-none fixed z-100 w-[calc(100%-2rem)] max-w-sm";
 
+export const TOAST_DURATION_MS = 4000;
+
+export const TOAST_VISIBLE = 3;
+
+export const TOAST_GAP = 14;
+
 export const toastVariantClasses = {
   "neutral": "bg-popover text-ink border-border",
   "positive": "bg-popover text-ink border-chip-positive-border",

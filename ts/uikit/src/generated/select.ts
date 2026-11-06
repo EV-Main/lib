@@ -16,6 +16,8 @@ export const SELECT_SEPARATOR = "bg-border pointer-events-none -mx-1 my-1 h-px";
 
 export const NATIVE_SELECT_BASE = "border-input text-ink h-7 w-full min-w-0 appearance-none rounded-[var(--control-radius)] border bg-secondary py-0 pr-9 pl-2 text-base pointer-fine:text-body transition-colors outline-none disabled:pointer-events-none disabled:cursor-not-allowed focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error has-[option[value='']:checked]:text-ink-soft [&_option]:bg-popover [&_option]:text-ink [&_optgroup]:bg-popover [&_optgroup]:text-ink-soft [color-scheme:var(--scheme,normal)]";
 
+export const SELECT_TYPEAHEAD_MS = 500;
+
 export const selectTriggerSizeClasses = {
   "sm": "h-8",
   "md": "h-9",

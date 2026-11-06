@@ -23,6 +23,8 @@ import {
   SIDEBAR_MENU,
   SIDEBAR_MENU_ITEM,
   type SidebarMenuButtonSize,
+  SIDEBAR_WIDTH,
+  SIDEBAR_WIDTH_ICON,
 } from "../../generated/sidebar";
 import { buttonVariantClasses, type ButtonVariant } from "../../generated/button";
 import type { SidebarCollapsible, SidebarSide, SidebarVariant } from "../../generated/sidebar";
@@ -32,8 +34,6 @@ export type { SidebarMenuButtonSize };
 
 // omitted: mobile sheet, cookie, kbd shortcut — see README Limitations
 
-const SIDEBAR_WIDTH = "16rem";
-const SIDEBAR_WIDTH_ICON = "3rem";
 
 interface SidebarContextValue {
   state: "expanded" | "collapsed";

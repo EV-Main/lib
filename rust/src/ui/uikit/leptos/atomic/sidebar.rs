@@ -4,7 +4,7 @@ use leptos::{context::Provider, prelude::*};
 use crate::{
 	cn,
 	ui::uikit::{
-		core::{SIDEBAR_STYLE, sidebar_collapsible_data, sidebar_state},
+		core::{sidebar_collapsible_data, sidebar_state, sidebar_style},
 		leptos::{
 			ButtonVariant, SIDEBAR_CONTENT, SIDEBAR_FLAT, SIDEBAR_FOOTER, SIDEBAR_GROUP, SIDEBAR_GROUP_CONTENT, SIDEBAR_GROUP_LABEL, SIDEBAR_HEADER, SIDEBAR_INNER, SIDEBAR_INSET,
 			SIDEBAR_MENU, SIDEBAR_MENU_BUTTON_BASE, SIDEBAR_MENU_ITEM, SIDEBAR_RAIL, SIDEBAR_SEPARATOR, SIDEBAR_TRIGGER, SIDEBAR_WRAPPER, SidebarCollapsible, SidebarSide, SidebarVariant,
@@ -56,7 +56,7 @@ pub fn SidebarProvider(
 	let open = use_controllable(open, default_open, on_open_change);
 	let cls = cn!(SIDEBAR_WRAPPER, class);
 	view! {
-		<div data-slot="sidebar-wrapper" style=SIDEBAR_STYLE class=cls>
+		<div data-slot="sidebar-wrapper" style=sidebar_style() class=cls>
 			<Provider value=SidebarContext { open }>{children()}</Provider>
 		</div>
 	}

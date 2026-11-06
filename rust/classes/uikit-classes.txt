@@ -15,8 +15,10 @@
 -top-12 left-1/2 -translate-x-1/2 rotate-90
 -translate-x-1/2
 13:04
+16rem
 2026-06-10 09:05
 2026-06-10T09:05
+3rem
 @container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-4 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-4
 Balance:
 Inter-Italic.ttf

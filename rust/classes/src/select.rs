@@ -74,3 +74,6 @@ pub fn native_select_size_class(size: Size) -> &'static str {
 		Size::Lg | Size::Touch | Size::Xl => "h-11 pr-11 pl-3 text-base pointer-fine:text-base",
 	}
 }
+
+/// How long (ms) typed characters keep extending one typeahead query.
+pub const SELECT_TYPEAHEAD_MS: u32 = 500;

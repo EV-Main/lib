@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { focusCandidates } from "../../primitives/focus-scope";
+import { SELECT_TYPEAHEAD_MS } from "../../generated/select";
 
 // Keyboard and focus for `SelectContent`, kept out of the component itself.
 // The options are read from the DOM, never counted from `children`: a
@@ -9,7 +10,6 @@ import { focusCandidates } from "../../primitives/focus-scope";
 // caller's is invisible to `Children`, and an index counted there points at
 // the wrong row.
 
-const TYPEAHEAD_MS = 500;
 
 export function listOptions(list: HTMLElement | null): HTMLElement[] {
   return Array.from(list?.querySelectorAll<HTMLElement>("[role='option']:not([data-disabled])") ?? []);
@@ -56,7 +56,7 @@ export function useListboxKeys(listRef: React.RefObject<HTMLElement | null>) {
       if (event.key.length !== 1 || event.key === " " || event.ctrlKey || event.metaKey || event.altKey) return false;
       const now = Date.now();
       const t = typed.current;
-      t.text = now - t.at > TYPEAHEAD_MS ? event.key.toLowerCase() : t.text + event.key.toLowerCase();
+      t.text = now - t.at > SELECT_TYPEAHEAD_MS ? event.key.toLowerCase() : t.text + event.key.toLowerCase();
       t.at = now;
       // One letter repeated cycles through the options that start with it.
       const repeated = t.text.split("").every((c) => c === t.text[0]);

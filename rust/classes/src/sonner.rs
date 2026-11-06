@@ -45,3 +45,10 @@ pub enum ToastPosition {
 	#[tw(default, class = "bottom-4 right-4")]
 	BottomRight,
 }
+
+/// Default auto-dismiss lifetime (ms).
+pub const TOAST_DURATION_MS: u32 = 4000;
+/// Only the front toasts show while the stack is collapsed.
+pub const TOAST_VISIBLE: usize = 3;
+/// Gap (px) between toasts once the stack is expanded.
+pub const TOAST_GAP: u32 = 14;

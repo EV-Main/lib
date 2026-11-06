@@ -1,9 +1,10 @@
 use std::collections::{BTreeMap, BTreeSet};
 
+use ev_lib_classes::SELECT_TYPEAHEAD_MS;
+
 use crate::ui::uikit::core::{KeyInput, Placement, sort_by_position};
 
 /// Keys typed within this long of each other build one type-ahead query.
-const TYPEAHEAD_MS: f64 = 500.0;
 
 /// One `Select`'s open list: its options, the one holding focus, the type-ahead.
 /// The chosen value is the port's controllable state, so every read takes it.
@@ -192,14 +193,14 @@ struct Typeahead {
 impl Typeahead {
 	/// Whether a query is under way: something typed, within the window.
 	fn is_typing(&self, now: Option<f64>) -> bool {
-		!self.text.is_empty() && matches!((now, self.at), (Some(now), Some(at)) if now - at <= TYPEAHEAD_MS)
+		!self.text.is_empty() && matches!((now, self.at), (Some(now), Some(at)) if now - at <= f64::from(SELECT_TYPEAHEAD_MS))
 	}
 
 	/// Adds `ch` to the query, starting a new one after a pause — or on every
 	/// key where the port has no clock, which still leaves a repeated letter cycling.
 	fn push(&mut self, ch: char, now: Option<f64>) -> String {
 		let fresh = match (now, self.at) {
-			(Some(now), Some(at)) => now - at > TYPEAHEAD_MS,
+			(Some(now), Some(at)) => now - at > f64::from(SELECT_TYPEAHEAD_MS),
 			_ => true,
 		};
 		if fresh {

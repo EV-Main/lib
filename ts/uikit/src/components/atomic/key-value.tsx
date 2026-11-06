@@ -10,6 +10,7 @@ import {
   KEY_VALUE_STATUS,
   KEY_VALUE_VALUE,
   KEY_VALUE_LABELS,
+  KEY_VALUE_COPIED_MS,
 } from "../../generated/key-value";
 import { UiIcon } from "../../icons/ui-icons";
 
@@ -28,7 +29,6 @@ export interface KeyValueProps extends Omit<React.ComponentProps<"div">, "childr
   labels?: KeyValueLabels;
 }
 
-const COPIED_MS = 2000;
 
 // The async clipboard API needs a secure context and a user gesture; an
 // insecure origin or an old webview falls back to a selection + execCommand.
@@ -68,7 +68,7 @@ export function KeyValue({ label, value, copyText, labels = {}, className, ...pr
     if (copyText === undefined || !(await writeClipboard(copyText))) return;
     setCopied(true);
     clearTimeout(timer.current);
-    timer.current = setTimeout(() => setCopied(false), COPIED_MS);
+    timer.current = setTimeout(() => setCopied(false), KEY_VALUE_COPIED_MS);
   };
 
   return (

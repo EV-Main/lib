@@ -1,19 +1,13 @@
-use ev_lib_classes::{ToastPosition, ToastVariant};
+use ev_lib_classes::{TOAST_DURATION_MS, TOAST_GAP, TOAST_VISIBLE, ToastPosition, ToastVariant};
 
-/// Only the front three toasts show while the stack is collapsed.
-const VISIBLE_TOASTS: usize = 3;
-/// Gap (px) between toasts once the stack is expanded.
-const GAP: u32 = 14;
 /// The kit measures nothing, so the stack assumes this height (px) for the
 /// collapse clamp and the expanded spacing: the collapsed pile is exact, the
 /// expanded list is uniformly spaced. Tuned to a single-line toast (p-4 + one
 /// text-sm line).
 const TOAST_HEIGHT_EST: u32 = 56;
-/// Default auto-dismiss lifetime (ms). Mirrors the TS `DEFAULT_DURATION`.
-pub(crate) const DEFAULT_DURATION_MS: u32 = 4000;
 /// The `Toaster` root's layout vars.
 pub(crate) fn toaster_style() -> String {
-	format!("--front-height: {TOAST_HEIGHT_EST}px; --gap: {GAP}px;")
+	format!("--front-height: {TOAST_HEIGHT_EST}px; --gap: {TOAST_GAP}px;")
 }
 
 /// The edge a `Toaster` at `position` stacks against, for `data-y-position`.
@@ -110,7 +104,7 @@ pub(crate) struct ToastView {
 }
 
 fn view(toast: &Toast, index: usize, total: usize) -> ToastView {
-	let offset = index as u32 * (TOAST_HEIGHT_EST + GAP);
+	let offset = index as u32 * (TOAST_HEIGHT_EST + TOAST_GAP);
 	let z = total - index;
 	let life = toast.duration.unwrap_or(0); // a persistent toast runs no life animation; 0 fills the var
 	ToastView {
@@ -119,7 +113,7 @@ fn view(toast: &Toast, index: usize, total: usize) -> ToastView {
 		variant: toast.variant,
 		state: toast.state,
 		front: index == 0,
-		visible: index < VISIBLE_TOASTS,
+		visible: index < TOAST_VISIBLE,
 		autodismiss: toast.duration.is_some(),
 		style: format!("--index: {index}; --z-index: {z}; --offset: {offset}px; --initial-height: {TOAST_HEIGHT_EST}px; --life: {life}ms;"),
 	}
@@ -132,7 +126,7 @@ mod tests {
 	#[test]
 	fn the_newest_toast_fronts_the_stack_and_only_three_show() {
 		let mut q = ToastQueue::default();
-		let ids: Vec<u64> = (0..4).map(|n| q.push(format!("t{n}"), ToastVariant::Info, Some(DEFAULT_DURATION_MS))).collect();
+		let ids: Vec<u64> = (0..4).map(|n| q.push(format!("t{n}"), ToastVariant::Info, Some(TOAST_DURATION_MS))).collect();
 		let stack = q.stack();
 		assert_eq!(stack.iter().map(|t| t.id).collect::<Vec<_>>(), ids.iter().rev().copied().collect::<Vec<_>>());
 		assert_eq!(stack.iter().map(|t| t.front).collect::<Vec<_>>(), [true, false, false, false]);
@@ -155,7 +149,7 @@ mod tests {
 	#[test]
 	fn only_a_lifetime_auto_dismisses() {
 		let mut q = ToastQueue::default();
-		q.push("times out".to_owned(), ToastVariant::Neutral, Some(DEFAULT_DURATION_MS));
+		q.push("times out".to_owned(), ToastVariant::Neutral, Some(TOAST_DURATION_MS));
 		q.push("sticky".to_owned(), ToastVariant::Neutral, None);
 		let stack = q.stack();
 		assert!(!stack[0].autodismiss && stack[0].style.ends_with("--life: 0ms;"));

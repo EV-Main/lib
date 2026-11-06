@@ -74,3 +74,6 @@ pub enum SidebarCollapsible {
 	Icon,
 	None,
 }
+
+pub const SIDEBAR_WIDTH: &str = "16rem";
+pub const SIDEBAR_WIDTH_ICON: &str = "3rem";

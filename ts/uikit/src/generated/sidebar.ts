@@ -32,6 +32,10 @@ export const SIDEBAR_MENU = "flex w-full min-w-0 flex-col gap-1";
 
 export const SIDEBAR_MENU_ITEM = "group/menu-item relative";
 
+export const SIDEBAR_WIDTH = "16rem";
+
+export const SIDEBAR_WIDTH_ICON = "3rem";
+
 export const SIDEBAR_SIDES = ["left", "right"] as const;
 export type SidebarSide = (typeof SIDEBAR_SIDES)[number];
 

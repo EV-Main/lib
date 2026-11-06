@@ -28,3 +28,6 @@ impl Default for KeyValueLabels {
 		}
 	}
 }
+
+/// How long (ms) a copy's check mark and "Copied" announcement stay.
+pub const KEY_VALUE_COPIED_MS: i32 = 2000;
