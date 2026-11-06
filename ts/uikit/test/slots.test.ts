@@ -24,7 +24,7 @@ describe("data-slot names", () => {
   it("selects only slots that exist", () => {
     const known = new Set<string>([...DATA_SLOTS, ...TS_ONLY_SLOTS]);
     const unknown = sources(SRC).flatMap(path =>
-      [...readFileSync(path, "utf8").matchAll(/\[data-slot=["\x27]?([a-z0-9-]+)/g)]
+      [...readFileSync(path, "utf8").matchAll(/(?:\[data-slot=|data-\[slot=)["\x27]?([a-z0-9-]+)/g)]
         .map(([, name = ""]) => name)
         .filter(name => !known.has(name))
         .map(name => `${path.slice(SRC.length + 1)}: ${name}`),

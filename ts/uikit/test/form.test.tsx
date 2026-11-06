@@ -51,7 +51,7 @@ describe("Form", () => {
       </FormItem>,
     );
     const el = getByText("Email");
-    expect(el).toHaveAttribute("data-slot", "form-label");
+    expect(el).toHaveAttribute("data-slot", "label");
     expect(el).toHaveAttribute("data-error", "true");
   });
 

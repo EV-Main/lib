@@ -53,11 +53,13 @@ fn class_strings_select_only_known_slots() {
 			if line.trim_start().starts_with("//") {
 				continue;
 			}
-			for (at, _) in line.match_indices("[data-slot=") {
-				let rest = &line[at + "[data-slot=".len()..];
-				let name = &rest[..rest.find(|c: char| !(c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-')).unwrap_or(rest.len())];
-				if !known.contains(name) {
-					unknown.push(format!("{}:{}: {name}", file.file_name().expect("file").to_string_lossy(), n + 1));
+			for needle in ["[data-slot=", "data-[slot="] {
+				for (at, _) in line.match_indices(needle) {
+					let rest = &line[at + needle.len()..];
+					let name = &rest[..rest.find(|c: char| !(c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-')).unwrap_or(rest.len())];
+					if !known.contains(name) {
+						unknown.push(format!("{}:{}: {name}", file.file_name().expect("file").to_string_lossy(), n + 1));
+					}
 				}
 			}
 		}

@@ -62,7 +62,6 @@ export function FormLabel({
 
   return (
     <Label
-      data-slot="form-label"
       data-error={!!error}
       className={cn("data-[error=true]:text-accent-error", className)}
       htmlFor={formItemId}
