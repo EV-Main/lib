@@ -30,6 +30,8 @@ export {
   type ExperimentOverride,
   type ExperimentOverrides,
   type OverriddenConfig,
+  validHoldout,
+  validWeights,
 } from './overrides';
 
 /**

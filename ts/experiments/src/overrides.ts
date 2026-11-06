@@ -46,7 +46,8 @@ export type OverriddenConfig<C extends ExperimentConfig> = {
 /** A spec as it may arrive from a config built without `satisfies`. */
 type ExperimentSpecWithStray = ExperimentConfig[string] & { readonly weights?: unknown };
 
-function validWeights(raw: unknown, length: number): readonly number[] | undefined {
+/** The operator's weights when valid for `length` variants (see {@link applyOverrides}). */
+export function validWeights(raw: unknown, length: number): readonly number[] | undefined {
   if (!Array.isArray(raw) || raw.length !== length) return undefined;
   const weights: number[] = [];
   for (const w of raw as readonly unknown[]) {
@@ -56,7 +57,8 @@ function validWeights(raw: unknown, length: number): readonly number[] | undefin
   return weights.reduce((sum, w) => sum + w, 0) > 0 ? weights : undefined;
 }
 
-function validHoldout(raw: unknown): number | undefined {
+/** The operator's holdout when valid (see {@link applyOverrides}). */
+export function validHoldout(raw: unknown): number | undefined {
   return typeof raw === 'number' && Number.isFinite(raw) && raw >= 0 && raw < 1 ? raw : undefined;
 }
 

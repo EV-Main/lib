@@ -69,6 +69,9 @@ Rust crate and its TypeScript mirror at once.
 
 ### Added
 
+- **`validWeights`, `validHoldout`** (`@evinvest/experiments` 0.6.1): the
+  per-field checks `applyOverrides` makes, exported so the Service-Arb panel's
+  editor refuses exactly what a landing would drop.
 - **A landing's pages into Figma from its e2e harness** (`@evinvest/kitstart`
   0.24, mkLanding). `defineFigmaSuite` (which `defineSectionSuite` calls) adds
   one `@figma <page>` test per page of the section list and Playwright project;
