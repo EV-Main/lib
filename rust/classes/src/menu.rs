@@ -6,3 +6,4 @@ pub enum MenuItemVariant {
 	Neutral,
 	Destructive,
 }
+pub const MENU_RADIO_DOT: &str = "size-2 fill-current";

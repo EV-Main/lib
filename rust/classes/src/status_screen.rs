@@ -1,0 +1,12 @@
+pub const STATUS_SCREEN_ROOT: &str = "relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-6 py-32 text-center";
+pub const STATUS_SCREEN_GLOW: &str = "pointer-events-none absolute inset-0 opacity-[0.07] [background:radial-gradient(55%_45%_at_50%_30%,currentColor,transparent_70%)]";
+pub const STATUS_SCREEN_STACK: &str = "relative z-10 flex w-full max-w-2xl flex-col items-center";
+pub const STATUS_SCREEN_LOGO: &str = "mb-7 h-10 w-auto";
+pub const STATUS_SCREEN_EYEBROW: &str = "mb-6 font-mono text-[11px] uppercase tracking-[0.34em]";
+pub const STATUS_SCREEN_CODE: &str = "font-serif text-[110px] font-medium leading-[0.9] sm:text-[180px]";
+pub const STATUS_SCREEN_TITLE: &str = "mt-4 font-serif text-3xl font-light leading-tight text-ink sm:text-5xl";
+pub const STATUS_SCREEN_TITLE_ACCENT: &str = "font-serif italic";
+pub const STATUS_SCREEN_BODY: &str = "mx-auto mt-5 max-w-md text-sm leading-relaxed text-ink/60 sm:text-base";
+pub const STATUS_SCREEN_ACTIONS: &str = "mt-9 flex flex-col items-center gap-3 sm:flex-row";
+pub const STATUS_SCREEN_ACTION_ICON: &str = "mr-2 h-4 w-4";
+pub const STATUS_SCREEN_CTA: &str = "font-mono text-xs uppercase tracking-widest";

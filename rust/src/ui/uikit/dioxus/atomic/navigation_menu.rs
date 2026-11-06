@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use ev_lib_classes::{NAVIGATION_MENU_INDICATOR_ARROW, NAVIGATION_MENU_TRIGGER_CHEVRON, NAVIGATION_MENU_VIEWPORT_WRAPPER};
 
 pub use crate::ui::uikit::core::navigation_menu_trigger_style;
 use crate::{
@@ -65,7 +66,7 @@ pub fn NavigationMenuTrigger(#[props(default)] class: String, children: Element)
 			{children}
 			" "
 			svg {
-				class: "relative top-[1px] ml-1 size-3 transition duration-300 group-data-[state=open]:rotate-180",
+				class: NAVIGATION_MENU_TRIGGER_CHEVRON,
 				view_box: "0 0 24 24",
 				fill: "none",
 				stroke: "currentColor",
@@ -124,7 +125,7 @@ pub fn NavigationMenuIndicator(#[props(default)] class: String) -> Element {
 	let cls = cn!(NAVIGATION_MENU_INDICATOR, class);
 	rsx! {
 		div { class: cls, "data-slot": "navigation-menu-indicator",
-			div { class: "bg-border relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm shadow-md" }
+			div { class: NAVIGATION_MENU_INDICATOR_ARROW }
 		}
 	}
 }
@@ -135,7 +136,7 @@ pub fn NavigationMenuIndicator(#[props(default)] class: String) -> Element {
 pub fn NavigationMenuViewport(#[props(default)] class: String, children: Element) -> Element {
 	let cls = cn!(NAVIGATION_MENU_VIEWPORT, class);
 	rsx! {
-		div { class: "absolute top-full left-0 isolate z-50 flex justify-center",
+		div { class: NAVIGATION_MENU_VIEWPORT_WRAPPER,
 			div { class: cls, "data-slot": "navigation-menu-viewport", {children} }
 		}
 	}

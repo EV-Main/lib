@@ -15,3 +15,5 @@ export const CONTEXT_MENU_LABEL = "text-ink px-2 py-1.5 text-sm font-medium data
 export const CONTEXT_MENU_SEPARATOR = "bg-border -mx-1 my-1 h-px";
 
 export const CONTEXT_MENU_SHORTCUT = "text-ink-soft ml-auto text-xs tracking-widest";
+
+export const CONTEXT_MENU_ITEM_INDICATOR = "pointer-events-none absolute left-2 flex size-3.5 items-center justify-center";

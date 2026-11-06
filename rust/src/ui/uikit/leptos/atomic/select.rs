@@ -2,6 +2,7 @@
 use std::collections::BTreeMap;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
+use ev_lib_classes::{SELECT_CHEVRON, SELECT_ITEM_INDICATOR};
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -86,7 +87,7 @@ pub fn SelectTrigger(#[prop(optional)] size: Size, #[prop(optional, into)] class
 				stroke-width="2"
 				stroke-linecap="round"
 				stroke-linejoin="round"
-				class="size-4 opacity-50"
+				class=SELECT_CHEVRON
 			>
 				<path d="m6 9 6 6 6-6"></path>
 			</svg>
@@ -218,7 +219,7 @@ pub fn SelectItem(
 					.get()
 					.then(|| {
 						view! {
-							<span class="absolute right-2 flex size-3.5 items-center justify-center">
+							<span class=SELECT_ITEM_INDICATOR>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									width="24"

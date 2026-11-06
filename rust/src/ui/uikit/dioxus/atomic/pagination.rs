@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use ev_lib_classes::copy;
+use ev_lib_classes::{PAGINATION_CONTENT, PAGINATION_ELLIPSIS, PAGINATION_LINK_LABEL, PAGINATION_NEXT_LINK, PAGINATION_PREVIOUS_LINK, PAGINATION_ROOT, copy};
 
 use crate::{
 	cn,
@@ -8,7 +8,7 @@ use crate::{
 
 #[component]
 pub fn Pagination(#[props(default)] class: String, children: Element) -> Element {
-	let cls = cn!("mx-auto flex w-full justify-center", class);
+	let cls = cn!(PAGINATION_ROOT, class);
 	rsx! {
 		nav {
 			role: "navigation",
@@ -22,7 +22,7 @@ pub fn Pagination(#[props(default)] class: String, children: Element) -> Element
 
 #[component]
 pub fn PaginationContent(#[props(default)] class: String, children: Element) -> Element {
-	let cls = cn!("flex flex-row items-center gap-1", class);
+	let cls = cn!(PAGINATION_CONTENT, class);
 	rsx! {
 		ul { "data-slot": "pagination-content", class: cls, {children} }
 	}
@@ -66,7 +66,7 @@ pub fn PaginationLink(
 
 #[component]
 pub fn PaginationPrevious(#[props(default)] class: String, href: Option<String>, onclick: Option<EventHandler<MouseEvent>>) -> Element {
-	let cls = cn!("gap-1 px-2.5 sm:pl-2.5", class);
+	let cls = cn!(PAGINATION_PREVIOUS_LINK, class);
 	rsx! {
 		PaginationLink {
 			is_active: false,
@@ -82,14 +82,14 @@ pub fn PaginationPrevious(#[props(default)] class: String, href: Option<String>,
 				stroke_width: "2",
 				path { d: "m15 18-6-6 6-6" }
 			}
-			span { class: "hidden sm:block", {copy::PAGINATION_PREVIOUS} }
+			span { class: PAGINATION_LINK_LABEL, {copy::PAGINATION_PREVIOUS} }
 		}
 	}
 }
 
 #[component]
 pub fn PaginationNext(#[props(default)] class: String, href: Option<String>, onclick: Option<EventHandler<MouseEvent>>) -> Element {
-	let cls = cn!("gap-1 px-2.5 sm:pr-2.5", class);
+	let cls = cn!(PAGINATION_NEXT_LINK, class);
 	rsx! {
 		PaginationLink {
 			is_active: false,
@@ -98,7 +98,7 @@ pub fn PaginationNext(#[props(default)] class: String, href: Option<String>, onc
 			class: cls,
 			href,
 			onclick: move |e| { if let Some(h) = onclick { h.call(e); } },
-			span { class: "hidden sm:block", {copy::PAGINATION_NEXT} }
+			span { class: PAGINATION_LINK_LABEL, {copy::PAGINATION_NEXT} }
 			svg {
 				view_box: "0 0 24 24",
 				fill: "none",
@@ -112,7 +112,7 @@ pub fn PaginationNext(#[props(default)] class: String, href: Option<String>, onc
 
 #[component]
 pub fn PaginationEllipsis(#[props(default)] class: String) -> Element {
-	let cls = cn!("flex size-9 items-center justify-center", class);
+	let cls = cn!(PAGINATION_ELLIPSIS, class);
 	rsx! {
 		span {
 			"aria-hidden": "true",

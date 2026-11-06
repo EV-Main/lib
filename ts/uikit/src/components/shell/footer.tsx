@@ -2,6 +2,7 @@ import * as React from "react";
 import { Container } from "../atomic/container";
 import * as copy from "../../generated/copy";
 import type { FooterLink, FooterLinkGroup, FooterOffice } from "../../generated/footer";
+import { FOOTER_BRAND, FOOTER_COPYRIGHT, FOOTER_DESCRIPTION, FOOTER_GRID, FOOTER_HEADING, FOOTER_LEGAL_LINK, FOOTER_LEGAL_LINKS, FOOTER_LEGAL_SEPARATOR, FOOTER_LOCKUP, FOOTER_LOCKUP_TEXT, FOOTER_NAV_COLUMN, FOOTER_NAV_LINK, FOOTER_NAV_LIST, FOOTER_NEWSLETTER_BLURB, FOOTER_NEWSLETTER_COLUMN, FOOTER_OFFICES_LIST, FOOTER_OFFICE_NAME, FOOTER_ROOT, FOOTER_TAGLINE, FOOTER_VERSION, FOOTER_WIDE_COLUMN } from "../../generated/footer";
 
 export type { FooterLink, FooterLinkGroup, FooterOffice };
 
@@ -29,7 +30,7 @@ export interface FooterProps {
   children?: React.ReactNode;
 }
 
-const HEADING = "font-mono text-xs text-ink uppercase tracking-widest mb-6";
+const HEADING = FOOTER_HEADING;
 
 /**
  * A 12-col footer grid — brand 3 | sitemap groups 2 each | offices 3 |
@@ -68,28 +69,28 @@ export function Footer({
   const hasBrandColumn = lockup !== undefined || composed || description !== undefined || legalLinks.length > 0;
 
   return (
-    <footer data-slot="footer" className="bg-background border-t border-ink/10 py-16">
+    <footer data-slot="footer" className={FOOTER_ROOT}>
       {children}
       <Container>
-        <div className="grid grid-cols-2 gap-x-8 gap-y-8 lg:grid-cols-12 mb-12">
+        <div className={FOOTER_GRID}>
           {hasBrandColumn && (
-            <div className="col-span-2 lg:col-span-3">
+            <div className={FOOTER_WIDE_COLUMN}>
               {lockup !== undefined ? (
                 <div data-slot="footer-lockup" className="mb-6">{lockup}</div>
               ) : (
                 composed && <FooterLockup brand={brand} mark={mark} tagline={tagline} />
               )}
               {description !== undefined && (
-                <p className="text-ink/40 text-xs font-light max-w-sm leading-relaxed mb-6">
+                <p className={FOOTER_DESCRIPTION}>
                   {description}
                 </p>
               )}
               {legalLinks.length > 0 && (
-                <div className="flex gap-4 text-xs font-mono text-primary-ink">
+                <div className={FOOTER_LEGAL_LINKS}>
                   {legalLinks.map((link, i) => (
                     <React.Fragment key={link.label}>
-                      {i > 0 && <span className="text-ink/20">|</span>}
-                      <L href={link.href} className="hover:underline">
+                      {i > 0 && <span className={FOOTER_LEGAL_SEPARATOR}>|</span>}
+                      <L href={link.href} className={FOOTER_LEGAL_LINK}>
                         {link.label}
                       </L>
                     </React.Fragment>
@@ -100,14 +101,14 @@ export function Footer({
           )}
 
           {nav.map((group) => (
-            <nav key={group.heading} aria-label={`Footer ${group.heading} links`} className="lg:col-span-2">
+            <nav key={group.heading} aria-label={`Footer ${group.heading} links`} className={FOOTER_NAV_COLUMN}>
               <h4 className={HEADING}>{group.heading}</h4>
-              <ul className="space-y-3">
+              <ul className={FOOTER_NAV_LIST}>
                 {group.links.map((link) => (
                   <li key={link.href}>
                     <L
                       href={link.href}
-                      className="text-xs font-light text-ink/70 hover:text-primary-ink transition-colors"
+                      className={FOOTER_NAV_LINK}
                     >
                       {link.label}
                     </L>
@@ -118,12 +119,12 @@ export function Footer({
           ))}
 
           {offices.length > 0 && (
-            <div className="col-span-2 lg:col-span-3">
+            <div className={FOOTER_WIDE_COLUMN}>
               <h4 className={HEADING}>{officesHeading}</h4>
-              <ul className="space-y-4 text-xs text-ink/70 font-light leading-relaxed">
+              <ul className={FOOTER_OFFICES_LIST}>
                 {offices.map((office) => (
                   <li key={office.name}>
-                    <strong className="text-ink block font-mono text-[10px] uppercase tracking-wider mb-1">
+                    <strong className={FOOTER_OFFICE_NAME}>
                       {office.name}
                     </strong>
                     {office.address}
@@ -134,11 +135,11 @@ export function Footer({
           )}
 
           {newsletter && (
-            <div className="col-span-2 lg:col-span-2">
+            <div className={FOOTER_NEWSLETTER_COLUMN}>
               <h4 className={HEADING}>{newsletterHeading}</h4>
               {/* What the source's <Tier tier="alt"><Text> emits: alt body size
                   + the info variant, then the mb-4 the caller adds. */}
-              <p className="text-sm sm:text-xs font-light leading-relaxed text-ink/70 mb-4">
+              <p className={FOOTER_NEWSLETTER_BLURB}>
                 {newsletterBlurb}
               </p>
               {newsletter}
@@ -147,13 +148,13 @@ export function Footer({
         </div>
 
         {(copyright !== undefined || version !== undefined) && (
-          <div className="border-t border-ink/10 pt-8 text-[10px] font-mono text-ink/40">
+          <div className={FOOTER_COPYRIGHT}>
             <p>
               {copyright}
               {version && (
                 <>
                   {copyright !== undefined && " "}
-                  <a href={commitHref} className="text-ink/30">
+                  <a href={commitHref} className={FOOTER_VERSION}>
                     {version}
                   </a>
                 </>
@@ -176,15 +177,15 @@ function FooterLockup({
   tagline: string | undefined;
 }) {
   return (
-    <div data-slot="footer-lockup" className="flex items-center gap-3 mb-6">
+    <div data-slot="footer-lockup" className={FOOTER_LOCKUP}>
       {mark}
       {(brand !== undefined || tagline !== undefined) && (
-        <div className="flex flex-col">
+        <div className={FOOTER_LOCKUP_TEXT}>
           {brand !== undefined && (
-            <span className="font-serif font-bold text-base tracking-wider text-ink">{brand}</span>
+            <span className={FOOTER_BRAND}>{brand}</span>
           )}
           {tagline !== undefined && (
-            <span className="text-[8px] font-mono tracking-[0.3em] text-primary-ink uppercase">
+            <span className={FOOTER_TAGLINE}>
               {tagline}
             </span>
           )}

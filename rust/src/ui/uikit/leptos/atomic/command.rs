@@ -3,6 +3,7 @@ use std::{
 	sync::atomic::{AtomicUsize, Ordering},
 };
 
+use ev_lib_classes::COMMAND_INPUT_ICON;
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -128,7 +129,7 @@ pub fn CommandInput(
 				stroke-width="2"
 				stroke-linecap="round"
 				stroke-linejoin="round"
-				class="size-4 shrink-0 opacity-50"
+				class=COMMAND_INPUT_ICON
 				aria-hidden="true"
 			>
 				<circle cx="11" cy="11" r="8"></circle>

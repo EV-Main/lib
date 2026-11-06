@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
 pub use ev_lib_classes::MenuItemVariant;
+use ev_lib_classes::{DROPDOWN_MENU_SUB_CHEVRON, MENU_RADIO_DOT};
 
 use crate::{
 	cn,
@@ -193,7 +194,7 @@ pub fn DropdownMenuRadioItem(value: String, #[props(default)] disabled: bool, #[
 			},
 			span { class: DROPDOWN_MENU_ITEM_INDICATOR,
 				if checked {
-					svg { class: "size-2 fill-current", view_box: "0 0 24 24", "aria-hidden": "true",
+					svg { class: MENU_RADIO_DOT, view_box: "0 0 24 24", "aria-hidden": "true",
 						circle { cx: "12", cy: "12", r: "10" }
 					}
 				}
@@ -253,7 +254,7 @@ pub fn DropdownMenuSubTrigger(#[props(default)] inset: bool, #[props(default)] c
 			onclick: move |_| ctx.open.set(!ctx.open.get()),
 			{children}
 			svg {
-				class: "ml-auto size-4",
+				class: DROPDOWN_MENU_SUB_CHEVRON,
 				view_box: "0 0 24 24",
 				fill: "none",
 				stroke: "currentColor",

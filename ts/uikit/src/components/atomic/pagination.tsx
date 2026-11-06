@@ -2,6 +2,7 @@ import * as React from "react";
 import { cn } from "../../lib/cn";
 import { buttonVariants, type ButtonSize } from "./button";
 import * as copy from "../../generated/copy";
+import { PAGINATION_CONTENT, PAGINATION_ELLIPSIS, PAGINATION_LINK_LABEL, PAGINATION_NEXT_LINK, PAGINATION_PREVIOUS_LINK, PAGINATION_ROOT } from "../../generated/pagination";
 
 export function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -9,7 +10,7 @@ export function Pagination({ className, ...props }: React.ComponentProps<"nav">)
       role="navigation"
       aria-label={copy.PAGINATION}
       data-slot="pagination"
-      className={cn("mx-auto flex w-full justify-center", className)}
+      className={cn(PAGINATION_ROOT, className)}
       {...props}
     />
   );
@@ -22,7 +23,7 @@ export function PaginationContent({
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("flex flex-row items-center gap-1", className)}
+      className={cn(PAGINATION_CONTENT, className)}
       {...props}
     />
   );
@@ -98,11 +99,11 @@ export function PaginationPrevious({
     <PaginationLink
       aria-label={copy.PAGINATION_PREVIOUS_PAGE}
       size="md"
-      className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
+      className={cn(PAGINATION_PREVIOUS_LINK, className)}
       {...props}
     >
       <ChevronLeft />
-      <span className="hidden sm:block">{copy.PAGINATION_PREVIOUS}</span>
+      <span className={PAGINATION_LINK_LABEL}>{copy.PAGINATION_PREVIOUS}</span>
     </PaginationLink>
   );
 }
@@ -115,10 +116,10 @@ export function PaginationNext({
     <PaginationLink
       aria-label={copy.PAGINATION_NEXT_PAGE}
       size="md"
-      className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
+      className={cn(PAGINATION_NEXT_LINK, className)}
       {...props}
     >
-      <span className="hidden sm:block">{copy.PAGINATION_NEXT}</span>
+      <span className={PAGINATION_LINK_LABEL}>{copy.PAGINATION_NEXT}</span>
       <ChevronRight />
     </PaginationLink>
   );
@@ -132,7 +133,7 @@ export function PaginationEllipsis({
     <span
       aria-hidden
       data-slot="pagination-ellipsis"
-      className={cn("flex size-9 items-center justify-center", className)}
+      className={cn(PAGINATION_ELLIPSIS, className)}
       {...props}
     >
       <MoreHorizontal />

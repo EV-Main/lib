@@ -1,4 +1,4 @@
-use ev_lib_classes::copy;
+use ev_lib_classes::{PAGINATION_CONTENT, PAGINATION_ELLIPSIS, PAGINATION_LINK_LABEL, PAGINATION_NEXT_LINK, PAGINATION_PREVIOUS_LINK, PAGINATION_ROOT, copy};
 use leptos::prelude::*;
 
 use crate::{
@@ -8,7 +8,7 @@ use crate::{
 
 #[component]
 pub fn Pagination(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
-	let cls = cn!("mx-auto flex w-full justify-center", class);
+	let cls = cn!(PAGINATION_ROOT, class);
 	view! {
 		<nav role="navigation" aria-label=copy::PAGINATION data-slot="pagination" class=cls>
 			{children()}
@@ -18,7 +18,7 @@ pub fn Pagination(#[prop(optional, into)] class: String, children: Children) -> 
 
 #[component]
 pub fn PaginationContent(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
-	let cls = cn!("flex flex-row items-center gap-1", class);
+	let cls = cn!(PAGINATION_CONTENT, class);
 	view! {
 		<ul data-slot="pagination-content" class=cls>
 			{children()}
@@ -57,9 +57,9 @@ pub fn PaginationPrevious(
 		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 			<path d="m15 18-6-6 6-6" />
 		</svg>
-		<span class="hidden sm:block">{copy::PAGINATION_PREVIOUS}</span>
+		<span class=PAGINATION_LINK_LABEL>{copy::PAGINATION_PREVIOUS}</span>
 	};
-	let cls = cn!("gap-1 px-2.5 sm:pl-2.5", class);
+	let cls = cn!(PAGINATION_PREVIOUS_LINK, class);
 	link(
 		false.into(),
 		Size::default(),
@@ -79,12 +79,12 @@ pub fn PaginationNext(
 	#[prop(optional)] on_click: Option<Callback<leptos::ev::MouseEvent>>,
 ) -> impl IntoView {
 	let chevron = view! {
-		<span class="hidden sm:block">{copy::PAGINATION_NEXT}</span>
+		<span class=PAGINATION_LINK_LABEL>{copy::PAGINATION_NEXT}</span>
 		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 			<path d="m9 18 6-6-6-6" />
 		</svg>
 	};
-	let cls = cn!("gap-1 px-2.5 sm:pr-2.5", class);
+	let cls = cn!(PAGINATION_NEXT_LINK, class);
 	link(
 		false.into(),
 		Size::default(),
@@ -99,7 +99,7 @@ pub fn PaginationNext(
 
 #[component]
 pub fn PaginationEllipsis(#[prop(optional, into)] class: String) -> impl IntoView {
-	let cls = cn!("flex size-9 items-center justify-center", class);
+	let cls = cn!(PAGINATION_ELLIPSIS, class);
 	view! {
 		<span aria-hidden="true" data-slot="pagination-ellipsis" class=cls>
 			<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

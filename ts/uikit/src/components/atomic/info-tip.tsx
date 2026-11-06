@@ -13,6 +13,7 @@ import { Slot } from "../../primitives/slot";
 import { POPOVER_CONTENT } from "../../generated/popover";
 import type { Side } from "../../generated/primitives";
 import * as copy from "../../generated/copy";
+import { INFO_TIP_TRIGGER } from "../../generated/info-tip";
 
 /**
  * `InfoTip` — the ⓘ-beside-a-label *toggletip*. It reuses the popover machinery
@@ -127,7 +128,7 @@ export function InfoTipTrigger({
       aria-controls={contentId}
       ref={anchorRef as React.Ref<never>}
       className={cn(
-        "inline-flex size-4 shrink-0 cursor-help items-center justify-center rounded-full align-middle text-ink-soft outline-none transition-colors hover:text-ink focus-visible:ring-2 focus-visible:ring-ring data-[state=open]:text-accent-debug",
+        INFO_TIP_TRIGGER,
         className,
       )}
       onClick={(e: React.MouseEvent<HTMLButtonElement>) => {

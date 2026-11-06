@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use ev_lib_classes::copy;
+use ev_lib_classes::{SIDEBAR_ROOT, copy};
 
 use crate::{
 	cn,
@@ -89,7 +89,7 @@ pub fn Sidebar(
 	let inner = cn!(SIDEBAR_INNER, class);
 	rsx! {
 		div {
-			class: "group peer text-ink hidden md:block",
+			class: SIDEBAR_ROOT,
 			"data-state": state,
 			"data-collapsible": data_collapsible,
 			"data-variant": variant.as_ref(),

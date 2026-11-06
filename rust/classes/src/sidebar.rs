@@ -77,3 +77,4 @@ pub enum SidebarCollapsible {
 	Icon,
 	None,
 }
+pub const SIDEBAR_ROOT: &str = "group peer text-ink hidden md:block";

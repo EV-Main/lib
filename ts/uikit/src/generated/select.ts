@@ -18,6 +18,10 @@ export const NATIVE_SELECT_BASE = "border-input text-ink h-7 w-full min-w-0 appe
 
 export const SELECT_TYPEAHEAD_MS = 500;
 
+export const SELECT_CHEVRON = "size-4 opacity-50";
+
+export const SELECT_ITEM_INDICATOR = "absolute right-2 flex size-3.5 items-center justify-center";
+
 export const selectTriggerSizeClasses = {
   "sm": "h-8",
   "md": "h-9",

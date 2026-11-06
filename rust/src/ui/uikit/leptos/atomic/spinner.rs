@@ -1,11 +1,11 @@
-use ev_lib_classes::copy;
+use ev_lib_classes::{SPINNER, copy};
 use leptos::prelude::*;
 
 use crate::cn;
 
 #[component]
 pub fn Spinner(#[prop(optional, into)] class: String) -> impl IntoView {
-	let cls = cn!("size-4 animate-spin", class);
+	let cls = cn!(SPINNER, class);
 	view! {
 		<svg
 			class=cls

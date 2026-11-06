@@ -10,21 +10,9 @@ import { usePresence } from "../../primitives/presence";
 import { useRovingFocus } from "../../primitives/use-roving-focus";
 import { useHoverIntent } from "../../primitives/use-hover-intent";
 import { mergeRefs } from "../../primitives/merge-refs";
-import {
-  MENUBAR_CHECKBOX_ITEM,
-  MENUBAR_CONTENT,
-  MENUBAR_ITEM,
-  MENUBAR_ITEM_INDICATOR,
-  MENUBAR_LABEL,
-  MENUBAR_RADIO_ITEM,
-  MENUBAR_ROOT,
-  MENUBAR_SEPARATOR,
-  MENUBAR_SHORTCUT,
-  MENUBAR_SUB_CONTENT,
-  MENUBAR_SUB_TRIGGER,
-  MENUBAR_TRIGGER,
-} from "../../generated/menubar";
+import { MENUBAR_CHECKBOX_ITEM, MENUBAR_CONTENT, MENUBAR_ITEM, MENUBAR_ITEM_INDICATOR, MENUBAR_LABEL, MENUBAR_RADIO_ITEM, MENUBAR_ROOT, MENUBAR_SEPARATOR, MENUBAR_SHORTCUT, MENUBAR_SUB_CHEVRON, MENUBAR_SUB_CONTENT, MENUBAR_SUB_TRIGGER, MENUBAR_TRIGGER } from "../../generated/menubar";
 import type { MenuItemVariant } from "../../generated/menu";
+import { MENU_RADIO_DOT } from "../../generated/menu";
 
 interface MenuCtx {
   open: boolean;
@@ -266,7 +254,7 @@ export function MenubarRadioItem({
     >
       <span className={MENUBAR_ITEM_INDICATOR}>
         {checked && (
-          <svg className="size-2 fill-current" viewBox="0 0 24 24">
+          <svg className={MENU_RADIO_DOT} viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="10" />
           </svg>
         )}
@@ -390,7 +378,7 @@ export function MenubarSubTrigger({
     >
       {children}
       <svg
-        className="ml-auto h-4 w-4"
+        className={MENUBAR_SUB_CHEVRON}
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"

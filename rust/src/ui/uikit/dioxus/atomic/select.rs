@@ -5,6 +5,7 @@ use std::{
 };
 
 use dioxus::prelude::*;
+use ev_lib_classes::{SELECT_CHEVRON, SELECT_ITEM_INDICATOR};
 
 use crate::{
 	cn,
@@ -98,7 +99,7 @@ pub fn SelectTrigger(#[props(default)] size: Size, #[props(default)] class: Stri
 				stroke_width: "2",
 				stroke_linecap: "round",
 				stroke_linejoin: "round",
-				class: "size-4 opacity-50",
+				class: SELECT_CHEVRON,
 				path { d: "m6 9 6 6 6-6" }
 			}
 		}
@@ -214,7 +215,7 @@ pub fn SelectItem(
 			onfocus: on_focus,
 			onclick: choose,
 			if selected {
-				span { class: "absolute right-2 flex size-3.5 items-center justify-center",
+				span { class: SELECT_ITEM_INDICATOR,
 					svg {
 						xmlns: "http://www.w3.org/2000/svg",
 						width: "24",

@@ -1,10 +1,12 @@
 use dioxus::prelude::*;
-use ev_lib_classes::copy;
+use ev_lib_classes::{
+	FOOTER_BRAND, FOOTER_COPYRIGHT, FOOTER_DESCRIPTION, FOOTER_GRID, FOOTER_HEADING, FOOTER_LEGAL_LINK, FOOTER_LEGAL_LINKS, FOOTER_LEGAL_SEPARATOR, FOOTER_LOCKUP, FOOTER_LOCKUP_TEXT,
+	FOOTER_NAV_COLUMN, FOOTER_NAV_LINK, FOOTER_NAV_LIST, FOOTER_NEWSLETTER_BLURB, FOOTER_NEWSLETTER_COLUMN, FOOTER_OFFICE_NAME, FOOTER_OFFICES_LIST, FOOTER_ROOT, FOOTER_TAGLINE,
+	FOOTER_VERSION, FOOTER_WIDE_COLUMN, copy,
+};
 pub use ev_lib_classes::{FooterLink, FooterLinkGroup, FooterOffice};
 
 use crate::ui::uikit::dioxus::Container;
-
-const HEADING: &str = "font-mono text-xs text-ink uppercase tracking-widest mb-6";
 
 /// A 12-col footer grid — brand 3 | sitemap groups 2 each | offices 3 |
 /// newsletter 2 — with the legal links and copyright line. On mobile the sitemap
@@ -31,27 +33,27 @@ pub fn Footer(
 	children: Element,
 ) -> Element {
 	rsx! {
-		footer { class: "bg-background border-t border-ink/10 py-16", "data-slot": "footer",
+		footer { class: FOOTER_ROOT, "data-slot": "footer",
 			{children}
 			Container {
-				div { class: "grid grid-cols-2 gap-x-8 gap-y-8 lg:grid-cols-12 mb-12",
-					div { class: "col-span-2 lg:col-span-3",
-						div { class: "flex items-center gap-3 mb-6",
+				div { class: FOOTER_GRID,
+					div { class: FOOTER_WIDE_COLUMN,
+						div { class: FOOTER_LOCKUP,
 							{mark}
-							div { class: "flex flex-col",
-								span { class: "font-serif font-bold text-base tracking-wider text-ink", {brand} }
+							div { class: FOOTER_LOCKUP_TEXT,
+								span { class: FOOTER_BRAND, {brand} }
 								if let Some(tagline) = tagline {
-									span { class: "text-[8px] font-mono tracking-[0.3em] text-accent-debug uppercase", {tagline} }
+									span { class: FOOTER_TAGLINE, {tagline} }
 								}
 							}
 						}
-						p { class: "text-ink/40 text-xs font-light max-w-sm leading-relaxed mb-6", {description} }
-						div { class: "flex gap-4 text-xs font-mono text-accent-debug",
+						p { class: FOOTER_DESCRIPTION, {description} }
+						div { class: FOOTER_LEGAL_LINKS,
 							for (i , link) in legal_links.iter().enumerate() {
 								if i > 0 {
-									span { class: "text-ink/20", "|" }
+									span { class: FOOTER_LEGAL_SEPARATOR, "|" }
 								}
-								a { href: link.href.clone(), class: "hover:underline", {link.label.clone()} }
+								a { href: link.href.clone(), class: FOOTER_LEGAL_LINK, {link.label.clone()} }
 							}
 						}
 					}
@@ -60,14 +62,14 @@ pub fn Footer(
 						nav {
 							key: "{group.heading}",
 							aria_label: "Footer {group.heading} links",
-							class: "lg:col-span-2",
-							h4 { class: HEADING, {group.heading.clone()} }
-							ul { class: "space-y-3",
+							class: FOOTER_NAV_COLUMN,
+							h4 { class: FOOTER_HEADING, {group.heading.clone()} }
+							ul { class: FOOTER_NAV_LIST,
 								for link in group.links.iter() {
 									li { key: "{link.href}",
 										a {
 											href: link.href.clone(),
-											class: "text-xs font-light text-ink/70 hover:text-accent-debug transition-colors",
+											class: FOOTER_NAV_LINK,
 											{link.label.clone()}
 										}
 									}
@@ -77,12 +79,12 @@ pub fn Footer(
 					}
 
 					if !offices.is_empty() {
-						div { class: "col-span-2 lg:col-span-3",
-							h4 { class: HEADING, {offices_heading} }
-							ul { class: "space-y-4 text-xs text-ink/70 font-light leading-relaxed",
+						div { class: FOOTER_WIDE_COLUMN,
+							h4 { class: FOOTER_HEADING, {offices_heading} }
+							ul { class: FOOTER_OFFICES_LIST,
 								for office in offices.iter() {
 									li { key: "{office.name}",
-										strong { class: "text-ink block font-mono text-[10px] uppercase tracking-wider mb-1", {office.name.clone()} }
+										strong { class: FOOTER_OFFICE_NAME, {office.name.clone()} }
 										{office.address.clone()}
 									}
 								}
@@ -91,22 +93,22 @@ pub fn Footer(
 					}
 
 					if newsletter.is_some() {
-						div { class: "col-span-2 lg:col-span-2",
-							h4 { class: HEADING, {newsletter_heading} }
+						div { class: FOOTER_NEWSLETTER_COLUMN,
+							h4 { class: FOOTER_HEADING, {newsletter_heading} }
 							// What the source's `<Tier tier="alt"><Text>` emits: the alt body
 							// size + the info variant, then the mb-4 the caller adds.
-							p { class: "text-sm sm:text-xs font-light leading-relaxed text-ink/70 mb-4", {newsletter_blurb} }
+							p { class: FOOTER_NEWSLETTER_BLURB, {newsletter_blurb} }
 							{newsletter}
 						}
 					}
 				}
 
-				div { class: "border-t border-ink/10 pt-8 text-[10px] font-mono text-ink/40",
+				div { class: FOOTER_COPYRIGHT,
 					p {
 						{copyright}
 						if let Some(v) = version {
 							" "
-							a { href: commit_href, class: "text-ink/30", {v} }
+							a { href: commit_href, class: FOOTER_VERSION, {v} }
 						}
 					}
 				}

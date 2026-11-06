@@ -23,3 +23,5 @@ export const MENUBAR_SHORTCUT = "text-ink-soft ml-auto text-xs tracking-widest";
 export const MENUBAR_SUB_TRIGGER = "focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[state=open]:bg-hover data-[state=open]:text-ink flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-none select-none data-[inset]:pl-8";
 
 export const MENUBAR_SUB_CONTENT = "bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 absolute z-50 min-w-[8rem] overflow-hidden rounded-md border border-border p-1 shadow-lg";
+
+export const MENUBAR_SUB_CHEVRON = "ml-auto h-4 w-4";

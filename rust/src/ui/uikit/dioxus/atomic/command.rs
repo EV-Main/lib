@@ -8,6 +8,7 @@ use dioxus::{
 	html::{ScrollBehavior, ScrollLogicalPosition, ScrollToOptions},
 	prelude::*,
 };
+use ev_lib_classes::COMMAND_INPUT_ICON;
 
 use crate::{
 	cn,
@@ -136,7 +137,7 @@ pub fn CommandInput(
 				stroke_width: "2",
 				stroke_linecap: "round",
 				stroke_linejoin: "round",
-				class: "size-4 shrink-0 opacity-50",
+				class: COMMAND_INPUT_ICON,
 				"aria-hidden": "true",
 				circle { cx: "11", cy: "11", r: "8" }
 				path { d: "m21 21-4.3-4.3" }

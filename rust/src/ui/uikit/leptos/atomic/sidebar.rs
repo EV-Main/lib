@@ -1,4 +1,4 @@
-use ev_lib_classes::copy;
+use ev_lib_classes::{SIDEBAR_ROOT, copy};
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -83,7 +83,7 @@ pub fn Sidebar(
 	let inner = cn!(SIDEBAR_INNER, class);
 	view! {
 		<div
-			class="group peer text-ink hidden md:block"
+			class=SIDEBAR_ROOT
 			data-state=move || ctx.state()
 			data-collapsible=move || sidebar_collapsible_data(collapsible, ctx.open()).to_owned()
 			data-variant=variant.as_ref().to_owned()

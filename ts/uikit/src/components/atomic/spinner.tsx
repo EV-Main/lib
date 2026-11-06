@@ -1,13 +1,14 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import * as copy from "../../generated/copy";
+import { SPINNER } from "../../generated/spinner";
 
 export function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
   return (
     <svg
       role="status"
       aria-label={copy.LOADING}
-      className={cn("size-4 animate-spin", className)}
+      className={cn(SPINNER, className)}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"

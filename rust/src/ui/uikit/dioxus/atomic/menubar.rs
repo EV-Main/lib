@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
 pub use ev_lib_classes::MenuItemVariant;
+use ev_lib_classes::{MENU_RADIO_DOT, MENUBAR_SUB_CHEVRON};
 
 use crate::{
 	cn,
@@ -167,7 +168,7 @@ pub fn MenubarRadioItem(value: String, #[props(default)] class: String, children
 			span { class: MENUBAR_ITEM_INDICATOR,
 				if checked {
 					svg {
-						class: "size-2 fill-current",
+						class: MENU_RADIO_DOT,
 						view_box: "0 0 24 24",
 						circle { cx: "12", cy: "12", r: "10" }
 					}
@@ -229,7 +230,7 @@ pub fn MenubarSubTrigger(#[props(default)] inset: bool, #[props(default)] class:
 			onclick: move |_| ctx.open.set(!ctx.open.get()),
 			{children}
 			svg {
-				class: "ml-auto h-4 w-4",
+				class: MENUBAR_SUB_CHEVRON,
 				view_box: "0 0 24 24",
 				fill: "none",
 				stroke: "currentColor",

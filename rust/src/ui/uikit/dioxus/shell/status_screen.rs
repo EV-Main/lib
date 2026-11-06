@@ -11,6 +11,10 @@
 //! [`Footer`](crate::uikit_dioxus::Footer) render their links.
 
 use dioxus::prelude::*;
+use ev_lib_classes::{
+	STATUS_SCREEN_ACTION_ICON, STATUS_SCREEN_ACTIONS, STATUS_SCREEN_BODY, STATUS_SCREEN_CODE, STATUS_SCREEN_EYEBROW, STATUS_SCREEN_GLOW, STATUS_SCREEN_LOGO, STATUS_SCREEN_ROOT,
+	STATUS_SCREEN_STACK, STATUS_SCREEN_TITLE, STATUS_SCREEN_TITLE_ACCENT,
+};
 
 pub use crate::ui::uikit::core::{StatusLinkData, status_cta_class};
 use crate::{
@@ -38,25 +42,25 @@ pub fn StatusScreen(
 ) -> Element {
 	let accent_text = accent_text_class(accent);
 	rsx! {
-		section { class: "relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-6 py-32 text-center",
+		section { class: STATUS_SCREEN_ROOT,
 			div {
 				aria_hidden: "true",
 				class: cn!(
-					"pointer-events-none absolute inset-0 opacity-[0.07] [background:radial-gradient(55%_45%_at_50%_30%,currentColor,transparent_70%)]",
+					STATUS_SCREEN_GLOW,
 					accent_text
 				),
 			}
-			div { class: "relative z-10 flex w-full max-w-2xl flex-col items-center",
-				Logo { class: cn!("mb-7 h-10 w-auto", accent_text) }
-				p { class: cn!("mb-6 font-mono text-[11px] uppercase tracking-[0.34em]", accent_text), {eyebrow} }
-				p { class: cn!("font-serif text-[110px] font-medium leading-[0.9] sm:text-[180px]", accent_text), {code} }
-				h1 { class: "mt-4 font-serif text-3xl font-light leading-tight text-ink sm:text-5xl",
+			div { class: STATUS_SCREEN_STACK,
+				Logo { class: cn!(STATUS_SCREEN_LOGO, accent_text) }
+				p { class: cn!(STATUS_SCREEN_EYEBROW, accent_text), {eyebrow} }
+				p { class: cn!(STATUS_SCREEN_CODE, accent_text), {code} }
+				h1 { class: STATUS_SCREEN_TITLE,
 					{headline_lead}
-					span { class: cn!("font-serif italic", accent_text), {headline_accent} }
+					span { class: cn!(STATUS_SCREEN_TITLE_ACCENT, accent_text), {headline_accent} }
 					{headline_tail}
 				}
-				p { class: "mx-auto mt-5 max-w-md text-sm leading-relaxed text-ink/60 sm:text-base", {subtext} }
-				div { class: "mt-9 flex flex-col items-center gap-3 sm:flex-row",
+				p { class: STATUS_SCREEN_BODY, {subtext} }
+				div { class: STATUS_SCREEN_ACTIONS,
 					{children}
 					for link in links.iter() {
 						a {
@@ -169,7 +173,7 @@ fn arrow_left_icon() -> Element {
 	rsx! {
 		svg {
 			xmlns: "http://www.w3.org/2000/svg",
-			class: "mr-2 h-4 w-4",
+			class: STATUS_SCREEN_ACTION_ICON,
 			view_box: "0 0 24 24",
 			fill: "none",
 			stroke: "currentColor",

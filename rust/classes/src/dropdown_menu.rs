@@ -40,3 +40,4 @@ pub const DROPDOWN_MENU_ITEM_INDICATOR: &str = "pointer-events-none absolute lef
 pub const DROPDOWN_MENU_LABEL: &str = "px-2 py-1.5 text-sm font-medium data-[inset]:pl-8";
 pub const DROPDOWN_MENU_SEPARATOR: &str = "bg-border -mx-1 my-1 h-px";
 pub const DROPDOWN_MENU_SHORTCUT: &str = "text-ink-soft ml-auto text-xs tracking-widest";
+pub const DROPDOWN_MENU_SUB_CHEVRON: &str = "ml-auto size-4";

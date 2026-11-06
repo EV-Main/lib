@@ -1,14 +1,10 @@
+use ev_lib_classes::{SECTION_DESCRIPTOR, SECTION_DESCRIPTOR_SUMMARY};
 use leptos::prelude::*;
 
 use crate::{
 	cn,
 	ui::uikit::leptos::{FIELD_DESCRIPTION, FIELD_TITLE},
 };
-
-/// A static, always-visible block explaining a whole feature, in neutral body
-/// copy rather than a coloured alert. With `collapsible` it is a native
-/// `<details>`, for free keyboard support and find-in-page auto-expand.
-const SECTION_DESCRIPTOR: &str = "flex flex-col gap-2 rounded-lg border border-border bg-hover p-4 text-left";
 
 #[component]
 pub fn SectionDescriptor(
@@ -22,7 +18,7 @@ pub fn SectionDescriptor(
 	let cls = cn!(SECTION_DESCRIPTOR, class);
 	let glyph = icon.then(info_glyph);
 	if collapsible {
-		let summary_cls = cn!(FIELD_TITLE, "cursor-pointer list-none [&::-webkit-details-marker]:hidden");
+		let summary_cls = cn!(FIELD_TITLE, SECTION_DESCRIPTOR_SUMMARY);
 		let body_cls = cn!(FIELD_DESCRIPTION, "mt-2");
 		view! {
 			<details

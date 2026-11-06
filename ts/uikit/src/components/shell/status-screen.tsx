@@ -5,6 +5,7 @@ import { cn } from "../../lib/cn";
 import { accentTextClasses, type Accent } from "../../generated/accent";
 import { buttonVariants, type ButtonVariant } from "../atomic/button";
 import { Logo } from "./logo";
+import { STATUS_SCREEN_ACTIONS, STATUS_SCREEN_ACTION_ICON, STATUS_SCREEN_BODY, STATUS_SCREEN_CODE, STATUS_SCREEN_CTA, STATUS_SCREEN_EYEBROW, STATUS_SCREEN_GLOW, STATUS_SCREEN_LOGO, STATUS_SCREEN_ROOT, STATUS_SCREEN_STACK, STATUS_SCREEN_TITLE, STATUS_SCREEN_TITLE_ACCENT } from "../../generated/status-screen";
 
 /**
  * The shared 404 / 403 / 500 status surface.
@@ -29,7 +30,7 @@ export type { Accent };
 export function statusCtaClass(accent: Accent, variant: ButtonVariant) {
   return cn(
     buttonVariants({ variant, size: "lg", accent }),
-    "font-mono text-xs uppercase tracking-widest",
+    STATUS_SCREEN_CTA,
   );
 }
 
@@ -96,29 +97,29 @@ export function StatusScreen({
   const L = linkComponent ?? "a";
   const accentText = accentTextClasses[accent];
   return (
-    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-6 py-32 text-center">
+    <section className={STATUS_SCREEN_ROOT}>
       <div
         aria-hidden
         className={cn(
-          "pointer-events-none absolute inset-0 opacity-[0.07] [background:radial-gradient(55%_45%_at_50%_30%,currentColor,transparent_70%)]",
+          STATUS_SCREEN_GLOW,
           accentText,
         )}
       />
-      <div className="relative z-10 flex w-full max-w-2xl flex-col items-center">
-        <Logo className={cn("mb-7 h-10 w-auto", accentText)} />
-        <p className={cn("mb-6 font-mono text-[11px] uppercase tracking-[0.34em]", accentText)}>{eyebrow}</p>
-        <p className={cn("font-serif text-[110px] font-medium leading-[0.9] sm:text-[180px]", accentText)}>{code}</p>
-        <h1 className="mt-4 font-serif text-3xl font-light leading-tight text-ink sm:text-5xl">
+      <div className={STATUS_SCREEN_STACK}>
+        <Logo className={cn(STATUS_SCREEN_LOGO, accentText)} />
+        <p className={cn(STATUS_SCREEN_EYEBROW, accentText)}>{eyebrow}</p>
+        <p className={cn(STATUS_SCREEN_CODE, accentText)}>{code}</p>
+        <h1 className={STATUS_SCREEN_TITLE}>
           {headlineLead}
-          <span className={cn("font-serif italic", accentText)}>{headlineAccent}</span>
+          <span className={cn(STATUS_SCREEN_TITLE_ACCENT, accentText)}>{headlineAccent}</span>
           {headlineTail}
         </h1>
-        <p className="mx-auto mt-5 max-w-md text-sm leading-relaxed text-ink/60 sm:text-base">{subtext}</p>
-        <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row">
+        <p className={STATUS_SCREEN_BODY}>{subtext}</p>
+        <div className={STATUS_SCREEN_ACTIONS}>
           {children}
           {links?.map((link) => (
             <L key={link.label} href={link.href} className={statusCtaClass(accent, link.variant ?? "primary")}>
-              {link.leadingArrow ? <ArrowLeftIcon className="mr-2 h-4 w-4" /> : null}
+              {link.leadingArrow ? <ArrowLeftIcon className={STATUS_SCREEN_ACTION_ICON} /> : null}
               {link.label}
             </L>
           ))}

@@ -1,4 +1,5 @@
 pub use ev_lib_classes::MenuItemVariant;
+use ev_lib_classes::{CONTEXT_MENU_ITEM_INDICATOR, MENU_RADIO_DOT};
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -133,7 +134,7 @@ pub fn ContextMenuCheckboxItem(
 			aria-checked=move || checked.get().to_string()
 			on:click=move |e| ctx.activate(disabled, on_click, e)
 		>
-			<span class="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center">
+			<span class=CONTEXT_MENU_ITEM_INDICATOR>
 				{move || {
 					checked
 						.get()
@@ -204,13 +205,13 @@ pub fn ContextMenuRadioItem(#[prop(into)] value: String, #[prop(optional, into)]
 				menu.open.set(false);
 			}
 		>
-			<span class="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center">
+			<span class=CONTEXT_MENU_ITEM_INDICATOR>
 				{move || {
 					checked
 						.get()
 						.then(|| {
 							view! {
-								<svg class="size-2 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+								<svg class=MENU_RADIO_DOT viewBox="0 0 24 24" aria-hidden="true">
 									<circle cx="12" cy="12" r="10"></circle>
 								</svg>
 							}

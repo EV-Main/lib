@@ -77,3 +77,5 @@ pub fn native_select_size_class(size: Size) -> &'static str {
 		Size::Lg | Size::Touch | Size::Xl => "h-11 pr-11 pl-3 text-base pointer-fine:text-base",
 	}
 }
+pub const SELECT_CHEVRON: &str = "size-4 opacity-50";
+pub const SELECT_ITEM_INDICATOR: &str = "absolute right-2 flex size-3.5 items-center justify-center";

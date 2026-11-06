@@ -17,3 +17,5 @@ export const DROPDOWN_MENU_LABEL = "px-2 py-1.5 text-sm font-medium data-[inset]
 export const DROPDOWN_MENU_SEPARATOR = "bg-border -mx-1 my-1 h-px";
 
 export const DROPDOWN_MENU_SHORTCUT = "text-ink-soft ml-auto text-xs tracking-widest";
+
+export const DROPDOWN_MENU_SUB_CHEVRON = "ml-auto size-4";

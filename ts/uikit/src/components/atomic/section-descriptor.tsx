@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { FIELD_TITLE, FIELD_DESCRIPTION } from "../../generated/field";
+import { SECTION_DESCRIPTOR, SECTION_DESCRIPTOR_SUMMARY } from "../../generated/section-descriptor";
 
 /**
  * `SectionDescriptor` — a static, always-visible block that explains a whole
@@ -12,9 +13,6 @@ import { FIELD_TITLE, FIELD_DESCRIPTION } from "../../generated/field";
  * With `collapsible`, it renders as a native `<details>`/`<summary>` disclosure,
  * which carries keyboard support and find-in-page auto-expand for free.
  */
-const SECTION_DESCRIPTOR =
-  "flex flex-col gap-2 rounded-lg border border-border bg-hover p-4 text-left";
-
 // lucide `info`, inlined per the kit's no-lucide-dep icon convention.
 function InfoGlyph({ className }: { className?: string }) {
   return (
@@ -77,7 +75,7 @@ export function SectionDescriptor({
           data-slot="section-descriptor-title"
           className={cn(
             FIELD_TITLE,
-            "cursor-pointer list-none [&::-webkit-details-marker]:hidden",
+            SECTION_DESCRIPTOR_SUMMARY,
           )}
         >
           {titleContent}

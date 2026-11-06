@@ -1,4 +1,5 @@
 pub use ev_lib_classes::MenuItemVariant;
+use ev_lib_classes::{MENU_RADIO_DOT, MENUBAR_SUB_CHEVRON};
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -210,7 +211,7 @@ pub fn MenubarRadioItem(#[prop(into)] value: String, #[prop(optional, into)] cla
 						.get()
 						.then(|| {
 							view! {
-								<svg class="size-2 fill-current" viewBox="0 0 24 24">
+								<svg class=MENU_RADIO_DOT viewBox="0 0 24 24">
 									<circle cx="12" cy="12" r="10"></circle>
 								</svg>
 							}
@@ -282,7 +283,7 @@ pub fn MenubarSubTrigger(#[prop(optional)] inset: bool, #[prop(optional, into)] 
 		>
 			{children()}
 			<svg
-				class="ml-auto h-4 w-4"
+				class=MENUBAR_SUB_CHEVRON
 				viewBox="0 0 24 24"
 				fill="none"
 				stroke="currentColor"

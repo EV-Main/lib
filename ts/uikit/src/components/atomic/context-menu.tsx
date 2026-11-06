@@ -10,17 +10,9 @@ import { useHoverIntent } from "../../primitives/use-hover-intent";
 import { mergeRefs } from "../../primitives/merge-refs";
 import { Portal } from "../../primitives/portal";
 import { Slot } from "../../primitives/slot";
-import {
-  CONTEXT_MENU_CHECK_ITEM,
-  CONTEXT_MENU_CONTENT,
-  CONTEXT_MENU_ITEM,
-  CONTEXT_MENU_LABEL,
-  CONTEXT_MENU_SEPARATOR,
-  CONTEXT_MENU_SHORTCUT,
-  CONTEXT_MENU_SUB_CONTENT,
-  CONTEXT_MENU_SUB_TRIGGER,
-} from "../../generated/context-menu";
+import { CONTEXT_MENU_CHECK_ITEM, CONTEXT_MENU_CONTENT, CONTEXT_MENU_ITEM, CONTEXT_MENU_ITEM_INDICATOR, CONTEXT_MENU_LABEL, CONTEXT_MENU_SEPARATOR, CONTEXT_MENU_SHORTCUT, CONTEXT_MENU_SUB_CONTENT, CONTEXT_MENU_SUB_TRIGGER } from "../../generated/context-menu";
 import type { MenuItemVariant } from "../../generated/menu";
+import { MENU_RADIO_DOT } from "../../generated/menu";
 
 interface ContextMenuContextValue {
   open: boolean;
@@ -228,7 +220,7 @@ export function ContextMenuCheckboxItem({
       }}
       {...props}
     >
-      <span className="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center">
+      <span className={CONTEXT_MENU_ITEM_INDICATOR}>
         {checked ? (
           <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M20 6 9 17l-5-5" />
@@ -309,9 +301,9 @@ export function ContextMenuRadioItem({
       }}
       {...props}
     >
-      <span className="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center">
+      <span className={CONTEXT_MENU_ITEM_INDICATOR}>
         {checked ? (
-          <svg className="size-2 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+          <svg className={MENU_RADIO_DOT} viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="12" r="10" />
           </svg>
         ) : null}

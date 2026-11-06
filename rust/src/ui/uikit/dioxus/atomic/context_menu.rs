@@ -1,5 +1,6 @@
 use dioxus::prelude::*;
 pub use ev_lib_classes::MenuItemVariant;
+use ev_lib_classes::{CONTEXT_MENU_ITEM_INDICATOR, MENU_RADIO_DOT};
 
 use crate::{
 	cn,
@@ -135,7 +136,7 @@ pub fn ContextMenuCheckboxItem(
 				}
 				ctx.open.set(false);
 			},
-			span { class: "pointer-events-none absolute left-2 flex size-3.5 items-center justify-center",
+			span { class: CONTEXT_MENU_ITEM_INDICATOR,
 				if checked {
 					svg {
 						class: "size-4",
@@ -190,9 +191,9 @@ pub fn ContextMenuRadioItem(value: String, #[props(default)] disabled: bool, #[p
 				radio.value.set(value.clone());
 				menu.open.set(false);
 			},
-			span { class: "pointer-events-none absolute left-2 flex size-3.5 items-center justify-center",
+			span { class: CONTEXT_MENU_ITEM_INDICATOR,
 				if checked {
-					svg { class: "size-2 fill-current", view_box: "0 0 24 24", "aria-hidden": "true",
+					svg { class: MENU_RADIO_DOT, view_box: "0 0 24 24", "aria-hidden": "true",
 						circle { cx: "12", cy: "12", r: "10" }
 					}
 				}

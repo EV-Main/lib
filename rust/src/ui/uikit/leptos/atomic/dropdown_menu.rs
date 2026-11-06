@@ -1,4 +1,5 @@
 pub use ev_lib_classes::MenuItemVariant;
+use ev_lib_classes::{DROPDOWN_MENU_SUB_CHEVRON, MENU_RADIO_DOT};
 use leptos::{context::Provider, prelude::*};
 
 use crate::{
@@ -209,7 +210,7 @@ pub fn DropdownMenuRadioItem(#[prop(into)] value: String, #[prop(optional, into)
 						.get()
 						.then(|| {
 							view! {
-								<svg class="size-2 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+								<svg class=MENU_RADIO_DOT viewBox="0 0 24 24" aria-hidden="true">
 									<circle cx="12" cy="12" r="10"></circle>
 								</svg>
 							}
@@ -291,7 +292,7 @@ pub fn DropdownMenuSubTrigger(#[prop(optional)] inset: bool, #[prop(optional, in
 		>
 			{children()}
 			<svg
-				class="ml-auto size-4"
+				class=DROPDOWN_MENU_SUB_CHEVRON
 				viewBox="0 0 24 24"
 				fill="none"
 				stroke="currentColor"

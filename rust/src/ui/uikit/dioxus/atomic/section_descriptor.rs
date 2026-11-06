@@ -1,16 +1,10 @@
 use dioxus::prelude::*;
+use ev_lib_classes::{SECTION_DESCRIPTOR, SECTION_DESCRIPTOR_SUMMARY};
 
 use crate::{
 	cn,
 	ui::uikit::dioxus::{FIELD_DESCRIPTION, FIELD_TITLE},
 };
-
-/// `SectionDescriptor` — the Dioxus mirror of the TS `SectionDescriptor`. A static,
-/// always-visible block explaining a whole feature; neutral body copy (title reuses
-/// `FIELD_TITLE`, body reuses `FIELD_DESCRIPTION`) in a subtle bordered container,
-/// NOT a coloured alert. With `collapsible`, renders as a native `<details>`
-/// disclosure for free keyboard support and find-in-page auto-expand.
-const SECTION_DESCRIPTOR: &str = "flex flex-col gap-2 rounded-lg border border-border bg-hover p-4 text-left";
 
 #[component]
 pub fn SectionDescriptor(
@@ -23,7 +17,7 @@ pub fn SectionDescriptor(
 ) -> Element {
 	let cls = cn!(SECTION_DESCRIPTOR, class);
 	if collapsible {
-		let summary_cls = cn!(FIELD_TITLE, "cursor-pointer list-none [&::-webkit-details-marker]:hidden");
+		let summary_cls = cn!(FIELD_TITLE, SECTION_DESCRIPTOR_SUMMARY);
 		let body_cls = cn!(FIELD_DESCRIPTION, "mt-2");
 		rsx! {
 			details {

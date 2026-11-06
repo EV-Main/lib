@@ -1,3 +1,4 @@
+use ev_lib_classes::{NAVIGATION_MENU_INDICATOR_ARROW, NAVIGATION_MENU_TRIGGER_CHEVRON, NAVIGATION_MENU_VIEWPORT_WRAPPER};
 use leptos::{context::Provider, prelude::*};
 
 pub use crate::ui::uikit::core::navigation_menu_trigger_style;
@@ -68,7 +69,7 @@ pub fn NavigationMenuTrigger(#[prop(optional, into)] class: String, children: Ch
 			{children()}
 			" "
 			<svg
-				class="relative top-[1px] ml-1 size-3 transition duration-300 group-data-[state=open]:rotate-180"
+				class=NAVIGATION_MENU_TRIGGER_CHEVRON
 				viewBox="0 0 24 24"
 				fill="none"
 				stroke="currentColor"
@@ -130,7 +131,7 @@ pub fn NavigationMenuLink(#[prop(optional, into)] active: Signal<bool>, #[prop(o
 pub fn NavigationMenuIndicator(#[prop(optional, into)] class: String) -> impl IntoView {
 	view! {
 		<div class=cn!(NAVIGATION_MENU_INDICATOR, class) data-slot="navigation-menu-indicator">
-			<div class="bg-border relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm shadow-md"></div>
+			<div class=NAVIGATION_MENU_INDICATOR_ARROW></div>
 		</div>
 	}
 }
@@ -140,7 +141,7 @@ pub fn NavigationMenuIndicator(#[prop(optional, into)] class: String) -> impl In
 #[component]
 pub fn NavigationMenuViewport(#[prop(optional, into)] class: String, children: Children) -> impl IntoView {
 	view! {
-		<div class="absolute top-full left-0 isolate z-50 flex justify-center">
+		<div class=NAVIGATION_MENU_VIEWPORT_WRAPPER>
 			<div class=cn!(NAVIGATION_MENU_VIEWPORT, class) data-slot="navigation-menu-viewport">
 				{children()}
 			</div>

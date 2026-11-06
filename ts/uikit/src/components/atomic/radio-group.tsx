@@ -4,7 +4,7 @@ import * as React from "react";
 import { cn } from "../../lib/cn";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useRovingFocus } from "../../primitives/use-roving-focus";
-import { RADIO_GROUP_ITEM, RADIO_GROUP_ROOT } from "../../generated/radio-group";
+import { RADIO_GROUP_DOT, RADIO_GROUP_INDICATOR, RADIO_GROUP_ITEM, RADIO_GROUP_ROOT } from "../../generated/radio-group";
 
 interface RadioGroupContextValue {
   value: string;
@@ -123,10 +123,10 @@ export function RadioGroupItem({
       {checked ? (
         <span
           data-slot="radio-group-indicator"
-          className="relative flex items-center justify-center"
+          className={RADIO_GROUP_INDICATOR}
         >
           <svg
-            className="fill-primary-ink absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2"
+            className={RADIO_GROUP_DOT}
             viewBox="0 0 24 24"
             aria-hidden="true"
           >

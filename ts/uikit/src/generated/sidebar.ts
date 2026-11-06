@@ -36,6 +36,8 @@ export const SIDEBAR_WIDTH = "16rem";
 
 export const SIDEBAR_WIDTH_ICON = "3rem";
 
+export const SIDEBAR_ROOT = "group peer text-ink hidden md:block";
+
 export const SIDEBAR_SIDES = ["left", "right"] as const;
 export type SidebarSide = (typeof SIDEBAR_SIDES)[number];
 

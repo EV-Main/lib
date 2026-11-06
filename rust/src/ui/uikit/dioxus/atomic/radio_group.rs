@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use ev_lib_classes::{RADIO_GROUP_DOT, RADIO_GROUP_INDICATOR};
 
 use crate::{
 	cn,
@@ -64,9 +65,9 @@ pub fn RadioGroupItem(value: String, #[props(default)] class: String, #[props(de
 			if checked {
 				span {
 					"data-slot": "radio-group-indicator",
-					class: "relative flex items-center justify-center",
+					class: RADIO_GROUP_INDICATOR,
 					svg {
-						class: "fill-primary-ink absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2",
+						class: RADIO_GROUP_DOT,
 						view_box: "0 0 24 24",
 						circle { cx: "12", cy: "12", r: "10" }
 					}

@@ -1,11 +1,11 @@
 use dioxus::prelude::*;
-use ev_lib_classes::copy;
+use ev_lib_classes::{SPINNER, copy};
 
 use crate::cn;
 
 #[component]
 pub fn Spinner(#[props(default)] class: String) -> Element {
-	let cls = cn!("size-4 animate-spin", class);
+	let cls = cn!(SPINNER, class);
 	rsx! {
 		svg {
 			class: cls,

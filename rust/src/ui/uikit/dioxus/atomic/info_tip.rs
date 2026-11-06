@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use ev_lib_classes::copy;
+use ev_lib_classes::{INFO_TIP_TRIGGER, copy};
 
 use crate::{
 	cn,
@@ -40,10 +40,7 @@ pub fn InfoTip(open: Option<bool>, #[props(default)] default_open: bool, on_open
 pub fn InfoTipTrigger(#[props(default = copy::MORE_INFORMATION.to_owned())] label: String, #[props(default)] class: String) -> Element {
 	let ctx = use_context::<InfoTipCtx>();
 	let open = ctx.open.get();
-	let cls = cn!(
-		"inline-flex size-4 shrink-0 cursor-help items-center justify-center rounded-full align-middle text-ink-soft outline-none transition-colors hover:text-ink focus-visible:ring-2 focus-visible:ring-ring data-[state=open]:text-accent-debug",
-		class
-	);
+	let cls = cn!(INFO_TIP_TRIGGER, class);
 	rsx! {
 		button {
 			r#type: "button",
