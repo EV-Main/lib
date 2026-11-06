@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-pub use crate::ui::uikit::core::KeyValueLabels;
+pub use ev_lib_classes::KeyValueLabels;
 use crate::{
 	cn,
 	ui::uikit::leptos::{KEY_VALUE_BASE, KEY_VALUE_COPY, KEY_VALUE_LABEL, KEY_VALUE_ROW, KEY_VALUE_STATUS, KEY_VALUE_VALUE, icon_button::Glyph},
@@ -60,7 +60,7 @@ pub fn KeyValue(
 		KeyValueLabel::Text(text) => format!("Copy {text}"),
 		KeyValueLabel::View(_) => String::from("Copy"),
 	});
-	let copied_label = labels.copied.unwrap_or_else(|| String::from("Copied"));
+	let copied_label = labels.copied;
 	let label = match label {
 		KeyValueLabel::Text(text) => text.into_any(),
 		KeyValueLabel::View(view) => view.run(),

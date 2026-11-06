@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-pub use crate::ui::uikit::core::SystemBannerLabels;
+pub use ev_lib_classes::SystemBannerLabels;
 use crate::{
 	cn,
 	ui::uikit::leptos::{
@@ -43,7 +43,7 @@ pub fn SystemBanner(
 	let icon_cls = cn!(SYSTEM_BANNER_ICON, tone.as_class());
 	let has_message = children.is_some();
 	let body_cls = title.as_ref().map(|_| SYSTEM_BANNER_BODY_AFTER_TITLE);
-	let dismiss_label = labels.dismiss.unwrap_or_else(|| String::from("Dismiss"));
+	let dismiss_label = labels.dismiss;
 	view! {
 		<div class=cls data-slot="system-banner" data-tone=tone.as_ref().to_owned() role="status">
 			{glyph.map(|g| view! { <span class=icon_cls>{g}</span> })}

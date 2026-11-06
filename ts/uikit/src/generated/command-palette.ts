@@ -13,3 +13,12 @@ export const COMMAND_PALETTE_LABEL = "min-w-0 flex-1 truncate";
 export const COMMAND_PALETTE_HINTS = "flex items-center gap-3 border-t border-border-subtle px-2 py-1 text-caption text-ink-soft";
 
 export const COMMAND_PALETTE_HINT = "inline-flex items-center gap-1.5";
+
+export const COMMAND_PALETTE_LABELS = {
+  "close": "close",
+  "empty": "No results.",
+  "navigate": "navigate",
+  "placeholder": "Type a command or search…",
+  "select": "select",
+  "title": "Command palette",
+} as const;

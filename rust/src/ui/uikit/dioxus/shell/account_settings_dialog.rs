@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-pub use crate::ui::uikit::core::AccountSettingsDialogLabels;
+pub use ev_lib_classes::AccountSettingsDialogLabels;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
@@ -59,7 +59,7 @@ pub fn AccountSettingsDialog(
 	let described_by = description.as_ref().map(|_| description_id.clone());
 	let first = sections.first().map(|s| s.id.clone()).unwrap_or_default();
 	let default_value = default_value.unwrap_or(first);
-	let close_label = labels.close.unwrap_or_else(|| String::from("Close"));
+	let close_label = labels.close;
 	let cls = cn!(ACCOUNT_SETTINGS_DIALOG_CONTENT, class);
 	rsx! {
 		Dialog { open: open.get(), on_open_change: move |next| open.set(next),
@@ -254,7 +254,7 @@ mod tests {
 					},
 					title: rsx! { "Настройки аккаунта" },
 					sections: sections(),
-					labels: AccountSettingsDialogLabels { close: Some("Закрыть окно".into()) },
+					labels: AccountSettingsDialogLabels { close: "Закрыть окно".into() },
 				}
 				p { "closes:{closes}" }
 			}

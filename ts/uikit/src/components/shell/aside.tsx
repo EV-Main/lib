@@ -15,6 +15,7 @@ import {
   ASIDE_RAIL_SPACER,
   asidePanelSideClasses,
   type AsidePanelSide,
+  ASIDE_HEADER_LABELS,
 } from "../../generated/aside";
 import { Drawer, DrawerContent } from "../atomic/drawer";
 import { IconButton } from "../derived/icon-button";
@@ -47,14 +48,14 @@ export function AsideHeader({ title, onBack, onClose, actions, labels = {}, clas
       {...props}
     >
       {onBack && (
-        <IconButton aria-label={labels.back ?? "Back"} size="sm" onClick={onBack}>
+        <IconButton aria-label={labels.back ?? ASIDE_HEADER_LABELS.back} size="sm" onClick={onBack}>
           <UiIcon name="chevron-right" className={ASIDE_HEADER_BACK_ICON} />
         </IconButton>
       )}
       <h2 className={ASIDE_HEADER_TITLE}>{title}</h2>
       {actions}
       {onClose && (
-        <IconButton aria-label={labels.close ?? "Close"} size="sm" onClick={onClose}>
+        <IconButton aria-label={labels.close ?? ASIDE_HEADER_LABELS.close} size="sm" onClick={onClose}>
           <UiIcon name="x" />
         </IconButton>
       )}

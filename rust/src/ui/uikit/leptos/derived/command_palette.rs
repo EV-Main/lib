@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-pub use crate::ui::uikit::core::CommandPaletteLabels;
+pub use ev_lib_classes::CommandPaletteLabels;
 use crate::{
 	cn,
 	ui::uikit::leptos::{
@@ -52,12 +52,12 @@ pub fn CommandPalette(
 	let state = use_controllable(open, default_open, on_open_change);
 	let title_id = use_stable_id("command-palette-title");
 	let cls = cn!(COMMAND_PALETTE_CONTENT, class);
-	let title = labels.title.unwrap_or_else(|| String::from("Command palette"));
-	let placeholder = labels.placeholder.unwrap_or_else(|| String::from("Type a command or search…"));
-	let empty = labels.empty.unwrap_or_else(|| String::from("No results."));
-	let navigate = labels.navigate.unwrap_or_else(|| String::from("navigate"));
-	let select = labels.select.unwrap_or_else(|| String::from("select"));
-	let close = labels.close.unwrap_or_else(|| String::from("close"));
+	let title = labels.title;
+	let placeholder = labels.placeholder;
+	let empty = labels.empty;
+	let navigate = labels.navigate;
+	let select = labels.select;
+	let close = labels.close;
 	let labelled_by = title_id.clone();
 	// Run on every opening, so it clones what the inner parts take by value.
 	let body = move || {

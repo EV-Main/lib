@@ -26,6 +26,7 @@ mod checkbox;
 mod command;
 mod command_palette;
 mod confirm_dialog;
+pub mod copy;
 mod container;
 mod context_menu;
 mod date_time_picker;

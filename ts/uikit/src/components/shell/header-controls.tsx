@@ -37,6 +37,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../atomic/popover";
 import { Settled } from "./settled";
 import { Skeleton } from "../atomic/skeleton";
 import { UiIcon } from "../../icons/ui-icons";
+import * as copy from "../../generated/copy";
 
 export interface HeaderBalanceProps extends Omit<React.HTMLAttributes<HTMLElement>, "children"> {
   /** Only meaningful with `onClick`. */
@@ -135,7 +136,7 @@ export interface NotificationBellProps {
 /** The bell with an unread dot; the list opens in a popover. */
 export function NotificationBell({ notifications, onSelect, labels = {}, footer, className }: NotificationBellProps) {
   const unread = notifications.filter((n) => n.unread).length;
-  const name = labels.trigger ?? "Notifications";
+  const name = labels.trigger ?? copy.NOTIFICATION_BELL_TRIGGER;
   const spoken = unread > 0 ? `${name}, ${(labels.unread ?? ((n) => `${n} unread`))(unread)}` : name;
   return (
     <Popover>
@@ -149,7 +150,7 @@ export function NotificationBell({ notifications, onSelect, labels = {}, footer,
       </PopoverTrigger>
       <PopoverContent align="end" className={NOTIFICATION_BELL_CONTENT}>
         {notifications.length === 0 ? (
-          <p className={NOTIFICATION_BELL_EMPTY}>{labels.empty ?? "No notifications"}</p>
+          <p className={NOTIFICATION_BELL_EMPTY}>{labels.empty ?? copy.NOTIFICATION_BELL_EMPTY}</p>
         ) : (
           <ul className={NOTIFICATION_BELL_LIST}>
             {notifications.map((n) => (

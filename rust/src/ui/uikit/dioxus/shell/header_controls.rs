@@ -1,3 +1,4 @@
+use ev_lib_classes::copy;
 use dioxus::prelude::*;
 
 pub use crate::ui::uikit::core::HeaderNotification;
@@ -78,16 +79,25 @@ pub fn HeaderBalance(
 }
 
 /// The bell's own strings; every one defaults to English.
-#[derive(Clone, Default, PartialEq)]
+#[derive(Clone, PartialEq)]
 pub struct NotificationBellLabels {
-	/// The bell's name; "Notifications".
-	pub trigger: Option<String>,
+	/// The bell's name.
+	pub trigger: String,
 	/// Spoken after the name when something is unread; gets the count.
 	/// "{n} unread". A callback, not a template, so a language can pick its
 	/// plural form by the count.
 	pub unread: Option<Callback<usize, String>>,
-	/// Shown in place of an empty list; "No notifications".
-	pub empty: Option<String>,
+	/// Shown in place of an empty list.
+	pub empty: String,
+}
+impl Default for NotificationBellLabels {
+	fn default() -> Self {
+		Self {
+			trigger: copy::NOTIFICATION_BELL_TRIGGER.to_owned(),
+			unread: None,
+			empty: copy::NOTIFICATION_BELL_EMPTY.to_owned(),
+		}
+	}
 }
 
 /// The bell with an unread dot; the list opens in a popover. Mirrors the TS
@@ -107,7 +117,7 @@ pub fn NotificationBell(
 	#[props(default)] class: String,
 ) -> Element {
 	let unread = notifications.iter().filter(|n| n.unread).count();
-	let name = labels.trigger.unwrap_or_else(|| String::from("Notifications"));
+	let name = labels.trigger;
 	let spoken = match (unread, labels.unread) {
 		(0, _) => name,
 		(n, Some(say)) => format!("{name}, {}", say.call(n)),
@@ -122,7 +132,7 @@ pub fn NotificationBell(
 		NOTIFICATION_BELL_TRIGGER,
 		class
 	);
-	let empty = labels.empty.unwrap_or_else(|| String::from("No notifications"));
+	let empty = labels.empty;
 	rsx! {
 		Popover {
 			PopoverTrigger { class: trigger_cls, aria_label: spoken,
@@ -392,7 +402,7 @@ mod tests {
 			rsx! {
 				NotificationBell {
 					notifications: list,
-					labels: NotificationBellLabels { trigger: Some("Уведомления".into()), unread: Some(unread), empty: None },
+					labels: NotificationBellLabels { trigger: "Уведомления".into(), unread: Some(unread), ..Default::default() },
 				}
 			}
 		}
@@ -440,7 +450,7 @@ mod tests {
 			rsx! {
 				NotificationBell {
 					notifications: Vec::new(),
-					labels: NotificationBellLabels { empty: Some("Ничего нового".into()), ..Default::default() },
+					labels: NotificationBellLabels { empty: "Ничего нового".into(), ..Default::default() },
 				}
 			}
 		}

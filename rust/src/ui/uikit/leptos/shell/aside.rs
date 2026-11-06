@@ -1,7 +1,8 @@
 pub use ev_lib_classes::AsidePanelMode;
 use leptos::prelude::*;
 
-pub use crate::ui::uikit::core::{AsideCollapse, AsideHeaderLabels};
+pub use crate::ui::uikit::core::AsideCollapse;
+pub use ev_lib_classes::AsideHeaderLabels;
 use crate::{
 	cn,
 	ui::uikit::leptos::{
@@ -30,8 +31,8 @@ pub fn AsideHeader(
 	#[prop(optional)] labels: AsideHeaderLabels,
 	#[prop(optional, into)] class: String,
 ) -> impl IntoView {
-	let back_label = labels.back.unwrap_or_else(|| String::from("Back"));
-	let close_label = labels.close.unwrap_or_else(|| String::from("Close"));
+	let back_label = labels.back;
+	let close_label = labels.close;
 	let cls = cn!(ASIDE_HEADER_BASE, class);
 	view! {
 		<div data-slot="aside-header" class=cls>

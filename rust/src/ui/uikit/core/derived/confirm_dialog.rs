@@ -1,12 +1,3 @@
-/// The `ConfirmDialog`'s own strings; every one defaults to English.
-#[derive(Clone, Debug, Default, PartialEq)]
-pub struct ConfirmDialogLabels {
-	/// The cancel button; "Cancel".
-	pub cancel: Option<String>,
-	/// Shown when the work fails with an empty `error`; "Something went wrong".
-	pub error: Option<String>,
-}
-
 /// A `ConfirmDialog`'s hold on the parent's work, which it reports through
 /// `pending` and `error` (see the port's `ConfirmDialog`).
 ///

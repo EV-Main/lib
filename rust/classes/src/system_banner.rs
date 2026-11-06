@@ -45,3 +45,18 @@ pub fn system_banner_tone_class(tone: &SystemBannerTone) -> &'static str {
 		SystemBannerTone::Warn => "border-accent-warn/40 bg-accent-warn/10 text-accent-warn",
 	}
 }
+
+/// The `SystemBanner`'s own strings. English by default; a caller translates by overriding fields.
+#[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "ts_gen", derive(serde::Serialize), serde(rename_all = "camelCase"))]
+pub struct SystemBannerLabels {
+	/// `aria-label` of the dismiss button.
+	pub dismiss: String,
+}
+impl Default for SystemBannerLabels {
+	fn default() -> Self {
+		Self {
+			dismiss: "Dismiss".to_owned(),
+		}
+	}
+}

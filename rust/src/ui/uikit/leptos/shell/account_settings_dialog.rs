@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-pub use crate::ui::uikit::core::AccountSettingsDialogLabels;
+pub use ev_lib_classes::AccountSettingsDialogLabels;
 use crate::{
 	cn,
 	ui::uikit::leptos::{
@@ -62,7 +62,7 @@ pub fn AccountSettingsDialog(
 	let described_by = description.as_ref().map(|_| description_id.clone());
 	let first = sections.first().map(|s| s.id.clone()).unwrap_or_default();
 	let default_value = default_value.unwrap_or(first);
-	let close_label = labels.close.unwrap_or_else(|| String::from("Close"));
+	let close_label = labels.close;
 	let cls = cn!(ACCOUNT_SETTINGS_DIALOG_CONTENT, class);
 	let labelled_by = title_id.clone();
 	// Run on every opening, so it clones what the inner parts take by value.

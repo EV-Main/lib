@@ -2,7 +2,8 @@ use std::rc::Rc;
 
 use dioxus::prelude::*;
 
-pub use crate::ui::uikit::core::{ChatComposerLabels, ModelOption};
+pub use crate::ui::uikit::core::ModelOption;
+pub use ev_lib_classes::ChatComposerLabels;
 use crate::{
 	cn,
 	ui::uikit::{
@@ -103,7 +104,7 @@ pub fn ChatComposer(
 				value: text.get(),
 				disabled,
 				placeholder,
-				aria_label: labels.field.unwrap_or_else(|| "Message".into()),
+				aria_label: labels.field,
 				class: CHAT_COMPOSER_FIELD,
 				oninput: move |e: FormEvent| text.set(e.value()),
 				onkeydown: move |e: KeyboardEvent| {
@@ -116,7 +117,7 @@ pub fn ChatComposer(
 			}
 			div { class: CHAT_COMPOSER_TOOLBAR,
 				if let Some(attach) = on_attach {
-					IconButton { aria_label: labels.attach.unwrap_or_else(|| "Attach file".into()), size: Size::Sm, disabled, onclick: move |_| attach.call(()),
+					IconButton { aria_label: labels.attach, size: Size::Sm, disabled, onclick: move |_| attach.call(()),
 						Glyph { class: "size-4", path { d: "M5 12h14M12 5v14" } }
 					}
 				}
@@ -128,7 +129,7 @@ pub fn ChatComposer(
 				if streaming {
 					IconButton {
 						variant: IconButtonVariant::Outline,
-						aria_label: labels.stop.unwrap_or_else(|| "Stop".into()),
+						aria_label: labels.stop,
 						onclick: move |_| {
 							if let Some(stop) = on_stop {
 								stop.call(());
@@ -146,7 +147,7 @@ pub fn ChatComposer(
 				} else {
 					IconButton {
 						variant: IconButtonVariant::Outline,
-						aria_label: labels.send.unwrap_or_else(|| "Send".into()),
+						aria_label: labels.send,
 						disabled: disabled || empty,
 						onclick: move |_| send(),
 						Glyph { class: "size-4", path { d: "m5 12 7-7 7 7M12 19V5" } }
@@ -263,7 +264,7 @@ mod tests {
 			rsx! { ChatComposer { on_send: |_| {} } }
 		}
 		fn translated() -> Element {
-			rsx! { ChatComposer { on_send: |_| {}, labels: ChatComposerLabels { field: Some("Сообщение".into()), send: Some("Отправить".into()), ..Default::default() } } }
+			rsx! { ChatComposer { on_send: |_| {}, labels: ChatComposerLabels { field: "Сообщение".into(), send: "Отправить".into(), ..Default::default() } } }
 		}
 		let html = render(plain);
 		let area = opening_tag(&html, "<textarea");

@@ -36,46 +36,6 @@ impl LocalDateTime {
 	}
 }
 
-/// The picker's own strings; every one defaults to English.
-#[derive(Clone, Debug, Default, PartialEq)]
-pub struct DateTimePickerLabels {
-	/// `aria-label` of the calendar's previous-month button; "Previous month".
-	pub previous_month: Option<String>,
-	/// `aria-label` of the calendar's next-month button; "Next month".
-	pub next_month: Option<String>,
-	/// `aria-label` of the hours input; "Hours".
-	pub hours: Option<String>,
-	/// `aria-label` of the minutes input; "Minutes".
-	pub minutes: Option<String>,
-	/// Text of the clear button; "Clear".
-	pub clear: Option<String>,
-	/// `aria-label` of the close button; "Close".
-	pub close: Option<String>,
-	/// `aria-label` of the popover dialog; "Choose date and time".
-	pub dialog: Option<String>,
-}
-impl DateTimePickerLabels {
-	pub(crate) fn hours(&self) -> String {
-		self.hours.clone().unwrap_or_else(|| "Hours".to_owned())
-	}
-
-	pub(crate) fn minutes(&self) -> String {
-		self.minutes.clone().unwrap_or_else(|| "Minutes".to_owned())
-	}
-
-	pub(crate) fn clear(&self) -> String {
-		self.clear.clone().unwrap_or_else(|| "Clear".to_owned())
-	}
-
-	pub(crate) fn close(&self) -> String {
-		self.close.clone().unwrap_or_else(|| "Close".to_owned())
-	}
-
-	pub(crate) fn dialog(&self) -> String {
-		self.dialog.clone().unwrap_or_else(|| "Choose date and time".to_owned())
-	}
-}
-
 /// A `DateTimePicker`'s value and bounds, as of one render. The parent owns the
 /// value; every edit comes back as the next value to emit.
 #[derive(Clone, Copy, Debug, PartialEq)]

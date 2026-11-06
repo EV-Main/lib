@@ -1,6 +1,7 @@
 use leptos::{prelude::*, web_sys::HtmlInputElement};
 
-pub use crate::ui::uikit::core::{DateTimePickerLabels, LocalDateTime};
+pub use crate::ui::uikit::core::LocalDateTime;
+pub use ev_lib_classes::DateTimePickerLabels;
 use crate::{
 	cn,
 	ui::uikit::{
@@ -135,7 +136,7 @@ pub fn DateTimePicker(
 				<div
 					class=content_class.clone()
 					role="dialog"
-					aria-label=labels.dialog()
+					aria-label=labels.dialog.clone()
 					data-slot="date-time-picker-content"
 					data-state="open"
 					data-side="bottom"
@@ -159,7 +160,7 @@ pub fn DateTimePicker(
 							inputmode="numeric"
 							class=time_input_class.clone()
 							data-slot="date-time-picker-hours"
-							aria-label=labels.hours()
+							aria-label=labels.hours.clone()
 							value=hours
 							prop:value=move || picker.get().time_fields().0
 							disabled=disabled
@@ -174,7 +175,7 @@ pub fn DateTimePicker(
 							inputmode="numeric"
 							class=time_input_class.clone()
 							data-slot="date-time-picker-minutes"
-							aria-label=labels.minutes()
+							aria-label=labels.minutes.clone()
 							value=minutes
 							prop:value=move || picker.get().time_fields().1
 							disabled=disabled
@@ -191,13 +192,13 @@ pub fn DateTimePicker(
 								open.set(false);
 							}
 						>
-							{labels.clear()}
+							{labels.clear.clone()}
 						</button>
 						<button
 							type="button"
 							class=close_class.clone()
 							data-slot="date-time-picker-close"
-							aria-label=labels.close()
+							aria-label=labels.close.clone()
 							disabled=disabled
 							on:click=move |_| open.set(false)
 						>

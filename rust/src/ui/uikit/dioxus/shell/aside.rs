@@ -1,7 +1,8 @@
 use dioxus::prelude::*;
 pub use ev_lib_classes::AsidePanelMode;
 
-pub use crate::ui::uikit::core::{AsideCollapse, AsideHeaderLabels};
+pub use crate::ui::uikit::core::AsideCollapse;
+pub use ev_lib_classes::AsideHeaderLabels;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
@@ -27,8 +28,8 @@ pub fn AsideHeader(
 	#[props(default)] labels: AsideHeaderLabels,
 	#[props(default)] class: String,
 ) -> Element {
-	let back_label = labels.back.unwrap_or_else(|| String::from("Back"));
-	let close_label = labels.close.unwrap_or_else(|| String::from("Close"));
+	let back_label = labels.back;
+	let close_label = labels.close;
 	let cls = cn!(ASIDE_HEADER_BASE, class);
 	rsx! {
 		div { "data-slot": "aside-header", class: cls,
@@ -271,7 +272,7 @@ mod tests {
 					title: rsx! { "Изменить оповещение" },
 					on_back: |_| { BACKS.fetch_add(1, Ordering::SeqCst); },
 					on_close: |_| {},
-					labels: AsideHeaderLabels { back: Some("Назад".into()), ..Default::default() },
+					labels: AsideHeaderLabels { back: "Назад".into(), ..Default::default() },
 				}
 			}
 		}

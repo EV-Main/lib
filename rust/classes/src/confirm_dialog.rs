@@ -32,3 +32,21 @@ pub enum ConfirmDialogTone {
 	#[tw(class = "bg-chip-error-bg text-accent-error")]
 	Danger,
 }
+
+/// The `ConfirmDialog`'s own strings. English by default; a caller translates by overriding fields.
+#[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "ts_gen", derive(serde::Serialize), serde(rename_all = "camelCase"))]
+pub struct ConfirmDialogLabels {
+	/// The cancel button.
+	pub cancel: String,
+	/// Shown when the confirm action fails without a message.
+	pub error: String,
+}
+impl Default for ConfirmDialogLabels {
+	fn default() -> Self {
+		Self {
+			cancel: "Cancel".to_owned(),
+			error: "Something went wrong".to_owned(),
+		}
+	}
+}

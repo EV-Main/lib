@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-pub use crate::ui::uikit::core::ConfirmDialogLabels;
+pub use ev_lib_classes::ConfirmDialogLabels;
 use crate::{
 	cn,
 	ui::uikit::{
@@ -98,7 +98,7 @@ pub fn ConfirmDialog(
 	let described_by = description.as_ref().map(|_| description_id.clone());
 	let shown_error = error.filter(|_| flow.read().shows_error()).map(|e| {
 		if e.is_empty() {
-			labels.error.clone().unwrap_or_else(|| String::from("Something went wrong"))
+			labels.error.clone()
 		} else {
 			e
 		}
@@ -110,7 +110,7 @@ pub fn ConfirmDialog(
 	let confirm_cls = button_classes(&confirm_variant, Size::Xs, false, None, CONFIRM_DIALOG_PENDING);
 	let icon_cls = cn!(CONFIRM_DIALOG_ICON, tone.as_class());
 	let glyph = icon.unwrap_or_else(|| rsx! { AlertIcon {} });
-	let cancel_label = labels.cancel.unwrap_or_else(|| String::from("Cancel"));
+	let cancel_label = labels.cancel;
 	let cls = cn!(CONFIRM_DIALOG_CONTENT, class);
 	let trigger_cls = button_classes(&ButtonVariant::Outline, Size::Xs, false, None, &trigger_class);
 	rsx! {
@@ -375,7 +375,7 @@ mod tests {
 					confirm_label: rsx! { "Да" },
 					pending: busy(),
 					error: error(),
-					labels: ConfirmDialogLabels { error: Some("Что-то пошло не так".into()), ..Default::default() },
+					labels: ConfirmDialogLabels { error: "Что-то пошло не так".into(), ..Default::default() },
 					on_confirm: move |_| busy.set(true),
 				}
 				button {
@@ -487,7 +487,7 @@ mod tests {
 					},
 					title: rsx! { "Точно?" },
 					confirm_label: rsx! { "Да" },
-					labels: ConfirmDialogLabels { cancel: Some("Отмена".into()), ..Default::default() },
+					labels: ConfirmDialogLabels { cancel: "Отмена".into(), ..Default::default() },
 					on_confirm: |_| {
 						CONFIRMS.fetch_add(1, Ordering::SeqCst);
 					},

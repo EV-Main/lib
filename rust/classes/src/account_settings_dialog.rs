@@ -30,3 +30,18 @@ pub const ACCOUNT_SETTINGS_DIALOG_DESCRIPTION: &str = "text-body text-ink-mid";
 pub const ACCOUNT_SETTINGS_DIALOG_PANEL: &str = "flex flex-col gap-5";
 
 pub const ACCOUNT_SETTINGS_DIALOG_CLOSE: &str = "absolute right-4 top-4";
+
+/// The `AccountSettingsDialog`'s own strings. English by default; a caller translates by overriding fields.
+#[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "ts_gen", derive(serde::Serialize), serde(rename_all = "camelCase"))]
+pub struct AccountSettingsDialogLabels {
+	/// `aria-label` of the close button.
+	pub close: String,
+}
+impl Default for AccountSettingsDialogLabels {
+	fn default() -> Self {
+		Self {
+			close: "Close".to_owned(),
+		}
+	}
+}

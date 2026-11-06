@@ -9,6 +9,7 @@ import {
   KEY_VALUE_ROW,
   KEY_VALUE_STATUS,
   KEY_VALUE_VALUE,
+  KEY_VALUE_LABELS,
 } from "../../generated/key-value";
 import { UiIcon } from "../../icons/ui-icons";
 
@@ -87,7 +88,7 @@ export function KeyValue({ label, value, copyText, labels = {}, className, ...pr
         )}
       </div>
       <span role="status" aria-live="polite" className={KEY_VALUE_STATUS}>
-        {copied ? (labels.copied ?? "Copied") : ""}
+        {copied ? (labels.copied ?? KEY_VALUE_LABELS.copied) : ""}
       </span>
     </div>
   );

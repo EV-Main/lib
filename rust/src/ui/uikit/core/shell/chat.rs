@@ -10,19 +10,6 @@ pub struct ModelOption {
 	pub label: String,
 }
 
-/// The `ChatComposer`'s own strings; every one defaults to English.
-#[derive(Clone, Debug, Default, PartialEq)]
-pub struct ChatComposerLabels {
-	/// Names the message field; "Message".
-	pub field: Option<String>,
-	/// The send button; "Send".
-	pub send: Option<String>,
-	/// The stop button while streaming; "Stop".
-	pub stop: Option<String>,
-	/// The attach button; "Attach file".
-	pub attach: Option<String>,
-}
-
 /// Whether a keydown sends the message: a plain Enter that no IME composition
 /// owns. The Enter of an IME composition confirms the candidate. Safari reports
 /// that Enter after `compositionend`, with `isComposing` already false but

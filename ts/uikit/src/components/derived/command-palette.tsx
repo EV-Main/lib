@@ -9,6 +9,7 @@ import {
   COMMAND_PALETTE_LABEL,
   COMMAND_PALETTE_LIST,
   COMMAND_PALETTE_TITLE,
+  COMMAND_PALETTE_LABELS,
 } from "../../generated/command-palette";
 import { cn } from "../../lib/cn";
 import { useControllableState } from "../../primitives/use-controllable-state";
@@ -87,11 +88,11 @@ export function CommandPalette({
         showCloseButton={false}
         className={cn(COMMAND_PALETTE_CONTENT, className)}
       >
-        <DialogTitle className={COMMAND_PALETTE_TITLE}>{labels.title ?? "Command palette"}</DialogTitle>
+        <DialogTitle className={COMMAND_PALETTE_TITLE}>{labels.title ?? COMMAND_PALETTE_LABELS.title}</DialogTitle>
         <Command className={COMMAND_PALETTE_COMMAND}>
-          <CommandInput placeholder={labels.placeholder ?? "Type a command or search…"} />
+          <CommandInput placeholder={labels.placeholder ?? COMMAND_PALETTE_LABELS.placeholder} />
           <CommandList className={COMMAND_PALETTE_LIST}>
-            <CommandEmpty>{labels.empty ?? "No results."}</CommandEmpty>
+            <CommandEmpty>{labels.empty ?? COMMAND_PALETTE_LABELS.empty}</CommandEmpty>
             {groups.map((group, i) => (
               <React.Fragment key={group.id}>
                 {i > 0 && <CommandSeparator />}
@@ -122,15 +123,15 @@ export function CommandPalette({
         >
           <span className={COMMAND_PALETTE_HINT}>
             <Kbd>↑↓</Kbd>
-            {labels.navigate ?? "navigate"}
+            {labels.navigate ?? COMMAND_PALETTE_LABELS.navigate}
           </span>
           <span className={COMMAND_PALETTE_HINT}>
             <Kbd>↵</Kbd>
-            {labels.select ?? "select"}
+            {labels.select ?? COMMAND_PALETTE_LABELS.select}
           </span>
           <span className={COMMAND_PALETTE_HINT}>
             <Kbd>esc</Kbd>
-            {labels.close ?? "close"}
+            {labels.close ?? COMMAND_PALETTE_LABELS.close}
           </span>
         </div>
       </DialogContent>

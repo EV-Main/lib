@@ -8,6 +8,7 @@ import {
   POPOVER_FORM_FIELDS,
   POPOVER_FORM_FORM,
   POPOVER_FORM_TITLE,
+  POPOVER_FORM_LABELS,
 } from "../../generated/popover-form";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { Button } from "../atomic/button";
@@ -73,10 +74,10 @@ export function PopoverForm({
           <div className={POPOVER_FORM_FIELDS}>{children}</div>
           <div className={POPOVER_FORM_ACTIONS}>
             <Button type="reset" variant="ghost" size="sm">
-              {labels.reset ?? "Reset"}
+              {labels.reset ?? POPOVER_FORM_LABELS.reset}
             </Button>
             <Button type="submit" variant="primary" size="sm">
-              {labels.submit ?? "Apply"}
+              {labels.submit ?? POPOVER_FORM_LABELS.submit}
             </Button>
           </div>
         </form>

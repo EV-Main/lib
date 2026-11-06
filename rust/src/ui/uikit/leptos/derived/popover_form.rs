@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-pub use crate::ui::uikit::core::PopoverFormLabels;
+pub use ev_lib_classes::PopoverFormLabels;
 use crate::{
 	cn,
 	ui::uikit::leptos::{
@@ -48,8 +48,8 @@ pub fn PopoverForm(
 	let title_id = use_stable_id("popover-form-title");
 	let cls = cn!(POPOVER_FORM_CONTENT, class);
 	let trigger_cls = button_classes(&ButtonVariant::Outline, Size::Xs, false, None, &trigger_class);
-	let submit_label = labels.submit.unwrap_or_else(|| String::from("Apply"));
-	let reset_label = labels.reset.unwrap_or_else(|| String::from("Reset"));
+	let submit_label = labels.submit;
+	let reset_label = labels.reset;
 	let labelled_by = title_id.clone();
 	// Built per opening; each run clones what the inner parts take by value.
 	let form = move || {

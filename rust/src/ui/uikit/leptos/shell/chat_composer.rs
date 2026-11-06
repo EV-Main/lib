@@ -1,6 +1,7 @@
 use leptos::prelude::*;
 
-pub use crate::ui::uikit::core::{ChatComposerLabels, ModelOption};
+pub use crate::ui::uikit::core::ModelOption;
+pub use ev_lib_classes::ChatComposerLabels;
 use crate::{
 	cn,
 	ui::uikit::{
@@ -124,7 +125,7 @@ pub fn ChatComposer(
 				value=Signal::derive(move || text.get())
 				disabled=disabled
 				placeholder=placeholder
-				aria_label=field_label.unwrap_or_else(|| "Message".into())
+				aria_label=field_label
 				class=CHAT_COMPOSER_FIELD
 				on_input=Callback::new(move |e| text.set(event_target_value(&e)))
 				on_keydown=Callback::new(move |e: leptos::ev::KeyboardEvent| {
@@ -140,7 +141,7 @@ pub fn ChatComposer(
 					.map(|attach| {
 						view! {
 							<IconButton
-								aria_label=attach_label.unwrap_or_else(|| "Attach file".into())
+								aria_label=attach_label
 								size=Size::Sm
 								disabled=disabled
 								on_click=Callback::new(move |_| attach.run(()))
@@ -153,8 +154,8 @@ pub fn ChatComposer(
 					})} {tools.map(|t| t.run())} <span class=CHAT_COMPOSER_SPACER></span>
 				{hint.map(|h| view! { <span class=CHAT_COMPOSER_HINT>{h.run()}</span> })}
 				{
-					let stop_label = stop_label.unwrap_or_else(|| "Stop".into());
-					let send_label = send_label.unwrap_or_else(|| "Send".into());
+					let stop_label = stop_label;
+					let send_label = send_label;
 					move || {
 						if streaming.get() {
 							view! {

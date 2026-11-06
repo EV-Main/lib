@@ -59,3 +59,21 @@ pub enum AsidePanelMode {
 	/// Floats over a scrim on a `Sheet`.
 	Overlay,
 }
+
+/// The `AsideHeader`'s own strings. English by default; a caller translates by overriding fields.
+#[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "ts_gen", derive(serde::Serialize), serde(rename_all = "camelCase"))]
+pub struct AsideHeaderLabels {
+	/// `aria-label` of the back button.
+	pub back: String,
+	/// `aria-label` of the close button.
+	pub close: String,
+}
+impl Default for AsideHeaderLabels {
+	fn default() -> Self {
+		Self {
+			back: "Back".to_owned(),
+			close: "Close".to_owned(),
+		}
+	}
+}

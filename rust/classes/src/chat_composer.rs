@@ -20,3 +20,27 @@ pub const CHAT_COMPOSER_TOOLBAR: &str = "flex items-center gap-1.5";
 pub const CHAT_COMPOSER_SPACER: &str = "flex-1";
 
 pub const CHAT_COMPOSER_HINT: &str = "hidden text-caption text-ink-soft sm:inline";
+
+/// The `ChatComposer`'s own strings. English by default; a caller translates by overriding fields.
+#[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "ts_gen", derive(serde::Serialize), serde(rename_all = "camelCase"))]
+pub struct ChatComposerLabels {
+	/// Names the message field.
+	pub field: String,
+	/// The send button.
+	pub send: String,
+	/// The stop button while streaming.
+	pub stop: String,
+	/// The attach button.
+	pub attach: String,
+}
+impl Default for ChatComposerLabels {
+	fn default() -> Self {
+		Self {
+			field: "Message".to_owned(),
+			send: "Send".to_owned(),
+			stop: "Stop".to_owned(),
+			attach: "Attach file".to_owned(),
+		}
+	}
+}

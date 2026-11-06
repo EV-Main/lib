@@ -4,7 +4,6 @@ pub(super) mod command;
 pub(super) mod drawer;
 pub(super) mod field_context;
 pub(super) mod input_otp;
-pub(super) mod key_value;
 pub(super) mod menu;
 pub(super) mod popover;
 pub(super) mod section_label;

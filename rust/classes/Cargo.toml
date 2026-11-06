@@ -9,3 +9,8 @@ repository = "https://github.com/EV-Main/web_std"
 [dependencies]
 strum.workspace = true
 tailwind_fuse = { workspace = true, features = ["variant"] }
+serde = { workspace = true, features = ["derive"], optional = true }
+
+[features]
+# Serde derives on the data `ev_lib_gen` emits to TS; nothing else enables it.
+ts_gen = ["dep:serde"]

@@ -16,22 +16,19 @@ mod order;
 mod primitives;
 mod selection;
 
-pub use account_settings_dialog::AccountSettingsDialogLabels;
-pub use aside::{AsideCollapse, AsideHeaderLabels};
+pub use aside::AsideCollapse;
 pub use button::button_classes;
 pub use calendar::CalendarDate;
 pub(crate) use calendar::{Day, Grid, NEXT_MONTH, NO_CLOCK_MONTH, PREVIOUS_MONTH, WEEKDAYS};
 pub(crate) use carousel::{Carousel, carousel_transform};
 pub(crate) use chat::enter_sends;
-pub use chat::{ChatComposerLabels, ModelOption};
+pub use chat::ModelOption;
 pub(crate) use command::{Command, CommandKey, Row};
-pub use command_palette::CommandPaletteLabels;
 #[cfg(all(target_arch = "wasm32", feature = "wasm"))]
 pub(crate) use command_palette::{ShortcutHit, ShortcutKey, shortcut_hit};
-pub use confirm_dialog::ConfirmDialogLabels;
 pub(crate) use confirm_dialog::ConfirmFlow;
 pub(crate) use date_time_picker::Picker;
-pub use date_time_picker::{DateTimePickerLabels, LocalDateTime};
+pub use date_time_picker::LocalDateTime;
 pub(crate) use drawer::Presence;
 pub use field_context::FormControlContext;
 pub use footer::{FooterLink, FooterLinkGroup, FooterOffice};
@@ -42,13 +39,11 @@ pub use header_controls::HeaderNotification;
 pub(crate) use header_controls::platform_shortcut;
 pub(crate) use input_otp::InputOtp;
 pub(crate) use key::KeyInput;
-pub use key_value::KeyValueLabels;
 pub use menu::navigation_menu_trigger_style;
 #[cfg(test)]
 pub(crate) use order::Unplaced;
 pub(crate) use order::{Placement, sort_by_position};
 pub(crate) use popover::popover_placement;
-pub use popover_form::PopoverFormLabels;
 pub use primitives::DismissReason;
 pub(crate) use primitives::{LayerStack, Roving};
 pub use section_label::SectionLabelAs;
@@ -59,5 +54,4 @@ pub(crate) use sidebar::{SIDEBAR_STYLE, sidebar_collapsible_data, sidebar_state}
 pub(crate) use slider::{Drag, Slider, Track};
 pub(crate) use sonner::{DEFAULT_DURATION_MS, ToastQueue, ToastState, ToastView, toaster_style, y_position};
 pub use status_screen::{StatusLinkData, status_cta_class};
-pub use system_banner::SystemBannerLabels;
 pub use toggle::toggle_classes;

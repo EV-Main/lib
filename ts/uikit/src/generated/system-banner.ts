@@ -16,6 +16,10 @@ export const SYSTEM_BANNER_ACTION = "shrink-0";
 
 export const SYSTEM_BANNER_DISMISS = "-my-0.5 -mr-1 flex size-6 shrink-0 items-center justify-center rounded-md opacity-70 outline-none transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring";
 
+export const SYSTEM_BANNER_LABELS = {
+  "dismiss": "Dismiss",
+} as const;
+
 export const systemBannerIconToneClasses = {
   "neutral": "text-ink-soft",
   "primary": "text-primary-ink",

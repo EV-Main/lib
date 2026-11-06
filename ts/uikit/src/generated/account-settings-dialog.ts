@@ -23,3 +23,7 @@ export const ACCOUNT_SETTINGS_DIALOG_DESCRIPTION = "text-body text-ink-mid";
 export const ACCOUNT_SETTINGS_DIALOG_PANEL = "flex flex-col gap-5";
 
 export const ACCOUNT_SETTINGS_DIALOG_CLOSE = "absolute right-4 top-4";
+
+export const ACCOUNT_SETTINGS_DIALOG_LABELS = {
+  "close": "Close",
+} as const;

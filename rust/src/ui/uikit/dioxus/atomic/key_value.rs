@@ -3,7 +3,7 @@ use dioxus::{
 	prelude::*,
 };
 
-pub use crate::ui::uikit::core::KeyValueLabels;
+pub use ev_lib_classes::KeyValueLabels;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{KEY_VALUE_BASE, KEY_VALUE_COPY, KEY_VALUE_LABEL, KEY_VALUE_ROW, KEY_VALUE_STATUS, KEY_VALUE_VALUE},
@@ -37,7 +37,7 @@ pub fn KeyValue(
 		Some(text) => format!("Copy {text}"),
 		None => String::from("Copy"),
 	});
-	let copied_label = labels.copied.unwrap_or_else(|| String::from("Copied"));
+	let copied_label = labels.copied;
 	let has_copy = copy_text.is_some();
 	let on_press = move |_| {
 		let Some(text) = copy_text.clone() else { return };
@@ -245,7 +245,7 @@ mod tests {
 					value: rsx! { "x" },
 					copy_text: "x",
 					copy: |_| {},
-					labels: KeyValueLabels { copied: Some("Скопировано".into()), ..Default::default() },
+					labels: KeyValueLabels { copied: "Скопировано".into(), ..Default::default() },
 				}
 			}
 		}

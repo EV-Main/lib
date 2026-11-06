@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-pub use crate::ui::uikit::core::PopoverFormLabels;
+pub use ev_lib_classes::PopoverFormLabels;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
@@ -45,8 +45,8 @@ pub fn PopoverForm(
 	let title_id = use_stable_id("popover-form-title");
 	let cls = cn!(POPOVER_FORM_CONTENT, class);
 	let trigger_cls = button_classes(&ButtonVariant::Outline, Size::Xs, false, None, &trigger_class);
-	let submit_label = labels.submit.unwrap_or_else(|| String::from("Apply"));
-	let reset_label = labels.reset.unwrap_or_else(|| String::from("Reset"));
+	let submit_label = labels.submit;
+	let reset_label = labels.reset;
 	rsx! {
 		Popover { open: state.get(), on_open_change: move |next| state.set(next),
 			PopoverTrigger { class: trigger_cls, {trigger} }
@@ -190,8 +190,8 @@ mod tests {
 					trigger: rsx! { "Фильтр" },
 					title: rsx! { "Фильтр статуса" },
 					labels: PopoverFormLabels {
-						submit: Some("Применить".into()),
-						reset: Some("Сбросить".into()),
+						submit: "Применить".into(),
+						reset: "Сбросить".into(),
 					},
 					"поля"
 				}

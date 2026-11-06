@@ -10,6 +10,12 @@ use tailwind_fuse::AsTailwindClass;
 /// Per uikit module, merged after its consts. A module named here need not have a classes file.
 pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 	vec![
+		("popover-form", vec![labels::<PopoverFormLabels>("POPOVER_FORM_LABELS")]),
+		("key-value", vec![labels::<KeyValueLabels>("KEY_VALUE_LABELS")]),
+		("date-time-picker", vec![labels::<DateTimePickerLabels>("DATE_TIME_PICKER_LABELS")]),
+		("command-palette", vec![labels::<CommandPaletteLabels>("COMMAND_PALETTE_LABELS")]),
+		("chat-composer", vec![labels::<ChatComposerLabels>("CHAT_COMPOSER_LABELS")]),
+		("account-settings-dialog", vec![labels::<AccountSettingsDialogLabels>("ACCOUNT_SETTINGS_DIALOG_LABELS")]),
 		("accordion", vec![union::<AccordionType>("ACCORDION_TYPES", "AccordionType")]),
 		(
 			"accent",
@@ -22,7 +28,7 @@ pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 		("alert", vec![table::<AlertVariant>("alertVariants", "AlertVariant")]),
 		(
 			"aside",
-			vec![
+			vec![labels::<AsideHeaderLabels>("ASIDE_HEADER_LABELS"), 
 				table::<AsidePanelSide>("asidePanelSideClasses", "AsidePanelSide"),
 				union::<AsidePanelMode>("ASIDE_PANEL_MODES", "AsidePanelMode"),
 			],
@@ -52,7 +58,7 @@ pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 				union::<ChatAttachmentState>("CHAT_ATTACHMENT_STATES", "ChatAttachmentState"),
 			],
 		),
-		("confirm-dialog", vec![table::<ConfirmDialogTone>("confirmDialogIconToneClasses", "ConfirmDialogTone")]),
+		("confirm-dialog", vec![labels::<ConfirmDialogLabels>("CONFIRM_DIALOG_LABELS"), table::<ConfirmDialogTone>("confirmDialogIconToneClasses", "ConfirmDialogTone")]),
 		("drawer", vec![table::<DrawerDirection>("drawerDirectionClasses", "DrawerDirection")]),
 		("empty", vec![table::<EmptyMediaVariant>("emptyMediaVariants", "EmptyMediaVariant")]),
 		(
@@ -157,7 +163,7 @@ pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 		("status-item", vec![table::<StatusTone>("statusDotClasses", "StatusTone")]),
 		(
 			"system-banner",
-			vec![
+			vec![labels::<SystemBannerLabels>("SYSTEM_BANNER_LABELS"), 
 				table::<SystemBannerTone>("systemBannerIconToneClasses", "SystemBannerTone"),
 				Ts::Table {
 					name: "systemBannerToneClasses",
@@ -216,6 +222,14 @@ where
 		name,
 		ty,
 		entries: T::iter().map(|v| (v.as_ref().to_string(), v.as_class().to_string())).collect(),
+	}
+}
+
+/// A Labels struct's English defaults, which the TS spreads its overrides over.
+fn labels<T: Default + serde::Serialize>(name: &'static str) -> Ts {
+	Ts::Value {
+		name,
+		value: serde_json::to_value(T::default()).expect("labels are plain strings"),
 	}
 }
 

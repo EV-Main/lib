@@ -1,6 +1,7 @@
 use dioxus::{dioxus_core::needs_update, prelude::*};
 
-pub use crate::ui::uikit::core::{DateTimePickerLabels, LocalDateTime};
+pub use crate::ui::uikit::core::LocalDateTime;
+pub use ev_lib_classes::DateTimePickerLabels;
 use crate::{
 	cn,
 	ui::uikit::{
@@ -159,7 +160,7 @@ pub fn DateTimePicker(
 				div {
 					class: content_class,
 					role: "dialog",
-					"aria-label": labels.dialog(),
+					"aria-label": labels.dialog.clone(),
 					"data-slot": "date-time-picker-content",
 					"data-state": "open",
 					"data-side": "bottom",
@@ -182,7 +183,7 @@ pub fn DateTimePicker(
 							inputmode: "numeric",
 							class: time_input_class.clone(),
 							"data-slot": "date-time-picker-hours",
-							"aria-label": labels.hours(),
+							"aria-label": labels.hours.clone(),
 							value: hours,
 							disabled,
 							oninput: on_hours,
@@ -198,7 +199,7 @@ pub fn DateTimePicker(
 							inputmode: "numeric",
 							class: time_input_class,
 							"data-slot": "date-time-picker-minutes",
-							"aria-label": labels.minutes(),
+							"aria-label": labels.minutes.clone(),
 							value: minutes,
 							disabled,
 							oninput: on_minutes,
@@ -210,13 +211,13 @@ pub fn DateTimePicker(
 							"data-slot": "date-time-picker-clear",
 							disabled,
 							onclick: on_clear,
-							{labels.clear()}
+							{labels.clear.clone()}
 						}
 						button {
 							r#type: "button",
 							class: close_class,
 							"data-slot": "date-time-picker-close",
-							"aria-label": labels.close(),
+							"aria-label": labels.close.clone(),
 							disabled,
 							onclick: move |_| open.set(false),
 							CloseIcon {}
@@ -372,13 +373,13 @@ mod tests {
 					// Pins the opening month (30-day June) instead of the host's.
 					today: CalendarDate::new(2026, 6, 15),
 					labels: DateTimePickerLabels {
-						previous_month: Some("Назад".into()),
-						next_month: Some("Вперёд".into()),
-						hours: Some("Часы".into()),
-						minutes: Some("Минуты".into()),
-						clear: Some("Сбросить".into()),
-						close: Some("Закрыть".into()),
-						dialog: Some("Выберите дату и время".into()),
+						previous_month: "Назад".into(),
+						next_month: "Вперёд".into(),
+						hours: "Часы".into(),
+						minutes: "Минуты".into(),
+						clear: "Сбросить".into(),
+						close: "Закрыть".into(),
+						dialog: "Выберите дату и время".into(),
 					},
 				}
 			}

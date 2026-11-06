@@ -17,3 +17,10 @@ export const CHAT_COMPOSER_TOOLBAR = "flex items-center gap-1.5";
 export const CHAT_COMPOSER_SPACER = "flex-1";
 
 export const CHAT_COMPOSER_HINT = "hidden text-caption text-ink-soft sm:inline";
+
+export const CHAT_COMPOSER_LABELS = {
+  "attach": "Attach file",
+  "field": "Message",
+  "send": "Send",
+  "stop": "Stop",
+} as const;

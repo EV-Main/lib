@@ -20,6 +20,11 @@ export const CONFIRM_DIALOG_PENDING = "aria-disabled:cursor-not-allowed aria-dis
 
 export const CONFIRM_DIALOG_SPINNER = "size-3.5";
 
+export const CONFIRM_DIALOG_LABELS = {
+  "cancel": "Cancel",
+  "error": "Something went wrong",
+} as const;
+
 export const confirmDialogIconToneClasses = {
   "default": "bg-muted text-ink-mid",
   "danger": "bg-chip-error-bg text-accent-error",

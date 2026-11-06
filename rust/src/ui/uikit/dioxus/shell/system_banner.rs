@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-pub use crate::ui::uikit::core::SystemBannerLabels;
+pub use ev_lib_classes::SystemBannerLabels;
 use crate::{
 	cn,
 	ui::uikit::dioxus::{
@@ -39,7 +39,7 @@ pub fn SystemBanner(
 	let icon_cls = cn!(SYSTEM_BANNER_ICON, tone.as_class());
 	let has_message = has_content(&children);
 	let body_cls = title.as_ref().map(|_| SYSTEM_BANNER_BODY_AFTER_TITLE);
-	let dismiss_label = labels.dismiss.unwrap_or_else(|| String::from("Dismiss"));
+	let dismiss_label = labels.dismiss;
 	rsx! {
 		div { class: cls, "data-slot": "system-banner", "data-tone": tone.as_ref(), role: "status",
 			if has_content(&glyph) {
@@ -265,7 +265,7 @@ mod tests {
 	fn the_dismiss_label_is_overridable() {
 		fn app() -> Element {
 			rsx! {
-				SystemBanner { on_dismiss: |_| {}, labels: SystemBannerLabels { dismiss: Some("Закрыть".into()) }, "Hello" }
+				SystemBanner { on_dismiss: |_| {}, labels: SystemBannerLabels { dismiss: "Закрыть".into() }, "Hello" }
 			}
 		}
 		let html = render(app);

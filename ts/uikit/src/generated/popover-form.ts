@@ -9,3 +9,8 @@ export const POPOVER_FORM_TITLE = "px-0 text-h3 font-medium text-ink";
 export const POPOVER_FORM_FIELDS = "flex flex-col gap-2.5";
 
 export const POPOVER_FORM_ACTIONS = "flex justify-end gap-1.5";
+
+export const POPOVER_FORM_LABELS = {
+  "reset": "Reset",
+  "submit": "Apply",
+} as const;
