@@ -43,7 +43,7 @@ hand-written for one of four reasons:
 ```
  package      lines  what                                                   why
  ───────────────────────────────────────────────────────────────────────────────────
- uikit        14.7k  components/*.tsx (Dioxus twin; only classes shared)    A B
+ uikit        14.7k  components/{atomic,derived,shell}/* (Dioxus twin; only classes shared) A B
                      primitives/ (portal, floating, focus-scope)            B C
                      palette/ (brand palette tool)                          C
  architecture  0.3k  kernel ports + combinators                             A  README mapping table

@@ -6,7 +6,7 @@ import {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
-} from "../src/components/carousel";
+} from "../src/components/derived/carousel";
 
 function Basic(props: { defaultIndex?: number }) {
   return (

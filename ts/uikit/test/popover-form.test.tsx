@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { PopoverForm } from "../src/components/popover-form";
+import { PopoverForm } from "../src/components/derived/popover-form";
 
 function setup(props: Partial<React.ComponentProps<typeof PopoverForm>> = {}) {
   render(

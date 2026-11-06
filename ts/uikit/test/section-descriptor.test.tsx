@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { SectionDescriptor } from "../src/components/section-descriptor";
+import { SectionDescriptor } from "../src/components/atomic/section-descriptor";
 
 describe("SectionDescriptor", () => {
   it("renders a titled <section> with title and body slots", () => {

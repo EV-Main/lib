@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { ConfirmDialog } from "../src/components/confirm-dialog";
+import { ConfirmDialog } from "../src/components/derived/confirm-dialog";
 
 function deferred() {
   let resolve!: () => void;

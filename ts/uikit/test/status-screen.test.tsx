@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
-import { NotFound, Forbidden, ServerError, StatusScreen } from "../src/components/status-screen";
+import { NotFound, Forbidden, ServerError, StatusScreen } from "../src/components/shell/status-screen";
 
 describe("StatusScreen", () => {
   it("renders the code, eyebrow, headline and CTAs as plain <a> by default", () => {

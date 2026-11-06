@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { HeaderBalance, HeaderSearch, NotificationBell } from "../src/components/header-controls";
+import { HeaderBalance, HeaderSearch, NotificationBell } from "../src/components/shell/header-controls";
 
 describe("HeaderBalance", () => {
   it("shows a skeleton while loading, then reveals the figure", () => {

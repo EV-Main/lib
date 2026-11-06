@@ -4,42 +4,17 @@
 //! events into core inputs and renders the markup. See docs/ARCHITECTURE.md,
 //! "The `uikit` library".
 
-mod account_settings_dialog;
-mod aside;
-mod button;
-mod calendar;
-mod carousel;
-mod chat;
-mod command;
-mod command_palette;
-mod confirm_dialog;
-mod date_time_picker;
-mod drawer;
-mod field;
-mod footer;
-mod form;
-mod header_controls;
-mod input_otp;
+mod atomic;
+mod derived;
+mod shell;
+use atomic::*;
+use derived::*;
+use shell::*;
+
 mod key;
-mod key_value;
-mod menu;
 mod order;
-mod popover;
-mod popover_form;
 mod primitives;
-mod section_label;
-mod select;
 mod selection;
-mod sheet;
-mod sidebar;
-mod slider;
-mod smart_header;
-mod sonner;
-mod status_screen;
-mod system_banner;
-mod tabs;
-mod terminal;
-mod toggle;
 
 pub use account_settings_dialog::AccountSettingsDialogLabels;
 pub use aside::{AsideCollapse, AsideHeaderLabels, AsidePanelMode};
@@ -60,8 +35,8 @@ pub(crate) use date_time_picker::Picker;
 pub use date_time_picker::{DateTimePickerLabels, LocalDateTime};
 pub(crate) use drawer::Presence;
 pub use field::FieldLegendVariant;
+pub use field_context::FormControlContext;
 pub use footer::{FooterLink, FooterLinkGroup, FooterOffice};
-pub use form::FormControlContext;
 pub(crate) use form::FormItemContext;
 pub(crate) use header_controls::CTRL_K;
 pub use header_controls::HeaderNotification;
@@ -92,5 +67,4 @@ pub(crate) use sonner::{DEFAULT_DURATION_MS, ToastQueue, ToastState, ToastView, 
 pub use status_screen::{StatusLinkData, status_cta_class};
 pub use system_banner::SystemBannerLabels;
 pub use tabs::TabsOrientation;
-pub(crate) use terminal::depth_percent;
 pub use toggle::toggle_classes;

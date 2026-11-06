@@ -5,7 +5,7 @@ import {
   TabsList,
   TabsTrigger,
   TabsContent,
-} from "../src/components/tabs";
+} from "../src/components/atomic/tabs";
 
 function tree(props = {}) {
   return (

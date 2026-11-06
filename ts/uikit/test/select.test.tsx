@@ -9,9 +9,9 @@ import {
   SelectGroup,
   SelectLabel,
   SelectSeparator,
-} from "../src/components/select";
-import { Dialog, DialogContent, DialogTitle } from "../src/components/dialog";
-import { Drawer, DrawerContent, DrawerTitle } from "../src/components/drawer";
+} from "../src/components/atomic/select";
+import { Dialog, DialogContent, DialogTitle } from "../src/components/atomic/dialog";
+import { Drawer, DrawerContent, DrawerTitle } from "../src/components/atomic/drawer";
 
 function tree(props = {}) {
   return (

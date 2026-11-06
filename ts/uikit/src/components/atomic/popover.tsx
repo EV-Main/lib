@@ -1,0 +1,139 @@
+"use client";
+
+import * as React from "react";
+import { cn } from "../../lib/cn";
+import { useControllableState } from "../../primitives/use-controllable-state";
+import { useFloating } from "../../primitives/use-floating";
+import { DismissableLayerScope, useDismissableLayer } from "../../primitives/dismissable-layer";
+import { type InitialFocus, useFocusScope } from "../../primitives/focus-scope";
+import { usePresence } from "../../primitives/presence";
+import { mergeRefs } from "../../primitives/merge-refs";
+import { Portal } from "../../primitives/portal";
+import { Slot } from "../../primitives/slot";
+import { POPOVER_CONTENT } from "../../generated/popover";
+
+interface PopoverContextValue {
+  open: boolean;
+  setOpen: (next: boolean) => void;
+  anchorRef: React.RefObject<HTMLElement | null>;
+}
+
+const PopoverContext = React.createContext<PopoverContextValue | null>(null);
+
+function usePopover(): PopoverContextValue {
+  const ctx = React.useContext(PopoverContext);
+  if (!ctx) throw new Error("Popover parts must be used within <Popover>");
+  return ctx;
+}
+
+export interface PopoverProps {
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  children?: React.ReactNode;
+}
+
+export function Popover({ open, defaultOpen = false, onOpenChange, children }: PopoverProps) {
+  const [isOpen, setOpen] = useControllableState<boolean>({
+    ...(open !== undefined ? { value: open } : {}),
+    defaultValue: defaultOpen,
+    ...(onOpenChange ? { onChange: onOpenChange } : {}),
+  });
+  const anchorRef = React.useRef<HTMLElement | null>(null);
+  return (
+    <PopoverContext.Provider value={{ open: isOpen, setOpen, anchorRef }}>
+      {children}
+    </PopoverContext.Provider>
+  );
+}
+
+export interface PopoverTriggerProps extends React.ComponentProps<"button"> {
+  asChild?: boolean;
+}
+
+export function PopoverTrigger({ asChild = false, onClick, ...props }: PopoverTriggerProps) {
+  const { open, setOpen, anchorRef } = usePopover();
+  const Comp = asChild ? Slot : "button";
+  return (
+    <Comp
+      data-slot="popover-trigger"
+      aria-expanded={open}
+      ref={anchorRef as React.Ref<never>}
+      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+        onClick?.(e);
+        setOpen(!open);
+      }}
+      {...(props as Record<string, unknown>)}
+    />
+  );
+}
+
+export interface PopoverAnchorProps extends React.ComponentProps<"div"> {
+  asChild?: boolean;
+}
+
+export function PopoverAnchor({ asChild = false, ...props }: PopoverAnchorProps) {
+  const { anchorRef } = usePopover();
+  const Comp = asChild ? Slot : "div";
+  return (
+    <Comp
+      data-slot="popover-anchor"
+      ref={anchorRef as React.Ref<never>}
+      {...(props as Record<string, unknown>)}
+    />
+  );
+}
+
+export interface PopoverContentProps extends React.ComponentProps<"div"> {
+  side?: "top" | "right" | "bottom" | "left";
+  align?: "start" | "center" | "end";
+  sideOffset?: number;
+  /** Where focus lands on open. Default `first` (e.g. a `Command` search input). */
+  initialFocus?: InitialFocus;
+}
+
+export function PopoverContent({
+  className,
+  side: sideProp = "bottom",
+  align = "center",
+  sideOffset = 4,
+  initialFocus = "first",
+  children,
+  ...props
+}: PopoverContentProps) {
+  const { open, setOpen, anchorRef } = usePopover();
+  const { isPresent, ref: presRef } = usePresence(open);
+  const { floatingRef, style, side } = useFloating({
+    anchorRef,
+    open,
+    side: sideProp,
+    align,
+    offset: sideOffset,
+  });
+  const focusRef = useFocusScope(open, { initialFocus, returnFocusTo: anchorRef });
+  const dismissRef = useDismissableLayer({
+    enabled: open,
+    onDismiss: () => setOpen(false),
+    exclude: [anchorRef],
+  });
+  if (!isPresent) return null;
+  return (
+    <Portal>
+      <div
+        data-slot="popover-content"
+        data-state={open ? "open" : "closed"}
+        data-side={side}
+        data-align={align}
+        ref={mergeRefs(floatingRef, focusRef, dismissRef, presRef)}
+        style={style}
+        className={cn(
+          POPOVER_CONTENT,
+          className,
+        )}
+        {...(props as Record<string, unknown>)}
+      >
+        <DismissableLayerScope layer={dismissRef}>{children}</DismissableLayerScope>
+      </div>
+    </Portal>
+  );
+}

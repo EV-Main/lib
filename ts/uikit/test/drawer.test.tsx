@@ -9,7 +9,7 @@ import {
   DrawerFooter,
   DrawerTitle,
   DrawerDescription,
-} from "../src/components/drawer";
+} from "../src/components/atomic/drawer";
 
 function tree(props = {}, extra: React.ReactNode = null) {
   return (

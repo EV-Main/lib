@@ -28,13 +28,13 @@ export { useHoverIntent } from "./primitives/use-hover-intent";
 export type { HoverIntentHandlers } from "./primitives/use-hover-intent";
 export { mergeRefs } from "./primitives/merge-refs";
 
-export { Alert, AlertTitle, AlertDescription } from "./components/alert";
-export type { AlertProps, AlertVariant } from "./components/alert";
+export { Alert, AlertTitle, AlertDescription } from "./components/atomic/alert";
+export type { AlertProps, AlertVariant } from "./components/atomic/alert";
 
-export { Avatar, AvatarImage, AvatarFallback } from "./components/avatar";
+export { Avatar, AvatarImage, AvatarFallback } from "./components/atomic/avatar";
 
-export { Badge } from "./components/badge";
-export type { BadgeProps, BadgeVariant } from "./components/badge";
+export { Badge } from "./components/atomic/badge";
+export type { BadgeProps, BadgeVariant } from "./components/atomic/badge";
 
 export {
   Breadcrumb,
@@ -44,28 +44,28 @@ export {
   BreadcrumbPage,
   BreadcrumbSeparator,
   BreadcrumbEllipsis,
-} from "./components/breadcrumb";
-export type { BreadcrumbLinkProps } from "./components/breadcrumb";
+} from "./components/atomic/breadcrumb";
+export type { BreadcrumbLinkProps } from "./components/atomic/breadcrumb";
 
-export { Button, buttonVariants } from "./components/button";
+export { Button, buttonVariants } from "./components/atomic/button";
 export type {
   Accent,
   ButtonProps,
   ButtonVariant,
   ButtonSize,
   ButtonVariantsOptions,
-} from "./components/button";
+} from "./components/atomic/button";
 
 export {
   ButtonGroup,
   ButtonGroupText,
   ButtonGroupSeparator,
-} from "./components/button-group";
+} from "./components/atomic/button-group";
 export type {
   ButtonGroupOrientation,
   ButtonGroupProps,
   ButtonGroupTextProps,
-} from "./components/button-group";
+} from "./components/atomic/button-group";
 
 export {
   Card,
@@ -75,7 +75,7 @@ export {
   CardAction,
   CardContent,
   CardFooter,
-} from "./components/card";
+} from "./components/atomic/card";
 
 export {
   Empty,
@@ -84,11 +84,11 @@ export {
   EmptyTitle,
   EmptyDescription,
   EmptyContent,
-} from "./components/empty";
-export type { EmptyMediaVariant, EmptyMediaProps } from "./components/empty";
+} from "./components/atomic/empty";
+export type { EmptyMediaVariant, EmptyMediaProps } from "./components/atomic/empty";
 
-export { AuthWall } from "./components/auth-wall";
-export type { AuthWallProps } from "./components/auth-wall";
+export { AuthWall } from "./components/shell/auth-wall";
+export type { AuthWallProps } from "./components/shell/auth-wall";
 
 export {
   Field,
@@ -101,28 +101,28 @@ export {
   FieldDescription,
   FieldSeparator,
   FieldError,
-} from "./components/field";
-export type { FieldOrientation } from "./components/field";
+} from "./components/derived/field";
+export type { FieldOrientation } from "./components/derived/field";
 
-export { SectionDescriptor } from "./components/section-descriptor";
-export type { SectionDescriptorProps } from "./components/section-descriptor";
+export { SectionDescriptor } from "./components/atomic/section-descriptor";
+export type { SectionDescriptorProps } from "./components/atomic/section-descriptor";
 
-export { Footer } from "./components/footer";
+export { Footer } from "./components/shell/footer";
 export type {
   FooterProps,
   FooterLink,
   FooterLinkGroup,
   FooterOffice,
-} from "./components/footer";
+} from "./components/shell/footer";
 
-export { Input } from "./components/input";
-export type { InputProps, InputSize } from "./components/input";
-export { Textarea } from "./components/textarea";
-export type { TextareaProps, TextareaSize } from "./components/textarea";
-export { Label } from "./components/label";
+export { Input } from "./components/atomic/input";
+export type { InputProps, InputSize } from "./components/atomic/input";
+export { Textarea } from "./components/atomic/textarea";
+export type { TextareaProps, TextareaSize } from "./components/atomic/textarea";
+export { Label } from "./components/atomic/label";
 
-export { Logo } from "./components/logo";
-export type { LogoProps } from "./components/logo";
+export { Logo } from "./components/shell/logo";
+export type { LogoProps } from "./components/shell/logo";
 
 export {
   InputGroup,
@@ -131,13 +131,13 @@ export {
   InputGroupText,
   InputGroupInput,
   InputGroupTextarea,
-} from "./components/input-group";
+} from "./components/derived/input-group";
 export type {
   InputGroupAddonAlign,
   InputGroupButtonSize,
   InputGroupAddonProps,
   InputGroupButtonProps,
-} from "./components/input-group";
+} from "./components/derived/input-group";
 
 export {
   Item,
@@ -150,16 +150,16 @@ export {
   ItemFooter,
   ItemGroup,
   ItemSeparator,
-} from "./components/item";
+} from "./components/derived/item";
 export type {
   ItemVariant,
   ItemSize,
   ItemMediaVariant,
   ItemProps,
   ItemMediaProps,
-} from "./components/item";
+} from "./components/derived/item";
 
-export { Kbd, KbdGroup } from "./components/kbd";
+export { Kbd, KbdGroup } from "./components/atomic/kbd";
 
 
 export {
@@ -170,17 +170,17 @@ export {
   PaginationPrevious,
   PaginationNext,
   PaginationEllipsis,
-} from "./components/pagination";
-export type { PaginationLinkProps } from "./components/pagination";
+} from "./components/atomic/pagination";
+export type { PaginationLinkProps } from "./components/atomic/pagination";
 
-export { Progress } from "./components/progress";
-export type { ProgressProps } from "./components/progress";
+export { Progress } from "./components/atomic/progress";
+export type { ProgressProps } from "./components/atomic/progress";
 
-export { Separator } from "./components/separator";
-export type { SeparatorOrientation, SeparatorProps } from "./components/separator";
+export { Separator } from "./components/atomic/separator";
+export type { SeparatorOrientation, SeparatorProps } from "./components/atomic/separator";
 
-export { Skeleton } from "./components/skeleton";
-export { Spinner } from "./components/spinner";
+export { Skeleton } from "./components/atomic/skeleton";
+export { Spinner } from "./components/atomic/spinner";
 
 export {
   StatusScreen,
@@ -188,13 +188,13 @@ export {
   Forbidden,
   ServerError,
   statusCtaClass,
-} from "./components/status-screen";
+} from "./components/shell/status-screen";
 export type {
   StatusLinkData,
   StatusScreenProps,
   StatusPageProps,
   ServerErrorProps,
-} from "./components/status-screen";
+} from "./components/shell/status-screen";
 
 export {
   Table,
@@ -206,7 +206,7 @@ export {
   TableCell,
   TableCaption,
   TableCard,
-} from "./components/table";
+} from "./components/atomic/table";
 export type {
   TableProps,
   TableHeadProps,
@@ -214,7 +214,7 @@ export type {
   TableVariant,
   TableDensity,
   TableAlign,
-} from "./components/table";
+} from "./components/atomic/table";
 
 // TS-only: the phone form of a table.
 export {
@@ -222,13 +222,13 @@ export {
   ListRow,
   ListRowLabel,
   ListRowValue,
-} from "./components/list-rows";
+} from "./components/shell/list-rows";
 export type {
   ListRowsProps,
   ListRowsVariant,
   ListRowProps,
   ListRowLabelProps,
-} from "./components/list-rows";
+} from "./components/shell/list-rows";
 
 // Tier B — self-contained interactive components.
 export {
@@ -236,25 +236,25 @@ export {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "./components/accordion";
+} from "./components/atomic/accordion";
 export type {
   AccordionItemProps,
   AccordionProps,
-} from "./components/accordion";
+} from "./components/atomic/accordion";
 export {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "./components/collapsible";
+} from "./components/atomic/collapsible";
 export type {
   CollapsibleProps,
-} from "./components/collapsible";
+} from "./components/atomic/collapsible";
 export {
   Container,
-} from "./components/container";
+} from "./components/atomic/container";
 export type {
   ContainerProps,
-} from "./components/container";
+} from "./components/atomic/container";
 export {
   Check,
   Display,
@@ -263,77 +263,77 @@ export {
   Section,
   SectionHead,
   Stat,
-} from "./components/band";
+} from "./components/atomic/band";
 export type {
   Polarity,
   SectionHeadProps,
   SectionProps,
   StatProps,
   Surface,
-} from "./components/band";
+} from "./components/atomic/band";
 export {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "./components/tabs";
+} from "./components/atomic/tabs";
 export type {
   TabsContentProps,
   TabsProps,
   TabsTriggerProps,
-} from "./components/tabs";
+} from "./components/atomic/tabs";
 export {
   Toggle,
   toggleVariants,
-} from "./components/toggle";
+} from "./components/atomic/toggle";
 export type {
   ToggleProps,
   ToggleSize,
   ToggleVariant,
   ToggleVariantsOptions,
-} from "./components/toggle";
+} from "./components/atomic/toggle";
 export {
   ToggleGroup,
   ToggleGroupItem,
-} from "./components/toggle-group";
+} from "./components/atomic/toggle-group";
 export type {
   ToggleGroupItemProps,
   ToggleGroupProps,
-} from "./components/toggle-group";
+} from "./components/atomic/toggle-group";
 export {
   Switch,
-} from "./components/switch";
+} from "./components/atomic/switch";
 export type {
   SwitchProps,
-} from "./components/switch";
+} from "./components/atomic/switch";
 export {
   Checkbox,
-} from "./components/checkbox";
+} from "./components/atomic/checkbox";
 export type {
   CheckboxProps,
-} from "./components/checkbox";
+} from "./components/atomic/checkbox";
 export {
   RadioGroup,
   RadioGroupItem,
-} from "./components/radio-group";
+} from "./components/atomic/radio-group";
 export type {
   RadioGroupItemProps,
   RadioGroupProps,
-} from "./components/radio-group";
+} from "./components/atomic/radio-group";
 export {
   Slider,
-} from "./components/slider";
+} from "./components/atomic/slider";
 export type {
   SliderProps,
-} from "./components/slider";
+} from "./components/atomic/slider";
 export {
   ScrollArea,
   ScrollBar,
-} from "./components/scroll-area";
+} from "./components/atomic/scroll-area";
 export type {
   ScrollBarOrientation,
   ScrollBarProps,
-} from "./components/scroll-area";
+} from "./components/atomic/scroll-area";
 export {
   Sidebar,
   SidebarContent,
@@ -351,14 +351,14 @@ export {
   SidebarSeparator,
   SidebarTrigger,
   useSidebar,
-} from "./components/sidebar";
+} from "./components/atomic/sidebar";
 export type {
   SidebarGroupLabelProps,
   SidebarMenuButtonProps,
   SidebarMenuButtonSize,
   SidebarProps,
   SidebarProviderProps,
-} from "./components/sidebar";
+} from "./components/atomic/sidebar";
 export {
   Carousel,
   CarouselContent,
@@ -366,20 +366,20 @@ export {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "./components/carousel";
+} from "./components/derived/carousel";
 export type {
   CarouselProps,
-} from "./components/carousel";
+} from "./components/derived/carousel";
 export {
   InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
-} from "./components/input-otp";
+} from "./components/atomic/input-otp";
 export type {
   InputOTPProps,
   InputOTPSlotProps,
-} from "./components/input-otp";
+} from "./components/atomic/input-otp";
 
 // Tier C — overlay/portal components.
 export {
@@ -387,45 +387,45 @@ export {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./components/tooltip";
+} from "./components/atomic/tooltip";
 export type {
   TooltipContentProps,
   TooltipProps,
   TooltipProviderProps,
   TooltipTriggerProps,
-} from "./components/tooltip";
+} from "./components/atomic/tooltip";
 export {
   Popover,
   PopoverAnchor,
   PopoverContent,
   PopoverTrigger,
-} from "./components/popover";
+} from "./components/atomic/popover";
 export type {
   PopoverAnchorProps,
   PopoverContentProps,
   PopoverProps,
   PopoverTriggerProps,
-} from "./components/popover";
+} from "./components/atomic/popover";
 export {
   InfoTip,
   InfoTipContent,
   InfoTipTrigger,
-} from "./components/info-tip";
+} from "./components/atomic/info-tip";
 export type {
   InfoTipContentProps,
   InfoTipProps,
   InfoTipTriggerProps,
-} from "./components/info-tip";
+} from "./components/atomic/info-tip";
 export {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "./components/hover-card";
+} from "./components/atomic/hover-card";
 export type {
   HoverCardContentProps,
   HoverCardProps,
   HoverCardTriggerProps,
-} from "./components/hover-card";
+} from "./components/atomic/hover-card";
 export {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -442,7 +442,7 @@ export {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "./components/dropdown-menu";
+} from "./components/atomic/dropdown-menu";
 export type {
   DropdownMenuCheckboxItemProps,
   DropdownMenuContentProps,
@@ -454,7 +454,7 @@ export type {
   DropdownMenuSubProps,
   DropdownMenuSubTriggerProps,
   DropdownMenuTriggerProps,
-} from "./components/dropdown-menu";
+} from "./components/atomic/dropdown-menu";
 export {
   ContextMenu,
   ContextMenuCheckboxItem,
@@ -471,7 +471,7 @@ export {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuTrigger,
-} from "./components/context-menu";
+} from "./components/atomic/context-menu";
 export type {
   ContextMenuCheckboxItemProps,
   ContextMenuItemProps,
@@ -482,7 +482,7 @@ export type {
   ContextMenuSubProps,
   ContextMenuSubTriggerProps,
   ContextMenuTriggerProps,
-} from "./components/context-menu";
+} from "./components/atomic/context-menu";
 export {
   Menubar,
   MenubarCheckboxItem,
@@ -499,12 +499,12 @@ export {
   MenubarSubContent,
   MenubarSubTrigger,
   MenubarTrigger,
-} from "./components/menubar";
+} from "./components/atomic/menubar";
 export type {
   MenubarMenuProps,
   MenubarRadioGroupProps,
   MenubarSubProps,
-} from "./components/menubar";
+} from "./components/atomic/menubar";
 export {
   NavigationMenu,
   NavigationMenuContent,
@@ -515,10 +515,10 @@ export {
   NavigationMenuTrigger,
   NavigationMenuViewport,
   navigationMenuTriggerStyle,
-} from "./components/navigation-menu";
+} from "./components/atomic/navigation-menu";
 export type {
   NavigationMenuItemProps,
-} from "./components/navigation-menu";
+} from "./components/atomic/navigation-menu";
 export {
   Dialog,
   DialogClose,
@@ -530,7 +530,7 @@ export {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
-} from "./components/dialog";
+} from "./components/atomic/dialog";
 export type {
   DialogCloseProps,
   DialogContentProps,
@@ -538,7 +538,7 @@ export type {
   DialogPortalProps,
   DialogProps,
   DialogTriggerProps,
-} from "./components/dialog";
+} from "./components/atomic/dialog";
 export {
   AlertDialog,
   AlertDialogAction,
@@ -550,7 +550,7 @@ export {
   AlertDialogOverlay,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "./components/alert-dialog";
+} from "./components/atomic/alert-dialog";
 export type {
   AlertDialogActionProps,
   AlertDialogCancelProps,
@@ -558,7 +558,7 @@ export type {
   AlertDialogOverlayProps,
   AlertDialogProps,
   AlertDialogTriggerProps,
-} from "./components/alert-dialog";
+} from "./components/atomic/alert-dialog";
 export {
   Sheet,
   SheetClose,
@@ -569,14 +569,14 @@ export {
   SheetOverlay,
   SheetTitle,
   SheetTrigger,
-} from "./components/sheet";
+} from "./components/atomic/sheet";
 export type {
   SheetCloseProps,
   SheetContentProps,
   SheetOverlayProps,
   SheetProps,
   SheetTriggerProps,
-} from "./components/sheet";
+} from "./components/atomic/sheet";
 export {
   Drawer,
   DrawerClose,
@@ -587,13 +587,13 @@ export {
   DrawerOverlay,
   DrawerTitle,
   DrawerTrigger,
-} from "./components/drawer";
+} from "./components/atomic/drawer";
 export type {
   DrawerCloseProps,
   DrawerDirection,
   DrawerProps,
   DrawerTriggerProps,
-} from "./components/drawer";
+} from "./components/atomic/drawer";
 export {
   Select,
   SelectContent,
@@ -603,7 +603,7 @@ export {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "./components/select";
+} from "./components/atomic/select";
 export type {
   SelectContentProps,
   SelectItemProps,
@@ -611,16 +611,16 @@ export type {
   SelectTriggerProps,
   SelectTriggerSize,
   SelectValueProps,
-} from "./components/select";
+} from "./components/atomic/select";
 export {
   NativeSelect,
   NativeSelectGroup,
   NativeSelectOption,
-} from "./components/native-select";
+} from "./components/atomic/native-select";
 export type {
   NativeSelectProps,
   NativeSelectSize,
-} from "./components/native-select";
+} from "./components/atomic/native-select";
 export {
   Command,
   CommandDialog,
@@ -631,32 +631,32 @@ export {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from "./components/command";
+} from "./components/atomic/command";
 export type {
   CommandDialogProps,
   CommandGroupProps,
   CommandItemProps,
   CommandProps,
-} from "./components/command";
+} from "./components/atomic/command";
 
 // Tier D — heavy engines (dep-light: see README Limitations).
 export {
   Calendar,
-} from "./components/calendar";
+} from "./components/atomic/calendar";
 export type {
   CalendarProps,
-} from "./components/calendar";
+} from "./components/atomic/calendar";
 export {
   DateTimePicker,
-} from "./components/date-time-picker";
+} from "./components/derived/date-time-picker";
 export type {
   DateTimePickerLabels,
   DateTimePickerProps,
-} from "./components/date-time-picker";
+} from "./components/derived/date-time-picker";
 export {
   Toaster,
   toast,
-} from "./components/sonner";
+} from "./components/atomic/sonner";
 export type {
   Toast,
   ToastFn,
@@ -665,7 +665,7 @@ export type {
   ToastState,
   ToastVariant,
   ToasterProps,
-} from "./components/sonner";
+} from "./components/atomic/sonner";
 export {
   Form,
   FormControl,
@@ -673,119 +673,119 @@ export {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./components/form";
+} from "./components/derived/form";
 
 // App shell — TS-only: the frame a signed-in app's screens sit in. Router-agnostic
 // (`linkComponent` + `pathname`); motion is CSS in `motion.css`.
-export { AppShell } from "./components/app-shell";
-export type { AppShellProps, ShellBreakpoint } from "./components/app-shell";
+export { AppShell } from "./components/shell/app-shell";
+export type { AppShellProps, ShellBreakpoint } from "./components/shell/app-shell";
 
 export {
   isNavItemActive,
   isPlainLeftClick,
   navItemMatch,
   resolveActiveNavItem,
-} from "./components/nav-model";
-export type { NavGroup, NavItem, NavItemState, NavMatch } from "./components/nav-model";
-export type { NavCollapseLabels, NavGroupCollapse } from "./components/nav-collapse";
-export { usePendingNavigation } from "./components/use-shell-nav";
+} from "./components/shell/nav-model";
+export type { NavGroup, NavItem, NavItemState, NavMatch } from "./components/shell/nav-model";
+export type { NavCollapseLabels, NavGroupCollapse } from "./components/shell/nav-collapse";
+export { usePendingNavigation } from "./components/shell/use-shell-nav";
 
-export { ShellNav } from "./components/shell-nav";
-export type { ShellNavLabels, ShellNavProps } from "./components/shell-nav";
+export { ShellNav } from "./components/shell/shell-nav";
+export type { ShellNavLabels, ShellNavProps } from "./components/shell/shell-nav";
 
-export { NavBadge, NavDot } from "./components/nav-badge";
-export type { NavBadgeProps, NavBadgeVariant, NavDotProps, NavDotTone } from "./components/nav-badge";
+export { NavBadge, NavDot } from "./components/shell/nav-badge";
+export type { NavBadgeProps, NavBadgeVariant, NavDotProps, NavDotTone } from "./components/shell/nav-badge";
 
-export { BottomTabBar } from "./components/bottom-tab-bar";
-export type { BottomTabBarLabels, BottomTabBarProps } from "./components/bottom-tab-bar";
+export { BottomTabBar } from "./components/shell/bottom-tab-bar";
+export type { BottomTabBarLabels, BottomTabBarProps } from "./components/shell/bottom-tab-bar";
 
-export { TopBar } from "./components/top-bar";
-export type { TopBarProps } from "./components/top-bar";
+export { TopBar } from "./components/shell/top-bar";
+export type { TopBarProps } from "./components/shell/top-bar";
 
-export { AccountMenu } from "./components/account-menu";
+export { AccountMenu } from "./components/shell/account-menu";
 export type {
   AccountMenuLabels,
   AccountMenuProfile,
   AccountMenuProps,
   AccountMenuTab,
-} from "./components/account-menu";
+} from "./components/shell/account-menu";
 
-export { MobileAppBar } from "./components/mobile-app-bar";
-export type { MobileAppBarBack, MobileAppBarLabels, MobileAppBarProps } from "./components/mobile-app-bar";
+export { MobileAppBar } from "./components/shell/mobile-app-bar";
+export type { MobileAppBarBack, MobileAppBarLabels, MobileAppBarProps } from "./components/shell/mobile-app-bar";
 
-export { PageFrame, PageHeading, SectionLabel } from "./components/page-frame";
+export { PageFrame, PageHeading, SectionLabel } from "./components/shell/page-frame";
 export type {
   PageFrameProps,
   PageFrameWidth,
   PageHeadingProps,
   SectionLabelProps,
   SectionLabelTone,
-} from "./components/page-frame";
+} from "./components/shell/page-frame";
 
-export { SectionNav } from "./components/section-nav";
+export { SectionNav } from "./components/shell/section-nav";
 export type {
   SectionNavGroup,
   SectionNavItem,
   SectionNavLabels,
   SectionNavProps,
-} from "./components/section-nav";
+} from "./components/shell/section-nav";
 
-export { ResourceError } from "./components/resource-error";
-export type { ResourceErrorLabels, ResourceErrorProps } from "./components/resource-error";
+export { ResourceError } from "./components/shell/resource-error";
+export type { ResourceErrorLabels, ResourceErrorProps } from "./components/shell/resource-error";
 
-export { SystemBanner } from "./components/system-banner";
-export type { SystemBannerLabels, SystemBannerProps, SystemBannerTone } from "./components/system-banner";
+export { SystemBanner } from "./components/shell/system-banner";
+export type { SystemBannerLabels, SystemBannerProps, SystemBannerTone } from "./components/shell/system-banner";
 
-export { Settled } from "./components/settled";
-export type { SettledProps } from "./components/settled";
-export { AnimatedNumber } from "./components/animated-number";
-export type { AnimatedNumberProps } from "./components/animated-number";
-export { useCountTween } from "./components/use-count-tween";
-export type { CountTweenOptions } from "./components/use-count-tween";
+export { Settled } from "./components/shell/settled";
+export type { SettledProps } from "./components/shell/settled";
+export { AnimatedNumber } from "./components/derived/animated-number";
+export type { AnimatedNumberProps } from "./components/derived/animated-number";
+export { useCountTween } from "./components/atomic/use-count-tween";
+export type { CountTweenOptions } from "./components/atomic/use-count-tween";
 
 // Uikit 2.0 elements and composed parts
-export { IconButton } from "./components/icon-button";
-export type { IconButtonProps, IconButtonSize, IconButtonVariant } from "./components/icon-button";
-export { StatusItem, StatusDot } from "./components/status-item";
-export type { StatusDotProps, StatusItemProps, StatusTone } from "./components/status-item";
-export { WorkspaceTabs, WorkspaceTab } from "./components/workspace-tab";
-export type { WorkspaceTabProps, WorkspaceTabsProps } from "./components/workspace-tab";
-export { KeyValue } from "./components/key-value";
-export type { KeyValueLabels, KeyValueProps } from "./components/key-value";
-export { FormRow } from "./components/form-row";
-export type { FormRowProps } from "./components/form-row";
-export { SettingsLayout, SettingsSection, SettingsRow } from "./components/settings";
-export type { SettingsLayoutProps, SettingsRowProps, SettingsSectionProps } from "./components/settings";
-export { AccountSettingsDialog } from "./components/account-settings-dialog";
+export { IconButton } from "./components/derived/icon-button";
+export type { IconButtonProps, IconButtonSize, IconButtonVariant } from "./components/derived/icon-button";
+export { StatusItem, StatusDot } from "./components/atomic/status-item";
+export type { StatusDotProps, StatusItemProps, StatusTone } from "./components/atomic/status-item";
+export { WorkspaceTabs, WorkspaceTab } from "./components/shell/workspace-tab";
+export type { WorkspaceTabProps, WorkspaceTabsProps } from "./components/shell/workspace-tab";
+export { KeyValue } from "./components/atomic/key-value";
+export type { KeyValueLabels, KeyValueProps } from "./components/atomic/key-value";
+export { FormRow } from "./components/atomic/form-row";
+export type { FormRowProps } from "./components/atomic/form-row";
+export { SettingsLayout, SettingsSection, SettingsRow } from "./components/derived/settings";
+export type { SettingsLayoutProps, SettingsRowProps, SettingsSectionProps } from "./components/derived/settings";
+export { AccountSettingsDialog } from "./components/shell/account-settings-dialog";
 export type {
   AccountSettingsDialogLabels,
   AccountSettingsDialogProps,
   AccountSettingsSection,
-} from "./components/account-settings-dialog";
-export { ConfirmDialog } from "./components/confirm-dialog";
-export type { ConfirmDialogLabels, ConfirmDialogProps, ConfirmDialogTone } from "./components/confirm-dialog";
-export { AccountList, AccountListItem } from "./components/account-list";
-export type { AccountListItemProps, AccountListProps } from "./components/account-list";
-export { PopoverForm } from "./components/popover-form";
-export type { PopoverFormLabels, PopoverFormProps } from "./components/popover-form";
-export { CommandPalette, useCommandPaletteShortcut } from "./components/command-palette";
+} from "./components/shell/account-settings-dialog";
+export { ConfirmDialog } from "./components/derived/confirm-dialog";
+export type { ConfirmDialogLabels, ConfirmDialogProps, ConfirmDialogTone } from "./components/derived/confirm-dialog";
+export { AccountList, AccountListItem } from "./components/shell/account-list";
+export type { AccountListItemProps, AccountListProps } from "./components/shell/account-list";
+export { PopoverForm } from "./components/derived/popover-form";
+export type { PopoverFormLabels, PopoverFormProps } from "./components/derived/popover-form";
+export { CommandPalette, useCommandPaletteShortcut } from "./components/derived/command-palette";
 export type {
   CommandPaletteGroup,
   CommandPaletteItem,
   CommandPaletteLabels,
   CommandPaletteProps,
-} from "./components/command-palette";
-export { HeaderBalance, HeaderSearch, NotificationBell } from "./components/header-controls";
+} from "./components/derived/command-palette";
+export { HeaderBalance, HeaderSearch, NotificationBell } from "./components/shell/header-controls";
 export type {
   HeaderBalanceProps,
   HeaderNotification,
   HeaderSearchProps,
   NotificationBellLabels,
   NotificationBellProps,
-} from "./components/header-controls";
-export { SmartHeader } from "./components/smart-header";
-export type { SmartHeaderProps, SmartHeaderState } from "./components/smart-header";
-export { AsideHeader, AsidePanel, AsideRail } from "./components/aside";
+} from "./components/shell/header-controls";
+export { SmartHeader } from "./components/shell/smart-header";
+export type { SmartHeaderProps, SmartHeaderState } from "./components/shell/smart-header";
+export { AsideHeader, AsidePanel, AsideRail } from "./components/shell/aside";
 export type {
   AsideHeaderLabels,
   AsideHeaderProps,
@@ -793,25 +793,25 @@ export type {
   AsidePanelProps,
   AsideRailItem,
   AsideRailProps,
-} from "./components/aside";
-export { ChatAttachment, ChatBubble, ChatMarker, ChatMessage } from "./components/chat-message";
+} from "./components/shell/aside";
+export { ChatAttachment, ChatBubble, ChatMarker, ChatMessage } from "./components/shell/chat-message";
 export type {
   ChatAttachmentProps,
   ChatBubbleProps,
   ChatBubbleVariant,
   ChatMarkerProps,
   ChatMessageProps,
-} from "./components/chat-message";
-export { ChatStreamText } from "./components/chat-stream-text";
-export type { ChatStreamTextProps } from "./components/chat-stream-text";
-export { ChatTyping } from "./components/chat-typing";
-export type { ChatTypingProps } from "./components/chat-typing";
-export { ChatComposer, ModelChip } from "./components/chat-composer";
+} from "./components/shell/chat-message";
+export { ChatStreamText } from "./components/shell/chat-stream-text";
+export type { ChatStreamTextProps } from "./components/shell/chat-stream-text";
+export { ChatTyping } from "./components/shell/chat-typing";
+export type { ChatTypingProps } from "./components/shell/chat-typing";
+export { ChatComposer, ModelChip } from "./components/shell/chat-composer";
 export type {
   ChatComposerLabels,
   ChatComposerProps,
   ModelChipProps,
   ModelOption,
-} from "./components/chat-composer";
-export { ChatDock, ChatPanel } from "./components/chat-panel";
-export type { ChatDockLabels, ChatDockProps, ChatPanelLabels, ChatPanelProps } from "./components/chat-panel";
+} from "./components/shell/chat-composer";
+export { ChatDock, ChatPanel } from "./components/shell/chat-panel";
+export type { ChatDockLabels, ChatDockProps, ChatPanelLabels, ChatPanelProps } from "./components/shell/chat-panel";

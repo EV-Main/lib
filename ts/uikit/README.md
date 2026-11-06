@@ -784,7 +784,7 @@ a button step only — `Input` and `SelectTrigger` already clear it at `lg`.
 | `Badge variant="destructive"` · `"success"` | `error` · `positive` (new: `primary`, `info`, `warn`) |
 | `SystemBanner` tones `warn`, `info` | the same, plus `neutral` and `primary`; `info` draws its icon in `accent-info-ink` |
 | `accent-error-ink` (`text-accent-error-ink`, a brand file's `accent-error-ink`) | `accent-error`; destructive menu rows read in it, and `evinvest-palette` refuses the key |
-| `Terminal`, `TerminalPane*`, `TerminalChart`, `TerminalTicker`, `TickerStat`, `OrderBook*`, `TradesTapeRow`, `OrderForm*`, `OpenOrdersEmpty` and their types | removed from the TS kit (the Rust terminal stays) |
+| `Terminal`, `TerminalPane*`, `TerminalChart`, `TerminalTicker`, `TickerStat`, `OrderBook*`, `TradesTapeRow`, `OrderForm*`, `OpenOrdersEmpty` and their types | removed from the kit; a trading view owns its terminal |
 
 **Silent changes: the compiler does not flag these.**
 

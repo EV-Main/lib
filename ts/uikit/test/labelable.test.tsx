@@ -2,15 +2,15 @@ import * as React from "react";
 import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
 import { isLabelable } from "../src/primitives/labelable";
-import { Button } from "../src/components/button";
-import { Checkbox } from "../src/components/checkbox";
-import { Field, FieldLabel } from "../src/components/field";
-import { Input } from "../src/components/input";
-import { Label } from "../src/components/label";
-import { NativeSelect } from "../src/components/native-select";
-import { Select, SelectContent, SelectTrigger, SelectValue } from "../src/components/select";
-import { Switch } from "../src/components/switch";
-import { Textarea } from "../src/components/textarea";
+import { Button } from "../src/components/atomic/button";
+import { Checkbox } from "../src/components/atomic/checkbox";
+import { Field, FieldLabel } from "../src/components/derived/field";
+import { Input } from "../src/components/atomic/input";
+import { Label } from "../src/components/atomic/label";
+import { NativeSelect } from "../src/components/atomic/native-select";
+import { Select, SelectContent, SelectTrigger, SelectValue } from "../src/components/atomic/select";
+import { Switch } from "../src/components/atomic/switch";
+import { Textarea } from "../src/components/atomic/textarea";
 
 // Each control marks itself in its own module; `FieldLabel` reads the mark to
 // tell a label that wraps its control (no `for`) from one beside it.

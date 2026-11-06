@@ -1,7 +1,7 @@
 import * as React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render, within } from "@testing-library/react";
-import { AccountMenu } from "../src/components/account-menu";
+import { AccountMenu } from "../src/components/shell/account-menu";
 
 const open = (ui: React.ReactElement) => {
   const view = render(ui);

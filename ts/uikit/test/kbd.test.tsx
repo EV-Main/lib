@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { Kbd, KbdGroup } from "../src/components/kbd";
+import { Kbd, KbdGroup } from "../src/components/atomic/kbd";
 
 describe("Kbd", () => {
   it("renders the base and slot", () => {

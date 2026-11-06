@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from "../src/components/accordion";
+} from "../src/components/atomic/accordion";
 
 function tree(props = {}) {
   return (

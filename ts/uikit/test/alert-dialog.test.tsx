@@ -10,7 +10,7 @@ import {
   AlertDialogFooter,
   AlertDialogAction,
   AlertDialogCancel,
-} from "../src/components/alert-dialog";
+} from "../src/components/atomic/alert-dialog";
 
 function tree(props = {}) {
   return (

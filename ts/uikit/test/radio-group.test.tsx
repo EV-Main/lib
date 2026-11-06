@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
-import { RadioGroup, RadioGroupItem } from "../src/components/radio-group";
+import { RadioGroup, RadioGroupItem } from "../src/components/atomic/radio-group";
 
 describe("RadioGroup", () => {
   it("renders role, slot and base classes", () => {

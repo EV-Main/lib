@@ -245,6 +245,15 @@ the full list is in [`ts/uikit/README.md`](../ts/uikit/README.md#limitations).
 - **A component exists in both ports or neither.** The same test fails on a
   gallery label present on one side only, and on a `#[component]` exported by
   one port only; every exported component appears in a gallery entry.
+- **Three layers, edges only downward** (#234). Every component sits in
+  `atomic/`, `derived/` or `shell/` — the same one in the core, both ports and
+  TS. `atomic` renders no other component; `derived` composes `atomic` ones
+  and nests no further; `shell` is app chrome and flows, and may render any
+  layer. Only rendering counts: reusing another component's class table
+  (`button_classes`, `buttonVariants`) is the atomic language, as are the
+  tokens, `ev_lib_classes` and TS `icons/`. Modules stay flat in the public
+  API. `parity.rs` (`components_render_only_lower_layers`) and
+  `ts/uikit/test/layers.test.ts` fail on an upward or sideways render.
 
 ## The I/O libraries — analytics, error_monitoring, experiments
 

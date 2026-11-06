@@ -1,8 +1,8 @@
 import * as React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render } from "@testing-library/react";
-import { BottomTabBar } from "../src/components/bottom-tab-bar";
-import type { NavItem } from "../src/components/nav-model";
+import { BottomTabBar } from "../src/components/shell/bottom-tab-bar";
+import type { NavItem } from "../src/components/shell/nav-model";
 
 const FakeLink = ({ onClick, ...props }: React.ComponentProps<"a">) => (
   <a

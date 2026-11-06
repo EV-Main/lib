@@ -11,7 +11,7 @@ import {
   ItemSeparator,
   ItemHeader,
   ItemFooter,
-} from "../src/components/item";
+} from "../src/components/derived/item";
 
 describe("Item", () => {
   it("renders the default variant and size", () => {

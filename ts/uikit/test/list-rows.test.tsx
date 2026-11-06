@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { ListRow, ListRowLabel, ListRowValue, ListRows } from "../src/components/list-rows";
+import { ListRow, ListRowLabel, ListRowValue, ListRows } from "../src/components/shell/list-rows";
 
 describe("ListRows", () => {
   it("is a list whose rows are split by hairlines", () => {

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
-import { Avatar, AvatarImage, AvatarFallback } from "../src/components/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "../src/components/atomic/avatar";
 
 describe("Avatar", () => {
   it("renders the wrapper base and slot", () => {

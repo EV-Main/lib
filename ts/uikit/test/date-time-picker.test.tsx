@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
-import { DateTimePicker } from "../src/components/date-time-picker";
+import { DateTimePicker } from "../src/components/derived/date-time-picker";
 
 const june = (day: number, hour = 0, minute = 0) => new Date(2026, 5, day, hour, minute);
 const TODAY = june(15, 12, 0);

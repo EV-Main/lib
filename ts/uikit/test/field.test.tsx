@@ -11,13 +11,13 @@ import {
   FieldSet,
   FieldContent,
   FieldTitle,
-} from "../src/components/field";
-import { Checkbox } from "../src/components/checkbox";
-import { Input } from "../src/components/input";
-import { NativeSelect } from "../src/components/native-select";
-import { Select, SelectTrigger, SelectValue } from "../src/components/select";
-import { Switch } from "../src/components/switch";
-import { Textarea } from "../src/components/textarea";
+} from "../src/components/derived/field";
+import { Checkbox } from "../src/components/atomic/checkbox";
+import { Input } from "../src/components/atomic/input";
+import { NativeSelect } from "../src/components/atomic/native-select";
+import { Select, SelectTrigger, SelectValue } from "../src/components/atomic/select";
+import { Switch } from "../src/components/atomic/switch";
+import { Textarea } from "../src/components/atomic/textarea";
 
 describe("Field", () => {
   it("defaults to the vertical orientation", () => {

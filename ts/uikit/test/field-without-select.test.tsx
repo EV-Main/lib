@@ -1,13 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
 import { render } from "@testing-library/react";
-import { Field, FieldLabel } from "../src/components/field";
-import { Input } from "../src/components/input";
+import { Field, FieldLabel } from "../src/components/derived/field";
+import { Input } from "../src/components/atomic/input";
 
 // A page with a Field and an Input, and no Select anywhere: the shape that
 // used to pull `select.tsx` in through field.tsx. Each test file is its own
 // module graph, so this one loads exactly what such a page loads — and select
 // failing to load proves it never does.
-vi.mock("../src/components/select", () => {
+vi.mock("../src/components/atomic/select", () => {
   throw new Error("select.tsx was loaded by a page that renders no Select");
 });
 

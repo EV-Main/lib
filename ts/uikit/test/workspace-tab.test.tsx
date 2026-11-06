@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { WorkspaceTabs, WorkspaceTab } from "../src/components/workspace-tab";
+import { WorkspaceTabs, WorkspaceTab } from "../src/components/shell/workspace-tab";
 
 function setup(onClose = vi.fn()) {
   render(

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { SmartHeader, type SmartHeaderState } from "../src/components/smart-header";
+import { SmartHeader, type SmartHeaderState } from "../src/components/shell/smart-header";
 
 function view(state: SmartHeaderState) {
   return render(

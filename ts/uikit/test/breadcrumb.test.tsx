@@ -8,7 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
   BreadcrumbEllipsis,
-} from "../src/components/breadcrumb";
+} from "../src/components/atomic/breadcrumb";
 
 describe("Breadcrumb", () => {
   it("renders the nav with aria-label and slot", () => {

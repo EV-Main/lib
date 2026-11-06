@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { Container } from "../src/components/container";
+import { Container } from "../src/components/atomic/container";
 
 describe("Container", () => {
   it("applies the token-driven gutter and max width", () => {

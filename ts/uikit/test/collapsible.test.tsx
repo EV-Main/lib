@@ -4,7 +4,7 @@ import {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
-} from "../src/components/collapsible";
+} from "../src/components/atomic/collapsible";
 
 describe("Collapsible", () => {
   it("hides its content until opened, then reveals it", () => {

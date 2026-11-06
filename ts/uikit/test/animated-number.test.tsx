@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, render, renderHook } from "@testing-library/react";
 import { renderToString } from "react-dom/server";
-import { AnimatedNumber } from "../src/components/animated-number";
-import { useCountTween } from "../src/components/use-count-tween";
+import { AnimatedNumber } from "../src/components/derived/animated-number";
+import { useCountTween } from "../src/components/atomic/use-count-tween";
 import { digitGlyphs, rollStep, splitNumber } from "../src/lib/number-parts";
 
 function stubMotionPreference(reduce: boolean) {

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { Label } from "../src/components/label";
+import { Label } from "../src/components/atomic/label";
 
 describe("Label", () => {
   it("renders a label with base classes and slot", () => {

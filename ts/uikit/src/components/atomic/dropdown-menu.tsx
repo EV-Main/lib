@@ -1,0 +1,532 @@
+"use client";
+
+import * as React from "react";
+import { cn } from "../../lib/cn";
+import { useControllableState } from "../../primitives/use-controllable-state";
+import { useFloating } from "../../primitives/use-floating";
+import { DismissableLayerScope, useDismissableLayer } from "../../primitives/dismissable-layer";
+import { usePresence } from "../../primitives/presence";
+import { useRovingFocus } from "../../primitives/use-roving-focus";
+import { useHoverIntent } from "../../primitives/use-hover-intent";
+import { mergeRefs } from "../../primitives/merge-refs";
+import { Portal } from "../../primitives/portal";
+import { Slot } from "../../primitives/slot";
+import {
+  DROPDOWN_MENU_CHECK_ITEM,
+  DROPDOWN_MENU_CONTENT,
+  DROPDOWN_MENU_ITEM,
+  DROPDOWN_MENU_ITEM_INDICATOR,
+  DROPDOWN_MENU_LABEL,
+  DROPDOWN_MENU_SEPARATOR,
+  DROPDOWN_MENU_SHORTCUT,
+  DROPDOWN_MENU_SUB_CONTENT,
+  DROPDOWN_MENU_SUB_TRIGGER,
+} from "../../generated/dropdown-menu";
+
+interface DropdownMenuContextValue {
+  open: boolean;
+  setOpen: (next: boolean) => void;
+  anchorRef: React.RefObject<HTMLElement | null>;
+}
+
+const DropdownMenuContext = React.createContext<DropdownMenuContextValue | null>(
+  null,
+);
+
+function useDropdownMenu(): DropdownMenuContextValue {
+  const ctx = React.useContext(DropdownMenuContext);
+  if (!ctx) throw new Error("DropdownMenu parts must be used within <DropdownMenu>");
+  return ctx;
+}
+
+export interface DropdownMenuProps {
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  children?: React.ReactNode;
+}
+
+export function DropdownMenu({ open, defaultOpen = false, onOpenChange, children }: DropdownMenuProps) {
+  const [isOpen, setOpen] = useControllableState<boolean>({
+    ...(open !== undefined ? { value: open } : {}),
+    defaultValue: defaultOpen,
+    ...(onOpenChange ? { onChange: onOpenChange } : {}),
+  });
+  const anchorRef = React.useRef<HTMLElement | null>(null);
+  return (
+    <DropdownMenuContext.Provider value={{ open: isOpen, setOpen, anchorRef }}>
+      <div data-slot="dropdown-menu">{children}</div>
+    </DropdownMenuContext.Provider>
+  );
+}
+
+export function DropdownMenuPortal({ children }: { children?: React.ReactNode }) {
+  return <Portal>{children}</Portal>;
+}
+
+export interface DropdownMenuTriggerProps extends React.ComponentProps<"button"> {
+  asChild?: boolean;
+}
+
+export function DropdownMenuTrigger({ asChild = false, onClick, ...props }: DropdownMenuTriggerProps) {
+  const { open, setOpen, anchorRef } = useDropdownMenu();
+  const Comp = asChild ? Slot : "button";
+  return (
+    <Comp
+      data-slot="dropdown-menu-trigger"
+      aria-haspopup="menu"
+      aria-expanded={open}
+      data-state={open ? "open" : "closed"}
+      ref={anchorRef as React.Ref<HTMLButtonElement>}
+      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+        onClick?.(e);
+        setOpen(!open);
+      }}
+      {...(props as Record<string, unknown>)}
+    />
+  );
+}
+
+export interface DropdownMenuContentProps extends React.ComponentProps<"div"> {
+  sideOffset?: number;
+  align?: "start" | "center" | "end";
+}
+
+export function DropdownMenuContent({
+  className,
+  sideOffset = 4,
+  align = "start",
+  children,
+  ...props
+}: DropdownMenuContentProps) {
+  const { open, setOpen, anchorRef } = useDropdownMenu();
+  const { isPresent, ref: presRef } = usePresence(open);
+  const { floatingRef, style, side } = useFloating({
+    anchorRef,
+    open,
+    side: "bottom",
+    align,
+    offset: sideOffset,
+  });
+  const dismissRef = useDismissableLayer({
+    enabled: open,
+    onDismiss: () => setOpen(false),
+    exclude: [anchorRef],
+  });
+  const contentRef = React.useRef<HTMLDivElement | null>(null);
+  // Roving focus across rendered menu items: ArrowUp/Down move the active item.
+  const items = () =>
+    Array.from(
+      contentRef.current?.querySelectorAll<HTMLElement>("[role^='menuitem']") ?? [],
+    ).filter((el) => el.getAttribute("data-disabled") === null);
+  const { activeIndex, setActiveIndex, onKeyDown: rovingKeyDown } = useRovingFocus({
+    count: () => items().length,
+    orientation: "vertical",
+    loop: true,
+  });
+  // Reset on close: a menu reopens on its first item, and an index left past
+  // the end (items gone while closed) would focus nothing.
+  React.useEffect(() => {
+    if (!open) setActiveIndex(0);
+  }, [open, setActiveIndex]);
+  React.useEffect(() => {
+    if (!open) return;
+    items()[activeIndex]?.focus();
+  }, [open, activeIndex]);
+  // Give focus back to the trigger on close, as Popover and Dialog do. Skipped when focus already
+  // went somewhere real (an item opened a dialog, an outside click landed on an input).
+  const wasOpen = React.useRef(false);
+  React.useEffect(() => {
+    if (open) {
+      wasOpen.current = true;
+      return;
+    }
+    if (!wasOpen.current) return;
+    wasOpen.current = false;
+    const active = document.activeElement;
+    if (!active || active === document.body || contentRef.current?.contains(active)) anchorRef.current?.focus();
+  }, [open, anchorRef]);
+  // Selecting an item closes the menu: items call this through context.
+  const close = React.useCallback(() => setOpen(false), [setOpen]);
+  if (!isPresent) return null;
+  return (
+    <Portal>
+      <DropdownMenuCloseContext.Provider value={close}>
+        <div
+          data-slot="dropdown-menu-content"
+          data-state={open ? "open" : "closed"}
+          data-side={side}
+          role="menu"
+          tabIndex={-1}
+          // Escape is the stack's (useDismissableLayer): it closes this menu
+          // only while it is the top layer.
+          onKeyDown={rovingKeyDown}
+          ref={mergeRefs(floatingRef, dismissRef, presRef, contentRef)}
+          style={style}
+          className={cn(
+            DROPDOWN_MENU_CONTENT,
+            className,
+          )}
+          {...(props as Record<string, unknown>)}
+        >
+          <DismissableLayerScope layer={dismissRef}>{children}</DismissableLayerScope>
+        </div>
+      </DropdownMenuCloseContext.Provider>
+    </Portal>
+  );
+}
+
+const DropdownMenuCloseContext = React.createContext<() => void>(() => {});
+
+export function DropdownMenuGroup({ className, ...props }: React.ComponentProps<"div">) {
+  return <div data-slot="dropdown-menu-group" role="group" className={className} {...props} />;
+}
+
+export interface DropdownMenuItemProps extends React.ComponentProps<"div"> {
+  /** Render the child (a link) as the item. */
+  asChild?: boolean;
+  inset?: boolean;
+  variant?: "neutral" | "destructive";
+  disabled?: boolean;
+}
+
+export function DropdownMenuItem({
+  asChild = false,
+  className,
+  inset,
+  variant = "neutral",
+  disabled,
+  onClick,
+  onKeyDown,
+  ...props
+}: DropdownMenuItemProps) {
+  const close = React.useContext(DropdownMenuCloseContext);
+  const Comp = asChild ? Slot : "div";
+  return (
+    <Comp
+      data-slot="dropdown-menu-item"
+      data-inset={inset ? "" : undefined}
+      data-variant={variant}
+      data-disabled={disabled ? "" : undefined}
+      role="menuitem"
+      tabIndex={disabled ? undefined : -1}
+      className={cn(
+        DROPDOWN_MENU_ITEM,
+        className,
+      )}
+      onClick={(e) => {
+        if (disabled) return;
+        onClick?.(e);
+        close();
+      }}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          (e.currentTarget as HTMLElement).click();
+        }
+      }}
+      {...props}
+    />
+  );
+}
+
+export interface DropdownMenuCheckboxItemProps extends React.ComponentProps<"div"> {
+  checked?: boolean;
+  disabled?: boolean;
+}
+
+export function DropdownMenuCheckboxItem({
+  className,
+  children,
+  checked,
+  disabled,
+  onClick,
+  onKeyDown,
+  ...props
+}: DropdownMenuCheckboxItemProps) {
+  // No close: several boxes can be toggled in one visit. Escape or an outside click ends it.
+  return (
+    <div
+      data-slot="dropdown-menu-checkbox-item"
+      role="menuitemcheckbox"
+      aria-checked={checked}
+      data-state={checked ? "checked" : "unchecked"}
+      data-disabled={disabled ? "" : undefined}
+      tabIndex={disabled ? undefined : -1}
+      className={cn(
+        DROPDOWN_MENU_CHECK_ITEM,
+        className,
+      )}
+      onClick={(e) => {
+        if (disabled) return;
+        onClick?.(e);
+      }}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          (e.currentTarget as HTMLElement).click();
+        }
+      }}
+      {...props}
+    >
+      <span className={DROPDOWN_MENU_ITEM_INDICATOR}>
+        {checked ? (
+          <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+        ) : null}
+      </span>
+      {children}
+    </div>
+  );
+}
+
+interface DropdownMenuRadioGroupContextValue {
+  value: string | undefined;
+  setValue: (next: string) => void;
+}
+
+const DropdownMenuRadioGroupContext =
+  React.createContext<DropdownMenuRadioGroupContextValue | null>(null);
+
+export interface DropdownMenuRadioGroupProps extends Omit<React.ComponentProps<"div">, "onChange"> {
+  value?: string;
+  onValueChange?: (value: string) => void;
+}
+
+export function DropdownMenuRadioGroup({
+  className,
+  value,
+  onValueChange,
+  children,
+  ...props
+}: DropdownMenuRadioGroupProps) {
+  const ctx = React.useMemo<DropdownMenuRadioGroupContextValue>(
+    () => ({ value, setValue: (next) => onValueChange?.(next) }),
+    [value, onValueChange],
+  );
+  return (
+    <DropdownMenuRadioGroupContext.Provider value={ctx}>
+      <div data-slot="dropdown-menu-radio-group" role="group" className={className} {...props}>
+        {children}
+      </div>
+    </DropdownMenuRadioGroupContext.Provider>
+  );
+}
+
+export interface DropdownMenuRadioItemProps extends React.ComponentProps<"div"> {
+  value: string;
+  disabled?: boolean;
+}
+
+export function DropdownMenuRadioItem({
+  className,
+  children,
+  value,
+  disabled,
+  onClick,
+  ...props
+}: DropdownMenuRadioItemProps) {
+  const close = React.useContext(DropdownMenuCloseContext);
+  const group = React.useContext(DropdownMenuRadioGroupContext);
+  const checked = group?.value === value;
+  return (
+    <div
+      data-slot="dropdown-menu-radio-item"
+      role="menuitemradio"
+      aria-checked={checked}
+      data-state={checked ? "checked" : "unchecked"}
+      data-disabled={disabled ? "" : undefined}
+      tabIndex={disabled ? undefined : -1}
+      className={cn(
+        DROPDOWN_MENU_CHECK_ITEM,
+        className,
+      )}
+      onClick={(e) => {
+        if (disabled) return;
+        onClick?.(e);
+        group?.setValue(value);
+        close();
+      }}
+      {...props}
+    >
+      <span className={DROPDOWN_MENU_ITEM_INDICATOR}>
+        {checked ? (
+          <svg className="size-2 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+          </svg>
+        ) : null}
+      </span>
+      {children}
+    </div>
+  );
+}
+
+export interface DropdownMenuLabelProps extends React.ComponentProps<"div"> {
+  inset?: boolean;
+}
+
+export function DropdownMenuLabel({ className, inset, ...props }: DropdownMenuLabelProps) {
+  return (
+    <div
+      data-slot="dropdown-menu-label"
+      data-inset={inset ? "" : undefined}
+      className={cn(DROPDOWN_MENU_LABEL, className)}
+      {...props}
+    />
+  );
+}
+
+export function DropdownMenuSeparator({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="dropdown-menu-separator"
+      role="separator"
+      className={cn(DROPDOWN_MENU_SEPARATOR, className)}
+      {...props}
+    />
+  );
+}
+
+export function DropdownMenuShortcut({ className, ...props }: React.ComponentProps<"span">) {
+  return (
+    <span
+      data-slot="dropdown-menu-shortcut"
+      className={cn(DROPDOWN_MENU_SHORTCUT, className)}
+      {...props}
+    />
+  );
+}
+
+// Sub-menus render inline (nested) rather than in a separate floating layer: the
+// sub-content is revealed in place when its trigger toggles, simplifying the
+// nesting Radix portals each level. data-state still reflects open/closed.
+interface DropdownMenuSubContextValue {
+  open: boolean;
+  setOpen: (next: boolean) => void;
+  triggerRef: React.RefObject<HTMLDivElement | null>;
+  /** Set by a keyboard open, so the first item takes focus; a pointer open leaves focus alone. */
+  focusFirst: React.RefObject<boolean>;
+}
+
+const DropdownMenuSubContext = React.createContext<DropdownMenuSubContextValue | null>(null);
+
+export interface DropdownMenuSubProps {
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  children?: React.ReactNode;
+}
+
+export function DropdownMenuSub({ open, defaultOpen = false, onOpenChange, children }: DropdownMenuSubProps) {
+  const [isOpen, setOpen] = useControllableState<boolean>({
+    ...(open !== undefined ? { value: open } : {}),
+    defaultValue: defaultOpen,
+    ...(onOpenChange ? { onChange: onOpenChange } : {}),
+  });
+  const triggerRef = React.useRef<HTMLDivElement | null>(null);
+  const focusFirst = React.useRef(false);
+  // On the wrapper, which holds the trigger and the flyout, so crossing from one to the other is not "leaving".
+  const hover = useHoverIntent({
+    onOpen: () => setOpen(true),
+    onClose: () => setOpen(false),
+    openDelay: 100,
+    closeDelay: 150,
+  });
+  return (
+    <DropdownMenuSubContext.Provider value={{ open: isOpen, setOpen, triggerRef, focusFirst }}>
+      <div data-slot="dropdown-menu-sub" {...hover}>
+        {children}
+      </div>
+    </DropdownMenuSubContext.Provider>
+  );
+}
+
+export interface DropdownMenuSubTriggerProps extends React.ComponentProps<"div"> {
+  inset?: boolean;
+}
+
+export function DropdownMenuSubTrigger({
+  className,
+  inset,
+  children,
+  onClick,
+  onKeyDown,
+  ...props
+}: DropdownMenuSubTriggerProps) {
+  const ctx = React.useContext(DropdownMenuSubContext);
+  return (
+    <div
+      ref={ctx?.triggerRef}
+      data-slot="dropdown-menu-sub-trigger"
+      data-inset={inset ? "" : undefined}
+      data-state={ctx?.open ? "open" : "closed"}
+      role="menuitem"
+      aria-haspopup="menu"
+      aria-expanded={ctx?.open}
+      tabIndex={-1}
+      className={cn(
+        DROPDOWN_MENU_SUB_TRIGGER,
+        className,
+      )}
+      onClick={(e) => {
+        onClick?.(e);
+        ctx?.setOpen(!ctx.open);
+      }}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (!ctx || (e.key !== "ArrowRight" && e.key !== "Enter" && e.key !== " ")) return;
+        e.preventDefault();
+        // Stops the menu's own handler, which would read Enter as "select this item".
+        e.stopPropagation();
+        ctx.focusFirst.current = true;
+        ctx.setOpen(true);
+      }}
+      {...props}
+    >
+      {children}
+      <svg className="ml-auto size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="m9 18 6-6-6-6" />
+      </svg>
+    </div>
+  );
+}
+
+export function DropdownMenuSubContent({ className, children, onKeyDown, ...props }: React.ComponentProps<"div">) {
+  const ctx = React.useContext(DropdownMenuSubContext);
+  const ref = React.useRef<HTMLDivElement | null>(null);
+  const open = ctx?.open ?? false;
+  React.useEffect(() => {
+    if (!open || !ctx?.focusFirst.current) return;
+    ctx.focusFirst.current = false;
+    ref.current?.querySelector<HTMLElement>("[role^='menuitem']")?.focus();
+  }, [open, ctx]);
+  if (!ctx?.open) return null;
+  return (
+    <div
+      ref={ref}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (e.key === "ArrowLeft" || e.key === "Escape") {
+          // Closes this flyout only; Escape would otherwise reach the whole menu's dismissal.
+          e.preventDefault();
+          e.stopPropagation();
+          ctx.setOpen(false);
+          ctx.triggerRef.current?.focus();
+        }
+      }}
+      data-slot="dropdown-menu-sub-content"
+      data-state="open"
+      role="menu"
+      className={cn(
+        DROPDOWN_MENU_SUB_CONTENT,
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}

@@ -2,16 +2,16 @@ import * as React from "react";
 import { flushSync } from "react-dom";
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { render, fireEvent, screen, act } from "@testing-library/react";
-import { Dialog, DialogContent, DialogTitle } from "../src/components/dialog";
-import { Drawer, DrawerContent, DrawerTitle } from "../src/components/drawer";
-import { CommandDialog, CommandInput, CommandItem, CommandList, Command } from "../src/components/command";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../src/components/dropdown-menu";
-import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "../src/components/context-menu";
-import { Popover, PopoverContent, PopoverTrigger } from "../src/components/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../src/components/select";
-import { Toaster, toast } from "../src/components/sonner";
-import { AlertDialog, AlertDialogContent, AlertDialogTitle } from "../src/components/alert-dialog";
-import { Sheet, SheetContent, SheetTitle } from "../src/components/sheet";
+import { Dialog, DialogContent, DialogTitle } from "../src/components/atomic/dialog";
+import { Drawer, DrawerContent, DrawerTitle } from "../src/components/atomic/drawer";
+import { CommandDialog, CommandInput, CommandItem, CommandList, Command } from "../src/components/atomic/command";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../src/components/atomic/dropdown-menu";
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "../src/components/atomic/context-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "../src/components/atomic/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../src/components/atomic/select";
+import { Toaster, toast } from "../src/components/atomic/sonner";
+import { AlertDialog, AlertDialogContent, AlertDialogTitle } from "../src/components/atomic/alert-dialog";
+import { Sheet, SheetContent, SheetTitle } from "../src/components/atomic/sheet";
 
 // Unlike dismissable-layer.test, the keys here start where the user's focus is
 // and travel the whole way: through React's root (where an `onKeyDown` may

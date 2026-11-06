@@ -1,10 +1,10 @@
 import * as React from "react";
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { render, fireEvent, screen, act } from "@testing-library/react";
-import { Dialog, DialogContent, DialogTitle } from "../src/components/dialog";
-import { AlertDialog, AlertDialogContent, AlertDialogTitle } from "../src/components/alert-dialog";
-import { CommandDialog } from "../src/components/command";
-import { Popover, PopoverContent, PopoverTrigger } from "../src/components/popover";
+import { Dialog, DialogContent, DialogTitle } from "../src/components/atomic/dialog";
+import { AlertDialog, AlertDialogContent, AlertDialogTitle } from "../src/components/atomic/alert-dialog";
+import { CommandDialog } from "../src/components/atomic/command";
+import { Popover, PopoverContent, PopoverTrigger } from "../src/components/atomic/popover";
 
 // jsdom paints nothing, but it resolves `z-index` from a stylesheet, which is
 // all the stacking order needs. The kit's own classes are Tailwind's, absent

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { Badge } from "../src/components/badge";
+import { Badge } from "../src/components/atomic/badge";
 
 describe("Badge", () => {
   it("renders the default variant", () => {

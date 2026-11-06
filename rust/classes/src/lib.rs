@@ -70,7 +70,6 @@ mod switch;
 mod system_banner;
 mod table;
 mod tabs;
-mod terminal;
 mod textarea;
 mod toggle;
 mod tooltip;
@@ -217,11 +216,6 @@ pub use system_banner::{
 };
 pub use table::{TABLE, TABLE_BODY, TABLE_CAPTION, TABLE_CARD, TABLE_CELL, TABLE_CONTAINER, TABLE_FOOTER, TABLE_HEAD, TABLE_HEADER, TABLE_ROW, TableAlign, TableDensity, TableVariant};
 pub use tabs::{TABS_CONTENT, TABS_LIST, TABS_ROOT, TABS_TRIGGER};
-pub use terminal::{
-	BookSide, OPEN_ORDERS_EMPTY, ORDER_BOOK, ORDER_BOOK_DEPTH, ORDER_BOOK_HEAD, ORDER_BOOK_PRICE, ORDER_BOOK_ROW, ORDER_BOOK_SPREAD, ORDER_FORM, ORDER_FORM_LABEL, ORDER_FORM_ROW,
-	ORDER_FORM_SUBMIT_BASE, ORDER_FORM_VALUE, OrderSide, TERMINAL_CHART, TERMINAL_PANE, TERMINAL_PANE_BODY, TERMINAL_PANE_HEADER, TERMINAL_ROOT, TERMINAL_TICKER, TERMINAL_TICKER_LABEL,
-	TERMINAL_TICKER_STAT, TERMINAL_TICKER_VALUE, TRADES_TAPE_ROW, TerminalArea, book_depth_class,
-};
 pub use textarea::{TEXTAREA_BASE, textarea_size_class};
 pub use toggle::{TOGGLE_BASE, ToggleVariant, toggle_size_class};
 pub use tooltip::TOOLTIP_CONTENT;

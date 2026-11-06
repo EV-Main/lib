@@ -14,7 +14,7 @@ import {
   MenubarSub,
   MenubarSubTrigger,
   MenubarSubContent,
-} from "../src/components/menubar";
+} from "../src/components/atomic/menubar";
 
 describe("Menubar", () => {
   it("renders the bar with role and slot", () => {

@@ -4,7 +4,7 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from "../src/components/popover";
+} from "../src/components/atomic/popover";
 
 describe("Popover", () => {
   it("hides its content until the trigger is clicked", () => {

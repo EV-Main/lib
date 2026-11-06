@@ -7,7 +7,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
-} from "../src/components/sheet";
+} from "../src/components/atomic/sheet";
 
 function tree(props = {}) {
   return (

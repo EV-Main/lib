@@ -2,10 +2,10 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, it, expect } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { ChatStreamText } from "../src/components/chat-stream-text";
-import { ChatTyping } from "../src/components/chat-typing";
-import { ChatBubble } from "../src/components/chat-message";
-import { ChatPanel } from "../src/components/chat-panel";
+import { ChatStreamText } from "../src/components/shell/chat-stream-text";
+import { ChatTyping } from "../src/components/shell/chat-typing";
+import { ChatBubble } from "../src/components/shell/chat-message";
+import { ChatPanel } from "../src/components/shell/chat-panel";
 
 const words = (c: HTMLElement) => [...c.querySelectorAll<HTMLElement>("[data-slot=chat-word]")];
 

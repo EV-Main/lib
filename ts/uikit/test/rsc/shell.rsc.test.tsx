@@ -3,10 +3,10 @@ import { Writable } from "node:stream";
 import { renderToPipeableStream } from "react-server-dom-webpack/server.node";
 import { describe, expect, it } from "vitest";
 
-import { AppShell } from "../../src/components/app-shell";
-import { NavBadge } from "../../src/components/nav-badge";
-import { PageFrame } from "../../src/components/page-frame";
-import { TopBar } from "../../src/components/top-bar";
+import { AppShell } from "../../src/components/shell/app-shell";
+import { NavBadge } from "../../src/components/shell/nav-badge";
+import { PageFrame } from "../../src/components/shell/page-frame";
+import { TopBar } from "../../src/components/shell/top-bar";
 
 // The shell's layout half carries no "use client": a Next layout renders it on
 // the server and passes the client nav in as a slot.

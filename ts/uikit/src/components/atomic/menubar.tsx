@@ -1,0 +1,438 @@
+"use client";
+
+import * as React from "react";
+import { cn } from "../../lib/cn";
+import { useControllableState } from "../../primitives/use-controllable-state";
+import { Portal } from "../../primitives/portal";
+import { useFloating } from "../../primitives/use-floating";
+import { DismissableLayerScope, useDismissableLayer } from "../../primitives/dismissable-layer";
+import { usePresence } from "../../primitives/presence";
+import { useRovingFocus } from "../../primitives/use-roving-focus";
+import { useHoverIntent } from "../../primitives/use-hover-intent";
+import { mergeRefs } from "../../primitives/merge-refs";
+import {
+  MENUBAR_CHECKBOX_ITEM,
+  MENUBAR_CONTENT,
+  MENUBAR_ITEM,
+  MENUBAR_ITEM_INDICATOR,
+  MENUBAR_LABEL,
+  MENUBAR_RADIO_ITEM,
+  MENUBAR_ROOT,
+  MENUBAR_SEPARATOR,
+  MENUBAR_SHORTCUT,
+  MENUBAR_SUB_CONTENT,
+  MENUBAR_SUB_TRIGGER,
+  MENUBAR_TRIGGER,
+} from "../../generated/menubar";
+
+interface MenuCtx {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  triggerRef: React.RefObject<HTMLButtonElement | null>;
+}
+const MenubarMenuContext = React.createContext<MenuCtx | null>(null);
+function useMenu(): MenuCtx {
+  const ctx = React.useContext(MenubarMenuContext);
+  if (!ctx) throw new Error("Menubar parts must be used within <MenubarMenu>");
+  return ctx;
+}
+
+const MenubarRadioGroupContext = React.createContext<{
+  value: string;
+  onValueChange: (value: string) => void;
+} | null>(null);
+
+export function Menubar({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="menubar"
+      role="menubar"
+      className={cn(MENUBAR_ROOT, className)}
+      {...props}
+    />
+  );
+}
+
+export interface MenubarMenuProps {
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  children?: React.ReactNode;
+}
+
+export function MenubarMenu({ open, defaultOpen = false, onOpenChange, children }: MenubarMenuProps) {
+  const [isOpen, setOpen] = useControllableState({
+    value: open,
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+  });
+  const triggerRef = React.useRef<HTMLButtonElement | null>(null);
+  return (
+    <MenubarMenuContext.Provider value={{ open: isOpen, setOpen, triggerRef }}>
+      <div data-slot="menubar-menu" className="relative">
+        {children}
+      </div>
+    </MenubarMenuContext.Provider>
+  );
+}
+
+export function MenubarTrigger({ className, onClick, ...props }: React.ComponentProps<"button">) {
+  const { open, setOpen, triggerRef } = useMenu();
+  return (
+    <button
+      ref={triggerRef}
+      type="button"
+      data-slot="menubar-trigger"
+      data-state={open ? "open" : "closed"}
+      className={cn(MENUBAR_TRIGGER, className)}
+      onClick={(e) => {
+        onClick?.(e);
+        setOpen(!open);
+      }}
+      {...props}
+    />
+  );
+}
+
+export function MenubarContent({
+  className,
+  children,
+  align = "start",
+  ...props
+}: React.ComponentProps<"div"> & { align?: "start" | "center" | "end" }) {
+  const { open, setOpen, triggerRef } = useMenu();
+  const { isPresent, ref: presenceRef } = usePresence(open);
+  const { floatingRef, style, side } = useFloating({
+    anchorRef: triggerRef,
+    open,
+    side: "bottom",
+    align,
+    offset: 8,
+  });
+  const dismissRef = useDismissableLayer({
+    enabled: open,
+    onDismiss: () => setOpen(false),
+    exclude: [triggerRef],
+  });
+
+  // Count the mounted menu items, not the children: separators, labels and
+  // groups are children too, and an inline sub-menu adds items when it opens.
+  const contentRef = React.useRef<HTMLDivElement | null>(null);
+  const items = () =>
+    Array.from(
+      contentRef.current?.querySelectorAll<HTMLElement>("[role^='menuitem']") ?? [],
+    ).filter((el) => el.getAttribute("data-disabled") === null);
+  const { activeIndex, setActiveIndex, onKeyDown } = useRovingFocus({
+    count: () => items().length,
+    orientation: "vertical",
+  });
+  // Reset on close: reopen on the first item, never on an index past the end.
+  React.useEffect(() => {
+    if (!open) setActiveIndex(0);
+  }, [open, setActiveIndex]);
+  React.useEffect(() => {
+    if (!open) return;
+    items()[activeIndex]?.focus();
+  }, [open, activeIndex]);
+
+  if (!isPresent) return null;
+  return (
+    <Portal>
+      <div
+        ref={mergeRefs(presenceRef, floatingRef, dismissRef, contentRef)}
+        data-slot="menubar-content"
+        data-state={open ? "open" : "closed"}
+        data-side={side}
+        role="menu"
+        style={style}
+        className={cn(MENUBAR_CONTENT, className)}
+        onKeyDown={onKeyDown}
+        {...props}
+      >
+        <DismissableLayerScope layer={dismissRef}>{children}</DismissableLayerScope>
+      </div>
+    </Portal>
+  );
+}
+
+export function MenubarGroup({ className, ...props }: React.ComponentProps<"div">) {
+  return <div data-slot="menubar-group" role="group" className={className} {...props} />;
+}
+
+export function MenubarItem({
+  className,
+  inset,
+  variant = "neutral",
+  ...props
+}: React.ComponentProps<"div"> & {
+  inset?: boolean;
+  variant?: "neutral" | "destructive";
+}) {
+  return (
+    <div
+      data-slot="menubar-item"
+      data-inset={inset}
+      data-variant={variant}
+      role="menuitem"
+      tabIndex={-1}
+      className={cn(MENUBAR_ITEM, className)}
+      {...props}
+    />
+  );
+}
+
+export function MenubarCheckboxItem({
+  className,
+  children,
+  checked,
+  ...props
+}: React.ComponentProps<"div"> & { checked?: boolean }) {
+  return (
+    <div
+      data-slot="menubar-checkbox-item"
+      role="menuitemcheckbox"
+      aria-checked={checked}
+      tabIndex={-1}
+      className={cn(MENUBAR_CHECKBOX_ITEM, className)}
+      {...props}
+    >
+      <span className={MENUBAR_ITEM_INDICATOR}>
+        {checked && (
+          <svg
+            className="size-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+        )}
+      </span>
+      {children}
+    </div>
+  );
+}
+
+export interface MenubarRadioGroupProps {
+  value?: string;
+  defaultValue?: string;
+  onValueChange?: (value: string) => void;
+  className?: string;
+  children?: React.ReactNode;
+}
+
+export function MenubarRadioGroup({
+  value,
+  defaultValue = "",
+  onValueChange,
+  className,
+  children,
+}: MenubarRadioGroupProps) {
+  const [current, setValue] = useControllableState({
+    value,
+    defaultValue,
+    onChange: onValueChange,
+  });
+  return (
+    <MenubarRadioGroupContext.Provider value={{ value: current, onValueChange: setValue }}>
+      <div data-slot="menubar-radio-group" role="group" className={className}>
+        {children}
+      </div>
+    </MenubarRadioGroupContext.Provider>
+  );
+}
+
+export function MenubarRadioItem({
+  className,
+  children,
+  value,
+  ...props
+}: React.ComponentProps<"div"> & { value: string }) {
+  const ctx = React.useContext(MenubarRadioGroupContext);
+  const checked = ctx?.value === value;
+  return (
+    <div
+      data-slot="menubar-radio-item"
+      role="menuitemradio"
+      aria-checked={checked}
+      tabIndex={-1}
+      className={cn(MENUBAR_RADIO_ITEM, className)}
+      onClick={() => ctx?.onValueChange(value)}
+      {...props}
+    >
+      <span className={MENUBAR_ITEM_INDICATOR}>
+        {checked && (
+          <svg className="size-2 fill-current" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+          </svg>
+        )}
+      </span>
+      {children}
+    </div>
+  );
+}
+
+export function MenubarLabel({
+  className,
+  inset,
+  ...props
+}: React.ComponentProps<"div"> & { inset?: boolean }) {
+  return (
+    <div
+      data-slot="menubar-label"
+      data-inset={inset}
+      className={cn(MENUBAR_LABEL, className)}
+      {...props}
+    />
+  );
+}
+
+export function MenubarSeparator({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="menubar-separator"
+      role="separator"
+      className={cn(MENUBAR_SEPARATOR, className)}
+      {...props}
+    />
+  );
+}
+
+export function MenubarShortcut({ className, ...props }: React.ComponentProps<"span">) {
+  return (
+    <span
+      data-slot="menubar-shortcut"
+      className={cn(MENUBAR_SHORTCUT, className)}
+      {...props}
+    />
+  );
+}
+
+interface SubCtx {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  triggerRef: React.RefObject<HTMLDivElement | null>;
+  /** Set by a keyboard open, so the first item takes focus; a pointer open leaves focus alone. */
+  focusFirst: React.RefObject<boolean>;
+}
+const MenubarSubContext = React.createContext<SubCtx | null>(null);
+function useSub(): SubCtx {
+  const ctx = React.useContext(MenubarSubContext);
+  if (!ctx) throw new Error("MenubarSub parts must be used within <MenubarSub>");
+  return ctx;
+}
+
+export interface MenubarSubProps {
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  children?: React.ReactNode;
+}
+
+export function MenubarSub({ open, defaultOpen = false, onOpenChange, children }: MenubarSubProps) {
+  const [isOpen, setOpen] = useControllableState({
+    value: open,
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+  });
+  const triggerRef = React.useRef<HTMLDivElement | null>(null);
+  const focusFirst = React.useRef(false);
+  const hover = useHoverIntent({
+    onOpen: () => setOpen(true),
+    onClose: () => setOpen(false),
+    openDelay: 100,
+    closeDelay: 150,
+  });
+  return (
+    <MenubarSubContext.Provider value={{ open: isOpen, setOpen, triggerRef, focusFirst }}>
+      <div data-slot="menubar-sub" className="relative" {...hover}>
+        {children}
+      </div>
+    </MenubarSubContext.Provider>
+  );
+}
+
+export function MenubarSubTrigger({
+  className,
+  inset,
+  children,
+  onClick,
+  onKeyDown,
+  ...props
+}: React.ComponentProps<"div"> & { inset?: boolean }) {
+  const { open, setOpen, triggerRef, focusFirst } = useSub();
+  return (
+    <div
+      ref={triggerRef}
+      data-slot="menubar-sub-trigger"
+      data-inset={inset}
+      data-state={open ? "open" : "closed"}
+      role="menuitem"
+      tabIndex={-1}
+      className={cn(MENUBAR_SUB_TRIGGER, className)}
+      onClick={(e) => {
+        onClick?.(e);
+        setOpen(!open);
+      }}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (e.key !== "ArrowRight" && e.key !== "Enter" && e.key !== " ") return;
+        e.preventDefault();
+        e.stopPropagation();
+        focusFirst.current = true;
+        setOpen(true);
+      }}
+      {...props}
+    >
+      {children}
+      <svg
+        className="ml-auto h-4 w-4"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="m9 18 6-6-6-6" />
+      </svg>
+    </div>
+  );
+}
+
+export function MenubarSubContent({ className, children, onKeyDown, ...props }: React.ComponentProps<"div">) {
+  const { open, setOpen, triggerRef, focusFirst } = useSub();
+  const { isPresent, ref } = usePresence(open);
+  const inner = React.useRef<HTMLDivElement | null>(null);
+  React.useEffect(() => {
+    if (!open || !focusFirst.current) return;
+    focusFirst.current = false;
+    inner.current?.querySelector<HTMLElement>("[role^='menuitem']")?.focus();
+  }, [open, focusFirst]);
+  if (!isPresent) return null;
+  return (
+    <div
+      ref={mergeRefs(ref as React.RefObject<HTMLDivElement>, inner)}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (e.key === "ArrowLeft" || e.key === "Escape") {
+          // Closes this flyout only; Escape would otherwise reach the whole menu's dismissal.
+          e.preventDefault();
+          e.stopPropagation();
+          setOpen(false);
+          triggerRef.current?.focus();
+        }
+      }}
+      data-slot="menubar-sub-content"
+      data-state={open ? "open" : "closed"}
+      role="menu"
+      className={cn(MENUBAR_SUB_CONTENT, className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}

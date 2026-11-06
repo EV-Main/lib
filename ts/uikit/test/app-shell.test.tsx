@@ -1,9 +1,9 @@
 import * as React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render } from "@testing-library/react";
-import { AppShell } from "../src/components/app-shell";
-import { MobileAppBar } from "../src/components/mobile-app-bar";
-import { PageFrame, PageHeading, SectionLabel } from "../src/components/page-frame";
+import { AppShell } from "../src/components/shell/app-shell";
+import { MobileAppBar } from "../src/components/shell/mobile-app-bar";
+import { PageFrame, PageHeading, SectionLabel } from "../src/components/shell/page-frame";
 
 const slot = (root: HTMLElement, name: string) => root.querySelector(`[data-slot="${name}"]`);
 

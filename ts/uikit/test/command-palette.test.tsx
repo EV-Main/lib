@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { CommandPalette, useCommandPaletteShortcut } from "../src/components/command-palette";
+import { CommandPalette, useCommandPaletteShortcut } from "../src/components/derived/command-palette";
 
 const groups = (onNew = vi.fn(), onSearch = vi.fn()) => [
   { id: "s", heading: "Suggestions", items: [{ id: "new", label: "New workspace", shortcut: "⌘N", onSelect: onNew }] },

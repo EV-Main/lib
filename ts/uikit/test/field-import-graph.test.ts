@@ -7,8 +7,8 @@ import { describe, expect, it } from "vitest";
 // `Select` too (floating, portal, focus scope, listbox). The controls now mark
 // themselves; this holds field's module graph to that.
 const PKG = join(import.meta.dirname, "..");
-const FIELD_SRC = join(PKG, "src/components/field.tsx");
-const FIELD_DIST = join(PKG, "dist/components/field.js");
+const FIELD_SRC = join(PKG, "src/components/derived/field.tsx");
+const FIELD_DIST = join(PKG, "dist/components/derived/field.js");
 
 const IMPORT = /(?:\bfrom|^\s*import)\s*["']([^"']+)["']/gm;
 
@@ -35,7 +35,7 @@ function graph(entry: string, extensions: readonly string[]): string[] {
 
 describe("field's module graph", () => {
   it("imports none of the kit's controls in source", () => {
-    const controls = /^\.\/(select|input|textarea|native-select|checkbox|switch)$/;
+    const controls = /^\.\.\/atomic\/(select|input|textarea|native-select|checkbox|switch)$/;
     expect(specifiers(FIELD_SRC).filter(spec => controls.test(spec))).toEqual([]);
   });
 
@@ -43,7 +43,7 @@ describe("field's module graph", () => {
     const reached = graph(FIELD_SRC, [".ts", ".tsx"]);
     // The walk really follows imports: field reaches the mark through one.
     expect(reached).toContain("src/primitives/labelable.ts");
-    expect(reached).not.toContain("src/components/select.tsx");
+    expect(reached).not.toContain("src/components/atomic/select.tsx");
   });
 
   // `dist/` is the build's output, absent until `npm run build` (or install's
@@ -51,6 +51,6 @@ describe("field's module graph", () => {
   it.runIf(existsSync(FIELD_DIST))("does not reach select.js in the built dist", () => {
     const reached = graph(FIELD_DIST, []);
     expect(reached).toContain("dist/primitives/labelable.js");
-    expect(reached).not.toContain("dist/components/select.js");
+    expect(reached).not.toContain("dist/components/atomic/select.js");
   });
 });

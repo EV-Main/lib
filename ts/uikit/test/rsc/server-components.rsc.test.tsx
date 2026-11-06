@@ -3,12 +3,12 @@ import { Writable } from "node:stream";
 import { renderToPipeableStream } from "react-server-dom-webpack/server.node";
 import { describe, expect, it } from "vitest";
 
-import { Badge } from "../../src/components/badge";
-import { BreadcrumbLink } from "../../src/components/breadcrumb";
-import { Button } from "../../src/components/button";
-import { ButtonGroupText } from "../../src/components/button-group";
-import { Item } from "../../src/components/item";
-import { Table, TableBody, TableCard, TableCell, TableRow } from "../../src/components/table";
+import { Badge } from "../../src/components/atomic/badge";
+import { BreadcrumbLink } from "../../src/components/atomic/breadcrumb";
+import { Button } from "../../src/components/atomic/button";
+import { ButtonGroupText } from "../../src/components/atomic/button-group";
+import { Item } from "../../src/components/derived/item";
+import { Table, TableBody, TableCard, TableCell, TableRow } from "../../src/components/atomic/table";
 
 // Runs under the `react-server` condition (see vitest.workspace.ts), the way
 // a Next Server Component renders: these modules carry no "use client", so

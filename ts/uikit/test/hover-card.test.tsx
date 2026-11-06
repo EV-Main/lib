@@ -4,7 +4,7 @@ import {
   HoverCard,
   HoverCardTrigger,
   HoverCardContent,
-} from "../src/components/hover-card";
+} from "../src/components/atomic/hover-card";
 
 describe("HoverCard", () => {
   it("hides its content until the trigger is hovered", () => {

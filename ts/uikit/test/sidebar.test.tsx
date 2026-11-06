@@ -5,7 +5,7 @@ import {
   Sidebar,
   SidebarTrigger,
   SidebarMenuButton,
-} from "../src/components/sidebar";
+} from "../src/components/atomic/sidebar";
 
 describe("Sidebar", () => {
   it("seeds the expanded state and the width custom properties", () => {

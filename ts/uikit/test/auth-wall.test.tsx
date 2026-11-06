@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
-import { AuthWall } from "../src/components/auth-wall";
+import { AuthWall } from "../src/components/shell/auth-wall";
 
 describe("AuthWall", () => {
   it("is an Empty with a lock, the copy and the host's action (canon parity with Rust)", () => {

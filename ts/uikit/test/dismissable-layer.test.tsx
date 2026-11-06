@@ -2,9 +2,9 @@ import * as React from "react";
 import { describe, it, expect } from "vitest";
 import { render, fireEvent, screen, act } from "@testing-library/react";
 import { useDismissableLayer, type DismissEvent } from "../src/index";
-import { Dialog, DialogContent, DialogTitle } from "../src/components/dialog";
-import { Popover, PopoverContent, PopoverTrigger } from "../src/components/popover";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../src/components/dropdown-menu";
+import { Dialog, DialogContent, DialogTitle } from "../src/components/atomic/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "../src/components/atomic/popover";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../src/components/atomic/dropdown-menu";
 
 // Escape and pointer-downs as the document hears them — which is how they
 // arrive where React's root is `document` (Next), whatever React did on the

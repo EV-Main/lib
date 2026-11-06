@@ -9,7 +9,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "../src/components/dropdown-menu";
+} from "../src/components/atomic/dropdown-menu";
 
 function menu(extra?: React.ReactNode) {
   render(

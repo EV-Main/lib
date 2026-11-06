@@ -5,7 +5,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
   InputOTPSeparator,
-} from "../src/components/input-otp";
+} from "../src/components/atomic/input-otp";
 
 function Basic(props: {
   value?: string;

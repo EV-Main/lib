@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { AsideHeader, AsidePanel, AsideRail } from "../src/components/aside";
-import { AppShell } from "../src/components/app-shell";
+import { AsideHeader, AsidePanel, AsideRail } from "../src/components/shell/aside";
+import { AppShell } from "../src/components/shell/app-shell";
 
 afterEach(() => {
   vi.unstubAllGlobals();

@@ -1,5 +1,6 @@
-//! Both ports render the same HTML, and a component exists in both ports or
-//! neither (docs/ARCHITECTURE.md, "The `uikit` library"). Every gallery label is
+//! Both ports render the same HTML, a component exists in both ports or
+//! neither, and renders only what its layer may (docs/ARCHITECTURE.md, "The
+//! `uikit` library"). Every gallery label is
 //! rendered through dioxus-ssr and Leptos SSR, and the two must agree once each
 //! is reduced to a canonical tree. Each test reports every problem in one run, so
 //! a porting agent finds their own labels among everybody else's.
@@ -138,6 +139,57 @@ fn every_component_is_in_both_ports_and_the_gallery() {
 		}
 	}
 	assert!(report.is_empty(), "component coverage\n{report}");
+}
+
+#[test]
+fn components_render_only_lower_layers() {
+	let mut report = String::new();
+	for (port, renders) in [
+		(
+			"dioxus",
+			(|text: &str, name: &str| used(text, name, |rest| rest.trim_start().starts_with('{'))) as fn(&str, &str) -> bool,
+		),
+		("leptos", |text: &str, name: &str| {
+			used(text, &format!("<{name}"), |rest| rest.starts_with([' ', '\t', '\n', '/', '>']))
+		}),
+	] {
+		let dir = format!("src/ui/uikit/{port}");
+		let names = components(&dir);
+		let modules: BTreeMap<String, (String, String)> = rust_files(&std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(&dir))
+			.into_iter()
+			.filter_map(|path| {
+				let layer = path.parent()?.file_name()?.to_string_lossy().into_owned();
+				let text = std::fs::read_to_string(&path).expect("read component");
+				let code = text.split("#[cfg(test)]").next().expect("split yields one piece").to_owned();
+				Some((path.file_stem()?.to_string_lossy().into_owned(), (layer, code)))
+			})
+			.collect();
+		let rank = |layer: &str| match layer {
+			"atomic" => Some(0),
+			"derived" => Some(1),
+			"shell" => Some(2),
+			_ => None,
+		};
+		for (module, (layer, code)) in &modules {
+			let Some(own) = rank(layer) else { continue };
+			for (name, owner) in &names {
+				if owner == module || !renders(code, name) {
+					continue;
+				}
+				let Some(theirs) = modules.get(owner).and_then(|(l, _)| rank(l)) else { continue };
+				// atomic renders no component; derived only atomic; shell anything beneath it or beside it
+				let allowed = match own {
+					0 => false,
+					1 => theirs == 0,
+					_ => true,
+				};
+				if !allowed {
+					writeln!(report, "{port}: {layer}/{module} renders {name} ({}/{owner})", modules[owner].0).unwrap();
+				}
+			}
+		}
+	}
+	assert!(report.is_empty(), "layer violations\n{report}");
 }
 
 fn by_label(side: &str, rendered: Vec<(&'static str, String)>) -> BTreeMap<&'static str, String> {

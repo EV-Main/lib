@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
-import { Switch } from "../src/components/switch";
+import { Switch } from "../src/components/atomic/switch";
 
 describe("Switch", () => {
   it("renders unchecked by default with role and slot", () => {

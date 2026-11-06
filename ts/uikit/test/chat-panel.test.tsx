@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { act, render, screen, fireEvent } from "@testing-library/react";
-import { ChatDock, ChatPanel } from "../src/components/chat-panel";
+import { ChatDock, ChatPanel } from "../src/components/shell/chat-panel";
 
 // jsdom does no layout, so the scroll geometry is set by hand.
 function geometry(el: HTMLElement, g: { scrollHeight: number; clientHeight: number; scrollTop: number }) {

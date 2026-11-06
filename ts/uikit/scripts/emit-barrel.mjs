@@ -1,7 +1,7 @@
 // Re-emits `dist/index.js` from `src/index.ts` with TypeScript, over what tsup
 // wrote.
 //
-// esbuild compiles `export { Button } from "./components/button"` into an
+// esbuild compiles `export { Button } from "./components/atomic/button"` into an
 // `import` plus one trailing `export { … }` (it has to, to drop the type-only
 // names). The result means the same, but it is no longer a *barrel* to Next:
 // `optimizePackageImports` only rewrites a module made of `export … from`

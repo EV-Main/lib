@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
-import { ToggleGroup, ToggleGroupItem } from "../src/components/toggle-group";
+import { ToggleGroup, ToggleGroupItem } from "../src/components/atomic/toggle-group";
 
 describe("ToggleGroup", () => {
   it("renders the group slot and propagates variant/size to items", () => {

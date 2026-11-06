@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { fireEvent, render } from "@testing-library/react";
-import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogTitle, AlertDialogTrigger } from "../src/components/alert-dialog";
-import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "../src/components/dialog";
-import { Drawer, DrawerClose, DrawerContent, DrawerTitle, DrawerTrigger } from "../src/components/drawer";
-import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "../src/components/sheet";
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogTitle, AlertDialogTrigger } from "../src/components/atomic/alert-dialog";
+import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "../src/components/atomic/dialog";
+import { Drawer, DrawerClose, DrawerContent, DrawerTitle, DrawerTrigger } from "../src/components/atomic/drawer";
+import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "../src/components/atomic/sheet";
 
 // A clicked button is not focused in jsdom (nor in Safari), so the element
 // focused before opening is <body>: focus has to come back through the

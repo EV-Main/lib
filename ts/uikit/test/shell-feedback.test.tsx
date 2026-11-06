@@ -1,9 +1,9 @@
 import * as React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render } from "@testing-library/react";
-import { ResourceError } from "../src/components/resource-error";
-import { Settled } from "../src/components/settled";
-import { SystemBanner } from "../src/components/system-banner";
+import { ResourceError } from "../src/components/shell/resource-error";
+import { Settled } from "../src/components/shell/settled";
+import { SystemBanner } from "../src/components/shell/system-banner";
 
 describe("ResourceError", () => {
   it("is one alerting line without a retry", () => {

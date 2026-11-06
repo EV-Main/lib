@@ -6,7 +6,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-} from "../src/components/dropdown-menu";
+} from "../src/components/atomic/dropdown-menu";
 
 describe("DropdownMenu", () => {
   it("hides its content until the trigger is clicked", () => {
