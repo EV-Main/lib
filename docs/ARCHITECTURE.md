@@ -41,7 +41,7 @@ of the subdirectory.
 
 ```toml
 # native
-ev_lib = { git = "https://github.com/EV-invest/lib.git", default-features = false, features = ["architecture"] }
+ev_lib = { version = "0.31", default-features = false, features = ["architecture"] }
 ```
 
 ## Component map

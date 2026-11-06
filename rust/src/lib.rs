@@ -6,7 +6,7 @@
 //! consumer pulls in only what it asks for and nothing else is compiled:
 //!
 //! ```toml
-//! ev_lib = { git = "https://github.com/EV-invest/lib.git", default-features = false, features = ["architecture"] }
+//! ev_lib = { version = "0.31", default-features = false, features = ["architecture"] }
 //! ```
 //!
 //! # Available features
@@ -52,11 +52,9 @@
 //! - **`ts_gen`** — TypeScript emitted from Rust types (through `ts-rs`) and
 //!   values (through serde), for a repo's own `gen` step. Build-time only. See
 //!   [`ts_gen`].
-//! - **`kitstart`** — the pure core of a small-business landing (mirrors the core
-//!   of `@evinvest/kitstart`): the place model, the publication gate, request
-//!   routing, schema.org JSON-LD, `<head>` metadata, sitemap and robots, the
-//!   form's spam barriers. No I/O, wasm-safe; pinned with the TypeScript port to
-//!   the fixtures in `tests/fixtures/kitstart/`. See [`kitstart`].
+//! - **`marketing`** — outbound contact links (the Rust twin of
+//!   `@evinvest/marketing`'s contact core): `tel:` / `wa.me` hrefs and which
+//!   channel a link opens. No I/O, wasm-safe. See [`marketing`].
 
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
@@ -97,8 +95,8 @@ pub mod experiments;
 #[cfg(feature = "i18n")]
 pub mod i18n;
 
-#[cfg(feature = "kitstart")]
-pub mod kitstart;
+#[cfg(feature = "marketing")]
+pub mod marketing;
 
 #[cfg(feature = "settings")]
 pub mod settings;

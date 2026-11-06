@@ -1,7 +1,7 @@
 # @evinvest/error-monitoring
 
 A **vendor-neutral** error-monitoring toolkit — the TypeScript mirror of the
-`error_monitoring` feature of the [`ev_lib`](https://github.com/EV-invest/lib) Rust
+`error_monitoring` feature of the [`ev_lib`](https://github.com/EV-Main/web_std) Rust
 crate. The core is a tiny injectable [`ErrorSink`](#core----vendor-neutral) port
 that imports **no** monitoring SDK; concrete [Sentry](https://sentry.io)
 adapters for React, Node/Edge, and Next.js live behind separate subpath exports

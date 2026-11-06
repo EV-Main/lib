@@ -1,7 +1,7 @@
 # @evinvest/analytics
 
 A **vendor-neutral, dep-light** product-analytics sink — the TypeScript mirror
-of the `analytics` feature of the [`ev_lib`](https://github.com/EV-invest/lib) Rust
+of the `analytics` feature of the [`ev_lib`](https://github.com/EV-Main/web_std) Rust
 crate (`ev_lib::analytics`). Code against one tiny seam — `AnalyticsSink` — and pick
 your vendor at the edges. The default vendor is PostHog, but the **core imports
 no SDK**: you inject the PostHog instance, or bring your own sink.

@@ -23,7 +23,7 @@ mounted Secret moved on without this process.
 
 ```toml
 [dependencies]
-ev_lib = { git = "https://github.com/EV-invest/lib.git", default-features = false, features = ["settings"] }
+ev_lib = { version = "0.31", default-features = false, features = ["settings"] }
 ```
 
 `wasm32`-safe by construction (no browser env exists, so `from_env` simply

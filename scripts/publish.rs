@@ -67,30 +67,6 @@ fn run_capturing(cmd: &mut Command) -> (bool, String) {
 	(out.status.success(), text)
 }
 
-/// The sibling packages `dir` links through `file:` (kitstart builds against
-/// `../uikit` and `../marketing`). `npm install` there runs the
-/// sibling's own `prepare`, which needs the sibling's dev tools, and a dependent
-/// must publish after what it links — so both the order and the install step read
-/// this.
-fn file_deps(dir: &std::path::Path) -> Vec<PathBuf> {
-	let Ok(text) = std::fs::read_to_string(dir.join("package.json")) else { return Vec::new() };
-	let Ok(json) = serde_json::from_str::<serde_json::Value>(&text) else { return Vec::new() };
-	let mut found = Vec::new();
-	for section in ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"] {
-		if let Some(deps) = json.get(section).and_then(|d| d.as_object()) {
-			for spec in deps.values().filter_map(|v| v.as_str()) {
-				if let Some(rel) = spec.strip_prefix("file:") {
-					let path = dir.join(rel);
-					if !found.contains(&path) {
-						found.push(path);
-					}
-				}
-			}
-		}
-	}
-	found
-}
-
 fn version_of(dir: &std::path::Path) -> String {
 	let json: serde_json::Value = serde_json::from_str(&std::fs::read_to_string(dir.join("package.json")).expect("read package.json")).expect("parse package.json");
 	json["version"].as_str().expect("package.json version").to_owned()
@@ -118,174 +94,6 @@ fn changed(prefix: &str, paths: &[&str]) -> bool {
 		None => true,
 		Some(tag) => !Command::new("git").args(["diff", "--quiet", &tag, "--"]).args(paths).status().expect("git diff").success(),
 	}
-}
-
-/// The brand scaffold kitstart ships. It names the other @evinvest packages by
-/// range and the lib flake by kitstart's tag, so a release that does not move
-/// them leaves the template unable to install what was just published — which
-/// is how kitstart 0.4.0 went out still pointing at `^0.3.0` (#163).
-const TEMPLATE_MANIFEST: &str = "ts/kitstart/template/package.json";
-const KITSTART: &str = "@evinvest/kitstart";
-const KITSTART_TAG_FILES: &[&str] = &["ts/kitstart/template/flake.nix", "ts/kitstart/README.md"];
-
-/// Does `range` admit `version`? The same slice of semver as
-/// ts/kitstart/scripts/semver.mjs — the one check-template holds the template to:
-/// `^`, `>=`, `<=`, `>`, `<`, `=`/bare, `*`, AND by space, `||`. `None` for
-/// anything else, so an unreadable range is reported rather than guessed at.
-fn admits(range: &str, version: &str) -> Option<bool> {
-	fn parse(s: &str) -> Option<[u64; 3]> {
-		let mut out = [0; 3];
-		let mut parts = s.split('.');
-		out[0] = parts.next()?.parse().ok()?;
-		for slot in &mut out[1..] {
-			if let Some(p) = parts.next() {
-				*slot = p.parse().ok()?;
-			}
-		}
-		parts.next().is_none().then_some(out)
-	}
-	let v = parse(version)?;
-	let term = |t: &str| -> Option<bool> {
-		if t.is_empty() || t == "*" {
-			return Some(true);
-		}
-		let (op, rest) = ["^", ">=", "<=", ">", "<", "="].iter().find_map(|op| t.strip_prefix(op).map(|r| (*op, r))).unwrap_or(("", t));
-		let b = parse(rest)?;
-		Some(match op {
-			"^" => {
-				let upper = if b[0] > 0 {
-					[b[0] + 1, 0, 0]
-				} else if b[1] > 0 {
-					[0, b[1] + 1, 0]
-				} else {
-					[0, 0, b[2] + 1]
-				};
-				v >= b && v < upper
-			}
-			">=" => v >= b,
-			"<=" => v <= b,
-			">" => v > b,
-			"<" => v < b,
-			_ => v == b,
-		})
-	};
-	let mut any = false;
-	for alt in range.split("||") {
-		let mut all = true;
-		for t in alt.split_whitespace() {
-			all &= term(t)?;
-		}
-		any |= all;
-	}
-	Some(any)
-}
-
-/// Rewrite `name`'s range in a package.json text to `^version` when it does not
-/// admit `version`. Textual on purpose: re-serialising would reorder keys and
-/// reflow the file. `Ok(None)` when there is nothing to do.
-fn bump_range(manifest: &str, name: &str, version: &str) -> Result<Option<String>, String> {
-	let json: serde_json::Value = serde_json::from_str(manifest).map_err(|e| format!("parse: {e}"))?;
-	let Some(range) = ["dependencies", "devDependencies"].iter().find_map(|k| json[k][name].as_str()) else {
-		return Ok(None);
-	};
-	match admits(range, version) {
-		Some(true) => return Ok(None),
-		Some(false) => {}
-		None => return Err(format!("cannot read the range {name}@{range}; set it to ^{version} by hand")),
-	}
-	let from = format!("\"{name}\": \"{range}\"");
-	if manifest.matches(&from).count() != 1 {
-		return Err(format!("expected exactly one `{from}`"));
-	}
-	Ok(Some(manifest.replacen(&from, &format!("\"{name}\": \"^{version}\""), 1)))
-}
-
-/// Point every `@evinvest/kitstart-v<x.y.z>` in `text` at `version`.
-fn retag_kitstart(text: &str, version: &str) -> String {
-	let marker = "@evinvest/kitstart-v";
-	let mut out = String::with_capacity(text.len());
-	let mut rest = text;
-	while let Some(at) = rest.find(marker) {
-		let (head, tail) = rest.split_at(at + marker.len());
-		out.push_str(head);
-		let end = tail.find(|c: char| !(c.is_ascii_digit() || c == '.')).unwrap_or(tail.len());
-		let old = tail[..end].trim_end_matches('.');
-		if old.is_empty() {
-			rest = tail;
-			continue;
-		}
-		out.push_str(version);
-		rest = &tail[old.len()..];
-	}
-	out.push_str(rest);
-	out
-}
-
-/// Move the template onto a version of `name` that has reached the registry (or,
-/// for kitstart itself, is about to — see the call site). Returns the files it
-/// changed, for the release commit.
-fn point_template_at(name: &str, version: &str) -> Result<Vec<&'static str>, String> {
-	let mut touched = Vec::new();
-	let manifest = std::fs::read_to_string(TEMPLATE_MANIFEST).map_err(|e| format!("{TEMPLATE_MANIFEST}: {e}"))?;
-	if let Some(next) = bump_range(&manifest, name, version).map_err(|e| format!("{TEMPLATE_MANIFEST}: {e}"))? {
-		std::fs::write(TEMPLATE_MANIFEST, next).map_err(|e| format!("{TEMPLATE_MANIFEST}: {e}"))?;
-		touched.push(TEMPLATE_MANIFEST);
-	}
-	if name == KITSTART {
-		for file in KITSTART_TAG_FILES {
-			let text = std::fs::read_to_string(file).map_err(|e| format!("{file}: {e}"))?;
-			let next = retag_kitstart(&text, version);
-			if next != text {
-				std::fs::write(file, next).map_err(|e| format!("{file}: {e}"))?;
-				touched.push(*file);
-			}
-		}
-	}
-	Ok(touched)
-}
-
-/// What `npm version <level>` will make of `current`, without running it. `None`
-/// for anything but a plain `x.y.z`, which the template could not name anyway.
-fn next_version(current: &str, level: &str) -> Option<String> {
-	let mut parts = current.split('.').map(|p| p.parse::<u64>().ok());
-	let (a, b, c) = (parts.next()??, parts.next()??, parts.next()??);
-	if parts.next().is_some() {
-		return None;
-	}
-	Some(match level {
-		"major" => format!("{}.0.0", a + 1),
-		"minor" => format!("{a}.{}.0", b + 1),
-		"patch" => format!("{a}.{b}.{}", c + 1),
-		_ => return None,
-	})
-}
-
-fn has_kitstart_pin(text: &str) -> bool {
-	text.match_indices("@evinvest/kitstart-v")
-		.any(|(at, m)| text[at + m.len()..].starts_with(|c: char| c.is_ascii_digit()))
-}
-
-/// Walk the template through this run's releases, in publish order, without
-/// writing anything. Whatever this returns would otherwise surface only after
-/// the registry already holds a version the template cannot follow.
-fn plan_template(manifest: &str, tag_files: &[(&str, String)], releases: &[(&str, String)]) -> Vec<String> {
-	let mut errors = Vec::new();
-	let mut current = manifest.to_owned();
-	for (name, version) in releases {
-		match bump_range(&current, name, version) {
-			Ok(Some(next)) => current = next,
-			Ok(None) => {}
-			Err(e) => errors.push(format!("{TEMPLATE_MANIFEST}: {e}")),
-		}
-		if *name == KITSTART {
-			for (file, text) in tag_files {
-				if !has_kitstart_pin(text) {
-					errors.push(format!("{file}: no `@evinvest/kitstart-v<x.y.z>` pin to move"));
-				}
-			}
-		}
-	}
-	errors
 }
 
 /// Local release tags (`<name>-v<version>`) the remote does not have. `ls_remote`
@@ -455,10 +263,6 @@ fn main() -> ExitCode {
 		if name == "@evinvest/uikit" {
 			paths.extend(["tokens.css", "theme.css", "ev.css"]);
 		}
-		// Brands pin `lib.mkLanding` by kitstart's tag, so it ships with kitstart.
-		if name == KITSTART {
-			paths.push("nix");
-		}
 		if selected(&name) && changed(&name, &paths) {
 			impacted.push((dir, name));
 		}
@@ -497,39 +301,6 @@ fn main() -> ExitCode {
 			impacted.iter().map(|(_, n)| n.as_str()).collect::<Vec<_>>().join(", ")
 		}
 	);
-
-	// kitstart ships `template/` in its tarball, so it publishes last: by then the
-	// template already names every package this run released before it.
-	// A package linking a sibling through `file:` goes after the packages it links.
-	impacted.sort_by_key(|(dir, name)| (name == KITSTART, file_deps(dir).len()));
-
-	// Everything the loop below will do to the template, done first on paper: a
-	// range it cannot move has to stop the run before cargo-release or npm.
-	if !impacted.is_empty() {
-		let manifest = std::fs::read_to_string(TEMPLATE_MANIFEST).expect("read template manifest");
-		let listed: serde_json::Value = serde_json::from_str(&manifest).expect("parse template manifest");
-		let names_it = |name: &str| ["dependencies", "devDependencies"].iter().any(|k| listed[k][name].is_string());
-		let mut errors = Vec::new();
-		let mut releases: Vec<(&str, String)> = Vec::new();
-		for (dir, name) in &impacted {
-			if name != KITSTART && !names_it(name) {
-				continue;
-			}
-			match next_version(&version_of(dir), &level) {
-				Some(next) => releases.push((name.as_str(), next)),
-				None => errors.push(format!("{name}: cannot tell what `npm version {level}` makes of {}", version_of(dir))),
-			}
-		}
-		let tag_files: Vec<(&str, String)> = KITSTART_TAG_FILES.iter().map(|f| (*f, std::fs::read_to_string(f).expect("read kitstart pin file"))).collect();
-		errors.extend(plan_template(&manifest, &tag_files, &releases));
-		if !errors.is_empty() {
-			eprintln!("the kitstart template could not follow this release — nothing was released:");
-			for e in &errors {
-				eprintln!("  {e}");
-			}
-			return ExitCode::FAILURE;
-		}
-	}
 
 	// Rust: cargo-release versions, tags, commits, pushes and uploads to crates.io.
 	//
@@ -591,8 +362,6 @@ fn main() -> ExitCode {
 
 	let mut tags: Vec<String> = Vec::new();
 	let mut failed: Vec<(String, &str)> = Vec::new();
-	let mut template_errors: Vec<String> = Vec::new();
-	let mut template_moved = false;
 	let mut stage: Vec<PathBuf> = Vec::new();
 	for (dir, name) in &impacted {
 		println!(">> publishing {name}");
@@ -601,19 +370,14 @@ fn main() -> ExitCode {
 		// publish leaves the package claiming a version that was never released. Left
 		// alone that poisons the next run: it bumps again from the phantom version, so
 		// either a release number is skipped or the retry dies on "cannot publish over".
-		// Snapshot what this package's steps write — the manifest, the lock `npm
-		// install` and `npm version` both touch, and for kitstart the template — and
-		// put it back byte for byte on any failure.
+		// Snapshot what this package's steps write — the manifest and the lock `npm
+		// install` and `npm version` both touch — and put it back byte for byte on
+		// any failure.
 		let mut restore: Vec<(PathBuf, String)> = Vec::new();
 		for file in ["package.json", "package-lock.json"] {
 			let path = dir.join(file);
 			if let Ok(text) = std::fs::read_to_string(&path) {
 				restore.push((path, text));
-			}
-		}
-		if name == KITSTART {
-			for file in std::iter::once(TEMPLATE_MANIFEST).chain(KITSTART_TAG_FILES.iter().copied()) {
-				restore.push((PathBuf::from(file), std::fs::read_to_string(file).expect("read template file")));
 			}
 		}
 		let undo = || {
@@ -626,11 +390,6 @@ fn main() -> ExitCode {
 		// it would leave a published version with no commit or tag, and the next run
 		// would publish yet another one. Stop the loop instead and let what did
 		// publish be committed and tagged below.
-		if !file_deps(dir).iter().all(|dep| try_run(Command::new("npm").arg("install").current_dir(dep))) {
-			undo();
-			failed.push((name.clone(), "`npm install` of a linked sibling failed; nothing after it was attempted"));
-			break;
-		}
 		if !try_run(Command::new("npm").arg("install").current_dir(dir)) {
 			undo();
 			failed.push((name.clone(), "`npm install` failed; nothing after it was attempted"));
@@ -642,27 +401,6 @@ fn main() -> ExitCode {
 			break;
 		}
 		let version = version_of(dir);
-
-		// kitstart's own version goes into the template BEFORE its publish, or the
-		// tarball ships a scaffold that cannot install the very release it came in.
-		// The preflight already walked this; failing here means the files changed
-		// under the run, and a kitstart whose template is stale must not ship.
-		if name == KITSTART {
-			match point_template_at(name, &version) {
-				Ok(files) => {
-					template_moved |= !files.is_empty();
-					for file in files {
-						println!(">> template: {file} -> {name}@{version}");
-					}
-				}
-				Err(e) => {
-					undo();
-					eprintln!("!! {name} not published: the template could not follow it: {e}");
-					failed.push((name.clone(), "not published: its template could not be moved (see above)"));
-					continue;
-				}
-			}
-		}
 
 		// What `npm publish` would check and pack, without uploading: CI publishes from the tag.
 		let mut publish = Command::new("npm");
@@ -679,20 +417,6 @@ fn main() -> ExitCode {
 
 		stage.push(dir.clone());
 		tags.push(format!("{name}-v{version}"));
-		if name != KITSTART {
-			// Moved only once it passed its dry run. Committed with the release even
-			// when kitstart itself is not in this run: the template is part of
-			// kitstart's tarball, so kitstart is pending from here (said at the end).
-			match point_template_at(name, &version) {
-				Ok(files) =>
-					for file in files {
-						template_moved = true;
-						println!(">> template: {file} -> {name}@{version}");
-						stage.push(PathBuf::from(file));
-					},
-				Err(e) => template_errors.push(e),
-			}
-		}
 	}
 
 	// Only what actually reached the registry gets committed and tagged. `changed()`
@@ -749,27 +473,6 @@ fn main() -> ExitCode {
 		}
 	}
 
-	// Not fatal mid-run — the packages are already on the registry and must still
-	// be committed and tagged — but the release is not done until the template is.
-	if !template_errors.is_empty() {
-		eprintln!();
-		eprintln!("!! the kitstart template was NOT moved onto this release:");
-		for e in &template_errors {
-			eprintln!("     {e}");
-		}
-		eprintln!("   Fix it by hand in a follow-up commit; kitstart's `npm test` fails until then.");
-	}
-
-	// The tarball already on npm carries the old template; only a kitstart release
-	// ships the moved one.
-	let kitstart_tag = format!("{KITSTART}-v");
-	if template_moved && !tags.iter().any(|t| t.starts_with(&kitstart_tag)) {
-		eprintln!();
-		eprintln!(">> kitstart is now pending: its template moved, the published one did not. Release it:");
-		eprintln!();
-		eprintln!("    nix run .#publish -- {level} --npm-only --only {KITSTART}");
-	}
-
 	if !failed.is_empty() {
 		eprintln!();
 		eprintln!("tagged for CI to publish: {}", if tags.is_empty() { "nothing".to_owned() } else { tags.join(", ") });
@@ -787,7 +490,7 @@ fn main() -> ExitCode {
 		);
 	}
 
-	if failed.is_empty() && template_errors.is_empty() && untagged.is_empty() && !unpushed {
+	if failed.is_empty() && untagged.is_empty() && !unpushed {
 		ExitCode::SUCCESS
 	} else {
 		ExitCode::FAILURE
@@ -799,85 +502,9 @@ mod tests {
 	use super::*;
 
 	#[test]
-	fn admits_the_ranges_the_template_uses() {
-		assert_eq!(admits("^0.22.0", "0.22.5"), Some(true));
-		assert_eq!(admits("^0.22.0", "0.23.0"), Some(false));
-		assert_eq!(admits("^0.0.3", "0.0.4"), Some(false));
-		assert_eq!(admits("^1.2.0", "1.9.0"), Some(true));
-		assert_eq!(admits(">=0.22.0 <1", "0.23.0"), Some(true));
-		assert_eq!(admits(">=0.22.0 <1", "1.0.0"), Some(false));
-		assert_eq!(admits("^0.3.0 || ^0.4.0", "0.4.1"), Some(true));
-		assert_eq!(admits("*", "9.9.9"), Some(true));
-		assert_eq!(admits("0.4.0", "0.4.0"), Some(true));
-		assert_eq!(admits("~0.4.0", "0.4.0"), None);
-		assert_eq!(admits("file:../uikit", "0.4.0"), None);
-	}
-
-	const MANIFEST: &str = "{\n  \"dependencies\": {\n    \"@evinvest/kitstart\": \"^0.3.0\",\n    \"@evinvest/uikit\": \"^0.22.0\"\n  }\n}\n";
-
-	#[test]
-	fn bumps_only_a_range_that_no_longer_admits() {
-		let next = bump_range(MANIFEST, "@evinvest/uikit", "0.23.0").unwrap().unwrap();
-		assert_eq!(next, MANIFEST.replace("\"^0.22.0\"", "\"^0.23.0\""));
-		assert_eq!(bump_range(MANIFEST, "@evinvest/uikit", "0.22.4").unwrap(), None);
-		assert_eq!(bump_range(MANIFEST, "@evinvest/settings", "0.4.0").unwrap(), None);
-		assert!(bump_range(&MANIFEST.replace("^0.22.0", "~0.22.0"), "@evinvest/uikit", "0.23.0").is_err());
-	}
-
-	#[test]
-	fn the_real_template_moves_one_line_per_package() {
-		let real = include_str!("../ts/kitstart/template/package.json");
-		for name in ["@evinvest/uikit", "@evinvest/kitstart", "@evinvest/marketing", "@evinvest/i18n", "@evinvest/analytics"] {
-			let next = bump_range(real, name, "99.0.0").unwrap().unwrap_or_else(|| panic!("{name} not in the template"));
-			let changed: Vec<_> = real.lines().zip(next.lines()).filter(|(a, b)| a != b).collect();
-			assert_eq!(changed.len(), 1, "{name}: {changed:?}");
-			assert!(changed[0].1.ends_with(&format!("\"{name}\": \"^99.0.0\",")), "{name}: {changed:?}");
-		}
-		for file in [include_str!("../ts/kitstart/template/flake.nix"), include_str!("../ts/kitstart/README.md")] {
-			let next = retag_kitstart(file, "99.0.0");
-			assert_eq!(next.lines().zip(file.lines()).filter(|(a, b)| a != b).count(), 1);
-			assert!(next.contains("@evinvest/kitstart-v99.0.0\""));
-		}
-	}
-
-	#[test]
-	fn predicts_npm_version() {
-		assert_eq!(next_version("0.23.0", "minor").as_deref(), Some("0.24.0"));
-		assert_eq!(next_version("0.23.4", "patch").as_deref(), Some("0.23.5"));
-		assert_eq!(next_version("0.23.4", "major").as_deref(), Some("1.0.0"));
-		assert_eq!(next_version("1.0.0-rc.1", "patch"), None);
-	}
-
-	#[test]
-	fn preflight_refuses_what_the_loop_could_not_move() {
-		let pins = vec![("flake.nix", "ref=@evinvest/kitstart-v0.3.0\"".to_owned())];
-		let releases = vec![("@evinvest/uikit", "0.23.0".to_owned()), ("@evinvest/kitstart", "0.4.0".to_owned())];
-		assert!(plan_template(MANIFEST, &pins, &releases).is_empty());
-
-		let unreadable = MANIFEST.replace("^0.22.0", "~0.22.0");
-		let errors = plan_template(&unreadable, &pins, &releases);
-		assert_eq!(errors.len(), 1, "{errors:?}");
-		assert!(errors[0].contains("@evinvest/uikit@~0.22.0"), "{errors:?}");
-
-		let unpinned = vec![("flake.nix", "ref=@evinvest/kitstart-vX.Y.Z".to_owned())];
-		assert_eq!(plan_template(MANIFEST, &unpinned, &releases).len(), 1);
-		// Only a kitstart release moves the pins, so only it needs them.
-		assert!(plan_template(MANIFEST, &unpinned, &releases[..1]).is_empty());
-	}
-
-	#[test]
 	fn finds_tags_the_remote_lacks() {
 		let remote = "abc\trefs/tags/@evinvest/uikit-v0.23.0\nabd\trefs/tags/@evinvest/uikit-v0.23.0^{}\n";
-		assert_eq!(missing_tags("@evinvest/uikit-v0.23.0\n@evinvest/kitstart-v0.5.0\n", remote), vec!["@evinvest/kitstart-v0.5.0"]);
+		assert_eq!(missing_tags("@evinvest/uikit-v0.23.0\n@evinvest/i18n-v0.5.0\n", remote), vec!["@evinvest/i18n-v0.5.0"]);
 		assert!(missing_tags("@evinvest/uikit-v0.23.0\n", remote).is_empty());
-	}
-
-	#[test]
-	fn retags_every_kitstart_reference() {
-		let text = "ref=@evinvest/kitstart-v0.3.0\";\n`@evinvest/kitstart-vX.Y.Z` tag.\nat @evinvest/kitstart-v0.3.0.\n";
-		assert_eq!(
-			retag_kitstart(text, "0.4.0"),
-			"ref=@evinvest/kitstart-v0.4.0\";\n`@evinvest/kitstart-vX.Y.Z` tag.\nat @evinvest/kitstart-v0.4.0.\n"
-		);
 	}
 }

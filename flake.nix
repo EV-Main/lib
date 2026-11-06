@@ -121,33 +121,6 @@
             '';
           };
 
-          mkLandingFixture = import ./nix/mk-landing.nix {
-            inherit pkgs v_flakes;
-            root = ./nix/mk-landing-fixture;
-            pname = "mk-landing-fixture";
-            sitePort = "59099";
-            connected = true;
-            buildFiles = [ "package.json" "package-lock.json" "build.mjs" ];
-            requiredFiles = [ "assets/fonts/Display.ttf" ];
-            prodEnv = {
-              LEADS_DB_PATH = "/data/leads.db";
-              NODE_ENV = "production";
-              HOSTNAME = "0.0.0.0";
-              PORT = "59099";
-            };
-            smoke = {
-              page = "/fr";
-              og = "/og";
-              quote = { location = "paris"; subject = "standard"; locality = "75011"; mobile = "0612345678"; };
-            };
-            containerAttr = ".#mk-landing-fixture-container";
-            # The stand-in builds no kitstart landing, so it locks no kitstart.
-            checkKitstartVersion = false;
-            # A package the registry does not have (its `resolved` 404s), served
-            # from a vendored tarball — how a brand builds before a release.
-            packageSourceOverrides."node_modules/fixture-vendored" = ./nix/mk-landing-fixture/vendor/fixture-vendored-1.0.0.tgz;
-          };
-
           # ── Visual regression (rust/tests/visual) ───────────────────────────
           # Every input the render reads is pinned here. The suite compares byte
           # for byte, so an unpinned input is not slack — it is a baseline that
@@ -224,69 +197,13 @@
           # a host-built directory has to reach a sandboxed build somehow.
           distPath = builtins.getEnv "EV_VISUAL_DIST";
 
-          # ── Visual regression (ts/kitstart/test/visual) ─────────────────────
-          # The kitstart widget gallery, on the same pinned runner, browsers, fonts
-          # and Tailwind engine as the kit's suite. The pages are rendered on the
-          # host by the gallery test (react-dom/server); only the capture is here.
-          kitstartSnapshotsFrom =
-            dist:
-            pkgs.runCommand "kitstart-visual-snapshots"
-              (
-                visual.env
-                // {
-                  nativeBuildInputs = [ pkgs.playwright-test pkgs.python3 ];
-                }
-              )
-              ''
-                mkdir -p "$out" "$NIX_BUILD_TOP/run"
-                cd "$NIX_BUILD_TOP/run"
-                cp -r ${dist} dist
-                cp ${./ts/kitstart/test/visual/gallery.spec.ts} gallery.spec.ts
-                cp ${./ts/kitstart/test/visual/playwright.config.ts} playwright.config.ts
-                cp ${./ts/kitstart/test/visual/package.json} package.json
-                ln -s ${visual.nodeModules} node_modules
-                export HOME="$NIX_BUILD_TOP" KITSTART_SNAPSHOT_OUT="$out"
-                playwright test
-              '';
-
-          kitstartDistPath = builtins.getEnv "KITSTART_VISUAL_DIST";
-
-          kitstart-visual-app = pkgs.writeShellApplication {
-            name = "kitstart-visual";
-            runtimeInputs = [ pkgs.nodejs pkgs.git pkgs.diffutils ];
-            text = ''
-              cd "$(git rev-parse --show-toplevel)/ts/kitstart"
-              shots=test/visual/__screenshots__
-              # kitstart links the workspace kit and marketing layer; a linked
-              # directory ships whatever `dist/` it has, so build them first.
-              for pkg in uikit marketing; do
-                (cd "../$pkg" && { [ -d node_modules ] || npm ci --ignore-scripts; } && npm run build >/dev/null)
-              done
-              [ -d node_modules ] || npm ci --ignore-scripts
-              KITSTART_VISUAL_OUT="$PWD/test/visual/dist" npx vitest run test/visual/gallery.node.test.tsx
-              cp ${visual.tailwind} test/visual/dist/tailwind.js
-
-              dist=$(nix store add-path test/visual/dist --name kitstart-visual-dist)
-              out=$(KITSTART_VISUAL_DIST="$dist" nix build --impure --no-link --print-out-paths \
-                ".#packages.${linuxSystem}.kitstart-visual-snapshots")
-
-              if [ "''${1-}" = "--update" ]; then
-                rm -f "$shots"/*.png
-                install -m644 "$out"/*.png "$shots"/
-                echo "kitstart baselines updated from $out"
-              else
-                diff -rq --exclude=README.md "$out" "$shots"
-              fi
-            '';
-          };
-
           # Serves what the visual test renders: the live board on /, the static
           # pages it screenshots on /dist/. Comparing them is `cargo test --test gallery`.
           visual-app = pkgs.writeShellApplication {
             name = "visual";
             # `mold` because .cargo/config.toml links through it on linux
             runtimeInputs = [ rust pkgs.git pkgs.curl ]
-            ++ pkgs.lib.optionals pkgs.stdenv.isLinux [ pkgs.mold pkgs.xdg-utils ];
+              ++ pkgs.lib.optionals pkgs.stdenv.isLinux [ pkgs.mold pkgs.xdg-utils ];
             text = ''
               cd "$(git rev-parse --show-toplevel)"
               # sccache needs a server this one-shot run has no reason to depend on
@@ -309,7 +226,7 @@
             type = "app";
             program = "${pkgs.writeShellScriptBin "help" ''
               cat <<'EOF'
-              ${pname} — design kit: rust classes + ts packages (uikit, kitstart, i18n, …)
+              ${pname} — design kit: rust classes + ts packages (uikit, marketing, i18n, …)
 
               Commands:
                 nix develop                              dev shell (rust nightly, node, playwright, pre-commit)
@@ -317,9 +234,6 @@
                 nix run .#publish -- <major|minor|patch> cargo-release + npm publish of impacted ts packages
                 nix run .#visual                         serve the kit gallery: live board, colorscheme, every page the visual test captures
                 cargo test --test gallery --features uikit_dioxus   visual regression of the kit gallery (UPDATE_EXPECT=1 accepts)
-                nix run .#kitstart-visual [-- --update]  visual regression of the kitstart widget gallery
-                nix run .#mk-landing-smoke               smoke the mk-landing fixture container (linux + docker)
-                nix build .#checks.<system>.mk-landing-budget   mk-landing bundle size gate
 
               Docs: README.md, docs/
               EOF
@@ -340,40 +254,6 @@
             type = "app";
             program = "${visual-app}/bin/visual";
           };
-
-          # `nix run .#kitstart-visual [-- --update]`: render the widget gallery,
-          # capture it on linux, and compare byte for byte.
-          apps.kitstart-visual = {
-            type = "app";
-            program = "${kitstart-visual-app}/bin/kitstart-visual";
-          };
-
-          # `lib.mkLanding` against a stand-in brand: the hermetic npm build from
-          # its lockfile (a Windows-only optional package with a bogus integrity
-          # proves the platform pruning), the standalone install checks, the size
-          # gate, and on Linux the image and its smoke:
-          #   nix build .#checks.<system>.mk-landing-budget
-          #   nix run .#mk-landing-smoke            (Linux + docker)
-          checks = {
-            mk-landing-site = mkLandingFixture.checks.site;
-            mk-landing-budget = mkLandingFixture.checks.bundle-budget;
-          }
-          # The image is Linux's; the kitstart workflow builds and smokes it there.
-          // pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
-            mk-landing-container = mkLandingFixture.packages.container;
-          };
-
-          packages.mk-landing-fixture-container = mkLandingFixture.packages.container or mkLandingFixture.site;
-          apps.mk-landing-smoke = mkLandingFixture.apps.container-smoke;
-
-          packages.kitstart-visual-snapshots =
-            if kitstartDistPath == "" then
-              pkgs.runCommand "kitstart-visual-snapshots-no-dist" { } ''
-                echo "KITSTART_VISUAL_DIST is unset — this is built through \`nix run .#kitstart-visual\`." >&2
-                exit 1
-              ''
-            else
-              kitstartSnapshotsFrom (builtins.storePath kitstartDistPath);
 
           packages.visual-snapshots =
             if distPath == "" then
@@ -429,10 +309,5 @@
               };
             };
         }
-      )
-    // {
-      # `ev.lib.mkLanding { pkgs; root = ./.; pname; sitePort; buildFiles; … }`
-      # — the shared flake of every kitstart landing. See nix/mk-landing.nix.
-      lib.mkLanding = import ./nix/mk-landing.nix;
-    };
+      );
 }

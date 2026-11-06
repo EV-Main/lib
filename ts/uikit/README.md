@@ -1,7 +1,7 @@
 # @evinvest/uikit
 
 A **dep-light** React UI kit with shadcn-style semantics — the TypeScript mirror
-of the UI kit of the [`ev_lib`](https://github.com/EV-invest/lib) Rust crate,
+of the UI kit of the [`ev_lib`](https://github.com/EV-Main/web_std) Rust crate,
 which ships it for Dioxus (`ev_lib::uikit_dioxus`) and Leptos
 (`ev_lib::uikit_leptos`) over one framework-free core. All three are driven from
 the same canonical class strings and the same design tokens, so a component

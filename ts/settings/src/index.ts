@@ -6,7 +6,7 @@
  * server-safe, browser-safe entry.
  *
  * This is the TypeScript mirror of the `settings` Cargo feature of the
- * [`ev_lib`](https://github.com/EV-invest/lib) Rust crate; it preserves the
+ * [`ev_lib`](https://github.com/EV-Main/web_std) Rust crate; it preserves the
  * _semantics_ (var naming, required-by-default, empty-string-is-unset, the
  * bool/list parsing rules, aggregate errors, secret redaction) while reading
  * like idiomatic TS.

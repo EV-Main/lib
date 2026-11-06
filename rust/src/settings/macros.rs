@@ -44,7 +44,7 @@
 /// generating a `.env.example`), and `required_var_names(profile)` (the subset
 /// that must be set in that deployment profile — the deploy-time checklist),
 /// plus, under the native-only `settings_drift` feature, `watch_drift()` (see the
-/// [GUIDE](https://github.com/EV-invest/lib/blob/main/rust/src/settings/GUIDE.md#detecting-drift)).
+/// [GUIDE](https://github.com/EV-Main/web_std/blob/main/rust/src/settings/GUIDE.md#detecting-drift)).
 ///
 /// Field grammar: `#[secret]`, `#[env("NAME")]`, and/or
 /// `#[required_in("profile", …)]` (plus doc comments), then `name: Type`,

@@ -1,9 +1,0 @@
-{
-  "default": "manual",
-  "providers": {
-    "link": {
-      "url": "https://book.example.fr/vifnet",
-      "label": "Book"
-    }
-  }
-}

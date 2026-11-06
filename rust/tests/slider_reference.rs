@@ -9,7 +9,7 @@
 //!
 //! One deliberate deviation: the reference puts `aria-label` on the role-less
 //! root, where it is prohibited and never announced; we name the
-//! `role="slider"` thumb instead (EV-invest/lib#46).
+//! `role="slider"` thumb instead (EV-Main/web_std#46).
 //!
 //! Everything else must match byte-for-byte, which is what `EXPECTED` encodes.
 #![cfg(feature = "uikit_dioxus")]

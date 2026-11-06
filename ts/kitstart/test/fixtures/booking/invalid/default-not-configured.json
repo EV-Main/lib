@@ -1,8 +1,0 @@
-{
-  "default": "google_calendar",
-  "providers": {
-    "link": {
-      "url": "https://book.example.fr/vifnet"
-    }
-  }
-}

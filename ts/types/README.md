@@ -138,7 +138,7 @@ const Email = {
 ## Rust counter-part
 
 This is the TypeScript mirror of the `types` Cargo feature of the
-[`ev_lib`](https://github.com/EV-invest/lib) Rust crate. The Rust side defines
+[`ev_lib`](https://github.com/EV-Main/web_std) Rust crate. The Rust side defines
 `PhoneNumber` as a `#[wasm_bindgen]`-compatible newtype with the same validation
 semantics and the same E.164 country-code table, so validation is byte-identical
 on both sides.
