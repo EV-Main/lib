@@ -6,6 +6,7 @@ resolver = "3"
 members = ["rust", "rust/classes", "rust/gen", "rust/uikit-viewer"]
 
 [workspace.lints.rust]
+stable_features = "allow"
 unused_features = "allow"
 
 [workspace.lints.cargo]

@@ -16,7 +16,11 @@
 //! committed, and the `generated` pre-commit hook re-runs this and re-stages, so
 //! a committed artefact cannot disagree with its source.
 
-use std::{collections::BTreeSet, fs, path::Path};
+use std::{
+	collections::BTreeSet,
+	fs,
+	path::{Path, PathBuf},
+};
 
 use ev_lib::ts_gen::Ts;
 use strum::IntoEnumIterator;
@@ -125,7 +129,7 @@ fn write_class_inventory(root: &Path) {
 	println!("wrote {}", path.display());
 }
 /// Every `.rs` under `dir`, at any depth: a component file can sit in any layer directory.
-fn rust_sources(dir: &Path) -> Vec<std::path::PathBuf> {
+fn rust_sources(dir: &Path) -> Vec<PathBuf> {
 	let mut found = Vec::new();
 	for entry in fs::read_dir(dir).unwrap_or_else(|e| panic!("read {}: {e}", dir.display())) {
 		let path = entry.expect("dir entry").path();

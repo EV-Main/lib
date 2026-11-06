@@ -10,6 +10,7 @@
 use std::{
 	collections::{BTreeMap, HashMap},
 	fmt::Write as _,
+	path::{Path, PathBuf},
 };
 
 use scraper::{ElementRef, Html, node::Node as Parsed};
@@ -155,7 +156,7 @@ fn components_render_only_lower_layers() {
 	] {
 		let dir = format!("src/ui/uikit/{port}");
 		let names = components(&dir);
-		let modules: BTreeMap<String, (String, String)> = rust_files(&std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(&dir))
+		let modules: BTreeMap<String, (String, String)> = rust_files(&Path::new(env!("CARGO_MANIFEST_DIR")).join(&dir))
 			.into_iter()
 			.filter_map(|path| {
 				let layer = path.parent()?.file_name()?.to_string_lossy().into_owned();
@@ -211,7 +212,7 @@ fn source(rel: &str) -> String {
 /// components and test modules (everything after `#[cfg(test)]`) are not exported.
 fn components(dir: &str) -> BTreeMap<String, String> {
 	let mut found = BTreeMap::new();
-	for path in rust_files(&std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(dir)) {
+	for path in rust_files(&Path::new(env!("CARGO_MANIFEST_DIR")).join(dir)) {
 		let module = path.file_stem().expect("rust_files yields named files").to_string_lossy().into_owned();
 		let text = std::fs::read_to_string(&path).unwrap_or_else(|e| panic!("read {}: {e}", path.display()));
 		let mut pending = false;
@@ -232,7 +233,7 @@ fn components(dir: &str) -> BTreeMap<String, String> {
 	found
 }
 
-fn rust_files(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
+fn rust_files(dir: &Path) -> Vec<PathBuf> {
 	let mut found = Vec::new();
 	for entry in std::fs::read_dir(dir).unwrap_or_else(|e| panic!("read {}: {e}", dir.display())) {
 		let path = entry.expect("read_dir entry").path();
