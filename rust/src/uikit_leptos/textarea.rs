@@ -7,6 +7,10 @@ use crate::{
 
 /// Picks up the id and `aria-*` of an enclosing `FormControl`; outside one, all
 /// three are absent.
+///
+/// `aria_label`, `rows`, `on_keydown` and `node_ref` are opt-in for a field
+/// that a composite part owns: a chat composer names its field without a
+/// label, starts it one line tall, sends on Enter, and puts focus back on it.
 #[component]
 pub fn Textarea(
 	#[prop(optional)] size: Size,
@@ -20,7 +24,9 @@ pub fn Textarea(
 	#[prop(optional, into)] aria_label: Option<String>,
 	#[prop(optional)] rows: Option<u32>,
 	#[prop(optional)] on_keydown: Option<Callback<leptos::ev::KeyboardEvent>>,
+	#[prop(optional)] node_ref: Option<NodeRef<leptos::html::Textarea>>,
 ) -> impl IntoView {
+	let node = node_ref.unwrap_or_default(); // a field nobody asked to reach
 	let cls = cn!(TEXTAREA_BASE, textarea_size_class(size), class);
 	let form = use_context::<Signal<FormControlContext>>();
 	view! {
@@ -38,6 +44,7 @@ pub fn Textarea(
 			placeholder=placeholder
 			disabled=disabled
 			prop:value=value
+			node_ref=node
 			on:input=move |e| {
 				if let Some(h) = on_input {
 					h.run(e);

@@ -56,7 +56,7 @@ pub fn DialogPortal(children: Children) -> impl IntoView {
 pub fn DialogContent(
 	#[prop(default = true)] show_close_button: bool,
 	#[prop(optional, into)] aria_labelledby: Option<String>,
-	#[prop(optional, into)] aria_describedby: Option<String>,
+	#[prop(optional, into)] aria_describedby: MaybeProp<String>,
 	#[prop(optional, into)] class: String,
 	children: ChildrenFn,
 ) -> impl IntoView {
@@ -77,7 +77,7 @@ pub fn DialogContent(
 					role="dialog"
 					aria-modal="true"
 					aria-labelledby=aria_labelledby.clone()
-					aria-describedby=aria_describedby.clone()
+					aria-describedby=move || aria_describedby.get()
 					class=cls.clone()
 					data-slot="dialog-content"
 					data-state="open"

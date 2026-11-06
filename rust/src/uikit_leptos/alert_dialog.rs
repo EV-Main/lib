@@ -47,7 +47,7 @@ pub fn AlertDialogTrigger(#[prop(optional, into)] class: String, children: Child
 #[component]
 pub fn AlertDialogContent(
 	#[prop(optional, into)] aria_labelledby: Option<String>,
-	#[prop(optional, into)] aria_describedby: Option<String>,
+	#[prop(optional, into)] aria_describedby: MaybeProp<String>,
 	#[prop(optional, into)] class: String,
 	children: ChildrenFn,
 ) -> impl IntoView {
@@ -68,7 +68,7 @@ pub fn AlertDialogContent(
 					role="alertdialog"
 					aria-modal="true"
 					aria-labelledby=aria_labelledby.clone()
-					aria-describedby=aria_describedby.clone()
+					aria-describedby=move || aria_describedby.get()
 					class=cls.clone()
 					data-slot="alert-dialog-content"
 					data-state="open"

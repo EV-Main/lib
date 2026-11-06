@@ -37,14 +37,14 @@ pub fn Popover(
 /// `aria_label` names a trigger that holds only a glyph: the kit has no
 /// `asChild`, so an icon trigger cannot borrow the name of an `IconButton`.
 #[component]
-pub fn PopoverTrigger(#[prop(optional, into)] class: String, #[prop(optional, into)] aria_label: Option<String>, children: Children) -> impl IntoView {
+pub fn PopoverTrigger(#[prop(optional, into)] class: String, #[prop(optional, into)] aria_label: MaybeProp<String>, children: Children) -> impl IntoView {
 	let ctx = expect_context::<PopoverCtx>();
 	view! {
 		<button
 			type="button"
 			class=class
 			data-slot="popover-trigger"
-			aria-label=aria_label
+			aria-label=move || aria_label.get()
 			aria-expanded=move || ctx.open.get().to_string()
 			on:click=move |_| ctx.open.set(!ctx.open.get_untracked())
 		>

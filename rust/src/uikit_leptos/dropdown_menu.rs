@@ -32,7 +32,7 @@ pub fn DropdownMenu(
 /// `aria_label` names a trigger whose text alone says too little: the kit has
 /// no `asChild`, so a model chip cannot pass its "Model: Fast" name another way.
 #[component]
-pub fn DropdownMenuTrigger(#[prop(optional, into)] class: String, #[prop(optional, into)] aria_label: Option<String>, children: Children) -> impl IntoView {
+pub fn DropdownMenuTrigger(#[prop(optional, into)] class: String, #[prop(optional, into)] aria_label: MaybeProp<String>, children: Children) -> impl IntoView {
 	let ctx = expect_context::<DropdownMenuCtx>();
 	view! {
 		<button
@@ -40,7 +40,7 @@ pub fn DropdownMenuTrigger(#[prop(optional, into)] class: String, #[prop(optiona
 			class=class
 			data-slot="dropdown-menu-trigger"
 			data-state=move || if ctx.open.get() { "open" } else { "closed" }
-			aria-label=aria_label
+			aria-label=move || aria_label.get()
 			aria-haspopup="menu"
 			aria-expanded=move || ctx.open.get().to_string()
 			on:click=move |_| ctx.open.set(!ctx.open.get_untracked())
