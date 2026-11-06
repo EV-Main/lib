@@ -2,8 +2,7 @@
 #![cfg(feature = "i18n")]
 
 use ev_lib::i18n::{
-	LOCALES, Locale, LocaleRegistry, LocaleRegistryConfig, MessageValue, MessageValues, Messages, RegistryError, Translator, format_message, locale_alternates, locale_path,
-	negotiate,
+	LOCALES, Locale, LocaleRegistry, LocaleRegistryConfig, MessageValue, MessageValues, Messages, RegistryError, Translator, format_message, locale_alternates, locale_path, negotiate,
 	policy::{MissingContentPolicy, Rejection, TranslatedCatalogue, TranslatedEntry, audit, available_in, resolve_catalogue},
 	split_locale_path,
 };
@@ -93,10 +92,13 @@ fn translated(v: &Value) -> TranslatedCatalogue {
 		.expect("a translated catalogue")
 		.iter()
 		.map(|(k, e)| {
-			(k.clone(), TranslatedEntry {
-				en: str_of(&e["en"]).to_owned(),
-				t: str_of(&e["t"]).to_owned(),
-			})
+			(
+				k.clone(),
+				TranslatedEntry {
+					en: str_of(&e["en"]).to_owned(),
+					t: str_of(&e["t"]).to_owned(),
+				},
+			)
 		})
 		.collect()
 }
@@ -153,7 +155,12 @@ fn hides_untranslated_content() {
 fn config(v: &Value) -> LocaleRegistryConfig {
 	let labels = &v["labels"];
 	LocaleRegistryConfig {
-		locales: v["locales"].as_array().expect("locales").iter().map(|l| (str_of(l).to_owned(), str_of(&labels[str_of(l)]).to_owned())).collect(),
+		locales: v["locales"]
+			.as_array()
+			.expect("locales")
+			.iter()
+			.map(|l| (str_of(l).to_owned(), str_of(&labels[str_of(l)]).to_owned()))
+			.collect(),
 		default: str_of(&v["default"]).to_owned(),
 		prefix_default_locale: v["prefixDefaultLocale"].as_bool().expect("prefixDefaultLocale"),
 		hreflang: v["hreflang"].as_object().expect("hreflang").iter().map(|(l, t)| (l.clone(), str_of(t).to_owned())).collect(),
