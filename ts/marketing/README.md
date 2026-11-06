@@ -14,8 +14,8 @@ entry tracker, the YouTube plate) and generalised: **no brand strings, logos,
 copy, or i18n library**. Anything a reader sees is passed in — a translated
 string, or a translator `t(key)`.
 
-There is no Rust counterpart: this is browser/React-only glue, like `i18n` has
-none yet.
+Only the contact-link core has a Rust twin, `ev_lib::marketing`; both run
+`tests/fixtures/marketing/contact.json`. The rest is browser/React glue.
 
 ## Dep honesty
 
