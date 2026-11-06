@@ -80,7 +80,7 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("bg-muted"), "{html}");
+		assert!(html.contains("border-input"), "{html}");
 		assert!(html.contains("data-slot=\"button-group-separator\""), "{html}");
 	}
 }

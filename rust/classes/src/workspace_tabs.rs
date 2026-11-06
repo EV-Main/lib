@@ -7,7 +7,7 @@ pub const WORKSPACE_TAB_BASE: &str = "group inline-flex h-7 items-center rounded
 
 /// The hover repeats the fill, or the generic hover would wash the open tab
 /// back to the closed look.
-pub const WORKSPACE_TAB_SELECTED: &str = "border-border-subtle bg-secondary text-ink hover:bg-secondary";
+pub const WORKSPACE_TAB_SELECTED: &str = "border-border-subtle bg-card text-ink hover:bg-card";
 
 /// `min-w-0` lets a long title truncate instead of widening the row.
 pub const WORKSPACE_TAB_TRIGGER: &str = "inline-flex h-full min-w-0 items-center gap-2 rounded-[inherit] pl-2 outline-none";

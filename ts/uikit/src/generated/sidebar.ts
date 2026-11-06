@@ -9,11 +9,11 @@ export const sidebarMenuButtonSizeClasses = {
 } as const;
 export type SidebarMenuButtonSize = keyof typeof sidebarMenuButtonSizeClasses;
 
-export const SIDEBAR_WRAPPER = "group/sidebar-wrapper has-data-[variant=inset]:bg-secondary flex min-h-svh w-full";
+export const SIDEBAR_WRAPPER = "group/sidebar-wrapper has-data-[variant=inset]:bg-card flex min-h-svh w-full";
 
-export const SIDEBAR_FLAT = "bg-secondary text-ink flex h-full w-(--sidebar-width) flex-col";
+export const SIDEBAR_FLAT = "bg-card text-ink flex h-full w-(--sidebar-width) flex-col";
 
-export const SIDEBAR_INNER = "bg-secondary group-data-[variant=floating]:border-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-panel group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm";
+export const SIDEBAR_INNER = "bg-card group-data-[variant=floating]:border-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-panel group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm";
 
 export const SIDEBAR_TRIGGER = "inline-flex size-7 items-center justify-center rounded-control hover:bg-hover hover:text-ink";
 

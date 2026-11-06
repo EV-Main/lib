@@ -173,10 +173,7 @@ bg-accent-warn text-on-accent-warn hover:bg-accent-warn/90 focus-visible:ring-0 
 bg-active
 bg-active text-ink hover:bg-active
 bg-background
-bg-background border-border data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=closed]:fill-mode-forwards outline-hidden
 bg-background border-t border-ink/10 py-16
-bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-panel border border-border p-6 shadow-lg duration-200 data-[state=closed]:fill-mode-forwards outline-hidden sm:max-w-lg
-bg-background fixed z-50 flex h-auto border border-border
 bg-background flex h-9 items-center gap-1 rounded-panel border border-border p-1 shadow-xs
 bg-background relative flex w-full flex-1 flex-col md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-panel md:peer-data-[variant=inset]:shadow-sm md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2
 bg-background text-ink
@@ -190,11 +187,12 @@ bg-border relative flex-1 rounded-full
 bg-border shrink-0
 bg-brand
 bg-card
+bg-card group-data-[variant=floating]:border-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-panel group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm
 bg-card text-ink
 bg-card text-ink flex flex-col gap-4 rounded-panel border border-border py-4 shadow-card
+bg-card text-ink flex h-full w-(--sidebar-width) flex-col
 bg-card text-ink overflow-hidden rounded-panel border border-border shadow-sm
 bg-hover
-bg-hover animate-pulse rounded-control
 bg-hover text-ink rounded-control
 bg-ink text-background animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-fit rounded-panel px-3 py-1.5 text-xs text-balance
 bg-ink-soft
@@ -202,14 +200,17 @@ bg-ink-soft/50
 bg-ink/14 relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5
 bg-input relative !m-0 self-stretch shrink-0 data-[orientation=vertical]:h-auto
 bg-muted
+bg-muted animate-pulse rounded-control
 bg-muted border-t border-border font-medium [&>tr]:last:border-b-0
-bg-muted flex items-center gap-2 rounded-control border border-border px-4 text-body font-medium [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4
 bg-muted flex size-full items-center justify-center rounded-full
 bg-muted mx-auto mt-4 h-2 w-[100px] shrink-0 rounded-full
 bg-muted text-ink
 bg-muted text-ink flex size-10 shrink-0 items-center justify-center rounded-control [&_svg:not([class*='size-'])]:size-6
 bg-muted text-ink-soft inline-flex h-9 w-fit items-center justify-center rounded-panel p-[3px]
 bg-muted text-ink-soft pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-control px-1 font-sans text-xs font-medium select-none [&_svg:not([class*='size-'])]:size-3 [[data-slot=tooltip-content]_&]:bg-background/20 [[data-slot=tooltip-content]_&]:text-background
+bg-popover border-border data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=closed]:fill-mode-forwards outline-hidden
+bg-popover data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-panel border border-border p-6 shadow-lg duration-200 data-[state=closed]:fill-mode-forwards outline-hidden sm:max-w-lg
+bg-popover fixed z-50 flex h-auto border border-border
 bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 absolute z-50 min-w-[8rem] overflow-hidden rounded-panel border border-border p-1 shadow-lg
 bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-(--radix-context-menu-content-transform-origin) overflow-hidden rounded-panel border border-border p-1 shadow-lg
 bg-popover text-ink data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-(--radix-context-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-panel border border-border p-1 shadow-md
@@ -230,10 +231,9 @@ bg-primary-ink motion-safe:animate-pulse
 bg-primary-ink/20
 bg-primary-ink/20 relative h-2 w-full overflow-hidden rounded-full
 bg-secondary
-bg-secondary group-data-[variant=floating]:border-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-panel group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm
-bg-secondary text-ink flex h-full w-(--sidebar-width) flex-col
 bg-secondary text-on-secondary hover:bg-[image:linear-gradient(var(--hover),var(--hover))] focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 bg-transparent
+bg-transparent flex items-center gap-2 rounded-control border border-input px-4 text-body font-medium [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4
 body-a
 border border-accent-debug/40 text-accent-debug hover:bg-accent-debug/(--tint-hover)
 border border-accent-error/40 text-accent-error hover:bg-accent-error/(--tint-hover)
@@ -253,15 +253,15 @@ border-border
 border-border 
 border-border-strong
 border-border-subtle
-border-border-subtle bg-muted hover:bg-hover
-border-border-subtle bg-secondary text-ink hover:bg-secondary
+border-border-subtle bg-card text-ink hover:bg-card
 border-border\
 border-dashed
 border-input
 border-input [&_[data-placeholder]]:text-ink-soft [&_svg:not([class*='text-'])]:text-ink-soft focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error flex w-fit items-center justify-between gap-2 rounded-control border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
+border-input bg-transparent hover:bg-hover
 border-input bg-transparent shadow-xs w-full justify-start gap-2 text-left font-normal data-[placeholder]:text-ink-soft [&>svg]:text-ink-soft
 border-input placeholder:text-ink-soft focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error flex field-sizing-content min-h-16 w-full rounded-control border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm
-border-input text-ink h-7 w-full min-w-0 appearance-none rounded-control border bg-secondary py-0 pr-9 pl-2 text-base pointer-fine:text-body transition-colors outline-none disabled:pointer-events-none disabled:cursor-not-allowed focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error has-[option[value='']:checked]:text-ink-soft [&_option]:bg-popover [&_option]:text-ink [&_optgroup]:bg-popover [&_optgroup]:text-ink-soft [color-scheme:var(--scheme,normal)]
+border-input text-ink h-7 w-full min-w-0 appearance-none rounded-control border bg-transparent py-0 pr-9 pl-2 text-base pointer-fine:text-body transition-colors outline-none disabled:pointer-events-none disabled:cursor-not-allowed focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error has-[option[value='']:checked]:text-ink-soft [&_option]:bg-popover [&_option]:text-ink [&_optgroup]:bg-popover [&_optgroup]:text-ink-soft [color-scheme:var(--scheme,normal)]
 border-input text-primary-ink focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error aspect-square size-4 shrink-0 rounded-full border shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50
 border-l
 border-l border-border
@@ -541,7 +541,7 @@ flex h-11 items-center gap-3 border-t border-border py-0 pl-2 pr-3
 flex h-11 shrink-0 items-center gap-1.5 border-b border-border bg-card pl-3 pr-2
 flex h-14 items-center gap-3 border-b border-border bg-background px-8
 flex h-6.5 items-center gap-4 border-t border-border bg-background px-3 text-caption text-ink-soft
-flex h-8 w-55 items-center gap-2 rounded-control border border-border bg-muted pl-2.5 pr-1.5 text-left text-body text-ink-mid outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring
+flex h-8 w-55 items-center gap-2 rounded-control border border-input bg-transparent pl-2.5 pr-1.5 text-left text-body text-ink-mid outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring
 flex h-9 items-center gap-2 border-b border-border px-3 has-[[aria-invalid=true]]:border-accent-error
 flex h-full w-95 shrink-0 flex-col bg-card
 flex items-baseline gap-2
@@ -569,7 +569,7 @@ flex max-h-44 shrink-0 flex-col gap-2 overflow-y-auto border-b border-border-sub
 flex max-h-80 flex-col gap-0.5 overflow-y-auto
 flex max-h-[300px] scroll-py-1 flex-col overflow-x-hidden overflow-y-auto [&>*]:shrink-0
 flex max-h-[85dvh] flex-col bg-card
-flex max-h-[90dvh] max-w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden bg-popover p-0 sm:max-w-260 md:h-170 md:flex-row
+flex max-h-[90dvh] max-w-[calc(100%-2rem)] flex-col gap-0 overflow-hidden p-0 sm:max-w-260 md:h-170 md:flex-row
 flex max-w-sm flex-col items-center gap-2 text-center
 flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden
 flex min-h-0 flex-1 flex-col overflow-y-auto
@@ -592,7 +592,7 @@ flex shrink-0 items-center justify-center mb-2 [&_svg]:pointer-events-none [&_sv
 flex shrink-0 items-center justify-end gap-2 border-t border-border bg-card px-4 py-3
 flex size-4 shrink-0 text-primary-ink
 flex size-7 items-center justify-center
-flex size-7 items-center justify-center rounded-control border border-border bg-secondary text-ink-mid
+flex size-7 items-center justify-center rounded-control border border-border bg-card text-ink-mid
 flex size-8 shrink-0 items-center justify-center rounded-control bg-(color:--tone-fill) text-(color:--tone-ink)
 flex size-9 shrink-0 items-center justify-center rounded-control border border-border-subtle bg-muted text-ink-mid
 flex touch-none p-px transition-colors select-none
@@ -667,7 +667,7 @@ grid gap-3
 grid text-ink [&_[data-slot=command-group-heading]]:text-ink-soft overflow-hidden p-1 [&>[data-slot=command-group-heading]]:order-first [&_[data-slot=command-group-heading]]:px-2 [&_[data-slot=command-group-heading]]:py-1.5 [&_[data-slot=command-group-heading]]:text-xs [&_[data-slot=command-group-heading]]:font-medium
 group flex flex-1 list-none items-center justify-center gap-1
 group inline-flex h-7 items-center rounded-control border border-transparent text-body-s font-medium text-ink-mid transition-colors hover:bg-hover hover:text-ink has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring
-group inline-flex h-9 w-max items-center justify-center rounded-control bg-background px-4 py-2 text-sm font-medium hover:bg-hover hover:text-ink focus:bg-hover focus:text-ink disabled:pointer-events-none disabled:opacity-50 data-[state=open]:text-ink data-[state=open]:bg-hover focus-visible:ring-ring/50 outline-none transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1
+group inline-flex h-9 w-max items-center justify-center rounded-control bg-transparent px-4 py-2 text-sm font-medium hover:bg-hover hover:text-ink focus:bg-hover focus:text-ink disabled:pointer-events-none disabled:opacity-50 data-[state=open]:text-ink data-[state=open]:bg-hover focus-visible:ring-ring/50 outline-none transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1
 group-content
 group-label
 group/field flex w-full gap-3 data-[invalid=true]:text-accent-error
@@ -680,7 +680,7 @@ group/item flex items-center border border-transparent text-sm rounded-panel tra
 group/item-group flex flex-col
 group/menu-item relative
 group/navigation-menu relative flex max-w-max flex-1 items-center justify-center
-group/sidebar-wrapper has-data-[variant=inset]:bg-secondary flex min-h-svh w-full
+group/sidebar-wrapper has-data-[variant=inset]:bg-card flex min-h-svh w-full
 h-0.5 bg-border-subtle
 h-10
 h-10 border-border-subtle bg-card px-3
@@ -721,10 +721,10 @@ hits:{hits}
 hover-card-content
 hover-card-trigger
 hover:after:bg-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex
+hover:bg-card
 hover:bg-hover
 hover:bg-hover data-[state=selected]:bg-selected border-b border-border transition-colors
 hover:bg-hover hover:text-ink
-hover:bg-secondary
 hover:text-ink
 hover:text-ink transition-colors
 hover:underline
@@ -745,7 +745,7 @@ inline-flex h-5 items-center gap-1.5 px-2 text-caption text-ink-mid
 inline-flex h-5 items-center justify-center rounded-chip border px-1.5 text-caption border-(color:--tone-edge) bg-(color:--tone-fill) text-(color:--tone-ink) font-medium w-fit whitespace-nowrap shrink-0 gap-1 overflow-hidden [&>svg]:size-3 [&>svg]:pointer-events-none transition-colors outline-none [a&]:hover:bg-[image:linear-gradient(var(--hover),var(--hover))] aria-invalid:border-accent-error focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 inline-flex h-6 items-center gap-1 text-ink-soft
 inline-flex h-6.5 items-center gap-1 rounded-chip border border-border py-1 pl-2 pr-1.5 text-body-s text-ink-mid outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring
-inline-flex h-8 items-center gap-2 rounded-control border border-border bg-secondary pl-2.5 pr-2 text-body-s
+inline-flex h-8 items-center gap-2 rounded-control border border-input bg-transparent pl-2.5 pr-2 text-body-s
 inline-flex h-full min-w-0 items-center gap-2 rounded-[inherit] pl-2 outline-none
 inline-flex items-center gap-1
 inline-flex items-center gap-1.5
@@ -797,9 +797,9 @@ max-h-40 min-h-6 resize-none border-0 bg-transparent p-0 focus-visible:ring-0
 max-h-72
 max-h-[85dvh]
 max-h-[min(24rem,calc(100dvh-2rem))]
-max-w-105 gap-4 bg-popover p-5
+max-w-105 gap-4 p-5
 max-w-105 items-end
-max-w-105 rounded-panel border border-border bg-secondary px-3.5 py-2.5
+max-w-105 rounded-panel border border-border bg-card px-3.5 py-2.5
 max-w-105 rounded-panel border border-border-subtle bg-muted px-3.5 py-2.5
 max-w-3xl
 max-w-[52rem] text-[15px] md:text-[17px] leading-[1.58] text-ink-soft
@@ -1158,7 +1158,7 @@ top-1/2
 top-1/2 -left-12 -translate-y-1/2
 top-1/2 -right-12 -translate-y-1/2
 top-1/6
-top-1/6 max-w-[calc(100%-2rem)] translate-y-0 gap-0 overflow-hidden bg-popover p-0 sm:max-w-105
+top-1/6 max-w-[calc(100%-2rem)] translate-y-0 gap-0 overflow-hidden p-0 sm:max-w-105
 top-4 left-1/2 -translate-x-1/2
 top-4 left-4
 top-4 right-4
@@ -1193,7 +1193,7 @@ w-80 p-1
 w-auto p-0
 w-full border-collapse mt-4
 w-full caption-bottom text-sm
-w-full gap-0 border-border-strong bg-card p-0 sm:max-w-105 [&>[data-slot=sheet-close]]:hidden
+w-full gap-0 border-border-strong bg-popover p-0 sm:max-w-105 [&>[data-slot=sheet-close]]:hidden
 w-full px-[var(--page-px)]
 w-full text-sm
 whitespace-pre-wrap

@@ -1,4 +1,4 @@
-pub const HEADER_BALANCE_BASE: &str = "inline-flex h-8 items-center gap-2 rounded-control border border-border bg-secondary pl-2.5 pr-2 text-body-s";
+pub const HEADER_BALANCE_BASE: &str = "inline-flex h-8 items-center gap-2 rounded-control border border-input bg-transparent pl-2.5 pr-2 text-body-s";
 
 /// Added only when the balance is a button: a static figure must not look pressable.
 pub const HEADER_BALANCE_INTERACTIVE: &str = "cursor-pointer outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring";
@@ -48,7 +48,7 @@ pub const NOTIFICATION_BELL_ITEM_TIME: &str = "shrink-0 text-caption text-ink-so
 
 pub const NOTIFICATION_BELL_FOOTER: &str = "border-t border-border-subtle p-1 pt-1.5";
 
-pub const HEADER_SEARCH_BASE: &str = "flex h-8 w-55 items-center gap-2 rounded-control border border-border bg-muted pl-2.5 pr-1.5 text-left text-body text-ink-mid outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring";
+pub const HEADER_SEARCH_BASE: &str = "flex h-8 w-55 items-center gap-2 rounded-control border border-input bg-transparent pl-2.5 pr-1.5 text-left text-body text-ink-mid outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring";
 
 /// `min-w-0` with `truncate`: a long placeholder ends in an ellipsis and the
 /// shortcut hint stays visible.

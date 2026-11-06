@@ -3,7 +3,7 @@
 export const CHAT_BUBBLE_BASE = "min-w-0 break-words whitespace-pre-wrap text-body text-ink";
 
 export const chatBubbleVariantClasses = {
-  "user": "max-w-105 rounded-panel border border-border bg-secondary px-3.5 py-2.5",
+  "user": "max-w-105 rounded-panel border border-border bg-card px-3.5 py-2.5",
   "assistant": "py-0.5",
   "muted": "max-w-105 rounded-panel border border-border-subtle bg-muted px-3.5 py-2.5",
 } as const;
@@ -15,7 +15,7 @@ export const CHAT_MESSAGE_USER = "justify-end";
 
 export const CHAT_MESSAGE_AVATAR = "shrink-0";
 
-export const CHAT_MESSAGE_AVATAR_TILE = "flex size-7 items-center justify-center rounded-control border border-border bg-secondary text-ink-mid";
+export const CHAT_MESSAGE_AVATAR_TILE = "flex size-7 items-center justify-center rounded-control border border-border bg-card text-ink-mid";
 
 export const CHAT_MESSAGE_BODY = "flex min-w-0 flex-col gap-1.5";
 
