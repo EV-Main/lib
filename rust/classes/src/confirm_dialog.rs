@@ -4,7 +4,7 @@ pub const CONFIRM_DIALOG_HEADER: &str = "flex-row gap-3 text-left";
 
 /// The glyph tile wears the dialog's [`Tone`](crate::Tone): its wash over the well, and its ink.
 pub const CONFIRM_DIALOG_ICON: &str =
-	"flex size-8 shrink-0 items-center justify-center rounded-control bg-muted bg-[image:linear-gradient(var(--tone-wash),var(--tone-wash))] text-(color:--tone-ink)";
+	"flex size-(--control-h-sm) shrink-0 items-center justify-center rounded-control bg-muted bg-[image:linear-gradient(var(--tone-wash),var(--tone-wash))] text-(color:--tone-ink)";
 
 pub const CONFIRM_DIALOG_TEXT: &str = "flex min-w-0 flex-col gap-1";
 

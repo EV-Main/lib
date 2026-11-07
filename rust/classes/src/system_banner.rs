@@ -16,7 +16,7 @@ pub const SYSTEM_BANNER_BODY_AFTER_TITLE: &str = "text-ink-soft";
 pub const SYSTEM_BANNER_ACTION: &str = "shrink-0";
 
 /// A 24 px hit area; the negative margins keep it from growing the strip.
-pub const SYSTEM_BANNER_DISMISS: &str = "-my-0.5 -mr-1 flex size-6 shrink-0 items-center justify-center rounded-control opacity-70 outline-none \
+pub const SYSTEM_BANNER_DISMISS: &str = "-my-0.5 -mr-1 flex size-(--control-h-2xs) shrink-0 items-center justify-center rounded-control opacity-70 outline-none \
                                          transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring";
 
 /// The `SystemBanner`'s own strings. English by default; a caller translates by overriding fields.

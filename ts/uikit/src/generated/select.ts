@@ -14,7 +14,7 @@ export const SELECT_LABEL = "text-ink-soft px-2 py-1.5 text-xs";
 
 export const SELECT_SEPARATOR = "bg-border pointer-events-none -mx-1 my-1 h-px";
 
-export const NATIVE_SELECT_BASE = "border-input text-ink h-7 w-full min-w-0 appearance-none rounded-control border bg-transparent py-0 pr-9 pl-2 text-base pointer-fine:text-body transition-colors outline-none disabled:pointer-events-none disabled:cursor-not-allowed focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error has-[option[value='']:checked]:text-ink-soft [&_option]:bg-popover [&_option]:text-ink [&_optgroup]:bg-popover [&_optgroup]:text-ink-soft [color-scheme:var(--scheme,normal)]";
+export const NATIVE_SELECT_BASE = "border-input text-ink h-(--control-h-xs) w-full min-w-0 appearance-none rounded-control border bg-transparent py-0 pr-9 pl-2 text-base pointer-fine:text-body transition-colors outline-none disabled:pointer-events-none disabled:cursor-not-allowed focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error has-[option[value='']:checked]:text-ink-soft [&_option]:bg-popover [&_option]:text-ink [&_optgroup]:bg-popover [&_optgroup]:text-ink-soft [color-scheme:var(--scheme,normal)]";
 
 export const SELECT_TYPEAHEAD_MS = 500;
 
@@ -23,15 +23,15 @@ export const SELECT_CHEVRON = "size-4 opacity-50";
 export const SELECT_ITEM_INDICATOR = "absolute right-2 flex size-3.5 items-center justify-center";
 
 export const selectTriggerSizeClasses = {
-  "sm": "h-8",
-  "md": "h-9",
-  "lg": "h-12 px-4 text-base",
+  "sm": "h-(--control-h-sm)",
+  "md": "h-(--control-h-md)",
+  "lg": "h-(--control-h-xl) px-(--control-inset-md) text-base",
 } as const;
 export type SelectTriggerSize = keyof typeof selectTriggerSizeClasses;
 
 export const nativeSelectSizeClasses = {
-  "sm": "h-6",
-  "md": "h-7",
-  "lg": "h-11 pr-11 pl-3 text-base pointer-fine:text-base",
+  "sm": "h-(--control-h-2xs)",
+  "md": "h-(--control-h-xs)",
+  "lg": "h-(--control-h-touch) pr-11 pl-3 text-base pointer-fine:text-base",
 } as const;
 export type NativeSelectSize = keyof typeof nativeSelectSizeClasses;

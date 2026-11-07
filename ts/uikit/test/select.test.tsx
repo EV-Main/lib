@@ -110,7 +110,7 @@ describe("Select", () => {
 
   it("sizes the trigger from the shared form scale", () => {
     const { unmount } = render(tree());
-    expect(screen.getByRole("combobox")).toHaveClass("h-9", "rounded-control");
+    expect(screen.getByRole("combobox")).toHaveClass("h-(--control-h-md)", "rounded-control");
     unmount();
     render(
       <Select>
@@ -121,7 +121,7 @@ describe("Select", () => {
     );
     const trigger = screen.getByRole("combobox");
     expect(trigger).toHaveAttribute("data-size", "lg");
-    expect(trigger).toHaveClass("h-12", "px-4", "text-base");
+    expect(trigger).toHaveClass("h-(--control-h-xl)", "px-(--control-inset-md)", "text-base");
     expect(trigger).not.toHaveClass("text-sm");
   });
 

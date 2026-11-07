@@ -91,7 +91,7 @@ export function ProfileTabs({
             onClick={() => onChange(t.id)}
             onKeyDown={(e) => move(e, i)}
             className={cn(
-              "-mb-px h-8 flex-1 border-b px-3 text-body font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              "-mb-px h-(--control-h-sm) flex-1 border-b px-3 text-body font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring",
               selected ? "border-primary text-ink" : "border-transparent text-ink-mid hover:text-ink",
             )}
           >

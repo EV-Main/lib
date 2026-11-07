@@ -41,11 +41,11 @@ mod tests {
 	fn class_extends_base() {
 		fn app() -> Element {
 			rsx! {
-				Spinner { class: "size-8" }
+				Spinner { class: "size-5" }
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("size-8"), "{html}");
+		assert!(html.contains("size-5"), "{html}");
 		assert!(!html.contains("size-4"), "override should drop base size-4: {html}");
 	}
 }

@@ -5,7 +5,7 @@ pub const SIDEBAR_MENU_BUTTON_BASE: &str = "peer/menu-button flex w-full items-c
                                             group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none \
                                             aria-disabled:opacity-(--disabled-opacity) data-[active=true]:bg-selected data-[active=true]:font-medium \
                                             data-[active=true]:text-ink data-[state=open]:hover:bg-hover \
-                                            data-[state=open]:hover:text-ink group-data-[collapsible=icon]:size-8! \
+                                            data-[state=open]:hover:text-ink group-data-[collapsible=icon]:size-(--control-h-sm)! \
                                             group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0";
 
 pub const SIDEBAR_WRAPPER: &str = "group/sidebar-wrapper has-data-[variant=inset]:bg-card flex min-h-svh w-full";
@@ -14,7 +14,7 @@ pub const SIDEBAR_FLAT: &str = "bg-card text-ink flex h-full w-(--sidebar-width)
 
 pub const SIDEBAR_INNER: &str = "bg-card group-data-[variant=floating]:border-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-panel group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm";
 
-pub const SIDEBAR_TRIGGER: &str = "inline-flex size-7 items-center justify-center rounded-control hover:bg-hover hover:text-ink";
+pub const SIDEBAR_TRIGGER: &str = "inline-flex size-(--control-h-xs) items-center justify-center rounded-control hover:bg-hover hover:text-ink";
 
 pub const SIDEBAR_RAIL: &str = "hover:after:bg-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex";
 
@@ -30,7 +30,7 @@ pub const SIDEBAR_CONTENT: &str = "flex min-h-0 flex-1 flex-col gap-2 overflow-a
 
 pub const SIDEBAR_GROUP: &str = "relative flex w-full min-w-0 flex-col p-2";
 
-pub const SIDEBAR_GROUP_LABEL: &str = "text-ink/70 ring-ring flex h-8 shrink-0 items-center rounded-control px-2 text-xs font-medium outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0 group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0";
+pub const SIDEBAR_GROUP_LABEL: &str = "text-ink/70 ring-ring flex h-(--control-h-sm) shrink-0 items-center rounded-control px-2 text-xs font-medium outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0 group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0";
 
 pub const SIDEBAR_GROUP_CONTENT: &str = "w-full text-sm";
 
@@ -42,14 +42,15 @@ pub const SIDEBAR_WIDTH: &str = "16rem";
 
 pub const SIDEBAR_WIDTH_ICON: &str = "3rem";
 pub const SIDEBAR_ROOT: &str = "group peer text-ink hidden md:block";
-/// The rail's rows are full-width and left-aligned, so they take their height
-/// from the shared [`Size`](crate::Size) scale and nothing else — colour comes
-/// from `ButtonVariant`, like every other button in the kit.
+/// The rail's rows are full-width and left-aligned, so they take a rung of the
+/// shared ramp, one under the step's own at `Xs`–`Md` (a row packs tighter than
+/// a button) and the CTA's at `Lg` — colour comes from `ButtonVariant`, like
+/// every other button in the kit.
 pub fn sidebar_menu_button_size_class(size: crate::Size) -> &'static str {
 	match size {
-		crate::Size::Xs => "h-7 text-xs",
-		crate::Size::Sm | crate::Size::Md => "h-8 text-sm",
-		crate::Size::Lg | crate::Size::Touch | crate::Size::Xl => "h-12 text-sm group-data-[collapsible=icon]:p-0!",
+		crate::Size::Xs => "h-(--control-h-xs) text-xs",
+		crate::Size::Sm | crate::Size::Md => "h-(--control-h-sm) text-sm",
+		crate::Size::Lg | crate::Size::Touch | crate::Size::Xl => "h-(--control-h-xl) text-sm group-data-[collapsible=icon]:p-0!",
 	}
 }
 

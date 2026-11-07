@@ -103,7 +103,7 @@ describe("NavigationMenu", () => {
 
   it("exposes the trigger style helper", () => {
     const cls = navigationMenuTriggerStyle();
-    expect(cls).toContain("h-9");
+    expect(cls).toContain("h-(--control-h-md)");
     expect(cls).toContain("data-[state=open]:bg-hover");
   });
 });

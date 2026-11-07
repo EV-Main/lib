@@ -12,7 +12,7 @@ pub const CAROUSEL_ITEM_HORIZONTAL: &str = "pl-4";
 
 pub const CAROUSEL_ITEM_VERTICAL: &str = "pt-4";
 
-pub const CAROUSEL_NAV: &str = "absolute size-8 rounded-full";
+pub const CAROUSEL_NAV: &str = "absolute size-(--control-h-sm) rounded-full";
 
 pub const CAROUSEL_PREVIOUS_HORIZONTAL: &str = "top-1/2 -left-12 -translate-y-1/2";
 

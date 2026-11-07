@@ -4,12 +4,12 @@ pub const COMMAND_DIALOG_OVERLAY: &str = "fixed inset-0 z-50 bg-scrim";
 
 pub const COMMAND_DIALOG_CONTENT: &str = "fixed top-1/2 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-panel border border-border p-0 shadow-lg";
 
-pub const COMMAND_DIALOG_COMMAND: &str = "[&_[data-slot=command-input-wrapper]]:h-12 [&_[data-slot=command-input]]:h-12";
+pub const COMMAND_DIALOG_COMMAND: &str = "[&_[data-slot=command-input-wrapper]]:h-(--control-h-xl) [&_[data-slot=command-input]]:h-(--control-h-xl)";
 
-pub const COMMAND_INPUT_WRAPPER: &str = "flex h-9 items-center gap-2 border-b border-border px-3 has-[[aria-invalid=true]]:border-accent-error";
+pub const COMMAND_INPUT_WRAPPER: &str = "flex h-(--control-h-md) items-center gap-2 border-b border-border px-3 has-[[aria-invalid=true]]:border-accent-error";
 
 pub const COMMAND_INPUT: &str =
-	"placeholder:text-ink-soft flex h-10 w-full rounded-control bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-(--disabled-opacity)";
+	"placeholder:text-ink-soft flex h-(--control-h-lg) w-full rounded-control bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-(--disabled-opacity)";
 
 /// A column, not a grid: rows carry their rank as CSS `order`, which needs a flex or
 /// grid container, but a grid item with `overflow-hidden` (a group) has a minimum

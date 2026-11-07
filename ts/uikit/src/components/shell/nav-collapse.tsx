@@ -119,7 +119,7 @@ function Chevron({ open }: { open: boolean }) {
   );
 }
 
-const ROW = "flex min-h-9 items-center rounded-row text-body font-medium text-ink transition-colors motion-reduce:transition-none";
+const ROW = "flex min-h-(--control-h-md) items-center rounded-row text-body font-medium text-ink transition-colors motion-reduce:transition-none";
 const FOCUS = "outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
 export interface NavGroupHeaderProps {
@@ -156,7 +156,7 @@ export function NavGroupHeader({
   const chevronId = React.useId();
   const row = cn(ROW, open ? "bg-selected" : "hover:bg-hover", className);
   const chip = cn(
-    "grid size-7 shrink-0 place-items-center rounded-control text-ink-mid",
+    "grid size-(--control-h-xs) shrink-0 place-items-center rounded-control text-ink-mid",
     open && "bg-selected",
   );
   if (href === undefined) {

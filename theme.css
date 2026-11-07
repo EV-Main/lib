@@ -315,6 +315,7 @@
 /* The control height and inset ramps a `Size` step names, re-derived on every
  * scope that may set `--control-h`. Pin one step to bend the ramp. */
 :where(:root, [data-brand], [data-theme]) {
+  --control-h-2xs: calc(var(--control-h) - 3 * var(--control-step));
   --control-h-xs: calc(var(--control-h) - 2 * var(--control-step));
   --control-h-sm: calc(var(--control-h) - var(--control-step));
   --control-h-md: var(--control-h);

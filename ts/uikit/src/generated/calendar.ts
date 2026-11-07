@@ -2,7 +2,7 @@
 
 export const CALENDAR_ROOT = "p-3 w-fit";
 
-export const CALENDAR_NAV_BUTTON = "size-8 p-0 select-none";
+export const CALENDAR_NAV_BUTTON = "size-(--control-h-sm) p-0 select-none";
 
 export const CALENDAR_NAV = "flex items-center justify-between gap-1 w-full px-1";
 

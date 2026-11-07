@@ -1,6 +1,6 @@
 use crate::focus::option_focus_ring;
 
-pub const MENUBAR_ROOT: &str = "bg-background flex h-9 items-center gap-1 rounded-panel border border-border p-1 shadow-xs";
+pub const MENUBAR_ROOT: &str = "bg-background flex h-(--control-h-md) items-center gap-1 rounded-panel border border-border p-1 shadow-xs";
 pub const MENUBAR_TRIGGER: &str = concat!(
 	"focus:bg-hover focus:text-ink ",
 	option_focus_ring!(),

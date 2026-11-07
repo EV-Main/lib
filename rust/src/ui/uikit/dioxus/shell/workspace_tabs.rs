@@ -356,7 +356,7 @@ mod tests {
 		fn app() -> Element {
 			rsx! {
 				WorkspaceTabs { class: "gap-2",
-					WorkspaceTab { value: "a", class: "h-8", "Торговля" }
+					WorkspaceTab { value: "a", class: "h-(--control-h-sm)", "Торговля" }
 				}
 			}
 		}
@@ -364,6 +364,6 @@ mod tests {
 		assert!(html.contains("class=\"flex items-center gap-2\""), "{html}");
 		let pill = &html[html.find("data-slot=\"workspace-tab\"").expect("pill")..];
 		let pill = &pill[..pill.find('>').expect("tag end")];
-		assert!(pill.contains("h-8") && !pill.contains("h-7"), "{pill}");
+		assert!(pill.contains("h-(--control-h-sm)") && !pill.contains("h-(--control-h-xs)"), "{pill}");
 	}
 }

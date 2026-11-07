@@ -1,5 +1,5 @@
 pub const TABS_ROOT: &str = "flex flex-col gap-2";
-pub const TABS_LIST: &str = "bg-muted text-ink-soft inline-flex h-9 w-fit items-center justify-center rounded-panel p-[3px]";
+pub const TABS_LIST: &str = "bg-muted text-ink-soft inline-flex h-(--control-h-md) w-fit items-center justify-center rounded-panel p-[3px]";
 pub const TABS_TRIGGER: &str = "data-[state=active]:bg-background focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring \
                             text-ink inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-control \
                             border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] \

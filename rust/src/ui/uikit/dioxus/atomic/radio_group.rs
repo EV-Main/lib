@@ -222,12 +222,12 @@ mod tests {
 		fn app() -> Element {
 			rsx! {
 				RadioGroup { default_value: "a",
-					RadioGroupItem { value: "a", class: "size-6" }
+					RadioGroupItem { value: "a", class: "size-5" }
 				}
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("size-6"), "{html}");
+		assert!(html.contains("size-5"), "{html}");
 		assert!(!html.contains("size-4"), "override should drop base size-4: {html}");
 	}
 }

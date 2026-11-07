@@ -15,14 +15,16 @@ fails on a literal; an exemption there says why its literal is no role.
 them:
 
 ```
-xs = h − 2·step   sm = h − step   md = h   lg = h + step   xl = h + 3·step
-touch = max(lg, 44 px)                       (the WCAG 2.5.5 pointer target)
+2xs = h − 3·step   xs = h − 2·step   sm = h − step   md = h
+lg = h + step      xl = h + 3·step    touch = max(lg, 44 px)   (the WCAG 2.5.5 pointer target)
 ```
 
 A `Size` step names its rung and nothing else. A theme bends the ramp by
 pinning one rung (`--control-h-xl`), never by giving a component its own
 height. A component that sits off the ramp by design (a lone glyph two steps
-under its labelled sibling) names a rung too.
+under its labelled sibling, a field's `Lg` on the call to action's rung) names
+a rung too, and so does every fixed control box (a tab list, a menu bar, a
+glyph button).
 
 A step's side inset moves with its height: `--control-inset` is `md`'s, and
 a rung's is `inset + (h(rung) − h)`, so the label keeps its share of the box.

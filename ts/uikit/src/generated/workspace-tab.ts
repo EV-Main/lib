@@ -2,7 +2,7 @@
 
 export const WORKSPACE_TABS_BASE = "flex items-center gap-1";
 
-export const WORKSPACE_TAB_BASE = "group inline-flex h-7 items-center rounded-control border border-transparent text-body-s font-medium text-ink-mid transition-colors hover:bg-hover hover:text-ink has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring";
+export const WORKSPACE_TAB_BASE = "group inline-flex h-(--control-h-xs) items-center rounded-control border border-transparent text-body-s font-medium text-ink-mid transition-colors hover:bg-hover hover:text-ink has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring";
 
 export const WORKSPACE_TAB_SELECTED = "border-border-subtle bg-card text-ink hover:bg-card";
 
@@ -10,6 +10,6 @@ export const WORKSPACE_TAB_TRIGGER = "inline-flex h-full min-w-0 items-center ga
 
 export const WORKSPACE_TAB_LABEL = "truncate";
 
-export const WORKSPACE_TAB_CLOSE = "inline-flex size-6 items-center justify-center rounded-control text-ink-soft outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring";
+export const WORKSPACE_TAB_CLOSE = "inline-flex size-(--control-h-2xs) items-center justify-center rounded-control text-ink-soft outline-none hover:bg-hover hover:text-ink focus-visible:ring-2 focus-visible:ring-ring";
 
 export const WORKSPACE_TAB_SPACER = "w-2";

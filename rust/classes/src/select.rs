@@ -48,7 +48,7 @@ pub const SELECT_LABEL: &str = "text-ink-soft px-2 py-1.5 text-xs";
 pub const SELECT_SEPARATOR: &str = "bg-border pointer-events-none -mx-1 my-1 h-px";
 
 /// The native `<select>`; the size table fuses over it.
-pub const NATIVE_SELECT_BASE: &str = "border-input text-ink h-7 w-full min-w-0 appearance-none rounded-control border bg-transparent py-0 pr-9 pl-2 \
+pub const NATIVE_SELECT_BASE: &str = "border-input text-ink h-(--control-h-xs) w-full min-w-0 appearance-none rounded-control border bg-transparent py-0 pr-9 pl-2 \
 	 text-base pointer-fine:text-body transition-colors outline-none disabled:pointer-events-none disabled:cursor-not-allowed \
 	 focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error has-[option[value='']:checked]:text-ink-soft \
 	 [&_option]:bg-popover [&_option]:text-ink [&_optgroup]:bg-popover [&_optgroup]:text-ink-soft [color-scheme:var(--scheme,normal)]";
@@ -63,19 +63,20 @@ pub const SELECT_ITEM_INDICATOR: &str = "absolute right-2 flex size-3.5 items-ce
 /// lines up with the input beside it in a form row.
 pub fn select_trigger_size_class(size: Size) -> &'static str {
 	match size {
-		Size::Xs | Size::Sm => "h-8",
-		Size::Md => "h-9",
-		Size::Lg | Size::Touch | Size::Xl => "h-12 px-4 text-base",
+		Size::Xs | Size::Sm => "h-(--control-h-sm)",
+		Size::Md => "h-(--control-h-md)",
+		Size::Lg | Size::Touch | Size::Xl => "h-(--control-h-xl) px-(--control-inset-md) text-base",
 	}
 }
 
-/// The `NativeSelect`'s height, and for `Lg` its inset and type. The inset is
+/// The `NativeSelect`'s height, and for `Lg` its inset and type: two rungs under
+/// a field at `Sm`/`Md`, as it nests in one, and the touch floor at `Lg`. The inset is
 /// written per side because the right one clears the arrow: a `px-*` here would
 /// fuse that clearance away.
 pub fn native_select_size_class(size: Size) -> &'static str {
 	match size {
-		Size::Xs | Size::Sm => "h-6",
-		Size::Md => "h-7",
-		Size::Lg | Size::Touch | Size::Xl => "h-11 pr-11 pl-3 text-base pointer-fine:text-base",
+		Size::Xs | Size::Sm => "h-(--control-h-2xs)",
+		Size::Md => "h-(--control-h-xs)",
+		Size::Lg | Size::Touch | Size::Xl => "h-(--control-h-touch) pr-11 pl-3 text-base pointer-fine:text-base",
 	}
 }

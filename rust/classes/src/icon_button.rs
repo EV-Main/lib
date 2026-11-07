@@ -28,11 +28,11 @@ impl IconButtonVariant {
 }
 
 /// The square's edge, fused over the button's `--control-box`: a lone glyph sits
-/// two steps under its labelled sibling, so `md` is the `xs` rung and `sm` one step
-/// under it. `touch` keeps the floor; the TS `IconButtonSize` narrows to these three.
+/// two steps under its labelled sibling, so `md` is the `xs` rung and `sm` the
+/// `2xs` one. `touch` keeps the floor; the TS `IconButtonSize` narrows to these three.
 pub fn icon_button_size_class(size: Size) -> &'static str {
 	match size {
-		Size::Sm => "[--control-box:calc(var(--control-h-xs)_-_var(--control-step))]",
+		Size::Sm => "[--control-box:var(--control-h-2xs)]",
 		Size::Md => "[--control-box:var(--control-h-xs)]",
 		Size::Xs | Size::Lg | Size::Xl | Size::Touch => "",
 	}

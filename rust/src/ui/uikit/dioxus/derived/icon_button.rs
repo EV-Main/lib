@@ -196,7 +196,7 @@ mod tests {
 			"{md}"
 		);
 		assert!(!md.contains("control-h-md"), "the glyph's step replaces the button's: {md}");
-		assert!(classes(IconButtonVariant::Ghost, Size::Sm).contains("calc(var(--control-h-xs)_-_var(--control-step))"));
+		assert!(classes(IconButtonVariant::Ghost, Size::Sm).contains("[--control-box:var(--control-h-2xs)]"));
 		assert!(classes(IconButtonVariant::Ghost, Size::Touch).contains("control-h-touch"));
 		let outline = classes(IconButtonVariant::Outline, Size::Md);
 		assert!(outline.contains("bg-secondary") && outline.contains("text-ink-mid"), "{outline}");

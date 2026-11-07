@@ -2,7 +2,7 @@
 /// popover, the page elsewhere), so the grid never draws a second box.
 pub const CALENDAR_ROOT: &str = "p-3 w-fit";
 
-pub const CALENDAR_NAV_BUTTON: &str = "size-8 p-0 select-none";
+pub const CALENDAR_NAV_BUTTON: &str = "size-(--control-h-sm) p-0 select-none";
 
 pub const CALENDAR_NAV: &str = "flex items-center justify-between gap-1 w-full px-1";
 

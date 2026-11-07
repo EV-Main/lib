@@ -7,13 +7,9 @@ use std::{collections::BTreeSet, fs, path::Path};
 const ROOT: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/..");
 const SIZES: [&str; 6] = ["xs", "sm", "md", "lg", "xl", "touch"];
 
-/// Field heights map onto the ramp irregularly (a field's `lg` is the CTA's 48 px).
-const IRREGULAR_SIZE_TABLES: [(&str, &str); 7] = [
-	("inputSizeClasses", "field heights"),
-	("selectTriggerSizeClasses", "field heights"),
-	("nativeSelectSizeClasses", "field heights, nested inside a field"),
+/// Size tables whose steps are not a control's box on its own rung.
+const IRREGULAR_SIZE_TABLES: [(&str, &str); 3] = [
 	("textareaSizeClasses", "a minimum block height, not a control height"),
-	("sidebarMenuButtonSizeClasses", "a nav row, sized with its rail"),
 	("itemSizes", "a list row's density, padded all round, with no control box"),
 	("sizeClasses", "the ramp itself"),
 ];
@@ -205,4 +201,33 @@ fn disabled_is_one_token() {
 		offending.is_empty(),
 		"a disabled fade spelled by hand, where opacity-(--disabled-opacity) belongs: {offending:#?}"
 	);
+}
+
+/// A control's box is a rung of the ramp, so a theme that moves `--control-h`
+/// reaches it; a literal at a rung's size is a box the theme cannot reach.
+#[test]
+fn control_boxes_read_the_ramp() {
+	let literal = |class: &str| {
+		let Some(n) = ["h-", "min-h-", "size-"].iter().find_map(|axis| utility(class).strip_prefix(axis)) else {
+			return false;
+		};
+		["6", "7", "8", "9", "10", "11", "12"].contains(&n)
+	};
+	const MEDIA: &str = "media (an avatar, an item's or an empty state's tile), sized to what it frames";
+	const BAR: &str = "a bar (smart header, aside header, chat dock), sized with the frame";
+	let offending = literals(
+		literal,
+		&[
+			("size-7", MEDIA),
+			("size-8", MEDIA),
+			("size-10", MEDIA),
+			("[&_svg:not([class*='size-'])]:size-6", MEDIA),
+			("size-9", "a calendar day cell and a chat attachment tile: a grid's cell and media"),
+			("h-10", "the smart header bar and the status screen's mark"),
+			("h-11", BAR),
+			("h-6", "the typing indicator, a line of text"),
+			("min-h-6", "the composer's field, a block's minimum line"),
+		],
+	);
+	assert!(offending.is_empty(), "a control box at a rung's size, where its --control-h-* belongs: {offending:#?}");
 }

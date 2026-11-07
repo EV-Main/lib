@@ -176,7 +176,7 @@ mod tests {
 		let html = render(app);
 		assert!(html.contains("data-slot=\"button\""), "{html}");
 		assert!(html.contains("hover:bg-hover"), "ghost variant: {html}");
-		assert!(html.contains("h-6"), "xs size class: {html}");
+		assert!(html.contains("[--control-box:var(--control-h-2xs)]"), "xs size class: {html}");
 	}
 
 	#[test]
@@ -220,7 +220,7 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("size-8"), "{html}");
+		assert!(html.contains("[--control-box:var(--control-h-sm)] aspect-square"), "{html}");
 		assert!(html.contains("[--control-pad:0px]"), "icon button folds to a square, padding zeroed: {html}");
 	}
 

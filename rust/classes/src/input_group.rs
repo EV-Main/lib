@@ -2,7 +2,7 @@ use tailwind_fuse::{AsTailwindClass, TwVariant};
 
 pub const INPUT_GROUP_BASE: &str = "group/input-group border-input relative flex w-full items-center rounded-control border \
                                     shadow-xs transition-[color,box-shadow] outline-none \
-                                    h-9 min-w-0 has-[>textarea]:h-auto \
+                                    h-(--control-h-md) min-w-0 has-[>textarea]:h-auto \
                                     has-[>[data-align=inline-start]]:[&>input]:pl-2 \
                                     has-[>[data-align=inline-end]]:[&>input]:pr-2 \
                                     has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&>input]:pb-3 \
@@ -48,9 +48,9 @@ pub enum InputGroupButtonSize {
 /// `inputGroupButtonSizes` table; an icon button is a square with no inset.
 pub fn input_group_button_size_class(size: InputGroupButtonSize, icon: bool) -> &'static str {
 	match (size, icon) {
-		(InputGroupButtonSize::Xs, false) => "h-6 [--control-pad:var(--control-inset-xs)] rounded-control [&>svg:not([class*='size-'])]:size-3.5",
-		(InputGroupButtonSize::Sm, false) => "h-8 [--control-pad:var(--control-inset-sm)] rounded-control",
-		(InputGroupButtonSize::Xs, true) => "size-6 rounded-control [--control-pad:0px]",
-		(InputGroupButtonSize::Sm, true) => "size-8 [--control-pad:0px]",
+		(InputGroupButtonSize::Xs, false) => "[--control-box:var(--control-h-2xs)] [--control-pad:var(--control-inset-xs)] rounded-control [&>svg:not([class*='size-'])]:size-3.5",
+		(InputGroupButtonSize::Sm, false) => "[--control-box:var(--control-h-sm)] [--control-pad:var(--control-inset-sm)] rounded-control",
+		(InputGroupButtonSize::Xs, true) => "[--control-box:var(--control-h-2xs)] aspect-square rounded-control [--control-pad:0px]",
+		(InputGroupButtonSize::Sm, true) => "[--control-box:var(--control-h-sm)] aspect-square [--control-pad:0px]",
 	}
 }

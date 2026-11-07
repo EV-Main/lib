@@ -10,4 +10,4 @@ export const BREADCRUMB_PAGE = "text-ink font-normal";
 
 export const BREADCRUMB_SEPARATOR = "[&>svg]:size-3.5";
 
-export const BREADCRUMB_ELLIPSIS = "flex size-7 items-center justify-center";
+export const BREADCRUMB_ELLIPSIS = "flex size-(--control-h-xs) items-center justify-center";
