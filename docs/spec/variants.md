@@ -28,12 +28,12 @@ inverted: it names a consequence.
 emits `impl Default`, so a variant marked with it needs no name saying so.
 
 **The generated key is the variant name.** A table keyed `"default"` beside
-`"sm"` and `"lg"` cannot be read: `sidebarMenuButtonSizeClasses["default"]` was
-`Sm` while `buttonSizeClasses["default"]` was `Md`, and nothing surfaced the
-discrepancy because the key carried no information to contradict.
+`"sm"` and `"lg"` cannot be read: two tables can mean different steps by it, and
+nothing surfaces the discrepancy because the key carries no information to
+contradict.
 
 **A table key names one axis.** A multi-axis table is multiple tables, never a
-product flattened into strings: `buttonSizeClasses` over the sizes and
+product flattened into strings: `sizeClasses` over the sizes and
 `BUTTON_ICON` for the shape at any of them, not one table keyed `"icon-sm"` —
 which fuses magnitude with shape and, in `"icon"`, elides the default as well.
 

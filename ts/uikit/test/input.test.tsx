@@ -20,23 +20,23 @@ describe("Input", () => {
   });
 
   it("lets className override the base", () => {
-    const { container } = render(<Input className="h-12" />);
+    const { container } = render(<Input className="h-(--control-h-xl)" />);
     const el = container.querySelector("input")!;
-    expect(el).toHaveClass("h-12");
-    expect(el).not.toHaveClass("h-9");
+    expect(el).toHaveClass("h-(--control-h-xl)");
+    expect(el).not.toHaveClass("h-(--control-h-md)");
   });
 
   it("defaults to md and grows to a 48px, 16px-text field at lg", () => {
     const { container, rerender } = render(<Input />);
     const el = container.querySelector("input")!;
     expect(el).toHaveAttribute("data-size", "md");
-    expect(el).toHaveClass("h-9", "md:text-sm");
+    expect(el).toHaveClass("h-(--control-h-md)", "md:text-sm");
 
     rerender(<Input size="lg" />);
     expect(el).toHaveAttribute("data-size", "lg");
-    expect(el).toHaveClass("h-12", "px-4", "text-base", "md:text-base", "rounded-control");
+    expect(el).toHaveClass("h-(--control-h-xl)", "px-(--control-inset-md)", "text-base", "md:text-base", "rounded-control");
     // below 16px iOS Safari zooms into the focused field
-    expect(el).not.toHaveClass("h-9");
+    expect(el).not.toHaveClass("h-(--control-h-md)");
     expect(el).not.toHaveClass("md:text-sm");
   });
 

@@ -18,7 +18,7 @@ pub const DROPDOWN_MENU_ITEM: &str = concat!(
                     data-[variant=destructive]:focus:bg-accent-error/(--tint-hover) data-[variant=destructive]:focus:text-accent-error \
                     data-[variant=destructive]:*:[svg]:!text-accent-error [&_svg:not([class*='text-'])]:text-ink-soft \
                     relative flex cursor-default items-center gap-2 rounded-row px-2 py-1.5 text-sm outline-hidden select-none \
-                    data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none \
+                    data-[disabled]:pointer-events-none data-[disabled]:opacity-(--disabled-opacity) data-[inset]:pl-8 [&_svg]:pointer-events-none \
                     [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
 );
 pub const DROPDOWN_MENU_CHECK_ITEM: &str = concat!(
@@ -26,7 +26,7 @@ pub const DROPDOWN_MENU_CHECK_ITEM: &str = concat!(
 	option_focus_ring!(),
 	" relative flex cursor-default items-center gap-2 rounded-row \
                           py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none \
-                          data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+                          data-[disabled]:opacity-(--disabled-opacity) [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
 );
 pub const DROPDOWN_MENU_SUB_TRIGGER: &str = concat!(
 	"focus:bg-hover focus:text-ink ",

@@ -23,17 +23,18 @@
  *              accent-trace · accent-debug · accent-info · accent-warn · accent-error
  *              primary-ink — the primary role as ink on a surface, where the
  *              fill and the readable value are different colours;
- *              primary-hover · primary-border — the solid button's states
+ *              primary-hover · accent-*-hover — a solid fill's hover, derived;
+ *              primary-border — the primary button's edge
  *              positive-ink · accent-info-ink — a quiet status role as text on
  *              a surface; derived from the role and the ink, a palette may pin
  *              them. warn and error are text in their own colour
- *   FACES      button-primary-* · button-danger-* ({bg,hover,border,ink}) and
+ *   FACES      button-danger-* ({bg,hover,border,ink}) and
  *              tint-{neutral,primary,positive,info,warn,error,trace,debug}-{fill,edge}:
  *              what a Button or a toned chip, toast or banner paints, pinned per theme by EV and
  *              derived for a brand. Not part of what a brand file owes.
  *   TYPE       text-caption · body-s · body · body-l · h3 · h2 · h1 ·
  *              figure-m · figure-l (size and line height); fonts
- *   SCALARS    radius · control-radius · chip-radius · control-* · display-scale ·
+ *   SCALARS    radius · control-radius · chip-radius · control-* · disabled-opacity · display-scale ·
  *              page-* · shell-* · depth-* (behind shadow-card/elevated/overlay)
  *   MOTION     ev-ease-* · ev-dur-* · ev-rise · ev-stagger(-section)
  *   CHARTS     chart-1 … chart-6
@@ -809,22 +810,23 @@
   --color-positive-ink: var(--positive-ink);
   --color-accent-trace: var(--accent-trace);
   --color-on-accent-trace: var(--on-accent-trace);
+  --color-accent-trace-hover: var(--accent-trace-hover);
   --color-accent-debug: var(--accent-debug);
   --color-on-accent-debug: var(--on-accent-debug);
+  --color-accent-debug-hover: var(--accent-debug-hover);
   --color-accent-info: var(--accent-info);
   --color-on-accent-info: var(--on-accent-info);
+  --color-accent-info-hover: var(--accent-info-hover);
   --color-accent-info-ink: var(--accent-info-ink);
   --color-accent-warn: var(--accent-warn);
   --color-on-accent-warn: var(--on-accent-warn);
+  --color-accent-warn-hover: var(--accent-warn-hover);
   --color-accent-error: var(--accent-error);
   --color-on-accent-error: var(--on-accent-error);
+  --color-accent-error-hover: var(--accent-error-hover);
 
-  /* component faces: derived below, pinned per theme by EV, so `bg-button-primary-bg`
+  /* component faces: derived below, pinned per theme by EV, so `bg-button-danger-bg`
    * and `border-tint-error-edge` are real utilities the class merge understands */
-  --color-button-primary-bg: var(--button-primary-bg);
-  --color-button-primary-hover: var(--button-primary-hover);
-  --color-button-primary-border: var(--button-primary-border);
-  --color-button-primary-ink: var(--button-primary-ink);
   --color-button-danger-bg: var(--button-danger-bg);
   --color-button-danger-hover: var(--button-danger-hover);
   --color-button-danger-border: var(--button-danger-border);
@@ -892,7 +894,13 @@
    * side — ink over white needs ~47% to clear it, dark lands near 4:1. */
   --input: color-mix(in srgb, var(--ink) 48%, transparent);
   --ring: var(--primary-ink);
-  --primary-hover: color-mix(in srgb, var(--primary) 95%, black);
+  /* a solid fill's hover moves away from its label, so the label only gains contrast */
+  --primary-hover: color-mix(in srgb, rgb(from var(--on-primary) calc(255 - r) calc(255 - g) calc(255 - b)) var(--tint-hover), var(--primary));
+  --accent-trace-hover: color-mix(in srgb, rgb(from var(--on-accent-trace) calc(255 - r) calc(255 - g) calc(255 - b)) var(--tint-hover), var(--accent-trace));
+  --accent-debug-hover: color-mix(in srgb, rgb(from var(--on-accent-debug) calc(255 - r) calc(255 - g) calc(255 - b)) var(--tint-hover), var(--accent-debug));
+  --accent-info-hover: color-mix(in srgb, rgb(from var(--on-accent-info) calc(255 - r) calc(255 - g) calc(255 - b)) var(--tint-hover), var(--accent-info));
+  --accent-warn-hover: color-mix(in srgb, rgb(from var(--on-accent-warn) calc(255 - r) calc(255 - g) calc(255 - b)) var(--tint-hover), var(--accent-warn));
+  --accent-error-hover: color-mix(in srgb, rgb(from var(--on-accent-error) calc(255 - r) calc(255 - g) calc(255 - b)) var(--tint-hover), var(--accent-error));
   --primary-border: color-mix(in srgb, var(--primary-ink) 55%, transparent);
   /* the quiet status roles as text on a surface: a fill is a shape, and as text
    * it reads far below AA on a light plane. warn and error have none: they are
@@ -907,11 +915,7 @@
  * same scopes, listed in another order so the contract reader finds one rule
  * per selector. */
 :where([data-theme], [data-brand], .light, .dark, :root) {
-  /* primary is an outline button, danger the same in the error role */
-  --button-primary-bg: transparent;
-  --button-primary-hover: var(--hover);
-  --button-primary-border: color-mix(in srgb, var(--ink) 60%, transparent);
-  --button-primary-ink: var(--ink);
+  /* danger is an outline in the error role */
   --button-danger-bg: transparent;
   --button-danger-hover: color-mix(in srgb, var(--accent-error) var(--tint-hover), transparent);
   --button-danger-border: var(--accent-error);
@@ -956,7 +960,9 @@
   --control-radius: 0.25rem;
   --control-h: 2.25rem;
   --control-step: 0.25rem;
+  --control-inset: 1rem; /* the md rung's side inset; every other rung's moves with its height */
   --chip-radius: 0.25rem;
+  --disabled-opacity: 0.5;
   /* how much of its ink a tint's fill and edge take: an outline by default, a
    * tinted pill where a theme raises the fill; and a tone's pointed-at row or face */
   --tint-fill: 0%;
@@ -972,7 +978,7 @@
   --depth-card: 0 0 #0000;
   --depth-elevated: 0 0 #0000;
   --depth-overlay: 0 0 #0000;
-  /* the Xl (call-to-action) button reads both */
+  /* the Xl (call-to-action) rung's inset and text */
   --control-px: 2rem;
   --control-text: 1rem;
   /* multiplies the display type scale (uikit <Display>) */
@@ -1019,15 +1025,22 @@
    */
 }
 
-/* The control height ramp a `Size` step names, re-derived on every scope that
- * may set `--control-h`. Pin one step to bend the ramp. */
+/* The control height and inset ramps a `Size` step names, re-derived on every
+ * scope that may set `--control-h`. Pin one step to bend the ramp. */
 :where(:root, [data-brand], [data-theme]) {
+  --control-h-2xs: calc(var(--control-h) - 3 * var(--control-step));
   --control-h-xs: calc(var(--control-h) - 2 * var(--control-step));
   --control-h-sm: calc(var(--control-h) - var(--control-step));
   --control-h-md: var(--control-h);
   --control-h-lg: calc(var(--control-h) + var(--control-step));
   --control-h-xl: calc(var(--control-h) + 3 * var(--control-step));
   --control-h-touch: max(var(--control-h-lg), 2.75rem); /* the 44 px pointer-target floor (WCAG 2.5.5) */
+  --control-inset-xs: calc(var(--control-h-xs) - var(--control-h) + var(--control-inset));
+  --control-inset-sm: calc(var(--control-h-sm) - var(--control-h) + var(--control-inset));
+  --control-inset-md: var(--control-inset);
+  --control-inset-lg: calc(var(--control-h-lg) - var(--control-h) + var(--control-inset));
+  --control-inset-xl: var(--control-px);
+  --control-inset-touch: calc(var(--control-h-touch) - var(--control-h) + var(--control-inset));
 }
 
 :root {
@@ -1122,13 +1135,11 @@
 
   /* brand and primary. A fill and an ink are different jobs (docs/spec/accents.md):
    * --primary carries white at 4.62:1 and reads as a shape on every plane (3.30:1
-   * on the popover); --primary-ink is the teal that reads as text (4.96:1 there).
-   * Figma's hover #18998b is 3.52:1 under white, so #127c71 (5.06:1) is pinned. */
+   * on the popover); --primary-ink is the teal that reads as text (4.96:1 there). */
   --brand: #0d1627;
   --primary: #138377;
   --on-primary: #ffffff;
   --primary-ink: #35a395;
-  --primary-hover: #127c71;
   --primary-border: #35a3958c;
 
   /* status. Fills carry the dark label (white fails 3:1–3.4:1 on these); the
@@ -1154,15 +1165,6 @@
   --chart-4: #e68aaf;
   --chart-5: #2e9e5c;
   --chart-6: #988eef;
-
-  --button-primary-bg: #e6e1d300;
-  --button-primary-hover: #e6e1d314;
-  --button-primary-border: #e6e1d399;
-  --button-primary-ink: #e6e1d3;
-  --button-danger-bg: #f05b5200;
-  --button-danger-border: #f05b52;
-  --button-danger-ink: var(--accent-error);
-
 }
 
 /* ── u2 Light ────────────────────────────────────────────────── */
@@ -1194,7 +1196,6 @@
   --primary: #138377;
   --on-primary: #ffffff;
   --primary-ink: #116f65;
-  --primary-hover: #116f65;
   --primary-border: #116f658c;
 
   /* Figma's positive #228a4e carries neither label at 4.5:1 (white 4.36, dark
@@ -1223,15 +1224,6 @@
   --chart-4: #b74679;
   --chart-5: #228a4e;
   --chart-6: #6d5acc;
-
-  --button-primary-bg: #0d0d0f00;
-  --button-primary-hover: #0d0d0f0f;
-  --button-primary-border: #0d0d0fa6;
-  --button-primary-ink: #080e1a;
-  --button-danger-bg: #db383400;
-  --button-danger-border: #db3834;
-  --button-danger-ink: var(--accent-error);
-
 }
 
 /* ── Oldschool ───────────────────────────────────────────────── *
@@ -1273,7 +1265,6 @@
   --primary: #138377;
   --on-primary: #ffffff;
   --primary-ink: #35a395;
-  --primary-hover: #127c71;
   --primary-border: #35a39500;
 
   --positive: #2e9e5c;
@@ -1298,15 +1289,11 @@
   --chart-5: #2e9e5c;
   --chart-6: #988eef;
 
-  /* filled buttons. The danger label stays dark: white on #f05b52 is 3.32:1. */
-  --button-primary-bg: #138377;
-  --button-primary-hover: #127c71;
-  --button-primary-border: #138377;
-  --button-primary-ink: #ffffff;
-  --button-danger-bg: #f05b52;
-  --button-danger-hover: #f06c61;
-  --button-danger-border: #f05b52;
-  --button-danger-ink: #070d18;
+  /* danger is a fill */
+  --button-danger-bg: var(--accent-error);
+  --button-danger-hover: var(--accent-error-hover);
+  --button-danger-border: var(--accent-error);
+  --button-danger-ink: var(--on-accent-error);
 
   /* tints are pills with no edge */
   --tint-fill: 18%;

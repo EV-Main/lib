@@ -191,9 +191,12 @@ mod tests {
 	fn wears_the_square_button_face() {
 		let classes = |variant: IconButtonVariant, size: Size| cn!(button_classes(&variant.button_variant(), size, true, None, ""), icon_button_size_class(size), ICON_BUTTON_BASE);
 		let md = classes(IconButtonVariant::Ghost, Size::Md);
-		assert!(md.contains("[--control-box:var(--control-h-xs)]") && md.contains("aspect-square") && md.contains("px-0"), "{md}");
+		assert!(
+			md.contains("[--control-box:var(--control-h-xs)]") && md.contains("aspect-square") && md.contains("[--control-pad:0px]"),
+			"{md}"
+		);
 		assert!(!md.contains("control-h-md"), "the glyph's step replaces the button's: {md}");
-		assert!(classes(IconButtonVariant::Ghost, Size::Sm).contains("calc(var(--control-h-xs)_-_var(--control-step))"));
+		assert!(classes(IconButtonVariant::Ghost, Size::Sm).contains("[--control-box:var(--control-h-2xs)]"));
 		assert!(classes(IconButtonVariant::Ghost, Size::Touch).contains("control-h-touch"));
 		let outline = classes(IconButtonVariant::Outline, Size::Md);
 		assert!(outline.contains("bg-secondary") && outline.contains("text-ink-mid"), "{outline}");

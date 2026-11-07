@@ -8,4 +8,4 @@ pub const BREADCRUMB_PAGE: &str = "text-ink font-normal";
 
 pub const BREADCRUMB_SEPARATOR: &str = "[&>svg]:size-3.5";
 
-pub const BREADCRUMB_ELLIPSIS: &str = "flex size-7 items-center justify-center";
+pub const BREADCRUMB_ELLIPSIS: &str = "flex size-(--control-h-xs) items-center justify-center";

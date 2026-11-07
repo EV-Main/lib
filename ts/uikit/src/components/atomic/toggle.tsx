@@ -3,16 +3,11 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { useControllableState } from "../../primitives/use-controllable-state";
-import { sizeClasses } from "../../generated/size";
-import {
-  TOGGLE_BASE,
-  toggleSizeClasses,
-  toggleVariantClasses,
-  type ToggleSize,
-  type ToggleVariant,
-} from "../../generated/toggle";
+import { sizeClasses, type Size } from "../../generated/size";
+import { TOGGLE_BASE, toggleVariantClasses, type ToggleVariant } from "../../generated/toggle";
 
-export type { ToggleSize, ToggleVariant };
+export type ToggleSize = Size;
+export type { ToggleVariant };
 
 export interface ToggleVariantsOptions {
   variant?: ToggleVariant;
@@ -29,7 +24,7 @@ export function toggleVariants({
   size = "md",
   className,
 }: ToggleVariantsOptions = {}): string {
-  return cn(TOGGLE_BASE, toggleVariantClasses[variant], sizeClasses[size], toggleSizeClasses[size], className);
+  return cn(TOGGLE_BASE, toggleVariantClasses[variant], sizeClasses[size], className);
 }
 
 export interface ToggleProps

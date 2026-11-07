@@ -86,12 +86,12 @@ mod tests {
 	fn class_override_wins() {
 		fn app() -> Element {
 			rsx! {
-				Input { class: "h-12" }
+				Input { class: "h-(--control-h-xl)" }
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("h-12"), "{html}");
-		assert!(!html.contains("h-9"), "override should drop base h-9: {html}");
+		assert!(html.contains("h-(--control-h-xl)"), "{html}");
+		assert!(!html.contains("h-(--control-h-md)"), "override should drop the base height: {html}");
 	}
 
 	#[test]
@@ -102,11 +102,11 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("h-12"), "{html}");
+		assert!(html.contains("h-(--control-h-xl)"), "{html}");
 		assert!(html.contains("md:text-base"), "{html}");
-		// `file:h-9` sizes the file button and legitimately stays; only the bare
-		// height class must be gone.
-		assert!(!html.split(['"', ' ']).any(|class| class == "h-9"), "lg drops the md height: {html}");
+		// `file:h-(--control-h-md)` sizes the file button and legitimately stays;
+		// only the bare height class must be gone.
+		assert!(!html.split(['"', ' ']).any(|class| class == "h-(--control-h-md)"), "lg drops the md height: {html}");
 		assert!(!html.contains("md:text-sm"), "lg must not shrink below 16px: {html}");
 		assert!(html.contains("rounded-control"), "{html}");
 		assert!(html.contains("data-size=\"lg\""), "{html}");
@@ -118,7 +118,7 @@ mod tests {
 			rsx! { Input {} }
 		}
 		let html = render(app);
-		assert!(html.contains("h-9"), "{html}");
+		assert!(html.contains("h-(--control-h-md)"), "{html}");
 		assert!(html.contains("data-size=\"md\""), "{html}");
 	}
 }

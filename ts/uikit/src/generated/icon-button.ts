@@ -8,7 +8,7 @@ export const ICON_BUTTON_VARIANTS = ["outline", "ghost"] as const;
 export type IconButtonVariant = (typeof ICON_BUTTON_VARIANTS)[number];
 
 export const iconButtonSizeClasses = {
-  "sm": "[--control-box:calc(var(--control-h-xs)_-_var(--control-step))]",
+  "sm": "[--control-box:var(--control-h-2xs)]",
   "md": "[--control-box:var(--control-h-xs)]",
   "touch": "",
 } as const;

@@ -8,7 +8,7 @@ export const ACCOUNT_LIST_ITEM_CHECKED = "border-primary-border bg-selected";
 
 export const ACCOUNT_LIST_ITEM_UNCHECKED = "border-border-subtle bg-muted hover:bg-hover";
 
-export const ACCOUNT_LIST_ITEM_DISABLED = "opacity-40";
+export const ACCOUNT_LIST_ITEM_DISABLED = "opacity-(--disabled-opacity)";
 
 export const ACCOUNT_LIST_ITEM_RADIO = "flex min-w-0 flex-1 items-center gap-3 rounded-panel text-left outline-none focus-visible:ring-2 focus-visible:ring-ring";
 

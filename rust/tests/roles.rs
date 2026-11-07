@@ -2,18 +2,15 @@
 //! where the theme has a role token is a missing token. One test per kind of
 //! literal, over what the kit emits; an exemption says why its literal is no role.
 
-use std::{fs, path::Path};
+use std::{collections::BTreeSet, fs, path::Path};
 
 const ROOT: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/..");
 const SIZES: [&str; 6] = ["xs", "sm", "md", "lg", "xl", "touch"];
 
-/// Field heights map onto the ramp irregularly (a field's `lg` is the CTA's 48 px).
-const IRREGULAR_SIZE_TABLES: [(&str, &str); 6] = [
-	("inputSizeClasses", "field heights"),
-	("selectTriggerSizeClasses", "field heights"),
-	("nativeSelectSizeClasses", "field heights, nested inside a field"),
+/// Size tables whose steps are not a control's box on its own rung.
+const IRREGULAR_SIZE_TABLES: [(&str, &str); 3] = [
 	("textareaSizeClasses", "a minimum block height, not a control height"),
-	("sidebarMenuButtonSizeClasses", "a nav row, sized with its rail"),
+	("itemSizes", "a list row's density, padded all round, with no control box"),
 	("sizeClasses", "the ramp itself"),
 ];
 
@@ -52,7 +49,7 @@ fn literals(is_literal: impl Fn(&str) -> bool, exempt: &[(&str, &str)]) -> Vec<S
 	all.into_iter()
 		.filter(|(_, c)| is_literal(c) && !exempt.iter().any(|(e, _)| e == c))
 		.map(|(at, c)| format!("{at}: {c}"))
-		.collect::<std::collections::BTreeSet<_>>()
+		.collect::<BTreeSet<_>>()
 		.into_iter()
 		.collect()
 }
@@ -93,16 +90,16 @@ fn size_tables() -> Vec<(String, Vec<(String, String)>)> {
 			}
 		}
 	}
-	assert!(tables.iter().any(|(name, _)| name == "buttonSizeClasses"), "size tables not found in {}", dir.display());
+	assert!(tables.iter().any(|(name, _)| name == "sizeClasses"), "size tables not found in {}", dir.display());
 	tables
 }
 
-/// A control's height is its `Size` step's `--control-box`, so a step table
-/// carries no height of its own.
+/// A control's height is its `Size` step's `--control-box` and its inset the
+/// step's `--control-pad`, so a step table carries neither of its own.
 #[test]
 fn size_tables_read_the_ramp() {
 	let magnitude = |class: &str| {
-		["h-", "min-h-", "size-", "min-w-"]
+		["h-", "min-h-", "size-", "min-w-", "px-", "gap-"]
 			.iter()
 			.any(|axis| utility(class).strip_prefix(axis).is_some_and(|n| n.starts_with(|c: char| c.is_ascii_digit())))
 	};
@@ -116,7 +113,10 @@ fn size_tables_read_the_ramp() {
 			offending.extend(classes.split_whitespace().filter(|c| magnitude(c)).map(|c| format!("{name}[{key}]: {c}")));
 		}
 	}
-	assert!(offending.is_empty(), "a literal height in a size table, where the step's --control-box belongs: {offending:#?}");
+	assert!(
+		offending.is_empty(),
+		"a literal height or inset in a size table, where the step's --control-box or --control-pad belongs: {offending:#?}"
+	);
 }
 
 /// A corner is `rounded-{control,panel,chip,row}` or the `full` shape.
@@ -168,18 +168,12 @@ fn a_tone_is_a_tint() {
 		let Some((tone, alpha)) = color.split_once('/') else { return false };
 		["accent-", "positive", "primary"].iter().any(|t| tone.starts_with(t)) && alpha.starts_with(|c: char| c.is_ascii_digit())
 	};
-	const SOLID_HOVER: &str = "a solid face's own hover, not a tint";
 	const OUTLINE_EDGE: &str = "an outlined control's edge, which a tint's (none in Oldschool) cannot be";
 	const MEASURED: &str = "a shape whose ratio docs/spec/accents.md measures";
 	const FILLED_MARK: &str = "a fill at rest in its tone, which u2's tint (an outline) cannot give";
 	let offending = literals(
 		literal,
 		&[
-			("hover:bg-accent-trace/90", SOLID_HOVER),
-			("hover:bg-accent-debug/90", SOLID_HOVER),
-			("hover:bg-accent-info/90", SOLID_HOVER),
-			("hover:bg-accent-warn/90", SOLID_HOVER),
-			("hover:bg-accent-error/90", SOLID_HOVER),
 			("border-accent-trace/40", OUTLINE_EDGE),
 			("border-accent-debug/40", OUTLINE_EDGE),
 			("border-accent-info/40", OUTLINE_EDGE),
@@ -193,4 +187,47 @@ fn a_tone_is_a_tint() {
 		],
 	);
 	assert!(offending.is_empty(), "a tone at a numeric alpha, where its --tint-* belongs: {offending:#?}");
+}
+
+/// A disabled control fades to `--disabled-opacity`, one value for the kit.
+#[test]
+fn disabled_is_one_token() {
+	let literal = |class: &str| {
+		let fade = utility(class);
+		class[..class.len() - fade.len()].contains("disabled") && fade.strip_prefix("opacity-").is_some_and(|n| n.starts_with(|c: char| c.is_ascii_digit()))
+	};
+	let offending = literals(literal, &[]);
+	assert!(
+		offending.is_empty(),
+		"a disabled fade spelled by hand, where opacity-(--disabled-opacity) belongs: {offending:#?}"
+	);
+}
+
+/// A control's box is a rung of the ramp, so a theme that moves `--control-h`
+/// reaches it; a literal at a rung's size is a box the theme cannot reach.
+#[test]
+fn control_boxes_read_the_ramp() {
+	let literal = |class: &str| {
+		let Some(n) = ["h-", "min-h-", "size-"].iter().find_map(|axis| utility(class).strip_prefix(axis)) else {
+			return false;
+		};
+		["6", "7", "8", "9", "10", "11", "12"].contains(&n)
+	};
+	const MEDIA: &str = "media (an avatar, an item's or an empty state's tile), sized to what it frames";
+	const BAR: &str = "a bar (smart header, aside header, chat dock), sized with the frame";
+	let offending = literals(
+		literal,
+		&[
+			("size-7", MEDIA),
+			("size-8", MEDIA),
+			("size-10", MEDIA),
+			("[&_svg:not([class*='size-'])]:size-6", MEDIA),
+			("size-9", "a calendar day cell and a chat attachment tile: a grid's cell and media"),
+			("h-10", "the smart header bar and the status screen's mark"),
+			("h-11", BAR),
+			("h-6", "the typing indicator, a line of text"),
+			("min-h-6", "the composer's field, a block's minimum line"),
+		],
+	);
+	assert!(offending.is_empty(), "a control box at a rung's size, where its --control-h-* belongs: {offending:#?}");
 }

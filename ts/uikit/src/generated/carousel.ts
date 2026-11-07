@@ -14,7 +14,7 @@ export const CAROUSEL_ITEM_HORIZONTAL = "pl-4";
 
 export const CAROUSEL_ITEM_VERTICAL = "pt-4";
 
-export const CAROUSEL_NAV = "absolute size-8 rounded-full";
+export const CAROUSEL_NAV = "absolute size-(--control-h-sm) rounded-full";
 
 export const CAROUSEL_PREVIOUS_HORIZONTAL = "top-1/2 -left-12 -translate-y-1/2";
 

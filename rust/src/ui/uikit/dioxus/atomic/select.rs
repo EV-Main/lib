@@ -478,7 +478,7 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("h-8"), "{html}");
+		assert!(html.contains("h-(--control-h-sm)"), "{html}");
 	}
 
 	#[test]
@@ -491,7 +491,7 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("h-12"), "{html}");
+		assert!(html.contains("h-(--control-h-xl)"), "{html}");
 		assert!(html.contains("text-base"), "{html}");
 		assert!(!html.contains("text-sm"), "lg replaces the md type: {html}");
 		assert!(html.contains("rounded-control"), "{html}");

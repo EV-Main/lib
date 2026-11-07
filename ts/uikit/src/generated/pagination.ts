@@ -10,4 +10,4 @@ export const PAGINATION_NEXT_LINK = "gap-1 px-2.5 sm:pr-2.5";
 
 export const PAGINATION_LINK_LABEL = "hidden sm:block";
 
-export const PAGINATION_ELLIPSIS = "flex size-9 items-center justify-center";
+export const PAGINATION_ELLIPSIS = "flex size-(--control-h-md) items-center justify-center";

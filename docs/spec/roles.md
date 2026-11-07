@@ -15,17 +15,24 @@ fails on a literal; an exemption there says why its literal is no role.
 them:
 
 ```
-xs = h − 2·step   sm = h − step   md = h   lg = h + step   xl = h + 3·step
-touch = max(lg, 44 px)                       (the WCAG 2.5.5 pointer target)
+2xs = h − 3·step   xs = h − 2·step   sm = h − step   md = h
+lg = h + step      xl = h + 3·step    touch = max(lg, 44 px)   (the WCAG 2.5.5 pointer target)
 ```
 
 A `Size` step names its rung and nothing else. A theme bends the ramp by
 pinning one rung (`--control-h-xl`), never by giving a component its own
 height. A component that sits off the ramp by design (a lone glyph two steps
-under its labelled sibling) names a rung too.
+under its labelled sibling, a field's `Lg` on the call to action's rung) names
+a rung too, and so does every fixed control box (a tab list, a menu bar, a
+glyph button).
+
+A step's side inset moves with its height: `--control-inset` is `md`'s, and
+a rung's is `inset + (h(rung) − h)`, so the label keeps its share of the box.
+`xl`'s is pinned (`--control-px`), the call to action's own knob. The gap and
+the glyph-side inset are fractions of it, and a tool (a toggle) packs at half.
 
 A step names its text size with its rung (`xs` 12 px, `sm`/`md` 14 px,
-`lg`/`xl`/`touch` 16 px). A glyph follows the text, not the box: it is
+`lg`/`touch` 16 px, `xl` `--control-text`). A glyph follows the text, not the box: it is
 `1em + 2px`, so a lone glyph in a small square and a label's glyph in a tall
 one stay the same pair.
 
@@ -50,8 +57,9 @@ A state on a surface is the ladder, never a surface colour at an alpha:
 current. A face with a fill of its own (a Secondary button, a tinted chip)
 takes the hover as a layer over the fill
 (`bg-[image:linear-gradient(var(--hover),var(--hover))]`), so the fill
-survives it. A state on a role's solid fill (primary, danger, an accent)
-belongs to that role.
+survives it. A role's solid fill (primary, an accent) hovers by moving away
+from its label by `--tint-hover` (`--{role}-hover`), so the label only gains
+contrast. A disabled control fades to `--disabled-opacity`.
 
 ## Surface
 

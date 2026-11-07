@@ -87,8 +87,8 @@ describe("NativeSelect", () => {
     const { container } = render(<NativeSelect size="lg" />);
     const el = select(container);
     expect(el).toHaveAttribute("data-size", "lg");
-    expect(el).toHaveClass("h-11", "pl-3", "pr-11", "pointer-fine:text-base");
-    expect(el).not.toHaveClass("h-7");
+    expect(el).toHaveClass("h-(--control-h-touch)", "pl-3", "pr-11", "pointer-fine:text-base");
+    expect(el).not.toHaveClass("h-(--control-h-xs)");
     expect(el).not.toHaveClass("pointer-fine:text-body");
     expect(container.querySelector("svg")).toHaveClass("right-4");
   });
