@@ -8,6 +8,7 @@ export default defineWorkspace([
     extends: "./vitest.config.ts",
     test: {
       name: "dom",
+      setupFiles: ["./test/layout.ts"],
       exclude: ["test/rsc/**", "**/node_modules/**", "example/**"],
     },
   },
