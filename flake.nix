@@ -79,6 +79,7 @@
               .claude/
             '';
             lfs = false;
+            jobs.errors.augment = [{ name = "js-tests"; args.packagesDir = "ts"; }];
             npmRelease = {
               scope = "evinvest";
               packagesDir = "ts";
