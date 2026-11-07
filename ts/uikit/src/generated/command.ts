@@ -18,7 +18,7 @@ export const COMMAND_EMPTY = "py-6 text-center text-sm";
 
 export const COMMAND_GROUP = "grid text-ink [&_[data-slot=command-group-heading]]:text-ink-soft overflow-hidden p-1 [&>[data-slot=command-group-heading]]:order-first [&_[data-slot=command-group-heading]]:px-2 [&_[data-slot=command-group-heading]]:py-1.5 [&_[data-slot=command-group-heading]]:text-xs [&_[data-slot=command-group-heading]]:font-medium";
 
-export const COMMAND_ITEM = "data-[selected=true]:bg-hover data-[selected=true]:text-ink [&_svg:not([class*='text-'])]:text-ink-soft relative flex cursor-default items-center gap-2 rounded-row px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-(--disabled-opacity) [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
+export const COMMAND_ITEM = "data-[selected=true]:bg-hover data-[selected=true]:text-ink [&_svg:not([class*='text-'])]:text-ink-soft relative flex cursor-default items-center gap-2 rounded-row px-2 min-h-(--control-h-sm) text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-(--disabled-opacity) [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
 
 export const COMMAND_SEPARATOR = "bg-border -mx-1 h-px";
 

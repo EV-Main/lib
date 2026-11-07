@@ -127,7 +127,7 @@ describe("Table variant and density", () => {
     expect(table).toHaveClass(
       "[--table-px:calc(var(--spacing)*5)]",
       "[--table-dense-py:calc(var(--spacing)*1.5)]",
-      "[--table-head-h:calc(var(--spacing)*8)]",
+      "[--table-head-h:var(--control-h-sm)]",
     );
   });
 

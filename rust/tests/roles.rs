@@ -14,40 +14,60 @@ const IRREGULAR_SIZE_TABLES: [(&str, &str); 3] = [
 	("sizeClasses", "the ramp itself"),
 ];
 
-/// Every class the kit emits: the inventory (the tables and both ports' literals)
-/// and the string literals of the hand-written TS components, as `(where, class)`.
+/// Every class the kit emits, as `(repo-relative path, class)`: the string
+/// literals of the class tables, both ports and the hand-written TS, short of
+/// whole-line comments and a Rust file's test module. `ts/uikit/src/generated`
+/// mirrors `rust/classes` and would count each site twice.
 fn classes() -> Vec<(String, String)> {
 	let root = Path::new(ROOT);
-	let inventory = fs::read_to_string(root.join("rust/classes/uikit-classes.txt")).expect("read the class inventory");
-	let mut found: Vec<(String, String)> = inventory
-		.lines()
-		.skip(1)
-		.flat_map(|line| line.split_whitespace().map(|c| ("uikit-classes.txt".to_owned(), c.to_owned())))
-		.collect();
-	let mut dirs = vec![root.join("ts/uikit/src/components")];
+	let mut dirs: Vec<_> = [
+		"rust/classes/src",
+		"rust/src/ui/uikit/core",
+		"rust/src/ui/uikit/dioxus",
+		"rust/src/ui/uikit/leptos",
+		"ts/uikit/src",
+	]
+	.iter()
+	.map(|dir| root.join(dir))
+	.collect();
+	let generated = root.join("ts/uikit/src/generated");
+	let mut found = Vec::new();
 	while let Some(dir) = dirs.pop() {
 		for entry in fs::read_dir(&dir).unwrap_or_else(|e| panic!("read {}: {e}", dir.display())) {
 			let path = entry.expect("dir entry").path();
 			if path.is_dir() {
-				dirs.push(path);
+				if path != generated {
+					dirs.push(path);
+				}
 				continue;
 			}
-			let src = fs::read_to_string(&path).expect("read component");
+			if !path.extension().is_some_and(|e| e == "rs" || e == "ts" || e == "tsx") {
+				continue;
+			}
+			let src = fs::read_to_string(&path).expect("read source");
+			let lines: Vec<&str> = src.lines().collect();
+			// `#[cfg(test)]` also gates items outside a test module (core/order.rs)
+			let emitted = lines
+				.windows(2)
+				.position(|w| w[0].trim() == "#[cfg(test)]" && w[1].trim_start().starts_with("mod "))
+				.map_or(&lines[..], |at| &lines[..at]);
+			let code = emitted.iter().filter(|line| !line.trim_start().starts_with("//")).copied().collect::<Vec<_>>().join("\n");
 			let at = path.strip_prefix(root).expect("walked from root").display().to_string();
-			found.extend(src.split('"').skip(1).step_by(2).flat_map(|piece| piece.split_whitespace().map(|c| (at.clone(), c.to_owned()))));
+			found.extend(code.split('"').skip(1).step_by(2).flat_map(|piece| piece.split_whitespace().map(|c| (at.clone(), c.to_owned()))));
 		}
 	}
 	found
 }
 
-/// `classes()` that match, minus the exempt ones; fails if an exemption matches nothing.
-fn literals(is_literal: impl Fn(&str) -> bool, exempt: &[(&str, &str)]) -> Vec<String> {
+/// `classes()` that match, minus the ones exempt at their site; fails on an
+/// exemption that matches nothing there.
+fn literals(is_literal: impl Fn(&str) -> bool, exempt: &[(&str, &str, &str)]) -> Vec<String> {
 	let all = classes();
-	for (class, _) in exempt {
-		assert!(all.iter().any(|(_, c)| c == class), "{class} is exempt but no longer emitted");
+	for (site, class, _) in exempt {
+		assert!(all.iter().any(|(at, c)| at == site && c == class), "{class} is exempt at {site} but no longer emitted there");
 	}
 	all.into_iter()
-		.filter(|(_, c)| is_literal(c) && !exempt.iter().any(|(e, _)| e == c))
+		.filter(|(at, c)| is_literal(c) && !exempt.iter().any(|(site, e, _)| site == at && e == c))
 		.map(|(at, c)| format!("{at}: {c}"))
 		.collect::<BTreeSet<_>>()
 		.into_iter()
@@ -130,7 +150,14 @@ fn radius_is_a_role() {
 			.unwrap_or(rest);
 		["-xs", "-sm", "-md", "-lg", "-xl", "-2xl", "-3xl", "-4xl"].contains(&value) || (value.starts_with("-[") && value != "-[inherit]") || value.starts_with("-(")
 	};
-	let offending = literals(literal, &[("rounded-tl-sm", "the navigation viewport's arrow tip, a shape and no surface")]);
+	let offending = literals(
+		literal,
+		&[(
+			"rust/classes/src/navigation_menu.rs",
+			"rounded-tl-sm",
+			"the navigation viewport's arrow tip, a shape and no surface",
+		)],
+	);
 	assert!(offending.is_empty(), "a radius literal, where rounded-{{control,panel,chip,row}} belongs: {offending:#?}");
 }
 
@@ -149,6 +176,7 @@ fn state_is_the_ladder() {
 	let offending = literals(
 		literal,
 		&[(
+			"rust/classes/src/kbd.rs",
 			"[[data-slot=tooltip-content]_&]:bg-background/20",
 			"a key cap on the inverted tooltip face: a tint of it, no state",
 		)],
@@ -174,16 +202,16 @@ fn a_tone_is_a_tint() {
 	let offending = literals(
 		literal,
 		&[
-			("border-accent-trace/40", OUTLINE_EDGE),
-			("border-accent-debug/40", OUTLINE_EDGE),
-			("border-accent-info/40", OUTLINE_EDGE),
-			("border-accent-warn/40", OUTLINE_EDGE),
-			("border-accent-error/40", OUTLINE_EDGE),
-			("bg-primary-ink/20", MEASURED),
-			("has-data-[state=checked]:bg-primary-ink/5", MEASURED),
-			("aria-selected:bg-accent-info/20", FILLED_MARK),
-			("data-[reset]:not-aria-selected:bg-accent-trace/20", FILLED_MARK),
-			("bg-primary-ink/15", FILLED_MARK),
+			("rust/classes/src/accent.rs", "border-accent-trace/40", OUTLINE_EDGE),
+			("rust/classes/src/accent.rs", "border-accent-debug/40", OUTLINE_EDGE),
+			("rust/classes/src/accent.rs", "border-accent-info/40", OUTLINE_EDGE),
+			("rust/classes/src/accent.rs", "border-accent-warn/40", OUTLINE_EDGE),
+			("rust/classes/src/accent.rs", "border-accent-error/40", OUTLINE_EDGE),
+			("rust/classes/src/progress.rs", "bg-primary-ink/20", MEASURED),
+			("rust/classes/src/field.rs", "has-data-[state=checked]:bg-primary-ink/5", MEASURED),
+			("rust/classes/src/select.rs", "aria-selected:bg-accent-info/20", FILLED_MARK),
+			("rust/classes/src/select.rs", "data-[reset]:not-aria-selected:bg-accent-trace/20", FILLED_MARK),
+			("ts/uikit/src/components/shell/nav-badge.tsx", "bg-primary-ink/15", FILLED_MARK),
 		],
 	);
 	assert!(offending.is_empty(), "a tone at a numeric alpha, where its --tint-* belongs: {offending:#?}");
@@ -218,16 +246,38 @@ fn control_boxes_read_the_ramp() {
 	let offending = literals(
 		literal,
 		&[
-			("size-7", MEDIA),
-			("size-8", MEDIA),
-			("size-10", MEDIA),
-			("[&_svg:not([class*='size-'])]:size-6", MEDIA),
-			("size-9", "a calendar day cell and a chat attachment tile: a grid's cell and media"),
-			("h-10", "the smart header bar and the status screen's mark"),
-			("h-11", BAR),
-			("h-6", "the typing indicator, a line of text"),
-			("min-h-6", "the composer's field, a block's minimum line"),
+			("rust/classes/src/chat_message.rs", "size-7", MEDIA),
+			("rust/classes/src/avatar.rs", "size-8", MEDIA),
+			("rust/classes/src/item.rs", "size-8", MEDIA),
+			("rust/classes/src/item.rs", "size-10", MEDIA),
+			("rust/classes/src/empty.rs", "size-10", MEDIA),
+			("rust/classes/src/empty.rs", "[&_svg:not([class*='size-'])]:size-6", MEDIA),
+			("rust/classes/src/chat_message.rs", "size-9", "a chat attachment tile, media"),
+			("rust/classes/src/smart_header.rs", "h-10", "the smart header bar"),
+			("rust/classes/src/status_screen.rs", "h-10", "the status screen's mark"),
+			("rust/classes/src/smart_header.rs", "h-11", BAR),
+			("rust/classes/src/aside.rs", "h-11", BAR),
+			("ts/uikit/src/components/shell/chat-panel.tsx", "h-11", BAR),
+			("rust/classes/src/chat_typing.rs", "h-6", "the typing indicator, a line of text"),
+			("rust/classes/src/chat_composer.rs", "min-h-6", "the composer's field, a block's minimum line"),
 		],
 	);
 	assert!(offending.is_empty(), "a control box at a rung's size, where its --control-h-* belongs: {offending:#?}");
+}
+
+/// A type step is a rung of the text or the display ramp, so a theme that moves
+/// `--body-size` or `--display-base` reaches it.
+#[test]
+fn type_steps_read_the_ramps() {
+	let sheet = fs::read_to_string(Path::new(ROOT).join("theme.css")).expect("read theme.css");
+	let steps: Vec<&str> = sheet.lines().map(str::trim).filter(|line| line.starts_with("--text-")).collect();
+	assert!(!steps.is_empty(), "no --text-* step in theme.css");
+	let offending: Vec<&&str> = steps
+		.iter()
+		.filter(|line| {
+			let value = line.split_once(':').expect("a declaration").1;
+			!value.contains("var(--body-") && !value.contains("var(--display-")
+		})
+		.collect();
+	assert!(offending.is_empty(), "a type step spelled by hand, where the text or display ramp belongs: {offending:#?}");
 }

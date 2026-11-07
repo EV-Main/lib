@@ -23,7 +23,8 @@
  *              primary-ink — the primary role as ink on a surface, where the
  *              fill and the readable value are different colours;
  *              primary-hover · accent-*-hover — a solid fill's hover, derived;
- *              primary-border — the primary button's edge
+ *              primary-border — the primary button's edge;
+ *              on-secondary — the ink, derived
  *              positive-ink · accent-info-ink — a quiet status role as text on
  *              a surface; derived from the role and the ink, a palette may pin
  *              them. warn and error are text in their own colour
@@ -32,8 +33,10 @@
  *              what a Button or a toned chip, toast or banner paints, pinned per theme by EV and
  *              derived for a brand. Not part of what a brand file owes.
  *   TYPE       text-caption · body-s · body · body-l · h3 · h2 · h1 ·
- *              figure-m · figure-l (size and line height); fonts
- *   SCALARS    radius · control-radius · chip-radius · control-* · disabled-opacity · display-scale ·
+ *              figure-m · figure-l (size and line height), derived from
+ *              body-{size,step,leading} and display-{base,step,leading} ·
+ *              figure-leading · display-scale; fonts
+ *   SCALARS    radius · control-radius · chip-radius · control-* · disabled-opacity · body-* · display-* · figure-leading ·
  *              page-* · shell-* · depth-* (behind shadow-card/elevated/overlay)
  *   MOTION     ev-ease-* · ev-dur-* · ev-rise · ev-stagger(-section)
  *   CHARTS     chart-1 … chart-6

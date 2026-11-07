@@ -34,7 +34,23 @@ the glyph-side inset are fractions of it, and a tool (a toggle) packs at half.
 A step names its text size with its rung (`xs` 12 px, `sm`/`md` 14 px,
 `lg`/`touch` 16 px, `xl` `--control-text`). A glyph follows the text, not the box: it is
 `1em + 2px`, so a lone glyph in a small square and a label's glyph in a tall
-one stay the same pair.
+one stay the same pair. A checkbox's and a radio's box and a switch's thumb are
+glyphs; the switch's track is sized off its thumb.
+
+## Type
+
+The nine text steps are two even-step ramps. `--body-size`, `--body-step` and
+`--body-leading` are the text ramp's inputs (`body` is its rung 0);
+`--display-base`, `--display-step`, `--display-leading` and `--figure-leading`
+the display ramp's, and `--display-scale` multiplies the whole display tier:
+
+```
+text     size = body-size + k·body-step        leading = body-leading + 2k·body-step
+         caption −2 · body-s −1 · body 0 · body-l +1 · h3 +1           (13 px / 1 px, leading 18 px)
+display  size = (display-base + k·display-step) · display-scale
+         leading = size + display-leading (h1, h2) | size + figure-leading (figure-m, figure-l), · scale
+         figure-m 1 · h2 2 · figure-l 3 · h1 4                          (16 px / 4 px, +6 px / +4 px)
+```
 
 ## Radius
 

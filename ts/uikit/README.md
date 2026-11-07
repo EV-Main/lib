@@ -68,14 +68,14 @@ your Tailwind v4 entrypoint — this is the load-bearing part of the kit:
 | roles | `brand` `primary` `secondary` `positive` `accent-trace` `accent-debug` `accent-info` `accent-warn` `accent-error`, each with `on-*` where it gets filled; `primary-ink` — the primary role as ink on a surface; `primary-hover` · `accent-*-hover` — a solid fill's hover, the fill moved away from its label by `--tint-hover`; `primary-border` — the primary button's edge |
 | status inks | `positive-ink` · `accent-info-ink` — a quiet status role as text on a surface (derived, a palette may pin them); warn and error text wears `accent-warn` · `accent-error` itself, held to 3:1 |
 | faces | `button-danger-*` (`bg` `hover` `border` `ink`) — the destructive `Button`; `tint-{neutral,primary,positive,info,warn,error,trace,debug}-{fill,edge}` — a toned `Badge`, `Toast`, `SystemBanner`, `Alert`; derived for a brand, pinned per theme by EV |
-| type | `text-caption` 11/14 · `body-s` 12/16 · `body` 13/18 · `body-l` 14/20 · `h3` 14/20 · `h2` 24/30 · `h1` 32/38 · `figure-m` 20/24 · `figure-l` 28/32 (size and line height each) |
-| scalars | `radius` (panel, 6 px) · `control-radius` (4 px) · `chip-radius` (4 px) · `depth-card` `depth-elevated` `depth-overlay` · `control-h` `control-step` `control-inset` `control-px` `control-text` `disabled-opacity` `display-scale` `band-py` `page-max` `page-px` `shell-rail-w` `shell-tab-bar-h` · `font-*` |
+| type | `text-caption` 11/14 · `body-s` 12/16 · `body` 13/18 · `body-l` 14/20 · `h3` 14/20 · `h2` 24/30 · `h1` 32/38 · `figure-m` 20/24 · `figure-l` 28/32 (size and line height each), two ramps off the scalars `body-*` and `display-*` (see `docs/spec/roles.md`) |
+| scalars | `radius` (panel, 6 px) · `control-radius` (4 px) · `chip-radius` (4 px) · `depth-card` `depth-elevated` `depth-overlay` · `control-h` `control-step` `control-inset` `control-px` `control-text` `disabled-opacity` `body-size` `body-step` `body-leading` `display-base` `display-step` `display-leading` `figure-leading` `display-scale` `band-py` `page-max` `page-px` `shell-rail-w` `shell-tab-bar-h` · `font-*` |
 | motion | `ev-ease-out` `ev-ease-in-out` `ev-dur-fast` `ev-dur-base` `ev-dur-slow` `ev-rise` `ev-stagger` `ev-stagger-section` |
 | charts | `chart-1` … `chart-6` |
 
-A palette owes **29 names**: the colours that are not derived, which is every
+A palette owes **28 names**: the colours that are not derived, which is every
 role and surface above plus `chart-1` … `chart-6`. The states, lines, inks,
-status inks, faces and chips are derived from them with formulas, so a brand
+status inks, faces, chips and `on-secondary` (the ink) are derived from them with formulas, so a brand
 file that pins none of them still renders.
 
 Custom properties inherit, so a scope class on a `<section>` re-themes its
@@ -154,7 +154,7 @@ It has two halves, each also shipped as a flat sheet of its own —
 
 ### Brand palettes
 
-A second brand is a palette against the same names (29 of them, `chart-6` among them), scoped to
+A second brand is a palette against the same names (28 of them, `chart-6` among them), scoped to
 `[data-brand="<slug>"]`; light is its default and `.light` / `.dark` beneath it
 pick a polarity, so a `<Section polarity="dark">` inside the brand takes the
 brand's dark values. The package ships a generator for it, reading the
@@ -226,7 +226,7 @@ under a brand under another brand may match either.
 
 ### Fonts
 
-The families are parameters, one per role, and not part of the 29 colour names:
+The families are parameters, one per role, and not part of the 28 colour names:
 a palette is complete without them, and the generator only carries what a
 brand file's `[fonts]` declares. Unset, each is EV's, and Oldschool carries the
 families the navy look shipped with:
@@ -804,7 +804,7 @@ a button step only — `Input` and `SelectTrigger` already clear it at `lg`.
   Oldschool); the kit ships no font files.
 - The font role `display` is `serif`: `--brand-font-display` / `font-display`
   become `--brand-font-serif` / `font-serif` (see [Fonts](#fonts)).
-- A brand file must add `chart-6` (29 names now); `evinvest-palette` names it.
+- A brand file must add `chart-6` (28 names now); `evinvest-palette` names it.
 - Panel radius is 6 px at every width (the `sm` bump to 8 px is gone), controls
   and chips 4 px, and the depth tiers are flat. **Aquafix, vifnet and any other
   brand take these and lose their card shadow** unless their scope overrides

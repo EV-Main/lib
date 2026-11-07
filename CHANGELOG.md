@@ -456,6 +456,24 @@ Rust crate and its TypeScript mirror at once.
 
 ### Changed
 
+- **The type scale is derived** (`ev_lib` `uikit` and `@evinvest/uikit`, #297):
+  the nine `--text-*` steps are a text ramp off `--body-size`, `--body-step`,
+  `--body-leading` and a display ramp off `--display-base`, `--display-step`,
+  `--display-leading`, `--figure-leading`, with `--display-scale` now scaling
+  h1, h2 and the figures as well as `Band`'s headline. Same pixels at the
+  defaults.
+- **Boxes outside `Size` name their rung** (`ev_lib` `uikit` and
+  `@evinvest/uikit`, #297): a menu, context-menu, menubar, command or select
+  row is `min-h-(--control-h-sm)` with no block padding (a wrapped label grows
+  it by its lines only), a table head `--control-h-lg` (`compact`:
+  `--control-h-sm`), a calendar cell and column `--control-h-md`. A checkbox's
+  and a radio's box and a switch's thumb are a glyph, `1em + 2px`, the track
+  sized off the thumb: the same 16 px at 14 px text, larger beside larger text.
+- **`on-secondary` is derived** (`ev_lib` `uikit` and `@evinvest/uikit`,
+  #297): it is the ink unless a palette pins it, so a brand file owes 28 names.
+- **`rust/tests/roles.rs` exempts a literal at its site** (#297): it walks the
+  kit's sources instead of the class inventory, past test modules, and an
+  exemption names the file it holds for.
 - **Connected landings: sites_panel by derived address, and `/.well-known/sa-site`**
   (`@evinvest/kitstart`, minor, breaking).
   - `SITES_PANEL_INTERNAL_URL` replaces `LOCATIONS_API_URL`, and the kit

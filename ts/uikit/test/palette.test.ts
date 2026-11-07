@@ -28,7 +28,7 @@ describe("readContract", () => {
     expect(contract.required).toContain("primary-ink");
     expect(contract.required).toContain("chart-6");
     expect(contract.required).not.toContain("border");
-    expect(contract.required).toHaveLength(29);
+    expect(contract.required).toHaveLength(28);
   });
 
   it("owes no state, line or status-ink token: the contract derives them", () => {

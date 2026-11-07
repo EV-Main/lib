@@ -5,7 +5,7 @@ use crate::focus::filled_focus_ring;
 pub const CHECKBOX_BASE: &str = concat!(
 	"peer border-input data-[state=checked]:bg-primary data-[state=checked]:text-on-primary \
 	 data-[state=checked]:border-primary focus-visible:border-ring aria-invalid:ring-accent-error/20 \
-	 aria-invalid:border-accent-error size-4 shrink-0 rounded-control border shadow-xs transition-shadow \
+	 aria-invalid:border-accent-error size-[calc(1em+2px)] shrink-0 rounded-control border shadow-xs transition-shadow \
 	 outline-none disabled:cursor-not-allowed disabled:opacity-(--disabled-opacity) ",
 	filled_focus_ring!()
 );

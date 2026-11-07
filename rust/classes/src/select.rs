@@ -22,7 +22,7 @@ pub const SELECT_CONTENT_BOUNDS: &str = "min-w-[max(8rem,var(--select-trigger-wi
 pub const SELECT_ITEM: &str = concat!(
 	"focus:bg-hover focus:text-ink aria-selected:bg-accent-info/20 aria-selected:text-accent-info data-[reset]:not-aria-selected:bg-accent-trace/20 ",
 	option_focus_ring!(),
-	" [&_svg:not([class*='text-'])]:text-ink-soft relative flex w-full cursor-default items-center gap-2 rounded-row py-1.5 pr-8 pl-2 \
+	" [&_svg:not([class*='text-'])]:text-ink-soft relative flex w-full cursor-default items-center gap-2 rounded-row min-h-(--control-h-sm) pr-8 pl-2 \
 	 text-sm whitespace-normal [overflow-wrap:anywhere] outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-(--disabled-opacity) [&_svg]:pointer-events-none \
 	 [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2"
 );

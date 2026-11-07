@@ -39,7 +39,6 @@
   --background: #0d0d0f;
   --card: #151518;
   --secondary: #1c1c20;
-  --on-secondary: var(--ink);
   --popover: #252529;
   --muted: #070709;
   --hover: #e6e1d30f;
@@ -102,7 +101,6 @@
   --background: #efebdf;
   --card: #f6f3eb;
   --secondary: #fbfaf6;
-  --on-secondary: var(--ink);
   --popover: #ffffff;
   --muted: #e6e1d3;
   --hover: #0d0d0f0d;
@@ -171,7 +169,6 @@
   --background: #070d18;
   --card: #16233c;
   --secondary: #0d1526;
-  --on-secondary: var(--ink);
   --popover: #1d2c49;
   --muted: #26375c;
   --hover: #e6e1d312;
