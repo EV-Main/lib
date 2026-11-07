@@ -75,6 +75,12 @@ Rust crate and its TypeScript mirror at once.
 
 ### Added
 
+- **`@evinvest/figma-render`** (0.1.0, no Rust twin): a Playwright suite's
+  pages into Figma frames. `defineFigmaSuite({ test }, urls, { hide })`, its
+  `settle`, and the `evinvest-figma-render` bin (`frames` lists the
+  `<project> <page>` keys; without it, the frames `FIGMA_CAPTURES` names are
+  captured). Out of sites_tools' `testing/e2e`, which now wraps it; site_conductor
+  renders its screens with it too.
 - **`validWeights`, `validHoldout`** (`@evinvest/experiments` 0.6.1): the
   per-field checks `applyOverrides` makes, exported so the Service-Arb panel's
   editor refuses exactly what a landing would drop.
