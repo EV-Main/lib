@@ -221,7 +221,7 @@ mod tests {
 		}
 		let html = render(app);
 		assert!(html.contains("size-8"), "{html}");
-		assert!(html.contains("p-0"), "icon button folds to a square, padding zeroed: {html}");
+		assert!(html.contains("[--control-pad:0px]"), "icon button folds to a square, padding zeroed: {html}");
 	}
 
 	#[test]

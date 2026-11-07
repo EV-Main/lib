@@ -1,18 +1,17 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { Slot } from "../../primitives/slot";
-import { sizeClasses } from "../../generated/size";
+import { sizeClasses, type Size } from "../../generated/size";
 import { accentFillClasses, accentOutlineClasses, type Accent } from "../../generated/accent";
 import {
   BUTTON_BASE,
   BUTTON_ICON,
-  buttonSizeClasses,
   buttonVariantClasses,
-  type ButtonSize,
   type ButtonVariant,
 } from "../../generated/button";
 
-export type { Accent, ButtonSize, ButtonVariant };
+export type ButtonSize = Size;
+export type { Accent, ButtonVariant };
 
 export interface ButtonVariantsOptions {
   variant?: ButtonVariant;
@@ -42,7 +41,7 @@ export function buttonVariants({
     BUTTON_BASE,
     buttonVariantClasses[variant],
     sizeClasses[size],
-    icon ? BUTTON_ICON : buttonSizeClasses[size],
+    icon ? BUTTON_ICON : undefined,
     accent === undefined ? undefined : accentClass(accent, variant),
     className,
   );

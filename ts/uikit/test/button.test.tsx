@@ -19,8 +19,7 @@ describe("Button", () => {
         x
       </Button>,
     );
-    expect(getByText("x")).toHaveClass(sizeClasses.sm);
-    expect(getByText("x")).toHaveClass("aspect-square");
+    expect(getByText("x")).toHaveClass("[--control-box:var(--control-h-sm)]", "aspect-square", "[--control-pad:0px]");
   });
 
   it("takes the touch step, as a square when icon", () => {
@@ -32,9 +31,9 @@ describe("Button", () => {
         </Button>
       </>,
     );
-    expect(getByText("go")).toHaveClass(sizeClasses.touch, "px-6");
-    expect(getByText("x")).toHaveClass(sizeClasses.touch, "aspect-square", "px-0");
-    expect(getByText("x")).not.toHaveClass("px-6");
+    expect(getByText("go")).toHaveClass(sizeClasses.touch, "px-(--control-pad)");
+    expect(getByText("x")).toHaveClass("[--control-box:var(--control-h-touch)]", "aspect-square", "[--control-pad:0px]");
+    expect(getByText("x")).not.toHaveClass("[--control-pad:var(--control-inset-touch)]");
   });
 
   it("recolours at an accent rung, per the variant's face", () => {

@@ -221,8 +221,9 @@ discipline:
   drifted sheet is a colour quietly going missing on a consumer, not a build
   error.
 - **An intent enum sets custom properties; a base reads them.** A variant
-  emits one literal (`Size::Sm` is `[--control-box:var(--control-h-sm)]`) and a
-  component base reads it on whatever axis it sizes (`h-(--control-box)`), so
+  emits literals (`Size::Sm` sets `--control-box` and `--control-pad` to its
+  rungs) and a component base reads them on whatever axis it sizes
+  (`h-(--control-box)`, `px-(--control-pad)`), so
   no component keeps its own table of the same steps and every class stays a
   literal the inventory carries. A later fuse of the same property wins.
 

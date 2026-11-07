@@ -21,9 +21,9 @@ export const inputGroupAddonAligns = {
 export type InputGroupAddonAlign = keyof typeof inputGroupAddonAligns;
 
 export const inputGroupButtonSizes = {
-  "xs": "h-6 gap-1 px-2 rounded-control [&>svg:not([class*='size-'])]:size-3.5 has-[>svg]:px-2",
-  "sm": "h-8 px-2.5 gap-1.5 rounded-control has-[>svg]:px-2.5",
-  "icon-xs": "size-6 rounded-control p-0 has-[>svg]:p-0",
-  "icon-sm": "size-8 p-0 has-[>svg]:p-0",
+  "xs": "h-6 [--control-pad:var(--control-inset-xs)] rounded-control [&>svg:not([class*='size-'])]:size-3.5",
+  "sm": "h-8 [--control-pad:var(--control-inset-sm)] rounded-control",
+  "icon-xs": "size-6 rounded-control [--control-pad:0px]",
+  "icon-sm": "size-8 [--control-pad:0px]",
 } as const;
 export type InputGroupButtonSize = keyof typeof inputGroupButtonSizes;

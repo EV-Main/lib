@@ -39,15 +39,7 @@ pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 			],
 		),
 		("band", vec![table::<Polarity>("polarityClasses", "Polarity"), table::<Surface>("surfaceClasses", "Surface")]),
-		(
-			"button",
-			vec![
-				table::<ButtonVariant>("buttonVariantClasses", "ButtonVariant"),
-				// Size and shape are two axes: the square is one class over every step, not
-				// a key fused into the size table (`"icon-sm"`). See docs/spec/variants.md.
-				size_table("buttonSizeClasses", "ButtonSize", button_size_class),
-			],
-		),
+		("button", vec![table::<ButtonVariant>("buttonVariantClasses", "ButtonVariant")]),
 		("button-group", vec![table::<ButtonGroupOrientation>("buttonGroupOrientationClasses", "ButtonGroupOrientation")]),
 		(
 			"chat-message",
@@ -166,13 +158,7 @@ pub fn uikit() -> Vec<(&'static str, Vec<Ts>)> {
 		),
 		("textarea", vec![form_size_table("textareaSizeClasses", "TextareaSize", textarea_size_class)]),
 		("toggle-group", vec![union::<ToggleGroupType>("TOGGLE_GROUP_TYPES", "ToggleGroupType")]),
-		(
-			"toggle",
-			vec![
-				table::<ToggleVariant>("toggleVariantClasses", "ToggleVariant"),
-				size_table("toggleSizeClasses", "ToggleSize", toggle_size_class),
-			],
-		),
+		("toggle", vec![table::<ToggleVariant>("toggleVariantClasses", "ToggleVariant")]),
 	]
 }
 
@@ -241,15 +227,6 @@ where
 		name,
 		ty,
 		items: T::iter().map(Into::into).collect(),
-	}
-}
-
-/// Any `fn(Size) -> &str` over the whole control scale, keyed by the size name.
-fn size_table(name: &'static str, ty: &'static str, class: fn(Size) -> &'static str) -> Ts {
-	Ts::Table {
-		name,
-		ty,
-		entries: Size::iter().map(|s| (s.as_ref().to_string(), class(s).to_string())).collect(),
 	}
 }
 

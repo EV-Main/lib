@@ -244,6 +244,7 @@
   --control-radius: 0.25rem;
   --control-h: 2.25rem;
   --control-step: 0.25rem;
+  --control-inset: 1rem; /* the md rung's side inset; every other rung's moves with its height */
   --chip-radius: 0.25rem;
   /* how much of its ink a tint's fill and edge take: an outline by default, a
    * tinted pill where a theme raises the fill; and a tone's pointed-at row or face */
@@ -260,7 +261,7 @@
   --depth-card: 0 0 #0000;
   --depth-elevated: 0 0 #0000;
   --depth-overlay: 0 0 #0000;
-  /* the Xl (call-to-action) button reads both */
+  /* the Xl (call-to-action) rung's inset and text */
   --control-px: 2rem;
   --control-text: 1rem;
   /* multiplies the display type scale (uikit <Display>) */
@@ -307,8 +308,8 @@
    */
 }
 
-/* The control height ramp a `Size` step names, re-derived on every scope that
- * may set `--control-h`. Pin one step to bend the ramp. */
+/* The control height and inset ramps a `Size` step names, re-derived on every
+ * scope that may set `--control-h`. Pin one step to bend the ramp. */
 :where(:root, [data-brand], [data-theme]) {
   --control-h-xs: calc(var(--control-h) - 2 * var(--control-step));
   --control-h-sm: calc(var(--control-h) - var(--control-step));
@@ -316,6 +317,12 @@
   --control-h-lg: calc(var(--control-h) + var(--control-step));
   --control-h-xl: calc(var(--control-h) + 3 * var(--control-step));
   --control-h-touch: max(var(--control-h-lg), 2.75rem); /* the 44 px pointer-target floor (WCAG 2.5.5) */
+  --control-inset-xs: calc(var(--control-h-xs) - var(--control-h) + var(--control-inset));
+  --control-inset-sm: calc(var(--control-h-sm) - var(--control-h) + var(--control-inset));
+  --control-inset-md: var(--control-inset);
+  --control-inset-lg: calc(var(--control-h-lg) - var(--control-h) + var(--control-inset));
+  --control-inset-xl: var(--control-px);
+  --control-inset-touch: calc(var(--control-h-touch) - var(--control-h) + var(--control-inset));
 }
 
 :root {

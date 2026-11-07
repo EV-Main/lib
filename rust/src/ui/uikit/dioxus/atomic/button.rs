@@ -55,7 +55,7 @@ mod tests {
 	use tailwind_fuse::AsTailwindClass;
 
 	use super::*;
-	use crate::ui::uikit::dioxus::{FILLED_FOCUS_RING, button_size_class, test_util::render};
+	use crate::ui::uikit::dioxus::{FILLED_FOCUS_RING, test_util::render};
 
 	#[test]
 	fn default_variant_and_size_render() {
@@ -77,7 +77,10 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains(Size::Sm.as_class()) && html.contains("aspect-square px-0"), "{html}");
+		assert!(
+			html.contains("[--control-box:var(--control-h-sm)]") && html.contains("aspect-square [--control-pad:0px]"),
+			"{html}"
+		);
 	}
 
 	#[test]
@@ -88,8 +91,8 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains(Size::Lg.as_class()) && html.contains("aspect-square"), "{html}");
-		assert!(!html.contains("px-6"), "icon button must not carry text padding: {html}");
+		assert!(html.contains("[--control-box:var(--control-h-lg)]") && html.contains("aspect-square"), "{html}");
+		assert!(!html.contains("control-inset-lg"), "icon button must not carry text padding: {html}");
 	}
 
 	#[test]
@@ -101,11 +104,8 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		// the rendered attribute escapes `>`, so match the escaped class string
-		let text = button_size_class(Size::Touch).replace('>', "&#62;");
-		assert!(html.contains(&text), "{html}");
 		assert!(
-			html.contains(Size::Touch.as_class()) && html.contains("aspect-square px-0"),
+			html.contains(Size::Touch.as_class()) && html.contains("aspect-square [--control-pad:0px]"),
 			"icon touch button must be a square: {html}"
 		);
 	}

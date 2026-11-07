@@ -2,18 +2,19 @@
 //! where the theme has a role token is a missing token. One test per kind of
 //! literal, over what the kit emits; an exemption says why its literal is no role.
 
-use std::{fs, path::Path};
+use std::{collections::BTreeSet, fs, path::Path};
 
 const ROOT: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/..");
 const SIZES: [&str; 6] = ["xs", "sm", "md", "lg", "xl", "touch"];
 
 /// Field heights map onto the ramp irregularly (a field's `lg` is the CTA's 48 px).
-const IRREGULAR_SIZE_TABLES: [(&str, &str); 6] = [
+const IRREGULAR_SIZE_TABLES: [(&str, &str); 7] = [
 	("inputSizeClasses", "field heights"),
 	("selectTriggerSizeClasses", "field heights"),
 	("nativeSelectSizeClasses", "field heights, nested inside a field"),
 	("textareaSizeClasses", "a minimum block height, not a control height"),
 	("sidebarMenuButtonSizeClasses", "a nav row, sized with its rail"),
+	("itemSizes", "a list row's density, padded all round, with no control box"),
 	("sizeClasses", "the ramp itself"),
 ];
 
@@ -52,7 +53,7 @@ fn literals(is_literal: impl Fn(&str) -> bool, exempt: &[(&str, &str)]) -> Vec<S
 	all.into_iter()
 		.filter(|(_, c)| is_literal(c) && !exempt.iter().any(|(e, _)| e == c))
 		.map(|(at, c)| format!("{at}: {c}"))
-		.collect::<std::collections::BTreeSet<_>>()
+		.collect::<BTreeSet<_>>()
 		.into_iter()
 		.collect()
 }
@@ -93,16 +94,16 @@ fn size_tables() -> Vec<(String, Vec<(String, String)>)> {
 			}
 		}
 	}
-	assert!(tables.iter().any(|(name, _)| name == "buttonSizeClasses"), "size tables not found in {}", dir.display());
+	assert!(tables.iter().any(|(name, _)| name == "sizeClasses"), "size tables not found in {}", dir.display());
 	tables
 }
 
-/// A control's height is its `Size` step's `--control-box`, so a step table
-/// carries no height of its own.
+/// A control's height is its `Size` step's `--control-box` and its inset the
+/// step's `--control-pad`, so a step table carries neither of its own.
 #[test]
 fn size_tables_read_the_ramp() {
 	let magnitude = |class: &str| {
-		["h-", "min-h-", "size-", "min-w-"]
+		["h-", "min-h-", "size-", "min-w-", "px-", "gap-"]
 			.iter()
 			.any(|axis| utility(class).strip_prefix(axis).is_some_and(|n| n.starts_with(|c: char| c.is_ascii_digit())))
 	};
@@ -116,7 +117,10 @@ fn size_tables_read_the_ramp() {
 			offending.extend(classes.split_whitespace().filter(|c| magnitude(c)).map(|c| format!("{name}[{key}]: {c}")));
 		}
 	}
-	assert!(offending.is_empty(), "a literal height in a size table, where the step's --control-box belongs: {offending:#?}");
+	assert!(
+		offending.is_empty(),
+		"a literal height or inset in a size table, where the step's --control-box or --control-pad belongs: {offending:#?}"
+	);
 }
 
 /// A corner is `rounded-{control,panel,chip,row}` or the `full` shape.

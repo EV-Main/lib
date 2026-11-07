@@ -24,8 +24,13 @@ pinning one rung (`--control-h-xl`), never by giving a component its own
 height. A component that sits off the ramp by design (a lone glyph two steps
 under its labelled sibling) names a rung too.
 
+A step's side inset moves with its height: `--control-inset` is `md`'s, and
+a rung's is `inset + (h(rung) − h)`, so the label keeps its share of the box.
+`xl`'s is pinned (`--control-px`), the call to action's own knob. The gap and
+the glyph-side inset are fractions of it, and a tool (a toggle) packs at half.
+
 A step names its text size with its rung (`xs` 12 px, `sm`/`md` 14 px,
-`lg`/`xl`/`touch` 16 px). A glyph follows the text, not the box: it is
+`lg`/`touch` 16 px, `xl` `--control-text`). A glyph follows the text, not the box: it is
 `1em + 2px`, so a lone glyph in a small square and a label's glyph in a tall
 one stay the same pair.
 

@@ -45,12 +45,12 @@ pub enum InputGroupButtonSize {
 }
 
 /// Size × icon → shadcn's flat `xs`/`sm`/`icon-xs`/`icon-sm` keys. Mirrors the TS
-/// `inputGroupButtonSizes` table; an icon button is a square (`size-N p-0`).
+/// `inputGroupButtonSizes` table; an icon button is a square with no inset.
 pub fn input_group_button_size_class(size: InputGroupButtonSize, icon: bool) -> &'static str {
 	match (size, icon) {
-		(InputGroupButtonSize::Xs, false) => "h-6 gap-1 px-2 rounded-control [&>svg:not([class*='size-'])]:size-3.5 has-[>svg]:px-2",
-		(InputGroupButtonSize::Sm, false) => "h-8 px-2.5 gap-1.5 rounded-control has-[>svg]:px-2.5",
-		(InputGroupButtonSize::Xs, true) => "size-6 rounded-control p-0 has-[>svg]:p-0",
-		(InputGroupButtonSize::Sm, true) => "size-8 p-0 has-[>svg]:p-0",
+		(InputGroupButtonSize::Xs, false) => "h-6 [--control-pad:var(--control-inset-xs)] rounded-control [&>svg:not([class*='size-'])]:size-3.5",
+		(InputGroupButtonSize::Sm, false) => "h-8 [--control-pad:var(--control-inset-sm)] rounded-control",
+		(InputGroupButtonSize::Xs, true) => "size-6 rounded-control [--control-pad:0px]",
+		(InputGroupButtonSize::Sm, true) => "size-8 [--control-pad:0px]",
 	}
 }
