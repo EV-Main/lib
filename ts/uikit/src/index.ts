@@ -699,6 +699,9 @@ export type { NavBadgeProps, NavBadgeVariant, NavDotProps, NavDotTone } from "./
 export { BottomTabBar } from "./components/shell/bottom-tab-bar";
 export type { BottomTabBarLabels, BottomTabBarProps } from "./components/shell/bottom-tab-bar";
 
+export { Hotbar } from "./components/shell/hotbar";
+export type { HotbarAction, HotbarLabels, HotbarProps } from "./components/shell/hotbar";
+
 export { TopBar } from "./components/shell/top-bar";
 export type { TopBarProps } from "./components/shell/top-bar";
 
