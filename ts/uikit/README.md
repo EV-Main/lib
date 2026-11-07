@@ -454,6 +454,16 @@ export function Nav() {
   linkComponent?, hideFrom = "lg", labels: { back } }` — sticky under
   `--ev-shell-offset`; with `back` the title centres.
 - **`TopBar`** `{ start?, end? }` — layout only, server-safe.
+- **`Hotbar`** `{ actions: { id, label, icon, shortcut?: "N" | "mod+K", onSelect,
+  pressed?, pinned? }[], status?, takeover?: { tone: "warn" | "error", message,
+  action? }, labels }` — the bottom strip of a terminal-style app; the app docks
+  it. Shortcuts are bound while it is mounted, pinned or not: a plain key skips
+  a focused field, `mod+` (⌘ on Apple, Ctrl elsewhere) fires anywhere, a key
+  another handler took is left alone. Which actions are pinned is the user's,
+  set in its Customize popover and kept in this browser's `localStorage`
+  (`ev-hotbar`). `pressed` is a toggle the app owns. Under a 64rem strip (a
+  container query, not the viewport) it is a sideways-scrolling chip row with
+  no status. A `takeover` tints the strip and replaces the actions until cleared.
 - **`AccountMenu`** `{ account: { name?, email }, manageHref?, switchHref,
   groups?: NavGroup[], onSignOut, linkComponent?, labels: { trigger, manage,
   switchAccount, signOut } }` — an initials avatar opening the menu.
@@ -923,7 +933,8 @@ measuring needs host-only `web-sys`). Known gaps:
   `SelectValue` labels, `ListRows` / `ListRow` (a table's phone form), the
   rest of the [app shell](#app-shell) (`AppShell`, `ShellNav`, `BottomTabBar`,
   `NavBadge` / `NavDot`, `AccountMenu` and its profile form, `MobileAppBar`,
-  `PageFrame` / `PageHeading`, `SectionNav`, `ResourceError`, `Settled`) and
+  `PageFrame` / `PageHeading`, `SectionNav`, `ResourceError`, `Settled`,
+  `Hotbar`) and
   the parts that need a browser API Rust does not wrap: `AnimatedNumber` /
   `useCountTween` (a frame loop and `Intl`), `ChatStreamText` (word diffing and
   timers), and `ChatPanel` / `ChatDock` (`ResizeObserver`, scroll pinning).

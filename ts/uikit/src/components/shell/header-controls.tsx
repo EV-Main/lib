@@ -190,14 +190,14 @@ export interface HeaderSearchProps extends React.ComponentProps<"button"> {
 
 const APPLE = /Mac|iPhone|iPad|iPod/;
 
-// Read after mount, so the server render and the first client render agree.
-function usePlatformShortcut(): string {
-  const [shortcut, setShortcut] = React.useState<string>(copy.CTRL_K);
+/** Whether ⌘ is the modifier: read after mount, so the server render and the first client render agree. */
+export function useAppleKeys(): boolean {
+  const [apple, setApple] = React.useState(false);
   React.useEffect(() => {
     const nav = navigator as Navigator & { userAgentData?: { platform?: string } };
-    if (APPLE.test(nav.userAgentData?.platform ?? nav.platform ?? "")) setShortcut(copy.COMMAND_K);
+    setApple(APPLE.test(nav.userAgentData?.platform ?? nav.platform ?? ""));
   }, []);
-  return shortcut;
+  return apple;
 }
 
 /** A button dressed as the search field; it opens the palette rather than taking input. */
@@ -207,7 +207,7 @@ export function HeaderSearch({
   className,
   ...props
 }: HeaderSearchProps) {
-  const platformShortcut = usePlatformShortcut();
+  const platformShortcut = useAppleKeys() ? copy.COMMAND_K : copy.CTRL_K;
   return (
     <button
       type="button"

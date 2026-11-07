@@ -24,6 +24,7 @@ import MenuRecipesPage from "../pages/composed/MenuRecipesPage";
 import PopoverFormPage from "../pages/composed/PopoverFormPage";
 import SettingsPartsPage from "../pages/composed/SettingsPartsPage";
 import SmartHeaderPage from "../pages/composed/SmartHeaderPage";
+import HotbarPage from "../pages/composed/HotbarPage";
 import AccountModalScreen from "../pages/screens/AccountModalScreen";
 import AiChatScreen from "../pages/screens/AiChatScreen";
 import AsidesScreen from "../pages/screens/AsidesScreen";
@@ -90,6 +91,7 @@ export const ENTRIES: readonly Entry[] = [
   { tier: "composed", id: "command-palette", title: "Command palette", Page: CommandPalettePage },
   { tier: "composed", id: "menu-recipes", title: "Menu recipes", Page: MenuRecipesPage },
   { tier: "composed", id: "smart-header", title: "Smart header", Page: SmartHeaderPage },
+  { tier: "composed", id: "hotbar", title: "Hotbar", Page: HotbarPage },
   { tier: "composed", id: "asides", title: "Asides", Page: AsidesPage },
   { tier: "composed", id: "chat-parts", title: "Chat parts", Page: ChatPartsPage },
   { tier: "screens", id: "settings", title: "Settings", Page: SettingsScreen },
