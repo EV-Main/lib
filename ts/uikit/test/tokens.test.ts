@@ -524,7 +524,7 @@ describe("list rows ring their keyboard focus", () => {
 describe("the contract half of the sheet", () => {
   const rules = readRules(sheet);
 
-  it("derives the states, lines, inks, status inks, button faces and tints rather than asking a palette for them", () => {
+  it("derives the states, lines, inks, status inks, on-secondary, button faces and tints rather than asking a palette for them", () => {
     expect([...contract.derived].sort()).toEqual([
       "accent-debug-hover",
       "accent-error-hover",
@@ -545,6 +545,7 @@ describe("the contract half of the sheet", () => {
       "ink-mid",
       "ink-soft",
       "input",
+      "on-secondary",
       "positive-ink",
       "primary-border",
       "primary-hover",

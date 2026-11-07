@@ -181,6 +181,7 @@
    * side — ink over white needs ~47% to clear it, dark lands near 4:1. */
   --input: color-mix(in srgb, var(--ink) 48%, transparent);
   --ring: var(--primary-ink);
+  --on-secondary: var(--ink);
   /* a solid fill's hover moves away from its label, so the label only gains contrast */
   --primary-hover: color-mix(in srgb, rgb(from var(--on-primary) calc(255 - r) calc(255 - g) calc(255 - b)) var(--tint-hover), var(--primary));
   --accent-trace-hover: color-mix(in srgb, rgb(from var(--on-accent-trace) calc(255 - r) calc(255 - g) calc(255 - b)) var(--tint-hover), var(--accent-trace));

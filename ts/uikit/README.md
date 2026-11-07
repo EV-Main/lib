@@ -73,9 +73,9 @@ your Tailwind v4 entrypoint — this is the load-bearing part of the kit:
 | motion | `ev-ease-out` `ev-ease-in-out` `ev-dur-fast` `ev-dur-base` `ev-dur-slow` `ev-rise` `ev-stagger` `ev-stagger-section` |
 | charts | `chart-1` … `chart-6` |
 
-A palette owes **29 names**: the colours that are not derived, which is every
+A palette owes **28 names**: the colours that are not derived, which is every
 role and surface above plus `chart-1` … `chart-6`. The states, lines, inks,
-status inks, faces and chips are derived from them with formulas, so a brand
+status inks, faces, chips and `on-secondary` (the ink) are derived from them with formulas, so a brand
 file that pins none of them still renders.
 
 Custom properties inherit, so a scope class on a `<section>` re-themes its
@@ -154,7 +154,7 @@ It has two halves, each also shipped as a flat sheet of its own —
 
 ### Brand palettes
 
-A second brand is a palette against the same names (29 of them, `chart-6` among them), scoped to
+A second brand is a palette against the same names (28 of them, `chart-6` among them), scoped to
 `[data-brand="<slug>"]`; light is its default and `.light` / `.dark` beneath it
 pick a polarity, so a `<Section polarity="dark">` inside the brand takes the
 brand's dark values. The package ships a generator for it, reading the
@@ -226,7 +226,7 @@ under a brand under another brand may match either.
 
 ### Fonts
 
-The families are parameters, one per role, and not part of the 29 colour names:
+The families are parameters, one per role, and not part of the 28 colour names:
 a palette is complete without them, and the generator only carries what a
 brand file's `[fonts]` declares. Unset, each is EV's, and Oldschool carries the
 families the navy look shipped with:
@@ -804,7 +804,7 @@ a button step only — `Input` and `SelectTrigger` already clear it at `lg`.
   Oldschool); the kit ships no font files.
 - The font role `display` is `serif`: `--brand-font-display` / `font-display`
   become `--brand-font-serif` / `font-serif` (see [Fonts](#fonts)).
-- A brand file must add `chart-6` (29 names now); `evinvest-palette` names it.
+- A brand file must add `chart-6` (28 names now); `evinvest-palette` names it.
 - Panel radius is 6 px at every width (the `sm` bump to 8 px is gone), controls
   and chips 4 px, and the depth tiers are flat. **Aquafix, vifnet and any other
   brand take these and lose their card shadow** unless their scope overrides

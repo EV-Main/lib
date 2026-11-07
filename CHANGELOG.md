@@ -469,6 +469,8 @@ Rust crate and its TypeScript mirror at once.
   `--control-h-sm`), a calendar cell and column `--control-h-md`. A checkbox's
   and a radio's box and a switch's thumb are a glyph, `1em + 2px`, the track
   sized off the thumb: the same 16 px at 14 px text, larger beside larger text.
+- **`on-secondary` is derived** (`ev_lib` `uikit` and `@evinvest/uikit`,
+  #297): it is the ink unless a palette pins it, so a brand file owes 28 names.
 - **Connected landings: sites_panel by derived address, and `/.well-known/sa-site`**
   (`@evinvest/kitstart`, minor, breaking).
   - `SITES_PANEL_INTERNAL_URL` replaces `LOCATIONS_API_URL`, and the kit

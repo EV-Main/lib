@@ -23,7 +23,8 @@
  *              primary-ink — the primary role as ink on a surface, where the
  *              fill and the readable value are different colours;
  *              primary-hover · accent-*-hover — a solid fill's hover, derived;
- *              primary-border — the primary button's edge
+ *              primary-border — the primary button's edge;
+ *              on-secondary — the ink, derived
  *              positive-ink · accent-info-ink — a quiet status role as text on
  *              a surface; derived from the role and the ink, a palette may pin
  *              them. warn and error are text in their own colour

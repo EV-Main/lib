@@ -24,7 +24,8 @@
  *              primary-ink — the primary role as ink on a surface, where the
  *              fill and the readable value are different colours;
  *              primary-hover · accent-*-hover — a solid fill's hover, derived;
- *              primary-border — the primary button's edge
+ *              primary-border — the primary button's edge;
+ *              on-secondary — the ink, derived
  *              positive-ink · accent-info-ink — a quiet status role as text on
  *              a surface; derived from the role and the ink, a palette may pin
  *              them. warn and error are text in their own colour
@@ -896,6 +897,7 @@
    * side — ink over white needs ~47% to clear it, dark lands near 4:1. */
   --input: color-mix(in srgb, var(--ink) 48%, transparent);
   --ring: var(--primary-ink);
+  --on-secondary: var(--ink);
   /* a solid fill's hover moves away from its label, so the label only gains contrast */
   --primary-hover: color-mix(in srgb, rgb(from var(--on-primary) calc(255 - r) calc(255 - g) calc(255 - b)) var(--tint-hover), var(--primary));
   --accent-trace-hover: color-mix(in srgb, rgb(from var(--on-accent-trace) calc(255 - r) calc(255 - g) calc(255 - b)) var(--tint-hover), var(--accent-trace));
@@ -1120,7 +1122,6 @@
   --background: #0d0d0f;
   --card: #151518;
   --secondary: #1c1c20;
-  --on-secondary: var(--ink);
   --popover: #252529;
   --muted: #070709;
   --hover: #e6e1d30f;
@@ -1183,7 +1184,6 @@
   --background: #efebdf;
   --card: #f6f3eb;
   --secondary: #fbfaf6;
-  --on-secondary: var(--ink);
   --popover: #ffffff;
   --muted: #e6e1d3;
   --hover: #0d0d0f0d;
@@ -1252,7 +1252,6 @@
   --background: #070d18;
   --card: #16233c;
   --secondary: #0d1526;
-  --on-secondary: var(--ink);
   --popover: #1d2c49;
   --muted: #26375c;
   --hover: #e6e1d312;
