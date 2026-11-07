@@ -32,10 +32,30 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      # Paths built here rather than substituted (the rust-overlay toolchain, google-fonts) go to a
+      # file:// binary cache kept across runs: v_flakes' github/cache.nix `lean` scheme, keyed on the closure.
+      # Saved by uikit-rust's main runs only.
+      - name: Lean nix cache setup
+        run: |
+          mkdir -p /tmp/nix-lean-cache
+          chmod 0777 /tmp/nix-lean-cache
+          printf '#!/bin/sh\nexport PATH=/nix/var/nix/profiles/default/bin:$PATH\nnix copy --to "file:///tmp/nix-lean-cache?compression=zstd&parallel-compression=true" $OUT_PATHS || true\n' > /tmp/nix-lean-pbh.sh
+          chmod 0755 /tmp/nix-lean-pbh.sh
+      - name: Restore lean nix cache
+        uses: actions/cache/restore@v5
+        with:
+          path: /tmp/nix-lean-cache
+          key: nix-lean-${{ runner.os }}-${{ hashFiles('flake.lock', 'flake.nix') }}
+          restore-keys: nix-lean-${{ runner.os }}-
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
         with:
-          extra-conf: 'lazy-trees = true'
+          extra-conf: |
+            lazy-trees = true
+            post-build-hook = /tmp/nix-lean-pbh.sh
+            extra-substituters = file:///tmp/nix-lean-cache
+            extra-trusted-substituters = file:///tmp/nix-lean-cache
+            require-sigs = false
       # rust-cache reads the toolchain off PATH; the runner's own rustup one would key it wrong
       - name: Toolchain on PATH
         run: |
