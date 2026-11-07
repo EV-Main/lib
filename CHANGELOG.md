@@ -23,6 +23,12 @@ Rust crate and its TypeScript mirror at once.
 
 ### Breaking
 
+- **Control geometry is derived** (`ev_lib_classes`, `@evinvest/uikit`, #281):
+  `button_size_class` and `toggle_size_class` are gone (a `Size` step now sets
+  `--control-pad` from the new `--control-inset-*` ramp), as are the
+  `--button-primary-*` tokens. `--primary-hover` and the new
+  `--accent-*-hover` are derived from `--tint-hover`, and a disabled control
+  fades to the new `--disabled-opacity`.
 - **`@evinvest/types` removed**: no consumer imported it. `ev_lib::types`
   stays; `COUNTRY_CODES` is private again.
 - **`kitstart` moved to `EV-Service-Arb/sites_tools`** (`ev_lib` feature
