@@ -104,7 +104,9 @@ mod tests {
 		let rail = html.find("aria-label=\"Sections\"").expect("rail");
 		let main = html.find("data-slot=\"settings-main\"").expect("main column");
 		let body = html.find("Тело").expect("body");
-		assert!(nav < rail && rail < main && main < body, "{html}");
+		assert!(nav < rail, "{html}");
+		assert!(rail < main, "{html}");
+		assert!(main < body, "{html}");
 		assert!(!html.contains("<main"), "{html}");
 		assert!(html.contains("lg:flex-row"), "{html}");
 	}

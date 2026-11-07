@@ -178,7 +178,8 @@ mod tests {
 		let html = render(app);
 		assert!(html.contains("type=\"reset\""), "{html}");
 		assert!(html.contains("type=\"submit\""), "{html}");
-		assert!(html.contains(">Reset<") && html.contains(">Apply<"), "English defaults: {html}");
+		assert!(html.contains(">Reset<"), "English defaults: {html}");
+		assert!(html.contains(">Apply<"), "English defaults: {html}");
 	}
 
 	#[test]
@@ -200,6 +201,7 @@ mod tests {
 		let html = render(app);
 		assert!(html.contains(">Применить<"), "{html}");
 		assert!(html.contains(">Сбросить<"), "{html}");
-		assert!(!html.contains("Apply") && !html.contains("Reset<"), "{html}");
+		assert!(!html.contains("Apply"), "{html}");
+		assert!(!html.contains("Reset<"), "{html}");
 	}
 }

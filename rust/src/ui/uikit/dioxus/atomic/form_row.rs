@@ -112,8 +112,10 @@ mod tests {
 		let description = html.find("Shown on invoices").expect("description");
 		let control = html.find("JD").expect("control");
 		let hint = html.find("Max 40 characters").expect("hint");
-		assert!(label_col < description && description < control_col, "{html}");
-		assert!(control_col < control && control < hint, "{html}");
+		assert!(label_col < description, "{html}");
+		assert!(description < control_col, "{html}");
+		assert!(control_col < control, "{html}");
+		assert!(control < hint, "{html}");
 	}
 
 	#[test]

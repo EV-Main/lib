@@ -35,7 +35,8 @@ mod tests {
 			rsx! { ChatTyping {} }
 		}
 		let html = render(app);
-		assert!(html.contains("role=\"status\"") && html.contains("aria-label=\"Assistant is thinking\""), "{html}");
+		assert!(html.contains("role=\"status\""), "{html}");
+		assert!(html.contains("aria-label=\"Assistant is thinking\""), "{html}");
 		assert_eq!(html.matches("aria-hidden=\"true\" data-dot=\"\"").count(), 3, "{html}");
 		assert!(html.contains("data-still=\"\" class=\"text-body leading-none\">…</span>"), "{html}");
 	}

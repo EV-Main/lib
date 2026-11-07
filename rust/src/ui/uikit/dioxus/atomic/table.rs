@@ -170,7 +170,8 @@ mod tests {
 		assert!(html.contains("[--table-head-case:uppercase]"), "{html}");
 		assert!(html.contains("[--table-dense-py:calc(var(--spacing)*1.5)]"), "{html}");
 		// dioxus-ssr escapes `&` and `>` as numeric references
-		assert!(html.contains("thead") && html.contains("tr:hover]:bg-transparent"), "{html}");
+		assert!(html.contains("thead"), "{html}");
+		assert!(html.contains("tr:hover]:bg-transparent"), "{html}");
 		// the cell itself is unchanged: it only reads the properties
 		assert!(!html.contains("px-5"), "{html}");
 	}

@@ -41,7 +41,11 @@ fn matches_baselines() {
 		.collect();
 	let orphaned: Vec<&String> = baselines.keys().filter(|name| !captured.contains_key(*name)).collect();
 	assert!(
-		mismatched.is_empty() && orphaned.is_empty(),
+		mismatched.is_empty(),
+		"render differs from baseline: {mismatched:?}; baseline without a page: {orphaned:?}. Look at {DIST} (`nix run .#visual`), then accept with UPDATE_EXPECT=1"
+	);
+	assert!(
+		orphaned.is_empty(),
 		"render differs from baseline: {mismatched:?}; baseline without a page: {orphaned:?}. Look at {DIST} (`nix run .#visual`), then accept with UPDATE_EXPECT=1"
 	);
 }

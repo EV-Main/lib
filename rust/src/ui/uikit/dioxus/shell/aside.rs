@@ -282,7 +282,8 @@ mod tests {
 		let back = html.find("aria-label=\"Назад\"").expect("back button");
 		let title = html.find("Изменить оповещение").expect("title");
 		let close = html.find("aria-label=\"Close\"").expect("close button");
-		assert!(back < title && title < close, "{html}");
+		assert!(back < title, "{html}");
+		assert!(title < close, "{html}");
 		// Creation order is not DOM order, so the ids cannot say which button
 		// is which; the back-only header pins the wiring instead.
 		fn back_only() -> Element {
@@ -324,7 +325,8 @@ mod tests {
 		}
 		let html = render(app);
 		let group = opening_tag(&html, "data-slot=\"aside-rail\"");
-		assert!(group.contains("role=\"group\"") && group.contains("aria-label=\"Panels\""), "{group}");
+		assert!(group.contains("role=\"group\""), "{group}");
+		assert!(group.contains("aria-label=\"Panels\""), "{group}");
 		assert!(opening_tag(&html, "aria-label=\"Ассистент\"").contains("aria-pressed=true"), "{html}");
 		assert!(opening_tag(&html, "aria-label=\"Список наблюдения\"").contains("aria-pressed=false"), "{html}");
 	}
@@ -361,7 +363,8 @@ mod tests {
 		let at = |s: &str| html.find(s).unwrap_or_else(|| panic!("{s}: {html}"));
 		let spacer = at(&format!("class=\"{ASIDE_RAIL_SPACER}\""));
 		assert!(at("aria-label=\"Список наблюдения\"") < at("aria-label=\"Ассистент\""), "{html}");
-		assert!(at("aria-label=\"Ассистент\"") < spacer && spacer < at("aria-label=\"Настройки\""), "{html}");
+		assert!(at("aria-label=\"Ассистент\"") < spacer, "{html}");
+		assert!(spacer < at("aria-label=\"Настройки\""), "{html}");
 		assert!(!opening_tag(&html, "aria-label=\"Настройки\"").contains("aria-pressed=true"), "{html}");
 		let html = render_focused(app);
 		assert!(html.contains("role=\"tooltip\""), "{html}");
@@ -384,10 +387,13 @@ mod tests {
 		let panel = opening_tag(&html, "data-slot=\"aside-panel\"");
 		assert!(panel.starts_with("<aside"), "{panel}");
 		assert!(panel.contains("aria-label=\"Список наблюдения\""), "{panel}");
-		assert!(panel.contains("data-mode=\"docked\"") && panel.contains("data-side=\"right\""), "{panel}");
-		assert!(panel.contains("border-l") && !panel.contains("border-r"), "{panel}");
+		assert!(panel.contains("data-mode=\"docked\""), "{panel}");
+		assert!(panel.contains("data-side=\"right\""), "{panel}");
+		assert!(panel.contains("border-l"), "{panel}");
+		assert!(!panel.contains("border-r"), "{panel}");
 		let aside = &html[html.find("<aside").expect("aside")..html.find("</aside>").expect("aside end")];
-		assert!(aside.contains("Тело") && aside.contains("Сохранить"), "{aside}");
+		assert!(aside.contains("Тело"), "{aside}");
+		assert!(aside.contains("Сохранить"), "{aside}");
 		assert!(aside.contains("data-slot=\"aside-footer\""), "{aside}");
 	}
 
@@ -453,7 +459,8 @@ mod tests {
 		}
 		let html = render(app);
 		let panel = opening_tag(&html, "data-slot=\"aside-panel\"");
-		assert!(panel.contains("border-r") && !panel.contains("border-l"), "{panel}");
+		assert!(panel.contains("border-r"), "{panel}");
+		assert!(!panel.contains("border-l"), "{panel}");
 		assert!(panel.contains("data-side=\"left\""), "{panel}");
 	}
 
@@ -489,7 +496,8 @@ mod tests {
 		let mut h = Harness::new(app);
 		let html = h.html();
 		let dialog = opening_tag(&html, "data-slot=\"sheet-content\"");
-		assert!(dialog.contains("role=\"dialog\"") && dialog.contains("aria-modal=\"true\""), "{dialog}");
+		assert!(dialog.contains("role=\"dialog\""), "{dialog}");
+		assert!(dialog.contains("aria-modal=\"true\""), "{dialog}");
 		assert!(dialog.contains("aria-label=\"Удалить оповещение\""), "{dialog}");
 		assert!(dialog.contains("sm:max-w-105"), "{dialog}");
 		assert!(html.contains("Точно?"), "{html}");
@@ -514,7 +522,9 @@ mod tests {
 		assert!(opening_tag(&html, "data-slot=\"aside-panel-narrow\"").contains("contents md:hidden"), "{html}");
 		let sheet = html.find("data-slot=\"sheet-content\"").expect("sheet");
 		let drawer = html.find("data-slot=\"drawer-content\"").expect("drawer");
-		assert!(wide < sheet && sheet < narrow && narrow < drawer, "{html}");
+		assert!(wide < sheet, "{html}");
+		assert!(sheet < narrow, "{html}");
+		assert!(narrow < drawer, "{html}");
 	}
 
 	#[test]

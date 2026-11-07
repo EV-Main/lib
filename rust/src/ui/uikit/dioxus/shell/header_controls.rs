@@ -336,7 +336,8 @@ mod tests {
 			rsx! { HeaderBalance { label: rsx! { "Баланс:" }, value: "1 234,50 ₽", aria_label: "Баланс счёта" } }
 		}
 		let html = render(app);
-		assert!(html.contains("Баланс:") && !html.contains("Balance:"), "{html}");
+		assert!(html.contains("Баланс:"), "{html}");
+		assert!(!html.contains("Balance:"), "{html}");
 		assert!(html.contains("aria-label=\"Баланс счёта\""), "{html}");
 	}
 
@@ -425,7 +426,9 @@ mod tests {
 		let html = harness.html();
 		assert!(html.contains("aria-expanded=\"true\""), "{html}");
 		assert!(html.contains("data-align=\"end\""), "{html}");
-		assert!(html.contains("Заявка исполнена") && html.contains("За октябрь") && html.contains("2 мин назад"), "{html}");
+		assert!(html.contains("Заявка исполнена"), "{html}");
+		assert!(html.contains("За октябрь"), "{html}");
+		assert!(html.contains("2 мин назад"), "{html}");
 		assert!(html.contains("Все уведомления"), "{html}");
 		let unread_title = html.split("Заявка исполнена").next().and_then(|b| b.rsplit("<span").next()).expect("title");
 		assert!(unread_title.contains("font-medium"), "{unread_title}");
@@ -462,10 +465,10 @@ mod tests {
 		}
 		let html = render(app);
 		let trigger = html.split("data-slot=\"popover-trigger\"").next().and_then(|b| b.rsplit("<button").next()).expect("trigger");
-		assert!(
-			trigger.contains("bg-secondary") && trigger.contains("aspect-square") && trigger.contains("relative") && trigger.contains("ml-1"),
-			"{trigger}"
-		);
+		assert!(trigger.contains("bg-secondary"), "{trigger}");
+		assert!(trigger.contains("aspect-square"), "{trigger}");
+		assert!(trigger.contains("relative"), "{trigger}");
+		assert!(trigger.contains("ml-1"), "{trigger}");
 	}
 
 	#[test]
@@ -478,7 +481,8 @@ mod tests {
 		let html = harness.html();
 		assert!(html.starts_with("<button type=\"button\""), "{html}");
 		assert!(html.contains("Search or jump to…"), "{html}");
-		assert!(html.contains("data-slot=\"kbd\"") && html.contains(">Ctrl K</kbd>"), "{html}");
+		assert!(html.contains("data-slot=\"kbd\""), "{html}");
+		assert!(html.contains(">Ctrl K</kbd>"), "{html}");
 		let clicks = harness.listening("click");
 		assert_eq!(clicks.len(), 1, "{html}");
 		harness.click(clicks[0]);
@@ -492,7 +496,9 @@ mod tests {
 		}
 		let html = render(app);
 		let text = html.split("Поиск по счетам").next().and_then(|b| b.rsplit("<span").next()).expect("placeholder");
-		assert!(text.contains("truncate") && text.contains("min-w-0"), "{text}");
-		assert!(html.contains(">/</kbd>") && !html.contains("Ctrl K"), "{html}");
+		assert!(text.contains("truncate"), "{text}");
+		assert!(text.contains("min-w-0"), "{text}");
+		assert!(html.contains(">/</kbd>"), "{html}");
+		assert!(!html.contains("Ctrl K"), "{html}");
 	}
 }

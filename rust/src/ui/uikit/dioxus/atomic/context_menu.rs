@@ -329,7 +329,8 @@ mod tests {
 		assert!(html.contains("role=\"menu\""), "{html}");
 		assert!(html.contains("Back"), "{html}");
 		assert!(html.contains("data-state=\"open\""), "{html}");
-		assert!(!html.contains("data-disabled") && !html.contains("data-inset"), "the classes match on presence: {html}");
+		assert!(!html.contains("data-disabled"), "the classes match on presence: {html}");
+		assert!(!html.contains("data-inset"), "the classes match on presence: {html}");
 	}
 
 	#[test]

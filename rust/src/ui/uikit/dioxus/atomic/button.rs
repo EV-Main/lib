@@ -77,10 +77,8 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(
-			html.contains("[--control-box:var(--control-h-sm)]") && html.contains("aspect-square [--control-pad:0px]"),
-			"{html}"
-		);
+		assert!(html.contains("[--control-box:var(--control-h-sm)]"), "{html}");
+		assert!(html.contains("aspect-square [--control-pad:0px]"), "{html}");
 	}
 
 	#[test]
@@ -91,7 +89,8 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("[--control-box:var(--control-h-lg)]") && html.contains("aspect-square"), "{html}");
+		assert!(html.contains("[--control-box:var(--control-h-lg)]"), "{html}");
+		assert!(html.contains("aspect-square"), "{html}");
 		assert!(!html.contains("control-inset-lg"), "icon button must not carry text padding: {html}");
 	}
 
@@ -104,10 +103,8 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(
-			html.contains(Size::Touch.as_class()) && html.contains("aspect-square [--control-pad:0px]"),
-			"icon touch button must be a square: {html}"
-		);
+		assert!(html.contains(Size::Touch.as_class()), "icon touch button must be a square: {html}");
+		assert!(html.contains("aspect-square [--control-pad:0px]"), "icon touch button must be a square: {html}");
 	}
 
 	#[test]

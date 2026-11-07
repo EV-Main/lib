@@ -230,13 +230,12 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains("Панель безопасности") && !html.contains("Панель профиля"), "{html}");
+		assert!(html.contains("Панель безопасности"), "{html}");
+		assert!(!html.contains("Панель профиля"), "{html}");
 		let html = render_after_click(app);
 		assert!(html.contains("log:profile,security<"), "{html}");
-		assert!(
-			html.contains("Панель безопасности") && !html.contains("Панель профиля"),
-			"the owner did not move the value: {html}"
-		);
+		assert!(html.contains("Панель безопасности"), "the owner did not move the value: {html}");
+		assert!(!html.contains("Панель профиля"), "the owner did not move the value: {html}");
 	}
 
 	/// The sweep clicks the scrim as well as the close button, so a dialog
@@ -316,9 +315,12 @@ mod tests {
 		let html = render(open_dialog);
 		let content = &html[html.find("role=\"dialog\"").expect("dialog")..];
 		let content = &content[..content.find('>').expect("tag end")];
-		assert!(content.contains("p-0") && !content.contains("p-6") && !content.contains(" grid "), "{content}");
+		assert!(content.contains("p-0"), "{content}");
+		assert!(!content.contains("p-6"), "{content}");
+		assert!(!content.contains(" grid "), "{content}");
 		assert!(tab(&html, "Профиль").contains("data-[state=active]:bg-selected"), "{html}");
-		assert!(tab(&html, "Профиль").contains("border-0") && !tab(&html, "Профиль").contains("border-b "), "{html}");
+		assert!(tab(&html, "Профиль").contains("border-0"), "{html}");
+		assert!(!tab(&html, "Профиль").contains("border-b "), "{html}");
 		assert!(html.contains("class=\"font-serif text-h1 font-light text-ink\" data-slot=\"dialog-title\""), "{html}");
 	}
 }

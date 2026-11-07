@@ -364,6 +364,7 @@ mod tests {
 		assert!(html.contains("class=\"flex items-center gap-2\""), "{html}");
 		let pill = &html[html.find("data-slot=\"workspace-tab\"").expect("pill")..];
 		let pill = &pill[..pill.find('>').expect("tag end")];
-		assert!(pill.contains("h-(--control-h-sm)") && !pill.contains("h-(--control-h-xs)"), "{pill}");
+		assert!(pill.contains("h-(--control-h-sm)"), "{pill}");
+		assert!(!pill.contains("h-(--control-h-xs)"), "{pill}");
 	}
 }

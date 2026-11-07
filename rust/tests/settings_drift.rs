@@ -82,7 +82,8 @@ async fn watch_drift() {
 	let got = log.take();
 	assert!(got.contains("DRIFT_TEST_SMTP_HOST: changed since boot"), "{got}");
 	assert!(got.contains("DRIFT_TEST_API_TOKEN: appeared since boot"), "{got}");
-	assert!(!got.contains("hunter2") && !got.contains("elsewhere"), "{got}");
+	assert!(!got.contains("hunter2"), "{got}");
+	assert!(!got.contains("elsewhere"), "{got}");
 	run_for(watch.as_mut(), 5 * MINUTE).await;
 	assert_eq!(log.take().matches("since boot").count(), 2);
 }

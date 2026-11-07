@@ -236,7 +236,8 @@ mod tests {
 		assert!(html.contains("navigate"), "{html}");
 		assert!(html.contains(">esc<"), "{html}");
 		assert!(html.contains("⌘N"), "{html}");
-		assert!(html.contains("Предложения") && html.contains("data-slot=\"command-separator\""), "{html}");
+		assert!(html.contains("Предложения"), "{html}");
+		assert!(html.contains("data-slot=\"command-separator\""), "{html}");
 	}
 
 	#[test]
@@ -339,7 +340,8 @@ mod tests {
 
 		h.input(input, "НОВОЕ");
 		let html = h.html();
-		assert!(html.contains("Новое пространство") && !html.contains("Поиск символа"), "the label matches: {html}");
+		assert!(html.contains("Новое пространство"), "the label matches: {html}");
+		assert!(!html.contains("Поиск символа"), "the label matches: {html}");
 
 		h.input(input, "zzzz");
 		let html = h.html();

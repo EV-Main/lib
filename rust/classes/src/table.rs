@@ -96,7 +96,8 @@ mod tests {
 		assert!(cell.contains("py-[var(--table-dense-py"), "{cell}");
 
 		let cell = cn!(TABLE_CELL, "p-0");
-		assert!(!cell.contains("px-[") && !cell.contains("py-["), "{cell}");
+		assert!(!cell.contains("px-["), "{cell}");
+		assert!(!cell.contains("py-["), "{cell}");
 	}
 
 	#[test]
@@ -140,7 +141,8 @@ mod tests {
 	#[test]
 	fn align_end_is_tabular_and_overrides_the_head_start() {
 		let head = cn!(TABLE_HEAD, TableAlign::End.as_class());
-		assert!(head.contains("text-end") && head.contains("tabular-nums"), "{head}");
+		assert!(head.contains("text-end"), "{head}");
+		assert!(head.contains("tabular-nums"), "{head}");
 		assert!(!head.contains("text-start"), "{head}");
 	}
 }

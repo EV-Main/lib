@@ -270,7 +270,8 @@ mod tests {
 		}
 		let html = render(plain);
 		let area = opening_tag(&html, "<textarea");
-		assert!(area.contains("aria-label=\"Message\"") && area.contains("rows=\"1\""), "{area}");
+		assert!(area.contains("aria-label=\"Message\""), "{area}");
+		assert!(area.contains("rows=\"1\""), "{area}");
 		assert!(area.contains("placeholder=\"Ask the assistant…\""), "{area}");
 		let html = render(translated);
 		assert!(opening_tag(&html, "<textarea").contains("aria-label=\"Сообщение\""), "{html}");
@@ -284,9 +285,12 @@ mod tests {
 		}
 		let html = render(app);
 		let area = opening_tag(&html, "<textarea");
-		assert!(area.contains("data-slot=\"textarea\"") && area.contains("field-sizing-content"), "{area}");
-		assert!(area.contains("min-h-6") && area.contains("max-h-40"), "{area}");
-		assert!(!area.contains("min-h-16") && !area.contains("bg-muted"), "the composer's classes win: {area}");
+		assert!(area.contains("data-slot=\"textarea\""), "{area}");
+		assert!(area.contains("field-sizing-content"), "{area}");
+		assert!(area.contains("min-h-6"), "{area}");
+		assert!(area.contains("max-h-40"), "{area}");
+		assert!(!area.contains("min-h-16"), "the composer's classes win: {area}");
+		assert!(!area.contains("bg-muted"), "the composer's classes win: {area}");
 	}
 
 	#[test]
@@ -357,7 +361,9 @@ mod tests {
 		let mut h = Harness::new(app);
 		let html = h.html();
 		assert!(html.contains("aria-label=\"Attach file\""), "{html}");
-		assert!(html.contains("файл.pdf") && html.contains("Быстрая") && html.contains("Enter — отправить"), "{html}");
+		assert!(html.contains("файл.pdf"), "{html}");
+		assert!(html.contains("Быстрая"), "{html}");
+		assert!(html.contains("Enter — отправить"), "{html}");
 		// Every button: the send button with no text does nothing, so only the
 		// attach button counts.
 		let clicks = h.listening("click");

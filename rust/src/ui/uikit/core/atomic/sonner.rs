@@ -154,7 +154,9 @@ mod tests {
 		q.push("times out".to_owned(), Tone::Neutral, Some(TOAST_DURATION_MS));
 		q.push("sticky".to_owned(), Tone::Neutral, None);
 		let stack = q.stack();
-		assert!(!stack[0].autodismiss && stack[0].style.ends_with("--life: 0ms;"));
-		assert!(stack[1].autodismiss && stack[1].style.ends_with("--life: 4000ms;"));
+		assert!(!stack[0].autodismiss);
+		assert!(stack[0].style.ends_with("--life: 0ms;"));
+		assert!(stack[1].autodismiss);
+		assert!(stack[1].style.ends_with("--life: 4000ms;"));
 	}
 }

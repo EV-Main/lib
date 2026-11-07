@@ -229,8 +229,10 @@ mod tests {
 		let html = render(app);
 		let items: Vec<&str> = html.split("data-slot=\"toggle-group-item\"").skip(1).collect();
 		assert_eq!(items.len(), 2, "{html}");
-		assert!(items[0].contains("data-variant=\"outline\"") && items[0].contains("data-size=\"sm\""), "{html}");
-		assert!(items[1].contains("data-variant=\"bare\"") && items[1].contains("data-size=\"lg\""), "{html}");
+		assert!(items[0].contains("data-variant=\"outline\""), "{html}");
+		assert!(items[0].contains("data-size=\"sm\""), "{html}");
+		assert!(items[1].contains("data-variant=\"bare\""), "{html}");
+		assert!(items[1].contains("data-size=\"lg\""), "{html}");
 	}
 
 	thread_local! {

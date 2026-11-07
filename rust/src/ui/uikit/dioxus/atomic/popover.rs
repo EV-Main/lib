@@ -122,9 +122,12 @@ mod tests {
 			rsx! { Popover { default_open: true, PopoverTrigger { "open" } PopoverContent { "panel" } } }
 		}
 		let (start, end, centred) = (render(start), render(end), render(centred));
-		assert!(start.contains("left-0") && !start.contains("-translate-x-1/2"), "{start}");
-		assert!(end.contains("right-0") && !end.contains("-translate-x-1/2"), "{end}");
-		assert!(centred.contains("left-1/2") && centred.contains("-translate-x-1/2"), "{centred}");
+		assert!(start.contains("left-0"), "{start}");
+		assert!(!start.contains("-translate-x-1/2"), "{start}");
+		assert!(end.contains("right-0"), "{end}");
+		assert!(!end.contains("-translate-x-1/2"), "{end}");
+		assert!(centred.contains("left-1/2"), "{centred}");
+		assert!(centred.contains("-translate-x-1/2"), "{centred}");
 	}
 
 	#[test]

@@ -41,7 +41,9 @@ mod tests {
 		let end = html.find("data-slot=\"top-bar-end\"").expect("end slot");
 		let service = html.find("Казначейство").expect("service name");
 		let account = html.find("Анна Петрова").expect("account");
-		assert!(start < service && service < end && end < account, "start, then end: {html}");
+		assert!(start < service, "start, then end: {html}");
+		assert!(service < end, "start, then end: {html}");
+		assert!(end < account, "start, then end: {html}");
 	}
 
 	#[test]
@@ -60,7 +62,9 @@ mod tests {
 			rsx! { TopBar { class: "h-10 px-3" } }
 		}
 		let html = render(app);
-		assert!(html.contains("h-10") && html.contains("px-3"), "{html}");
-		assert!(!html.contains("h-14") && !html.contains("px-8"), "{html}");
+		assert!(html.contains("h-10"), "{html}");
+		assert!(html.contains("px-3"), "{html}");
+		assert!(!html.contains("h-14"), "{html}");
+		assert!(!html.contains("px-8"), "{html}");
 	}
 }

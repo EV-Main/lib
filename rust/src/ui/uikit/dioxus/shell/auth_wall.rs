@@ -60,6 +60,7 @@ mod tests {
 		let html = render(app);
 		assert!(html.contains("data-slot=\"empty\""), "{html}");
 		assert!(html.contains("data-variant=\"icon\""), "{html}");
-		assert!(html.contains("Sign in to view your wallet") && html.contains("<button>Sign in</button>"), "{html}");
+		assert!(html.contains("Sign in to view your wallet"), "{html}");
+		assert!(html.contains("<button>Sign in</button>"), "{html}");
 	}
 }

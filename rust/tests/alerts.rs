@@ -78,7 +78,8 @@ async fn paths_under_the_root_are_attached() {
 
 	assert_eq!(got.len(), 1, "{got:?}");
 	let (content, files) = &got[0];
-	assert!(content.contains("blocked: page") && content.contains("ERROR"), "{content}");
+	assert!(content.contains("blocked: page"), "{content}");
+	assert!(content.contains("ERROR"), "{content}");
 	assert_eq!(files, &[name(&png), name(&html)]);
 }
 
@@ -112,11 +113,9 @@ async fn too_big_goes_in_a_note() {
 
 	assert_eq!(got.len(), 2, "{got:?}");
 	assert_eq!(got[0].1, [name(&small)]);
-	assert!(
-		got[1].0.starts_with("not included:") && got[1].0.contains(&name(&big)) && got[1].0.contains("11.0 MiB"),
-		"{}",
-		got[1].0
-	);
+	assert!(got[1].0.starts_with("not included:"), "{}", got[1].0);
+	assert!(got[1].0.contains(&name(&big)), "{}", got[1].0);
+	assert!(got[1].0.contains("11.0 MiB"), "{}", got[1].0);
 	assert!(got[1].1.is_empty());
 }
 

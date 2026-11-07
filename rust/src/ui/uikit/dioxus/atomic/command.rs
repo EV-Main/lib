@@ -531,7 +531,8 @@ mod tests {
 		let at = html.find("data-slot=\"command-dialog\"").expect("dialog rendered");
 		let tag = &html[html[..at].rfind('<').expect("opening tag")..at];
 		assert!(tag.contains("aria-labelledby=\"палитра\""), "{tag}");
-		assert!(tag.contains("top-1/6") && !tag.contains("top-1/2"), "the caller's class wins on the box: {tag}");
+		assert!(tag.contains("top-1/6"), "the caller's class wins on the box: {tag}");
+		assert!(!tag.contains("top-1/2"), "the caller's class wins on the box: {tag}");
 	}
 
 	/// The value of the row marked highlighted, read off its text.
@@ -609,7 +610,8 @@ mod tests {
 			}
 		}
 		let html = render_with_effects(app);
-		assert!(html.contains(">Apple<") && html.contains(">Banana<"), "{html}");
+		assert!(html.contains(">Apple<"), "{html}");
+		assert!(html.contains(">Banana<"), "{html}");
 		assert!(!html.contains("command-empty"), "mounted rows are the results: {html}");
 		assert_eq!(highlighted(&html), ["Apple"], "{html}");
 

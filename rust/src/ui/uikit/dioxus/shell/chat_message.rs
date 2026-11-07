@@ -281,7 +281,8 @@ mod tests {
 		}
 		let html = render(app);
 		let user = opening_tag(&html, "data-variant=\"user\"");
-		assert!(user.contains(" border ") && user.contains("bg-card"), "{user}");
+		assert!(user.contains(" border "), "{user}");
+		assert!(user.contains("bg-card"), "{user}");
 		assert!(opening_tag(&html, "data-variant=\"muted\"").contains("bg-muted"), "{html}");
 		let assistant = opening_tag(&html, "data-variant=\"assistant\"");
 		assert!(!assistant.contains("border"), "{assistant}");
@@ -298,9 +299,11 @@ mod tests {
 		}
 		let html = render(app);
 		let live = opening_tag(&html, "печатаю");
-		assert!(live.contains("data-streaming") && live.contains("data-caret"), "{live}");
+		assert!(live.contains("data-streaming"), "{live}");
+		assert!(live.contains("data-caret"), "{live}");
 		let done = opening_tag(&html, "готово");
-		assert!(!done.contains("data-streaming") && !done.contains("data-caret"), "{done}");
+		assert!(!done.contains("data-streaming"), "{done}");
+		assert!(!done.contains("data-caret"), "{done}");
 		assert!(html.contains(">печатаю</div>"), "the text is not split into words: {html}");
 	}
 
@@ -334,9 +337,12 @@ mod tests {
 		}
 		let html = render(app);
 		let root = opening_tag(&html, "data-slot=\"chat-message\"");
-		assert!(root.contains("data-enter=\"rise\"") && root.contains("data-role=\"assistant\""), "{root}");
-		assert!(html.contains("Ассистент</span>") && html.contains("13:04</span>"), "{html}");
-		assert!(html.contains(CHAT_MESSAGE_AVATAR_TILE) && html.contains("<svg"), "the default sparkle tile: {html}");
+		assert!(root.contains("data-enter=\"rise\""), "{root}");
+		assert!(root.contains("data-role=\"assistant\""), "{root}");
+		assert!(html.contains("Ассистент</span>"), "{html}");
+		assert!(html.contains("13:04</span>"), "{html}");
+		assert!(html.contains(CHAT_MESSAGE_AVATAR_TILE), "the default sparkle tile: {html}");
+		assert!(html.contains("<svg"), "the default sparkle tile: {html}");
 	}
 
 	#[test]
@@ -391,11 +397,14 @@ mod tests {
 		}
 		let html = render(running);
 		let tag = opening_tag(&html, "data-slot=\"chat-marker\"");
-		assert!(tag.contains("role=\"status\"") && tag.contains("data-state=\"running\""), "{tag}");
-		assert!(html.contains("motion-safe:animate-pulse") && html.contains("Генерирую ответ…"), "{html}");
+		assert!(tag.contains("role=\"status\""), "{tag}");
+		assert!(tag.contains("data-state=\"running\""), "{tag}");
+		assert!(html.contains("motion-safe:animate-pulse"), "{html}");
+		assert!(html.contains("Генерирую ответ…"), "{html}");
 		let html = render(done);
 		assert!(!html.contains("role=\"status\""), "{html}");
-		assert!(html.contains("bg-ink-soft") && !html.contains("animate-pulse"), "{html}");
+		assert!(html.contains("bg-ink-soft"), "{html}");
+		assert!(!html.contains("animate-pulse"), "{html}");
 	}
 
 	#[test]
@@ -418,12 +427,14 @@ mod tests {
 			}
 		}
 		let html = render(done);
-		assert!(html.contains("get_positions</span>") && html.contains("account=main</span>"), "{html}");
+		assert!(html.contains("get_positions</span>"), "{html}");
+		assert!(html.contains("account=main</span>"), "{html}");
 		assert!(opening_tag(&html, "0,4 с").contains("text-ink-soft"), "{html}");
 		assert!(html.contains("M20 6 9 17l-5-5"), "a finished call shows the check: {html}");
 		let html = render(failed);
 		let root = opening_tag(&html, "data-slot=\"chat-marker\"");
-		assert!(root.contains("data-state=\"error\"") && root.contains("border-tint-error-edge"), "{root}");
+		assert!(root.contains("data-state=\"error\""), "{root}");
+		assert!(root.contains("border-tint-error-edge"), "{root}");
 		assert!(opening_tag(&html, "Ошибка · 1,2 с").contains("text-accent-error"), "{html}");
 		assert!(!html.contains("M20 6 9 17l-5-5"), "{html}");
 	}
@@ -473,7 +484,8 @@ mod tests {
 		}
 		let html = render(app);
 		let bar = opening_tag(&html, "role=\"progressbar\"");
-		assert!(bar.contains("aria-label=\"график.png\"") && bar.contains("aria-valuenow=\"62\""), "{bar}");
+		assert!(bar.contains("aria-label=\"график.png\""), "{bar}");
+		assert!(bar.contains("aria-valuenow=\"62\""), "{bar}");
 		assert!(html.contains("Uploading… 62%</span>"), "{html}");
 		assert!(html.contains("width: 62%"), "{html}");
 		assert!(html.contains("data-type=\"image\""), "{html}");

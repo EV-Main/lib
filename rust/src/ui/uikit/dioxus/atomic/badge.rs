@@ -35,7 +35,8 @@ mod tests {
 	#[test]
 	fn the_type_size_survives_the_tone_ink() {
 		let classes = cn!(BADGE_BASE, Tone::Error.as_class());
-		assert!(classes.contains("text-caption") && classes.contains("text-(color:--tone-ink)"), "{classes}");
+		assert!(classes.contains("text-caption"), "{classes}");
+		assert!(classes.contains("text-(color:--tone-ink)"), "{classes}");
 	}
 
 	#[test]

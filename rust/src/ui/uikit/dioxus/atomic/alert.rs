@@ -56,7 +56,8 @@ mod tests {
 			}
 		}
 		let html = render(app);
-		assert!(html.contains(Tone::Error.as_class()) && html.contains("text-(color:--tone-ink)"), "{html}");
+		assert!(html.contains(Tone::Error.as_class()), "{html}");
+		assert!(html.contains("text-(color:--tone-ink)"), "{html}");
 		assert!(html.contains("text-ink-mid"), "the description holds the body-text floor: {html}");
 	}
 

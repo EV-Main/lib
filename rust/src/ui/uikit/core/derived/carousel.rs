@@ -71,7 +71,8 @@ mod tests {
 		assert_eq!(c.next(0), Some(1));
 		assert_eq!(c.next(1), None);
 		assert_eq!(c.prev(0), None);
-		assert!(!c.can_prev(0) && c.can_next(0));
+		assert!(!c.can_prev(0));
+		assert!(c.can_next(0));
 	}
 
 	#[test]

@@ -46,7 +46,9 @@ mod tests {
 		let html = render(app);
 		assert!(html.starts_with("<p"), "{html}");
 		assert!(html.contains("data-slot=\"section-label\""), "{html}");
-		assert!(html.contains("uppercase") && html.contains("tracking-widest") && html.contains("text-ink-soft"), "{html}");
+		assert!(html.contains("uppercase"), "{html}");
+		assert!(html.contains("tracking-widest"), "{html}");
+		assert!(html.contains("text-ink-soft"), "{html}");
 		assert!(html.contains("Общие"), "{html}");
 	}
 
@@ -57,7 +59,8 @@ mod tests {
 		}
 		let html = render(app);
 		assert!(html.starts_with("<h2"), "{html}");
-		assert!(html.contains("text-primary-ink") && !html.contains("text-ink-soft"), "{html}");
+		assert!(html.contains("text-primary-ink"), "{html}");
+		assert!(!html.contains("text-ink-soft"), "{html}");
 	}
 
 	#[test]
@@ -66,6 +69,7 @@ mod tests {
 			rsx! { SectionLabel { class: "text-ink", "Группа" } }
 		}
 		let html = render(app);
-		assert!(html.contains("text-ink") && !html.contains("text-ink-soft"), "{html}");
+		assert!(html.contains("text-ink"), "{html}");
+		assert!(!html.contains("text-ink-soft"), "{html}");
 	}
 }

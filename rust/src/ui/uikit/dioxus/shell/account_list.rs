@@ -309,7 +309,8 @@ mod tests {
 		let radio_body = &html[start..start + html[start..].find("</button>").expect("radio end")];
 		assert!(!radio_body.contains("Ещё"), "{radio_body}");
 		let actions = html.find("data-slot=\"account-list-item-actions\"").expect("actions");
-		assert!(actions > start && html[actions..].contains(">Ещё</button>"), "{html}");
+		assert!(actions > start, "{html}");
+		assert!(html[actions..].contains(">Ещё</button>"), "{html}");
 	}
 
 	#[test]
@@ -328,7 +329,9 @@ mod tests {
 		// avatar's own circle and sans initial.
 		let tile = &html[..html.find("data-slot=\"avatar\"").expect("avatar")];
 		let tile = &tile[tile.rfind("class=").expect("class")..];
-		assert!(tile.contains("size-14") && tile.contains("rounded-control") && !tile.contains("rounded-full"), "{tile}");
+		assert!(tile.contains("size-14"), "{tile}");
+		assert!(tile.contains("rounded-control"), "{tile}");
+		assert!(!tile.contains("rounded-full"), "{tile}");
 		assert!(html.contains("font-serif text-h2 font-light text-ink\" data-slot=\"avatar-fallback\""), "{html}");
 	}
 
@@ -394,6 +397,8 @@ mod tests {
 		assert!(html.contains("class=\"flex flex-col gap-4\""), "{html}");
 		let row = &html[html.find("data-slot=\"account-list-item\"").expect("row")..];
 		let row = &row[..row.find('>').expect("tag end")];
-		assert!(row.contains("opacity-(--disabled-opacity)") && row.contains("p-4") && !row.contains("p-2.5"), "{row}");
+		assert!(row.contains("opacity-(--disabled-opacity)"), "{row}");
+		assert!(row.contains("p-4"), "{row}");
+		assert!(!row.contains("p-2.5"), "{row}");
 	}
 }

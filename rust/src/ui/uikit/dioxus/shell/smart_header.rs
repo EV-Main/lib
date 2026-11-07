@@ -106,7 +106,8 @@ mod tests {
 	fn keeps_the_bar_in_every_state() {
 		for app in [default_view, collapsed_view, banner_view, search_view] {
 			let html = render(app);
-			assert!(html.contains("Бренд") && html.contains("Аккаунт"), "{html}");
+			assert!(html.contains("Бренд"), "{html}");
+			assert!(html.contains("Аккаунт"), "{html}");
 			assert_eq!(html.matches("data-slot=\"top-bar\"").count(), 1, "{html}");
 		}
 	}
@@ -128,7 +129,9 @@ mod tests {
 		let end = html.find("data-slot=\"top-bar-end\"").expect("end");
 		let brand = html.find("Бренд").expect("brand");
 		let folded = html.find("Свёрнуто").expect("folded");
-		assert!(start < brand && brand < folded && folded < end, "the fold follows the brand on the start side: {html}");
+		assert!(start < brand, "the fold follows the brand on the start side: {html}");
+		assert!(brand < folded, "the fold follows the brand on the start side: {html}");
+		assert!(folded < end, "the fold follows the brand on the start side: {html}");
 	}
 
 	#[test]
@@ -164,13 +167,13 @@ mod tests {
 		}
 		let html = render(app);
 		let bar = html.split("data-slot=\"top-bar\"").next().and_then(|before| before.rsplit("<header").next()).expect("bar tag");
-		assert!(
-			bar.contains("h-10") && bar.contains("bg-card") && bar.contains("px-3") && bar.contains("border-border-subtle"),
-			"{bar}"
-		);
-		assert!(
-			!bar.contains("h-14") && !bar.contains("bg-background") && !bar.contains("px-8") && !bar.contains("border-border "),
-			"{bar}"
-		);
+		assert!(bar.contains("h-10"), "{bar}");
+		assert!(bar.contains("bg-card"), "{bar}");
+		assert!(bar.contains("px-3"), "{bar}");
+		assert!(bar.contains("border-border-subtle"), "{bar}");
+		assert!(!bar.contains("h-14"), "{bar}");
+		assert!(!bar.contains("bg-background"), "{bar}");
+		assert!(!bar.contains("px-8"), "{bar}");
+		assert!(!bar.contains("border-border "), "{bar}");
 	}
 }

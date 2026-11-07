@@ -195,7 +195,9 @@ mod tests {
 		let mut roving = Roving::new(RovingOrientation::Vertical);
 		roving.register(0, "a".to_owned());
 		roving.register(1, "b".to_owned());
-		assert!(roving.is_tab_stop("b", "b") && !roving.is_tab_stop("a", "b"));
-		assert!(roving.is_tab_stop("a", "") && !roving.is_tab_stop("b", ""));
+		assert!(roving.is_tab_stop("b", "b"));
+		assert!(!roving.is_tab_stop("a", "b"));
+		assert!(roving.is_tab_stop("a", ""));
+		assert!(!roving.is_tab_stop("b", ""));
 	}
 }

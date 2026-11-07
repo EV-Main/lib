@@ -135,7 +135,8 @@ mod tests {
 		let html = render(app);
 		let class = html.split("class=\"").nth(1).and_then(|rest| rest.split('"').next()).expect("section has a class");
 		let classes: Vec<&str> = class.split_whitespace().collect();
-		assert!(!classes.contains(&"light") && !classes.contains(&"dark"), "{html}");
+		assert!(!classes.contains(&"light"), "{html}");
+		assert!(!classes.contains(&"dark"), "{html}");
 	}
 
 	#[test]
