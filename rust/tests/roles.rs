@@ -231,3 +231,20 @@ fn control_boxes_read_the_ramp() {
 	);
 	assert!(offending.is_empty(), "a control box at a rung's size, where its --control-h-* belongs: {offending:#?}");
 }
+
+/// A type step is a rung of the text or the display ramp, so a theme that moves
+/// `--body-size` or `--display-base` reaches it.
+#[test]
+fn type_steps_read_the_ramps() {
+	let sheet = fs::read_to_string(Path::new(ROOT).join("theme.css")).expect("read theme.css");
+	let steps: Vec<&str> = sheet.lines().map(str::trim).filter(|line| line.starts_with("--text-")).collect();
+	assert!(!steps.is_empty(), "no --text-* step in theme.css");
+	let offending: Vec<&&str> = steps
+		.iter()
+		.filter(|line| {
+			let value = line.split_once(':').expect("a declaration").1;
+			!value.contains("var(--body-") && !value.contains("var(--display-")
+		})
+		.collect();
+	assert!(offending.is_empty(), "a type step spelled by hand, where the text or display ramp belongs: {offending:#?}");
+}

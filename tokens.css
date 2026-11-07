@@ -32,8 +32,10 @@
  *              what a Button or a toned chip, toast or banner paints, pinned per theme by EV and
  *              derived for a brand. Not part of what a brand file owes.
  *   TYPE       text-caption · body-s · body · body-l · h3 · h2 · h1 ·
- *              figure-m · figure-l (size and line height); fonts
- *   SCALARS    radius · control-radius · chip-radius · control-* · disabled-opacity · display-scale ·
+ *              figure-m · figure-l (size and line height), derived from
+ *              body-{size,step,leading} and display-{base,step,leading} ·
+ *              figure-leading · display-scale; fonts
+ *   SCALARS    radius · control-radius · chip-radius · control-* · disabled-opacity · body-* · display-* · figure-leading ·
  *              page-* · shell-* · depth-* (behind shadow-card/elevated/overlay)
  *   MOTION     ev-ease-* · ev-dur-* · ev-rise · ev-stagger(-section)
  *   CHARTS     chart-1 … chart-6

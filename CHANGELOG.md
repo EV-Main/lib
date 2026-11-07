@@ -456,6 +456,12 @@ Rust crate and its TypeScript mirror at once.
 
 ### Changed
 
+- **The type scale is derived** (`ev_lib` `uikit` and `@evinvest/uikit`, #297):
+  the nine `--text-*` steps are a text ramp off `--body-size`, `--body-step`,
+  `--body-leading` and a display ramp off `--display-base`, `--display-step`,
+  `--display-leading`, `--figure-leading`, with `--display-scale` now scaling
+  h1, h2 and the figures as well as `Band`'s headline. Same pixels at the
+  defaults.
 - **Connected landings: sites_panel by derived address, and `/.well-known/sa-site`**
   (`@evinvest/kitstart`, minor, breaking).
   - `SITES_PANEL_INTERNAL_URL` replaces `LOCATIONS_API_URL`, and the kit
