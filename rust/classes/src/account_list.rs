@@ -6,7 +6,7 @@ pub const ACCOUNT_LIST_ITEM_CHECKED: &str = "border-primary-border bg-selected";
 
 pub const ACCOUNT_LIST_ITEM_UNCHECKED: &str = "border-border-subtle bg-muted hover:bg-hover";
 
-pub const ACCOUNT_LIST_ITEM_DISABLED: &str = "opacity-40";
+pub const ACCOUNT_LIST_ITEM_DISABLED: &str = "opacity-(--disabled-opacity)";
 
 /// `min-w-0` lets a long name truncate instead of pushing the actions out of
 /// the row.

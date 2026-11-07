@@ -1,4 +1,4 @@
-pub const SLIDER_ROOT: &str = "relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 \
+pub const SLIDER_ROOT: &str = "relative flex w-full touch-none items-center select-none data-[disabled]:opacity-(--disabled-opacity) \
                                data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 \
                                data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col";
 /// 14 % of the text ink, composited on the plane: 1.42:1 against card on Dark and
@@ -15,4 +15,4 @@ pub const SLIDER_RANGE: &str = "bg-primary-ink absolute data-[orientation=horizo
 /// thumb rides on.
 pub const SLIDER_THUMB: &str = "border-primary-ink ring-ring/50 block size-4 shrink-0 rounded-full border bg-ink shadow-sm \
                                 transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden \
-                                disabled:pointer-events-none disabled:opacity-50";
+                                disabled:pointer-events-none disabled:opacity-(--disabled-opacity)";

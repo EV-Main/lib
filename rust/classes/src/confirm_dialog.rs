@@ -18,7 +18,7 @@ pub const CONFIRM_DIALOG_FOOTER: &str = "flex-row justify-end gap-2";
 
 /// Keyed on `aria-disabled`, not `disabled`: a disabled button that holds
 /// focus drops it to `<body>`, and Tab then leaves the dialog.
-pub const CONFIRM_DIALOG_PENDING: &str = "aria-disabled:cursor-not-allowed aria-disabled:opacity-40";
+pub const CONFIRM_DIALOG_PENDING: &str = "aria-disabled:cursor-not-allowed aria-disabled:opacity-(--disabled-opacity)";
 
 pub const CONFIRM_DIALOG_SPINNER: &str = "size-3.5";
 

@@ -2,7 +2,7 @@
 
 export const INPUT_GROUP_BASE = "group/input-group border-input relative flex w-full items-center rounded-control border shadow-xs transition-[color,box-shadow] outline-none h-9 min-w-0 has-[>textarea]:h-auto has-[>[data-align=inline-start]]:[&>input]:pl-2 has-[>[data-align=inline-end]]:[&>input]:pr-2 has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-accent-error/20 has-[[data-slot][aria-invalid=true]]:border-accent-error";
 
-export const INPUT_GROUP_ADDON_BASE = "text-ink-soft flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&>svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-control group-data-[disabled=true]/input-group:opacity-50";
+export const INPUT_GROUP_ADDON_BASE = "text-ink-soft flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&>svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-control group-data-[disabled=true]/input-group:opacity-(--disabled-opacity)";
 
 export const INPUT_GROUP_BUTTON_BASE = "text-sm shadow-none flex gap-2 items-center";
 

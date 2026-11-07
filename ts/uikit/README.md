@@ -65,11 +65,11 @@ your Tailwind v4 entrypoint — this is the load-bearing part of the kit:
 | states | `hover` · `active` · `selected` — translucent tints; `scrim` — behind a modal |
 | ink | `ink` · `ink-mid` · `ink-soft` — hierarchy, loudest first; `ink-faint` — disabled only |
 | lines | `border-subtle` (row rule) · `border` (hairline, 14 %) · `border-strong` (state and overlay edges) · `input` (control edge, ≥ 3:1) · `ring` |
-| roles | `brand` `primary` `secondary` `positive` `accent-trace` `accent-debug` `accent-info` `accent-warn` `accent-error`, each with `on-*` where it gets filled; `primary-ink` — the primary role as ink on a surface; `primary-hover` · `primary-border` — the primary button's states |
+| roles | `brand` `primary` `secondary` `positive` `accent-trace` `accent-debug` `accent-info` `accent-warn` `accent-error`, each with `on-*` where it gets filled; `primary-ink` — the primary role as ink on a surface; `primary-hover` · `accent-*-hover` — a solid fill's hover, the fill moved away from its label by `--tint-hover`; `primary-border` — the primary button's edge |
 | status inks | `positive-ink` · `accent-info-ink` — a quiet status role as text on a surface (derived, a palette may pin them); warn and error text wears `accent-warn` · `accent-error` itself, held to 3:1 |
-| faces | `button-danger-*` (`bg` `hover` `border` `ink`) — the destructive `Button`; `tint-{neutral,primary,positive,info,warn,error,trace,debug}-{fill,edge}` — a toned `Badge`, `Toast`, `SystemBanner`, `Alert`; `button-primary-*` — no kit component paints it; derived for a brand, pinned per theme by EV |
+| faces | `button-danger-*` (`bg` `hover` `border` `ink`) — the destructive `Button`; `tint-{neutral,primary,positive,info,warn,error,trace,debug}-{fill,edge}` — a toned `Badge`, `Toast`, `SystemBanner`, `Alert`; derived for a brand, pinned per theme by EV |
 | type | `text-caption` 11/14 · `body-s` 12/16 · `body` 13/18 · `body-l` 14/20 · `h3` 14/20 · `h2` 24/30 · `h1` 32/38 · `figure-m` 20/24 · `figure-l` 28/32 (size and line height each) |
-| scalars | `radius` (panel, 6 px) · `control-radius` (4 px) · `chip-radius` (4 px) · `depth-card` `depth-elevated` `depth-overlay` · `control-h` `control-step` `control-px` `control-text` `display-scale` `band-py` `page-max` `page-px` `shell-rail-w` `shell-tab-bar-h` · `font-*` |
+| scalars | `radius` (panel, 6 px) · `control-radius` (4 px) · `chip-radius` (4 px) · `depth-card` `depth-elevated` `depth-overlay` · `control-h` `control-step` `control-inset` `control-px` `control-text` `disabled-opacity` `display-scale` `band-py` `page-max` `page-px` `shell-rail-w` `shell-tab-bar-h` · `font-*` |
 | motion | `ev-ease-out` `ev-ease-in-out` `ev-dur-fast` `ev-dur-base` `ev-dur-slow` `ev-rise` `ev-stagger` `ev-stagger-section` |
 | charts | `chart-1` … `chart-6` |
 

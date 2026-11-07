@@ -394,6 +394,6 @@ mod tests {
 		assert!(html.contains("class=\"flex flex-col gap-4\""), "{html}");
 		let row = &html[html.find("data-slot=\"account-list-item\"").expect("row")..];
 		let row = &row[..row.find('>').expect("tag end")];
-		assert!(row.contains("opacity-40") && row.contains("p-4") && !row.contains("p-2.5"), "{row}");
+		assert!(row.contains("opacity-(--disabled-opacity)") && row.contains("p-4") && !row.contains("p-2.5"), "{row}");
 	}
 }

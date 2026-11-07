@@ -90,7 +90,7 @@ aria-current=\
 aria-describedby
 aria-describedby=\
 aria-disabled
-aria-disabled:cursor-not-allowed aria-disabled:opacity-40
+aria-disabled:cursor-not-allowed aria-disabled:opacity-(--disabled-opacity)
 aria-disabled=\
 aria-expanded
 aria-expanded=\
@@ -133,14 +133,14 @@ aspect-square size-full
 avatar-fallback\
 background-color:currentColor
 basis-full
-bg-accent-debug text-on-accent-debug hover:bg-accent-debug/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+bg-accent-debug text-on-accent-debug hover:bg-accent-debug-hover focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 bg-accent-error
-bg-accent-error text-on-accent-error hover:bg-accent-error/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
-bg-accent-info text-on-accent-info hover:bg-accent-info/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
-bg-accent-trace text-on-accent-trace hover:bg-accent-trace/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+bg-accent-error text-on-accent-error hover:bg-accent-error-hover focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+bg-accent-info text-on-accent-info hover:bg-accent-info-hover focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+bg-accent-trace text-on-accent-trace hover:bg-accent-trace-hover focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 bg-accent-warn
 bg-accent-warn 
-bg-accent-warn text-on-accent-warn hover:bg-accent-warn/90 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+bg-accent-warn text-on-accent-warn hover:bg-accent-warn-hover focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 bg-active
 bg-active text-ink hover:bg-active
 bg-background
@@ -230,15 +230,15 @@ border-border-subtle bg-muted hover:bg-hover
 border-border\
 border-dashed
 border-input
-border-input [&_[data-placeholder]]:text-ink-soft [&_svg:not([class*='text-'])]:text-ink-soft focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error flex w-fit items-center justify-between gap-2 rounded-control border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
+border-input [&_[data-placeholder]]:text-ink-soft [&_svg:not([class*='text-'])]:text-ink-soft focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error flex w-fit items-center justify-between gap-2 rounded-control border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-(--disabled-opacity) *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
 border-input bg-transparent shadow-xs w-full justify-start gap-2 text-left font-normal data-[placeholder]:text-ink-soft [&>svg]:text-ink-soft
-border-input placeholder:text-ink-soft focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error flex field-sizing-content min-h-16 w-full rounded-control border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm
+border-input placeholder:text-ink-soft focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error flex field-sizing-content min-h-16 w-full rounded-control border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-(--disabled-opacity) md:text-sm
 border-input text-ink h-7 w-full min-w-0 appearance-none rounded-control border bg-transparent py-0 pr-9 pl-2 text-base pointer-fine:text-body transition-colors outline-none disabled:pointer-events-none disabled:cursor-not-allowed focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring aria-invalid:border-accent-error aria-invalid:focus-visible:ring-accent-error has-[option[value='']:checked]:text-ink-soft [&_option]:bg-popover [&_option]:text-ink [&_optgroup]:bg-popover [&_optgroup]:text-ink-soft [color-scheme:var(--scheme,normal)]
-border-input text-primary-ink focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error aspect-square size-4 shrink-0 rounded-full border shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50
+border-input text-primary-ink focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error aspect-square size-4 shrink-0 rounded-full border shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-(--disabled-opacity)
 border-l
 border-l border-border
 border-primary-border bg-selected
-border-primary-ink ring-ring/50 block size-4 shrink-0 rounded-full border bg-ink shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50
+border-primary-ink ring-ring/50 block size-4 shrink-0 rounded-full border bg-ink shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-(--disabled-opacity)
 border-r
 border-r border-border
 border-t
@@ -288,8 +288,8 @@ data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full
 data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px
 data-[orientation=vertical]:w-px
 data-[reset]:not-aria-selected:bg-accent-trace/20
-data-[selected=true]:bg-hover data-[selected=true]:text-ink [&_svg:not([class*='text-'])]:text-ink-soft relative flex cursor-default items-center gap-2 rounded-row px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
-data-[state=active]:bg-background focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-ink inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-control border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
+data-[selected=true]:bg-hover data-[selected=true]:text-ink [&_svg:not([class*='text-'])]:text-ink-soft relative flex cursor-default items-center gap-2 rounded-row px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-(--disabled-opacity) [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
+data-[state=active]:bg-background focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-ink inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-control border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-(--disabled-opacity) data-[state=active]:shadow-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
 data-[state=active]:bg-selected
 data-[state=checked]:bg-on-primary data-[state=unchecked]:bg-ink pointer-events-none block size-4 rounded-full ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0
 data-[state=checked]:translate-x-[calc(100%-2px)]
@@ -380,7 +380,7 @@ drawer-content
 ev-toast-life
 field-separator-content
 field-sizing-content
-file:text-ink placeholder:text-ink-soft selection:bg-primary selection:text-on-primary border-input h-9 w-full min-w-0 rounded-control border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error
+file:text-ink placeholder:text-ink-soft selection:bg-primary selection:text-on-primary border-input h-9 w-full min-w-0 rounded-control border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-(--disabled-opacity) md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error
 fill-primary-ink
 fill-primary-ink absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2
 first:rounded-l-control
@@ -427,7 +427,7 @@ flex items-center gap-1.5
 flex items-center gap-2
 flex items-center gap-2 border-t border-border px-3 py-2
 flex items-center gap-2 text-body-s text-ink-soft
-flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50
+flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-(--disabled-opacity) peer-disabled:cursor-not-allowed peer-disabled:opacity-(--disabled-opacity)
 flex items-center gap-2.5 p-2
 flex items-center gap-2.5 rounded-panel border bg-card px-2.5 py-2
 flex items-center gap-3
@@ -477,7 +477,7 @@ flex transition-transform
 flex w-11 shrink-0 flex-col items-center gap-1 border-l border-border bg-card px-1.5 py-2
 flex w-60 max-w-full flex-col overflow-hidden rounded-panel border border-border bg-card
 flex w-fit items-center gap-2 text-sm leading-snug font-medium
-flex w-fit items-center gap-2 text-sm leading-snug font-medium group-data-[disabled=true]/field:opacity-50
+flex w-fit items-center gap-2 text-sm leading-snug font-medium group-data-[disabled=true]/field:opacity-(--disabled-opacity)
 flex w-fit items-stretch [&>*]:focus-visible:z-10 [&>*]:focus-visible:relative [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-control has-[>[data-slot=button-group]]:gap-2
 flex w-full items-start gap-2 rounded-row px-2 py-1.5 text-left outline-none hover:bg-hover focus-visible:ring-2 focus-visible:ring-ring
 flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance
@@ -498,19 +498,19 @@ flex-row items-center
 flex-row items-center [&>[data-slot=field-label]]:flex-auto has-[>[data-slot=field-content]]:items-start has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px
 flex-row items-center justify-between sm:gap-6 [&>[data-slot=form-row-control]]:flex-none [&>[data-slot=form-row-control]]:items-end
 flex-row justify-end gap-2
-focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 rounded-control py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180
+focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 rounded-control py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-(--disabled-opacity) [&[data-state=open]>svg]:rotate-180
 focus-visible:inset-ring-2 focus-visible:inset-ring-ring
 focus-visible:ring-0
 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 focus-visible:ring-[3px]
 focus-visible:ring-ring/50 size-full rounded-[inherit] overflow-auto transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1
-focus:bg-hover focus:text-ink aria-selected:bg-accent-info/20 aria-selected:text-accent-info data-[reset]:not-aria-selected:bg-accent-trace/20 focus-visible:inset-ring-2 focus-visible:inset-ring-ring [&_svg:not([class*='text-'])]:text-ink-soft relative flex w-full cursor-default items-center gap-2 rounded-row py-1.5 pr-8 pl-2 text-sm whitespace-normal [overflow-wrap:anywhere] outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2
+focus:bg-hover focus:text-ink aria-selected:bg-accent-info/20 aria-selected:text-accent-info data-[reset]:not-aria-selected:bg-accent-trace/20 focus-visible:inset-ring-2 focus-visible:inset-ring-ring [&_svg:not([class*='text-'])]:text-ink-soft relative flex w-full cursor-default items-center gap-2 rounded-row py-1.5 pr-8 pl-2 text-sm whitespace-normal [overflow-wrap:anywhere] outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-(--disabled-opacity) [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2
 focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[state=open]:bg-hover data-[state=open]:text-ink [&_svg:not([class*='text-'])]:text-ink-soft flex cursor-default items-center gap-2 rounded-row px-2 py-1.5 text-sm outline-hidden select-none data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
 focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[state=open]:bg-hover data-[state=open]:text-ink [&_svg:not([class*='text-'])]:text-ink-soft flex cursor-default items-center rounded-row px-2 py-1.5 text-sm outline-hidden select-none data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
 focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[state=open]:bg-hover data-[state=open]:text-ink flex cursor-default items-center rounded-row px-2 py-1.5 text-sm outline-none select-none data-[inset]:pl-8
 focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[state=open]:bg-hover data-[state=open]:text-ink flex items-center rounded-row px-2 py-1 text-sm font-medium outline-hidden select-none
-focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[variant=destructive]:text-accent-error data-[variant=destructive]:focus:bg-accent-error/(--tint-hover) data-[variant=destructive]:focus:text-accent-error data-[variant=destructive]:*:[svg]:!text-accent-error [&_svg:not([class*='text-'])]:text-ink-soft relative flex cursor-default items-center gap-2 rounded-row px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
-focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring relative flex cursor-default items-center gap-2 rounded-row py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
+focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring data-[variant=destructive]:text-accent-error data-[variant=destructive]:focus:bg-accent-error/(--tint-hover) data-[variant=destructive]:focus:text-accent-error data-[variant=destructive]:*:[svg]:!text-accent-error [&_svg:not([class*='text-'])]:text-ink-soft relative flex cursor-default items-center gap-2 rounded-row px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-(--disabled-opacity) data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
+focus:bg-hover focus:text-ink focus-visible:inset-ring-2 focus-visible:inset-ring-ring relative flex cursor-default items-center gap-2 rounded-row py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-(--disabled-opacity) [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
 font-medium
 font-medium tabular-nums text-(color:--tone-ink)
 font-medium text-[10px] md:text-[11.5px] tracking-[0.15em] md:tracking-[0.16em] text-primary-ink [.bg-primary_&]:text-on-primary
@@ -541,14 +541,14 @@ grid grid-cols-2 gap-x-8 gap-y-8 lg:grid-cols-12 mb-12
 grid text-ink [&_[data-slot=command-group-heading]]:text-ink-soft overflow-hidden p-1 [&>[data-slot=command-group-heading]]:order-first [&_[data-slot=command-group-heading]]:px-2 [&_[data-slot=command-group-heading]]:py-1.5 [&_[data-slot=command-group-heading]]:text-xs [&_[data-slot=command-group-heading]]:font-medium
 group flex flex-1 list-none items-center justify-center gap-1
 group inline-flex h-7 items-center rounded-control border border-transparent text-body-s font-medium text-ink-mid transition-colors hover:bg-hover hover:text-ink has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring
-group inline-flex h-9 w-max items-center justify-center rounded-control bg-transparent px-4 py-2 text-sm font-medium hover:bg-hover hover:text-ink focus:bg-hover focus:text-ink disabled:pointer-events-none disabled:opacity-50 data-[state=open]:text-ink data-[state=open]:bg-hover focus-visible:ring-ring/50 outline-none transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1
+group inline-flex h-9 w-max items-center justify-center rounded-control bg-transparent px-4 py-2 text-sm font-medium hover:bg-hover hover:text-ink focus:bg-hover focus:text-ink disabled:pointer-events-none disabled:opacity-(--disabled-opacity) data-[state=open]:text-ink data-[state=open]:bg-hover focus-visible:ring-ring/50 outline-none transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1
 group peer text-ink hidden md:block
 group-content
 group-label
 group/field flex w-full gap-3 data-[invalid=true]:text-accent-error
 group/field-content flex flex-1 flex-col gap-1.5 leading-snug
 group/field-group @container/field-group flex w-full flex-col gap-7 data-[slot=checkbox-group]:gap-3 [&>[data-slot=field-group]]:gap-4
-group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50 has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-panel has-[>[data-slot=field]]:border [&>*]:data-[slot=field]:p-4 has-data-[state=checked]:bg-primary-ink/5 has-data-[state=checked]:border-primary-ink
+group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-(--disabled-opacity) has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-panel has-[>[data-slot=field]]:border [&>*]:data-[slot=field]:p-4 has-data-[state=checked]:bg-primary-ink/5 has-data-[state=checked]:border-primary-ink
 group/input-group
 group/input-group border-input relative flex w-full items-center rounded-control border shadow-xs transition-[color,box-shadow] outline-none h-9 min-w-0 has-[>textarea]:h-auto has-[>[data-align=inline-start]]:[&>input]:pl-2 has-[>[data-align=inline-end]]:[&>input]:pr-2 has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&>input]:pb-3 has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-accent-error/20 has-[[data-slot][aria-invalid=true]]:border-accent-error
 group/item flex items-center border border-transparent text-sm rounded-panel transition-colors [a]:hover:bg-hover [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]
@@ -608,8 +608,8 @@ info-tip-content\
 info-tip-trigger\
 inline-block
 inline-flex
-inline-flex h-(--control-box) items-center justify-center px-(--control-pad) gap-[calc(var(--control-pad)*0.5)] has-[>svg]:px-[calc(var(--control-pad)*0.75)] whitespace-nowrap rounded-control font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-[calc(1em+2px)] shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error
-inline-flex h-(--control-box) min-w-(--control-box) items-center justify-center rounded-control font-medium px-[calc(var(--control-pad)*0.5)] gap-[calc(var(--control-pad)*0.5)] hover:bg-hover hover:text-ink disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-primary data-[state=on]:text-on-primary [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-[calc(1em+2px)] [&_svg]:shrink-0 focus-visible:border-ring outline-none transition-[color,box-shadow] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error whitespace-nowrap focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+inline-flex h-(--control-box) items-center justify-center px-(--control-pad) gap-[calc(var(--control-pad)*0.5)] has-[>svg]:px-[calc(var(--control-pad)*0.75)] whitespace-nowrap rounded-control font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-(--disabled-opacity) [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-[calc(1em+2px)] shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error
+inline-flex h-(--control-box) min-w-(--control-box) items-center justify-center rounded-control font-medium px-[calc(var(--control-pad)*0.5)] gap-[calc(var(--control-pad)*0.5)] hover:bg-hover hover:text-ink disabled:pointer-events-none disabled:opacity-(--disabled-opacity) data-[state=on]:bg-primary data-[state=on]:text-on-primary [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-[calc(1em+2px)] [&_svg]:shrink-0 focus-visible:border-ring outline-none transition-[color,box-shadow] aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error whitespace-nowrap focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 inline-flex h-5 items-center gap-1.5 px-2 text-caption text-ink-mid
 inline-flex h-5 items-center justify-center rounded-chip border px-1.5 text-caption border-(color:--tone-edge) bg-(color:--tone-fill) text-(color:--tone-ink) font-medium w-fit whitespace-nowrap shrink-0 gap-1 overflow-hidden [&>svg]:size-3 [&>svg]:pointer-events-none transition-colors outline-none [a&]:hover:bg-[image:linear-gradient(var(--hover),var(--hover))] aria-invalid:border-accent-error focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 inline-flex h-6 items-center gap-1 text-ink-soft
@@ -699,9 +699,9 @@ my-0
 notification-dot
 object-cover
 one-time-code
+opacity-(--disabled-opacity)
 opacity-0
 opacity-100
-opacity-40
 order-first
 order-first pl-3 has-[>button]:ml-[-0.45rem] has-[>kbd]:ml-[-0.35rem]
 order-first w-full justify-start px-3 pt-3 [.border-b]:pb-3 group-has-[>input]/input-group:pt-2.5
@@ -723,10 +723,10 @@ p-6
 panel-one
 panel-two
 pb-3
-peer border-input data-[state=checked]:bg-primary data-[state=checked]:text-on-primary data-[state=checked]:border-primary focus-visible:border-ring aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error size-4 shrink-0 rounded-control border shadow-xs transition-shadow outline-none disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
-peer data-[state=checked]:bg-primary data-[state=unchecked]:bg-input focus-visible:border-ring inline-flex h-[1.15rem] w-8 shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+peer border-input data-[state=checked]:bg-primary data-[state=checked]:text-on-primary data-[state=checked]:border-primary focus-visible:border-ring aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error size-4 shrink-0 rounded-control border shadow-xs transition-shadow outline-none disabled:cursor-not-allowed disabled:opacity-(--disabled-opacity) focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
+peer data-[state=checked]:bg-primary data-[state=unchecked]:bg-input focus-visible:border-ring inline-flex h-[1.15rem] w-8 shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none disabled:cursor-not-allowed disabled:opacity-(--disabled-opacity) focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring
 peer/field-label
-peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-row p-2 text-left text-sm outline-hidden ring-ring transition-[width,height,padding] hover:bg-hover hover:text-ink focus-visible:ring-2 active:bg-active active:text-ink disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-selected data-[active=true]:font-medium data-[active=true]:text-ink data-[state=open]:hover:bg-hover data-[state=open]:hover:text-ink group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0
+peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-row p-2 text-left text-sm outline-hidden ring-ring transition-[width,height,padding] hover:bg-hover hover:text-ink focus-visible:ring-2 active:bg-active active:text-ink disabled:pointer-events-none disabled:opacity-(--disabled-opacity) group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-(--disabled-opacity) data-[active=true]:bg-selected data-[active=true]:font-medium data-[active=true]:text-ink data-[state=open]:hover:bg-hover data-[state=open]:hover:text-ink group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0
 pending:false
 pending:{pending}
 picked:
@@ -735,7 +735,7 @@ picked:team
 picked:{picked}
 pl-4
 placeholder:text-ink-soft
-placeholder:text-ink-soft flex h-10 w-full rounded-control bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50
+placeholder:text-ink-soft flex h-10 w-full rounded-control bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-(--disabled-opacity)
 pointer-events-auto flex w-full items-start gap-3 rounded-panel border border-(color:--tone-edge) bg-popover p-3 text-body text-ink shadow-elevated
 pointer-events-none absolute inset-0 flex items-center justify-center
 pointer-events-none absolute inset-0 opacity-[0.07] [background:radial-gradient(55%_45%_at_50%_30%,currentColor,transparent_70%)]
@@ -771,13 +771,13 @@ py-[var(--table-dense-py,var(--table-py,calc(var(--spacing)*2)))]
 radio-group-indicator
 relative
 relative -my-2 h-5 text-sm group-data-[variant=outline]/field-group:-mb-2
-relative flex items-center gap-2 has-disabled:opacity-50
+relative flex items-center gap-2 has-disabled:opacity-(--disabled-opacity)
 relative flex items-center justify-center
 relative flex min-h-0 min-w-0 flex-1 flex-col gap-5 overflow-y-auto p-6 md:p-8
 relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-6 py-32 text-center
 relative flex size-8 shrink-0 overflow-hidden rounded-full
 relative flex w-full min-w-0 flex-col p-2
-relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col
+relative flex w-full touch-none items-center select-none data-[disabled]:opacity-(--disabled-opacity) data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col
 relative size-9 shrink-0 p-0 select-none
 relative size-9 shrink-0 p-0 text-center select-none
 relative top-[1px] ml-1 size-3 transition duration-300 group-data-[state=open]:rotate-180
@@ -875,7 +875,7 @@ text-ink-mid text-body
 text-ink-soft
 text-ink-soft [&>a:hover]:text-primary-ink text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4
 text-ink-soft flex flex-wrap items-center gap-1.5 text-body break-words sm:gap-2.5
-text-ink-soft flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&>svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-control group-data-[disabled=true]/input-group:opacity-50
+text-ink-soft flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&>svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-control group-data-[disabled=true]/input-group:opacity-(--disabled-opacity)
 text-ink-soft flex items-center gap-2 text-sm [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4
 text-ink-soft line-clamp-2 text-sm leading-normal font-normal text-balance [&>a:hover]:text-primary-ink [&>a]:underline [&>a]:underline-offset-4
 text-ink-soft ml-auto text-xs tracking-widest

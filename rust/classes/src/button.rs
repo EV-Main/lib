@@ -4,7 +4,7 @@ use tailwind_fuse::{AsTailwindClass, TwVariant};
 /// so the TS codegen can emit it verbatim and `button_classes` fuses it last-wins.
 pub const BUTTON_BASE: &str = "inline-flex h-(--control-box) items-center justify-center px-(--control-pad) gap-[calc(var(--control-pad)*0.5)] \
                                has-[>svg]:px-[calc(var(--control-pad)*0.75)] whitespace-nowrap rounded-control \
-                               font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-40 \
+                               font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-(--disabled-opacity) \
                                [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-[calc(1em+2px)] shrink-0 [&_svg]:shrink-0 \
                                outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] \
                                aria-invalid:ring-accent-error/20 aria-invalid:border-accent-error";

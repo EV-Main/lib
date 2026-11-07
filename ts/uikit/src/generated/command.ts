@@ -10,7 +10,7 @@ export const COMMAND_DIALOG_COMMAND = "[&_[data-slot=command-input-wrapper]]:h-1
 
 export const COMMAND_INPUT_WRAPPER = "flex h-9 items-center gap-2 border-b border-border px-3 has-[[aria-invalid=true]]:border-accent-error";
 
-export const COMMAND_INPUT = "placeholder:text-ink-soft flex h-10 w-full rounded-control bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50";
+export const COMMAND_INPUT = "placeholder:text-ink-soft flex h-10 w-full rounded-control bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-(--disabled-opacity)";
 
 export const COMMAND_LIST = "flex max-h-[300px] scroll-py-1 flex-col overflow-x-hidden overflow-y-auto [&>*]:shrink-0";
 
@@ -18,7 +18,7 @@ export const COMMAND_EMPTY = "py-6 text-center text-sm";
 
 export const COMMAND_GROUP = "grid text-ink [&_[data-slot=command-group-heading]]:text-ink-soft overflow-hidden p-1 [&>[data-slot=command-group-heading]]:order-first [&_[data-slot=command-group-heading]]:px-2 [&_[data-slot=command-group-heading]]:py-1.5 [&_[data-slot=command-group-heading]]:text-xs [&_[data-slot=command-group-heading]]:font-medium";
 
-export const COMMAND_ITEM = "data-[selected=true]:bg-hover data-[selected=true]:text-ink [&_svg:not([class*='text-'])]:text-ink-soft relative flex cursor-default items-center gap-2 rounded-row px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
+export const COMMAND_ITEM = "data-[selected=true]:bg-hover data-[selected=true]:text-ink [&_svg:not([class*='text-'])]:text-ink-soft relative flex cursor-default items-center gap-2 rounded-row px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-(--disabled-opacity) [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
 
 export const COMMAND_SEPARATOR = "bg-border -mx-1 h-px";
 

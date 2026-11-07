@@ -16,7 +16,7 @@ export const CONFIRM_DIALOG_ERROR = "text-body text-accent-error";
 
 export const CONFIRM_DIALOG_FOOTER = "flex-row justify-end gap-2";
 
-export const CONFIRM_DIALOG_PENDING = "aria-disabled:cursor-not-allowed aria-disabled:opacity-40";
+export const CONFIRM_DIALOG_PENDING = "aria-disabled:cursor-not-allowed aria-disabled:opacity-(--disabled-opacity)";
 
 export const CONFIRM_DIALOG_SPINNER = "size-3.5";
 

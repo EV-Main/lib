@@ -249,7 +249,7 @@ function ShellNavRow({
         state.active
           ? "font-semibold text-on-primary"
           : cn("font-medium hover:bg-hover", nested ? "text-ink-mid" : "text-ink"),
-        item.disabled && "cursor-not-allowed opacity-50 hover:bg-transparent",
+        item.disabled && "cursor-not-allowed opacity-(--disabled-opacity) hover:bg-transparent",
       )}
     >
       {row.renderItem ? (

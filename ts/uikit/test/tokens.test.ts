@@ -118,6 +118,11 @@ function paintValue(value: string, scope: Scope, surface: string): string {
   if (value === "black") return "#000000";
   if (value === "transparent") return surface;
   if (/^#[0-9a-f]{6}$/i.test(value)) return value.toLowerCase();
+  const inverse = /^rgb\(from var\(--([a-z0-9-]+)\) calc\(255 - r\) calc\(255 - g\) calc\(255 - b\)\)$/.exec(value);
+  if (inverse?.[1]) {
+    const hex = paint(inverse[1], scope, surface);
+    return `#${[1, 3, 5].map((i) => (255 - parseInt(hex.slice(i, i + 2), 16)).toString(16).padStart(2, "0")).join("")}`;
+  }
   const rgba = /^(#[0-9a-f]{6})([0-9a-f]{2})$/i.exec(value);
   if (rgba?.[1] && rgba[2]) return composite(rgba[1].toLowerCase(), parseInt(rgba[2], 16) / 255, surface);
   const mix = /^color-mix\(in srgb, (.+?) (\d+(?:\.\d+)?%|var\(--[a-z0-9-]+\)), (.+)\)$/.exec(value);
@@ -365,15 +370,25 @@ describe.each(scopes)("palette $label", (scope) => {
     it("the solid primary hover still carries the label (AA text)", () => {
       expect(contrast(t("on-primary"), paint("primary-hover", scope, t("card")))).toBeGreaterThanOrEqual(4.5);
     });
+
+    // a solid fill's hover moves away from its label, so the label only gains
+    it.each(["primary", "accent-trace", "accent-debug", "accent-info", "accent-warn", "accent-error"])(
+      "the solid %s hover carries its label at least as well as the fill",
+      (role) => {
+        const label = t(`on-${role}`);
+        const hover = paint(`${role}-hover`, scope, t("card"));
+        expect(contrast(label, hover)).toBeGreaterThanOrEqual(contrast(label, t(role)));
+      },
+    );
   });
 
   // 1.0 Button faces. Each is a background that may be translucent, a hover
   // painted over it, an edge and a label; all four are resolved over the plane
   // the button sits on.
   describe("button faces", () => {
-    const faces = ["primary", "danger"] as const;
+    const faces = ["danger"] as const;
     // the danger label is error text, held to 3:1 like the rest of it
-    const floor = { primary: 4.5, danger: 3 };
+    const floor = { danger: 3 };
 
     it.each(faces)("the %s label reads on the face and on its hover", (face) => {
       for (const surface of ["background", "secondary", "card", "popover"]) {
@@ -511,7 +526,12 @@ describe("the contract half of the sheet", () => {
 
   it("derives the states, lines, inks, status inks, button faces and tints rather than asking a palette for them", () => {
     expect([...contract.derived].sort()).toEqual([
+      "accent-debug-hover",
+      "accent-error-hover",
+      "accent-info-hover",
       "accent-info-ink",
+      "accent-trace-hover",
+      "accent-warn-hover",
       "active",
       "border",
       "border-strong",
@@ -520,10 +540,6 @@ describe("the contract half of the sheet", () => {
       "button-danger-border",
       "button-danger-hover",
       "button-danger-ink",
-      "button-primary-bg",
-      "button-primary-border",
-      "button-primary-hover",
-      "button-primary-ink",
       "hover",
       "ink-faint",
       "ink-mid",
@@ -566,10 +582,6 @@ describe("the contract half of the sheet", () => {
     const names = [...(facesRule?.declarations.keys() ?? [])];
     expect(names).toEqual(
       expect.arrayContaining([
-        "button-primary-bg",
-        "button-primary-hover",
-        "button-primary-border",
-        "button-primary-ink",
         "button-danger-bg",
         "button-danger-hover",
         "button-danger-border",

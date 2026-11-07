@@ -55,8 +55,9 @@ A state on a surface is the ladder, never a surface colour at an alpha:
 current. A face with a fill of its own (a Secondary button, a tinted chip)
 takes the hover as a layer over the fill
 (`bg-[image:linear-gradient(var(--hover),var(--hover))]`), so the fill
-survives it. A state on a role's solid fill (primary, danger, an accent)
-belongs to that role.
+survives it. A role's solid fill (primary, an accent) hovers by moving away
+from its label by `--tint-hover` (`--{role}-hover`), so the label only gains
+contrast. A disabled control fades to `--disabled-opacity`.
 
 ## Surface
 

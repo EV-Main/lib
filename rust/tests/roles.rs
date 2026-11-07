@@ -172,18 +172,12 @@ fn a_tone_is_a_tint() {
 		let Some((tone, alpha)) = color.split_once('/') else { return false };
 		["accent-", "positive", "primary"].iter().any(|t| tone.starts_with(t)) && alpha.starts_with(|c: char| c.is_ascii_digit())
 	};
-	const SOLID_HOVER: &str = "a solid face's own hover, not a tint";
 	const OUTLINE_EDGE: &str = "an outlined control's edge, which a tint's (none in Oldschool) cannot be";
 	const MEASURED: &str = "a shape whose ratio docs/spec/accents.md measures";
 	const FILLED_MARK: &str = "a fill at rest in its tone, which u2's tint (an outline) cannot give";
 	let offending = literals(
 		literal,
 		&[
-			("hover:bg-accent-trace/90", SOLID_HOVER),
-			("hover:bg-accent-debug/90", SOLID_HOVER),
-			("hover:bg-accent-info/90", SOLID_HOVER),
-			("hover:bg-accent-warn/90", SOLID_HOVER),
-			("hover:bg-accent-error/90", SOLID_HOVER),
 			("border-accent-trace/40", OUTLINE_EDGE),
 			("border-accent-debug/40", OUTLINE_EDGE),
 			("border-accent-info/40", OUTLINE_EDGE),
@@ -197,4 +191,18 @@ fn a_tone_is_a_tint() {
 		],
 	);
 	assert!(offending.is_empty(), "a tone at a numeric alpha, where its --tint-* belongs: {offending:#?}");
+}
+
+/// A disabled control fades to `--disabled-opacity`, one value for the kit.
+#[test]
+fn disabled_is_one_token() {
+	let literal = |class: &str| {
+		let fade = utility(class);
+		class[..class.len() - fade.len()].contains("disabled") && fade.strip_prefix("opacity-").is_some_and(|n| n.starts_with(|c: char| c.is_ascii_digit()))
+	};
+	let offending = literals(literal, &[]);
+	assert!(
+		offending.is_empty(),
+		"a disabled fade spelled by hand, where opacity-(--disabled-opacity) belongs: {offending:#?}"
+	);
 }

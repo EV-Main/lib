@@ -22,17 +22,18 @@
  *              accent-trace · accent-debug · accent-info · accent-warn · accent-error
  *              primary-ink — the primary role as ink on a surface, where the
  *              fill and the readable value are different colours;
- *              primary-hover · primary-border — the solid button's states
+ *              primary-hover · accent-*-hover — a solid fill's hover, derived;
+ *              primary-border — the primary button's edge
  *              positive-ink · accent-info-ink — a quiet status role as text on
  *              a surface; derived from the role and the ink, a palette may pin
  *              them. warn and error are text in their own colour
- *   FACES      button-primary-* · button-danger-* ({bg,hover,border,ink}) and
+ *   FACES      button-danger-* ({bg,hover,border,ink}) and
  *              tint-{neutral,primary,positive,info,warn,error,trace,debug}-{fill,edge}:
  *              what a Button or a toned chip, toast or banner paints, pinned per theme by EV and
  *              derived for a brand. Not part of what a brand file owes.
  *   TYPE       text-caption · body-s · body · body-l · h3 · h2 · h1 ·
  *              figure-m · figure-l (size and line height); fonts
- *   SCALARS    radius · control-radius · chip-radius · control-* · display-scale ·
+ *   SCALARS    radius · control-radius · chip-radius · control-* · disabled-opacity · display-scale ·
  *              page-* · shell-* · depth-* (behind shadow-card/elevated/overlay)
  *   MOTION     ev-ease-* · ev-dur-* · ev-rise · ev-stagger(-section)
  *   CHARTS     chart-1 … chart-6
