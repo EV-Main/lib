@@ -54,6 +54,7 @@ ev_lib = { version = "0.31", default-features = false, features = ["architecture
            │ kernel   architecture · i18n · types   (I/O-free)│   ts: architecture, i18n
            └──────────────────────────────────────────────────┘
  codegen   ts_gen — build-time only, reached by no scope
+ tooling   ts: figma-render — test-time only, no Rust twin
 ```
 
 Scopes are modules of the one crate, not crates: `lib.rs` re-exports every

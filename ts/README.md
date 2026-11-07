@@ -13,6 +13,7 @@ ts/
 ├── mfe/               host side of the `mfe` Cargo feature (registry, loader, events, RemoteElement)
 ├── settings/          port of the `settings` Cargo feature (typed env settings)
 ├── marketing/         landing-page layer over uikit: motion, form harness, click-to-load
+├── figma-render/      a Playwright suite's pages into Figma frames (the `@figma` suite + its bin)
 └── i18n/              five-locale i18n: registry, URL contract, ICU-subset formatter
 ```
 
@@ -22,7 +23,7 @@ Two exceptions. `i18n` has no Cargo feature yet; the planned one will read the
 *same* `messages/<locale>/*.json` catalogues to localise transactional
 email, so the two sides share one translation source rather than drifting.
 `marketing` has none by design: it is React-only glue over the kit (motion,
-forms, click-to-load) for landing pages.
+forms, click-to-load) for landing pages; nor has `figma-render`, test tooling.
 `node_modules/`, `dist/`, and `*.tsbuildinfo` are git-ignored.
 
 ## What is not generated
@@ -68,4 +69,5 @@ The rest is hand-written for one of four reasons:
                      posthog, react, next                                   B
  error-monitoring 0.6k  Sentry / React / Next wiring                        B
  marketing     1.8k  motion, form harness, react                            C
+ figma-render  0.2k  @figma suite, settle, frames bin                       C
 ```

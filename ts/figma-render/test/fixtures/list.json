@@ -1,0 +1,418 @@
+{
+  "suites": [
+    {
+      "title": "sections.spec.ts",
+      "file": "sections.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "@figma",
+          "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+          "line": 67,
+          "column": 10,
+          "specs": [
+            {
+              "title": "/fr",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-afc795f2ce10d98d2272",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            },
+            {
+              "title": "/fr/prices",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-1c9901641eeb0889ca23",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            },
+            {
+              "title": "/fr/about",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-4d2b5f437a0bb6de3629",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            },
+            {
+              "title": "http://localhost:52826/fr",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-418f2b0898c2740211b3",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            },
+            {
+              "title": "/fr/nope",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-355f50ebe13f72d2109d",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            },
+            {
+              "title": "/fr/thanks",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-ad8e1e8ee7895829b271",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            },
+            {
+              "title": "/fr",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-794478fc29a85f051641",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            },
+            {
+              "title": "/fr/prices",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-0d51019d602fb26426e6",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            },
+            {
+              "title": "/fr/about",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-cd88dcce5576d1390fa1",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            },
+            {
+              "title": "http://localhost:52826/fr",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-3eaccec266067e64b630",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            },
+            {
+              "title": "/fr/nope",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-79cdbf4753c454a0127f",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            },
+            {
+              "title": "/fr/thanks",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-94219fc60c51a7b8af90",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            },
+            {
+              "title": "/fr",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet",
+                  "projectName": "tablet",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-214baaa80409b094b8cf",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            },
+            {
+              "title": "/fr/prices",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet",
+                  "projectName": "tablet",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-d3b9059fcc5df780d674",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            },
+            {
+              "title": "/fr/about",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet",
+                  "projectName": "tablet",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-4bd008af6610a76dab8c",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            },
+            {
+              "title": "http://localhost:52826/fr",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet",
+                  "projectName": "tablet",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-6ee884d621da01493b52",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            },
+            {
+              "title": "/fr/nope",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet",
+                  "projectName": "tablet",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-64d1449a7d6770725e54",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            },
+            {
+              "title": "/fr/thanks",
+              "ok": true,
+              "tags": [
+                "figma"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet",
+                  "projectName": "tablet",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "c7050c374d48a01b3ec0-55fc98cdc6c6b6cadc75",
+              "file": "../../node_modules/@evinvest/sites-tools/dist/testing/e2e.js",
+              "line": 70,
+              "column": 13
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": []
+}
