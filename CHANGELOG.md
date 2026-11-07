@@ -23,6 +23,12 @@ Rust crate and its TypeScript mirror at once.
 
 ### Breaking
 
+- **`evinvest-figma-render` renders on its own** (`@evinvest/figma-render`,
+  minor): without `frames` it requires `--file` and is a client of Figma's MCP
+  server: it issues the capture ids, runs the suite, polls, and in one
+  `use_figma` (the run's only rate-limited call) puts the frames on a new
+  `<sha> <date>` page in a page × project grid, printing its link. The first
+  run logs in to Figma in the browser. `FIGMA_CAPTURES` is no longer an input.
 - **Control geometry is derived** (`ev_lib_classes`, `@evinvest/uikit`, #281):
   `button_size_class` and `toggle_size_class` are gone (a `Size` step now sets
   `--control-pad` from the new `--control-inset-*` ramp), as are the

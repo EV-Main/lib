@@ -7,12 +7,20 @@ interface ListSuite {
   suites?: ListSuite[];
 }
 
-/** The `<project> <page>` keys of `playwright test --list --reporter=json`, in its order. */
-export function frames(list: { suites: ListSuite[]; errors: unknown[] }): string[] {
+export interface Frame {
+  project: string;
+  page: string;
+}
+
+/** A frame's key in `FIGMA_CAPTURES`, `frames`' output and its Figma name. */
+export const frameKey = (f: Frame) => `${f.project} ${f.page}`;
+
+/** The `@figma` frames of `playwright test --list --reporter=json`, in its order. */
+export function frames(list: { suites: ListSuite[]; errors: unknown[] }): Frame[] {
   if (list.errors.length > 0) throw new Error(`playwright --list: ${JSON.stringify(list.errors)}`);
-  const walk = (suites: ListSuite[]): string[] =>
+  const walk = (suites: ListSuite[]): Frame[] =>
     suites.flatMap(s => [
-      ...(s.title === FIGMA_SUITE ? s.specs.flatMap(spec => spec.tests.map(t => `${t.projectName} ${spec.title}`)) : []),
+      ...(s.title === FIGMA_SUITE ? s.specs.flatMap(spec => spec.tests.map(t => ({ project: t.projectName, page: spec.title }))) : []),
       ...walk(s.suites ?? []),
     ]);
   return walk(list.suites);

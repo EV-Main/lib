@@ -1,5 +1,5 @@
 import type { Page, TestType } from "@playwright/test";
-import { FIGMA_SUITE } from "./frames";
+import { FIGMA_SUITE, frameKey } from "./frames";
 
 /**
  * `@evinvest/figma-render` — pages of a Playwright suite, serialized into Figma
@@ -85,7 +85,7 @@ export function defineFigmaSuite({ test }: { test: TestType<any, any> }, urls: r
     test.use({ bypassCSP: true }); // capture.js and its POST to Figma
     for (const [name, url] of pages) {
       test(name, async ({ page }: { page: Page }, info: { project: { name: string } }) => {
-        const capture = captures[`${info.project.name} ${name}`];
+        const capture = captures[frameKey({ project: info.project.name, page: name })];
         if (capture === undefined) return test.skip(true, "frame not requested");
         test.setTimeout(120_000); // a capture uploads up to 50 MB
         await page.emulateMedia({ reducedMotion: "reduce" });

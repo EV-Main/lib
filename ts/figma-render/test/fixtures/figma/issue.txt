@@ -1,0 +1,121 @@
+Capture ID generated: `78c18467-5589-4a48-b732-ce9791bf0312`
+Target file: pJsZ5LBU3VuhRHqI8IVADy
+
+**CRITICAL — Capture IDs and Parallelism:**
+- Each capture ID is **single-use** and captures exactly **one page**. Never reuse a capture ID for multiple pages.
+- The hash URL containing the capture ID (e.g., `#figmacapture=...`) can only be submitted once. After submission, that URL becomes invalid and returns a 409 error if reused.
+- **Since the target file already exists, you CAN generate multiple capture IDs upfront and run them in parallel.** Call this tool once per page to get separate capture IDs, then open each page with its own capture ID simultaneously.
+- **Manual re-capture:** After a capture completes, the capture toolbar in the browser lets the user manually navigate to other pages and re-capture with automatically generated new capture IDs.
+
+## Instructions
+## Step 0: Choose Capture Mode (REQUIRED FIRST)
+
+Classify the target before doing anything else:
+
+- **EXTERNAL**: target URL host is NOT a local address (e.g., `https://example.com`).
+- **LOCAL**: target is served on `localhost`, `127.0.0.1`, `[::1]`, `0.0.0.0`, or `*.local`, or is a page from the current codebase.
+
+Hard rules:
+- If EXTERNAL → go to **Step 1A (Playwright)**. Skip Step 1B entirely.
+- If LOCAL → go to **Step 1B (Script Tag)**. Skip Step 1A entirely.
+- Never run `open <external-url>#figmacapture=...` — it silently fails without the injected script.
+- `file://` URLs are not supported.
+- Do NOT download/curl external pages to serve locally — it will not work.
+
+## Step 1A: External Capture via Playwright
+
+Use this for any non-local URL (a site you do not control).
+
+**If Playwright MCP is not available in your tool list**, inform the user that capturing external sites requires the Playwright MCP server. Ask if they'd like you to install it. Do NOT attempt the script-tag method on external sites — it will silently fail.
+
+## Playwright MCP (for external sites)
+
+Use when you can't add the script to the page. Bypasses CSP restrictions:
+
+```javascript
+async (page) => {
+  await page.route('**/*', async (route) => {
+    const response = await route.fetch();
+    const headers = { ...response.headers() };
+    delete headers['content-security-policy'];
+    delete headers['content-security-policy-report-only'];
+    await route.fulfill({ response, headers });
+  });
+  await page.goto('<TARGET_URL>');
+  const r = await page.context().request.get('https://mcp.figma.com/mcp/html-to-design/capture.js');
+  await page.evaluate((s) => { const el = document.createElement('script'); el.textContent = s; document.head.appendChild(el); }, await r.text());
+  await page.waitForTimeout(500);
+  return await page.evaluate(() => window.figma.captureForDesign({ captureId: '78c18467-5589-4a48-b732-ce9791bf0312', endpoint: 'https://mcp.figma.com/mcp/capture/78c18467-5589-4a48-b732-ce9791bf0312/submit?bindVariables=true&promptId=5b0c8e64-31a2-4c55-9d0e-6f2a7e1b9c43', selector: 'body' }));
+}
+```
+
+After running the Playwright script, go to **Step 2: Poll Loop**.
+
+## Step 1B: Local Capture via Script Tag
+
+Use this for ALL local/dev projects where you can edit source code. Do NOT use Playwright for local projects.
+
+### Resolve Target Page From Codebase
+
+Search the repository to determine:
+1. **Entry route/page** to capture (e.g., homepage `/`, a specific route like `/dashboard`).
+2. **File to edit** for script injection (e.g., `index.html`, `public/index.html`, `app/layout.tsx`).
+3. **Dev server command** (from package.json scripts or framework config).
+4. **Final local URL** (e.g., `http://localhost:5173/`).
+
+Do not ask the user for a URL until codebase discovery fails.
+
+### Dev Server Setup
+
+Whenever you need to start or use a local dev server:
+1. Check if a dev server is already running on the default port (e.g. 5173 for Vite, 3000 for Next.js, 4200 for Angular, 8080 for http-server). Use `lsof -i :<port>` on macOS/Linux or `netstat -ano | findstr :<port>` on Windows. If one is running and serving the right content, reuse it.
+2. If not running, start one using the project's dev command (e.g. `npm run dev`). For plain HTML files, use `npx http-server . -p 3000` or `python3 -m http.server 3000`.
+3. Verify the port is free before binding. If occupied, pick a different port.
+4. Use `http://localhost:<port>/...` as your target URL.
+
+### Add Capture Script and Open the Page
+
+To capture the page, add this snippet to your HTML. It prepares the page for conversion to Figma:
+
+```html
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+```
+
+The script automatically detects and captures the page structure when loaded.
+
+Open this URL (replace `<target-url>` with the actual localhost URL):
+
+- **macOS**: `open "<target-url>#figmacapture=78c18467-5589-4a48-b732-ce9791bf0312&figmaendpoint=https%3A%2F%2Fmcp.figma.com%2Fmcp%2Fcapture%2F78c18467-5589-4a48-b732-ce9791bf0312%2Fsubmit%3FbindVariables%3Dtrue%26promptId%3D5b0c8e64-31a2-4c55-9d0e-6f2a7e1b9c43&figmadelay=1000"`
+- **Linux**: `xdg-open "<target-url>#figmacapture=78c18467-5589-4a48-b732-ce9791bf0312&figmaendpoint=https%3A%2F%2Fmcp.figma.com%2Fmcp%2Fcapture%2F78c18467-5589-4a48-b732-ce9791bf0312%2Fsubmit%3FbindVariables%3Dtrue%26promptId%3D5b0c8e64-31a2-4c55-9d0e-6f2a7e1b9c43&figmadelay=1000"`
+- **Windows**: `start "<target-url>#figmacapture=78c18467-5589-4a48-b732-ce9791bf0312&figmaendpoint=https%3A%2F%2Fmcp.figma.com%2Fmcp%2Fcapture%2F78c18467-5589-4a48-b732-ce9791bf0312%2Fsubmit%3FbindVariables%3Dtrue%26promptId%3D5b0c8e64-31a2-4c55-9d0e-6f2a7e1b9c43&figmadelay=1000"`
+
+Optional: `&figmadelay=<ms>` (wait before capture), `&figmaselector=<css>` (capture specific element), `&figmaselector=*` (manual element selection UI)
+
+After opening, go to **Step 2: Poll Loop**.
+
+## Step 2: Poll Loop (MANDATORY)
+
+1. Wait 5 seconds.
+2. Call this tool again with BOTH `fileKey: "pJsZ5LBU3VuhRHqI8IVADy"` and `captureId: "78c18467-5589-4a48-b732-ce9791bf0312"` (fileKey is required on every call).
+3. If status is `pending` or `processing`, go back to step 1 and repeat.
+4. Stop only when status is `completed`.
+5. If still `pending` after 10 polls, troubleshoot (verify script injection, dev server, URL).
+
+Never switch methods because of `pending` or `processing`.
+Never create a new capture ID while polling this one.
+Never stop polling after only 1–2 attempts.
+
+**Now execute Steps 1–3 above.** Step 3 (polling) is critical — follow the loop exactly.
+
+## Capturing Additional Pages
+
+**Programmatic multi-page capture (recommended):** For each additional page, call this tool again with the SAME `fileKey`. Each call generates a new capture ID that adds to this same file. Use each capture ID's hash URL to open and capture its respective page.
+
+**Manual capture (alternative):** After this capture completes, the browser will show a capture toolbar. The user can manually click links to navigate to other pages, then use the toolbar to re-capture. The toolbar handles generating new capture IDs automatically.
+
+**Important:** Every page must be opened with the hash URL parameters (including the captureId) to load the capture script. Opening pages without the hash URL will not work.
+
+**Note:** The maximum capture size, including serialized images, is 50MB.
+
+Set up local font access for Figma Agent & MCP: https://help.figma.com/hc/en-us/articles/360039956894-Add-a-font-to-Figma.
+Upload custom fonts to your organization for Figma Agent & MCP: https://help.figma.com/hc/en-us/articles/360039956774-Upload-custom-fonts-to-an-organization.

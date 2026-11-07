@@ -69,5 +69,5 @@ The rest is hand-written for one of four reasons:
                      posthog, react, next                                   B
  error-monitoring 0.6k  Sentry / React / Next wiring                        B
  marketing     1.8k  motion, form harness, react                            C
- figma-render  0.2k  @figma suite, settle, frames bin                       C
+ figma-render  0.5k  @figma suite, settle, bin: a Figma MCP client          C
 ```

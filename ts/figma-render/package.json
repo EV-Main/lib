@@ -1,7 +1,7 @@
 {
   "name": "@evinvest/figma-render",
   "version": "0.1.0",
-  "description": "Pages of a Playwright suite serialized into Figma frames through generate_figma_design's capture script: the `@figma` suite, its settle, and the bin that lists the frame keys and runs the captures. Zero runtime deps; Playwright is the caller's.",
+  "description": "Pages of a Playwright suite serialized into Figma frames through generate_figma_design's capture script: the `@figma` suite, its settle, and the bin that lists the frame keys or renders them onto a Figma page as its own Figma MCP client. Zero runtime deps; Playwright is the caller's.",
   "license": "BlueOak-1.0.0",
   "publishConfig": {
     "access": "public"

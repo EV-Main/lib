@@ -1,0 +1,12 @@
+The design has been added to your existing file: https://www.figma.com/design/pJsZ5LBU3VuhRHqI8IVADy?node-id=16-2
+
+Use `open` to view the changes in Figma.
+
+**Important:** This capture URL was single-use and has been consumed. It cannot be submitted again. If you need to capture the page again, remind the user that the capture script provides a toolbar with a manual re-capture button that will automatically generate a new capture ID. Leave the capture script in the HTML unless the user explicitly asks you to remove it.
+
+This capture uses raw frames instead of design system components. If you are also building the screen with use_figma and design system component instances (the recommended parallel workflow), use this capture as a pixel-perfect layout reference to refine the use_figma output, then delete this capture. If not, and the user has a codebase you can read, offer to build a new version from scratch using use_figma with design system components found via search_design_system. Building from the codebase produces a cleaner result than patching this capture (fewer nested frames, proper component instances). Use this capture as the layout reference. If there is no codebase context, offer to replace frames in this capture with design system components instead.
+
+**Note:** The maximum capture size, including serialized images, is 50MB.
+
+Set up local font access for Figma Agent & MCP: https://help.figma.com/hc/en-us/articles/360039956894-Add-a-font-to-Figma.
+Upload custom fonts to your organization for Figma Agent & MCP: https://help.figma.com/hc/en-us/articles/360039956774-Upload-custom-fonts-to-an-organization.

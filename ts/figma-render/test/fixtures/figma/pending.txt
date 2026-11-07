@@ -1,0 +1,5 @@
+Status for capture ID `cbb8935b-2fb3-4d36-80b3-c87db122c5e8`: **pending**.
+This is normal. The page is still loading and/or the capture script is still serializing.
+Action: wait 5 seconds, then call this tool again with the SAME captureId.
+Next call must include BOTH: `fileKey: "u7VdYDg4DVCGTXNnwI9IAc"` and `captureId: "cbb8935b-2fb3-4d36-80b3-c87db122c5e8"`
+Do not switch to Playwright. Do not generate a new capture ID. Continue polling; if still pending after 10 polls, troubleshoot and keep polling until status is `completed`.
