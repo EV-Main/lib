@@ -453,8 +453,8 @@ mod tests {
 		}
 		let html = render(app);
 		assert!(html.contains("px-6"), "{html}");
-		// the item's own base `px-2 py-1.5` is dropped by the override (the bar
+		// the item's own base `px-2 min-h-(--control-h-sm)` is dropped by the override (the bar
 		// trigger keeps its independent `px-2`).
-		assert!(!html.contains("px-2 py-1.5"), "override should drop item base px-2: {html}");
+		assert!(!html.contains("px-2 min-h-(--control-h-sm)"), "override should drop item base px-2: {html}");
 	}
 }

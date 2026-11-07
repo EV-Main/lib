@@ -462,6 +462,13 @@ Rust crate and its TypeScript mirror at once.
   `--display-leading`, `--figure-leading`, with `--display-scale` now scaling
   h1, h2 and the figures as well as `Band`'s headline. Same pixels at the
   defaults.
+- **Boxes outside `Size` name their rung** (`ev_lib` `uikit` and
+  `@evinvest/uikit`, #297): a menu, context-menu, menubar, command or select
+  row is `min-h-(--control-h-sm)` with no block padding (a wrapped label grows
+  it by its lines only), a table head `--control-h-lg` (`compact`:
+  `--control-h-sm`), a calendar cell and column `--control-h-md`. A checkbox's
+  and a radio's box and a switch's thumb are a glyph, `1em + 2px`, the track
+  sized off the thumb: the same 16 px at 14 px text, larger beside larger text.
 - **Connected landings: sites_panel by derived address, and `/.well-known/sa-site`**
   (`@evinvest/kitstart`, minor, breaking).
   - `SITES_PANEL_INTERNAL_URL` replaces `LOCATIONS_API_URL`, and the kit

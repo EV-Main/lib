@@ -34,7 +34,8 @@ the glyph-side inset are fractions of it, and a tool (a toggle) packs at half.
 A step names its text size with its rung (`xs` 12 px, `sm`/`md` 14 px,
 `lg`/`touch` 16 px, `xl` `--control-text`). A glyph follows the text, not the box: it is
 `1em + 2px`, so a lone glyph in a small square and a label's glyph in a tall
-one stay the same pair.
+one stay the same pair. A checkbox's and a radio's box and a switch's thumb are
+glyphs; the switch's track is sized off its thumb.
 
 ## Type
 

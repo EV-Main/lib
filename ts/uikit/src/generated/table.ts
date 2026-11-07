@@ -14,7 +14,7 @@ export const TABLE_FOOTER = "bg-muted border-t border-border font-medium [&>tr]:
 
 export const TABLE_ROW = "hover:bg-hover data-[state=selected]:bg-selected border-b border-border transition-colors";
 
-export const TABLE_HEAD = "text-[color:var(--table-head-ink,var(--ink))] h-[var(--table-head-h,calc(var(--spacing)*10))] px-[var(--table-px,calc(var(--spacing)*2))] text-start align-middle font-medium whitespace-nowrap text-[length:var(--table-head-text)] tracking-[var(--table-head-tracking)] [text-transform:var(--table-head-case)] [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]";
+export const TABLE_HEAD = "text-[color:var(--table-head-ink,var(--ink))] h-[var(--table-head-h,var(--control-h-lg))] px-[var(--table-px,calc(var(--spacing)*2))] text-start align-middle font-medium whitespace-nowrap text-[length:var(--table-head-text)] tracking-[var(--table-head-tracking)] [text-transform:var(--table-head-case)] [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]";
 
 export const TABLE_CELL = "px-[var(--table-px,calc(var(--spacing)*2))] py-[var(--table-dense-py,var(--table-py,calc(var(--spacing)*2)))] align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]";
 
@@ -28,7 +28,7 @@ export type TableVariant = keyof typeof tableVariants;
 
 export const tableDensities = {
   "default": "[--table-dense-py:initial] [--table-head-h:initial]",
-  "compact": "[--table-dense-py:calc(var(--spacing)*1.5)] [--table-head-h:calc(var(--spacing)*8)]",
+  "compact": "[--table-dense-py:calc(var(--spacing)*1.5)] [--table-head-h:var(--control-h-sm)]",
 } as const;
 export type TableDensity = keyof typeof tableDensities;
 

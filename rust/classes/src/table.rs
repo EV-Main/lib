@@ -23,7 +23,7 @@ pub const TABLE_ROW: &str = "hover:bg-hover data-[state=selected]:bg-selected bo
 // head keeps the table's own `text-sm` exactly as before. Colours read the
 // `:root` tokens (`--ink`), not `--color-ink`: the theme is `@theme inline`, so
 // Tailwind never emits the `--color-*` names for a `var()` to find.
-pub const TABLE_HEAD: &str = "text-[color:var(--table-head-ink,var(--ink))] h-[var(--table-head-h,calc(var(--spacing)*10))] \
+pub const TABLE_HEAD: &str = "text-[color:var(--table-head-ink,var(--ink))] h-[var(--table-head-h,var(--control-h-lg))] \
                              px-[var(--table-px,calc(var(--spacing)*2))] text-start align-middle font-medium whitespace-nowrap \
                              text-[length:var(--table-head-text)] tracking-[var(--table-head-tracking)] [text-transform:var(--table-head-case)] \
                              [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]";
@@ -62,7 +62,7 @@ pub enum TableVariant {
 pub enum TableDensity {
 	#[tw(default, class = "[--table-dense-py:initial] [--table-head-h:initial]")]
 	Default,
-	#[tw(class = "[--table-dense-py:calc(var(--spacing)*1.5)] [--table-head-h:calc(var(--spacing)*8)]")]
+	#[tw(class = "[--table-dense-py:calc(var(--spacing)*1.5)] [--table-head-h:var(--control-h-sm)]")]
 	Compact,
 }
 
