@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import { spawnSync } from "node:child_process";
 import { parseArgs } from "node:util";
 import { FIGMA_SUITE, frames } from "./frames";

@@ -21,10 +21,11 @@
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
   "bin": {
-    "evinvest-figma-render": "./dist/cli.js"
+    "evinvest-figma-render": "cli/figma-render.mjs"
   },
   "files": [
-    "dist"
+    "dist",
+    "cli"
   ],
   "sideEffects": false,
   "engines": {
