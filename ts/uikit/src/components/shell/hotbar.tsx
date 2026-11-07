@@ -243,4 +243,4 @@ export function Hotbar({ actions, status, takeover, labels = {}, className, ...p
 const ITEM =
   "inline-flex h-(--control-h-xs) shrink-0 items-center gap-1.5 whitespace-nowrap rounded-chip border border-border bg-secondary pr-3 pl-2 text-body-s text-ink-mid transition-colors outline-none hover:text-ink focus-visible:ring-2 focus-visible:ring-ring " +
   "@5xl:h-(--control-h-2xs) @5xl:rounded-control @5xl:border-transparent @5xl:bg-transparent @5xl:px-2 @5xl:hover:bg-hover";
-const PRESSED = "border-primary-ink/55 text-primary-ink hover:text-primary-ink @5xl:border-primary-ink/55";
+const PRESSED = `${toneClasses.primary} border-(color:--tone-edge) bg-(color:--tone-fill) text-(color:--tone-ink) hover:text-(color:--tone-ink) @5xl:border-(color:--tone-edge) @5xl:bg-(color:--tone-fill)`;
