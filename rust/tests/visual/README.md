@@ -81,9 +81,10 @@ A mac has two ways to refresh the baselines. Both end in the same place — the
 capture is the `*-linux` derivation either way.
 
 **Through CI (no local builder needed).** `.github/workflows/visual-baselines.yml`
-renders the suite on the same ubuntu image the gate uses and publishes the PNGs
-as the `visual-snapshots` artifact. It runs on every pull request that touches
-`rust/`, the token/motion CSS, the flake or the cargo manifests/toolchain, and on `workflow_dispatch`:
+(generated from `github.visualBaselines` in `flake.nix`) runs `nix run .#visual-render` on
+every pull request that touches `rust/`, the token/motion CSS, the flake or the cargo
+manifests, and on `workflow_dispatch`. It publishes the render as the `visual-snapshots`
+artifact and fails when it differs from the committed baselines:
 
 ```sh
 gh run list --workflow "Visual baselines" --branch "$(git branch --show-current)"
@@ -92,10 +93,8 @@ gh run download <run-id> -n visual-snapshots -D rust/tests/visual/__screenshots_
 git add rust/tests/visual/__screenshots__ && git commit -m "test(uikit): refresh visual baselines (run <run-id>)"
 ```
 
-Put the run id in the commit message: it is the provenance of the bytes. The
-gallery test in `uikit-rust.yml` then confirms them on the next push. This
-workflow is hand-written, not produced by the `github` block in `flake.nix` — the generator only overwrites its own fixed file names
-(`errors.yml`, `warnings.yml`, `claude*.yml`, `release-*.yml`, …), so it stays.
+Put the run id in the commit message: it is the provenance of the bytes. The next
+run confirms them.
 
 **With a linux builder.** In nix-darwin:
 
@@ -114,6 +113,5 @@ substituters rather than reusing the host's.
 ## Not covered
 
 Nothing here stops a stale baseline being committed — it only makes a stale one
-detectable. Catching it at merge is the gallery test in
-`.github/workflows/uikit-rust.yml`: an ubuntu runner is byte-compatible with
-these baselines for free.
+detectable. Catching it at merge is `.github/workflows/visual-baselines.yml`: an
+ubuntu runner is byte-compatible with these baselines for free.

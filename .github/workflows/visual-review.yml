@@ -3,7 +3,7 @@
 # https://ev-main.github.io/web_std/pr/<n>/ and one comment linking it with the
 # changed-% table; no difference, no page and no comment. Closing the PR takes
 # the page down. It reads committed baselines only, so it builds nothing; the
-# gallery test in uikit-rust.yml is what holds them to the render.
+# visual-baselines.yml is what holds them to the render.
 name: Visual review
 'on':
   pull_request:
@@ -32,14 +32,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      - name: Install Nix
-        if: github.event.action != 'closed'
-        uses: DeterminateSystems/nix-installer-action@main
-        with:
-          extra-conf: 'lazy-trees = true'
+      - if: github.event.action != 'closed'
+        uses: ./.github/actions/nix-env
       - name: Review
         if: github.event.action != 'closed'
         run: nix run .#visual-review -- --summary tmp/visual-review.md "origin/${{ github.base_ref }}"

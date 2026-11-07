@@ -84,6 +84,12 @@
               scope = "evinvest";
               packagesDir = "ts";
             };
+            visualBaselines = {
+              dir = "rust/tests/visual/__screenshots__";
+              render = "visual-render";
+              paths = [ "rust/**" "tokens.css" "theme.css" "ev.css" "motion.css" "flake.nix" "flake.lock" "Cargo.toml" "Cargo.lock" ];
+              rustCache = "uikit";
+            };
           };
 
           readme = v_flakes.readme-fw {
@@ -222,6 +228,16 @@
             '';
           };
 
+          # run from the dev shell, whose toolchain and node_modules link it uses
+          visual-render = pkgs.writeShellApplication {
+            name = "visual-render";
+            runtimeInputs = [ pkgs.git ];
+            text = ''
+              cd "$(git rev-parse --show-toplevel)"
+              UPDATE_EXPECT=1 exec cargo test -p ev_lib --features uikit_dioxus --test gallery
+            '';
+          };
+
           # `nix run .#visual-review -- [<git-ref>] [--themes a,b] [--fresh]`; see rust/tests/visual/README.md.
           visual-review = pkgs.writeShellApplication {
             name = "visual-review";
@@ -230,6 +246,11 @@
           };
         in
         {
+          apps.visual-render = {
+            type = "app";
+            program = "${visual-render}/bin/visual-render";
+          };
+
           apps.visual-review = {
             type = "app";
             program = "${visual-review}/bin/visual-review";

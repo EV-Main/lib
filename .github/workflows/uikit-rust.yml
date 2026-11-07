@@ -44,60 +44,20 @@ name: uikit rust
   workflow_dispatch: {}
 permissions:
   contents: read
-# The repo's cargo config wraps rustc in kache, whose store a runner doesn't keep;
-# an empty wrapper turns it off for every step, `nix run .#gen` included.
-env:
-  RUSTC_WRAPPER: ''
 jobs:
   test:
     name: classes, components, codegen drift
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      # Paths built here rather than substituted (the rust-overlay toolchain, google-fonts) go to a
-      # file:// binary cache kept across runs: v_flakes' github/cache.nix `lean` scheme, keyed on the closure.
-      - name: Lean nix cache setup
-        run: |
-          mkdir -p /tmp/nix-lean-cache
-          chmod 0777 /tmp/nix-lean-cache
-          printf '#!/bin/sh\nexport PATH=/nix/var/nix/profiles/default/bin:$PATH\nnix copy --to "file:///tmp/nix-lean-cache?compression=zstd&parallel-compression=true" $OUT_PATHS || true\n' > /tmp/nix-lean-pbh.sh
-          chmod 0755 /tmp/nix-lean-pbh.sh
-      - name: Restore lean nix cache
-        uses: actions/cache/restore@v5
-        with:
-          path: /tmp/nix-lean-cache
-          key: nix-lean-${{ runner.os }}-${{ hashFiles('flake.lock', 'flake.nix') }}
-          restore-keys: nix-lean-${{ runner.os }}-
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-        with:
-          extra-conf: |
-            lazy-trees = true
-            post-build-hook = /tmp/nix-lean-pbh.sh
-            extra-substituters = file:///tmp/nix-lean-cache
-            extra-trusted-substituters = file:///tmp/nix-lean-cache
-            require-sigs = false
-      # rust-cache reads the toolchain off PATH; the runner's own rustup one would key it wrong
-      - name: Toolchain on PATH
-        run: |
-          nix develop --command bash -c 'dirname "$(command -v rustc)" > /tmp/rust-bin'
-          cat /tmp/rust-bin >> "$GITHUB_PATH"
-      - name: Save lean nix cache
-        if: github.ref == 'refs/heads/main'
-        uses: actions/cache/save@v5
-        with:
-          path: /tmp/nix-lean-cache
-          key: nix-lean-${{ runner.os }}-${{ hashFiles('flake.lock', 'flake.nix') }}
-      - uses: Swatinem/rust-cache@v2
-        with:
-          shared-key: uikit
-          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/nix-env
+        with: { rust-cache: uikit }
       - name: ev_lib_classes
-        run: nix develop --command env RUSTC_WRAPPER= cargo test -p ev_lib_classes
+        run: nix develop --command cargo test -p ev_lib_classes
       # Both ports at once: the parity test renders every gallery entry through each.
+      # The gallery itself is visual-baselines.yml's.
       - name: ev_lib uikit
-        run: nix develop --command env RUSTC_WRAPPER= cargo test -p ev_lib --features "uikit_dioxus uikit_leptos"
+        run: nix develop --command cargo test -p ev_lib --features "uikit_dioxus uikit_leptos" -- --exact --skip matches_baselines
       # The generated files are committed, so a change to their source that was
       # not regenerated (or an edit to the output by hand) shows up as a diff.
       # `gen` brings rustc but not a linker, so it runs from the dev shell (as the
