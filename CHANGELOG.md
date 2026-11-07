@@ -471,6 +471,9 @@ Rust crate and its TypeScript mirror at once.
   sized off the thumb: the same 16 px at 14 px text, larger beside larger text.
 - **`on-secondary` is derived** (`ev_lib` `uikit` and `@evinvest/uikit`,
   #297): it is the ink unless a palette pins it, so a brand file owes 28 names.
+- **`rust/tests/roles.rs` exempts a literal at its site** (#297): it walks the
+  kit's sources instead of the class inventory, past test modules, and an
+  exemption names the file it holds for.
 - **Connected landings: sites_panel by derived address, and `/.well-known/sa-site`**
   (`@evinvest/kitstart`, minor, breaking).
   - `SITES_PANEL_INTERNAL_URL` replaces `LOCATIONS_API_URL`, and the kit
